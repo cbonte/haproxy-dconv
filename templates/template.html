@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>${headers['title']} ${headers['version']} - ${headers['subtitle']}</title>
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<style>
+			pre {
+				color: #000;
+				background: transparent;
+			}
+			li small {
+				color: #888;
+				font-size: 80%;
+			}
+			li b small {
+				color: #888;
+				font-size: 100%;
+			}
+			.keyword  {
+				background: #eee; 
+				border-top: 1px solid #fff;
+				border-bottom: 1px solid #ccc;
+			}
+		</style>
+		<script src="js/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="page-header">
+				<div class="container-fluid">
+					<div class="row-fluid">
+						<div class="span8">
+							<h1>${headers['title']} <small>${headers['version']}</small></h1>
+							<h2>${headers['subtitle']}</h2>
+						</div>
+						<div class="span4 pagination-right">
+							<div>${headers['date']}</div>
+							<div>${headers['author']}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="alert alert-success pagination-centered">
+				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b>
+			</div>
+			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
+				<label>Search keyword:</label>
+				<input type="text" name="keyword" class="span3 search-query" style="margin: 0 auto;" data-provide="typeahead" data-source='["${'","'.join(keywords)}"]' autocomplete="off"/>
+				<input class="btn btn-primary" type="submit" value="Go"/>
+			</form>
+			<div class="row">
+				<div class="span3">
+					<div class="well sidebar-nav">
+						<ul class="nav nav-list">
+							<li class="nav-header">Summary</li>
+							<% level = 0 %>
+							% for k in chapterIndexes:
+								<% chapter = chapters[k] %>
+								% if chapter['title']:
+									<%
+										if level != chapter['level'] and chapter['level'] == 1: 
+											otag = "<b>"
+											etag = "</b>"
+										else:
+											otag = etag = ""
+									%>
+									% if otag:
+										<li class="divider"></li>
+									% endif
+									<li><a href="#${chapter['chapter']}">${otag}<small>${chapter['chapter']}.&nbsp;</small>${chapter['title']}${etag}</a></li>
+								% endif
+							% endfor
+						</ul>
+					</div>
+				</div>
+				<div class="span9">
+					<div class="row-fluid">
+						<div class="span12">
+							${document}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
