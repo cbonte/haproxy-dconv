@@ -19,13 +19,40 @@
 TODO : ability to split chapters into several files
 TODO : manage keyword locality (server/proxy/global ; ex : maxconn)
 '''
-import os, sys, cgi, re
+import os, subprocess, sys, cgi, re
 import time
 import datetime
 
 from mako.template import Template
 
 VERSION = "0.0.1"
+
+# Temporarly determine the version from git to follow which commit generated
+# the documentation
+def get_git_version():
+	global VERSION
+	if not os.path.isdir(".git"):
+		print >> sys.stderr, "This does not appear to be a Git repository."
+		return
+	try:
+		p = subprocess.Popen(["git", "describe", "--tags", "--match", "v*"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	except EnvironmentError:
+		print >> sys.stderr, "Unable to run git"
+		return
+	version = p.communicate()[0]
+	if p.returncode != 0:
+		print >> sys.stderr, "Unable to run git"
+		return
+		
+	if len(version) < 2:
+		return
+		
+	version = version[1:].strip()
+	return version
+
+VERSION = get_git_version()
+if not VERSION:
+	sys.exit(1)
 
 context = {
 	'headers':	{},
