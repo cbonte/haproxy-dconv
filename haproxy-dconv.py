@@ -70,10 +70,12 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
 	if isinstance(table, dict):
 		title = table["title"]
 		table = table["rows"]
+		
+	if not maxColumns:
+		maxColumns = len(table[0])
 	
 	if title:
-		documentAppend('<table border="0" cellspacing="0" cellpadding="0">', False)
-		documentAppend('<tr><th class="title">%s :</th><td class="data">' % title, False)
+		documentAppend('<p>%s :' % title, False)
 
 	documentAppend('<table class=\"table table-bordered\" border="0" cellspacing="0" cellpadding="0">', False)
 	mode = "th"
@@ -89,8 +91,14 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
 		for column in row:
 			if j >= maxColumns:
 				break
-			data = column
-			if data.strip() in ['X', '-', 'yes', 'no']:
+			data = column.strip()
+			if data in ['yes']:
+				open = '<%s class="alert-success"><div class="pagination-centered">' % mode
+				close = '</div></%s>' % mode
+			elif data in ['no']:
+				open = '<%s class="alert-error"><div class="pagination-centered">' % mode
+				close = '</div></%s>' % mode
+			elif data in ['X', '-']:
 				open = '<%s><div class="pagination-centered">' % mode
 				close = '</div></%s>' % mode
 			else:
@@ -105,7 +113,7 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
 			if j == 0 and len(row) > maxColumns:
 				for k in xrange(maxColumns, len(row)):
 					open = open + '<span class="pull-right">' + row[k] + '</span>'
-			documentAppend('%s%s%s' % (open, column, close), False)
+			documentAppend('%s%s%s' % (open, data, close), False)
 			j += 1
 		mode = "td"
 		documentAppend('</tr>', False)
@@ -117,7 +125,7 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
 	documentAppend('</table>', False)
 	
 	if title:
-		documentAppend('</td></tr></table>', False)
+		documentAppend('</p>', False)
 
 def colorize(text):
 	colorized = ""
@@ -412,7 +420,7 @@ for section in sections:
 				renderTable(table, nbColumns, details["chapter"] == "4.1")
 				i += 1 # skip useless next line
 				continue
-			elif False and line.find("May be used in sections") != -1:
+			elif line.find("May be used in sections") != -1:
 				rows = []
 				headers = line.split(":")
 				rows.append(headers[1].split("|"))
