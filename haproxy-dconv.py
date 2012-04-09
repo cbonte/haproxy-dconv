@@ -481,6 +481,7 @@ for section in sections:
 					# This is probably not a keyword but a text, ignore it
 					documentAppend(line)
 			else:
+				line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
 				line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
 				documentAppend(line)
 			i = i + 1
