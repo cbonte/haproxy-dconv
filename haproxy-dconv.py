@@ -22,10 +22,16 @@ TODO : manage keyword locality (server/proxy/global ; ex : maxconn)
 import os, subprocess, sys, cgi, re
 import time
 import datetime
+# only usable upto 2.7
+#import argparse
+
+# before 2.7
+from optparse import OptionParser
 
 from mako.template import Template
 
 VERSION = "0.0.1"
+
 
 # Temporarly determine the version from git to follow which commit generated
 # the documentation
@@ -202,12 +208,29 @@ def colorize(text):
 	return colorized
 
 
+usage="Usage: %prog --infile <infile> --outfile <outfile>"
+
+parser = OptionParser(description='Generate HTML Document from HAProxy configuation.txt',
+                      version=VERSION,
+                      usage=usage)
+parser.add_option('--html', help='Output in HTML')
+parser.add_option('--infile','-i','--in', help='Inputfile mostly the configuration.txt')
+parser.add_option('--outfile','-o','--out', help='Outputfile')
+#parser.print_help()
+(option, args) = parser.parse_args()
+
+if len(sys.argv) <= 3:
+	parser.print_help()
+	exit(1)
+
+'''
 if len(sys.argv) != 3:
 	print "Usage: %s <infile> <outfile>" % sys.argv[0]
 	exit(1)
+'''
 
 data = []
-fd = file(sys.argv[1],"r")
+fd = file(option.infile,"r")
 for line in fd:
 	data.append(line)
 fd.close()
@@ -232,7 +255,7 @@ specialSections = {
 	},
 }
 
-print >> sys.stderr, "Importing %s..." % sys.argv[1]
+print >> sys.stderr, "Importing %s..." % option.infile
 
 nblines = len(data)
 i = j = 0
@@ -520,11 +543,11 @@ keywords.sort()
 
 createLinks()
 
-print >> sys.stderr, "Exporting to %s..." % sys.argv[2]
+print >> sys.stderr, "Exporting to %s..." % option.outfile
 
 template = Template(filename=os.path.join(os.path.dirname(__file__), 'templates', 'template.html'))
 
-outfile = open(sys.argv[2],'w')
+outfile = open(option.outfile,'w')
 
 print >> outfile, template.render(
 	headers = context['headers'], 
