@@ -22,12 +22,8 @@ TODO : manage keyword locality (server/proxy/global ; ex : maxconn)
 import os, subprocess, sys, cgi, re
 import time
 import datetime
-# only usable upto 2.7
-#import argparse
 
-# before 2.7
 from optparse import OptionParser
-
 from mako.template import Template
 
 VERSION = "0.0.1"
@@ -213,21 +209,13 @@ usage="Usage: %prog --infile <infile> --outfile <outfile>"
 parser = OptionParser(description='Generate HTML Document from HAProxy configuation.txt',
                       version=VERSION,
                       usage=usage)
-parser.add_option('--html', help='Output in HTML')
-parser.add_option('--infile','-i','--in', help='Inputfile mostly the configuration.txt')
-parser.add_option('--outfile','-o','--out', help='Outputfile')
-#parser.print_help()
+parser.add_option('--infile', '-i', help='Input file mostly the configuration.txt')
+parser.add_option('--outfile','-o', help='Output file')
 (option, args) = parser.parse_args()
 
-if len(sys.argv) <= 3:
+if not (option.infile  and option.outfile) or len(args) > 0:
 	parser.print_help()
 	exit(1)
-
-'''
-if len(sys.argv) != 3:
-	print "Usage: %s <infile> <outfile>" % sys.argv[0]
-	exit(1)
-'''
 
 data = []
 fd = file(option.infile,"r")
