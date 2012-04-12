@@ -568,10 +568,12 @@ def convert(infile, outfile):
     createLinks()
 
     # Add the keywords conflicts to the keywords list to make them available in the search form
+    # And remove the original keyword which is now useless
     for keyword in keyword_conflicts:
         sections = keyword_conflicts[keyword]
         for section in sections:
             keywords.append("%s (%s)" % (keyword, chapters[section]['title']))
+	keywords.remove(keyword)
 
     print >> sys.stderr, "Exporting to %s..." % outfile
 
