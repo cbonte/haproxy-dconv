@@ -243,7 +243,7 @@ def convert(infile, outfile):
 
     chapters = {}
 
-    keywords = []
+    keywords = {}
     keywordsCount = {}
 
     specialSections = {
@@ -503,8 +503,12 @@ def convert(infile, outfile):
                         for j in xrange(0, len(splitKeyword)):
                             subKeyword = " ".join(splitKeyword[0:j + 1])
                             if subKeyword != "no":
-                                keywords.append(subKeyword)
+                                #keywords.append(subKeyword)
+                                if not subKeyword in keywords:
+                                    keywords[subKeyword] = set()
+                                keywords[subKeyword].add(details["chapter"])
                             documentAppend('<a name="%s"></a>' % subKeyword, False)
+
                         deprecated = parameters.find("(deprecated)")
                         if deprecated != -1:
                             prefix = ""
@@ -537,7 +541,13 @@ def convert(infile, outfile):
                 i = i + 1
             documentAppend('</pre><br />')
 
-    keywords = set(keywords)
+    # Log warnings for keywords defined in several chapters
+    for keyword in keywords:
+        keyword_chapters = list(keywords[keyword])
+        keyword_chapters.sort()
+        if len(keyword_chapters) > 1:
+            print >> sys.stderr, 'Multi section keyword : "%s" in chapters %s' % (keyword, list(keyword_chapters))
+
     keywords = list(keywords)
     keywords.sort()
 
