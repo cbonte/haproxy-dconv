@@ -18,6 +18,7 @@
 '''
 TODO : ability to split chapters into several files
 TODO : manage keyword locality (server/proxy/global ; ex : maxconn)
+TODO : Remove global variables where possible
 '''
 import os, subprocess, sys, cgi, re
 import time
@@ -89,16 +90,22 @@ def getTitleDetails(string):
 
 # Parse the wole document to insert links on keywords
 def createLinks():
-    global document, keywords, keywordsCount
+    global document, keywords, keywordsCount, keyword_conflicts
 
     print >> sys.stderr, "Generating keywords links..."
 
     for keyword in keywords:
         keywordsCount[keyword] = document.count('&quot;' + keyword + '&quot;')
+        if (keyword in keyword_conflicts) and (not keywordsCount[keyword]):
+            # The keyword is never used, we can remove it from the conflicts list
+            del keyword_conflicts[keyword]
         document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + keyword + '">' + keyword + '</a>&quot;')
         if keyword.startswith("option "):
             shortKeyword = keyword[len("option "):]
             keywordsCount[shortKeyword] = document.count('&quot;' + shortKeyword + '&quot;')
+            if (shortKeyword in keyword_conflicts) and (not keywordsCount[shortKeyword]):
+                # The keyword is never used, we can remove it from the conflicts list
+                del keyword_conflicts[shortKeyword]
             document = document.replace('&quot;' + shortKeyword + '&quot;', '&quot;<a href="#' + keyword + '">' + shortKeyword + '</a>&quot;')
 
 def documentAppend(text, retline = True):
@@ -222,7 +229,7 @@ def colorize(text):
 # The parser itself
 # TODO : simplify the parser ! Make it clearer and modular.
 def convert(infile, outfile):
-    global document, keywords, keywordsCount, chapters
+    global document, keywords, keywordsCount, chapters, keyword_conflicts
 
     data = []
     fd = file(infile,"r")
