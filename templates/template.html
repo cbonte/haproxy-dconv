@@ -29,11 +29,13 @@
 			<div class="alert alert-success pagination-centered">
 				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b>
 			</div>
+
 			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
 				<label>Search keyword:</label>
 				<input type="text" name="keyword" class="span3 search-query" style="margin: 0 auto;" data-provide="typeahead" data-source='["${'","'.join(keywords)}"]' autocomplete="off"/>
 				<input class="btn btn-primary" type="submit" value="Go"/>
 			</form>
+
 			<div class="row">
 				<div class="span3">
 					<div class="well sidebar-nav">
@@ -60,6 +62,33 @@
 					</div>
 				</div>
 				<div class="span9">
+					% if keyword_conflicts:
+						<div class="alert alert-warning">
+							Currently, the converter can't manage keywords defined in several sections. Generated Links will probably be wrong for such keywords.
+							Until this can be fixed, you can use the links below to access directly to the right section :
+							<%
+								sorted_keywords = list(keyword_conflicts)
+								sorted_keywords.sort()
+							%>
+							<dl class="dl-horizontal">
+							% for keyword in sorted_keywords:
+								<dt>${keyword}</dt>
+								<dd>
+									<% sections = keyword_conflicts[keyword] %>
+									<% i = 0 %>
+									% for section in sections:
+										%if i:
+											&nbsp;|&nbsp;
+										% endif
+										<a href="#${section}-${keyword}">${chapters[section]['title']}</a>
+										<% i += 1 %>
+									% endfor
+								</dd>
+							% endfor
+							</dl>
+						</div>
+					% endif
+
 					<div class="row-fluid">
 						<div class="span12">
 							${document}

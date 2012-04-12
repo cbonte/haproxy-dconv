@@ -500,14 +500,17 @@ def convert(infile, outfile):
                         keyword = False
 
                     if keyword and (len(splitKeyword) <= 5):
+                        toplevel = details["chapter"].split('.', 1)[0]
                         for j in xrange(0, len(splitKeyword)):
                             subKeyword = " ".join(splitKeyword[0:j + 1])
                             if subKeyword != "no":
                                 #keywords.append(subKeyword)
                                 if not subKeyword in keywords:
                                     keywords[subKeyword] = set()
-                                keywords[subKeyword].add(details["chapter"])
+                                keywords[subKeyword].add(toplevel)
                             documentAppend('<a name="%s"></a>' % subKeyword, False)
+                            documentAppend('<a name="%s-%s"></a>' % (toplevel, subKeyword), False)
+                            documentAppend('<a name="%s-%s"></a>' % (details["chapter"], subKeyword), False)
 
                         deprecated = parameters.find("(deprecated)")
                         if deprecated != -1:
@@ -542,11 +545,13 @@ def convert(infile, outfile):
             documentAppend('</pre><br />')
 
     # Log warnings for keywords defined in several chapters
+    keyword_conflicts = {}
     for keyword in keywords:
         keyword_chapters = list(keywords[keyword])
         keyword_chapters.sort()
         if len(keyword_chapters) > 1:
             print >> sys.stderr, 'Multi section keyword : "%s" in chapters %s' % (keyword, list(keyword_chapters))
+            keyword_conflicts[keyword] = keyword_chapters
 
     keywords = list(keywords)
     keywords.sort()
@@ -566,6 +571,7 @@ def convert(infile, outfile):
             chapterIndexes = chapterIndexes,
             keywords = keywords,
             keywordsCount = keywordsCount,
+            keyword_conflicts = keyword_conflicts,
             version = VERSION,
             date = datetime.datetime.now().strftime("%Y/%m/%d")
     )
