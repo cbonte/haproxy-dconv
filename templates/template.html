@@ -64,14 +64,11 @@
 				<div class="span9">
 					% if keyword_conflicts:
 						<div class="alert alert-warning">
-							Currently, the converter can't manage keywords defined in several sections. Generated Links will probably be wrong for such keywords.
+							Currently, the converter can't resolve conflicts for keywords defined in several sections.
+							Generated links will probably be wrong for such keywords.
 							Until this can be fixed, you can use the links below to access directly to the right section :
-							<%
-								sorted_keywords = list(keyword_conflicts)
-								sorted_keywords.sort()
-							%>
 							<dl class="dl-horizontal">
-							% for keyword in sorted_keywords:
+							% for keyword in sorted(list(keyword_conflicts)):
 								<dt>${keyword}</dt>
 								<dd>
 									<% sections = keyword_conflicts[keyword] %>
