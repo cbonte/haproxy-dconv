@@ -518,6 +518,8 @@ def convert(infile, outfile):
                             documentAppend('<a name="%s"></a>' % subKeyword, False)
                             documentAppend('<a name="%s-%s"></a>' % (toplevel, subKeyword), False)
                             documentAppend('<a name="%s-%s"></a>' % (details["chapter"], subKeyword), False)
+                            documentAppend('<a name="%s (%s)"></a>' % (subKeyword, chapters[toplevel]['title']), False)
+                            documentAppend('<a name="%s (%s)"></a>' % (subKeyword, chapters[details["chapter"]]['title']), False)
 
                         deprecated = parameters.find("(deprecated)")
                         if deprecated != -1:
@@ -564,6 +566,12 @@ def convert(infile, outfile):
     keywords.sort()
 
     createLinks()
+
+    # Add the keywords conflicts to the keywords list to make them available in the search form
+    for keyword in keyword_conflicts:
+        sections = keyword_conflicts[keyword]
+        for section in sections:
+            keywords.append("%s (%s)" % (keyword, chapters[section]['title']))
 
     print >> sys.stderr, "Exporting to %s..." % outfile
 
