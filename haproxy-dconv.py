@@ -90,7 +90,7 @@ def getTitleDetails(string):
 
 # Parse the wole document to insert links on keywords
 def createLinks():
-    global document, keywords, keywordsCount, keyword_conflicts
+    global document, keywords, keywordsCount, keyword_conflicts, chapters
 
     print >> sys.stderr, "Generating keywords links..."
 
@@ -99,7 +99,23 @@ def createLinks():
         if (keyword in keyword_conflicts) and (not keywordsCount[keyword]):
             # The keyword is never used, we can remove it from the conflicts list
             del keyword_conflicts[keyword]
-        document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + keyword + '">' + keyword + '</a>&quot;')
+
+	if keyword in keyword_conflicts:
+		chapter_list = ""
+		for chapter in keyword_conflicts[keyword]:
+			chapter_list += '<li><a href="#%s (%s)">%s</a></li>' % (keyword, chapters[chapter]['title'], chapters[chapter]['title'])
+		document = document.replace('&quot;' + keyword + '&quot;',
+			'&quot;<span class="dropdown">' +
+			'<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+			keyword +
+			'</a>' +
+			'<ul class="dropdown-menu">' +
+			'<div>This keyword is available in sections :</div>' +
+			chapter_list +
+			'</ul>' +
+			'</span>&quot;')
+	else:
+		document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + keyword + '">' + keyword + '</a>&quot;')
         if keyword.startswith("option "):
             shortKeyword = keyword[len("option "):]
             keywordsCount[shortKeyword] = document.count('&quot;' + shortKeyword + '&quot;')
