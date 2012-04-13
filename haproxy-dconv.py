@@ -100,27 +100,27 @@ def createLinks():
             # The keyword is never used, we can remove it from the conflicts list
             del keyword_conflicts[keyword]
 
-	if keyword in keyword_conflicts:
-		chapter_list = ""
-		for chapter in keyword_conflicts[keyword]:
-			chapter_list += '<li><a href="#%s (%s)">%s</a></li>' % (keyword, chapters[chapter]['title'], chapters[chapter]['title'])
-		document = document.replace('&quot;' + keyword + '&quot;',
-			'&quot;<span class="dropdown">' +
-			'<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-			keyword +
-			'</a>' +
-			'<ul class="dropdown-menu">' +
-			'<div>This keyword is available in sections :</div>' +
-			chapter_list +
-			'</ul>' +
-			'</span>&quot;')
-	else:
-		document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + keyword + '">' + keyword + '</a>&quot;')
+        if keyword in keyword_conflicts:
+            chapter_list = ""
+            for chapter in keyword_conflicts[keyword]:
+                chapter_list += '<li><a href="#%s (%s)">%s</a></li>' % (keyword, chapters[chapter]['title'], chapters[chapter]['title'])
+            document = document.replace('&quot;' + keyword + '&quot;',
+                    '&quot;<span class="dropdown">' +
+                    '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+                    keyword +
+                    '</a>' +
+                    '<ul class="dropdown-menu">' +
+                    '<div>This keyword is available in sections :</div>' +
+                    chapter_list +
+                    '</ul>' +
+                    '</span>&quot;')
+        else:
+            document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + keyword + '">' + keyword + '</a>&quot;')
         if keyword.startswith("option "):
             shortKeyword = keyword[len("option "):]
             keywordsCount[shortKeyword] = document.count('&quot;' + shortKeyword + '&quot;')
             if (shortKeyword in keyword_conflicts) and (not keywordsCount[shortKeyword]):
-                # The keyword is never used, we can remove it from the conflicts list
+            # The keyword is never used, we can remove it from the conflicts list
                 del keyword_conflicts[shortKeyword]
             document = document.replace('&quot;' + shortKeyword + '&quot;', '&quot;<a href="#' + keyword + '">' + shortKeyword + '</a>&quot;')
 
@@ -591,7 +591,7 @@ def convert(infile, outfile):
         for section in sections:
             keywords.insert(offset, "%s (%s)" % (keyword, chapters[section]['title']))
             offset += 1
-	keywords.remove(keyword)
+        keywords.remove(keyword)
 
     print >> sys.stderr, "Exporting to %s..." % outfile
 
