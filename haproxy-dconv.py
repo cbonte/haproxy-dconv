@@ -393,6 +393,10 @@ def convert(infile, outfile):
                 else:
                     nextline = ""
 
+                line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
+                line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
+                line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
+
                 if tablePattern.match(nextline):
                     lineSeparator = nextline
                     nbColumns = nextline.count("+") + 1
@@ -563,8 +567,6 @@ def convert(infile, outfile):
                         # This is probably not a keyword but a text, ignore it
                         documentAppend(line)
                 else:
-                    line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
-                    line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
                     documentAppend(line)
                 i = i + 1
             documentAppend('</pre><br />')
