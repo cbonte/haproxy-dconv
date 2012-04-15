@@ -27,13 +27,15 @@ import datetime
 from optparse import OptionParser
 from mako.template import Template
 
-VERSION = "0.0.1"
+VERSION = ""
+DATE = ""
 
 def main():
-    global VERSION
+    global VERSION, DATE
 
     VERSION = get_git_version()
-    if not VERSION:
+    DATE = get_git_date()
+    if not VERSION or not DATE:
         sys.exit(1)
 
     usage="Usage: %prog --infile <infile> --outfile <outfile>"
@@ -55,7 +57,6 @@ def main():
 # Temporarily determine the version from git to follow which commit generated
 # the documentation
 def get_git_version():
-    global VERSION
     if not os.path.isdir(".git"):
         print >> sys.stderr, "This does not appear to be a Git repository."
         return
@@ -74,6 +75,23 @@ def get_git_version():
 
     version = version[1:].strip()
     return version
+
+# Temporarily determine the last commit date from git
+def get_git_date():
+    if not os.path.isdir(".git"):
+        print >> sys.stderr, "This does not appear to be a Git repository."
+        return
+    try:
+        p = subprocess.Popen(["git", "log", "-1", '--format=%ct'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except EnvironmentError:
+        print >> sys.stderr, "Unable to run git"
+        return
+    date = p.communicate()[0]
+    if p.returncode != 0:
+        print >> sys.stderr, "Unable to run git"
+        return
+
+    return date
 
 def getTitleDetails(string):
     array = string.split(".")
@@ -630,7 +648,7 @@ def convert(infile, outfile):
             keywordsCount = keywordsCount,
             keyword_conflicts = keyword_conflicts,
             version = VERSION,
-            date = datetime.datetime.now().strftime("%Y/%m/%d")
+            date = datetime.datetime.fromtimestamp(int(DATE)).strftime("%Y/%m/%d")
     )
     fd.close()
 
