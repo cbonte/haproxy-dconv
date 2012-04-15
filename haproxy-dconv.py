@@ -302,6 +302,8 @@ def convert(infile, outfile):
     data = []
     fd = file(infile,"r")
     for line in fd:
+        line.replace("\t", " " * 8)
+        line = line.rstrip()
         data.append(line)
     fd.close()
 
@@ -415,7 +417,7 @@ def convert(infile, outfile):
                     '( [a-z0-9\-_]+)*',             # subkeywords
                     '(\(&lt;[a-z0-9]+&gt;\))?'      # arg
                     ))
-            tablePattern = re.compile(r'^[ \t]*(-+\+)+-+')
+            tablePattern = re.compile(r'^ *(-+\+)+-+')
 
             lines = content.split("\n")
             nblines = len(lines)
@@ -577,7 +579,7 @@ def convert(infile, outfile):
                     i += 1 # Skip underline
                     while not lines[i + 1].rstrip():
                         i += 1 # Skip empty lines
-                elif line != "" and not re.match(r'^[ \t]', line):
+                elif line != "" and not re.match(r'^ ', line):
                     parsed = keywordPattern.match(line)
                     if parsed != None:
 
