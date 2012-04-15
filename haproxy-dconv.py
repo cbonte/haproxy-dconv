@@ -464,7 +464,7 @@ def convert(infile, outfile):
                 line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
                 line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
 
-                if re.match(r'^ *Examples? *:.*', line):
+                if re.match(r'^ *Examples? *:$', line):
                     # Detect examples blocks
                     line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
                     documentAppend(line)
@@ -487,6 +487,13 @@ def convert(infile, outfile):
                             i += 1
                         documentAppend("</pre>")
                     continue
+
+                # Some examples are currently too complex to parse, well, just colorize the header for now.
+                # See below : a description on the same line as the label 'Example:' but continues on several lines
+                # Example: accept all connections from white-listed hosts, count all other
+                #          connections and reject too fast ones. This results in abusive ones
+                #          being blocked as long as they don't slow down.
+                line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
 
                 if context['headers']['subtitle'] == 'Configuration Manual' and tablePattern.match(nextline):
                     # activate table rendering only for th Configuration Manual
