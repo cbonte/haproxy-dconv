@@ -511,7 +511,13 @@ def convert(infile, outfile):
                     continue
 
 
-                if line != "" and not re.match(r'^[ \t]', line):
+                if (len(line) > 0) and (len(nextline) > 0) and (nextline[0] == '-') and ("-" * len(line) == nextline):
+                        # Detect underlines
+                    documentAppend('<h5>%s</h5>' % line, False)
+                    i += 1 # Skip underline
+                    while not lines[i + 1].rstrip():
+                        i += 1 # Skip empty lines
+                elif line != "" and not re.match(r'^[ \t]', line):
                     parsed = keywordPattern.match(line)
                     if parsed != None:
 
@@ -531,7 +537,6 @@ def convert(infile, outfile):
                         for j in xrange(0, len(splitKeyword)):
                             subKeyword = " ".join(splitKeyword[0:j + 1])
                             if subKeyword != "no":
-                                #keywords.append(subKeyword)
                                 if not subKeyword in keywords:
                                     keywords[subKeyword] = set()
                                 keywords[subKeyword].add(toplevel)
