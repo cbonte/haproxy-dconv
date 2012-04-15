@@ -338,6 +338,10 @@ def convert(infile, outfile):
             if details["chapter"]:
                 documentAppend("<a name=\"%s\"></a>" % details["chapter"])
                 fulltitle = details["chapter"] + ". " + title
+                if not details["chapter"] in chapters:
+                    print >> sys.stderr, "Adding '%s' to the summary" % details["title"]
+                    chapters[details["chapter"]] = details
+                    chapterIndexes = sorted(chapters.keys())
             if level == 1:
                 documentAppend("<div class=\"page-header\">", False)
             documentAppend("<h%d><small>%s.</small> %s</h%d>" % (level, details["chapter"], cgi.escape(title, True), level))
@@ -403,7 +407,8 @@ def convert(infile, outfile):
                 line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
                 line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
 
-                if tablePattern.match(nextline):
+                if context['headers']['subtitle'] == 'Configuration Manual' and tablePattern.match(nextline):
+                    # activate table rendering only for th Configuration Manual
                     lineSeparator = nextline
                     nbColumns = nextline.count("+") + 1
                     extraColumns = 0
