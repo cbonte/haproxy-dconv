@@ -294,6 +294,13 @@ def colorize(text):
 
     return colorized
 
+def get_indent(line):
+    i = 0
+    length = len(line)
+    while i < length and line[i] == ' ':
+        i += 1
+    return i
+
 # The parser itself
 # TODO : simplify the parser ! Make it clearer and modular.
 def convert(infile, outfile):
@@ -456,7 +463,30 @@ def convert(infile, outfile):
 
                 line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
                 line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
-                line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
+
+                if re.match(r'^ *Examples? *:.*', line):
+                    # Detect examples blocks
+                    line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
+                    documentAppend(line)
+                    indent = get_indent(line)
+                    i +=1
+                    while not lines[i]:
+                        i += 1 # Skip empty lines
+
+                    if get_indent(lines[i]) > indent:
+                        documentAppend("<pre>", False)
+                        add_empty_line = 0
+                        while i < len(lines) and ((not lines[i]) or (get_indent(lines[i]) > indent)):
+                            if lines[i]:
+                                for j in xrange(0, add_empty_line):
+                                    documentAppend("")
+                                documentAppend(lines[i])
+                                add_empty_line = 0
+                            else:
+                                add_empty_line += 1
+                            i += 1
+                        documentAppend("</pre>")
+                    continue
 
                 if context['headers']['subtitle'] == 'Configuration Manual' and tablePattern.match(nextline):
                     # activate table rendering only for th Configuration Manual
