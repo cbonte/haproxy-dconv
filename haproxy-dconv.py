@@ -29,9 +29,10 @@ from mako.template import Template
 
 VERSION = ""
 DATE = ""
+HAPROXY_GIT_VERSION = False
 
 def main():
-    global VERSION, DATE
+    global VERSION, DATE, HAPROXY_GIT_VERSION
 
     VERSION = get_git_version()
     DATE = get_git_date()
@@ -50,6 +51,8 @@ def main():
     if not (option.infile  and option.outfile) or len(args) > 0:
         parser.print_help()
         exit(1)
+
+    HAPROXY_GIT_VERSION = get_haproxy_git_version(os.path.dirname(option.infile))
 
     convert(option.infile, option.outfile)
 
@@ -92,6 +95,23 @@ def get_git_date():
         return
 
     return date
+
+def get_haproxy_git_version(path):
+    try:
+        p = subprocess.Popen(["git", "describe", "--tags", "--match", "v*"], cwd=path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except EnvironmentError:
+        return False
+    version = p.communicate()[0]
+
+    if p.returncode != 0:
+        return False
+
+    if len(version) < 2:
+        return False
+
+    version = version[1:].strip()
+    version = re.sub(r'-g.*', '', version)
+    return version
 
 def getTitleDetails(string):
     array = string.split(".")
@@ -409,6 +429,9 @@ def convert(infile, outfile):
                         'author':       lines[5].strip(),
                         'date':         lines[6].strip()
                 }
+                if HAPROXY_GIT_VERSION:
+                    context['headers']['version'] = 'version ' + HAPROXY_GIT_VERSION
+
                 # Skip header lines
                 while lines[i]:
                     i += 1
