@@ -82,9 +82,9 @@ def getTitleDetails(string):
     chapter  = ".".join(array)
     level    = max(1, len(array))
     if array:
-	toplevel = array[0]
+        toplevel = array[0]
     else:
-	toplevel = False
+        toplevel = False
 
     return {
             "title"   : title,
@@ -180,7 +180,7 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
             if j == 0 and i != 0 and hasKeywords:
                 if keyword.startswith("[no] "):
                     keyword = keyword[len("[no] "):]
-		open += '<a href="#%s-%s">' % (hasKeywords, keyword)
+                open += '<a href="#%s-%s">' % (hasKeywords, keyword)
                 close = '</a>' + close
             if j == 0 and len(row) > maxColumns:
                 for k in xrange(maxColumns, len(row)):
@@ -574,6 +574,10 @@ def convert(infile, outfile):
                         parameters = colorize(parameters)
 
                         documentAppend('<div class="keyword">%s<b><a name="%s"></a><a href="#%s-%s">%s</a></b>%s%s</div>' % (prefix, keyword, toplevel, keyword, keyword, parameters, suffix), False)
+                    elif line.startswith("/*"):
+                        # Skip comments in the documentation
+                        while not lines[i].endswith("*/"):
+                            i += 1
                     else:
                         # This is probably not a keyword but a text, ignore it
                         documentAppend(line)
