@@ -417,12 +417,10 @@ def convert(infile, outfile):
             content = cgi.escape(content, True)
             content = re.sub(r'section ([0-9]+(.[0-9]+)*)', r'<a href="#\1">section \1</a>', content)
 
-            #keywordPattern = re.compile(r'^((([a-z0-9\-_\.\(\)]|&lt;|&gt;)+[a-z0-9\)])( +[a-z0-9][a-z0-9\-_\.\(\)]*[a-z0-9\)])*)(.*)')
-            #keywordPattern = re.compile('^(((\(&lt;[a-z0-9\-_\.]+&lt;\))? +[a-z0-9][a-z0-9\-_\.\(\)]*[a-z0-9\)])*)(.*)')
             keywordPattern = re.compile(r'^(%s%s)(%s)' % (
-                    '([a-z][a-z0-9\-_\.]*[a-z0-9\-_)])',    # keyword
-                    '( [a-z0-9\-_]+)*',             # subkeywords
-                    '(\(&lt;[a-z0-9]+&gt;\))?'      # arg
+                    '([a-z][a-z0-9\-_\.]*[a-z0-9\-_)])', # keyword
+                    '( [a-z0-9\-_]+)*',                  # subkeywords
+                    '(\((&lt;[a-z0-9]+&gt;/?)+\))?'      # arg (ex: (<backend>), (<frontend>/<backend>), ...
                     ))
             tablePattern = re.compile(r'^ *(-+\+)+-+')
 
