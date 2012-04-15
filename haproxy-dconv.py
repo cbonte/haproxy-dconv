@@ -169,13 +169,18 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
 
     documentAppend('<table class=\"table table-bordered\" border="0" cellspacing="0" cellpadding="0">', False)
     mode = "th"
-
+    headerLine = ""
     i = 0
     for row in table:
-        if i == 0:
-            documentAppend('<thead>', False)
+        line = ""
 
-        documentAppend('<tr>', False)
+        if i == 0:
+            line += '<thead>'
+        elif i > 1 and (i  - 1) % 20 == 0:
+            # Repeat headers periodically for long tables
+            line += headerLine
+
+        line += '<tr>'
 
         j = 0
         for column in row:
@@ -203,13 +208,16 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
             if j == 0 and len(row) > maxColumns:
                 for k in xrange(maxColumns, len(row)):
                     open = open + '<span class="pull-right">' + row[k] + '</span>'
-            documentAppend('%s%s%s' % (open, data, close), False)
+            line += '%s%s%s' % (open, data, close)
             j += 1
         mode = "td"
-        documentAppend('</tr>', False)
+        line += '</tr>'
 
         if i == 0:
-            documentAppend('</thead>', False)
+            line += '</thead>'
+            headerLine = line
+
+        documentAppend(line, False)
 
         i += 1
     documentAppend('</table>', False)
