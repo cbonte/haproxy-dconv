@@ -78,14 +78,19 @@ def get_git_version():
 def getTitleDetails(string):
     array = string.split(".")
 
-    title   = array.pop().strip()
-    chapter = ".".join(array)
-    level   = max(1, len(array))
+    title    = array.pop().strip()
+    chapter  = ".".join(array)
+    level    = max(1, len(array))
+    if array:
+	toplevel = array[0]
+    else:
+	toplevel = False
 
     return {
-            "title"  : title,
-            "chapter": chapter,
-            "level"  : level
+            "title"   : title,
+            "chapter" : chapter,
+            "level"   : level,
+            "toplevel": toplevel
     }
 
 # Parse the wole document to insert links on keywords
@@ -173,8 +178,8 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
             keyword = column
             if j == 0 and i != 0 and hasKeywords:
                 if keyword.startswith("[no] "):
-                    keyword = keyword[5:]
-                open = open + '<a href="#' + keyword + '">'
+                    keyword = keyword[len("[no] "):]
+		open += '<a href="#%s-%s">' % (hasKeywords, keyword)
                 close = '</a>' + close
             if j == 0 and len(row) > maxColumns:
                 for k in xrange(maxColumns, len(row)):
@@ -494,7 +499,7 @@ def convert(infile, outfile):
 
                             i += 1
                     print >> sys.stderr, "Leaving table mode"
-                    renderTable(table, nbColumns, details["chapter"] == "4.1")
+                    renderTable(table, nbColumns, details["toplevel"])
                     i += 1 # skip useless next line
                     continue
                 elif line.find("May be used in sections") != -1:
@@ -533,7 +538,7 @@ def convert(infile, outfile):
                         keyword = False
 
                     if keyword and (len(splitKeyword) <= 5):
-                        toplevel = details["chapter"].split('.', 1)[0]
+                        toplevel = details["toplevel"]
                         for j in xrange(0, len(splitKeyword)):
                             subKeyword = " ".join(splitKeyword[0:j + 1])
                             if subKeyword != "no":
@@ -567,7 +572,7 @@ def convert(infile, outfile):
 
                         parameters = colorize(parameters)
 
-                        documentAppend('<div class="keyword">%s<b><a name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, keyword, keyword, parameters, suffix), False)
+                        documentAppend('<div class="keyword">%s<b><a name="%s"></a><a href="#%s-%s">%s</a></b>%s%s</div>' % (prefix, keyword, toplevel, keyword, keyword, parameters, suffix), False)
                     else:
                         # This is probably not a keyword but a text, ignore it
                         documentAppend(line)
