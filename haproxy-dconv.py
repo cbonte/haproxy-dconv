@@ -113,6 +113,7 @@ def createLinks():
                     '&quot;<span class="dropdown">' +
                     '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
                     keyword +
+                    '<span class="caret"></span>' +
                     '</a>' +
                     '<ul class="dropdown-menu">' +
                     '<div>This keyword is available in sections :</div>' +
