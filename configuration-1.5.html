@@ -4,11 +4,7 @@
 		<meta charset="utf-8" />
 		<title>HAProxy version 1.5-dev8-24 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-		<style>
-		</style>
 		<link href="css/page.css" rel="stylesheet" />
-		<script src="js/jquery.min.js"></script>
-		<script src="bootstrap/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -27,7 +23,7 @@
 				</div>
 			</div>
 			<div class="alert alert-success pagination-centered">
-				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.3-7-gb9efd56</b> on <b>2012/04/16</b>
+				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.3-8-gd307f8c</b> on <b>2012/04/16</b>
 			</div>
 
 			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
@@ -912,7 +908,7 @@ it is required to create at least one userlist and to define users.
 
 
   <span class="label label-success">Example:</span>
-<pre>        userlist L1
+<pre class="prettyprint">        userlist L1
           group G1 users tiger,scott
           group G2 users xdb,scott
 
@@ -927,8 +923,7 @@ it is required to create at least one userlist and to define users.
           user tiger password $6$k6y3o.eP$JlKBx(...)xHSwRv6J.C0/D7cV91 groups G1
           user scott insecure-password elgato groups G1,G2
           user xdb insecure-password hello groups G2
-</pre>
-  Please note that both lists are functionally identical.
+</pre>  Please note that both lists are functionally identical.
 </pre><br />
 <a name="3.5"></a>
 <h2><small>3.5.</small> Peers</h2>
@@ -963,7 +958,7 @@ tables.
   across all peers.
 
   <span class="label label-success">Example:</span>
-<pre>    peers mypeers
+<pre class="prettyprint">    peers mypeers
         peer haproxy1 192.168.0.1:1024
         peer haproxy2 192.168.0.2:1024
         peer haproxy3 10.2.0.1:1024
@@ -976,8 +971,7 @@ tables.
 
         server srv1 192.168.0.30:80
         server srv2 192.168.0.31:80
-</pre>
-</pre><br />
+</pre></pre><br />
 <a name="4"></a>
 <div class="page-header"><h1><small>4.</small> Proxies</h1>
 </div><pre>Proxy configuration can be located in a set of sections :
@@ -1038,11 +1032,10 @@ specified in a previous &quot;defaults&quot; section.
 
 <a name="acl"></a><a name="4-acl"></a><a name="4.2-acl"></a><a name="acl (Proxies)"></a><a name="acl (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="acl"></a><a href="#4-acl">acl</a></b> <span style="color: #080">&lt;aclname&gt;</span> <span style="color: #080">&lt;criterion&gt;</span> <span style="color: #008">[flags]</span> <span style="color: #008">[operator]</span> <span style="color: #080">&lt;value&gt;</span> ...</div>  Declare or complete an access list.
 <p>  May be used in sections  :<table class="table table-bordered" border="0" cellspacing="0" cellpadding="0"><thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead><tr><td class="alert-error"><div class="pagination-centered">no</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td></tr></table></p>  <span class="label label-success">Example:</span>
-<pre>        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
+<pre class="prettyprint">        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
         acl invalid_src  src_port     0:1023
         acl local_dst    hdr(host) -i localhost
-</pre>
-  See <a href="#7">section 7</a> about ACL usage.
+</pre>  See <a href="#7">section 7</a> about ACL usage.
 
 
 <a name="appsession"></a><a name="4-appsession"></a><a name="4.2-appsession"></a><a name="appsession (Proxies)"></a><a name="appsession (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="appsession"></a><a href="#4-appsession">appsession</a></b> <span style="color: #080">&lt;cookie&gt;</span> len <span style="color: #080">&lt;length&gt;</span> timeout <span style="color: #080">&lt;holdtime&gt;</span>
@@ -1104,9 +1097,8 @@ specified in a previous &quot;defaults&quot; section.
          processes, which can result in random behaviours.
 
   <span class="label label-success">Example :</span>
-<pre>        appsession JSESSIONID len 52 timeout 3h
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#cookie (Proxies)">Proxies</a></li><li><a href="#cookie (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#stick">stick</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;,
+<pre class="prettyprint">        appsession JSESSIONID len 52 timeout 3h
+</pre>  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#cookie (Proxies)">Proxies</a></li><li><a href="#cookie (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#stick">stick</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;,
              &quot;<a href="#ignore-persist">ignore-persist</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot; and &quot;<a href="#bind-process">bind-process</a>&quot;.
 
 
@@ -1313,14 +1305,13 @@ specified in a previous &quot;defaults&quot; section.
   for each backend.
 
   <span class="label label-success">Examples :</span>
-<pre>        balance roundrobin
+<pre class="prettyprint">        balance roundrobin
         balance url_param userid
         balance url_param session_id check_post 64
         balance hdr(User-Agent)
         balance hdr(host)
         balance hdr(Host) use_domain_only
-</pre>
-  Note: the following caveats and limitations on using the &quot;check_post&quot;
+</pre>  Note: the following caveats and limitations on using the &quot;check_post&quot;
   extension with &quot;url_param&quot; must be considered :
 
     - all POST requests are eligible for consideration, because there is no way
@@ -1496,12 +1487,11 @@ specified in a previous &quot;defaults&quot; section.
   in a frontend.
 
   <span class="label label-success">Example :</span>
-<pre>        listen http_proxy
+<pre class="prettyprint">        listen http_proxy
             bind :80,:443
             bind 10.0.0.1:10080,10.0.0.1:10443
             bind /var/run/ssl-frontend.sock user root mode 600 accept-proxy
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#option forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol
+</pre>  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#option forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol
              documentation.
 
 
@@ -1538,7 +1528,7 @@ specified in a previous &quot;defaults&quot; section.
   backend automatically inherits the frontend's processes.
 
   <span class="label label-success">Example :</span>
-<pre>        listen app_ip1
+<pre class="prettyprint">        listen app_ip1
             bind 10.0.0.1:80
             bind-process odd
 
@@ -1549,8 +1539,7 @@ specified in a previous &quot;defaults&quot; section.
         listen management
             bind 10.0.0.3:80
             bind-process 1 2 3 4
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#nbproc">nbproc</a>&quot; in global section.
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#nbproc">nbproc</a>&quot; in global section.
 
 
 <a name="block"></a><a name="4-block"></a><a name="4.2-block"></a><a name="block (Proxies)"></a><a name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="block"></a><a href="#4-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div>  Block a layer 7 request if/unless a condition is matched
@@ -1563,12 +1552,11 @@ specified in a previous &quot;defaults&quot; section.
   &quot;<a href="#block">block</a>&quot; statements per instance.
 
   <span class="label label-success">Example:</span>
-<pre>        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
+<pre class="prettyprint">        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
         acl invalid_src  src_port     0:1023
         acl local_dst    hdr(host) -i localhost
         block if invalid_src || local_dst
-</pre>
-  See <a href="#7">section 7</a> about ACL usage.
+</pre>  See <a href="#7">section 7</a> about ACL usage.
 
 
 <a name="capture"></a><a name="4-capture"></a><a name="4.2-capture"></a><a name="capture (Proxies)"></a><a name="capture (Alphabetically sorted keywords reference)"></a><a name="capture cookie"></a><a name="4-capture cookie"></a><a name="4.2-capture cookie"></a><a name="capture cookie (Proxies)"></a><a name="capture cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="capture cookie"></a><a href="#4-capture cookie">capture cookie</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div>  Capture and log a cookie in the request and in the response.
@@ -1601,9 +1589,8 @@ specified in a previous &quot;defaults&quot; section.
   specify a capture in a &quot;defaults&quot; section.
 
   <span class="label label-success">Example:</span>
-<pre>        capture cookie ASPSESSION len 32
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#capture request header">capture request header</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as
+<pre class="prettyprint">        capture cookie ASPSESSION len 32
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#capture request header">capture request header</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as
             <a href="#8">section 8</a> about logging.
 
 
@@ -1640,11 +1627,10 @@ specified in a previous &quot;defaults&quot; section.
   possible to specify a capture in a &quot;defaults&quot; section.
 
   <span class="label label-success">Example:</span>
-<pre>        capture request header Host len 15
+<pre class="prettyprint">        capture request header Host len 15
         capture request header X-Forwarded-For len 15
         capture request header Referrer len 15
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as <a href="#8">section 8</a>
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as <a href="#8">section 8</a>
              about logging.
 
 
@@ -1675,10 +1661,9 @@ specified in a previous &quot;defaults&quot; section.
   is not possible to specify a capture in a &quot;defaults&quot; section.
 
   <span class="label label-success">Example:</span>
-<pre>        capture response header Content-length len 9
+<pre class="prettyprint">        capture response header Content-length len 9
         capture response header Location len 15
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#capture request header">capture request header</a>&quot; as well as <a href="#8">section 8</a>
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#capture request header">capture request header</a>&quot; as well as <a href="#8">section 8</a>
              about logging.
 
 
@@ -1888,12 +1873,11 @@ specified in a previous &quot;defaults&quot; section.
   is declared for a given server, the cookie is not set.
 
   <span class="label label-success">Examples :</span>
-<pre>        cookie JSESSIONID prefix
+<pre class="prettyprint">        cookie JSESSIONID prefix
         cookie SRV insert indirect nocache
         cookie SRV insert postonly indirect
         cookie SRV insert indirect nocache maxidle 30m maxlife 8h
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#appsession">appsession</a>&quot;, &quot;balance source&quot;, &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#server">server</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#appsession">appsession</a>&quot;, &quot;balance source&quot;, &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#server">server</a>&quot;
              and &quot;<a href="#ignore-persist">ignore-persist</a>&quot;.
 
 
@@ -1905,9 +1889,8 @@ specified in a previous &quot;defaults&quot; section.
               details.
 
   <span class="label label-success">Example :</span>
-<pre>        default-server inter 1000 weight 13
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#server">server</a>&quot; and <a href="#5">section 5</a> about server options
+<pre class="prettyprint">        default-server inter 1000 weight 13
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#server">server</a>&quot; and <a href="#5">section 5</a> about server options
 
 
 <a name="default_backend"></a><a name="4-default_backend"></a><a name="4.2-default_backend"></a><a name="default_backend (Proxies)"></a><a name="default_backend (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="default_backend"></a><a href="#4-default_backend">default_backend</a></b> <span style="color: #080">&lt;backend&gt;</span></div>  Specify the backend to use when no &quot;<a href="#use_backend">use_backend</a>&quot; rule has been matched.
@@ -1920,11 +1903,10 @@ specified in a previous &quot;defaults&quot; section.
   will catch all undetermined requests.
 
   <span class="label label-success">Example :</span>
-<pre>        use_backend     dynamic  if  url_dyn
+<pre class="prettyprint">        use_backend     dynamic  if  url_dyn
         use_backend     static   if  url_css url_img extension_img
         default_backend dynamic
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#use_backend">use_backend</a>&quot;, &quot;reqsetbe&quot;, &quot;reqisetbe&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#use_backend">use_backend</a>&quot;, &quot;reqsetbe&quot;, &quot;reqisetbe&quot;
 
 
 <a name="disabled"></a><a name="4-disabled"></a><a name="4.2-disabled"></a><a name="disabled (Proxies)"></a><a name="disabled (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="disabled"></a><a href="#4-disabled">disabled</a></b></div>  Disable a proxy, frontend or backend.
@@ -2008,11 +1990,10 @@ specified in a previous &quot;defaults&quot; section.
   <span class="label label-see-also">See also :</span> &quot;<a href="#errorloc">errorloc</a>&quot;, &quot;<a href="#errorloc302">errorloc302</a>&quot;, &quot;<a href="#errorloc303">errorloc303</a>&quot;
 
   <span class="label label-success">Example :</span>
-<pre>        errorfile 400 /etc/haproxy/errorfiles/400badreq.http
+<pre class="prettyprint">        errorfile 400 /etc/haproxy/errorfiles/400badreq.http
         errorfile 403 /etc/haproxy/errorfiles/403forbid.http
         errorfile 503 /etc/haproxy/errorfiles/503sorry.http
-</pre>
-<a name="errorloc"></a><a name="4-errorloc"></a><a name="4.2-errorloc"></a><a name="errorloc (Proxies)"></a><a name="errorloc (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="errorloc"></a><a href="#4-errorloc">errorloc</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;url&gt;</span></div><a name="errorloc302"></a><a name="4-errorloc302"></a><a name="4.2-errorloc302"></a><a name="errorloc302 (Proxies)"></a><a name="errorloc302 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="errorloc302"></a><a href="#4-errorloc302">errorloc302</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;url&gt;</span></div>  Return an HTTP redirection to a URL instead of errors generated by HAProxy
+</pre><a name="errorloc"></a><a name="4-errorloc"></a><a name="4.2-errorloc"></a><a name="errorloc (Proxies)"></a><a name="errorloc (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="errorloc"></a><a href="#4-errorloc">errorloc</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;url&gt;</span></div><a name="errorloc302"></a><a name="4-errorloc302"></a><a name="4.2-errorloc302"></a><a name="errorloc302 (Proxies)"></a><a name="errorloc302 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="errorloc302"></a><a href="#4-errorloc302">errorloc302</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;url&gt;</span></div>  Return an HTTP redirection to a URL instead of errors generated by HAProxy
 <p>  May be used in sections  :<table class="table table-bordered" border="0" cellspacing="0" cellpadding="0"><thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead><tr><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td></tr></table></p>  <span class="label label-info">Arguments :</span>
     &lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
               generating codes 200, 400, 403, 408, 500, 502, 503, and 504.
@@ -2112,15 +2093,14 @@ specified in a previous &quot;defaults&quot; section.
   backend. That way it's safe to leave it unset.
 
   <span class="label label-success">Example :</span>
-<pre>     # The servers will accept between 100 and 1000 concurrent connections each
-     # and the maximum of 1000 will be reached when the backend reaches 10000
-     # connections.
+<pre class="prettyprint">     <span class="comment"># The servers will accept between 100 and 1000 concurrent connections each</span>
+     <span class="comment"># and the maximum of 1000 will be reached when the backend reaches 10000</span>
+     <span class="comment"># connections.</span>
      backend dynamic
         fullconn   10000
         server     srv1   dyn1:80 minconn 100 maxconn 1000
         server     srv2   dyn2:80 minconn 100 maxconn 1000
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#server">server</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#server">server</a>&quot;
 
 
 <a name="grace"></a><a name="4-grace"></a><a name="4.2-grace"></a><a name="grace (Proxies)"></a><a name="grace (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="grace"></a><a href="#4-grace">grace</a></b> <span style="color: #080">&lt;time&gt;</span></div>  Maintain a proxy operational for some time after a soft stop
@@ -2261,19 +2241,18 @@ specified in a previous &quot;defaults&quot; section.
   then this last one has precedence when the server responds with 404.
 
   <span class="label label-success">Examples :</span>
-<pre>         # only accept status 200 as valid
+<pre class="prettyprint">         <span class="comment"># only accept status 200 as valid</span>
          http-check expect status 200
 
-         # consider SQL errors as errors
+         <span class="comment"># consider SQL errors as errors</span>
          http-check expect ! string SQL\ Error
 
-         # consider status 5xx only as errors
+         <span class="comment"># consider status 5xx only as errors</span>
          http-check expect ! rstatus ^5
 
-         # check that we have a correct hexadecimal tag before /html
+         <span class="comment"># check that we have a correct hexadecimal tag before /html</span>
          http-check expect rstring &lt;!--tag:[0-9a-f]*&lt;/html&gt;
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check disable-on-404">http-check disable-on-404</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check disable-on-404">http-check disable-on-404</a>&quot;
 
 
 <a name="http-check"></a><a name="4-http-check"></a><a name="4.2-http-check"></a><a name="http-check (Proxies)"></a><a name="http-check (Alphabetically sorted keywords reference)"></a><a name="http-check send-state"></a><a name="4-http-check send-state"></a><a name="4.2-http-check send-state"></a><a name="http-check send-state (Proxies)"></a><a name="http-check send-state (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="http-check send-state"></a><a href="#4-http-check send-state">http-check send-state</a></b></div>  Enable emission of a state header with HTTP health checks
@@ -2330,7 +2309,7 @@ specified in a previous &quot;defaults&quot; section.
   instance.
 
   <span class="label label-success">Example:</span>
-<pre>        acl nagios src 192.168.129.3
+<pre class="prettyprint">        acl nagios src 192.168.129.3
         acl local_net src 192.168.0.0/16
         acl auth_ok http_auth(L1)
 
@@ -2338,13 +2317,11 @@ specified in a previous &quot;defaults&quot; section.
         http-request allow if local_net auth_ok
         http-request auth realm Gimme if local_net auth_ok
         http-request deny
-</pre>
-  <span class="label label-success">Example:</span>
-<pre>        acl auth_ok http_auth_group(L1) G1
+</pre>  <span class="label label-success">Example:</span>
+<pre class="prettyprint">        acl auth_ok http_auth_group(L1) G1
 
         http-request auth unless auth_ok
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a>
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a>
              about ACL usage.
 
 <a name="http-send-name-header"></a><a name="4-http-send-name-header"></a><a name="4.2-http-send-name-header"></a><a name="http-send-name-header (Proxies)"></a><a name="http-send-name-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="http-send-name-header"></a><a href="#4-http-send-name-header">http-send-name-header</a></b> <span style="color: #008">[<span style="color: #080">&lt;header&gt;</span>]</span></div>  Add the server name to a request. Use the header string given by &lt;header&gt;
@@ -2450,11 +2427,10 @@ specified in a previous &quot;defaults&quot; section.
          being emitted.
 
   <span class="label label-success">Example :</span>
-<pre>    log global
-    log 127.0.0.1:514 local0 notice         # only send important events
-    log 127.0.0.1:514 local0 notice notice  # same but limit output level
-</pre>
-<a name="log-format"></a><a name="4-log-format"></a><a name="4.2-log-format"></a><a name="log-format (Proxies)"></a><a name="log-format (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="log-format"></a><a href="#4-log-format">log-format</a></b> <span style="color: #080">&lt;string&gt;</span>
+<pre class="prettyprint">    log global
+    log 127.0.0.1:514 local0 notice         <span class="comment"># only send important events</span>
+    log 127.0.0.1:514 local0 notice notice  <span class="comment"># same but limit output level</span>
+</pre><a name="log-format"></a><a name="4-log-format"></a><a name="4.2-log-format"></a><a name="log-format (Proxies)"></a><a name="log-format (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="log-format"></a><a href="#4-log-format">log-format</a></b> <span style="color: #080">&lt;string&gt;</span>
    Allows you to custom a log line.</div>
    <span class="label label-see-also">See also :</span> Custom Log Format (8.2.4)
 
@@ -2507,10 +2483,9 @@ specified in a previous &quot;defaults&quot; section.
    will be refused.
 
    <span class="label label-success">Example :</span>
-<pre>     defaults http_instances
+<pre class="prettyprint">     defaults http_instances
          mode http
-</pre>
-   <span class="label label-see-also">See also :</span> &quot;<a href="#monitor">monitor</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;
+</pre>   <span class="label label-see-also">See also :</span> &quot;<a href="#monitor">monitor</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;
 
 
 <a name="monitor"></a><a name="4-monitor"></a><a name="4.2-monitor"></a><a name="monitor (Proxies)"></a><a name="monitor (Alphabetically sorted keywords reference)"></a><a name="monitor fail"></a><a name="4-monitor fail"></a><a name="4.2-monitor fail"></a><a name="monitor fail (Proxies)"></a><a name="monitor fail (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="monitor fail"></a><a href="#4-monitor fail">monitor fail</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div>  Add a condition to report a failure to a monitor HTTP request.
@@ -2537,14 +2512,13 @@ specified in a previous &quot;defaults&quot; section.
   messages may be tweaked using &quot;<a href="#errorfile">errorfile</a>&quot; or &quot;<a href="#errorloc">errorloc</a>&quot; if needed.
 
   <span class="label label-success">Example:</span>
-<pre>     frontend www
+<pre class="prettyprint">     frontend www
         mode http
         acl site_dead nbsrv(dynamic) lt 2
         acl site_dead nbsrv(static)  lt 2
         monitor-uri   /site_alive
         monitor fail  if site_dead
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#monitor-net">monitor-net</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;, &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#errorloc">errorloc</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#monitor-net">monitor-net</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;, &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#errorloc">errorloc</a>&quot;
 
 
 <a name="monitor-net"></a><a name="4-monitor-net"></a><a name="4.2-monitor-net"></a><a name="monitor-net (Proxies)"></a><a name="monitor-net (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="monitor-net"></a><a href="#4-monitor-net">monitor-net</a></b> <span style="color: #080">&lt;source&gt;</span></div>  Declare a source network which is limited to monitor requests
@@ -2575,11 +2549,10 @@ specified in a previous &quot;defaults&quot; section.
   a frontend. If more than one is found, only the last one will be considered.
 
   <span class="label label-success">Example :</span>
-<pre>    # addresses .252 and .253 are just probing us.
+<pre class="prettyprint">    <span class="comment"># addresses .252 and .253 are just probing us.</span>
     frontend www
         monitor-net 192.168.0.252/31
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#monitor fail">monitor fail</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#monitor fail">monitor fail</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;
 
 
 <a name="monitor-uri"></a><a name="4-monitor-uri"></a><a name="4.2-monitor-uri"></a><a name="monitor-uri (Proxies)"></a><a name="monitor-uri (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="monitor-uri"></a><a href="#4-monitor-uri">monitor-uri</a></b> <span style="color: #080">&lt;uri&gt;</span></div>  Intercept a URI used by external components' monitor requests
@@ -2604,12 +2577,11 @@ specified in a previous &quot;defaults&quot; section.
   can be imagined (most often the number of available servers in a backend).
 
   <span class="label label-success">Example :</span>
-<pre>    # Use /haproxy_test to report haproxy's status
+<pre class="prettyprint">    <span class="comment"># Use /haproxy_test to report haproxy's status</span>
     frontend www
         mode http
         monitor-uri /haproxy_test
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#monitor fail">monitor fail</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#monitor fail">monitor fail</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;
 
 
 <a name="option"></a><a name="4-option"></a><a name="4.2-option"></a><a name="option (Proxies)"></a><a name="option (Alphabetically sorted keywords reference)"></a><a name="option abortonclose"></a><a name="4-option abortonclose"></a><a name="4.2-option abortonclose"></a><a name="option abortonclose (Proxies)"></a><a name="option abortonclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="option abortonclose"></a><a href="#4-option abortonclose">option abortonclose</a></b></div><a name="no"></a><a name="4-no"></a><a name="4.2-no"></a><a name="no (Proxies)"></a><a name="no (Alphabetically sorted keywords reference)"></a><a name="no option"></a><a name="4-no option"></a><a name="4.2-no option"></a><a name="no option (Proxies)"></a><a name="no option (Alphabetically sorted keywords reference)"></a><a name="no option abortonclose"></a><a name="4-no option abortonclose"></a><a name="4.2-no option abortonclose"></a><a name="no option abortonclose (Proxies)"></a><a name="no option abortonclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="no option abortonclose"></a><a href="#4-no option abortonclose">no option abortonclose</a></b></div>  Enable or disable early dropping of aborted requests pending in queues.
@@ -2942,17 +2914,16 @@ specified in a previous &quot;defaults&quot; section.
   &quot;<a href="#option http-server-close">http-server-close</a>&quot; options is set when using this option.
 
   <span class="label label-success">Examples :</span>
-<pre>    # Public HTTP address also used by stunnel on the same machine
+<pre class="prettyprint">    <span class="comment"># Public HTTP address also used by stunnel on the same machine</span>
     frontend www
         mode http
-        option forwardfor except 127.0.0.1  # stunnel already adds the header
+        option forwardfor except 127.0.0.1  <span class="comment"># stunnel already adds the header</span>
 
-    # Those servers want the IP Address in X-Client
+    <span class="comment"># Those servers want the IP Address in X-Client</span>
     backend www
         mode http
         option forwardfor header X-Client
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpclose">option httpclose</a>&quot;, &quot;<a href="#option http-server-close">option http-server-close</a>&quot;,
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpclose">option httpclose</a>&quot;, &quot;<a href="#option http-server-close">option http-server-close</a>&quot;,
              &quot;<a href="#option forceclose">option forceclose</a>&quot;
 
 
@@ -3120,14 +3091,13 @@ specified in a previous &quot;defaults&quot; section.
   to some dedicated ports using the inetd daemon.
 
   <span class="label label-success">Examples :</span>
-<pre>      # Relay HTTPS traffic to Apache instance and check service availability
-      # using HTTP request &quot;OPTIONS * HTTP/1.1&quot; on port 80.
+<pre class="prettyprint">      <span class="comment"># Relay HTTPS traffic to Apache instance and check service availability</span>
+      <span class="comment"># using HTTP request &quot;OPTIONS * HTTP/1.1&quot; on port 80.</span>
       backend https_relay
           mode tcp
           option httpchk OPTIONS * HTTP/1.1\r\nHost:\ www
           server apache1 192.168.1.1:443 check port 80
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option ssl-hello-chk">option ssl-hello-chk</a>&quot;, &quot;<a href="#option smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option mysql-check">option mysql-check</a>&quot;,
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option ssl-hello-chk">option ssl-hello-chk</a>&quot;, &quot;<a href="#option smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option mysql-check">option mysql-check</a>&quot;,
              &quot;<a href="#option pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#http-check">http-check</a>&quot; and the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#port">port</a>&quot; and
              &quot;<a href="#inter">inter</a>&quot; server options.
 
@@ -3210,12 +3180,11 @@ specified in a previous &quot;defaults&quot; section.
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
   <span class="label label-success">Example :</span>
-<pre>    # this backend understands HTTP proxy requests and forwards them directly.
+<pre class="prettyprint">    <span class="comment"># this backend understands HTTP proxy requests and forwards them directly.</span>
     backend direct_forward
         option httpclose
         option http_proxy
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpclose">option httpclose</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpclose">option httpclose</a>&quot;
 
 
 <a name="option"></a><a name="4-option"></a><a name="4.2-option"></a><a name="option (Proxies)"></a><a name="option (Alphabetically sorted keywords reference)"></a><a name="option independant-streams"></a><a name="4-option independant-streams"></a><a name="4.2-option independant-streams"></a><a name="option independant-streams (Proxies)"></a><a name="option independant-streams (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="option independant-streams"></a><a href="#4-option independant-streams">option independant-streams</a></b></div><a name="no"></a><a name="4-no"></a><a name="4.2-no"></a><a name="no (Proxies)"></a><a name="no (Alphabetically sorted keywords reference)"></a><a name="no option"></a><a name="4-no option"></a><a name="4.2-no option"></a><a name="no option (Proxies)"></a><a name="no option (Alphabetically sorted keywords reference)"></a><a name="no option independant-streams"></a><a name="4-no option independant-streams"></a><a name="4.2-no option independant-streams"></a><a name="no option independant-streams (Proxies)"></a><a name="no option independant-streams (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="no option independant-streams"></a><a href="#4-no option independant-streams">no option independant-streams</a></b></div>  Enable or disable independant timeout processing for both directions
@@ -3262,9 +3231,8 @@ specified in a previous &quot;defaults&quot; section.
   configure it.
 
   <span class="label label-success">Example :</span>
-<pre>        option ldap-check
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;
+<pre class="prettyprint">        option ldap-check
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;
 
 
 <a name="option"></a><a name="4-option"></a><a name="4.2-option"></a><a name="option (Proxies)"></a><a name="option (Alphabetically sorted keywords reference)"></a><a name="option log-health-checks"></a><a name="4-option log-health-checks"></a><a name="4.2-option log-health-checks"></a><a name="option log-health-checks (Proxies)"></a><a name="option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="option log-health-checks"></a><a href="#4-option log-health-checks">option log-health-checks</a></b></div><a name="no"></a><a name="4-no"></a><a name="4.2-no"></a><a name="no (Proxies)"></a><a name="no (Alphabetically sorted keywords reference)"></a><a name="no option"></a><a name="4-no option"></a><a name="4.2-no option"></a><a name="no option (Proxies)"></a><a name="no option (Alphabetically sorted keywords reference)"></a><a name="no option log-health-checks"></a><a name="4-no option log-health-checks"></a><a name="4.2-no option log-health-checks"></a><a name="no option log-health-checks (Proxies)"></a><a name="no option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="no option log-health-checks"></a><a href="#4-no option log-health-checks">no option log-health-checks</a></b></div>  Enable or disable logging of health checks
@@ -3315,7 +3283,7 @@ specified in a previous &quot;defaults&quot; section.
   bytes are expected to be transferred.
 
   <span class="label label-success">Examples :</span>
-<pre>      listen http_proxy 0.0.0.0:80
+<pre class="prettyprint">      listen http_proxy 0.0.0.0:80
           mode http
           option httplog
           option logasap
@@ -3325,8 +3293,7 @@ specified in a previous &quot;defaults&quot; section.
           haproxy[14389]: 10.0.1.2:33317 [06/Feb/2009:12:14:14.655] http-in \
           static/srv1 9/10/7/14/+30 200 +243 - - ---- 3/1/1/1/0 1/0 \
           &quot;GET /image.iso HTTP/1.0&quot;
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httplog">option httplog</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot;, and <a href="#8">section 8</a> about
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httplog">option httplog</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot;, and <a href="#8">section 8</a> about
              logging.
 
 
@@ -3454,17 +3421,16 @@ specified in a previous &quot;defaults&quot; section.
   &quot;<a href="#option http-server-close">http-server-close</a>&quot; options is set when using this option.
 
   <span class="label label-success">Examples :</span>
-<pre>    # Original Destination address
+<pre class="prettyprint">    <span class="comment"># Original Destination address</span>
     frontend www
         mode http
         option originalto except 127.0.0.1
 
-    # Those servers want the IP Address in X-Client-Dst
+    <span class="comment"># Those servers want the IP Address in X-Client-Dst</span>
     backend www
         mode http
         option originalto header X-Client-Dst
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpclose">option httpclose</a>&quot;, &quot;<a href="#option http-server-close">option http-server-close</a>&quot;,
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpclose">option httpclose</a>&quot;, &quot;<a href="#option http-server-close">option http-server-close</a>&quot;,
              &quot;<a href="#option forceclose">option forceclose</a>&quot;
 
 
@@ -3520,9 +3486,8 @@ specified in a previous &quot;defaults&quot; section.
   find the &quot;+PONG&quot; response message.
 
   <span class="label label-success">Example :</span>
-<pre>        option redis-check
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;
+<pre class="prettyprint">        option redis-check
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;
 
 
 <a name="option"></a><a name="4-option"></a><a name="4.2-option"></a><a name="option (Proxies)"></a><a name="option (Alphabetically sorted keywords reference)"></a><a name="option smtpchk"></a><a name="4-option smtpchk"></a><a name="4.2-option smtpchk"></a><a name="option smtpchk (Proxies)"></a><a name="option smtpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="option smtpchk"></a><a href="#4-option smtpchk">option smtpchk</a></b></div><a name="option"></a><a name="4-option"></a><a name="4.2-option"></a><a name="option (Proxies)"></a><a name="option (Alphabetically sorted keywords reference)"></a><a name="option smtpchk"></a><a name="4-option smtpchk"></a><a name="4.2-option smtpchk"></a><a name="option smtpchk (Proxies)"></a><a name="option smtpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="option smtpchk"></a><a href="#4-option smtpchk">option smtpchk</a></b> <span style="color: #080">&lt;hello&gt;</span> <span style="color: #080">&lt;domain&gt;</span></div>  Use SMTP health checks for server testing
@@ -3554,9 +3519,8 @@ specified in a previous &quot;defaults&quot; section.
   which requires the cttproxy feature to be compiled in.
 
   <span class="label label-success">Example :</span>
-<pre>        option smtpchk HELO mydomain.org
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;
+<pre class="prettyprint">        option smtpchk HELO mydomain.org
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;
 
 
 <a name="option"></a><a name="4-option"></a><a name="4.2-option"></a><a name="option (Proxies)"></a><a name="option (Alphabetically sorted keywords reference)"></a><a name="option socket-stats"></a><a name="4-option socket-stats"></a><a name="4.2-option socket-stats"></a><a name="option socket-stats (Proxies)"></a><a name="option socket-stats (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="option socket-stats"></a><a href="#4-option socket-stats">option socket-stats</a></b></div><a name="no"></a><a name="4-no"></a><a name="4.2-no"></a><a name="no (Proxies)"></a><a name="no (Alphabetically sorted keywords reference)"></a><a name="no option"></a><a name="4-no option"></a><a name="4.2-no option"></a><a name="no option (Proxies)"></a><a name="no option (Alphabetically sorted keywords reference)"></a><a name="no option socket-stats"></a><a name="4-no option socket-stats"></a><a name="4.2-no option socket-stats"></a><a name="no option socket-stats (Proxies)"></a><a name="no option socket-stats (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="no option socket-stats"></a><a href="#4-no option socket-stats">no option socket-stats</a></b></div>
@@ -3590,9 +3554,8 @@ specified in a previous &quot;defaults&quot; section.
   keyword.
 
   <span class="label label-success">Example :</span>
-<pre>        option splice-auto
-</pre>
-  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+<pre class="prettyprint">        option splice-auto
+</pre>  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
   <span class="label label-see-also">See also :</span> &quot;<a href="#option splice-request">option splice-request</a>&quot;, &quot;<a href="#option splice-response">option splice-response</a>&quot;, and global
@@ -3612,9 +3575,8 @@ specified in a previous &quot;defaults&quot; section.
   Important note: see &quot;<a href="#option splice-auto">option splice-auto</a>&quot; for usage limitations.
 
   <span class="label label-success">Example :</span>
-<pre>        option splice-request
-</pre>
-  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+<pre class="prettyprint">        option splice-request
+</pre>  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
   <span class="label label-see-also">See also :</span> &quot;<a href="#option splice-auto">option splice-auto</a>&quot;, &quot;<a href="#option splice-response">option splice-response</a>&quot;, and global options
@@ -3634,9 +3596,8 @@ specified in a previous &quot;defaults&quot; section.
   Important note: see &quot;<a href="#option splice-auto">option splice-auto</a>&quot; for usage limitations.
 
   <span class="label label-success">Example :</span>
-<pre>        option splice-response
-</pre>
-  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+<pre class="prettyprint">        option splice-response
+</pre>  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
   <span class="label label-see-also">See also :</span> &quot;<a href="#option splice-auto">option splice-auto</a>&quot;, &quot;<a href="#option splice-request">option splice-request</a>&quot;, and global options
@@ -3839,20 +3800,19 @@ specified in a previous &quot;defaults&quot; section.
   that the &quot;IP address redirection&quot; option is disabled.
 
   <span class="label label-success">Example :</span>
-<pre>        listen tse-farm
+<pre class="prettyprint">        listen tse-farm
             bind :3389
-            # wait up to 5s for an RDP cookie in the request
+            <span class="comment"># wait up to 5s for an RDP cookie in the request</span>
             tcp-request inspect-delay 5s
             tcp-request content accept if RDP_COOKIE
-            # apply RDP cookie persistence
+            <span class="comment"># apply RDP cookie persistence</span>
             persist rdp-cookie
-            # if server is unknown, let's balance on the same cookie.
-            # alternatively, &quot;balance leastconn&quot; may be useful too.
+            <span class="comment"># if server is unknown, let's balance on the same cookie.</span>
+            <span class="comment"># alternatively, &quot;balance leastconn&quot; may be useful too.</span>
             balance rdp-cookie
             server srv1 1.1.1.1:3389
             server srv2 1.1.1.2:3389
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;balance rdp-cookie&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot;, the &quot;<a href="#req_rdp_cookie">req_rdp_cookie</a>&quot; ACL and
+</pre>  <span class="label label-see-also">See also :</span> &quot;balance rdp-cookie&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot;, the &quot;<a href="#req_rdp_cookie">req_rdp_cookie</a>&quot; ACL and
   the rdp_cookie pattern fetch function.
 
 
@@ -4029,11 +3989,10 @@ specified in a previous &quot;defaults&quot; section.
   Reqdeny, reqallow and reqpass should be avoided in new designs.
 
   <span class="label label-success">Example :</span>
-<pre>     # allow www.* but refuse *.local
+<pre class="prettyprint">     <span class="comment"># allow www.* but refuse *.local</span>
      reqiallow ^Host:\ www\.
      reqideny  ^Host:\ .*\.local
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and
             <a href="#7">section 7</a> about ACLs.
 
 
@@ -4059,11 +4018,10 @@ specified in a previous &quot;defaults&quot; section.
   responses. Keep in mind that header names are not case-sensitive.
 
   <span class="label label-success">Example :</span>
-<pre>     # remove X-Forwarded-For header and SERVER cookie
+<pre class="prettyprint">     <span class="comment"># remove X-Forwarded-For header and SERVER cookie</span>
      reqidel ^X-Forwarded-For:.*
      reqidel ^Cookie:.*SERVER=
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, <a href="#6">section 6</a> about HTTP header
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4094,11 +4052,10 @@ specified in a previous &quot;defaults&quot; section.
   Reqdeny, reqallow and reqpass should be avoided in new designs.
 
   <span class="label label-success">Example :</span>
-<pre>     # refuse *.local, then allow www.*
+<pre class="prettyprint">     <span class="comment"># refuse *.local, then allow www.*</span>
      reqideny  ^Host:\ .*\.local
      reqiallow ^Host:\ www\.
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4124,12 +4081,11 @@ specified in a previous &quot;defaults&quot; section.
   Reqdeny, reqallow and reqpass should be avoided in new designs.
 
   <span class="label label-success">Example :</span>
-<pre>     # refuse *.local, then allow www.*, but ignore &quot;www.private.local&quot;
+<pre class="prettyprint">     <span class="comment"># refuse *.local, then allow www.*, but ignore &quot;www.private.local&quot;</span>
      reqipass  ^Host:\ www.private\.local
      reqideny  ^Host:\ .*\.local
      reqiallow ^Host:\ www\.
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4162,12 +4118,11 @@ specified in a previous &quot;defaults&quot; section.
   request line are case-sensitive while header names are not.
 
   <span class="label label-success">Example :</span>
-<pre>     # replace &quot;/static/&quot; with &quot;/&quot; at the beginning of any request path.
+<pre class="prettyprint">     <span class="comment"># replace &quot;/static/&quot; with &quot;/&quot; at the beginning of any request path.</span>
      reqrep ^([^\ ]*)\ /static/(.*)     \1\ /\2
-     # replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.
+     <span class="comment"># replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.</span>
      reqirep ^Host:\ www.mydomain.com   Host:\ www
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, <a href="#6">section 6</a> about HTTP header
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4199,16 +4154,15 @@ specified in a previous &quot;defaults&quot; section.
   efficient at reducing the load on the network and firewalls.
 
   <span class="label label-success">Examples :</span>
-<pre>     # ignore user-agents reporting any flavour of &quot;Mozilla&quot; or &quot;MSIE&quot;, but
-     # block all others.
+<pre class="prettyprint">     <span class="comment"># ignore user-agents reporting any flavour of &quot;Mozilla&quot; or &quot;MSIE&quot;, but</span>
+     <span class="comment"># block all others.</span>
      reqipass   ^User-Agent:\.*(Mozilla|MSIE)
      reqitarpit ^User-Agent:
 
-     # block bad guys
+     <span class="comment"># block bad guys</span>
      acl badguys src 10.1.0.3 172.16.13.20/28
      reqitarpit . if badguys
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, <a href="#6">section 6</a> about HTTP header
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4274,10 +4228,9 @@ specified in a previous &quot;defaults&quot; section.
   responses. Keep in mind that header names are not case-sensitive.
 
   <span class="label label-success">Example :</span>
-<pre>     # remove the Server header from responses
+<pre class="prettyprint">     <span class="comment"># remove the Server header from responses</span>
      reqidel ^Server:.*
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, <a href="#6">section 6</a> about HTTP header
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4308,10 +4261,9 @@ specified in a previous &quot;defaults&quot; section.
   Rspdeny should be avoided in new designs.
 
   <span class="label label-success">Example :</span>
-<pre>     # Ensure that no content type matching ms-word will leak
+<pre class="prettyprint">     <span class="comment"># Ensure that no content type matching ms-word will leak</span>
      rspideny  ^Content-type:\.*/ms-word
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation
             and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4345,10 +4297,9 @@ specified in a previous &quot;defaults&quot; section.
   are not case-sensitive.
 
   <span class="label label-success">Example :</span>
-<pre>     # replace &quot;Location: 127.0.0.1:8080&quot; with &quot;Location: www.mydomain.com&quot;
+<pre class="prettyprint">     <span class="comment"># replace &quot;Location: 127.0.0.1:8080&quot; with &quot;Location: www.mydomain.com&quot;</span>
      rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, <a href="#6">section 6</a> about HTTP header
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
 
 
@@ -4380,10 +4331,9 @@ specified in a previous &quot;defaults&quot; section.
               dedicated to it. Please refer to <a href="#5">section 5</a> for more details.
 
   <span class="label label-success">Examples :</span>
-<pre>        server first  10.1.1.1:1080 cookie first  check inter 1000
+<pre class="prettyprint">        server first  10.1.1.1:1080 cookie first  check inter 1000
         server second 10.1.1.2:1080 cookie second check inter 1000
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about
              server options
 
 
@@ -4487,35 +4437,34 @@ specified in a previous &quot;defaults&quot; section.
   <a href="#5">section 5</a> for more information.
 
   <span class="label label-success">Examples :</span>
-<pre>        backend private
-            # Connect to the servers using our 192.168.1.200 source address
+<pre class="prettyprint">        backend private
+            <span class="comment"># Connect to the servers using our 192.168.1.200 source address</span>
             source 192.168.1.200
 
         backend transparent_ssl1
-            # Connect to the SSL farm from the client's source address
+            <span class="comment"># Connect to the SSL farm from the client's source address</span>
             source 192.168.1.200 usesrc clientip
 
         backend transparent_ssl2
-            # Connect to the SSL farm from the client's source address and port
-            # not recommended if IP conntrack is present on the local machine.
+            <span class="comment"># Connect to the SSL farm from the client's source address and port</span>
+            <span class="comment"># not recommended if IP conntrack is present on the local machine.</span>
             source 192.168.1.200 usesrc client
 
         backend transparent_ssl3
-            # Connect to the SSL farm from the client's source address. It
-            # is more conntrack-friendly.
+            <span class="comment"># Connect to the SSL farm from the client's source address. It</span>
+            <span class="comment"># is more conntrack-friendly.</span>
             source 192.168.1.200 usesrc clientip
 
         backend transparent_smtp
-            # Connect to the SMTP farm from the client's source address/port
-            # with Tproxy version 4.
+            <span class="comment"># Connect to the SMTP farm from the client's source address/port</span>
+            <span class="comment"># with Tproxy version 4.</span>
             source 0.0.0.0 usesrc clientip
 
         backend transparent_http
-            # Connect to the servers using the client's IP as seen by previous
-            # proxy.
+            <span class="comment"># Connect to the servers using the client's IP as seen by previous</span>
+            <span class="comment"># proxy.</span>
             source 0.0.0.0 usesrc hdr_ip(x-forwarded-for,-1)
-</pre>
-  <span class="label label-see-also">See also :</span> the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; server option in <a href="#5">section 5</a>, the Tproxy patches for
+</pre>  <span class="label label-see-also">See also :</span> the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; server option in <a href="#5">section 5</a>, the Tproxy patches for
              the Linux kernel on www.balabit.com, the &quot;<a href="#bind">bind</a>&quot; keyword.
 
 
@@ -4573,20 +4522,18 @@ specified in a previous &quot;defaults&quot; section.
   time.
 
   <span class="label label-success">Example :</span>
-<pre>    # statistics admin level only for localhost
+<pre class="prettyprint">    <span class="comment"># statistics admin level only for localhost</span>
     backend stats_localhost
         stats enable
         stats admin if LOCALHOST
-</pre>
-  <span class="label label-success">Example :</span>
-<pre>    # statistics admin level always enabled because of the authentication
+</pre>  <span class="label label-success">Example :</span>
+<pre class="prettyprint">    <span class="comment"># statistics admin level always enabled because of the authentication</span>
     backend stats_auth
         stats enable
         stats auth  admin:AdMiN123
         stats admin if TRUE
-</pre>
-  <span class="label label-success">Example :</span>
-<pre>    # statistics admin level depends on the authenticated user
+</pre>  <span class="label label-success">Example :</span>
+<pre class="prettyprint">    <span class="comment"># statistics admin level depends on the authenticated user</span>
     userlist stats-auth
         group admin    users admin
         user  admin    insecure-password AdMiN123
@@ -4599,8 +4546,7 @@ specified in a previous &quot;defaults&quot; section.
         acl AUTH_ADMIN http_auth_group(stats-auth) admin
         stats http-request auth unless AUTH
         stats admin if AUTH_ADMIN
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats http-request">stats http-request</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;,
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats http-request">stats http-request</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;,
              &quot;<a href="#bind-process">bind-process</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about
              ACL usage.
 
@@ -4631,7 +4577,7 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # public access (limited to this backend only)
+<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4642,13 +4588,12 @@ specified in a previous &quot;defaults&quot; section.
         stats auth    admin1:AdMiN123
         stats auth    admin2:AdMiN321
 
-    # internal monitoring access (unlimited)
+    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats uri     /admin?stats
         stats refresh 5s
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats scope">stats scope</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats scope">stats scope</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
 
 
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats enable"></a><a name="4-stats enable"></a><a name="4.2-stats enable"></a><a name="stats enable (Proxies)"></a><a name="stats enable (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats enable"></a><a href="#4-stats enable">stats enable</a></b></div>  Enable statistics reporting with default settings
@@ -4666,7 +4611,7 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # public access (limited to this backend only)
+<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4677,13 +4622,12 @@ specified in a previous &quot;defaults&quot; section.
         stats auth    admin1:AdMiN123
         stats auth    admin2:AdMiN321
 
-    # internal monitoring access (unlimited)
+    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats uri     /admin?stats
         stats refresh 5s
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
 
 
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats hide-version"></a><a name="4-stats hide-version"></a><a name="4.2-stats hide-version"></a><a name="stats hide-version (Proxies)"></a><a name="stats hide-version (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats hide-version"></a><a href="#4-stats hide-version">stats hide-version</a></b></div>  Enable statistics and hide HAProxy version reporting
@@ -4701,7 +4645,7 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # public access (limited to this backend only)
+<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4712,13 +4656,12 @@ specified in a previous &quot;defaults&quot; section.
         stats auth    admin1:AdMiN123
         stats auth    admin2:AdMiN321
 
-    # internal monitoring access (unlimited)
+    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats uri     /admin?stats
         stats refresh 5s
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
 
 
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats http-request"></a><a name="4-stats http-request"></a><a name="4.2-stats http-request"></a><a name="stats http-request (Proxies)"></a><a name="stats http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats http-request"></a><a href="#4-stats http-request">stats http-request</a></b> <span style="color: #800">{ allow | deny | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> }</span>
@@ -4756,7 +4699,7 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # public access (limited to this backend only)
+<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4767,13 +4710,12 @@ specified in a previous &quot;defaults&quot; section.
         stats auth    admin1:AdMiN123
         stats auth    admin2:AdMiN321
 
-    # internal monitoring access (unlimited)
+    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats uri     /admin?stats
         stats refresh 5s
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
 
 
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats refresh"></a><a name="4-stats refresh"></a><a name="4.2-stats refresh"></a><a name="stats refresh (Proxies)"></a><a name="stats refresh (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats refresh"></a><a href="#4-stats refresh">stats refresh</a></b> <span style="color: #080">&lt;delay&gt;</span></div>  Enable statistics with automatic refresh
@@ -4795,7 +4737,7 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # public access (limited to this backend only)
+<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4806,13 +4748,12 @@ specified in a previous &quot;defaults&quot; section.
         stats auth    admin1:AdMiN123
         stats auth    admin2:AdMiN321
 
-    # internal monitoring access (unlimited)
+    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats uri     /admin?stats
         stats refresh 5s
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
 
 
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats scope"></a><a name="4-stats scope"></a><a name="4.2-stats scope"></a><a name="stats scope (Proxies)"></a><a name="stats scope (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats scope"></a><a href="#4-stats scope">stats scope</a></b> <span style="color: #800">{ <span style="color: #080">&lt;name&gt;</span> | &quot;.&quot; }</span></div>  Enable statistics and limit access scope
@@ -4833,7 +4774,7 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # public access (limited to this backend only)
+<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4844,13 +4785,12 @@ specified in a previous &quot;defaults&quot; section.
         stats auth    admin1:AdMiN123
         stats auth    admin2:AdMiN321
 
-    # internal monitoring access (unlimited)
+    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats uri     /admin?stats
         stats refresh 5s
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;
 
 
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats show-desc"></a><a name="4-stats show-desc"></a><a name="4.2-stats show-desc"></a><a name="stats show-desc (Proxies)"></a><a name="stats show-desc (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats show-desc"></a><a href="#4-stats show-desc">stats show-desc</a></b> <span style="color: #008">[ <span style="color: #080">&lt;desc&gt;</span> ]</span></div>  Enable reporting of a description on the statistics page.
@@ -4866,14 +4806,13 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # internal monitoring access (unlimited)
+<pre class="prettyprint">    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats show-desc Master node for Europe, Asia, Africa
         stats uri       /admin?stats
         stats refresh   5s
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;show-node&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot; and &quot;<a href="#description">description</a>&quot; in
+</pre>  <span class="label label-see-also">See also:</span> &quot;show-node&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot; and &quot;<a href="#description">description</a>&quot; in
             global section.
 
 
@@ -4905,14 +4844,13 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example:</span>
-<pre>    # internal monitoring access (unlimited)
+<pre class="prettyprint">    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats show-node Europe-1
         stats uri       /admin?stats
         stats refresh   5s
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;show-desc&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;, and &quot;<a href="#node">node</a>&quot; in global
+</pre>  <span class="label label-see-also">See also:</span> &quot;show-desc&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;, and &quot;<a href="#node">node</a>&quot; in global
             section.
 
 
@@ -4943,7 +4881,7 @@ specified in a previous &quot;defaults&quot; section.
   unobvious parameters.
 
   <span class="label label-success">Example :</span>
-<pre>    # public access (limited to this backend only)
+<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4954,13 +4892,12 @@ specified in a previous &quot;defaults&quot; section.
         stats auth    admin1:AdMiN123
         stats auth    admin2:AdMiN321
 
-    # internal monitoring access (unlimited)
+    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats uri     /admin?stats
         stats refresh 5s
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats auth">stats auth</a>&quot;, &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats realm">stats realm</a>&quot;
 
 
 <a name="stick"></a><a name="4-stick"></a><a name="4.2-stick"></a><a name="stick (Proxies)"></a><a name="stick (Alphabetically sorted keywords reference)"></a><a name="stick match"></a><a name="4-stick match"></a><a name="4.2-stick match"></a><a name="stick match (Proxies)"></a><a name="stick match (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stick match"></a><a href="#4-stick match">stick match</a></b> <span style="color: #080">&lt;pattern&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div>  Define a request pattern matching condition to stick a user to a server
@@ -5014,8 +4951,8 @@ specified in a previous &quot;defaults&quot; section.
          processes, which can result in random behaviours.
 
   <span class="label label-success">Example :</span>
-<pre>    # forward SMTP users to the same server they just used for POP in the
-    # last 30 minutes
+<pre class="prettyprint">    <span class="comment"># forward SMTP users to the same server they just used for POP in the</span>
+    <span class="comment"># last 30 minutes</span>
     backend pop
         mode tcp
         balance roundrobin
@@ -5030,8 +4967,7 @@ specified in a previous &quot;defaults&quot; section.
         stick match src table pop
         server s1 192.168.1.1:25
         server s2 192.168.1.1:25
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a>
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a>
              about ACLs and pattern extraction.
 
 
@@ -5047,16 +4983,16 @@ specified in a previous &quot;defaults&quot; section.
          processes, which can result in random behaviours.
 
   <span class="label label-success">Examples :</span>
-<pre>    # The following form ...
+<pre class="prettyprint">    <span class="comment"># The following form ...</span>
     stick on src table pop if !localhost
 
-    # ...is strictly equivalent to this one :
+    <span class="comment"># ...is strictly equivalent to this one :</span>
     stick match src table pop if !localhost
     stick store-request src table pop if !localhost
 
 
-    # Use cookie persistence for HTTP, and stick on source address for HTTPS as
-    # well as HTTP without cookie. Share the same table between both accesses.
+    <span class="comment"># Use cookie persistence for HTTP, and stick on source address for HTTPS as</span>
+    <span class="comment"># well as HTTP without cookie. Share the same table between both accesses.</span>
     backend http
         mode http
         balance roundrobin
@@ -5072,8 +5008,7 @@ specified in a previous &quot;defaults&quot; section.
         stick on src
         server s1 192.168.1.1:443
         server s2 192.168.1.1:443
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stick match">stick match</a>&quot;, &quot;<a href="#stick store-request">stick store-request</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot; and &quot;<a href="#bind-process">bind-process</a>&quot;.
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stick match">stick match</a>&quot;, &quot;<a href="#stick store-request">stick store-request</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot; and &quot;<a href="#bind-process">bind-process</a>&quot;.
 
 
 <a name="stick"></a><a name="4-stick"></a><a name="4.2-stick"></a><a name="stick (Proxies)"></a><a name="stick (Alphabetically sorted keywords reference)"></a><a name="stick store-request"></a><a name="4-stick store-request"></a><a name="4.2-stick store-request"></a><a name="stick store-request (Proxies)"></a><a name="stick store-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stick store-request"></a><a href="#4-stick store-request">stick store-request</a></b> <span style="color: #080">&lt;pattern&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div>  Define a request pattern used to create an entry in a stickiness table
@@ -5136,8 +5071,8 @@ specified in a previous &quot;defaults&quot; section.
          processes, which can result in random behaviours.
 
   <span class="label label-success">Example :</span>
-<pre>    # forward SMTP users to the same server they just used for POP in the
-    # last 30 minutes
+<pre class="prettyprint">    <span class="comment"># forward SMTP users to the same server they just used for POP in the</span>
+    <span class="comment"># last 30 minutes</span>
     backend pop
         mode tcp
         balance roundrobin
@@ -5152,8 +5087,7 @@ specified in a previous &quot;defaults&quot; section.
         stick match src table pop
         server s1 192.168.1.1:25
         server s2 192.168.1.1:25
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a>
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a>
              about ACLs and pattern extraction.
 
 
@@ -5361,12 +5295,11 @@ specified in a previous &quot;defaults&quot; section.
   something that can be ignored.
 
   <span class="label label-success">Example:</span>
-<pre>        # Keep track of counters of up to 1 million IP addresses over 5 minutes
-        # and store a general purpose counter and the average connection rate
-        # computed over a sliding window of 30 seconds.
+<pre class="prettyprint">        <span class="comment"># Keep track of counters of up to 1 million IP addresses over 5 minutes</span>
+        <span class="comment"># and store a general purpose counter and the average connection rate</span>
+        <span class="comment"># computed over a sliding window of 30 seconds.</span>
         stick-table type ip size 1m expire 5m store gpc0,conn_rate(30s)
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stick match">stick match</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#stick store-request">stick store-request</a>&quot;, <a href="#2.2">section 2.2</a>
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stick match">stick match</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#stick store-request">stick store-request</a>&quot;, <a href="#2.2">section 2.2</a>
              about time format and <a href="#7">section 7</a> about ACLs.
 
 
@@ -5421,37 +5354,36 @@ specified in a previous &quot;defaults&quot; section.
   The table will contain the real server that processed the request.
 
   <span class="label label-success">Example :</span>
-<pre>    # Learn SSL session ID from both request and response and create affinity.
+<pre class="prettyprint">    <span class="comment"># Learn SSL session ID from both request and response and create affinity.</span>
     backend https
         mode tcp
         balance roundrobin
-        # maximum SSL session ID length is 32 bytes.
+        <span class="comment"># maximum SSL session ID length is 32 bytes.</span>
         stick-table type binary len 32 size 30k expire 30m
 
         acl clienthello req_ssl_hello_type 1
         acl serverhello rep_ssl_hello_type 2
 
-        # use tcp content accepts to detects ssl client and server hello.
+        <span class="comment"># use tcp content accepts to detects ssl client and server hello.</span>
         tcp-request inspect-delay 5s
         tcp-request content accept if clienthello
 
-        # no timeout on response inspect delay by default.
+        <span class="comment"># no timeout on response inspect delay by default.</span>
         tcp-response content accept if serverhello
 
-        # SSL session ID (SSLID) may be present on a client or server hello.
-        # Its length is coded on 1 byte at offset 43 and its value starts
-        # at offset 44.
+        <span class="comment"># SSL session ID (SSLID) may be present on a client or server hello.</span>
+        <span class="comment"># Its length is coded on 1 byte at offset 43 and its value starts</span>
+        <span class="comment"># at offset 44.</span>
 
-        # Match and learn on request if client hello.
+        <span class="comment"># Match and learn on request if client hello.</span>
         stick on payload_lv(43,1) if clienthello
 
-        # Learn on response if server hello.
+        <span class="comment"># Learn on response if server hello.</span>
         stick store-response payload_lv(43,1) if serverhello
 
         server s1 192.168.1.1:443
         server s2 192.168.1.1:443
-</pre>
-  <span class="label label-see-also">See also :</span> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, and <a href="#7">section 7</a> about ACLs and pattern
+</pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, and <a href="#7">section 7</a> about ACLs and pattern
              extraction.
 
 
@@ -5608,26 +5540,24 @@ specified in a previous &quot;defaults&quot; section.
   period.
 
   <span class="label label-success">Example:</span>
-<pre>        # Accept HTTP requests containing a Host header saying &quot;example.com&quot;
-        # and reject everything else.
+<pre class="prettyprint">        <span class="comment"># Accept HTTP requests containing a Host header saying &quot;example.com&quot;</span>
+        <span class="comment"># and reject everything else.</span>
         acl is_host_com hdr(Host) -i example.com
         tcp-request inspect-delay 30s
         tcp-request content accept if HTTP is_host_com
         tcp-request content reject
-</pre>
-  <span class="label label-success">Example:</span>
-<pre>        # reject SMTP connection if client speaks first
+</pre>  <span class="label label-success">Example:</span>
+<pre class="prettyprint">        <span class="comment"># reject SMTP connection if client speaks first</span>
         tcp-request inspect-delay 30s
         acl content_present req_len gt 0
         tcp-request content reject if content_present
 
-        # Forward HTTPS connection only if client speaks
+        <span class="comment"># Forward HTTPS connection only if client speaks</span>
         tcp-request inspect-delay 30s
         acl content_present req_len gt 0
         tcp-request content accept if content_present
         tcp-request content reject
-</pre>
-  <span class="label label-success">Example:</span> track per-frontend and per-backend counters, block abusers at the
+</pre>  <span class="label label-success">Example:</span> track per-frontend and per-backend counters, block abusers at the
            frontend when the backend detects abuse.
 
         frontend http
@@ -6033,13 +5963,12 @@ specified in a previous &quot;defaults&quot; section.
     makes them more compact and saves space in logs.
 
     <span class="label label-success">Example:</span>
-<pre>        unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
+<pre class="prettyprint">        unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
 
         will generate:
 
                7F000001:8296_7F00001E:1F90_4F7B0A69_0003:790A
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#unique-id-header">unique-id-header</a>&quot;
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#unique-id-header">unique-id-header</a>&quot;
 
 <a name="unique-id-header"></a><a name="4-unique-id-header"></a><a name="4.2-unique-id-header"></a><a name="unique-id-header (Proxies)"></a><a name="unique-id-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="unique-id-header"></a><a href="#4-unique-id-header">unique-id-header</a></b> <span style="color: #080">&lt;name&gt;</span></div>  Add a unique ID header in the HTTP request.
 <p>  May be used in sections  :<table class="table table-bordered" border="0" cellspacing="0" cellpadding="0"><thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead><tr><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-error"><div class="pagination-centered">no</div></td></tr></table></p>  <span class="label label-info">Arguments :</span>
@@ -6049,14 +5978,13 @@ specified in a previous &quot;defaults&quot; section.
     unique-id-format. It can't work if the unique-id-format doesn't exist.
 
     <span class="label label-success">Example:</span>
-<pre>        unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
+<pre class="prettyprint">        unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
         unique-id-header X-Unique-ID
 
         will generate:
 
            X-Unique-ID: 7F000001:8296_7F00001E:1F90_4F7B0A69_0003:790A
-</pre>
-    <span class="label label-see-also">See also:</span> &quot;<a href="#unique-id-format">unique-id-format</a>&quot;
+</pre>    <span class="label label-see-also">See also:</span> &quot;<a href="#unique-id-format">unique-id-format</a>&quot;
 
 <a name="use_backend"></a><a name="4-use_backend"></a><a name="4.2-use_backend"></a><a name="use_backend (Proxies)"></a><a name="use_backend (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="use_backend"></a><a href="#4-use_backend">use_backend</a></b> <span style="color: #080">&lt;backend&gt;</span> if <span style="color: #080">&lt;condition&gt;</span></div><a name="use_backend"></a><a name="4-use_backend"></a><a name="4.2-use_backend"></a><a name="use_backend (Proxies)"></a><a name="use_backend (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="use_backend"></a><a href="#4-use_backend">use_backend</a></b> <span style="color: #080">&lt;backend&gt;</span> unless <span style="color: #080">&lt;condition&gt;</span></div>  Switch to a specific backend if/unless an ACL-based condition is matched.
 <p>  May be used in sections  :<table class="table table-bordered" border="0" cellspacing="0" cellpadding="0"><thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead><tr><td class="alert-error"><div class="pagination-centered">no</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-error"><div class="pagination-centered">no</div></td></tr></table></p>  <span class="label label-info">Arguments :</span>
@@ -6129,17 +6057,16 @@ specified in a previous &quot;defaults&quot; section.
   have their weight set to zero, they will not be used for other traffic.
 
   <span class="label label-success">Example :</span>
-<pre>     # intercept incoming TLS requests based on the SNI field
+<pre class="prettyprint">     <span class="comment"># intercept incoming TLS requests based on the SNI field</span>
      use-server www if { req_ssl_sni -i www.example.com }
      server     www 192.168.0.1:443 weight 0
      use-server mail if { req_ssl_sni -i mail.example.com }
      server     mail 192.168.0.1:587 weight 0
      use-server imap if { req_ssl_sni -i imap.example.com }
      server     mail 192.168.0.1:993 weight 0
-     # all the rest is forwarded to this server
+     <span class="comment"># all the rest is forwarded to this server</span>
      server  default 192.168.0.2:443 check
-</pre>
-  <span class="label label-see-also">See also:</span> &quot;<a href="#use_backend">use_backend</a>&quot;, serction 5 about server and <a href="#7">section 7</a> about ACLs.
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#use_backend">use_backend</a>&quot;, serction 5 about server and <a href="#7">section 7</a> about ACLs.
 </pre><br />
 <a name="5"></a>
 <div class="page-header"><h1><small>5.</small> Server and default-server options</h1>
@@ -6691,13 +6618,12 @@ addresses and ports, as well as internal values independant on the stream.
   sucking of an online dictionary).
 
   <span class="label label-success">Example :</span>
-<pre>        # Redirect to an error page if the dictionary is requested too often
+<pre class="prettyprint">        <span class="comment"># Redirect to an error page if the dictionary is requested too often</span>
         backend dynamic
             mode http
             acl being_scanned be_sess_rate gt 100
             redirect location /denied.html if being_scanned
-</pre>
-<a name="connslots"></a><a name="7-connslots"></a><a name="7.5.1-connslots"></a><a name="connslots (Using ACLs and pattern extraction)"></a><a name="connslots (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="connslots"></a><a href="#7-connslots">connslots</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a name="connslots"></a><a name="7-connslots"></a><a name="7.5.1-connslots"></a><a name="connslots (Using ACLs and pattern extraction)"></a><a name="connslots (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="connslots"></a><a href="#7-connslots">connslots</a></b>(<span style="color: #080">&lt;backend&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div>  The basic idea here is to be able to measure the number of connection &quot;slots&quot;
+</pre><a name="connslots"></a><a name="7-connslots"></a><a name="7.5.1-connslots"></a><a name="connslots (Using ACLs and pattern extraction)"></a><a name="connslots (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="connslots"></a><a href="#7-connslots">connslots</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a name="connslots"></a><a name="7-connslots"></a><a name="7.5.1-connslots"></a><a name="connslots (Using ACLs and pattern extraction)"></a><a name="connslots (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="connslots"></a><a href="#7-connslots">connslots</a></b>(<span style="color: #080">&lt;backend&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div>  The basic idea here is to be able to measure the number of connection &quot;slots&quot;
   still available (connection + queue), so that anything beyond that (intended
   usage; see &quot;<a href="#use_backend">use_backend</a>&quot; keyword) can be redirected to a different backend.
 
@@ -6749,10 +6675,10 @@ addresses and ports, as well as internal values independant on the stream.
   the rate to go down below the limit.
 
   <span class="label label-success">Example :</span>
-<pre>        # This frontend limits incoming mails to 10/s with a max of 100
-        # concurrent connections. We accept any connection below 10/s, and
-        # force excess clients to wait for 100 ms. Since clients are limited to
-        # 100 max, there cannot be more than 10 incoming mails per second.
+<pre class="prettyprint">        <span class="comment"># This frontend limits incoming mails to 10/s with a max of 100</span>
+        <span class="comment"># concurrent connections. We accept any connection below 10/s, and</span>
+        <span class="comment"># force excess clients to wait for 100 ms. Since clients are limited to</span>
+        <span class="comment"># 100 max, there cannot be more than 10 incoming mails per second.</span>
         frontend mail
             bind :25
             mode tcp
@@ -6761,8 +6687,7 @@ addresses and ports, as well as internal values independant on the stream.
             tcp-request inspect-delay 100ms
             tcp-request content accept if ! too_fast
             tcp-request content accept if WAIT_END
-</pre>
-<a name="nbsrv"></a><a name="7-nbsrv"></a><a name="7.5.1-nbsrv"></a><a name="nbsrv (Using ACLs and pattern extraction)"></a><a name="nbsrv (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="nbsrv"></a><a href="#7-nbsrv">nbsrv</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a name="nbsrv"></a><a name="7-nbsrv"></a><a name="7.5.1-nbsrv"></a><a name="nbsrv (Using ACLs and pattern extraction)"></a><a name="nbsrv (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="nbsrv"></a><a href="#7-nbsrv">nbsrv</a></b>(<span style="color: #080">&lt;backend&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div>  Returns true when the number of usable servers of either the current backend
+</pre><a name="nbsrv"></a><a name="7-nbsrv"></a><a name="7.5.1-nbsrv"></a><a name="nbsrv (Using ACLs and pattern extraction)"></a><a name="nbsrv (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="nbsrv"></a><a href="#7-nbsrv">nbsrv</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a name="nbsrv"></a><a name="7-nbsrv"></a><a name="7.5.1-nbsrv"></a><a name="nbsrv (Using ACLs and pattern extraction)"></a><a name="nbsrv (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="nbsrv"></a><a href="#7-nbsrv">nbsrv</a></b>(<span style="color: #080">&lt;backend&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div>  Returns true when the number of usable servers of either the current backend
   or the named backend matches the values or ranges specified. This is used to
   switch to an alternate backend when the number of servers is too low to
   to handle some load. It is useful to report a failure when combined with
@@ -6985,9 +6910,9 @@ addresses and ports, as well as internal values independant on the stream.
   Note: it is recommended to use the more complete &quot;track-counters&quot; instead.
 
   <span class="label label-success">Example :</span>
-<pre>        # This frontend limits incoming SSH connections to 3 per 10 second for
-        # each source address, and rejects excess connections until a 10 second
-        # silence is observed. At most 20 addresses are tracked.
+<pre class="prettyprint">        <span class="comment"># This frontend limits incoming SSH connections to 3 per 10 second for</span>
+        <span class="comment"># each source address, and rejects excess connections until a 10 second</span>
+        <span class="comment"># silence is observed. At most 20 addresses are tracked.</span>
         listen ssh
             bind :22
             mode tcp
@@ -6995,8 +6920,7 @@ addresses and ports, as well as internal values independant on the stream.
             stick-table type ip size 20 expire 10s store conn_cnt
             tcp-request content reject if { src_update_count gt 3 }
             server local 127.0.0.1:22
-</pre>
-<a name="srv_conn"></a><a name="7-srv_conn"></a><a name="7.5.1-srv_conn"></a><a name="srv_conn (Using ACLs and pattern extraction)"></a><a name="srv_conn (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="srv_conn"></a><a href="#7-srv_conn">srv_conn</a></b>(<span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div>  Applies to the number of currently established connections on the server,
+</pre><a name="srv_conn"></a><a name="7-srv_conn"></a><a name="7.5.1-srv_conn"></a><a name="srv_conn (Using ACLs and pattern extraction)"></a><a name="srv_conn (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="srv_conn"></a><a href="#7-srv_conn">srv_conn</a></b>(<span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div>  Applies to the number of currently established connections on the server,
   possibly including the connection being evaluated.
   It can be used to use a specific farm when one server is full.
   See also the &quot;<a href="#fe_conn">fe_conn</a>&quot;, &quot;<a href="#be_conn">be_conn</a>&quot; and &quot;<a href="#queue">queue</a>&quot; criteria.
@@ -7075,13 +6999,12 @@ keyword for more detailed information on the subject.
   hello (type 1), like in the example below.
 
   <span class="label label-success">Examples :</span>
-<pre>     # Wait for a client hello for at most 5 seconds
+<pre class="prettyprint">     <span class="comment"># Wait for a client hello for at most 5 seconds</span>
      tcp-request inspect-delay 5s
      tcp-request content accept if { req_ssl_hello_type 1 }
      use_backend bk_allow if { req_ssl_sni -f allowed_sites }
      default_backend bk_sorry_page
-</pre>
-<a name="req_ssl_ver"></a><a name="7-req_ssl_ver"></a><a name="7.5.2-req_ssl_ver"></a><a name="req_ssl_ver (Using ACLs and pattern extraction)"></a><a name="req_ssl_ver (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="req_ssl_ver"></a><a href="#7-req_ssl_ver">req_ssl_ver</a></b> <span style="color: #080">&lt;decimal&gt;</span></div>  Returns true when data in the request buffer look like SSL, with a protocol
+</pre><a name="req_ssl_ver"></a><a name="7-req_ssl_ver"></a><a name="7.5.2-req_ssl_ver"></a><a name="req_ssl_ver (Using ACLs and pattern extraction)"></a><a name="req_ssl_ver (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="req_ssl_ver"></a><a href="#7-req_ssl_ver">req_ssl_ver</a></b> <span style="color: #080">&lt;decimal&gt;</span></div>  Returns true when data in the request buffer look like SSL, with a protocol
   version matching the specified range. Both SSLv2 hello messages and SSLv3
   messages are supported. The test tries to be strict enough to avoid being
   easily fooled. In particular, it waits for as many bytes as announced in the
@@ -7099,19 +7022,18 @@ keyword for more detailed information on the subject.
   inspection.
 
   <span class="label label-success">Examples :</span>
-<pre>     # delay every incoming request by 2 seconds
+<pre class="prettyprint">     <span class="comment"># delay every incoming request by 2 seconds</span>
      tcp-request inspect-delay 2s
      tcp-request content accept if WAIT_END
 
-     # don't immediately tell bad guys they are rejected
+     <span class="comment"># don't immediately tell bad guys they are rejected</span>
      tcp-request inspect-delay 10s
      acl goodguys src 10.0.0.0/24
      acl badguys  src 10.0.1.0/24
      tcp-request content accept if goodguys
      tcp-request content reject if badguys WAIT_END
      tcp-request content reject
-</pre>
-</pre><br />
+</pre></pre><br />
 <a name="7.5.3"></a>
 <h3><small>7.5.3.</small> Matching at Layer 7</h3>
 <pre>A third set of criteria applies to information which can be found at the
@@ -7488,22 +7410,21 @@ The list of currently supported pattern fetch functions is the following :
                servers than the hash used by &quot;balance rdp-cookie&quot;.
 
                <span class="label label-success">Example :</span>
-<pre>                listen tse-farm
+<pre class="prettyprint">                listen tse-farm
                     bind 0.0.0.0:3389
-                    # wait up to 5s for an RDP cookie in the request
+                    <span class="comment"># wait up to 5s for an RDP cookie in the request</span>
                     tcp-request inspect-delay 5s
                     tcp-request content accept if RDP_COOKIE
-                    # apply RDP cookie persistence
+                    <span class="comment"># apply RDP cookie persistence</span>
                     persist rdp-cookie
-                    # Persist based on the mstshash cookie
-                    # This is only useful makes sense if
-                    # balance rdp-cookie is not used
+                    <span class="comment"># Persist based on the mstshash cookie</span>
+                    <span class="comment"># This is only useful makes sense if</span>
+                    <span class="comment"># balance rdp-cookie is not used</span>
                     stick-table type string size 204800
                     stick on rdp_cookie(mstshash)
                     server srv1 1.1.1.1:3389
                     server srv1 1.1.1.2:3389
-</pre>
-               <span class="label label-see-also">See also :</span> &quot;balance rdp-cookie&quot;, &quot;<a href="#persist rdp-cookie">persist rdp-cookie</a>&quot;,
+</pre>               <span class="label label-see-also">See also :</span> &quot;balance rdp-cookie&quot;, &quot;<a href="#persist rdp-cookie">persist rdp-cookie</a>&quot;,
                &quot;<a href="#tcp-request">tcp-request</a>&quot; and the &quot;<a href="#req_rdp_cookie">req_rdp_cookie</a>&quot; ACL.
 
   cookie(&lt;name&gt;)
@@ -7632,7 +7553,7 @@ as the connection is accepted. One should note that this currently is the only
 format which logs the request's destination IP and ports.
 
   <span class="label label-success">Example :</span>
-<pre>        listen www
+<pre class="prettyprint">        listen www
             mode http
             log global
             server srv1 127.0.0.1:8000
@@ -7640,8 +7561,7 @@ format which logs the request's destination IP and ports.
     &gt;&gt;&gt; Feb  6 12:12:09 localhost \
           haproxy[14385]: Connect from 10.0.1.2:33312 to 10.0.3.31:8012 \
           (www/HTTP)
-</pre>
-  Field   Format                                Extract from the example above
+</pre>  Field   Format                                Extract from the example above
       1   process_name '[' pid ']:'                            haproxy[14385]:
       2   'Connect from'                                          Connect from
       3   source_ip ':' source_port                             10.0.1.2:33312
@@ -7681,7 +7601,7 @@ fields may slightly vary depending on some configuration options, those are
 marked with a star ('*') after the field name below.
 
   <span class="label label-success">Example :</span>
-<pre>        frontend fnt
+<pre class="prettyprint">        frontend fnt
             mode tcp
             option tcplog
             log global
@@ -7693,8 +7613,7 @@ marked with a star ('*') after the field name below.
     &gt;&gt;&gt; Feb  6 12:12:56 localhost \
           haproxy[14387]: 10.0.1.2:33313 [06/Feb/2009:12:12:51.443] fnt \
           bck/srv1 0/0/5007 212 -- 0/0/0/0/3 0/0
-</pre>
-  Field   Format                                Extract from the example above
+</pre>  Field   Format                                Extract from the example above
       1   process_name '[' pid ']:'                            haproxy[14387]:
       2   client_ip ':' client_port                             10.0.1.2:33313
       3   '[' accept_date ']'                       [06/Feb/2009:12:12:51.443]
@@ -7851,7 +7770,7 @@ slightly vary depending on some configuration options. Those ones are marked
 with a star ('*') after the field name below.
 
   <span class="label label-success">Example :</span>
-<pre>        frontend http-in
+<pre class="prettyprint">        frontend http-in
             mode http
             option httplog
             log global
@@ -7864,8 +7783,7 @@ with a star ('*') after the field name below.
           haproxy[14389]: 10.0.1.2:33317 [06/Feb/2009:12:14:14.655] http-in \
           static/srv1 10/0/30/69/109 200 2750 - - ---- 1/1/1/1/0 0/0 {1wt.eu} \
           {} &quot;GET /index.html HTTP/1.1&quot;
-</pre>
-  Field   Format                                Extract from the example above
+</pre>  Field   Format                                Extract from the example above
       1   process_name '[' pid ']:'                            haproxy[14389]:
       2   client_ip ':' client_port                             10.0.1.2:33317
       3   '[' accept_date ']'                       [06/Feb/2009:12:14:14.655]
@@ -8101,10 +8019,9 @@ Flags are :
   * X: hexadecimal represenation (IPs, Ports, %Ts, %rt, %pid)
 
   <span class="label label-success">Example:</span>
-<pre>    log-format %T\ %t\ Some\ Text
+<pre class="prettyprint">    log-format %T\ %t\ Some\ Text
     log-format %{+Q}o\ %t\ %s\ %{-Q}r
-</pre>
-At the moment, the default HTTP format is defined this way :
+</pre>At the moment, the default HTTP format is defined this way :
 
     log-format %Ci:%Cp\ [%t]\ %f\ %b/%s\ %Tq/%Tw/%Tc/%Tr/%Tt\ %st\ %B\ %cc\ \
                %cs\ %tsc\ %ac/%fc/%bc/%sc/%rc\ %sq/%bq\ %hr\ %hs\ %{+Q}r
@@ -8722,13 +8639,12 @@ a new cookie. It is also possible to detect if a server unexpectedly sets a
 wrong cookie to a client, leading to session crossing.
 
   <span class="label label-success">Examples :</span>
-<pre>        # capture the first cookie whose name starts with &quot;ASPSESSION&quot;
+<pre class="prettyprint">        <span class="comment"># capture the first cookie whose name starts with &quot;ASPSESSION&quot;</span>
         capture cookie ASPSESSION len 32
 
-        # capture the first cookie whose name is exactly &quot;vgnvisitor&quot;
+        <span class="comment"># capture the first cookie whose name is exactly &quot;vgnvisitor&quot;</span>
         capture cookie vgnvisitor= len 32
-</pre>
-</pre><br />
+</pre></pre><br />
 <a name="8.8"></a>
 <h2><small>8.8.</small> Capturing HTTP headers</h2>
 <pre>Header captures are useful to track unique request identifiers set by an upper
@@ -8750,7 +8666,7 @@ request headers block. These blocks are displayed just before the HTTP request
 in the logs.
 
   <span class="label label-success">Example :</span>
-<pre>        # This instance chains to the outgoing proxy
+<pre class="prettyprint">        <span class="comment"># This instance chains to the outgoing proxy</span>
         listen proxy-out
             mode http
             option httplog
@@ -8758,28 +8674,28 @@ in the logs.
             log global
             server cache1 192.168.1.1:3128
 
-            # log the name of the virtual server
+            <span class="comment"># log the name of the virtual server</span>
             capture request  header Host len 20
 
-            # log the amount of data uploaded during a POST
+            <span class="comment"># log the amount of data uploaded during a POST</span>
             capture request  header Content-Length len 10
 
-            # log the beginning of the referrer
+            <span class="comment"># log the beginning of the referrer</span>
             capture request  header Referer len 20
 
-            # server name (useful for outgoing proxies only)
+            <span class="comment"># server name (useful for outgoing proxies only)</span>
             capture response header Server len 20
 
-            # logging the content-length is useful with &quot;<a href="#option logasap">option logasap</a>&quot;
+            <span class="comment"># logging the content-length is useful with &quot;<a href="#option logasap">option logasap</a>&quot;</span>
             capture response header Content-Length len 10
 
-            # log the expected cache behaviour on the response
+            <span class="comment"># log the expected cache behaviour on the response</span>
             capture response header Cache-Control len 8
 
-            # the Via header will report the next proxy's name
+            <span class="comment"># the Via header will report the next proxy's name</span>
             capture response header Via len 20
 
-            # log the URL location during a redirection
+            <span class="comment"># log the URL location during a redirection</span>
             capture response header Location len 20
 
     &gt;&gt;&gt; Aug  9 20:26:09 localhost \
@@ -8800,8 +8716,7 @@ in the logs.
           {www.sytadin.equipement.gouv.fr||http://trafic.1wt.eu/} \
           {Apache|230|||http://www.sytadin.} \
           &quot;GET http://www.sytadin.equipement.gouv.fr/ HTTP/1.1&quot;
-</pre>
-</pre><br />
+</pre></pre><br />
 <a name="8.9"></a>
 <h2><small>8.9.</small> Examples of logs</h2>
 <pre>These are real-world examples of logs accompanied with an explanation. Some of
@@ -9012,8 +8927,8 @@ own stats.
   string.
 
   <span class="label label-success">Example :</span>
-<pre>        $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: http_proxy, type: ip, size:204800, used:2
+<pre class="prettyprint">        $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
+    &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
     &gt;&gt;&gt; 0x80e6a4c: key=127.0.0.1 use=0 exp=3594729 gpc0=0 conn_rate(30000)=1 \
           bytes_out_rate(60000)=187
     &gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
@@ -9022,14 +8937,13 @@ own stats.
         $ echo &quot;clear table http_proxy key 127.0.0.1&quot; | socat stdio /tmp/sock1
 
         $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: http_proxy, type: ip, size:204800, used:1
+    &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
     &gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
           bytes_out_rate(60000)=191
         $ echo &quot;clear table http_proxy data.gpc0 eq 1&quot; | socat stdio /tmp/sock1
         $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: http_proxy, type: ip, size:204800, used:1
-</pre>
-<a name="disable"></a><a name="9-disable"></a><a name="9.2-disable"></a><a name="disable (Statistics and monitoring)"></a><a name="disable (Unix Socket commands)"></a><a name="disable frontend"></a><a name="9-disable frontend"></a><a name="9.2-disable frontend"></a><a name="disable frontend (Statistics and monitoring)"></a><a name="disable frontend (Unix Socket commands)"></a><div class="keyword"><b><a name="disable frontend"></a><a href="#9-disable frontend">disable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div>  Mark the frontend as temporarily stopped. This corresponds to the mode which
+    &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
+</pre><a name="disable"></a><a name="9-disable"></a><a name="9.2-disable"></a><a name="disable (Statistics and monitoring)"></a><a name="disable (Unix Socket commands)"></a><a name="disable frontend"></a><a name="9-disable frontend"></a><a name="9.2-disable frontend"></a><a name="disable frontend (Statistics and monitoring)"></a><a name="disable frontend (Unix Socket commands)"></a><div class="keyword"><b><a name="disable frontend"></a><a href="#9-disable frontend">disable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div>  Mark the frontend as temporarily stopped. This corresponds to the mode which
   is used during a soft restart : the frontend releases the port but can be
   enabled again if needed. This should be used with care as some non-Linux OSes
   are unable to enable it back. This is intended to be used in environments
@@ -9169,9 +9083,9 @@ own stats.
   line.
 
   <span class="label label-success">Example :</span>
-<pre>        $ echo &quot;<a href="#show errors">show errors</a>&quot; | socat stdio /tmp/sock1
-    &gt;&gt;&gt; [04/Mar/2009:15:46:56.081] backend http-in (#2) : invalid response
-          src 127.0.0.1, session #54, frontend fe-eth0 (#1), server s2 (#1)
+<pre class="prettyprint">        $ echo &quot;<a href="#show errors">show errors</a>&quot; | socat stdio /tmp/sock1
+    &gt;&gt;&gt; [04/Mar/2009:15:46:56.081] backend http-in (<span class="comment">#2) : invalid response</span>
+          src 127.0.0.1, session <span class="comment">#54, frontend fe-eth0 (#1), server s2 (#1)</span>
           response length 213 bytes, error at position 23:
 
           00000  HTTP/1.0 200 OK\r\n
@@ -9190,8 +9104,7 @@ own stats.
     213 bytes when the error was detected, and the error was at byte 23. This
     is the slash ('/') in header name &quot;header/bizarre&quot;, which is not a valid
     HTTP character for a header name.
-</pre>
-<a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show info"></a><a name="9-show info"></a><a name="9.2-show info"></a><a name="show info (Statistics and monitoring)"></a><a name="show info (Unix Socket commands)"></a><div class="keyword"><b><a name="show info"></a><a href="#9-show info">show info</a></b></div>  Dump info about haproxy status on current process.
+</pre><a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show info"></a><a name="9-show info"></a><a name="9.2-show info"></a><a name="show info (Statistics and monitoring)"></a><a name="show info (Unix Socket commands)"></a><div class="keyword"><b><a name="show info"></a><a href="#9-show info">show info</a></b></div>  Dump info about haproxy status on current process.
 
 <a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show sess"></a><a name="9-show sess"></a><a name="9.2-show sess"></a><a name="show sess (Statistics and monitoring)"></a><a name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a name="show sess"></a><a href="#9-show sess">show sess</a></b></div>  Dump all known sessions. Avoid doing this on slow connections as this can
   be huge. This command is restricted and can only be issued on sockets
@@ -9215,7 +9128,7 @@ own stats.
     - &lt;sid&gt; is a server ID, -1 to dump everything from the selected proxy.
 
   <span class="label label-success">Example :</span>
-<pre>        $ echo &quot;show info;show stat&quot; | socat stdio unix-connect:/tmp/sock1
+<pre class="prettyprint">        $ echo &quot;show info;show stat&quot; | socat stdio unix-connect:/tmp/sock1
     &gt;&gt;&gt; Name: HAProxy
         Version: 1.4-dev2-49
         Release_date: 2009/09/23
@@ -9223,7 +9136,7 @@ own stats.
         Process_num: 1
         (...)
 
-        # pxname,svname,qcur,qmax,scur,smax,slim,stot,bin,bout,dreq,  (...)
+        <span class="comment"># pxname,svname,qcur,qmax,scur,smax,slim,stot,bin,bout,dreq,  (...)</span>
         stats,FRONTEND,,,0,0,1000,0,0,0,0,0,0,,,,,OPEN,,,,,,,,,1,1,0, (...)
         stats,BACKEND,0,0,0,0,1000,0,0,0,0,0,,0,0,0,0,UP,0,0,0,,0,250,(...)
         (...)
@@ -9236,18 +9149,16 @@ own stats.
     line after the information output which marks the end of the first block.
     A similar empty line appears at the end of the second block (stats) so that
     the reader knows the output has not been truncated.
-</pre>
-<a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show table"></a><a name="9-show table"></a><a name="9.2-show table"></a><a name="show table (Statistics and monitoring)"></a><a name="show table (Unix Socket commands)"></a><div class="keyword"><b><a name="show table"></a><a href="#9-show table">show table</a></b></div>  Dump general information on all known stick-tables. Their name is returned
+</pre><a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show table"></a><a name="9-show table"></a><a name="9.2-show table"></a><a name="show table (Statistics and monitoring)"></a><a name="show table (Unix Socket commands)"></a><div class="keyword"><b><a name="show table"></a><a href="#9-show table">show table</a></b></div>  Dump general information on all known stick-tables. Their name is returned
   (the name of the proxy which holds them), their type (currently zero, always
   IP), their size in maximum possible number of entries, and the number of
   entries currently in use.
 
   <span class="label label-success">Example :</span>
-<pre>        $ echo &quot;<a href="#show table">show table</a>&quot; | socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: front_pub, type: ip, size:204800, used:171454
-    &gt;&gt;&gt; # table: back_rdp, type: ip, size:204800, used:0
-</pre>
-<a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show table"></a><a name="9-show table"></a><a name="9.2-show table"></a><a name="show table (Statistics and monitoring)"></a><a name="show table (Unix Socket commands)"></a><div class="keyword"><b><a name="show table"></a><a href="#9-show table">show table</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div>  Dump contents of stick-table &lt;name&gt;. In this mode, a first line of generic
+<pre class="prettyprint">        $ echo &quot;<a href="#show table">show table</a>&quot; | socat stdio /tmp/sock1
+    &gt;&gt;&gt; <span class="comment"># table: front_pub, type: ip, size:204800, used:171454</span>
+    &gt;&gt;&gt; <span class="comment"># table: back_rdp, type: ip, size:204800, used:0</span>
+</pre><a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show table"></a><a name="9-show table"></a><a name="9.2-show table"></a><a name="show table (Statistics and monitoring)"></a><a name="show table (Unix Socket commands)"></a><div class="keyword"><b><a name="show table"></a><a href="#9-show table">show table</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div>  Dump contents of stick-table &lt;name&gt;. In this mode, a first line of generic
   information about the table is reported as with &quot;<a href="#show table">show table</a>&quot;, then all
   entries are dumped. Since this can be quite heavy, it is possible to specify
   a filter in order to specify what entries to display.
@@ -9271,31 +9182,30 @@ own stats.
   and string.
 
   <span class="label label-success">Example :</span>
-<pre>        $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: http_proxy, type: ip, size:204800, used:2
+<pre class="prettyprint">        $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
+    &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
     &gt;&gt;&gt; 0x80e6a4c: key=127.0.0.1 use=0 exp=3594729 gpc0=0 conn_rate(30000)=1  \
           bytes_out_rate(60000)=187
     &gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
           bytes_out_rate(60000)=191
 
         $ echo &quot;show table http_proxy data.gpc0 gt 0&quot; | socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: http_proxy, type: ip, size:204800, used:2
+    &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
     &gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
           bytes_out_rate(60000)=191
 
         $ echo &quot;show table http_proxy data.conn_rate gt 5&quot; | \
             socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: http_proxy, type: ip, size:204800, used:2
+    &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
     &gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
           bytes_out_rate(60000)=191
 
         $ echo &quot;show table http_proxy key 127.0.0.2&quot; | \
             socat stdio /tmp/sock1
-    &gt;&gt;&gt; # table: http_proxy, type: ip, size:204800, used:2
+    &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
     &gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
           bytes_out_rate(60000)=191
-</pre>
-  When the data criterion applies to a dynamic value dependent on time such as
+</pre>  When the data criterion applies to a dynamic value dependent on time such as
   a bytes rate, the value is dynamically computed during the evaluation of the
   entry in order to decide whether it has to be dumped or not. This means that
   such a filter could match for some time then not match anymore because as
@@ -9304,12 +9214,11 @@ own stats.
   It is possible to use this to extract lists of IP addresses abusing the
   service, in order to monitor them or even blacklist them in a firewall.
   <span class="label label-success">Example :</span>
-<pre>        $ echo &quot;show table http_proxy data.gpc0 gt 0&quot; \
+<pre class="prettyprint">        $ echo &quot;show table http_proxy data.gpc0 gt 0&quot; \
           | socat stdio /tmp/sock1 \
           | fgrep 'key=' | cut -d' ' -f2 | cut -d= -f2 &gt; abusers-ip.txt
           ( or | awk '/key/{ print a[split($2,a,&quot;=&quot;)]; }' )
-</pre>
-<a name="shutdown"></a><a name="9-shutdown"></a><a name="9.2-shutdown"></a><a name="shutdown (Statistics and monitoring)"></a><a name="shutdown (Unix Socket commands)"></a><a name="shutdown frontend"></a><a name="9-shutdown frontend"></a><a name="9.2-shutdown frontend"></a><a name="shutdown frontend (Statistics and monitoring)"></a><a name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a name="shutdown frontend"></a><a href="#9-shutdown frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div>  Completely delete the specified frontend. All the ports it was bound to will
+</pre><a name="shutdown"></a><a name="9-shutdown"></a><a name="9.2-shutdown"></a><a name="shutdown (Statistics and monitoring)"></a><a name="shutdown (Unix Socket commands)"></a><a name="shutdown frontend"></a><a name="9-shutdown frontend"></a><a name="9.2-shutdown frontend"></a><a name="shutdown frontend (Statistics and monitoring)"></a><a name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a name="shutdown frontend"></a><a href="#9-shutdown frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div>  Completely delete the specified frontend. All the ports it was bound to will
   be released. It will not be possible to enable the frontend anymore after
   this operation. This is intended to be used in environments where stopping a
   proxy is not even imaginable but a misconfigured proxy must be fixed. That
@@ -9340,6 +9249,8 @@ own stats.
 				</div>
 			</div>
 		</div>
+		<script src="js/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>
 
