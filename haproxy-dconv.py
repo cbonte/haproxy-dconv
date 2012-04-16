@@ -472,18 +472,19 @@ def convert(infile, outfile):
                         i += 1 # Skip empty lines
 
                     if get_indent(lines[i]) > indent:
-                        documentAppend("<pre>", False)
+                        documentAppend('<pre class="prettyprint">', False)
                         add_empty_line = 0
                         while i < len(lines) and ((not lines[i]) or (get_indent(lines[i]) > indent)):
                             if lines[i]:
                                 for j in xrange(0, add_empty_line):
                                     documentAppend("")
-                                documentAppend(lines[i])
+                                line = re.sub(r'(#.*)$', r'<span class="comment">\1</span>', lines[i])
+                                documentAppend(line)
                                 add_empty_line = 0
                             else:
                                 add_empty_line += 1
                             i += 1
-                        documentAppend("</pre>")
+                        documentAppend("</pre>", False)
                     continue
 
                 # Some examples are currently too complex to parse, well, just colorize the header for now.
