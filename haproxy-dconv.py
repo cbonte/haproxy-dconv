@@ -462,7 +462,7 @@ def convert(infile, outfile):
                 line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
                 line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
 
-                if re.match(r'^ *Examples? *:$', line):
+                if re.match(r'.*Examples? *:', line):
                     # Detect examples blocks
                     line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
                     documentAppend(line)
