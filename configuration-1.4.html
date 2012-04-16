@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<div class="alert alert-success pagination-centered">
-				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.3-8-gd307f8c</b> on <b>2012/04/16</b>
+				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.4</b> on <b>2012/04/16</b>
 			</div>
 
 			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
@@ -851,8 +851,7 @@ it is required to create at least one userlist and to define users.
   DES-based method of crypting passwords.
 
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        userlist L1
+  <span class="label label-success">Example:</span><pre class="prettyprint">        userlist L1
           group G1 users tiger,scott
           group G2 users xdb,scott
 
@@ -928,8 +927,7 @@ specified in a previous &quot;defaults&quot; section.
 
 
 <a name="acl"></a><a name="4-acl"></a><a name="4.2-acl"></a><a name="acl (Proxies)"></a><a name="acl (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="acl"></a><a href="#4-acl">acl</a></b> <span style="color: #080">&lt;aclname&gt;</span> <span style="color: #080">&lt;criterion&gt;</span> <span style="color: #008">[flags]</span> <span style="color: #008">[operator]</span> <span style="color: #080">&lt;value&gt;</span> ...</div>  Declare or complete an access list.
-<p>  May be used in sections  :<table class="table table-bordered" border="0" cellspacing="0" cellpadding="0"><thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead><tr><td class="alert-error"><div class="pagination-centered">no</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td></tr></table></p>  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
+<p>  May be used in sections  :<table class="table table-bordered" border="0" cellspacing="0" cellpadding="0"><thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead><tr><td class="alert-error"><div class="pagination-centered">no</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td><td class="alert-success"><div class="pagination-centered">yes</div></td></tr></table></p>  <span class="label label-success">Example:</span><pre class="prettyprint">        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
         acl invalid_src  src_port     0:1023
         acl local_dst    hdr(host) -i localhost
 </pre>  See <a href="#7">section 7</a> about ACL usage.
@@ -960,10 +958,8 @@ specified in a previous &quot;defaults&quot; section.
                prefix (or URL parameter prefix). The appsession value is the
                data following this prefix.
 
-               <span class="label label-success">Example :</span>
-               appsession ASPSESSIONID len 64 timeout 3h prefix
-
-               This will match the cookie ASPSESSIONIDXXXX=XXXXX,
+               <span class="label label-success">Example :</span><pre class="prettyprint">               appsession ASPSESSIONID len 64 timeout 3h prefix
+</pre>               This will match the cookie ASPSESSIONIDXXXX=XXXXX,
                the appsession value will be XXXX=XXXXX.
 
     mode       This option allows to change the URL parser mode.
@@ -993,8 +989,7 @@ specified in a previous &quot;defaults&quot; section.
          unless you know what you do : memory is not shared between the
          processes, which can result in random behaviours.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        appsession JSESSIONID len 52 timeout 3h
+  <span class="label label-success">Example :</span><pre class="prettyprint">        appsession JSESSIONID len 52 timeout 3h
 </pre>  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#cookie (Proxies)">Proxies</a></li><li><a href="#cookie (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#stick">stick</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;,
              &quot;<a href="#ignore-persist">ignore-persist</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot; and &quot;<a href="#bind-process">bind-process</a>&quot;.
 
@@ -1182,8 +1177,7 @@ specified in a previous &quot;defaults&quot; section.
   algorithm, mode nor option have been set. The algorithm may only be set once
   for each backend.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">        balance roundrobin
+  <span class="label label-success">Examples :</span><pre class="prettyprint">        balance roundrobin
         balance url_param userid
         balance url_param session_id check_post 64
         balance hdr(User-Agent)
@@ -1309,8 +1303,7 @@ specified in a previous &quot;defaults&quot; section.
   a frontend, as well as there is no limit to the number of &quot;<a href="#bind">bind</a>&quot; statements
   in a frontend.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        listen http_proxy
+  <span class="label label-success">Example :</span><pre class="prettyprint">        listen http_proxy
             bind :80,:443
             bind 10.0.0.1:10080,10.0.0.1:10443
 </pre>  <span class="label label-see-also">See also :</span> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;.
@@ -1348,8 +1341,7 @@ specified in a previous &quot;defaults&quot; section.
   If some backends are referenced by frontends bound to other processes, the
   backend automatically inherits the frontend's processes.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        listen app_ip1
+  <span class="label label-success">Example :</span><pre class="prettyprint">        listen app_ip1
             bind 10.0.0.1:80
             bind-process odd
 
@@ -1372,8 +1364,7 @@ specified in a previous &quot;defaults&quot; section.
   conditions are met or not met. There is no fixed limit to the number of
   &quot;<a href="#block">block</a>&quot; statements per instance.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
+  <span class="label label-success">Example:</span><pre class="prettyprint">        acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
         acl invalid_src  src_port     0:1023
         acl local_dst    hdr(host) -i localhost
         block if invalid_src || local_dst
@@ -1409,8 +1400,7 @@ specified in a previous &quot;defaults&quot; section.
   configured in the sources by default to 64 characters. It is not possible to
   specify a capture in a &quot;defaults&quot; section.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        capture cookie ASPSESSION len 32
+  <span class="label label-success">Example:</span><pre class="prettyprint">        capture cookie ASPSESSION len 32
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#capture request header">capture request header</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as
             <a href="#8">section 8</a> about logging.
 
@@ -1447,8 +1437,7 @@ specified in a previous &quot;defaults&quot; section.
   same frontend, header captures can only be declared in a frontend. It is not
   possible to specify a capture in a &quot;defaults&quot; section.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        capture request header Host len 15
+  <span class="label label-success">Example:</span><pre class="prettyprint">        capture request header Host len 15
         capture request header X-Forwarded-For len 15
         capture request header Referrer len 15
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as <a href="#8">section 8</a>
@@ -1481,8 +1470,7 @@ specified in a previous &quot;defaults&quot; section.
   for a same frontend, header captures can only be declared in a frontend. It
   is not possible to specify a capture in a &quot;defaults&quot; section.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        capture response header Content-length len 9
+  <span class="label label-success">Example:</span><pre class="prettyprint">        capture response header Content-length len 9
         capture response header Location len 15
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#capture request header">capture request header</a>&quot; as well as <a href="#8">section 8</a>
              about logging.
@@ -1688,8 +1676,7 @@ specified in a previous &quot;defaults&quot; section.
   indicated after the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#cookie (Proxies)">Proxies</a></li><li><a href="#cookie (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; keyword in a &quot;<a href="#server">server</a>&quot; statement. If no cookie
   is declared for a given server, the cookie is not set.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">        cookie JSESSIONID prefix
+  <span class="label label-success">Examples :</span><pre class="prettyprint">        cookie JSESSIONID prefix
         cookie SRV insert indirect nocache
         cookie SRV insert postonly indirect
         cookie SRV insert indirect nocache maxidle 30m maxlife 8h
@@ -1704,8 +1691,7 @@ specified in a previous &quot;defaults&quot; section.
               section dedicated to it. Please refer to <a href="#5">section 5</a> for more
               details.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        default-server inter 1000 weight 13
+  <span class="label label-success">Example :</span><pre class="prettyprint">        default-server inter 1000 weight 13
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#server">server</a>&quot; and <a href="#5">section 5</a> about server options
 
 
@@ -1718,8 +1704,7 @@ specified in a previous &quot;defaults&quot; section.
   used when no rule has matched. It generally is the dynamic backend which
   will catch all undetermined requests.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        use_backend     dynamic  if  url_dyn
+  <span class="label label-success">Example :</span><pre class="prettyprint">        use_backend     dynamic  if  url_dyn
         use_backend     static   if  url_css url_img extension_img
         default_backend dynamic
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#use_backend">use_backend</a>&quot;, &quot;reqsetbe&quot;, &quot;reqisetbe&quot;
@@ -1805,8 +1790,7 @@ specified in a previous &quot;defaults&quot; section.
 
   <span class="label label-see-also">See also :</span> &quot;<a href="#errorloc">errorloc</a>&quot;, &quot;<a href="#errorloc302">errorloc302</a>&quot;, &quot;<a href="#errorloc303">errorloc303</a>&quot;
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        errorfile 400 /etc/haproxy/errorfiles/400badreq.http
+  <span class="label label-success">Example :</span><pre class="prettyprint">        errorfile 400 /etc/haproxy/errorfiles/400badreq.http
         errorfile 403 /etc/haproxy/errorfiles/403forbid.http
         errorfile 503 /etc/haproxy/errorfiles/503sorry.http
 </pre><a name="errorloc"></a><a name="4-errorloc"></a><a name="4.2-errorloc"></a><a name="errorloc (Proxies)"></a><a name="errorloc (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="errorloc"></a><a href="#4-errorloc">errorloc</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;url&gt;</span></div><a name="errorloc302"></a><a name="4-errorloc302"></a><a name="4.2-errorloc302"></a><a name="errorloc302 (Proxies)"></a><a name="errorloc302 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="errorloc302"></a><a href="#4-errorloc302">errorloc302</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;url&gt;</span></div>  Return an HTTP redirection to a URL instead of errors generated by HAProxy
@@ -1904,8 +1888,7 @@ specified in a previous &quot;defaults&quot; section.
   push it further for important loads without overloading the servers during
   exceptional loads.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># The servers will accept between 100 and 1000 concurrent connections each</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># The servers will accept between 100 and 1000 concurrent connections each</span>
      <span class="comment"># and the maximum of 1000 will be reached when the backend reaches 10000</span>
      <span class="comment"># connections.</span>
      backend dynamic
@@ -2043,8 +2026,7 @@ specified in a previous &quot;defaults&quot; section.
   Last, if &quot;<a href="#http-check expect">http-check expect</a>&quot; is combined with &quot;<a href="#http-check disable-on-404">http-check disable-on-404</a>&quot;,
   then this last one has precedence when the server responds with 404.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">         <span class="comment"># only accept status 200 as valid</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">         <span class="comment"># only accept status 200 as valid</span>
          http-check expect status 200
 
          <span class="comment"># consider SQL errors as errors</span>
@@ -2111,8 +2093,7 @@ specified in a previous &quot;defaults&quot; section.
   There is no fixed limit to the number of http-request statements per
   instance.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        acl nagios src 192.168.129.3
+  <span class="label label-success">Example:</span><pre class="prettyprint">        acl nagios src 192.168.129.3
         acl local_net src 192.168.0.0/16
         acl auth_ok http_auth(L1)
 
@@ -2120,8 +2101,7 @@ specified in a previous &quot;defaults&quot; section.
         http-request allow if local_net auth_ok
         http-request auth realm Gimme if local_net auth_ok
         http-request deny
-</pre>  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        acl auth_ok http_auth_group(L1) G1
+</pre>  <span class="label label-success">Example:</span><pre class="prettyprint">        acl auth_ok http_auth_group(L1) G1
 
         http-request auth unless auth_ok
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#stats http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a>
@@ -2224,8 +2204,7 @@ specified in a previous &quot;defaults&quot; section.
   Note : According to RFC3164, messages are truncated to 1024 bytes before
          being emitted.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    log global
+  <span class="label label-success">Example :</span><pre class="prettyprint">    log global
     log 127.0.0.1:514 local0 notice         <span class="comment"># only send important events</span>
     log 127.0.0.1:514 local0 notice notice  <span class="comment"># same but limit output level</span>
 </pre><a name="maxconn"></a><a name="4-maxconn"></a><a name="4.2-maxconn"></a><a name="maxconn (Proxies)"></a><a name="maxconn (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="maxconn"></a><a href="#4-maxconn">maxconn</a></b> <span style="color: #080">&lt;conns&gt;</span></div>  Fix the maximum number of concurrent connections on a frontend
@@ -2275,8 +2254,7 @@ specified in a previous &quot;defaults&quot; section.
    backend are in the same mode (generally HTTP), otherwise the configuration
    will be refused.
 
-   <span class="label label-success">Example :</span>
-<pre class="prettyprint">     defaults http_instances
+   <span class="label label-success">Example :</span><pre class="prettyprint">     defaults http_instances
          mode http
 </pre>   <span class="label label-see-also">See also :</span> &quot;<a href="#monitor">monitor</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;
 
@@ -2304,8 +2282,7 @@ specified in a previous &quot;defaults&quot; section.
   criterion. Note that &quot;<a href="#monitor fail">monitor fail</a>&quot; only works in HTTP mode. Both status
   messages may be tweaked using &quot;<a href="#errorfile">errorfile</a>&quot; or &quot;<a href="#errorloc">errorloc</a>&quot; if needed.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">     frontend www
+  <span class="label label-success">Example:</span><pre class="prettyprint">     frontend www
         mode http
         acl site_dead nbsrv(dynamic) lt 2
         acl site_dead nbsrv(static)  lt 2
@@ -2341,8 +2318,7 @@ specified in a previous &quot;defaults&quot; section.
   Last, please note that only one &quot;<a href="#monitor-net">monitor-net</a>&quot; statement can be specified in
   a frontend. If more than one is found, only the last one will be considered.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># addresses .252 and .253 are just probing us.</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># addresses .252 and .253 are just probing us.</span>
     frontend www
         monitor-net 192.168.0.252/31
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#monitor fail">monitor fail</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;
@@ -2369,8 +2345,7 @@ specified in a previous &quot;defaults&quot; section.
   &quot;<a href="#monitor fail">monitor fail</a>&quot; and ACLs so that the result can be adjusted to whatever check
   can be imagined (most often the number of available servers in a backend).
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># Use /haproxy_test to report haproxy's status</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># Use /haproxy_test to report haproxy's status</span>
     frontend www
         mode http
         monitor-uri /haproxy_test
@@ -2700,8 +2675,7 @@ specified in a previous &quot;defaults&quot; section.
   In order to fix this, ensure that any of the &quot;<a href="#option httpclose">httpclose</a>&quot;, &quot;<a href="#option forceclose">forceclose</a>&quot; or
   &quot;<a href="#option http-server-close">http-server-close</a>&quot; options is set when using this option.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">    <span class="comment"># Public HTTP address also used by stunnel on the same machine</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">    <span class="comment"># Public HTTP address also used by stunnel on the same machine</span>
     frontend www
         mode http
         option forwardfor except 127.0.0.1  <span class="comment"># stunnel already adds the header</span>
@@ -2877,8 +2851,7 @@ specified in a previous &quot;defaults&quot; section.
   plain TCP backends. This is particularly useful to check simple scripts bound
   to some dedicated ports using the inetd daemon.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">      <span class="comment"># Relay HTTPS traffic to Apache instance and check service availability</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">      <span class="comment"># Relay HTTPS traffic to Apache instance and check service availability</span>
       <span class="comment"># using HTTP request &quot;OPTIONS * HTTP/1.1&quot; on port 80.</span>
       backend https_relay
           mode tcp
@@ -2965,8 +2938,7 @@ specified in a previous &quot;defaults&quot; section.
   If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># this backend understands HTTP proxy requests and forwards them directly.</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># this backend understands HTTP proxy requests and forwards them directly.</span>
     backend direct_forward
         option httpclose
         option http_proxy
@@ -3016,8 +2988,7 @@ specified in a previous &quot;defaults&quot; section.
   Logging of bind requests is server dependent see your documentation how to
   configure it.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        option ldap-check
+  <span class="label label-success">Example :</span><pre class="prettyprint">        option ldap-check
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;
 
 
@@ -3068,8 +3039,7 @@ specified in a previous &quot;defaults&quot; section.
   &quot;Content-Length&quot; response header so that the logs at least indicate how many
   bytes are expected to be transferred.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">      listen http_proxy 0.0.0.0:80
+  <span class="label label-success">Examples :</span><pre class="prettyprint">      listen http_proxy 0.0.0.0:80
           mode http
           option httplog
           option logasap
@@ -3195,8 +3165,7 @@ specified in a previous &quot;defaults&quot; section.
   In order to fix this, ensure that any of the &quot;<a href="#option httpclose">httpclose</a>&quot;, &quot;<a href="#option forceclose">forceclose</a>&quot; or
   &quot;<a href="#option http-server-close">http-server-close</a>&quot; options is set when using this option.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">    <span class="comment"># Original Destination address</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">    <span class="comment"># Original Destination address</span>
     frontend www
         mode http
         option originalto except 127.0.0.1
@@ -3280,8 +3249,7 @@ specified in a previous &quot;defaults&quot; section.
   connecting to the server using the &quot;usesrc&quot; argument of the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; keyword,
   which requires the cttproxy feature to be compiled in.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        option smtpchk HELO mydomain.org
+  <span class="label label-success">Example :</span><pre class="prettyprint">        option smtpchk HELO mydomain.org
 </pre>  <span class="label label-see-also">See also :</span> &quot;<a href="#option httpchk">option httpchk</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;
 
 
@@ -3315,8 +3283,7 @@ specified in a previous &quot;defaults&quot; section.
   case of doubt, splicing may be globally disabled using the global &quot;<a href="#nosplice">nosplice</a>&quot;
   keyword.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        option splice-auto
+  <span class="label label-success">Example :</span><pre class="prettyprint">        option splice-auto
 </pre>  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
@@ -3336,8 +3303,7 @@ specified in a previous &quot;defaults&quot; section.
 
   Important note: see &quot;<a href="#option splice-auto">option splice-auto</a>&quot; for usage limitations.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        option splice-request
+  <span class="label label-success">Example :</span><pre class="prettyprint">        option splice-request
 </pre>  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
@@ -3357,8 +3323,7 @@ specified in a previous &quot;defaults&quot; section.
 
   Important note: see &quot;<a href="#option splice-auto">option splice-auto</a>&quot; for usage limitations.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        option splice-response
+  <span class="label label-success">Example :</span><pre class="prettyprint">        option splice-response
 </pre>  If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
   in a specific instance by prepending the &quot;no&quot; keyword before it.
 
@@ -3562,8 +3527,7 @@ specified in a previous &quot;defaults&quot; section.
   RDP cookie only if it is configured for &quot;token redirection mode&quot;, which means
   that the &quot;IP address redirection&quot; option is disabled.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        listen tse-farm
+  <span class="label label-success">Example :</span><pre class="prettyprint">        listen tse-farm
             bind :3389
             <span class="comment"># wait up to 5s for an RDP cookie in the request</span>
             tcp-request inspect-delay 5s
@@ -3596,14 +3560,12 @@ specified in a previous &quot;defaults&quot; section.
   millisecond, it is extremely accurate. Also, the limit applies immediately,
   no delay is needed at all to detect the threshold.
 
-  <span class="label label-success">Example :</span> limit the connection rate on SMTP to 10 per second max
-        listen smtp
+  <span class="label label-success">Example :</span> <pre class="prettyprint"><div class="example-desc">Limit the connection rate on SMTP to 10 per second max</div>        listen smtp
             mode tcp
             bind :25
             rate-limit sessions 10
             server 127.0.0.1:1025
-
-  Note : when the maximum rate is reached, the frontend's status appears as
+</pre>  Note : when the maximum rate is reached, the frontend's status appears as
          &quot;FULL&quot; in the statistics, exactly as when it is saturated.
 
   <span class="label label-see-also">See also :</span> the &quot;<a href="#backlog">backlog</a>&quot; keyword and the &quot;<a href="#fe_sess_rate">fe_sess_rate</a>&quot; ACL criterion.
@@ -3663,8 +3625,7 @@ specified in a previous &quot;defaults&quot; section.
         cookie set with &quot;NAME=value&quot;. You have to clear the cookie &quot;NAME=&quot; for
         that, because the browser makes the difference.
 
-  <span class="label label-success">Example:</span> move the login URL only to HTTPS.
-        acl clear      dst_port  80
+  <span class="label label-success">Example:</span> <pre class="prettyprint"><div class="example-desc">Move the login URL only to HTTPS.</div>        acl clear      dst_port  80
         acl secure     dst_port  8080
         acl login_page url_beg   /login
         acl logout     url_beg   /logout
@@ -3676,12 +3637,9 @@ specified in a previous &quot;defaults&quot; section.
         redirect prefix   http://mysite.com drop-query if login_page !uid_given
         redirect location http://mysite.com/           if !login_page secure
         redirect location / clear-cookie USERID=       if logout
-
-  <span class="label label-success">Example:</span> send redirects for request for articles without a '/'.
-        acl missing_slash path_reg ^/article/[^/]*$
+</pre>  <span class="label label-success">Example:</span> <pre class="prettyprint"><div class="example-desc">Send redirects for request for articles without a '/'.</div>        acl missing_slash path_reg ^/article/[^/]*$
         redirect code 301 prefix / drop-query append-slash if missing_slash
-
-  See <a href="#7">section 7</a> about ACL usage.
+</pre>  See <a href="#7">section 7</a> about ACL usage.
 
 
 <a name="redisp"></a><a name="4-redisp"></a><a name="4.2-redisp"></a><a name="redisp (Proxies)"></a><a name="redisp (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="redisp"></a><a href="#4-redisp">redisp</a></b> <span class="label label-warning">(deprecated)</span></div><a name="redispatch"></a><a name="4-redispatch"></a><a name="4.2-redispatch"></a><a name="redispatch (Proxies)"></a><a name="redispatch (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="redispatch"></a><a href="#4-redispatch">redispatch</a></b> <span class="label label-warning">(deprecated)</span></div>  Enable or disable session redistribution in case of connection failure
@@ -3720,11 +3678,9 @@ specified in a previous &quot;defaults&quot; section.
   and not to traffic generated by HAProxy, such as health-checks or error
   responses.
 
-  <span class="label label-success">Example :</span> add &quot;X-Proto: SSL&quot; to requests coming via port 81
-     acl is-ssl  dst_port       81
+  <span class="label label-success">Example :</span> <pre class="prettyprint"><div class="example-desc">Add &quot;X-Proto: SSL&quot; to requests coming via port 81</div>     acl is-ssl  dst_port       81
      reqadd      X-Proto:\ SSL  if is-ssl
-
-  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a>
+</pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a>
             about ACLs.
 
 
@@ -3750,8 +3706,7 @@ specified in a previous &quot;defaults&quot; section.
   It is easier, faster and more powerful to use ACLs to write access policies.
   Reqdeny, reqallow and reqpass should be avoided in new designs.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># allow www.* but refuse *.local</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># allow www.* but refuse *.local</span>
      reqiallow ^Host:\ www\.
      reqideny  ^Host:\ .*\.local
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and
@@ -3779,8 +3734,7 @@ specified in a previous &quot;defaults&quot; section.
   and not to traffic generated by HAProxy, such as health-checks or error
   responses. Keep in mind that header names are not case-sensitive.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># remove X-Forwarded-For header and SERVER cookie</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># remove X-Forwarded-For header and SERVER cookie</span>
      reqidel ^X-Forwarded-For:.*
      reqidel ^Cookie:.*SERVER=
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, <a href="#6">section 6</a> about HTTP header
@@ -3813,8 +3767,7 @@ specified in a previous &quot;defaults&quot; section.
   It is easier, faster and more powerful to use ACLs to write access policies.
   Reqdeny, reqallow and reqpass should be avoided in new designs.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># refuse *.local, then allow www.*</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># refuse *.local, then allow www.*</span>
      reqideny  ^Host:\ .*\.local
      reqiallow ^Host:\ www\.
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header
@@ -3842,8 +3795,7 @@ specified in a previous &quot;defaults&quot; section.
   It is easier, faster and more powerful to use ACLs to write access policies.
   Reqdeny, reqallow and reqpass should be avoided in new designs.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># refuse *.local, then allow www.*, but ignore &quot;www.private.local&quot;</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># refuse *.local, then allow www.*, but ignore &quot;www.private.local&quot;</span>
      reqipass  ^Host:\ www.private\.local
      reqideny  ^Host:\ .*\.local
      reqiallow ^Host:\ www\.
@@ -3879,8 +3831,7 @@ specified in a previous &quot;defaults&quot; section.
   spaces between the request and the response. Keep in mind that URLs in
   request line are case-sensitive while header names are not.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># replace &quot;/static/&quot; with &quot;/&quot; at the beginning of any request path.</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># replace &quot;/static/&quot; with &quot;/&quot; at the beginning of any request path.</span>
      reqrep ^([^\ ]*)\ /static/(.*)     \1\ /\2
      <span class="comment"># replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.</span>
      reqirep ^Host:\ www.mydomain.com   Host:\ www
@@ -3915,8 +3866,7 @@ specified in a previous &quot;defaults&quot; section.
   come. Depending on the environment and attack, it may be particularly
   efficient at reducing the load on the network and firewalls.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">     <span class="comment"># ignore user-agents reporting any flavour of &quot;Mozilla&quot; or &quot;MSIE&quot;, but</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">     <span class="comment"># ignore user-agents reporting any flavour of &quot;Mozilla&quot; or &quot;MSIE&quot;, but</span>
      <span class="comment"># block all others.</span>
      reqipass   ^User-Agent:\.*(Mozilla|MSIE)
      reqitarpit ^User-Agent:
@@ -3989,8 +3939,7 @@ specified in a previous &quot;defaults&quot; section.
   and not to traffic generated by HAProxy, such as health-checks or error
   responses. Keep in mind that header names are not case-sensitive.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># remove the Server header from responses</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># remove the Server header from responses</span>
      reqidel ^Server:.*
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
@@ -4022,8 +3971,7 @@ specified in a previous &quot;defaults&quot; section.
   It is easier, faster and more powerful to use ACLs to write access policies.
   Rspdeny should be avoided in new designs.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># Ensure that no content type matching ms-word will leak</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># Ensure that no content type matching ms-word will leak</span>
      rspideny  ^Content-type:\.*/ms-word
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation
             and <a href="#7">section 7</a> about ACLs.
@@ -4058,8 +4006,7 @@ specified in a previous &quot;defaults&quot; section.
   spaces between the request and the response. Keep in mind that header names
   are not case-sensitive.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">     <span class="comment"># replace &quot;Location: 127.0.0.1:8080&quot; with &quot;Location: www.mydomain.com&quot;</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">     <span class="comment"># replace &quot;Location: 127.0.0.1:8080&quot; with &quot;Location: www.mydomain.com&quot;</span>
      rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, <a href="#6">section 6</a> about HTTP header
             manipulation, and <a href="#7">section 7</a> about ACLs.
@@ -4089,8 +4036,7 @@ specified in a previous &quot;defaults&quot; section.
               accepts an important number of options and has a complete section
               dedicated to it. Please refer to <a href="#5">section 5</a> for more details.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">        server first  10.1.1.1:1080 cookie first  check inter 1000
+  <span class="label label-success">Examples :</span><pre class="prettyprint">        server first  10.1.1.1:1080 cookie first  check inter 1000
         server second 10.1.1.2:1080 cookie second check inter 1000
 </pre>  <span class="label label-see-also">See also:</span> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about
              server options
@@ -4195,8 +4141,7 @@ specified in a previous &quot;defaults&quot; section.
   is possible at the server level using the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; server option. Refer to
   <a href="#5">section 5</a> for more information.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">        backend private
+  <span class="label label-success">Examples :</span><pre class="prettyprint">        backend private
             <span class="comment"># Connect to the servers using our 192.168.1.200 source address</span>
             source 192.168.1.200
 
@@ -4280,19 +4225,16 @@ specified in a previous &quot;defaults&quot; section.
   request won't be processed. It is recommended to alter few servers at a
   time.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># statistics admin level only for localhost</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># statistics admin level only for localhost</span>
     backend stats_localhost
         stats enable
         stats admin if LOCALHOST
-</pre>  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># statistics admin level always enabled because of the authentication</span>
+</pre>  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># statistics admin level always enabled because of the authentication</span>
     backend stats_auth
         stats enable
         stats auth  admin:AdMiN123
         stats admin if TRUE
-</pre>  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># statistics admin level depends on the authenticated user</span>
+</pre>  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># statistics admin level depends on the authenticated user</span>
     userlist stats-auth
         group admin    users admin
         user  admin    insecure-password AdMiN123
@@ -4335,8 +4277,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4369,8 +4310,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4403,8 +4343,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4457,8 +4396,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4495,8 +4433,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4532,8 +4469,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4564,8 +4500,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># internal monitoring access (unlimited)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats show-desc Master node for Europe, Asia, Africa
@@ -4602,8 +4537,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">    <span class="comment"># internal monitoring access (unlimited)</span>
+  <span class="label label-success">Example:</span><pre class="prettyprint">    <span class="comment"># internal monitoring access (unlimited)</span>
     backend private_monitoring
         stats enable
         stats show-node Europe-1
@@ -4639,8 +4573,7 @@ specified in a previous &quot;defaults&quot; section.
   recommended to set all other settings in order to avoid relying on default
   unobvious parameters.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># public access (limited to this backend only)</span>
     backend public_www
         server srv1 192.168.0.1:80
         stats enable
@@ -4709,8 +4642,7 @@ specified in a previous &quot;defaults&quot; section.
          unless you know what you do : memory is not shared between the
          processes, which can result in random behaviours.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># forward SMTP users to the same server they just used for POP in the</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># forward SMTP users to the same server they just used for POP in the</span>
     <span class="comment"># last 30 minutes</span>
     backend pop
         mode tcp
@@ -4741,8 +4673,7 @@ specified in a previous &quot;defaults&quot; section.
          unless you know what you do : memory is not shared between the
          processes, which can result in random behaviours.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">    <span class="comment"># The following form ...</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">    <span class="comment"># The following form ...</span>
     stick on src table pop if !localhost
 
     <span class="comment"># ...is strictly equivalent to this one :</span>
@@ -4829,8 +4760,7 @@ specified in a previous &quot;defaults&quot; section.
          unless you know what you do : memory is not shared between the
          processes, which can result in random behaviours.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    <span class="comment"># forward SMTP users to the same server they just used for POP in the</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">    <span class="comment"># forward SMTP users to the same server they just used for POP in the</span>
     <span class="comment"># last 30 minutes</span>
     backend pop
         mode tcp
@@ -4956,8 +4886,7 @@ specified in a previous &quot;defaults&quot; section.
   If no &quot;<a href="#tcp-request content">tcp-request content</a>&quot; rules are matched, the default action is set to
   &quot;accept&quot;.
 
-  <span class="label label-success">Example:</span>
-<pre class="prettyprint">        <span class="comment"># reject SMTP connection if client speaks first</span>
+  <span class="label label-success">Example:</span><pre class="prettyprint">        <span class="comment"># reject SMTP connection if client speaks first</span>
         tcp-request inspect-delay 30s
         acl content_present req_len gt 0
         tcp-request reject if content_present
@@ -5485,9 +5414,8 @@ The currently supported settings are the following ones.
   connect to them. Note: never use a relative location here, it would cause a
   loop between the client and HAProxy!
 
-  <span class="label label-success">Example :</span>  server srv1 192.168.1.1:80 redir http://image1.mydomain.com check
-
-  Supported in default-server: No
+  <span class="label label-success">Example :</span>  <pre class="prettyprint">  server srv1 192.168.1.1:80 redir http://image1.mydomain.com check
+</pre>  Supported in default-server: No
 
 <a name="rise"></a><a name="5-rise"></a><a name="5-rise"></a><a name="rise (Server and default-server options)"></a><a name="rise (Server and default-server options)"></a><div class="keyword"><b><a name="rise"></a><a href="#5-rise">rise</a></b> <span style="color: #080">&lt;count&gt;</span></div>  The &quot;<a href="#rise">rise</a>&quot; parameter states that a server will be considered as operational
   after &lt;count&gt; consecutive successful health checks. This value defaults to 2
@@ -5829,8 +5757,7 @@ addresses and ports, as well as internal values independant on the stream.
   reaches too high a session rate, or to limit abuse of service (eg. prevent
   sucking of an online dictionary).
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        <span class="comment"># Redirect to an error page if the dictionary is requested too often</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">        <span class="comment"># Redirect to an error page if the dictionary is requested too often</span>
         backend dynamic
             mode http
             acl being_scanned be_sess_rate gt 100
@@ -5889,8 +5816,7 @@ addresses and ports, as well as internal values independant on the stream.
   combined with layer 4 ACLs in order to force the clients to wait a bit for
   the rate to go down below the limit.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        <span class="comment"># This frontend limits incoming mails to 10/s with a max of 100</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">        <span class="comment"># This frontend limits incoming mails to 10/s with a max of 100</span>
         <span class="comment"># concurrent connections. We accept any connection below 10/s, and</span>
         <span class="comment"># force excess clients to wait for 100 ms. Since clients are limited to</span>
         <span class="comment"># 100 max, there cannot be more than 10 incoming mails per second.</span>
@@ -5992,8 +5918,7 @@ for more detailed information on the subject.
   declaration. This test was designed to be used with TCP request content
   inspection.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">     <span class="comment"># delay every incoming request by 2 seconds</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">     <span class="comment"># delay every incoming request by 2 seconds</span>
      tcp-request inspect-delay 2s
      tcp-request content accept if WAIT_END
 
@@ -6227,9 +6152,7 @@ and to every request on the &quot;img&quot;, &quot;video&quot;, &quot;download&q
 It is also possible to form rules using &quot;anonymous ACLs&quot;. Those are unnamed ACL
 expressions that are built on the fly without needing to be declared. They must
 be enclosed between braces, with a space before and after each brace (because
-the braces must be seen as independant words). <span class="label label-success">Example :</span>
-
-   The following rule :
+the braces must be seen as independant words). <span class="label label-success">Example :</span><pre class="prettyprint">   The following rule :
 
        acl missing_cl hdr_cnt(Content-length) eq 0
        block if METH_POST missing_cl
@@ -6237,8 +6160,7 @@ the braces must be seen as independant words). <span class="label label-success"
    Can also be written that way :
 
        block if METH_POST { hdr_cnt(Content-length) eq 0 }
-
-It is generally not recommended to use this construct because it's a lot easier
+</pre>It is generally not recommended to use this construct because it's a lot easier
 to leave errors in the configuration when written that way. However, for very
 simple rules matching only one source IP address for instance, it can make more
 sense to use them than to declare ACLs with random names. Another example of
@@ -6393,8 +6315,7 @@ Note : Since log lines may be quite long, the log examples in sections below
 as the connection is accepted. One should note that this currently is the only
 format which logs the request's destination IP and ports.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        listen www
+  <span class="label label-success">Example :</span><pre class="prettyprint">        listen www
             mode http
             log global
             server srv1 127.0.0.1:8000
@@ -6437,8 +6358,7 @@ not be logged if &quot;<a href="#option dontlog-normal">option dontlog-normal</a
 fields may slightly vary depending on some configuration options, those are
 marked with a star ('*') after the field name below.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        frontend fnt
+  <span class="label label-success">Example :</span><pre class="prettyprint">        frontend fnt
             mode tcp
             option tcplog
             log global
@@ -6599,8 +6519,7 @@ Most fields are shared with the TCP log, some being different. A few fields may
 slightly vary depending on some configuration options. Those ones are marked
 with a star ('*') after the field name below.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        frontend http-in
+  <span class="label label-success">Example :</span><pre class="prettyprint">        frontend http-in
             mode http
             option httplog
             log global
@@ -7359,8 +7278,7 @@ user switches to a new session for example, because the server will reassign it
 a new cookie. It is also possible to detect if a server unexpectedly sets a
 wrong cookie to a client, leading to session crossing.
 
-  <span class="label label-success">Examples :</span>
-<pre class="prettyprint">        <span class="comment"># capture the first cookie whose name starts with &quot;ASPSESSION&quot;</span>
+  <span class="label label-success">Examples :</span><pre class="prettyprint">        <span class="comment"># capture the first cookie whose name starts with &quot;ASPSESSION&quot;</span>
         capture cookie ASPSESSION len 32
 
         <span class="comment"># capture the first cookie whose name is exactly &quot;vgnvisitor&quot;</span>
@@ -7386,8 +7304,7 @@ follow the same representation, but are displayed after a space following the
 request headers block. These blocks are displayed just before the HTTP request
 in the logs.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">        <span class="comment"># This instance chains to the outgoing proxy</span>
+  <span class="label label-success">Example :</span><pre class="prettyprint">        <span class="comment"># This instance chains to the outgoing proxy</span>
         listen proxy-out
             mode http
             option httplog
@@ -7710,8 +7627,7 @@ own stats.
   will be followed by a '+' sign, indicating it is a continuation of previous
   line.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    &gt;&gt;&gt; $ echo &quot;<a href="#show errors">show errors</a>&quot; | socat stdio /tmp/sock1
+  <span class="label label-success">Example :</span><pre class="prettyprint">    &gt;&gt;&gt; $ echo &quot;<a href="#show errors">show errors</a>&quot; | socat stdio /tmp/sock1
         [04/Mar/2009:15:46:56.081] backend http-in (<span class="comment">#2) : invalid response</span>
           src 127.0.0.1, session <span class="comment">#54, frontend fe-eth0 (#1), server s2 (#1)</span>
           response length 213 bytes, error at position 23:
@@ -7755,8 +7671,7 @@ own stats.
           1 + 2 + 4 = 7   -&gt; frontend + backend + server.
     - &lt;sid&gt; is a server ID, -1 to dump everything from the selected proxy.
 
-  <span class="label label-success">Example :</span>
-<pre class="prettyprint">    &gt;&gt;&gt; $ echo &quot;show info;show stat&quot; | socat stdio unix-connect:/tmp/sock1
+  <span class="label label-success">Example :</span><pre class="prettyprint">    &gt;&gt;&gt; $ echo &quot;show info;show stat&quot; | socat stdio unix-connect:/tmp/sock1
         Name: HAProxy
         Version: 1.4-dev2-49
         Release_date: 2009/09/23
