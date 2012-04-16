@@ -462,17 +462,38 @@ def convert(infile, outfile):
                 line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
                 line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
 
-                if re.match(r'.*Examples? *:', line):
+                if re.search(r'Examples? *:', line):
                     # Detect examples blocks
+                    desc_indent = False
+                    desc = re.sub(r'.*Examples? *:', '', line).strip()
+
+                    # Some examples have a description
+                    if desc:
+                        desc_indent = len(line) - len(desc)
+
                     line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
-                    documentAppend(line)
                     indent = get_indent(line)
+
+                    if desc:
+                        documentAppend(line[:len(line) - len(desc)], False)
+                        # And some description are on multiple lines
+                        while lines[i + 1] and get_indent(lines[i + 1]) == desc_indent:
+                            desc += " " + lines[i + 1].strip()
+                            i += 1
+                    else:
+                        documentAppend(line, False)
+
                     i +=1
+                    add_empty_line = 0
                     while not lines[i]:
+                        add_empty_line += 1
                         i += 1 # Skip empty lines
 
                     if get_indent(lines[i]) > indent:
                         documentAppend('<pre class="prettyprint">', False)
+                        if desc:
+                            desc = desc[0].upper() + desc[1:]
+                            documentAppend('<div class="example-desc">%s</div>' % desc, False)
                         add_empty_line = 0
                         while i < len(lines) and ((not lines[i]) or (get_indent(lines[i]) > indent)):
                             if lines[i]:
@@ -485,14 +506,20 @@ def convert(infile, outfile):
                                 add_empty_line += 1
                             i += 1
                         documentAppend("</pre>", False)
+                    elif get_indent(lines[i]) == indent:
+                        # Simple example that can't have empty lines
+                        documentAppend('<pre class="prettyprint">', False)
+                        if add_empty_line:
+                                # This means that the example was on the same line as the 'Example' tag
+                            documentAppend(" " * indent + desc)
+                        else:
+                            while i < len(lines) and (get_indent(lines[i]) == indent):
+                                documentAppend(lines[i])
+                                i += 1
+                            while not lines[i]:
+                                i += 1 # Skip empty remaining lines
+                        documentAppend("</pre>", False)
                     continue
-
-                # Some examples are currently too complex to parse, well, just colorize the header for now.
-                # See below : a description on the same line as the label 'Example:' but continues on several lines
-                # Example: accept all connections from white-listed hosts, count all other
-                #          connections and reject too fast ones. This results in abusive ones
-                #          being blocked as long as they don't slow down.
-                line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
 
                 if context['headers']['subtitle'] == 'Configuration Manual' and tablePattern.match(nextline):
                     # activate table rendering only for th Configuration Manual
