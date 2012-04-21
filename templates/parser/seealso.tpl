@@ -1,1 +1,3 @@
-<span class="label label-see-also">\1</span>
+<div class="page-header unpre">
+    <b>${label}</b> ${desc}
+</div>

@@ -71,11 +71,3 @@ class Parser(parser.Parser):
                 content=content
             )
         return line
-
-    def get_indent(self, line):
-        indent = 0
-        length = len(line)
-        while indent < length and line[indent] == ' ':
-            indent += 1
-        return indent
-

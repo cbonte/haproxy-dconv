@@ -17,9 +17,9 @@
 % for extra in col['extra']:
 <span class="pull-right">${extra}</span>\
 % endfor
-${data}</a>
+${data}</a>\
 % else:
-${data}
+${data}\
 % endif
 </td>\
 % endfor

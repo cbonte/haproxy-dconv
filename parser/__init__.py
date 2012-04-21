@@ -15,6 +15,13 @@ class Parser:
     def parse(self, line):
         return line
 
+    def get_indent(self, line):
+        indent = 0
+        length = len(line)
+        while indent < length and line[indent] == ' ':
+            indent += 1
+        return indent
+
 
 class PContext:
     def __init__(self, templates):
