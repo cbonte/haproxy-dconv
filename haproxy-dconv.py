@@ -20,7 +20,11 @@ TODO : ability to split chapters into several files
 TODO : manage keyword locality (server/proxy/global ; ex : maxconn)
 TODO : Remove global variables where possible
 '''
-import os, subprocess, sys, cgi, re
+import os
+import subprocess
+import sys
+import cgi
+import re
 import time
 import datetime
 
@@ -30,6 +34,346 @@ from mako.template import Template
 VERSION = ""
 DATE = ""
 HAPROXY_GIT_VERSION = False
+
+class PContext:
+    def __init__(self, content):
+        self.lines = content.split("\n")
+        self.nblines = len(self.lines)
+        self.i = 0
+        self.stop = False
+
+    def get_lines(self):
+        return self.lines
+
+    def eat_lines(self):
+        count = 0
+        while self.lines[self.i].strip():
+            count += 1
+            self.next()
+        return count
+
+    def eat_empty_lines(self):
+        count = 0
+        while not self.lines[self.i].strip():
+            count += 1
+            self.next()
+        return count
+
+    def next(self, count=1):
+        self.i += count
+
+    def has_more_lines(self, offset=0):
+        return self.i + offset < self.nblines
+
+    def get_line(self, offset=0):
+        return self.lines[self.i + offset].rstrip()
+
+class ArgumentParser:
+    def parse(self, pctxt, line):
+        line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
+        return line
+
+class SeeAlsoParser:
+    def parse(self, pctxt, line):
+        line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
+        return line
+
+class NextLineParser:
+    def parse(self, pctxt, line):
+        pctxt.next()
+        return line
+
+class ExampleParser:
+    def parse(self, pctxt, line):
+        res = ""
+        if re.search(r'Examples? *:', line):
+            # Detect examples blocks
+            desc_indent = False
+            desc = re.sub(r'.*Examples? *:', '', line).strip()
+
+            # Some examples have a description
+            if desc:
+                desc_indent = len(line) - len(desc)
+
+            line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
+            indent = get_indent(line)
+
+            if desc:
+                res += line[:len(line) - len(desc)]
+                # And some description are on multiple lines
+                while pctxt.get_line(1) and get_indent(pctxt.get_line(1)) == desc_indent:
+                    desc += " " + pctxt.get_line(1).strip()
+                    pctxt.next()
+            else:
+                res += line
+
+            pctxt.next()
+            add_empty_line = pctxt.eat_empty_lines()
+
+            if get_indent(pctxt.get_line()) > indent:
+                res += '<pre class="prettyprint">'
+                if desc:
+                    desc = desc[0].upper() + desc[1:]
+                    res += '<div class="example-desc">%s</div>' % desc
+                add_empty_line = 0
+                while pctxt.has_more_lines() and ((not pctxt.get_line()) or (get_indent(pctxt.get_line()) > indent)):
+                    if pctxt.get_line():
+                        for j in xrange(0, add_empty_line):
+                            res += "\n"
+                        line = re.sub(r'(#.*)$', r'<span class="comment">\1</span>', pctxt.get_line())
+                        res += line + '\n'
+                        add_empty_line = 0
+                    else:
+                        add_empty_line += 1
+                    pctxt.next()
+                res += "</pre>"
+            elif get_indent(pctxt.get_line()) == indent:
+                # Simple example that can't have empty lines
+                res += '<pre class="prettyprint">'
+                if add_empty_line:
+                        # This means that the example was on the same line as the 'Example' tag
+                    res += " " * indent + desc
+                else:
+                    while pctxt.has_more_lines() and (get_indent(pctxt.get_line()) == indent):
+                        res += pctxt.get_line()
+                        pctxt.next()
+                    pctxt.eat_empty_lines() # Skip empty remaining lines
+                res += "</pre>"
+            pctxt.stop = True
+        else:
+            res = line
+        return res
+
+class UnderlineParser:
+    def parse(self, pctxt, line):
+        if pctxt.has_more_lines(1):
+            nextline = pctxt.get_line(1)
+            if (len(line) > 0) and (len(nextline) > 0) and (nextline[0] == '-') and ("-" * len(line) == nextline):
+                # Detect underlines
+                line = '<h5>%s</h5>' % line
+                pctxt.next(2)
+                pctxt.eat_empty_lines()
+                pctxt.stop = True
+
+        return line
+
+class TableParser:
+    def __init__(self):
+        self.tablePattern = re.compile(r'^ *(-+\+)+-+')
+
+    def parse(self, pctxt, line):
+        global document, keywords, keywordsCount, chapters, keyword_conflicts
+        global details, context
+
+        res = ""
+
+        if pctxt.has_more_lines(1):
+            nextline = pctxt.get_line(1)
+        else:
+            nextline = ""
+
+        if context['headers']['subtitle'] == 'Configuration Manual' and self.tablePattern.match(nextline):
+            # activate table rendering only for the Configuration Manual
+            lineSeparator = nextline
+            nbColumns = nextline.count("+") + 1
+            extraColumns = 0
+            print >> sys.stderr, "Entering table mode (%d columns)" % nbColumns
+            table = []
+            if line.find("|") != -1:
+                row = []
+                while pctxt.has_more_lines():
+                    line = pctxt.get_line()
+                    if pctxt.has_more_lines(1):
+                        nextline = pctxt.get_line(1)
+                    else:
+                        nextline = ""
+                    if line == lineSeparator:
+                        # New row
+                        table.append(row)
+                        row = []
+                        if nextline.find("|") == -1:
+                            break # End of table
+                    else:
+                        # Data
+                        columns = line.split("|")
+                        for j in xrange(0, len(columns)):
+                            try:
+                                if row[j]:
+                                    row[j] += "<br />"
+                                row[j] += columns[j].strip()
+                            except:
+                                row.append(columns[j].strip())
+                    pctxt.next()
+            else:
+                row = []
+                headers = nextline
+                while pctxt.has_more_lines():
+                    line = pctxt.get_line()
+                    if pctxt.has_more_lines(1):
+                        nextline = pctxt.get_line(1)
+                    else:
+                        nextline = ""
+
+                    if nextline == "":
+                        if row: table.append(row)
+                        break # End of table
+
+                    if (line != lineSeparator) and (line[0] != "-"):
+                        start = 0
+
+                        if row and not line.startswith(" "):
+                            # Row is complete, parse a new one
+                            table.append(row)
+                            row = []
+
+                        tmprow = []
+                        while start != -1:
+                            end = headers.find("+", start)
+                            if end == -1:
+                                end = len(headers)
+
+                            realend = end
+                            if realend == len(headers):
+                                realend = len(line)
+                            else:
+                                while realend < len(line) and line[realend] != " ":
+                                    realend += 1
+                                    end += 1
+
+                            tmprow.append(line[start:realend])
+
+                            start = end + 1
+                            if start >= len(headers):
+                                start = -1
+                        for j in xrange(0, nbColumns):
+                            try:
+                                row[j] += tmprow[j].strip()
+                            except:
+                                row.append(tmprow[j].strip())
+
+                        deprecated = row[0].endswith("(deprecated)")
+                        if deprecated:
+                            row[0] = row[0][: -len("(deprecated)")].rstrip()
+
+                        nooption = row[1].startswith("(*)")
+                        if nooption:
+                            row[1] = row[1][len("(*)"):].strip()
+
+                        if deprecated or nooption:
+                            extraColumns = 1
+                            extra = ""
+                            if deprecated:
+                                extra += '<span class="label label-warning">(deprecated)</span>'
+                            if nooption:
+                                extra += '<span>(*)</span>'
+                            row.append(extra)
+
+                    pctxt.next()
+            print >> sys.stderr, "Leaving table mode"
+            res = renderTable(table, nbColumns, details["toplevel"])
+            pctxt.next() # skip useless next line
+            pctxt.stop = True
+        elif line.find("May be used in sections") != -1:
+            nextline = pctxt.get_line(1)
+            rows = []
+            headers = line.split(":")
+            rows.append(headers[1].split("|"))
+            rows.append(nextline.split("|"))
+            table = {
+                    "rows": rows,
+                    "title": headers[0]
+            }
+            print rows
+            res = renderTable(table)
+            pctxt.next(2)  # skip this previous table
+            pctxt.stop = True
+        else:
+            res = line
+
+        return res
+
+class KeywordParser:
+    def __init__(self):
+        self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (
+            '([a-z][a-z0-9\-_\.]*[a-z0-9\-_)])', # keyword
+            '( [a-z0-9\-_]+)*',                  # subkeywords
+            '(\((&lt;[a-z0-9]+&gt;/?)+\))?'      # arg (ex: (<backend>), (<frontend>/<backend>), ...
+        ))
+
+    def parse(self, pctxt, line):
+        global document, keywords, keywordsCount, chapters, keyword_conflicts
+        global details
+
+        res = ""
+
+        if line != "" and not re.match(r'^ ', line):
+            parsed = self.keywordPattern.match(line)
+            if parsed != None:
+
+                keyword = parsed.group(1)
+                arg     = parsed.group(4)
+                parameters = line[len(keyword) + len(arg):]
+                if parameters != "" and not re.match("^ +(&lt;|\[|\{|/|\(deprecated\))", parameters):
+                    keyword = False
+                else:
+                    splitKeyword = keyword.split(" ")
+                parameters = arg + parameters
+            else:
+                keyword = False
+
+            if keyword and (len(splitKeyword) <= 5):
+                toplevel = details["toplevel"]
+                for j in xrange(0, len(splitKeyword)):
+                    subKeyword = " ".join(splitKeyword[0:j + 1])
+                    if subKeyword != "no":
+                        if not subKeyword in keywords:
+                            keywords[subKeyword] = set()
+                        keywords[subKeyword].add(toplevel)
+                    res += '<a name="%s"></a>' % subKeyword
+                    res += '<a name="%s-%s"></a>' % (toplevel, subKeyword)
+                    res += '<a name="%s-%s"></a>' % (details["chapter"], subKeyword)
+                    res += '<a name="%s (%s)"></a>' % (subKeyword, chapters[toplevel]['title'])
+                    res += '<a name="%s (%s)"></a>' % (subKeyword, chapters[details["chapter"]]['title'])
+
+                deprecated = parameters.find("(deprecated)")
+                if deprecated != -1:
+                    prefix = ""
+                    suffix = ""
+                    parameters = parameters.replace("(deprecated)", '<span class="label label-warning">(deprecated)</span>')
+                else:
+                    prefix = ""
+                    suffix = ""
+
+                nextline = pctxt.get_line(1)
+
+                while nextline.startswith("   "):
+                    # Found parameters on the next line
+                    parameters += "\n" + nextline
+                    pctxt.next()
+                    if pctxt.has_more_lines(1):
+                        nextline = pctxt.get_line(1)
+                    else:
+                        nextline = ""
+
+
+                parameters = colorize(parameters)
+
+                res += '<div class="keyword">%s<b><a name="%s"></a><a href="#%s-%s">%s</a></b>%s%s</div>' % (prefix, keyword, toplevel, keyword, keyword, parameters, suffix)
+                pctxt.next()
+                pctxt.stop = True
+            elif line.startswith("/*"):
+                # Skip comments in the documentation
+                while not pctxt.get_line().endswith("*/"):
+                    pctxt.next()
+                pctxt.next()
+            else:
+                # This is probably not a keyword but a text, ignore it
+                res += line
+        else:
+            res += line
+
+        return res
+
 
 def main():
     global VERSION, DATE, HAPROXY_GIT_VERSION
@@ -131,7 +475,7 @@ def getTitleDetails(string):
             "toplevel": toplevel
     }
 
-# Parse the wole document to insert links on keywords
+# Parse the whole document to insert links on keywords
 def createLinks():
     global document, keywords, keywordsCount, keyword_conflicts, chapters
 
@@ -176,6 +520,8 @@ def documentAppend(text, retline = True):
 
 # Render tables detected by the conversion parser
 def renderTable(table, maxColumns = 0, hasKeywords = False):
+    res = ""
+
     title = None
     if isinstance(table, dict):
         title = table["title"]
@@ -185,9 +531,9 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
         maxColumns = len(table[0])
 
     if title:
-        documentAppend('<p>%s :' % title, False)
+        res += '<p>%s :' % title
 
-    documentAppend('<table class=\"table table-bordered\" border="0" cellspacing="0" cellpadding="0">', False)
+    res += '<table class=\"table table-bordered\" border="0" cellspacing="0" cellpadding="0">'
     mode = "th"
     headerLine = ""
     i = 0
@@ -237,13 +583,15 @@ def renderTable(table, maxColumns = 0, hasKeywords = False):
             line += '</thead>'
             headerLine = line
 
-        documentAppend(line, False)
+        res += line
 
         i += 1
-    documentAppend('</table>', False)
+    res += '</table>'
 
     if title:
-        documentAppend('</p>', False)
+        res += '</p>'
+
+    return res
 
 # Used to colorize keywords parameters
 # TODO : use CSS styling
@@ -305,6 +653,7 @@ def get_indent(line):
 # TODO : simplify the parser ! Make it clearer and modular.
 def convert(infile, outfile):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
+    global details, context
 
     data = []
     fd = file(infile,"r")
@@ -352,8 +701,8 @@ def convert(infile, outfile):
         if (line == "Summary" or re.match("^[0-9].*", line)) and (len(next) > 0) and (next[0] == '-') and ("-" * len(line) == next):
             sections.append(currentSection)
             currentSection = {
-                    "details": getTitleDetails(line),
-                    "content": "",
+                "details": getTitleDetails(line),
+                "content": "",
             }
             j = 0
             i += 1 # Skip underline
@@ -417,18 +766,10 @@ def convert(infile, outfile):
             content = cgi.escape(content, True)
             content = re.sub(r'section ([0-9]+(.[0-9]+)*)', r'<a href="#\1">section \1</a>', content)
 
-            keywordPattern = re.compile(r'^(%s%s)(%s)' % (
-                    '([a-z][a-z0-9\-_\.]*[a-z0-9\-_)])', # keyword
-                    '( [a-z0-9\-_]+)*',                  # subkeywords
-                    '(\((&lt;[a-z0-9]+&gt;/?)+\))?'      # arg (ex: (<backend>), (<frontend>/<backend>), ...
-                    ))
-            tablePattern = re.compile(r'^ *(-+\+)+-+')
-
-            lines = content.split("\n")
-            nblines = len(lines)
-            i = 0
+            pctxt = PContext(content)
 
             if not title:
+                lines = pctxt.get_lines()
                 context['headers'] = {
                         'title':        lines[1].strip(),
                         'subtitle':     lines[2].strip(),
@@ -440,271 +781,40 @@ def convert(infile, outfile):
                     context['headers']['version'] = 'version ' + HAPROXY_GIT_VERSION
 
                 # Skip header lines
-                while lines[i]:
-                    i += 1
-                while not lines[i]:
-                    i += 1
+                pctxt.eat_lines()
+                pctxt.eat_empty_lines()
 
             documentAppend('<pre>', False)
 
-            while i < nblines:
+            parsers = [
+                ArgumentParser(),
+                SeeAlsoParser(),
+                ExampleParser(),
+                TableParser(),
+                UnderlineParser(),
+                KeywordParser(),
+                NextLineParser(),
+            ]
+
+            while pctxt.has_more_lines():
                 try:
                     specialSection = specialSections[details["chapter"]]
                 except:
                     specialSection = specialSections["default"]
 
-                line = lines[i]
+                line = pctxt.get_line()
                 if i < nblines - 1:
-                    nextline = lines[i + 1]
+                    nextline = pctxt.get_line(1)
                 else:
                     nextline = ""
 
-                line = re.sub(r'(Arguments :)', r'<span class="label label-info">\1</span>', line)
-                line = re.sub(r'(See also *:)', r'<span class="label label-see-also">\1</span>', line)
-
-                if re.search(r'Examples? *:', line):
-                    # Detect examples blocks
-                    desc_indent = False
-                    desc = re.sub(r'.*Examples? *:', '', line).strip()
-
-                    # Some examples have a description
-                    if desc:
-                        desc_indent = len(line) - len(desc)
-
-                    line = re.sub(r'(Examples? *:)', r'<span class="label label-success">\1</span>', line)
-                    indent = get_indent(line)
-
-                    if desc:
-                        documentAppend(line[:len(line) - len(desc)], False)
-                        # And some description are on multiple lines
-                        while lines[i + 1] and get_indent(lines[i + 1]) == desc_indent:
-                            desc += " " + lines[i + 1].strip()
-                            i += 1
-                    else:
-                        documentAppend(line, False)
-
-                    i +=1
-                    add_empty_line = 0
-                    while not lines[i]:
-                        add_empty_line += 1
-                        i += 1 # Skip empty lines
-
-                    if get_indent(lines[i]) > indent:
-                        documentAppend('<pre class="prettyprint">', False)
-                        if desc:
-                            desc = desc[0].upper() + desc[1:]
-                            documentAppend('<div class="example-desc">%s</div>' % desc, False)
-                        add_empty_line = 0
-                        while i < len(lines) and ((not lines[i]) or (get_indent(lines[i]) > indent)):
-                            if lines[i]:
-                                for j in xrange(0, add_empty_line):
-                                    documentAppend("")
-                                line = re.sub(r'(#.*)$', r'<span class="comment">\1</span>', lines[i])
-                                documentAppend(line)
-                                add_empty_line = 0
-                            else:
-                                add_empty_line += 1
-                            i += 1
-                        documentAppend("</pre>", False)
-                    elif get_indent(lines[i]) == indent:
-                        # Simple example that can't have empty lines
-                        documentAppend('<pre class="prettyprint">', False)
-                        if add_empty_line:
-                                # This means that the example was on the same line as the 'Example' tag
-                            documentAppend(" " * indent + desc)
-                        else:
-                            while i < len(lines) and (get_indent(lines[i]) == indent):
-                                documentAppend(lines[i])
-                                i += 1
-                            while not lines[i]:
-                                i += 1 # Skip empty remaining lines
-                        documentAppend("</pre>", False)
-                    continue
-
-                if context['headers']['subtitle'] == 'Configuration Manual' and tablePattern.match(nextline):
-                    # activate table rendering only for th Configuration Manual
-                    lineSeparator = nextline
-                    nbColumns = nextline.count("+") + 1
-                    extraColumns = 0
-                    print >> sys.stderr, "Entering table mode (%d columns)" % nbColumns
-                    table = []
-                    if line.find("|") != -1:
-                        row = []
-                        while i < nblines:
-                            line = lines[i]
-                            if i < nblines - 1:
-                                nextline = lines[i + 1]
-                            else:
-                                nextline = ""
-                            if line == lineSeparator:
-                                # New row
-                                table.append(row)
-                                row = []
-                                if nextline.find("|") == -1:
-                                    break # End of table
-                            else:
-                                # Data
-                                columns = line.split("|")
-                                for j in xrange(0, len(columns)):
-                                    try:
-                                        if row[j]:
-                                            row[j] += "<br />"
-                                        row[j] += columns[j].strip()
-                                    except:
-                                        row.append(columns[j].strip())
-                            i = i + 1
-                    else:
-                        row = []
-                        headers = nextline
-                        while i < nblines:
-                            line = lines[i]
-                            if i < nblines - 1:
-                                nextline = lines[i + 1]
-                            else:
-                                nextline = ""
-
-                            if nextline == "":
-                                if row: table.append(row)
-                                break # End of table
-
-                            if (line != lineSeparator) and (line[0] != "-"):
-                                start = 0
-
-                                if row and not line.startswith(" "):
-                                    # Row is complete, parse a new one
-                                    table.append(row)
-                                    row = []
-
-                                tmprow = []
-                                while start != -1:
-                                    end = headers.find("+", start)
-                                    if end == -1:
-                                        end = len(headers)
-
-                                    realend = end
-                                    if realend == len(headers):
-                                        realend = len(line)
-                                    else:
-                                        while realend < len(line) and line[realend] != " ":
-                                            realend += 1
-                                            end += 1
-
-                                    tmprow.append(line[start:realend])
-
-                                    start = end + 1
-                                    if start >= len(headers):
-                                        start = -1
-                                for j in xrange(0, nbColumns):
-                                    try:
-                                        row[j] += tmprow[j].strip()
-                                    except:
-                                        row.append(tmprow[j].strip())
-
-                                deprecated = row[0].endswith("(deprecated)")
-                                if deprecated:
-                                    row[0] = row[0][: -len("(deprecated)")].rstrip()
-
-                                nooption = row[1].startswith("(*)")
-                                if nooption:
-                                    row[1] = row[1][len("(*)"):].strip()
-
-                                if deprecated or nooption:
-                                    extraColumns = 1
-                                    extra = ""
-                                    if deprecated:
-                                        extra += '<span class="label label-warning">(deprecated)</span>'
-                                    if nooption:
-                                        extra += '<span>(*)</span>'
-                                    row.append(extra)
-
-                            i += 1
-                    print >> sys.stderr, "Leaving table mode"
-                    renderTable(table, nbColumns, details["toplevel"])
-                    i += 1 # skip useless next line
-                    continue
-                elif line.find("May be used in sections") != -1:
-                    rows = []
-                    headers = line.split(":")
-                    rows.append(headers[1].split("|"))
-                    rows.append(nextline.split("|"))
-                    table = {
-                            "rows": rows,
-                            "title": headers[0]
-                    }
-                    renderTable(table)
-                    i += 2 # skip this previous table
-                    continue
-
-
-                if (len(line) > 0) and (len(nextline) > 0) and (nextline[0] == '-') and ("-" * len(line) == nextline):
-                        # Detect underlines
-                    documentAppend('<h5>%s</h5>' % line, False)
-                    i += 1 # Skip underline
-                    while not lines[i + 1].rstrip():
-                        i += 1 # Skip empty lines
-                elif line != "" and not re.match(r'^ ', line):
-                    parsed = keywordPattern.match(line)
-                    if parsed != None:
-
-                        keyword = parsed.group(1)
-                        arg     = parsed.group(4)
-                        parameters = line[len(keyword) + len(arg):]
-                        if parameters != "" and not re.match("^ +(&lt;|\[|\{|/|\(deprecated\))", parameters):
-                            keyword = False
-                        else:
-                            splitKeyword = keyword.split(" ")
-                        parameters = arg + parameters
-                    else:
-                        keyword = False
-
-                    if keyword and (len(splitKeyword) <= 5):
-                        toplevel = details["toplevel"]
-                        for j in xrange(0, len(splitKeyword)):
-                            subKeyword = " ".join(splitKeyword[0:j + 1])
-                            if subKeyword != "no":
-                                if not subKeyword in keywords:
-                                    keywords[subKeyword] = set()
-                                keywords[subKeyword].add(toplevel)
-                            documentAppend('<a name="%s"></a>' % subKeyword, False)
-                            documentAppend('<a name="%s-%s"></a>' % (toplevel, subKeyword), False)
-                            documentAppend('<a name="%s-%s"></a>' % (details["chapter"], subKeyword), False)
-                            documentAppend('<a name="%s (%s)"></a>' % (subKeyword, chapters[toplevel]['title']), False)
-                            documentAppend('<a name="%s (%s)"></a>' % (subKeyword, chapters[details["chapter"]]['title']), False)
-
-                        deprecated = parameters.find("(deprecated)")
-                        if deprecated != -1:
-                            prefix = ""
-                            suffix = ""
-                            parameters = parameters.replace("(deprecated)", '<span class="label label-warning">(deprecated)</span>')
-                        else:
-                            prefix = ""
-                            suffix = ""
-
-                        while nextline.startswith("   "):
-                            # Found parameters on the next line
-                            parameters += "\n" + nextline
-                            i += 1
-                            if i < nblines - 1:
-                                nextline = lines[i + 1]
-                            else:
-                                nextline = ""
-
-
-                        parameters = colorize(parameters)
-
-                        documentAppend('<div class="keyword">%s<b><a name="%s"></a><a href="#%s-%s">%s</a></b>%s%s</div>' % (prefix, keyword, toplevel, keyword, keyword, parameters, suffix), False)
-                    elif line.startswith("/*"):
-                        # Skip comments in the documentation
-                        while not lines[i].endswith("*/"):
-                            i += 1
-                    else:
-                        # This is probably not a keyword but a text, ignore it
-                        documentAppend(line)
-                else:
-                    documentAppend(line)
-                i = i + 1
+                pctxt.stop = False
+                for parser in parsers:
+                    line = parser.parse(pctxt, line)
+                    if pctxt.stop:
+                        break
+                documentAppend(line, not pctxt.stop)
             documentAppend('</pre><br />')
-
     # Log warnings for keywords defined in several chapters
     keyword_conflicts = {}
     for keyword in keywords:
