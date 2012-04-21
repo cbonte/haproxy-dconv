@@ -137,7 +137,7 @@ class Parser(parser.Parser):
         return line
 
     # Render tables detected by the conversion parser
-    def renderTable(self, table, maxColumns = 0, hasKeywords = False):
+    def renderTable(self, table, maxColumns = 0, toplevel = None):
         pctxt  = self.pctxt
         template = pctxt.templates.get_template("parser/table.tpl")
 
@@ -155,6 +155,7 @@ class Parser(parser.Parser):
 
         mode = "th"
         headerLine = ""
+        hasKeywords = False
         i = 0
         for row in table:
             line = ""
@@ -178,17 +179,17 @@ class Parser(parser.Parser):
 
                 data = column.strip()
                 keyword = column
+                if j == 0 and i == 0 and keyword == 'keyword':
+                    hasKeywords = True
                 if j == 0 and i != 0 and hasKeywords:
                     if keyword.startswith("[no] "):
                         keyword = keyword[len("[no] "):]
-                    tplcol['toplevel'] = hasKeywords
+                    tplcol['toplevel'] = toplevel
                     tplcol['keyword'] = keyword
                 tplcol['extra'] = []
                 if j == 0 and len(row) > maxColumns:
                     for k in xrange(maxColumns, len(row)):
                         tplcol['extra'].append(row[k])
-                        #open = open + '<span class="pull-right">' + row[k] + '</span>'
-                #line += '%s%s%s' % (open, data, close)
                 tplcol['data'] = data
                 cols.append(tplcol)
                 j += 1
