@@ -29,55 +29,16 @@ import time
 import datetime
 
 from optparse import OptionParser
-from mako.template import Template
 
+from mako.template import Template
+from mako.lookup import TemplateLookup
+
+from parser import PContext
 from parser import *
 
 VERSION = ""
 DATE = ""
 HAPROXY_GIT_VERSION = False
-
-class PContext:
-    def __init__(self):
-        self.set_content("")
-
-    def set_content(self, content):
-        self.lines = content.split("\n")
-        self.nblines = len(self.lines)
-        self.i = 0
-        self.stop = False
-
-    def get_lines(self):
-        return self.lines
-
-    def eat_lines(self):
-        count = 0
-        while self.lines[self.i].strip():
-            count += 1
-            self.next()
-        return count
-
-    def eat_empty_lines(self):
-        count = 0
-        while not self.lines[self.i].strip():
-            count += 1
-            self.next()
-        return count
-
-    def next(self, count=1):
-        self.i += count
-
-    def has_more_lines(self, offset=0):
-        return self.i + offset < self.nblines
-
-    def get_line(self, offset=0):
-        return self.lines[self.i + offset].rstrip()
-
-class NextLineParser:
-    def parse(self, pctxt, line):
-        pctxt.next()
-        return line
-
 
 def main():
     global VERSION, DATE, HAPROXY_GIT_VERSION
@@ -222,16 +183,15 @@ def documentAppend(text, retline = True):
     if retline:
         document += "\n"
 
-def init_parsers():
+def init_parsers(pctxt):
     return [
-        underline.Parser(),
-        arguments.Parser(),
-        seealso.Parser(),
-        example.Parser(),
-        table.Parser(),
-        underline.Parser(),
-        keyword.Parser(),
-        NextLineParser(),
+        underline.Parser(pctxt),
+        arguments.Parser(pctxt),
+        seealso.Parser(pctxt),
+        example.Parser(pctxt),
+        table.Parser(pctxt),
+        underline.Parser(pctxt),
+        keyword.Parser(pctxt),
     ]
 
 # The parser itself
@@ -246,7 +206,15 @@ def convert(infile, outfile):
         data.append(line)
     fd.close()
 
-    pctxt = PContext()
+    pctxt = PContext(
+        TemplateLookup(
+            directories=[
+                os.path.join(os.path.dirname(__file__), 'templates')
+            ]
+        )
+    )
+
+    parsers = init_parsers(pctxt)
 
     pctxt.context = {
             'headers':      {},
@@ -376,8 +344,6 @@ def convert(infile, outfile):
 
             documentAppend('<pre>', False)
 
-            parsers = init_parsers()
-
             while pctxt.has_more_lines():
                 try:
                     specialSection = specialSections[details["chapter"]]
@@ -392,10 +358,16 @@ def convert(infile, outfile):
 
                 pctxt.stop = False
                 for parser in parsers:
-                    line = parser.parse(pctxt, line)
+                    line = parser.parse(line)
                     if pctxt.stop:
                         break
-                documentAppend(line, not pctxt.stop)
+
+                if pctxt.stop:
+                    documentAppend(line, False)
+                else:
+                    documentAppend(line, True)
+                    pctxt.next()
+
             documentAppend('</pre><br />')
     # Log warnings for keywords defined in several chapters
     keyword_conflicts = {}
@@ -423,7 +395,7 @@ def convert(infile, outfile):
 
     print >> sys.stderr, "Exporting to %s..." % outfile
 
-    template = Template(filename=os.path.join(os.path.dirname(__file__), 'templates', 'template.html'))
+    template = pctxt.templates.get_template('template.html')
 
     fd = open(outfile,'w')
 

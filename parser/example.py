@@ -1,7 +1,9 @@
 import re
+import parser
 
-class Parser:
-    def parse(self, pctxt, line):
+class Parser(parser.Parser):
+    def parse(self, line):
+        pctxt = self.pctxt
         res = ""
         if re.search(r'Examples? *:', line):
             # Detect examples blocks

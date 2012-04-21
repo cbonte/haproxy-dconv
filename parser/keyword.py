@@ -1,14 +1,17 @@
 import re
+import parser
 
-class Parser:
-    def __init__(self):
+class Parser(parser.Parser):
+    def __init__(self, pctxt):
+        parser.Parser.__init__(self, pctxt)
         self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (
             '([a-z][a-z0-9\-_\.]*[a-z0-9\-_)])', # keyword
             '( [a-z0-9\-_]+)*',                  # subkeywords
             '(\((&lt;[a-z0-9]+&gt;/?)+\))?'      # arg (ex: (<backend>), (<frontend>/<backend>), ...
         ))
 
-    def parse(self, pctxt, line):
+    def parse(self, line):
+        pctxt = self.pctxt
         keywords = pctxt.keywords
         keywordsCount = pctxt.keywordsCount
         chapters = pctxt.chapters

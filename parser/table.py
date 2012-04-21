@@ -1,13 +1,16 @@
 import re
 import sys
+import parser
 
-class Parser:
-    def __init__(self):
+class Parser(parser.Parser):
+    def __init__(self, pctxt):
+        parser.Parser.__init__(self, pctxt)
         self.tablePattern = re.compile(r'^ *(-+\+)+-+')
 
-    def parse(self, pctxt, line):
+    def parse(self, line):
         global document, keywords, keywordsCount, chapters, keyword_conflicts
 
+        pctxt = self.pctxt
         res = ""
 
         if pctxt.has_more_lines(1):
