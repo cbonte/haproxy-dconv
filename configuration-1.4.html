@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<div class="alert alert-success pagination-centered">
-				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5</b> on <b>2012/04/21</b>
+				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-2-g236dd26</b> on <b>2012/04/21</b>
 			</div>
 
 			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
@@ -4152,8 +4152,7 @@ specified in a previous &quot;defaults&quot; section.
 
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
-<div class="example-desc">Limit the connection rate on SMTP to 10 per second max</div>
-        listen smtp
+<div class="example-desc">Limit the connection rate on SMTP to 10 per second max</div>        listen smtp
             mode tcp
             bind :25
             rate-limit sessions 10
@@ -4225,8 +4224,7 @@ specified in a previous &quot;defaults&quot; section.
 
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">Move the login URL only to HTTPS.</div>
-        acl clear      dst_port  80
+<div class="example-desc">Move the login URL only to HTTPS.</div>        acl clear      dst_port  80
         acl secure     dst_port  8080
         acl login_page url_beg   /login
         acl logout     url_beg   /logout
@@ -4240,8 +4238,7 @@ specified in a previous &quot;defaults&quot; section.
         redirect location / clear-cookie USERID=       if logout
 </pre><span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">Send redirects for request for articles without a '/'.</div>
-        acl missing_slash path_reg ^/article/[^/]*$
+<div class="example-desc">Send redirects for request for articles without a '/'.</div>        acl missing_slash path_reg ^/article/[^/]*$
         redirect code 301 prefix / drop-query append-slash if missing_slash
 </pre>  See <a href="#7">section 7</a> about ACL usage.
 
@@ -4293,8 +4290,7 @@ specified in a previous &quot;defaults&quot; section.
 
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
-<div class="example-desc">Add &quot;X-Proto: SSL&quot; to requests coming via port 81</div>
-     acl is-ssl  dst_port       81
+<div class="example-desc">Add &quot;X-Proto: SSL&quot; to requests coming via port 81</div>     acl is-ssl  dst_port       81
      reqadd      X-Proto:\ SSL  if is-ssl
 </pre><div class="page-header unpre">
     <b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.
@@ -6181,9 +6177,9 @@ The currently supported settings are the following ones.
 
 <table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>Server state</th><th>Interval used</th></tr></thead>
-<tr><td None><a href="#5-UP 100% (non-transitional)">UP 100% (non-transitional)</a></td><td None>&quot;<a href="#inter">inter</a>&quot;</td></tr>
-<tr><td None><a href="#5-Transitionally UP (going down),<br />Transitionally DOWN (going up),<br />or yet unchecked.">Transitionally UP (going down),<br />Transitionally DOWN (going up),<br />or yet unchecked.</a></td><td None>&quot;<a href="#fastinter">fastinter</a>&quot; if set, &quot;<a href="#inter">inter</a>&quot; otherwise.<br /></td></tr>
-<tr><td None><a href="#5-DOWN 100% (non-transitional)">DOWN 100% (non-transitional)</a></td><td None>&quot;<a href="#downinter">downinter</a>&quot; if set, &quot;<a href="#inter">inter</a>&quot; otherwise.</td></tr>
+<tr><td None>UP 100% (non-transitional)</td><td None>&quot;<a href="#inter">inter</a>&quot;</td></tr>
+<tr><td None>Transitionally UP (going down),<br />Transitionally DOWN (going up),<br />or yet unchecked.</td><td None>&quot;<a href="#fastinter">fastinter</a>&quot; if set, &quot;<a href="#inter">inter</a>&quot; otherwise.<br /></td></tr>
+<tr><td None>DOWN 100% (non-transitional)</td><td None>&quot;<a href="#downinter">downinter</a>&quot; if set, &quot;<a href="#inter">inter</a>&quot; otherwise.</td></tr>
 </table>
   Just as with every other time-based parameter, they can be entered in any
   other explicit unit among { us, ms, s, m, h, d }. The &quot;<a href="#inter">inter</a>&quot; parameter also
@@ -6982,25 +6978,25 @@ order to avoid confusion. Their equivalence is provided below.
 
 <table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>ACL name</th><th>Equivalent to</th><th>Usage</th></tr></thead>
-<tr><td None><a href="#7-FALSE">FALSE</a></td><td None>always_false</td><td None>never match</td></tr>
-<tr><td None><a href="#7-HTTP">HTTP</a></td><td None>req_proto_http</td><td None>match if protocol is valid HTTP</td></tr>
-<tr><td None><a href="#7-HTTP_1.0">HTTP_1.0</a></td><td None>req_ver 1.0</td><td None>match HTTP version 1.0</td></tr>
-<tr><td None><a href="#7-HTTP_1.1">HTTP_1.1</a></td><td None>req_ver 1.1</td><td None>match HTTP version 1.1</td></tr>
-<tr><td None><a href="#7-HTTP_CONTENT">HTTP_CONTENT</a></td><td None>hdr_val(content-length) gt 0</td><td None>match an existing content-length</td></tr>
-<tr><td None><a href="#7-HTTP_URL_ABS">HTTP_URL_ABS</a></td><td None>url_reg ^[^/:]*://</td><td None>match absolute URL with scheme</td></tr>
-<tr><td None><a href="#7-HTTP_URL_SLASH">HTTP_URL_SLASH</a></td><td None>url_beg /</td><td None>match URL beginning with &quot;/&quot;</td></tr>
-<tr><td None><a href="#7-HTTP_URL_STAR">HTTP_URL_STAR</a></td><td None>url     *</td><td None>match URL equal to &quot;*&quot;</td></tr>
-<tr><td None><a href="#7-LOCALHOST">LOCALHOST</a></td><td None>src 127.0.0.1/8</td><td None>match connection from local host</td></tr>
-<tr><td None><a href="#7-METH_CONNECT">METH_CONNECT</a></td><td None>method  CONNECT</td><td None>match HTTP CONNECT method</td></tr>
-<tr><td None><a href="#7-METH_GET">METH_GET</a></td><td None>method  GET HEAD</td><td None>match HTTP GET or HEAD method</td></tr>
-<tr><td None><a href="#7-METH_HEAD">METH_HEAD</a></td><td None>method  HEAD</td><td None>match HTTP HEAD method</td></tr>
-<tr><td None><a href="#7-METH_OPTIONS">METH_OPTIONS</a></td><td None>method  OPTIONS</td><td None>match HTTP OPTIONS method</td></tr>
-<tr><td None><a href="#7-METH_POST">METH_POST</a></td><td None>method  POST</td><td None>match HTTP POST method</td></tr>
-<tr><td None><a href="#7-METH_TRACE">METH_TRACE</a></td><td None>method  TRACE</td><td None>match HTTP TRACE method</td></tr>
-<tr><td None><a href="#7-RDP_COOKIE">RDP_COOKIE</a></td><td None>req_rdp_cookie_cnt gt 0</td><td None>match presence of an RDP cookie</td></tr>
-<tr><td None><a href="#7-REQ_CONTENT">REQ_CONTENT</a></td><td None>req_len gt 0</td><td None>match data in the request buffer</td></tr>
-<tr><td None><a href="#7-TRUE">TRUE</a></td><td None>always_true</td><td None>always match</td></tr>
-<tr><td None><a href="#7-WAIT_END">WAIT_END</a></td><td None>wait_end</td><td None>wait for end of content analysis</td></tr>
+<tr><td None>FALSE</td><td None>always_false</td><td None>never match</td></tr>
+<tr><td None>HTTP</td><td None>req_proto_http</td><td None>match if protocol is valid HTTP</td></tr>
+<tr><td None>HTTP_1.0</td><td None>req_ver 1.0</td><td None>match HTTP version 1.0</td></tr>
+<tr><td None>HTTP_1.1</td><td None>req_ver 1.1</td><td None>match HTTP version 1.1</td></tr>
+<tr><td None>HTTP_CONTENT</td><td None>hdr_val(content-length) gt 0</td><td None>match an existing content-length</td></tr>
+<tr><td None>HTTP_URL_ABS</td><td None>url_reg ^[^/:]*://</td><td None>match absolute URL with scheme</td></tr>
+<tr><td None>HTTP_URL_SLASH</td><td None>url_beg /</td><td None>match URL beginning with &quot;/&quot;</td></tr>
+<tr><td None>HTTP_URL_STAR</td><td None>url     *</td><td None>match URL equal to &quot;*&quot;</td></tr>
+<tr><td None>LOCALHOST</td><td None>src 127.0.0.1/8</td><td None>match connection from local host</td></tr>
+<tr><td None>METH_CONNECT</td><td None>method  CONNECT</td><td None>match HTTP CONNECT method</td></tr>
+<tr><td None>METH_GET</td><td None>method  GET HEAD</td><td None>match HTTP GET or HEAD method</td></tr>
+<tr><td None>METH_HEAD</td><td None>method  HEAD</td><td None>match HTTP HEAD method</td></tr>
+<tr><td None>METH_OPTIONS</td><td None>method  OPTIONS</td><td None>match HTTP OPTIONS method</td></tr>
+<tr><td None>METH_POST</td><td None>method  POST</td><td None>match HTTP POST method</td></tr>
+<tr><td None>METH_TRACE</td><td None>method  TRACE</td><td None>match HTTP TRACE method</td></tr>
+<tr><td None>RDP_COOKIE</td><td None>req_rdp_cookie_cnt gt 0</td><td None>match presence of an RDP cookie</td></tr>
+<tr><td None>REQ_CONTENT</td><td None>req_len gt 0</td><td None>match data in the request buffer</td></tr>
+<tr><td None>TRUE</td><td None>always_true</td><td None>always match</td></tr>
+<tr><td None>WAIT_END</td><td None>wait_end</td><td None>wait for end of content analysis</td></tr>
 </table></pre><br />
 <a name="7.7"></a>
 <h2><small>7.7.</small> Using ACLs to form conditions</h2>
