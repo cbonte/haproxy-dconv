@@ -11,7 +11,7 @@ class Parser(parser.Parser):
 
     def parse(self, line):
         pctxt = self.pctxt
-        res = ""
+
         result = re.search(r'(Examples? *:)', line)
         if result:
             label = result.group(0)
@@ -62,17 +62,15 @@ class Parser(parser.Parser):
                         pctxt.next()
                     pctxt.eat_empty_lines() # Skip empty remaining lines
 
+            pctxt.stop = True
+
             template = pctxt.templates.get_template("parser/example.tpl")
-            res = template.render(
+            return template.render(
                 label=label,
                 desc=desc,
                 content=content
             )
-
-            pctxt.stop = True
-        else:
-            res = line
-        return res
+        return line
 
     def get_indent(self, line):
         indent = 0
