@@ -23,11 +23,11 @@ class Parser(parser.Parser):
             if desc:
                 desc_indent = len(line) - len(desc)
 
-            indent = self.get_indent(line)
+            indent = parser.get_indent(line)
 
             if desc:
                 # And some description are on multiple lines
-                while pctxt.get_line(1) and self.get_indent(pctxt.get_line(1)) == desc_indent:
+                while pctxt.get_line(1) and parser.get_indent(pctxt.get_line(1)) == desc_indent:
                     desc += " " + pctxt.get_line(1).strip()
                     pctxt.next()
 
@@ -36,11 +36,11 @@ class Parser(parser.Parser):
 
             content = []
 
-            if self.get_indent(pctxt.get_line()) > indent:
+            if parser.get_indent(pctxt.get_line()) > indent:
                 if desc:
                     desc = desc[0].upper() + desc[1:]
                 add_empty_line = 0
-                while pctxt.has_more_lines() and ((not pctxt.get_line()) or (self.get_indent(pctxt.get_line()) > indent)):
+                while pctxt.has_more_lines() and ((not pctxt.get_line()) or (parser.get_indent(pctxt.get_line()) > indent)):
                     if pctxt.get_line():
                         for j in xrange(0, add_empty_line):
                             content.append("")
@@ -50,19 +50,21 @@ class Parser(parser.Parser):
                     else:
                         add_empty_line += 1
                     pctxt.next()
-            elif self.get_indent(pctxt.get_line()) == indent:
+            elif parser.get_indent(pctxt.get_line()) == indent:
                 # Simple example that can't have empty lines
                 if add_empty_line:
                     # This means that the example was on the same line as the 'Example' tag
                     content.append(" " * indent + desc)
                     desc = False
                 else:
-                    while pctxt.has_more_lines() and (self.get_indent(pctxt.get_line()) == indent):
+                    while pctxt.has_more_lines() and (parser.get_indent(pctxt.get_line()) == indent):
                         content.append(pctxt.get_line())
                         pctxt.next()
                     pctxt.eat_empty_lines() # Skip empty remaining lines
 
             pctxt.stop = True
+
+            parser.remove_indent(content)
 
             template = pctxt.templates.get_template("parser/example.tpl")
             return template.render(

@@ -15,21 +15,16 @@ class Parser:
     def parse(self, line):
         return line
 
-    def get_indent(self, line):
-        indent = 0
-        length = len(line)
-        while indent < length and line[indent] == ' ':
-            indent += 1
-        return indent
-
-
 class PContext:
-    def __init__(self, templates):
-        self.set_content("")
+    def __init__(self, templates = None):
+        self.set_content_list([])
         self.templates = templates
 
     def set_content(self, content):
-        self.lines = content.split("\n")
+        self.set_content_list(content.split("\n"))
+
+    def set_content_list(self, content):
+        self.lines = content
         self.nblines = len(self.lines)
         self.i = 0
         self.stop = False
@@ -39,14 +34,14 @@ class PContext:
 
     def eat_lines(self):
         count = 0
-        while self.lines[self.i].strip():
+        while self.has_more_lines() and self.lines[self.i].strip():
             count += 1
             self.next()
         return count
 
     def eat_empty_lines(self):
         count = 0
-        while not self.lines[self.i].strip():
+        while self.has_more_lines() and not self.lines[self.i].strip():
             count += 1
             self.next()
         return count
@@ -61,3 +56,26 @@ class PContext:
         return self.lines[self.i + offset].rstrip()
 
 
+# Get the indentation of a line
+def get_indent(line):
+        indent = 0
+        length = len(line)
+        while indent < length and line[indent] == ' ':
+            indent += 1
+        return indent
+
+
+# Remove unneeded indentation
+def remove_indent(list):
+    # Detect the minimum indentation in the list
+    min_indent = -1
+    for line in list:
+        if not line.strip():
+            continue
+        indent = get_indent(line)
+        if min_indent < 0 or indent < min_indent:
+            min_indent = indent
+    # Realign the list content to remove the minimum indentation
+    if min_indent > 0:
+        for index, line in enumerate(list):
+            list[index] = line[min_indent:]

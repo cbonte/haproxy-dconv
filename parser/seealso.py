@@ -11,10 +11,10 @@ class Parser(parser.Parser):
 
             desc = re.sub(r'.*See also *:', '', line).strip()
 
-            indent = self.get_indent(line)
+            indent = parser.get_indent(line)
 
             # Some descriptions are on multiple lines
-            while pctxt.has_more_lines(1) and self.get_indent(pctxt.get_line(1)) > indent:
+            while pctxt.has_more_lines(1) and parser.get_indent(pctxt.get_line(1)) > indent:
                 desc += " " + pctxt.get_line(1).strip()
                 pctxt.next()
 

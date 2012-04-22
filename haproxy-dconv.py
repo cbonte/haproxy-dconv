@@ -34,6 +34,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 
 from parser import PContext
+from parser import remove_indent
 from parser import *
 
 VERSION = ""
@@ -342,8 +343,9 @@ def convert(infile, outfile):
                 pctxt.eat_lines()
                 pctxt.eat_empty_lines()
 
-            documentAppend('<pre>', False)
+            documentAppend('<div>', False)
 
+            delay = []
             while pctxt.has_more_lines():
                 try:
                     specialSection = specialSections[details["chapter"]]
@@ -356,19 +358,43 @@ def convert(infile, outfile):
                 else:
                     nextline = ""
 
+                oldline = line
                 pctxt.stop = False
                 for parser in parsers:
                     line = parser.parse(line)
                     if pctxt.stop:
                         break
-
-                if pctxt.stop:
+                if oldline == line:
+                    # nothing has changed,
+                    # delays the rendering
+                    if delay or line != "":
+                        delay.append(line)
+                    pctxt.next()
+                elif pctxt.stop:
+                    while delay and delay[-1].strip() == "":
+                        del delay[-1]
+                    if delay:
+                        remove_indent(delay)
+                        documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
+                    delay = []
                     documentAppend(line, False)
                 else:
+                    while delay and delay[-1].strip() == "":
+                        del delay[-1]
+                    if delay:
+                        remove_indent(delay)
+                        documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
+                    delay = []
                     documentAppend(line, True)
                     pctxt.next()
 
-            documentAppend('</pre><br />')
+            while delay and delay[-1].strip() == "":
+                del delay[-1]
+            if delay:
+                remove_indent(delay)
+                documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
+            delay = []
+            documentAppend('</div>')
     # Log warnings for keywords defined in several chapters
     keyword_conflicts = {}
     for keyword in keywords:
