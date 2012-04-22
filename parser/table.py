@@ -154,14 +154,12 @@ class Parser(parser.Parser):
         maxcols = 0
         while pctxt.get_line().strip().startswith("|"):
             row = pctxt.get_line().strip()[1:-1].split("|")
-            print row
             rows.append(row)
             maxcols = max(maxcols, len(row))
             pctxt.next()
             if pctxt.get_line() == linesep:
                 # TODO : find a way to define a special style for next row
                 pctxt.next()
-        print maxcols
         pctxt.stop = True
 
         return self.renderTable(rows, maxcols)
