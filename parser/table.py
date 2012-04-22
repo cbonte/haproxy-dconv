@@ -5,19 +5,24 @@ import parser
 class Parser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
-        self.tablePattern = re.compile(r'^ *(-+\+)+-+')
+        self.table1Pattern = re.compile(r'^ *(-+\+)+-+')
+        self.table2Pattern = re.compile(r'^ *\+(-+\+)+')
 
     def parse(self, line):
         global document, keywords, keywordsCount, chapters, keyword_conflicts
 
         pctxt = self.pctxt
 
+        if pctxt.context['headers']['subtitle'] != 'Configuration Manual':
+            # Quick exit
+            return line
+
         if pctxt.has_more_lines(1):
             nextline = pctxt.get_line(1)
         else:
             nextline = ""
 
-        if pctxt.context['headers']['subtitle'] == 'Configuration Manual' and self.tablePattern.match(nextline):
+        if self.table1Pattern.match(nextline):
             # activate table rendering only for the Configuration Manual
             lineSeparator = nextline
             nbColumns = nextline.count("+") + 1
@@ -119,6 +124,8 @@ class Parser(parser.Parser):
             pctxt.stop = True
 
             return self.renderTable(table, nbColumns, pctxt.details["toplevel"])
+        elif self.table2Pattern.match(line):
+            return self.parse_table_format2()
         elif line.find("May be used in sections") != -1:
             nextline = pctxt.get_line(1)
             rows = []
@@ -135,6 +142,29 @@ class Parser(parser.Parser):
             return self.renderTable(table)
 
         return line
+
+
+    def parse_table_format2(self):
+        pctxt = self.pctxt
+
+        linesep = pctxt.get_line()
+        rows = []
+
+        pctxt.next()
+        maxcols = 0
+        while pctxt.get_line().strip().startswith("|"):
+            row = pctxt.get_line().strip()[1:-1].split("|")
+            print row
+            rows.append(row)
+            maxcols = max(maxcols, len(row))
+            pctxt.next()
+            if pctxt.get_line() == linesep:
+                # TODO : find a way to define a special style for next row
+                pctxt.next()
+        print maxcols
+        pctxt.stop = True
+
+        return self.renderTable(rows, maxcols)
 
     # Render tables detected by the conversion parser
     def renderTable(self, table, maxColumns = 0, toplevel = None):
@@ -165,7 +195,7 @@ class Parser(parser.Parser):
             else:
                 row_template = pctxt.templates.get_template("parser/table/row.tpl")
 
-            if i > 1 and (i  - 1) % 20 == 0:
+            if i > 1 and (i  - 1) % 20 == 0 and len(table) > 50:
                 # Repeat headers periodically for long tables
                 rows.append(headerLine)
 

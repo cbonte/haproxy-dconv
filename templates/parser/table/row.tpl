@@ -6,7 +6,7 @@
         style = "class=\"alert-success pagination-centered\""
     elif data in ['no']:
         style = "class=\"alert-error pagination-centered\""
-    elif data in ['X', '-']:
+    elif data in ['X', '-', '*']:
         style = "class=\"pagination-centered\""
     else:
         style = None
