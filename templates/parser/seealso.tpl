@@ -1,3 +1,1 @@
-<div class="page-header unpre">
-    <b>${label}</b> ${desc}
-</div>\
+<div class="page-header"><b>${label}</b> ${desc}</div>
