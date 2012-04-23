@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev8-24 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev8-25 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -12,7 +12,7 @@
 				<div class="container-fluid">
 					<div class="row-fluid">
 						<div class="span8">
-							<h1>HAProxy <small>version 1.5-dev8-24</small></h1>
+							<h1>HAProxy <small>version 1.5-dev8-25</small></h1>
 							<h2>Configuration Manual</h2>
 						</div>
 						<div class="span4 pagination-right">
@@ -1994,17 +1994,15 @@ keyword in a &quot;defaults&quot; section.</pre><div class="page-header"><b>See 
 <tr><td class="alert-error pagination-centered">no</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span> none
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;address&gt; is the IPv4 address of the default server. Alternatively, a
+          resolvable hostname is supported, but this name will be resolved
+          during start-up.
+
+&lt;ports&gt;   is a mandatory port specification. All connections will be sent
+          to this port, and it is not permitted to use port offsets as is
+          possible with normal servers.</pre>
 </div>
-<pre class="text">  &lt;address&gt; is the IPv4 address of the default server. Alternatively, a
-            resolvable hostname is supported, but this name will be resolved
-            during start-up.
-
-  &lt;ports&gt;   is a mandatory port specification. All connections will be sent
-            to this port, and it is not permitted to use port offsets as is
-            possible with normal servers.
-
-The &quot;<a href="#dispatch">dispatch</a>&quot; keyword designates a default server for use when no other
+<pre class="text">The &quot;<a href="#dispatch">dispatch</a>&quot; keyword designates a default server for use when no other
 server can take the connection. In the past it was used to forward non
 persistent connections to an auxiliary load balancer. Due to its simple
 syntax, it has also been used for simple TCP relays. It is recommended not to
@@ -2527,34 +2525,33 @@ to assign them some reasonable connection limits.</pre><div class="page-header">
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments"> tcp       The instance will work in pure TCP mode. A full-duplex connection
-           will be established between clients and servers, and no layer 7
-           examination will be performed. This is the default mode. It
-           should be used for SSL, SSH, SMTP, ...
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">tcp       The instance will work in pure TCP mode. A full-duplex connection
+          will be established between clients and servers, and no layer 7
+          examination will be performed. This is the default mode. It
+          should be used for SSL, SSH, SMTP, ...
 
- http      The instance will work in HTTP mode. The client request will be
-           analyzed in depth before connecting to any server. Any request
-           which is not RFC-compliant will be rejected. Layer 7 filtering,
-           processing and switching will be possible. This is the mode which
-           brings HAProxy most of its value.
+http      The instance will work in HTTP mode. The client request will be
+          analyzed in depth before connecting to any server. Any request
+          which is not RFC-compliant will be rejected. Layer 7 filtering,
+          processing and switching will be possible. This is the mode which
+          brings HAProxy most of its value.
 
- health    The instance will work in &quot;health&quot; mode. It will just reply &quot;OK&quot;
-           to incoming connections and close the connection. Nothing will be
-           logged. This mode is used to reply to external components health
-           checks. This mode is deprecated and should not be used anymore as
-           it is possible to do the same and even better by combining TCP or
-           HTTP modes with the &quot;<a href="#monitor">monitor</a>&quot; keyword.
-
-When doing content switching, it is mandatory that the frontend and the
-backend are in the same mode (generally HTTP), otherwise the configuration
-will be refused.
-
-Example :
-  defaults http_instances
-      mode http
-
-See also : &quot;<a href="#monitor">monitor</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;</pre>
+health    The instance will work in &quot;health&quot; mode. It will just reply &quot;OK&quot;
+          to incoming connections and close the connection. Nothing will be
+          logged. This mode is used to reply to external components health
+          checks. This mode is deprecated and should not be used anymore as
+          it is possible to do the same and even better by combining TCP or
+          HTTP modes with the &quot;<a href="#monitor">monitor</a>&quot; keyword.</pre>
 </div>
+<pre class="text">When doing content switching, it is mandatory that the frontend and the
+backend are in the same mode (generally HTTP), otherwise the configuration
+will be refused.</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>defaults http_instances
+    mode http
+</code></pre>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#monitor">monitor</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;</div>
 <a name="monitor"></a><a name="4-monitor"></a><a name="4.2-monitor"></a><a name="monitor (Proxies)"></a><a name="monitor (Alphabetically sorted keywords reference)"></a><a name="monitor fail"></a><a name="4-monitor fail"></a><a name="4.2-monitor fail"></a><a name="monitor fail (Proxies)"></a><a name="monitor fail (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="monitor fail"></a><a href="#4-monitor fail">monitor fail</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Add a condition to report a failure to a monitor HTTP request.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td></tr>
@@ -3380,8 +3377,8 @@ bytes are expected to be transferred.</pre><div class="separator">
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">user &lt;username&gt; This is the username which will be used when connecting
-to MySQL server.</pre>
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;username&gt; This is the username which will be used when connecting to MySQL
+           server.</pre>
 </div>
 <pre class="text">If you specify a username, the check consists of sending two MySQL packet,
 one Client Authentication packet, and one QUIT packet, to correctly close
@@ -3420,8 +3417,8 @@ to route the client via the machine hosting haproxy.</pre><div class="page-heade
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">user &lt;username&gt; This is the username which will be used when connecting
-to PostgreSQL server.</pre>
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;username&gt; This is the username which will be used when connecting to
+           PostgreSQL server.</pre>
 </div>
 <pre class="text">The check sends a PostgreSQL StartupMessage and waits for either
 Authentication request or ErrorResponse message. It is a basic but useful
@@ -6042,9 +6039,9 @@ present the client's IP to the server when establishing the connection.</pre><di
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;string&gt;   is a log-format string.
-
-This keyword creates a ID for each request using the custom log format. A
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;string&gt;   is a log-format string.</pre>
+</div>
+<pre class="text">This keyword creates a ID for each request using the custom log format. A
 unique ID is useful to trace a request passing through many components of
 a complex infrastructure. The newly created ID may also be logged using the
 %ID tag the log-format string.
@@ -6059,39 +6056,37 @@ Similarly, a timestamp may protect against a rollover of the counter.
 Logging the process ID will avoid collisions after a service restart.
 
 It is recommended to use hexadecimal notation for many fields since it
-makes them more compact and saves space in logs.
+makes them more compact and saves space in logs.</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
 
-Example:
+will generate:
 
-    unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
-
-    will generate:
-
-           7F000001:8296_7F00001E:1F90_4F7B0A69_0003:790A</pre>
-</div>
-<div class="page-header"><b>See also:</b> &quot;<a href="#unique-id-header">unique-id-header</a>&quot;</div>
+       7F000001:8296_7F00001E:1F90_4F7B0A69_0003:790A
+</code></pre>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#unique-id-header">unique-id-header</a>&quot;</div>
 <a name="unique-id-header"></a><a name="4-unique-id-header"></a><a name="4.2-unique-id-header"></a><a name="unique-id-header (Proxies)"></a><a name="unique-id-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="unique-id-header"></a><a href="#4-unique-id-header">unique-id-header</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Add a unique ID header in the HTTP request.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;name&gt;   is the name of the header.
-
-Add a unique-id header in the HTTP request sent to the server, using the
-unique-id-format. It can't work if the unique-id-format doesn't exist.
-
-Example:
-
-    unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;name&gt;   is the name of the header.</pre>
+</div>
+<pre class="text">Add a unique-id header in the HTTP request sent to the server, using the
+unique-id-format. It can't work if the unique-id-format doesn't exist.</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>    unique-id-format %{+X}o\ %Ci:%Cp_%Fi:%Fp_%Ts_%rt:%pid
     unique-id-header X-Unique-ID
 
     will generate:
 
        X-Unique-ID: 7F000001:8296_7F00001E:1F90_4F7B0A69_0003:790A
 
-See also: &quot;<a href="#unique-id-format">unique-id-format</a>&quot;</pre>
-</div>
-<a name="use_backend"></a><a name="4-use_backend"></a><a name="4.2-use_backend"></a><a name="use_backend (Proxies)"></a><a name="use_backend (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="use_backend"></a><a href="#4-use_backend">use_backend</a></b> <span style="color: #080">&lt;backend&gt;</span> if <span style="color: #080">&lt;condition&gt;</span></div><a name="use_backend"></a><a name="4-use_backend"></a><a name="4.2-use_backend"></a><a name="use_backend (Proxies)"></a><a name="use_backend (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="use_backend"></a><a href="#4-use_backend">use_backend</a></b> <span style="color: #080">&lt;backend&gt;</span> unless <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Switch to a specific backend if/unless an ACL-based condition is matched.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+See also: &quot;<a href="#unique-id-format">unique-id-format</a>&quot;
+</code></pre>
+</div><a name="use_backend"></a><a name="4-use_backend"></a><a name="4.2-use_backend"></a><a name="use_backend (Proxies)"></a><a name="use_backend (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="use_backend"></a><a href="#4-use_backend">use_backend</a></b> <span style="color: #080">&lt;backend&gt;</span> if <span style="color: #080">&lt;condition&gt;</span></div><a name="use_backend"></a><a name="4-use_backend"></a><a name="4.2-use_backend"></a><a name="use_backend (Proxies)"></a><a name="use_backend (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="use_backend"></a><a href="#4-use_backend">use_backend</a></b> <span style="color: #080">&lt;backend&gt;</span> unless <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Switch to a specific backend if/unless an ACL-based condition is matched.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td></tr>
 </table></div>
@@ -6129,7 +6124,7 @@ must decode several protocols on a unique port, one of them being HTTP.</pre><di
 <tr><td class="alert-error pagination-centered">no</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;server&gt;   is the name of a valid server in the same backend section.
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;server&gt;    is the name of a valid server in the same backend section.
 
 &lt;condition&gt; is a condition composed of ACLs, as described in <a href="#7">section 7</a>.</pre>
 </div>
