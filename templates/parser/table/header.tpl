@@ -1,6 +1,7 @@
-<thead><tr>\
-% for col in columns:
-<% data = col['data'] %>\
-<th>${data}</th>\
-% endfor
-</tr></thead>
+<thead>
+    <tr>
+    % for col in columns:
+        <th>${col['data']}</th>
+    % endfor
+    </tr>
+</thead>

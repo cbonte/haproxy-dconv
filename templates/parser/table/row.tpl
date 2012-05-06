@@ -1,26 +1,31 @@
-<tr>\
-% for col in columns:
-<% data = col['data'] %>\
-<%
-    if data in ['yes']:
-        style = "class=\"alert-success pagination-centered\""
-    elif data in ['no']:
-        style = "class=\"alert-error pagination-centered\""
-    elif data in ['X', '-', '*']:
-        style = "class=\"pagination-centered\""
-    else:
-        style = None
-%>\
-<td ${style}>\
-% if "keyword" in col:
+<tr>
+    % for col in columns:
+        <% data = col['data'] %>\
+        <%
+            style = ''
+            if data in ['yes']:
+                style = ' class="alert-success pagination-centered"'
+            elif data in ['no']:
+                style = ' class="alert-error pagination-centered"'
+            elif data in ['X', '-', '*']:
+                style = ' class="pagination-centered"'
+            else:
+                try:
+                    int(data.strip())
+                    style = ' class="pagination-right"'
+                except:
+                    pass
+        %>\
+<td${style}>\
+            % if "keyword" in col:
 <a href="#${col['toplevel']}-${col['keyword']}">\
-% for extra in col['extra']:
+                % for extra in col['extra']:
 <span class="pull-right">${extra}</span>\
-% endfor
+                % endfor
 ${data}</a>\
-% else:
+            % else:
 ${data}\
-% endif
-</td>\
-% endfor
+            % endif
+</td>
+    % endfor
 </tr>

@@ -7,7 +7,7 @@ class Parser(parser.Parser):
         self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (
             '([a-z][a-z0-9\-_\.]*[a-z0-9\-_)])', # keyword
             '( [a-z0-9\-_]+)*',                  # subkeywords
-            '(\((&lt;[a-z0-9]+&gt;/?)+\))?'      # arg (ex: (<backend>), (<frontend>/<backend>), ...
+            '(\((&lt;[a-z0-9]+&gt;[/,\[\]]*)+\))?'      # arg (ex: (<backend>), (<frontend>/<backend>), ...
         ))
 
     def parse(self, line):
@@ -40,12 +40,18 @@ class Parser(parser.Parser):
                     if subKeyword != "no":
                         if not subKeyword in keywords:
                             keywords[subKeyword] = set()
-                        keywords[subKeyword].add(toplevel)
+                        keywords[subKeyword].add(pctxt.details["chapter"])
+
+                    fulltitle = chapters[toplevel]['title']
+                    if fulltitle != chapters[pctxt.details["chapter"]]['title']:
+                        fulltitle += " - " + chapters[pctxt.details["chapter"]]['title']
+
                     res += '<a name="%s"></a>' % subKeyword
                     res += '<a name="%s-%s"></a>' % (toplevel, subKeyword)
                     res += '<a name="%s-%s"></a>' % (pctxt.details["chapter"], subKeyword)
                     res += '<a name="%s (%s)"></a>' % (subKeyword, chapters[toplevel]['title'])
                     res += '<a name="%s (%s)"></a>' % (subKeyword, chapters[pctxt.details["chapter"]]['title'])
+                    res += '<a name="%s (%s)"></a>' % (subKeyword, fulltitle)
 
                 deprecated = parameters.find("(deprecated)")
                 if deprecated != -1:
@@ -58,7 +64,7 @@ class Parser(parser.Parser):
 
                 nextline = pctxt.get_line(1)
 
-                while nextline.startswith("   "):
+                while nextline.startswith("    "):
                     # Found parameters on the next line
                     parameters += "\n" + nextline
                     pctxt.next()

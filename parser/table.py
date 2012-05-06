@@ -13,6 +13,7 @@ class Parser(parser.Parser):
 
         pctxt = self.pctxt
 
+        # activate table rendering only for the Configuration Manual
         if pctxt.context['headers']['subtitle'] != 'Configuration Manual':
             # Quick exit
             return line
@@ -22,12 +23,22 @@ class Parser(parser.Parser):
         else:
             nextline = ""
 
-        if self.table1Pattern.match(nextline):
-            # activate table rendering only for the Configuration Manual
-            lineSeparator = nextline
-            nbColumns = nextline.count("+") + 1
+        if (line.strip() and self.table1Pattern.match(nextline)) or self.table1Pattern.match(line):
+            if self.table1Pattern.match(nextline):
+                lineSeparator = nextline
+                nbColumns = nextline.count("+") + 1
+            else:
+                lineSeparator = line
+                nbColumns = line.count("+") + 1
+                pctxt.next()
+                line = pctxt.get_line()
+                if pctxt.has_more_lines(1):
+                    nextline = pctxt.get_line(1)
+                else:
+                    nextline = ""
+
             extraColumns = 0
-            print >> sys.stderr, "Entering table mode (%d columns)" % nbColumns
+            print >> sys.stderr, "Entering table mode (%d columns) : %s " % (nbColumns, line)
             table = []
             if line.find("|") != -1:
                 row = []
@@ -49,7 +60,7 @@ class Parser(parser.Parser):
                         for j in xrange(0, len(columns)):
                             try:
                                 if row[j]:
-                                    row[j] += "<br />"
+                                    row[j] += " "
                                 row[j] += columns[j].strip()
                             except:
                                 row.append(columns[j].strip())
@@ -68,10 +79,19 @@ class Parser(parser.Parser):
                         if row: table.append(row)
                         break # End of table
 
-                    if (line != lineSeparator) and (line[0] != "-"):
+                    if line and (line != lineSeparator) and (line[0] != "-"):
                         start = 0
 
-                        if row and not line.startswith(" "):
+                        if line.rstrip()[-1] == '|':
+                            line = line.rstrip()[:-1]
+
+                        try:
+                            int(line.strip().split(" ")[0])
+                            is_number = True
+                        except Exception:
+                            is_number = False
+
+                        if row and (not line.startswith(" ") or is_number):
                             # Row is complete, parse a new one
                             table.append(row)
                             row = []
@@ -86,7 +106,7 @@ class Parser(parser.Parser):
                             if realend == len(headers):
                                 realend = len(line)
                             else:
-                                while realend < len(line) and line[realend] != " ":
+                                while realend < len(line) and line[realend:realend + 2] != "  ":
                                     realend += 1
                                     end += 1
 
@@ -105,9 +125,9 @@ class Parser(parser.Parser):
                         if deprecated:
                             row[0] = row[0][: -len("(deprecated)")].rstrip()
 
-                        nooption = row[1].startswith("(*)")
+                        nooption = row[1].endswith("(*)")
                         if nooption:
-                            row[1] = row[1][len("(*)"):].strip()
+                            row[1] = row[1][:-len("(*)")].strip()
 
                         if deprecated or nooption:
                             extraColumns = 1

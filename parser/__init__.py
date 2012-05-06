@@ -66,7 +66,7 @@ def get_indent(line):
 
 
 # Remove unneeded indentation
-def remove_indent(list):
+def remove_indent(list, offset=0):
     # Detect the minimum indentation in the list
     min_indent = -1
     for line in list:
@@ -76,6 +76,7 @@ def remove_indent(list):
         if min_indent < 0 or indent < min_indent:
             min_indent = indent
     # Realign the list content to remove the minimum indentation
+    min_indent += offset
     if min_indent > 0:
         for index, line in enumerate(list):
             list[index] = line[min_indent:]

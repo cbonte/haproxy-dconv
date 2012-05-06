@@ -72,4 +72,29 @@ class Parser(parser.Parser):
                 desc=desc,
                 content=content
             )
+        elif re.search(r'^ *&gt;', line):
+            content = []
+            previous_line = None
+            while pctxt.has_more_lines() and re.search(r'^ *&gt;', pctxt.get_line()):
+                line = re.sub(r'^ *&gt;( |$)', '', pctxt.get_line())
+                content.append(line)
+                pctxt.next()
+                previous_line = line
+
+            while previous_line and previous_line.endswith('\\'):
+                line = pctxt.get_line()
+                content.append(line)
+                pctxt.next()
+                previous_line = line
+
+            if pctxt.has_more_lines():
+                    print pctxt.get_line()
+            parser.remove_indent(content)
+            template = pctxt.templates.get_template("parser/example.tpl")
+            return template.render(
+                label=None,
+                desc=None,
+                content=content
+            )
+
         return line

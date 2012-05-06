@@ -34,6 +34,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 
 from parser import PContext
+from parser import get_indent
 from parser import remove_indent
 from parser import *
 
@@ -194,6 +195,7 @@ def init_parsers(pctxt):
         underline.Parser(pctxt),
         keyword.Parser(pctxt),
     ]
+
 
 # The parser itself
 def convert(infile, outfile):
@@ -371,30 +373,16 @@ def convert(infile, outfile):
                         delay.append(line)
                     pctxt.next()
                 elif pctxt.stop:
-                    while delay and delay[-1].strip() == "":
-                        del delay[-1]
-                    if delay:
-                        remove_indent(delay)
-                        documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
-                    delay = []
+                    documentAppend("\n".join(render_delayed(delay)), False)
                     documentAppend(line, False)
                 else:
-                    while delay and delay[-1].strip() == "":
-                        del delay[-1]
-                    if delay:
-                        remove_indent(delay)
-                        documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
-                    delay = []
+                    documentAppend("\n".join(render_delayed(delay)), False)
                     documentAppend(line, True)
                     pctxt.next()
 
-            while delay and delay[-1].strip() == "":
-                del delay[-1]
-            if delay:
-                remove_indent(delay)
-                documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
-            delay = []
+            documentAppend("\n".join(render_delayed(delay)), False)
             documentAppend('</div>')
+
     # Log warnings for keywords defined in several chapters
     keyword_conflicts = {}
     for keyword in keywords:
@@ -415,7 +403,11 @@ def convert(infile, outfile):
         sections = keyword_conflicts[keyword]
         offset = keywords.index(keyword)
         for section in sections:
-            keywords.insert(offset, "%s (%s)" % (keyword, chapters[section]['title']))
+            toplevel = section.split(".")[0]
+            title = chapters[toplevel]['title']
+            if title != chapters[section]['title']:
+                title += " - " + chapters[section]['title']
+            keywords.insert(offset, "%s (%s)" % (keyword, title))
             offset += 1
         keywords.remove(keyword)
 
@@ -437,6 +429,108 @@ def convert(infile, outfile):
             date = datetime.datetime.fromtimestamp(int(DATE)).strftime("%Y/%m/%d")
     )
     fd.close()
+
+
+def render_delayed(delay, list=False):
+    while delay and not delay[-1].strip():
+        del delay[-1]
+
+    rendered = []
+    if delay:
+        paragraph = []
+        indent = -1
+        previous_line = None
+        for i, line in enumerate(delay):
+            line_indent = get_indent(line)
+            if not line:
+                remove_indent(paragraph)
+                if paragraph:
+                    format = False
+                    for s in paragraph:
+                        if s.find("  ") != -1:
+                            format = True
+                            break
+                    if format:
+                        open = '<pre><code>'
+                        close = '</code></pre>'
+                    else:
+                        open = '<div class="text separator">\n'
+                        close = '\n</div>'
+
+                    rendered.append('%s%s%s' % (open, "\n".join(paragraph), close))
+                    del paragraph[:]
+                    indent = -1
+                    previous_line = None
+                if line:
+                    paragraph.append(line)
+            elif list == line.strip()[0]:
+                type = line.strip()[0]
+                j = i
+                while j < len(delay) and (not delay[j] or get_indent(delay[j]) >= line_indent or (get_indent(delay[j]) == line_indent and delay[j][line_indent] == type)):
+                    j += 1
+                subdelay = delay[i:j]
+                del delay[i:j]
+                #remove_indent(subdelay, 1)
+                paragraph.append("<li>")
+                paragraph += render_delayed(subdelay, True)
+                paragraph.append("</li>")
+            elif not list and line.strip()[0] in ['-', '*']:
+                type = line.strip()[0]
+                j = i
+                while j < len(delay) and (not delay[j] or get_indent(delay[j]) >= line_indent or (get_indent(delay[j]) == line_indent and delay[j][line_indent] in line.strip()[0] in ['-', '*'])):
+                    j += 1
+                subdelay = delay[i:j]
+                del delay[i:j]
+                #print subdelay
+                #sys.exit(1)
+                #remove_indent(subdelay, 1)
+                paragraph.append("<ul>")
+                paragraph += render_delayed(subdelay, type)
+                paragraph.append("</ul>")
+                '''
+                paragraph.append("<ul>")
+                for listitem in subdelay:
+                    paragraph.append("<li>%s</li>" % listitem)
+                paragraph.append("</ul>")
+                '''
+                indent = line_indent
+                previous_line = line
+            elif (indent >= 0 and line_indent > indent):
+                if previous_line and previous_line[indent] != ' ' and previous_line[indent - 1] == ' ':
+                    paragraph.append(line)
+                else:
+                    j = i
+                    while j < len(delay) and (not delay[j] or get_indent(delay[j]) > indent):
+                        j += 1
+                    subdelay = delay[i:j]
+                    del delay[i:j]
+                    paragraph += render_delayed(subdelay)
+                indent = line_indent
+                previous_line = line
+            else:
+                paragraph.append(line)
+                indent = line_indent
+                previous_line = line
+
+        if paragraph:
+            remove_indent(paragraph)
+            format = False
+            for s in paragraph:
+                if s.find("  ") != -1:
+                    format = True
+                    break
+            if format:
+                open = '<pre><code>'
+                close = '</code></pre>'
+            else:
+                open = '<div class="text separator">\n'
+                close = '\n</div>'
+
+            rendered.append('%s%s%s' % (open, "\n".join(paragraph), close))
+
+    del delay[:]
+
+    return rendered
 
 if __name__ == '__main__':
     main()
