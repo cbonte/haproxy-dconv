@@ -14,7 +14,7 @@ class Parser(parser.Parser):
             indent = parser.get_indent(line)
 
             # Some descriptions are on multiple lines
-            while pctxt.has_more_lines(1) and parser.get_indent(pctxt.get_line(1)) > indent:
+            while pctxt.has_more_lines(1) and parser.get_indent(pctxt.get_line(1)) >= indent:
                 desc += " " + pctxt.get_line(1).strip()
                 pctxt.next()
 
