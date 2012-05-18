@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev10 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev10-9 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -12,7 +12,7 @@
 				<div class="container-fluid">
 					<div class="row-fluid">
 						<div class="span8">
-							<h1>HAProxy <small>version 1.5-dev10</small></h1>
+							<h1>HAProxy <small>version 1.5-dev10-9</small></h1>
 							<h2>Configuration Manual</h2>
 						</div>
 						<div class="span4 pagination-right">
@@ -4210,7 +4210,7 @@ request line are case-sensitive while header names are not.</pre><div class="sep
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># replace &quot;/static/&quot; with &quot;/&quot; at the beginning of any request path.</span>
-reqrep ^([^\ ]*)\ /static/(.*)     \1\ /\2
+reqrep ^([^\ :]*)\ /static/(.*)     \1\ /\2
 <span class="comment"># replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.</span>
 reqirep ^Host:\ www.mydomain.com   Host:\ www
 </code></pre>
@@ -4913,7 +4913,7 @@ customers, where node or description should be different for each customer.
 
 Though this statement alone is enough to enable statistics reporting, it is
 recommended to set all other settings in order to avoid relying on default
-unobvious parameters.</pre><div class="separator">
+unobvious parameters.  By default description is not shown.</pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># internal monitoring access (unlimited)</span>
@@ -4933,7 +4933,7 @@ backend private_monitoring
 
 Though this statement alone is enough to enable statistics reporting, it is
 recommended to set all other settings in order to avoid relying on default
-unobvious parameters.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;.</div>
+unobvious parameters.  Default behaviour is not to show this information.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;.</div>
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats show-node"></a><a name="4-stats show-node"></a><a name="4.2-stats show-node"></a><a name="stats show-node (Proxies)"></a><a name="stats show-node (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats show-node"></a><a href="#4-stats show-node">stats show-node</a></b> <span style="color: #008">[ <span style="color: #080">&lt;name&gt;</span> ]</span></div><pre class="text">Enable reporting of a host name on the statistics page.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
@@ -4944,7 +4944,7 @@ unobvious parameters.</pre><div class="page-header"><b>See also:</b> &quot;<a hr
 </div>
 <pre class="text">This statement is useful for users that offer shared services to their
 customers, where node or description might be different on a stats page
-provided for each customer.
+provided for each customer.  Default behaviour is not to show host name.
 
 Though this statement alone is enough to enable statistics reporting, it is
 recommended to set all other settings in order to avoid relying on default
