@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.4.20 - Configuration Manual</title>
+		<title>HAProxy version 1.4.21 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -12,18 +12,18 @@
 				<div class="container-fluid">
 					<div class="row-fluid">
 						<div class="span8">
-							<h1>HAProxy <small>version 1.4.20</small></h1>
+							<h1>HAProxy <small>version 1.4.21</small></h1>
 							<h2>Configuration Manual</h2>
 						</div>
 						<div class="span4 pagination-right">
-							<div>2012/03/10</div>
+							<div>2012/05/21</div>
 							<div>willy tarreau</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="alert alert-success pagination-centered">
-				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-8-ge39d036</b> on <b>2012/04/22</b>
+				Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-10-g92bcb6d</b> on <b>2012/05/08</b>
 			</div>
 
 			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
@@ -579,36 +579,36 @@ disabled by the command line &quot;-db&quot; argument.</pre><a name="gid"></a><a
 ID is dedicated to HAProxy or to a small set of similar daemons. HAProxy must
 be started with a user belonging to this group, or with superuser privileges.
 See also &quot;<a href="#group">group</a>&quot; and &quot;<a href="#uid">uid</a>&quot;.</pre><a name="group"></a><a name="3-group"></a><a name="3.1-group"></a><a name="group (Global parameters)"></a><a name="group (Process management and security)"></a><div class="keyword"><b><a name="group"></a><a href="#3-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<a href="#gid">gid</a>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
-See also &quot;<a href="#gid">gid</a>&quot; and &quot;<a href="#user">user</a>&quot;.</pre><a name="log"></a><a name="3-log"></a><a name="3.1-log"></a><a name="log (Global parameters)"></a><a name="log (Process management and security)"></a><div class="keyword"><b><a name="log"></a><a href="#3-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">  Adds a global syslog server. Up to two global servers can be defined. They
-  will receive logs for startups and exits, as well as all logs from proxies
-  configured with &quot;<a href="#log global">log global</a>&quot;.
+See also &quot;<a href="#gid">gid</a>&quot; and &quot;<a href="#user">user</a>&quot;.</pre><a name="log"></a><a name="3-log"></a><a name="3.1-log"></a><a name="log (Global parameters)"></a><a name="log (Process management and security)"></a><div class="keyword"><b><a name="log"></a><a href="#3-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Up to two global servers can be defined. They
+will receive logs for startups and exits, as well as all logs from proxies
+configured with &quot;<a href="#log global">log global</a>&quot;.
 
-  &lt;address&gt; can be one of:
+&lt;address&gt; can be one of:
 
-        - An IPv4 address optionally followed by a colon and a UDP port. If
-          no port is specified, 514 is used by default (the standard syslog
-          port).
+      - An IPv4 address optionally followed by a colon and a UDP port. If
+        no port is specified, 514 is used by default (the standard syslog
+        port).
 
-        - A filesystem path to a UNIX domain socket, keeping in mind
-          considerations for chroot (be sure the path is accessible inside
-          the chroot) and uid/gid (be sure the path is appropriately
-          writeable).
+      - A filesystem path to a UNIX domain socket, keeping in mind
+        considerations for chroot (be sure the path is accessible inside
+        the chroot) and uid/gid (be sure the path is appropriately
+        writeable).
 
-  &lt;facility&gt; must be one of the 24 standard syslog facilities :
+&lt;facility&gt; must be one of the 24 standard syslog facilities :
 
-          kern   user   mail   daemon auth   syslog lpr    news
-          uucp   cron   auth2  ftp    ntp    audit  alert  cron2
-          local0 local1 local2 local3 local4 local5 local6 local7
+        kern   user   mail   daemon auth   syslog lpr    news
+        uucp   cron   auth2  ftp    ntp    audit  alert  cron2
+        local0 local1 local2 local3 local4 local5 local6 local7
 
-  An optional level can be specified to filter outgoing messages. By default,
-  all messages are sent. If a maximum level is specified, only messages with a
-  severity at least as important as this level will be sent. An optional minimum
-  level can be specified. If it is set, logs emitted with a more severe level
-  than this one will be capped to this level. This is used to avoid sending
-  &quot;emerg&quot; messages on all terminals on some default syslog configurations.
-  Eight levels are known :
+An optional level can be specified to filter outgoing messages. By default,
+all messages are sent. If a maximum level is specified, only messages with a
+severity at least as important as this level will be sent. An optional minimum
+level can be specified. If it is set, logs emitted with a more severe level
+than this one will be capped to this level. This is used to avoid sending
+&quot;emerg&quot; messages on all terminals on some default syslog configurations.
+Eight levels are known :
 
-	  emerg  alert  crit   err    warning notice info  debug</pre><a name="log-send-hostname"></a><a name="3-log-send-hostname"></a><a name="3.1-log-send-hostname"></a><a name="log-send-hostname (Global parameters)"></a><a name="log-send-hostname (Process management and security)"></a><div class="keyword"><b><a name="log-send-hostname"></a><a href="#3-log-send-hostname">log-send-hostname</a></b> <span style="color: #008">[<span style="color: #080">&lt;string&gt;</span>]</span></div><pre class="text">Sets the hostname field in the syslog header. If optional &quot;string&quot; parameter
+        emerg  alert  crit   err    warning notice info  debug</pre><a name="log-send-hostname"></a><a name="3-log-send-hostname"></a><a name="3.1-log-send-hostname"></a><a name="log-send-hostname (Global parameters)"></a><a name="log-send-hostname (Process management and security)"></a><div class="keyword"><b><a name="log-send-hostname"></a><a href="#3-log-send-hostname">log-send-hostname</a></b> <span style="color: #008">[<span style="color: #080">&lt;string&gt;</span>]</span></div><pre class="text">Sets the hostname field in the syslog header. If optional &quot;string&quot; parameter
 is set the header is set to the string contents, otherwise uses the hostname
 of the system. Generally used if one is not relaying logs through an
 intermediate syslog server or for simply customizing the hostname printed in
@@ -621,9 +621,8 @@ of operation. For systems limited to small sets of file descriptors per
 process, it may be needed to fork multiple daemons. USING MULTIPLE PROCESSES
 IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">daemon</a>&quot;.</pre><a name="pidfile"></a><a name="3-pidfile"></a><a name="3.1-pidfile"></a><a name="pidfile (Global parameters)"></a><a name="pidfile (Process management and security)"></a><div class="keyword"><b><a name="pidfile"></a><a href="#3-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes pids of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
-starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.</pre><a name="stats"></a><a name="3-stats"></a><a name="3.1-stats"></a><a name="stats (Global parameters)"></a><a name="stats (Process management and security)"></a><a name="stats socket"></a><a name="3-stats socket"></a><a name="3.1-stats socket"></a><a name="stats socket (Global parameters)"></a><a name="stats socket (Process management and security)"></a><div class="keyword"><b><a name="stats socket"></a><a href="#3-stats socket">stats socket</a></b> <span style="color: #080">&lt;path&gt;</span> <span style="color: #008">[<span style="color: #800">{uid | user}</span> <span style="color: #080">&lt;uid&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{gid | group}</span> <span style="color: #080">&lt;gid&gt;</span>]</span> <span style="color: #008">[mode <span style="color: #080">&lt;mode&gt;</span>]</span></div><pre class="text">[level &lt;level&gt;]
-
-Creates a UNIX socket in stream mode at location &lt;path&gt;. Any previously
+starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.</pre><a name="stats"></a><a name="3-stats"></a><a name="3.1-stats"></a><a name="stats (Global parameters)"></a><a name="stats (Process management and security)"></a><a name="stats socket"></a><a name="3-stats socket"></a><a name="3.1-stats socket"></a><a name="stats socket (Global parameters)"></a><a name="stats socket (Process management and security)"></a><div class="keyword"><b><a name="stats socket"></a><a href="#3-stats socket">stats socket</a></b> <span style="color: #080">&lt;path&gt;</span> <span style="color: #008">[<span style="color: #800">{uid | user}</span> <span style="color: #080">&lt;uid&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{gid | group}</span> <span style="color: #080">&lt;gid&gt;</span>]</span> <span style="color: #008">[mode <span style="color: #080">&lt;mode&gt;</span>]</span>
+             <span style="color: #008">[level <span style="color: #080">&lt;level&gt;</span>]</span></div><pre class="text">Creates a UNIX socket in stream mode at location &lt;path&gt;. Any previously
 existing socket will be backed up then replaced. Connections to this socket
 will return various statistics outputs and even allow some commands to be
 issued. Please consult <a href="#9.2">section 9.2</a> &quot;Unix Socket commands&quot; for more details.
@@ -1069,22 +1068,21 @@ Note : Consider not using this feature in multi-process mode (nbproc &gt; 1)
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;conns&gt;   is the number of pending connections. Depending on the operating
-          system, it may represent the number of already acknowledged</pre>
+          system, it may represent the number of already acknowledged
+          connections, of non-acknowledged ones, or both.</pre>
 </div>
-<pre class="text">	      connections, of non-acknowledged ones, or both.
+<pre class="text">In order to protect against SYN flood attacks, one solution is to increase
+the system's SYN backlog size. Depending on the system, sometimes it is just
+tunable via a system parameter, sometimes it is not adjustable at all, and
+sometimes the system relies on hints given by the application at the time of
+the listen() syscall. By default, HAProxy passes the frontend's maxconn value
+to the listen() syscall. On systems which can make use of this value, it can
+sometimes be useful to be able to specify a different value, hence this
+backlog parameter.
 
-  In order to protect against SYN flood attacks, one solution is to increase
-  the system's SYN backlog size. Depending on the system, sometimes it is just
-  tunable via a system parameter, sometimes it is not adjustable at all, and
-  sometimes the system relies on hints given by the application at the time of
-  the listen() syscall. By default, HAProxy passes the frontend's maxconn value
-  to the listen() syscall. On systems which can make use of this value, it can
-  sometimes be useful to be able to specify a different value, hence this
-  backlog parameter.
-
-  On Linux 2.4, the parameter is ignored by the system. On Linux 2.6, it is
-  used as a hint and the system accepts up to the smallest greater power of
-  two, and never more than some limits (usually 32768).</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; and the target operating system's tuning guide.</div>
+On Linux 2.4, the parameter is ignored by the system. On Linux 2.6, it is
+used as a hint and the system accepts up to the smallest greater power of
+two, and never more than some limits (usually 32768).</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; and the target operating system's tuning guide.</div>
 <a name="balance"></a><a name="4-balance"></a><a name="4.2-balance"></a><a name="balance (Proxies)"></a><a name="balance (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="balance"></a><a href="#4-balance">balance</a></b> <span style="color: #080">&lt;algorithm&gt;</span> <span style="color: #008">[ <span style="color: #080">&lt;arguments&gt;</span> ]</span></div><a name="balance"></a><a name="4-balance"></a><a name="4.2-balance"></a><a name="balance (Proxies)"></a><a name="balance (Alphabetically sorted keywords reference)"></a><a name="balance url_param"></a><a name="4-balance url_param"></a><a name="4.2-balance url_param"></a><a name="balance url_param (Proxies)"></a><a name="balance url_param (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="balance url_param"></a><a href="#4-balance url_param">balance url_param</a></b> <span style="color: #080">&lt;param&gt;</span> <span style="color: #008">[check_post <span style="color: #008">[<span style="color: #080">&lt;max_wait&gt;</span>]</span>]</span></div><pre class="text">Define the load balancing algorithm to be used in a backend.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
@@ -1168,87 +1166,86 @@ Note : Consider not using this feature in multi-process mode (nbproc &gt; 1)
   url_param   The URL parameter specified in argument will be looked up in
               the query string of each HTTP GET request.
 
-              If the modifier &quot;check_post&quot; is used, then an HTTP POST</pre>
+              If the modifier &quot;check_post&quot; is used, then an HTTP POST
+              request entity will be searched for the parameter argument,
+              when it is not found in a query string after a question mark
+              ('?') in the URL. Optionally, specify a number of octets to
+              wait for before attempting to search the message body. If the
+              entity can not be searched, then round robin is used for each
+              request. For instance, if your clients always send the LB
+              parameter in the first 128 bytes, then specify that. The
+              default is 48. The entity data will not be scanned until the
+              required number of octets have arrived at the gateway, this
+              is the minimum of: (default/max_wait, Content-Length or first
+              chunk length). If Content-Length is missing or zero, it does
+              not need to wait for more data than the client promised to
+              send. When Content-Length is present and larger than
+              &lt;max_wait&gt;, then waiting is limited to &lt;max_wait&gt; and it is
+              assumed that this will be enough data to search for the
+              presence of the parameter. In the unlikely event that
+              Transfer-Encoding: chunked is used, only the first chunk is
+              scanned. Parameter values separated by a chunk boundary, may
+              be randomly balanced if at all.
+
+              If the parameter is found followed by an equal sign ('=') and
+              a value, then the value is hashed and divided by the total
+              weight of the running servers. The result designates which
+              server will receive the request.
+
+              This is used to track user identifiers in requests and ensure
+              that a same user ID will always be sent to the same server as
+              long as no server goes up or down. If no value is found or if
+              the parameter is not found, then a round robin algorithm is
+              applied. Note that this algorithm may only be used in an HTTP
+              backend. This algorithm is static by default, which means
+              that changing a server's weight on the fly will have no
+              effect, but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
+
+  hdr(&lt;name&gt;) The HTTP header &lt;name&gt; will be looked up in each HTTP request.
+              Just as with the equivalent ACL 'hdr()' function, the header
+              name in parenthesis is not case sensitive. If the header is
+              absent or if it does not contain any value, the roundrobin
+              algorithm is applied instead.
+
+              An optional 'use_domain_only' parameter is available, for
+              reducing the hash algorithm to the main domain part with some
+              specific headers such as 'Host'. For instance, in the Host
+              value &quot;haproxy.1wt.eu&quot;, only &quot;1wt&quot; will be considered.
+
+              This algorithm is static by default, which means that
+              changing a server's weight on the fly will have no effect,
+              but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
+
+  rdp-cookie
+  rdp-cookie(name)
+              The RDP cookie &lt;name&gt; (or &quot;mstshash&quot; if omitted) will be
+              looked up and hashed for each incoming TCP request. Just as
+              with the equivalent ACL 'req_rdp_cookie()' function, the name
+              is not case-sensitive. This mechanism is useful as a degraded
+              persistence mode, as it makes it possible to always send the
+              same user (or the same session ID) to the same server. If the
+              cookie is not found, the normal roundrobin algorithm is
+              used instead.
+
+              Note that for this to work, the frontend must ensure that an
+              RDP cookie is already present in the request buffer. For this
+              you must use 'tcp-request content accept' rule combined with
+              a 'req_rdp_cookie_cnt' ACL.
+
+              This algorithm is static by default, which means that
+              changing a server's weight on the fly will have no effect,
+              but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
+
+&lt;arguments&gt; is an optional list of arguments which may be needed by some
+            algorithms. Right now, only &quot;url_param&quot; and &quot;uri&quot; support an
+            optional argument.
+
+            balance uri [len &lt;len&gt;] [depth &lt;depth&gt;]
+            balance url_param &lt;param&gt; [check_post [&lt;max_wait&gt;]]</pre>
 </div>
-<pre class="text">		  request entity will be searched for the parameter argument,
-		  when it is not found in a query string after a question mark
-		  ('?') in the URL. Optionally, specify a number of octets to
-		  wait for before attempting to search the message body. If the
-		  entity can not be searched, then round robin is used for each
-		  request. For instance, if your clients always send the LB
-		  parameter in the first 128 bytes, then specify that. The
-		  default is 48. The entity data will not be scanned until the
-		  required number of octets have arrived at the gateway, this
-		  is the minimum of: (default/max_wait, Content-Length or first
-		  chunk length). If Content-Length is missing or zero, it does
-		  not need to wait for more data than the client promised to
-		  send. When Content-Length is present and larger than
-		  &lt;max_wait&gt;, then waiting is limited to &lt;max_wait&gt; and it is
-		  assumed that this will be enough data to search for the
-		  presence of the parameter. In the unlikely event that
-		  Transfer-Encoding: chunked is used, only the first chunk is
-		  scanned. Parameter values separated by a chunk boundary, may
-		  be randomly balanced if at all.
-
-                  If the parameter is found followed by an equal sign ('=') and
-                  a value, then the value is hashed and divided by the total
-                  weight of the running servers. The result designates which
-                  server will receive the request.
-
-                  This is used to track user identifiers in requests and ensure
-                  that a same user ID will always be sent to the same server as
-                  long as no server goes up or down. If no value is found or if
-                  the parameter is not found, then a round robin algorithm is
-                  applied. Note that this algorithm may only be used in an HTTP
-                  backend. This algorithm is static by default, which means
-                  that changing a server's weight on the fly will have no
-                  effect, but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
-
-      hdr(name)   The HTTP header &lt;name&gt; will be looked up in each HTTP request.
-                  Just as with the equivalent ACL 'hdr()' function, the header
-                  name in parenthesis is not case sensitive. If the header is
-                  absent or if it does not contain any value, the roundrobin
-                  algorithm is applied instead.
-
-                  An optional 'use_domain_only' parameter is available, for
-                  reducing the hash algorithm to the main domain part with some
-                  specific headers such as 'Host'. For instance, in the Host
-                  value &quot;haproxy.1wt.eu&quot;, only &quot;1wt&quot; will be considered.
-
-                  This algorithm is static by default, which means that
-                  changing a server's weight on the fly will have no effect,
-                  but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
-
-      rdp-cookie
-      rdp-cookie(name)
-                  The RDP cookie &lt;name&gt; (or &quot;mstshash&quot; if omitted) will be
-                  looked up and hashed for each incoming TCP request. Just as
-                  with the equivalent ACL 'req_rdp_cookie()' function, the name
-                  is not case-sensitive. This mechanism is useful as a degraded
-                  persistence mode, as it makes it possible to always send the
-                  same user (or the same session ID) to the same server. If the
-                  cookie is not found, the normal roundrobin algorithm is
-                  used instead.
-
-                  Note that for this to work, the frontend must ensure that an
-                  RDP cookie is already present in the request buffer. For this
-                  you must use 'tcp-request content accept' rule combined with
-                  a 'req_rdp_cookie_cnt' ACL.
-
-                  This algorithm is static by default, which means that
-                  changing a server's weight on the fly will have no effect,
-                  but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
-
-    &lt;arguments&gt; is an optional list of arguments which may be needed by some
-                algorithms. Right now, only &quot;url_param&quot; and &quot;uri&quot; support an
-                optional argument.
-
-                balance uri [len &lt;len&gt;] [depth &lt;depth&gt;]
-                balance url_param &lt;param&gt; [check_post [&lt;max_wait&gt;]]
-
-  The load balancing algorithm of a backend is set to roundrobin when no other
-  algorithm, mode nor option have been set. The algorithm may only be set once
-  for each backend.</pre><div class="separator">
+<pre class="text">The load balancing algorithm of a backend is set to roundrobin when no other
+algorithm, mode nor option have been set. The algorithm may only be set once
+for each backend.</pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
 <code>balance roundrobin
@@ -1804,8 +1801,7 @@ default_backend dynamic
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span> none
-</div>
+<span class="label label-info">Arguments :</span></div>
 <pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#disabled (Proxies)">Proxies</a></li><li><a href="#disabled (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; keyword is used to disable an instance, mainly in order to
 liberate a listening port or to temporarily disable a service. The instance
 will still be created and its configuration will be checked, but it will be
@@ -2059,66 +2055,65 @@ responses will still be considered as soft-stop.</pre><div class="page-header"><
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;match&gt;   is a keyword indicating how to look for a specific pattern in the
-          response. The keyword may be one of &quot;<a href="#status">status</a>&quot;, &quot;rstatus&quot;,</pre>
+          response. The keyword may be one of &quot;<a href="#status">status</a>&quot;, &quot;rstatus&quot;,
+          &quot;string&quot;, or &quot;rstring&quot;. The keyword may be preceeded by an
+          exclamation mark (&quot;!&quot;) to negate the match. Spaces are allowed
+          between the exclamation mark and the keyword. See below for more
+          details on the supported keywords.
+
+&lt;pattern&gt; is the pattern to look for. It may be a string or a regular
+          expression. If the pattern contains spaces, they must be escaped
+          with the usual backslash ('\').</pre>
 </div>
-<pre class="text">	      &quot;string&quot;, or &quot;rstring&quot;. The keyword may be preceeded by an
-              exclamation mark (&quot;!&quot;) to negate the match. Spaces are allowed
-              between the exclamation mark and the keyword. See below for more
-              details on the supported keywords.
+<pre class="text">By default, &quot;<a href="#option httpchk">option httpchk</a>&quot; considers that response statuses 2xx and 3xx
+are valid, and that others are invalid. When &quot;<a href="#http-check expect">http-check expect</a>&quot; is used,
+it defines what is considered valid or invalid. Only one &quot;<a href="#http-check">http-check</a>&quot;
+statement is supported in a backend. If a server fails to respond or times
+out, the check obviously fails. The available matches are :
 
-    &lt;pattern&gt; is the pattern to look for. It may be a string or a regular
-              expression. If the pattern contains spaces, they must be escaped
-              with the usual backslash ('\').
+  status &lt;string&gt; : test the exact string match for the HTTP status code.
+                    A health check respose will be considered valid if the
+                    response's status code is exactly this string. If the
+                    &quot;<a href="#status">status</a>&quot; keyword is prefixed with &quot;!&quot;, then the response
+                    will be considered invalid if the status code matches.
 
-  By default, &quot;<a href="#option httpchk">option httpchk</a>&quot; considers that response statuses 2xx and 3xx
-  are valid, and that others are invalid. When &quot;<a href="#http-check expect">http-check expect</a>&quot; is used,
-  it defines what is considered valid or invalid. Only one &quot;<a href="#http-check">http-check</a>&quot;
-  statement is supported in a backend. If a server fails to respond or times
-  out, the check obviously fails. The available matches are :
+  rstatus &lt;regex&gt; : test a regular expression for the HTTP status code.
+                    A health check respose will be considered valid if the
+                    response's status code matches the expression. If the
+                    &quot;rstatus&quot; keyword is prefixed with &quot;!&quot;, then the response
+                    will be considered invalid if the status code matches.
+                    This is mostly used to check for multiple codes.
 
-    status &lt;string&gt; : test the exact string match for the HTTP status code.
-                      A health check respose will be considered valid if the
-                      response's status code is exactly this string. If the
-                      &quot;<a href="#status">status</a>&quot; keyword is prefixed with &quot;!&quot;, then the response
-                      will be considered invalid if the status code matches.
+  string &lt;string&gt; : test the exact string match in the HTTP response body.
+                    A health check respose will be considered valid if the
+                    response's body contains this exact string. If the
+                    &quot;string&quot; keyword is prefixed with &quot;!&quot;, then the response
+                    will be considered invalid if the body contains this
+                    string. This can be used to look for a mandatory word at
+                    the end of a dynamic page, or to detect a failure when a
+                    specific error appears on the check page (eg: a stack
+                    trace).
 
-    rstatus &lt;regex&gt; : test a regular expression for the HTTP status code.
-                      A health check respose will be considered valid if the
-                      response's status code matches the expression. If the
-                      &quot;rstatus&quot; keyword is prefixed with &quot;!&quot;, then the response
-                      will be considered invalid if the status code matches.
-                      This is mostly used to check for multiple codes.
+  rstring &lt;regex&gt; : test a regular expression on the HTTP response body.
+                    A health check respose will be considered valid if the
+                    response's body matches this expression. If the &quot;rstring&quot;
+                    keyword is prefixed with &quot;!&quot;, then the response will be
+                    considered invalid if the body matches the expression.
+                    This can be used to look for a mandatory word at the end
+                    of a dynamic page, or to detect a failure when a specific
+                    error appears on the check page (eg: a stack trace).
 
-    string &lt;string&gt; : test the exact string match in the HTTP response body.
-                      A health check respose will be considered valid if the
-                      response's body contains this exact string. If the
-                      &quot;string&quot; keyword is prefixed with &quot;!&quot;, then the response
-                      will be considered invalid if the body contains this
-                      string. This can be used to look for a mandatory word at
-                      the end of a dynamic page, or to detect a failure when a
-                      specific error appears on the check page (eg: a stack
-                      trace).
+It is important to note that the responses will be limited to a certain size
+defined by the global &quot;<a href="#tune.chksize">tune.chksize</a>&quot; option, which defaults to 16384 bytes.
+Thus, too large responses may not contain the mandatory pattern when using
+&quot;string&quot; or &quot;rstring&quot;. If a large response is absolutely required, it is
+possible to change the default max size by setting the global variable.
+However, it is worth keeping in mind that parsing very large responses can
+waste some CPU cycles, especially when regular expressions are used, and that
+it is always better to focus the checks on smaller resources.
 
-    rstring &lt;regex&gt; : test a regular expression on the HTTP response body.
-                      A health check respose will be considered valid if the
-                      response's body matches this expression. If the &quot;rstring&quot;
-                      keyword is prefixed with &quot;!&quot;, then the response will be
-                      considered invalid if the body matches the expression.
-                      This can be used to look for a mandatory word at the end
-                      of a dynamic page, or to detect a failure when a specific
-                      error appears on the check page (eg: a stack trace).
-
-  It is important to note that the responses will be limited to a certain size
-  defined by the global &quot;<a href="#tune.chksize">tune.chksize</a>&quot; option, which defaults to 16384 bytes.
-  Thus, too large responses may not contain the mandatory pattern when using
-  &quot;string&quot; or &quot;rstring&quot;. If a large response is absolutely required, it is
-  possible to change the default max size by setting the global variable.
-  However, it is worth keeping in mind that parsing very large responses can
-  waste some CPU cycles, especially when regular expressions are used, and that
-  it is always better to focus the checks on smaller resources.
-
-  Last, if &quot;<a href="#http-check expect">http-check expect</a>&quot; is combined with &quot;<a href="#http-check disable-on-404">http-check disable-on-404</a>&quot;,
-  then this last one has precedence when the server responds with 404.</pre><div class="separator">
+Last, if &quot;<a href="#http-check expect">http-check expect</a>&quot; is combined with &quot;<a href="#http-check disable-on-404">http-check disable-on-404</a>&quot;,
+then this last one has precedence when the server responds with 404.</pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
 <code><span class="comment"># only accept status 200 as valid</span>
@@ -2335,34 +2330,33 @@ to assign them some reasonable connection limits.</pre><div class="page-header">
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments"> tcp       The instance will work in pure TCP mode. A full-duplex connection
-           will be established between clients and servers, and no layer 7
-           examination will be performed. This is the default mode. It
-           should be used for SSL, SSH, SMTP, ...
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">tcp       The instance will work in pure TCP mode. A full-duplex connection
+          will be established between clients and servers, and no layer 7
+          examination will be performed. This is the default mode. It
+          should be used for SSL, SSH, SMTP, ...
 
- http      The instance will work in HTTP mode. The client request will be
-           analyzed in depth before connecting to any server. Any request
-           which is not RFC-compliant will be rejected. Layer 7 filtering,
-           processing and switching will be possible. This is the mode which
-           brings HAProxy most of its value.
+http      The instance will work in HTTP mode. The client request will be
+          analyzed in depth before connecting to any server. Any request
+          which is not RFC-compliant will be rejected. Layer 7 filtering,
+          processing and switching will be possible. This is the mode which
+          brings HAProxy most of its value.
 
- health    The instance will work in &quot;health&quot; mode. It will just reply &quot;OK&quot;
-           to incoming connections and close the connection. Nothing will be
-           logged. This mode is used to reply to external components health
-           checks. This mode is deprecated and should not be used anymore as
-           it is possible to do the same and even better by combining TCP or
-           HTTP modes with the &quot;<a href="#monitor">monitor</a>&quot; keyword.
-
-When doing content switching, it is mandatory that the frontend and the
-backend are in the same mode (generally HTTP), otherwise the configuration
-will be refused.
-
-Example :
-  defaults http_instances
-      mode http
-
-See also : &quot;<a href="#monitor">monitor</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;</pre>
+health    The instance will work in &quot;health&quot; mode. It will just reply &quot;OK&quot;
+          to incoming connections and close the connection. Nothing will be
+          logged. This mode is used to reply to external components health
+          checks. This mode is deprecated and should not be used anymore as
+          it is possible to do the same and even better by combining TCP or
+          HTTP modes with the &quot;<a href="#monitor">monitor</a>&quot; keyword.</pre>
 </div>
+<pre class="text">When doing content switching, it is mandatory that the frontend and the
+backend are in the same mode (generally HTTP), otherwise the configuration
+will be refused.</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>defaults http_instances
+    mode http
+</code></pre>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#monitor">monitor</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;</div>
 <a name="monitor"></a><a name="4-monitor"></a><a name="4.2-monitor"></a><a name="monitor (Proxies)"></a><a name="monitor (Alphabetically sorted keywords reference)"></a><a name="monitor fail"></a><a name="4-monitor fail"></a><a name="4.2-monitor fail"></a><a name="monitor fail (Proxies)"></a><a name="monitor fail (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="monitor fail"></a><a href="#4-monitor fail">monitor fail</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Add a condition to report a failure to a monitor HTTP request.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td></tr>
@@ -3182,8 +3176,8 @@ bytes are expected to be transferred.</pre><div class="separator">
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">user &lt;username&gt; This is the username which will be used when connecting
-to MySQL server.</pre>
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;username&gt; This is the username which will be used when connecting to MySQL
+           server.</pre>
 </div>
 <pre class="text">If you specify a username, the check consists of sending two MySQL packet,
 one Client Authentication packet, and one QUIT packet, to correctly close
@@ -3671,11 +3665,12 @@ that the &quot;IP address redirection&quot; option is disabled.</pre><div class=
     <span class="comment"># apply RDP cookie persistence</span>
     persist rdp-cookie
     <span class="comment"># if server is unknown, let's balance on the same cookie.</span>
+    <span class="comment"># alternatively, &quot;balance leastconn&quot; may be useful too.</span>
+    balance rdp-cookie
+    server srv1 1.1.1.1:3389
+    server srv2 1.1.1.2:3389
 </code></pre>
-</div><pre class="text">	    # alternatively, &quot;balance leastconn&quot; may be useful too.
-            balance rdp-cookie
-            server srv1 1.1.1.1:3389
-            server srv2 1.1.1.2:3389</pre><div class="page-header"><b>See also :</b> &quot;balance rdp-cookie&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot; and the &quot;<a href="#req_rdp_cookie">req_rdp_cookie</a>&quot; ACL.</div>
+</div><div class="page-header"><b>See also :</b> &quot;balance rdp-cookie&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot; and the &quot;<a href="#req_rdp_cookie">req_rdp_cookie</a>&quot; ACL.</div>
 <a name="rate-limit"></a><a name="4-rate-limit"></a><a name="4.2-rate-limit"></a><a name="rate-limit (Proxies)"></a><a name="rate-limit (Alphabetically sorted keywords reference)"></a><a name="rate-limit sessions"></a><a name="4-rate-limit sessions"></a><a name="4.2-rate-limit sessions"></a><a name="rate-limit sessions (Proxies)"></a><a name="rate-limit sessions (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="rate-limit sessions"></a><a href="#4-rate-limit sessions">rate-limit sessions</a></b> <span style="color: #080">&lt;rate&gt;</span></div><pre class="text">Set a limit on the number of new sessions accepted per second on a frontend</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td></tr>
@@ -3985,7 +3980,7 @@ request line are case-sensitive while header names are not.</pre><div class="sep
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># replace &quot;/static/&quot; with &quot;/&quot; at the beginning of any request path.</span>
-reqrep ^([^\ ]*)\ /static/(.*)     \1\ /\2
+reqrep ^([^\ :]*)\ /static/(.*)     \1\ /\2
 <span class="comment"># replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.</span>
 reqirep ^Host:\ www.mydomain.com   Host:\ www
 </code></pre>
@@ -4685,7 +4680,7 @@ customers, where node or description should be different for each customer.
 
 Though this statement alone is enough to enable statistics reporting, it is
 recommended to set all other settings in order to avoid relying on default
-unobvious parameters.</pre><div class="separator">
+unobvious parameters.  By default description is not shown.</pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># internal monitoring access (unlimited)</span>
@@ -4705,7 +4700,7 @@ backend private_monitoring
 
 Though this statement alone is enough to enable statistics reporting, it is
 recommended to set all other settings in order to avoid relying on default
-unobvious parameters.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;.</div>
+unobvious parameters.  Default behaviour is not to show this information.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#stats enable">stats enable</a>&quot;, &quot;<a href="#stats uri">stats uri</a>&quot;.</div>
 <a name="stats"></a><a name="4-stats"></a><a name="4.2-stats"></a><a name="stats (Proxies)"></a><a name="stats (Alphabetically sorted keywords reference)"></a><a name="stats show-node"></a><a name="4-stats show-node"></a><a name="4.2-stats show-node"></a><a name="stats show-node (Proxies)"></a><a name="stats show-node (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="stats show-node"></a><a href="#4-stats show-node">stats show-node</a></b> <span style="color: #008">[ <span style="color: #080">&lt;name&gt;</span> ]</span></div><pre class="text">Enable reporting of a host name on the statistics page.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td></tr>
@@ -4716,7 +4711,7 @@ unobvious parameters.</pre><div class="page-header"><b>See also:</b> &quot;<a hr
 </div>
 <pre class="text">This statement is useful for users that offer shared services to their
 customers, where node or description might be different on a stats page
-provided for each customer.
+provided for each customer.  Default behaviour is not to show host name.
 
 Though this statement alone is enough to enable statistics reporting, it is
 recommended to set all other settings in order to avoid relying on default
@@ -5020,21 +5015,20 @@ string     a table declared with &quot;type string&quot; will store substrings o
            was last created, refreshed or matched. The expiration delay is
            defined using the standard time format, similarly as the various
            timeouts. The maximum duration is slightly above 24 days. See
-           <a href="#2.2">section 2.2</a> for more information. If this delay is not specified,</pre>
+           <a href="#2.2">section 2.2</a> for more information. If this delay is not specified,
+           the session won't automatically expire, but older entries will
+           be removed once full. Be sure not to use the &quot;nopurge&quot; parameter
+           if not expiration delay is specified.</pre>
 </div>
-<pre class="text">	       the session won't automatically expire, but older entries will
-               be removed once full. Be sure not to use the &quot;nopurge&quot; parameter
-               if not expiration delay is specified.
+<pre class="text">The is only one stick-table per backend. At the moment of writing this doc,
+it does not seem useful to have multiple tables per backend. If this happens
+to be required, simply create a dummy backend with a stick-table in it and
+reference it.
 
-  The is only one stick-table per backend. At the moment of writing this doc,
-  it does not seem useful to have multiple tables per backend. If this happens
-  to be required, simply create a dummy backend with a stick-table in it and
-  reference it.
-
-  It is important to understand that stickiness based on learning information
-  has some limitations, including the fact that all learned associations are
-  lost upon restart. In general it can be good as a complement but not always
-  as an exclusive stickiness.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#stick match">stick match</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#stick store-request">stick store-request</a>&quot;, and <a href="#2.2">section 2.2</a> about time format.</div>
+It is important to understand that stickiness based on learning information
+has some limitations, including the fact that all learned associations are
+lost upon restart. In general it can be good as a complement but not always
+as an exclusive stickiness.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#stick match">stick match</a>&quot;, &quot;<a href="#stick on">stick on</a>&quot;, &quot;<a href="#stick store-request">stick store-request</a>&quot;, and <a href="#2.2">section 2.2</a> about time format.</div>
 <a name="tcp-request"></a><a name="4-tcp-request"></a><a name="4.2-tcp-request"></a><a name="tcp-request (Proxies)"></a><a name="tcp-request (Alphabetically sorted keywords reference)"></a><a name="tcp-request content"></a><a name="4-tcp-request content"></a><a name="4.2-tcp-request content"></a><a name="tcp-request content (Proxies)"></a><a name="tcp-request content (Alphabetically sorted keywords reference)"></a><a name="tcp-request content accept"></a><a name="4-tcp-request content accept"></a><a name="4.2-tcp-request content accept"></a><a name="tcp-request content accept (Proxies)"></a><a name="tcp-request content accept (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="tcp-request content accept"></a><a href="#4-tcp-request content accept">tcp-request content accept</a></b> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Accept a connection if/unless a content inspection condition is matched</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no</td><td class="alert-success pagination-centered">yes</td><td class="alert-success pagination-centered">yes</td><td class="alert-error pagination-centered">no</td></tr>
@@ -7113,7 +7107,7 @@ easier finding and understanding.
 
      cD   The client did not send nor acknowledge any data for as long as the
           &quot;<a href="#timeout client">timeout client</a>&quot; delay. This is often caused by network failures on
-	  the client side, or the client simply leaving the net uncleanly.
+          the client side, or the client simply leaving the net uncleanly.
 
      CH   The client aborted while waiting for the server to start responding.
           It might be the server taking too long to respond or the client
@@ -7198,7 +7192,7 @@ easier finding and understanding.
 
      PC   The proxy refused to establish a connection to the server because the
           process' socket limit has been reached while attempting to connect.
-	  The global &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; parameter may be increased in the configuration
+          The global &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot; parameter may be increased in the configuration
           so that it does not happen anymore. This status is very rare and
           might happen when the global &quot;<a href="#ulimit-n">ulimit-n</a>&quot; parameter is forced by hand.
 
