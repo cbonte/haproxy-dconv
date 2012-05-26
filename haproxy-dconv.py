@@ -85,6 +85,7 @@ def get_git_version():
         return
 
     version = version[1:].strip()
+    version = re.sub(r'-g.*', '', version)
     return version
 
 def get_haproxy_git_version(path):
