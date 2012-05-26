@@ -4,9 +4,17 @@
 <%
     if data in ['yes']:
         style = "class=\"alert-success pagination-centered\""
+        data = 'yes<br /><img src="css/check.png" alt="yes" title="yes" />'
     elif data in ['no']:
         style = "class=\"alert-error pagination-centered\""
-    elif data in ['X', '-', '*']:
+        data = 'no<br /><img src="css/cross.png" alt="no" title="no" />'
+    elif data in ['X']:
+        style = "class=\"pagination-centered\""
+        data = '<img src="css/check.png" alt="X" title="yes" />'
+    elif data in ['-']:
+        style = "class=\"pagination-centered\""
+        data = '&nbsp;'
+    elif data in ['*']:
         style = "class=\"pagination-centered\""
     else:
         style = None
