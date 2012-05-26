@@ -96,7 +96,7 @@ if [ "$force" == 1 -o "$updated" == "1" -o "$updated14" == "1" ];
 then
 	echo "Generating documentation for HAProxy 1.4..."
 	cd $WORK_DIR/haproxy-dconv/master || exit 1
-		./haproxy-dconv.py -i $WORK_DIR/haproxy/1.4/doc/configuration.txt -o ../gh-pages/configuration-1.4.html
+		./haproxy-dconv.py -i ../../haproxy/1.4/doc/configuration.txt -o ../gh-pages/configuration-1.4.html
 	cd $PROJECT_HOME
 fi
 
@@ -104,7 +104,7 @@ if [ "$force" == 1 -o "$updated" == "1" -o "$updated15" == "1" ];
 then
 	echo "Generating documentation for HAProxy 1.5..."
 	cd $WORK_DIR/haproxy-dconv/master || exit 1
-		./haproxy-dconv.py -i $WORK_DIR/haproxy/1.5/doc/configuration.txt -o ../gh-pages/configuration-1.5.html
+		./haproxy-dconv.py -i ../../haproxy/1.5/doc/configuration.txt -o ../gh-pages/configuration-1.5.html
 	cd $PROJECT_HOME
 fi
 
