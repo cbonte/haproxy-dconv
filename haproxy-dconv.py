@@ -38,15 +38,13 @@ from parser import remove_indent
 from parser import *
 
 VERSION = ""
-DATE = ""
 HAPROXY_GIT_VERSION = False
 
 def main():
-    global VERSION, DATE, HAPROXY_GIT_VERSION
+    global VERSION, HAPROXY_GIT_VERSION
 
     VERSION = get_git_version()
-    DATE = get_git_date()
-    if not VERSION or not DATE:
+    if not VERSION:
         sys.exit(1)
 
     usage="Usage: %prog --infile <infile> --outfile <outfile>"
@@ -88,23 +86,6 @@ def get_git_version():
 
     version = version[1:].strip()
     return version
-
-# Temporarily determine the last commit date from git
-def get_git_date():
-    if not os.path.isdir(".git"):
-        print >> sys.stderr, "This does not appear to be a Git repository."
-        return
-    try:
-        p = subprocess.Popen(["git", "log", "-1", '--format=%ct'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    except EnvironmentError:
-        print >> sys.stderr, "Unable to run git"
-        return
-    date = p.communicate()[0]
-    if p.returncode != 0:
-        print >> sys.stderr, "Unable to run git"
-        return
-
-    return date
 
 def get_haproxy_git_version(path):
     try:
@@ -434,7 +415,7 @@ def convert(infile, outfile):
             keywordsCount = keywordsCount,
             keyword_conflicts = keyword_conflicts,
             version = VERSION,
-            date = datetime.datetime.fromtimestamp(int(DATE)).strftime("%Y/%m/%d")
+            date = datetime.datetime.now().strftime("%Y/%m/%d")
     )
     fd.close()
 
