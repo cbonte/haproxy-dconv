@@ -96,7 +96,8 @@ if [ "$force" == 1 -o "$updated" == "1" -o "$updated14" == "1" ];
 then
 	echo "Generating documentation for HAProxy 1.4..."
 	cd $WORK_DIR/haproxy-dconv/master || exit 1
-		./haproxy-dconv.py -i ../../haproxy/1.4/doc/configuration.txt -o ../gh-pages/configuration-1.4.html
+		./haproxy-dconv.py -i ../../haproxy/1.4/doc/configuration.txt -o ../gh-pages/configuration-1.4.html &&
+		sed -i "s/\(<\!-- VERSION-1\.5 -->\)\(.*\)\(<\!-- \/VERSION-1\.5 -->\)/\1${haproxy15_git_version}\3/" ../gh-pages/index.html
 	cd $PROJECT_HOME
 fi
 
@@ -104,7 +105,8 @@ if [ "$force" == 1 -o "$updated" == "1" -o "$updated15" == "1" ];
 then
 	echo "Generating documentation for HAProxy 1.5..."
 	cd $WORK_DIR/haproxy-dconv/master || exit 1
-		./haproxy-dconv.py -i ../../haproxy/1.5/doc/configuration.txt -o ../gh-pages/configuration-1.5.html
+		./haproxy-dconv.py -i ../../haproxy/1.5/doc/configuration.txt -o ../gh-pages/configuration-1.5.html &&
+		sed -i "s/\(<\!-- VERSION-1\.4 -->\)\(.*\)\(<\!-- \/VERSION-1\.4 -->\)/\1${haproxy14_git_version}\3/" ../gh-pages/index.html
 	cd $PROJECT_HOME
 fi
 
@@ -115,9 +117,6 @@ echo "- haproxy-dconv version : $version"
 echo "Synchronize generated documentations..."
 cd $WORK_DIR/haproxy-dconv/gh-pages || exit 1
 	push=0
-
-	sed -i "s/\(<\!-- VERSION-1\.4 -->\)\(.*\)\(<\!-- \/VERSION-1\.4 -->\)/\1${haproxy14_git_version}\3/" index.html
-	sed -i "s/\(<\!-- VERSION-1\.5 -->\)\(.*\)\(<\!-- \/VERSION-1\.5 -->\)/\1${haproxy15_git_version}\3/" index.html
 
 	rsync -av --delete ../master/bootstrap/ bootstrap/ &&
 		if [ "$(git status -s bootstrap/)" != "" ];
