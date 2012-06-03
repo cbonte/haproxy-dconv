@@ -97,7 +97,7 @@ then
 	echo "Generating documentation for HAProxy 1.4..."
 	cd $WORK_DIR/haproxy-dconv/master || exit 1
 		./haproxy-dconv.py -i ../../haproxy/1.4/doc/configuration.txt -o ../gh-pages/configuration-1.4.html &&
-		sed -i "s/\(<\!-- VERSION-1\.5 -->\)\(.*\)\(<\!-- \/VERSION-1\.5 -->\)/\1${haproxy15_git_version}\3/" ../gh-pages/index.html
+		sed -i "s/\(<\!-- VERSION-1\.4 -->\)\(.*\)\(<\!-- \/VERSION-1\.4 -->\)/\1${haproxy14_git_version}\3/" ../gh-pages/index.html
 	cd $PROJECT_HOME
 fi
 
@@ -106,7 +106,7 @@ then
 	echo "Generating documentation for HAProxy 1.5..."
 	cd $WORK_DIR/haproxy-dconv/master || exit 1
 		./haproxy-dconv.py -i ../../haproxy/1.5/doc/configuration.txt -o ../gh-pages/configuration-1.5.html &&
-		sed -i "s/\(<\!-- VERSION-1\.4 -->\)\(.*\)\(<\!-- \/VERSION-1\.4 -->\)/\1${haproxy14_git_version}\3/" ../gh-pages/index.html
+		sed -i "s/\(<\!-- VERSION-1\.5 -->\)\(.*\)\(<\!-- \/VERSION-1\.5 -->\)/\1${haproxy15_git_version}\3/" ../gh-pages/index.html
 	cd $PROJECT_HOME
 fi
 
