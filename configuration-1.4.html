@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.4.21-2 - Configuration Manual</title>
+		<title>HAProxy version 1.4.21-16 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -20,7 +20,7 @@
 						<li class=""><a href="configuration-1.5.html">Configuration Manual for HAProxy 1.5</a></li>
 					</ul>
 					<div class="pagination-right">
-						<h4><small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-24</b> on <b>2012/06/17</b></small></h4>
+						<h4><small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-24</b> on <b>2012/06/27</b></small></h4>
 					</div>
 				</div>
 			</div>
@@ -28,7 +28,7 @@
 			<div class="page-header">
 				<div class="row-fluid">
 					<div class="span8">
-						<h1>HAProxy <small>version 1.4.21-2</small></h1>
+						<h1>HAProxy <small>version 1.4.21-16</small></h1>
 						<h2>Configuration Manual</h2>
 					</div>
 					<div class="span4 pagination-right">
@@ -1150,18 +1150,20 @@ two, and never more than some limits (usually 32768).</pre><div class="page-head
               weight on the fly will have no effect, but this can be
               changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
 
-  uri         The left part of the URI (before the question mark) is hashed
-              and divided by the total weight of the running servers. The
-              result designates which server will receive the request. This
-              ensures that a same URI will always be directed to the same
-              server as long as no server goes up or down. This is used
-              with proxy caches and anti-virus proxies in order to maximize
-              the cache hit rate. Note that this algorithm may only be used
-              in an HTTP backend. This algorithm is static by default,
-              which means that changing a server's weight on the fly will
-              have no effect, but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
+  uri         This algorithm hashes either the left part of the URI (before
+              the question mark) or the whole URI (if the &quot;whole&quot; parameter
+              is present) and divides the hash value by the total weight of
+              the running servers. The result designates which server will
+              receive the request. This ensures that the same URI will
+              always be directed to the same server as long as no server
+              goes up or down. This is used with proxy caches and
+              anti-virus proxies in order to maximize the cache hit rate.
+              Note that this algorithm may only be used in an HTTP backend.
+              This algorithm is static by default, which means that
+              changing a server's weight on the fly will have no effect,
+              but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
 
-              This algorithm support two optional parameters &quot;len&quot; and
+              This algorithm supports two optional parameters &quot;len&quot; and
               &quot;depth&quot;, both followed by a positive integer number. These
               options may be helpful when it is needed to balance servers
               based on the beginning of the URI only. The &quot;len&quot; parameter
@@ -1626,8 +1628,8 @@ This parameter is provided for backwards compatibility but is currently
 deprecated. Please use &quot;<a href="#timeout connect">timeout connect</a>&quot;, &quot;<a href="#timeout queue">timeout queue</a>&quot; or &quot;<a href="#timeout tarpit">timeout tarpit</a>&quot;
 instead.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout connect">timeout connect</a>&quot;, &quot;<a href="#timeout queue">timeout queue</a>&quot;, &quot;<a href="#timeout tarpit">timeout tarpit</a>&quot;, &quot;<a href="#timeout server">timeout server</a>&quot;, &quot;<a href="#contimeout">contimeout</a>&quot;.</div>
 <a name="cookie"></a><a name="4-cookie"></a><a name="4.2-cookie"></a><a name="cookie (Proxies)"></a><a name="cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="cookie"></a><a href="#4-cookie">cookie</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ rewrite | insert | prefix ]</span> <span style="color: #008">[ indirect ]</span> <span style="color: #008">[ nocache ]</span>
-              <span style="color: #008">[ postonly ]</span> <span style="color: #008">[ preserve ]</span> <span style="color: #008">[ domain <span style="color: #080">&lt;domain&gt;</span> ]</span>*
-              <span style="color: #008">[ maxidle <span style="color: #080">&lt;idle&gt;</span> ]</span> <span style="color: #008">[ maxlife <span style="color: #080">&lt;life&gt;</span> ]</span></div><pre class="text">Enable cookie-based persistence in a backend.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+              <span style="color: #008">[ postonly ]</span> <span style="color: #008">[ preserve ]</span> <span style="color: #008">[ httponly ]</span> <span style="color: #008">[ secure ]</span>
+              <span style="color: #008">[ domain <span style="color: #080">&lt;domain&gt;</span> ]</span>* <span style="color: #008">[ maxidle <span style="color: #080">&lt;idle&gt;</span> ]</span> <span style="color: #008">[ maxlife <span style="color: #080">&lt;life&gt;</span> ]</span></div><pre class="text">Enable cookie-based persistence in a backend.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
@@ -1719,6 +1721,18 @@ preserve  This option may only be used with &quot;insert&quot; and/or &quot;indi
           check option, it is possible to perform a completely graceful
           shutdown because users will definitely leave the server after
           they logout.
+
+httponly  This option tells haproxy to add an &quot;HttpOnly&quot; cookie attribute
+          when a cookie is inserted. This attribute is used so that a
+          user agent doesn't share the cookie with non-HTTP components.
+          Please check RFC6265 for more information on this attribute.
+
+secure    This option tells haproxy to add a &quot;Secure&quot; cookie attribute when
+          a cookie is inserted. This attribute is used so that a user agent
+          never emits this cookie over non-secure channels, which means
+          that a cookie learned with this flag will be presented only over
+          SSL/TLS connections. Please check RFC6265 for more information on
+          this attribute.
 
 domain    This option allows to specify the domain at which a cookie is
           inserted. It requires exactly one parameter: a valid domain
@@ -2336,7 +2350,9 @@ properly tuned.
 
 Also, when &lt;conns&gt; is set to large values, it is possible that the servers
 are not sized to accept such loads, and for this reason it is generally wise
-to assign them some reasonable connection limits.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#server">server</a>&quot;, global section's &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#fullconn">fullconn</a>&quot;</div>
+to assign them some reasonable connection limits.
+
+By default, this value is set to 2000.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#server">server</a>&quot;, global section's &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#maxconn (Global parameters)">Global parameters</a></li><li><a href="#maxconn (Proxies)">Proxies</a></li><li><a href="#maxconn (Server and default-server options)">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#fullconn">fullconn</a>&quot;</div>
 <a name="mode"></a><a name="4-mode"></a><a name="4.2-mode"></a><a name="mode (Proxies)"></a><a name="mode (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="mode"></a><a href="#4-mode">mode</a></b> <span style="color: #800">{ tcp|http|health }</span></div><pre class="text">Set the running mode or protocol of the instance</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
