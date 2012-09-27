@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-36 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-40 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -20,7 +20,7 @@
 						<li class="active"><a href="configuration-1.5.html">Configuration Manual for HAProxy 1.5</a></li>
 					</ul>
 					<div class="pagination-right">
-						<h4><small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-25</b> on <b>2012/09/26</b></small></h4>
+						<h4><small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-25</b> on <b>2012/09/28</b></small></h4>
 					</div>
 				</div>
 			</div>
@@ -28,7 +28,7 @@
 			<div class="page-header">
 				<div class="row-fluid">
 					<div class="span8">
-						<h1>HAProxy <small>version 1.5-dev12-36</small></h1>
+						<h1>HAProxy <small>version 1.5-dev12-40</small></h1>
 						<h2>Configuration Manual</h2>
 					</div>
 					<div class="span4 pagination-right">
@@ -2474,11 +2474,13 @@ http      The instance will work in HTTP mode. The client request will be
           brings HAProxy most of its value.
 
 health    The instance will work in &quot;health&quot; mode. It will just reply &quot;OK&quot;
-          to incoming connections and close the connection. Nothing will be
-          logged. This mode is used to reply to external components health
-          checks. This mode is deprecated and should not be used anymore as
-          it is possible to do the same and even better by combining TCP or
-          HTTP modes with the &quot;<a href="#monitor">monitor</a>&quot; keyword.</pre>
+          to incoming connections and close the connection. Alternatively,
+          If the &quot;<a href="#option httpchk">httpchk</a>&quot; option is set, &quot;HTTP/1.0 200 OK&quot; will be sent
+          instead. Nothing will be logged in either case. This mode is used
+          to reply to external components health checks. This mode is
+          deprecated and should not be used anymore as it is possible to do
+          the same and even better by combining TCP or HTTP modes with the
+          &quot;<a href="#monitor">monitor</a>&quot; keyword.</pre>
 </div>
 <pre class="text">When doing content switching, it is mandatory that the frontend and the
 backend are in the same mode (generally HTTP), otherwise the configuration
@@ -2543,13 +2545,16 @@ In HTTP mode, a connection coming from a source matching &lt;source&gt; will be
 accepted, the following response will be sent without waiting for a request,
 then the connection will be closed : &quot;HTTP/1.0 200 OK&quot;. This is normally
 enough for any front-end HTTP probe to detect that the service is UP and
-running without forwarding the request to a backend server.
+running without forwarding the request to a backend server. Note that this
+response is sent in raw format, without any transformation. This is important
+as it means that it will not be SSL-encrypted on SSL listeners.
 
-Monitor requests are processed very early. It is not possible to block nor
-divert them using ACLs. They cannot be logged either, and it is the intended
-purpose. They are only used to report HAProxy's health to an upper component,
-nothing more. Right now, it is not possible to set failure conditions on
-requests caught by &quot;<a href="#monitor-net">monitor-net</a>&quot;.
+Monitor requests are processed very early, just after tcp-request connection
+ACLs which are the only ones able to block them. These connections are short
+lived and never wait for any data from the client. They cannot be logged, and
+it is the intended purpose. They are only used to report HAProxy's health to
+an upper component, nothing more. Please note that &quot;<a href="#monitor fail">monitor fail</a>&quot; rules do
+not apply to connections intercepted by &quot;<a href="#monitor-net">monitor-net</a>&quot;.
 
 Last, please note that only one &quot;<a href="#monitor-net">monitor-net</a>&quot; statement can be specified in
 a frontend. If more than one is found, only the last one will be considered.</pre><div class="separator">
