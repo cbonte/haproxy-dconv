@@ -277,6 +277,12 @@ def convert(infile, outfile):
         print >> sys.stderr, "Parsing chapter %s..." % title
 
         if title == "Summary":
+            summaryTemplate = pctxt.templates.get_template('summary.html')
+
+            documentAppend(summaryTemplate.render(
+                chapters = chapters,
+                chapterIndexes = chapterIndexes,
+            ))
             continue
 
         if title:
