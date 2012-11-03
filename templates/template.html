@@ -11,42 +11,58 @@
 			<div class="navbar-inner">
 				<div class="container">
 					<a class="brand" href="#">${headers['title']} ${headers['subtitle']}</a>
+					<ul class="nav">
+						<li class="divider-vertical"></li>
+							<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								Versions
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								## TODO : provide a structure to dynamically generate per version links
+								<li class="dropdown-submenu">
+									 <a tabindex="-1" href="#">HAProxy 1.4</a>
+									 <ul class="dropdown-menu">
+										<li><a href="configuration-1.4.html">Configuration Manual</a></li>
+										<li class="divider"></li>
+										<li><a href="http://git.1wt.eu/git/haproxy-1.4.git/">GIT Repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/git/?p=haproxy-1.4.git">Browse repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/download/1.4/">Browse directory</a></li>
+									</ul>
+								</li>
+								<li class="dropdown-submenu">
+									 <a tabindex="-1" href="#">HAProxy 1.5</a>
+									 <ul class="dropdown-menu">
+										<li><a href="configuration-1.5.html">Configuration Manual</a></li>
+										<li class="divider"></li>
+										<li><a href="http://git.1wt.eu/git/haproxy.git/">GIT Repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/git/?p=haproxygit">Browse repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/download/1.5/">Browse directory</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
 					<form class="navbar-search pull-right" onsubmit="search(this.keyword.value); return false">
-						<input id="searchKeyword" type="text" name="keyword" class="span3 search-query" placeholder="Search keyword" autocomplete="off"/>
+						<input id="searchKeyword" type="text" name="keyword" class="input-large search-query" placeholder="Search keyword" autocomplete="off"/>
 					</form>
 				</div>
 			</div>
 		</div>
-		<br />
 		<div class="container">
-			<div class="row-fluid">
-				<div class="span2">
-					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page">
-						<img src="http://haproxy.1wt.eu/img/logo-med.png" />
-					</a>
-				</div>
-				<div class="span10">
-					<ul class="nav nav-tabs">
-						<li class="${"active" if headers['version'].startswith("version 1.4") and headers['subtitle'] == 'Configuration Manual' else ""}"><a href="configuration-1.4.html">Configuration Manual for HAProxy 1.4</a></li>
-						<li class="${"active" if headers['version'].startswith("version 1.5") and headers['subtitle'] == 'Configuration Manual' else ""}"><a href="configuration-1.5.html">Configuration Manual for HAProxy 1.5</a></li>
-					</ul>
-					<div class="pagination-right">
-						<h4><small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b></small></h4>
-					</div>
-				</div>
+			<div class="pagination-right">
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b></small>
 			</div>
-			
-			<div class="page-header">
-				<div class="row-fluid">
-					<div class="span8">
-						<h1>${headers['title']} <small>${headers['version']}</small></h1>
-						<h2>${headers['subtitle']}</h2>
-					</div>
-					<div class="span4 pagination-right">
-						<div>${headers['date']}</div>
-						<div>${headers['author']}</div>
-					</div>
-				</div>
+			<div class="well pagination-centered">
+				<h1>${headers['title']}</h1>
+				<h2>${headers['subtitle']}</h2>
+				<p>${headers['version']}</p>
+				<p>
+					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
+					${headers['author']}<br>
+					${headers['date']}
+				</p>
 			</div>
 			
 			${document}
