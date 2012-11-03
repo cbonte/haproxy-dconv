@@ -7,6 +7,17 @@
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
 	<body>
+		<div class="navbar navbar-static-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#">${headers['title']} ${headers['subtitle']}</a>
+					<form class="navbar-search pull-right" onsubmit="search(this.keyword.value); return false">
+						<input id="searchKeyword" type="text" name="keyword" class="span3 search-query" placeholder="Search keyword" autocomplete="off"/>
+					</form>
+				</div>
+			</div>
+		</div>
+		<br />
 		<div class="container">
 			<div class="row-fluid">
 				<div class="span2">
@@ -38,16 +49,50 @@
 				</div>
 			</div>
 			
-			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
-				<label>Search keyword:</label>
-				<input type="text" name="keyword" class="span3 search-query" style="margin: 0 auto;" data-provide="typeahead" data-source='["${'","'.join(keywords)}"]' autocomplete="off"/>
-				<input class="btn btn-primary" type="submit" value="Go"/>
-			</form>
-
 			${document}
 		</div>
+
+		<div id="searchModal" class="modal hide fade" style="display: none;" tabindex="-1">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">&times;</a>
+				<h3>Search keyword</h3>
+			</div>
+			<div class="modal-body">
+				<h4>Unknown keyword <code></code></h4>
+				<p>The keyword <code></code> you're looking for doesn't exist or is not detected by the documentation converter.</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+			</div>
+		</div>
+
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
+
+		<script>
+			keywords = [
+				"${'",\n\t\t\t\t"'.join(keywords)}"
+			];
+
+			function search(keyword) {
+				if (keyword) {
+					if (!!~$.inArray(keyword, keywords)) {
+						window.location.hash = keyword;
+					} else {
+						$("#searchModal code").text(keyword);
+						$("#searchModal").modal();
+					}
+				}
+			}
+			
+			$('#searchKeyword').typeahead({
+				source: keywords,
+				updater: function(item) {
+					search(item)
+				}
+			})
+		</script>
+
 <!-- Piwik -->
 <script type="text/javascript">
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://stats.cdncdn.net/" : "http://stats.cdncdn.net/");
