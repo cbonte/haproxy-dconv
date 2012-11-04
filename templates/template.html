@@ -13,7 +13,7 @@
 					<a class="brand" href="#">${headers['title']} ${headers['subtitle']}</a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
-							<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
+						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								Versions
@@ -47,6 +47,18 @@
 					<form class="navbar-search pull-right" onsubmit="search(this.keyword.value); return false">
 						<input id="searchKeyword" type="text" name="keyword" class="input-large search-query" placeholder="Search keyword" autocomplete="off"/>
 					</form>
+				</div>
+			</div>
+		</div>
+		<div class="navbar navbar-fixed-bottom">
+			<div class="navbar-inner">
+				<div class="container">
+					<ul class="nav">
+						<li id="previous"></li>
+					</ul>
+					<ul class="nav pull-right">
+						<li id="next"></li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -86,6 +98,7 @@
 		<script src="bootstrap/js/bootstrap.min.js"></script>
 
 		<script>
+			/* Keyword search */
 			var keywords = [
 				"${'",\n\t\t\t\t"'.join(keywords)}"
 			];
@@ -108,6 +121,37 @@
 					return item
 				}
 			})
+
+			/* EXPERIMENTAL - Previous/Next navigation */
+			var headings = $(":header");
+			function refreshNavigation() {
+				var previous = false
+				var next = false
+				$.each(headings, function(item, value) {
+					var el = $(value)
+					if (! el.attr('id')) return true
+					if (el.offset().top < $(window).scrollTop()) {
+						previous = el
+					}
+					if (el.offset().top - 1 > $(window).scrollTop()) {
+						next = el
+					}
+					if (next) return false
+				})
+				$('#previous').html(
+					previous && previous.attr('id') ? '<a href="#' + previous.attr('id') + '">&larr; ' + previous.text() + '</a>' : '<a href="#top">&larr; Top</a>'
+				)
+				$('#next').html(
+					next && next.attr('id') ? '<a href="#' + next.attr('id') + '">' + next.text() + ' &rarr;</a>' : '<a href="#bottom">Bottom &rarr;</a>'
+				)
+			}
+
+			$(window).scroll(function () {
+				refreshNavigation()
+			});
+			$(document).ready(function() {
+				refreshNavigation()
+			});
 		</script>
 
 <!-- Piwik -->

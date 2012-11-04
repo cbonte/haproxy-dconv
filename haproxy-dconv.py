@@ -296,7 +296,7 @@ def convert(infile, outfile):
                     chapterIndexes = sorted(chapters.keys())
             if level == 1:
                 documentAppend("<div class=\"page-header\">", False)
-            documentAppend("<h%d><small>%s.</small> %s</h%d>" % (level, details["chapter"], cgi.escape(title, True), level))
+            documentAppend("<h%d id=\"%s\"><small>%s.</small> %s</h%d>" % (level, details["chapter"], details["chapter"], cgi.escape(title, True), level))
             if level == 1:
                 documentAppend("</div>", False)
 
