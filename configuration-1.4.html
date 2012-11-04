@@ -7,43 +7,63 @@
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
 	<body>
-		<div class="container">
-			<div class="row-fluid">
-				<div class="span2">
-					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page">
-						<img src="http://haproxy.1wt.eu/img/logo-med.png" />
-					</a>
-				</div>
-				<div class="span10">
-					<ul class="nav nav-tabs">
-						<li class="active"><a href="configuration-1.4.html">Configuration Manual for HAProxy 1.4</a></li>
-						<li class=""><a href="configuration-1.5.html">Configuration Manual for HAProxy 1.5</a></li>
+		<div class="navbar navbar-static-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#">HAProxy Configuration Manual</a>
+					<ul class="nav">
+						<li class="divider-vertical"></li>
+							<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								Versions
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-submenu">
+									 <a tabindex="-1" href="#">HAProxy 1.4</a>
+									 <ul class="dropdown-menu">
+										<li><a href="configuration-1.4.html">Configuration Manual</a></li>
+										<li class="divider"></li>
+										<li><a href="http://git.1wt.eu/git/haproxy-1.4.git/">GIT Repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/git/?p=haproxy-1.4.git">Browse repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/download/1.4/">Browse directory</a></li>
+									</ul>
+								</li>
+								<li class="dropdown-submenu">
+									 <a tabindex="-1" href="#">HAProxy 1.5</a>
+									 <ul class="dropdown-menu">
+										<li><a href="configuration-1.5.html">Configuration Manual</a></li>
+										<li class="divider"></li>
+										<li><a href="http://git.1wt.eu/git/haproxy.git/">GIT Repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/git/?p=haproxygit">Browse repository</a></li>
+										<li><a href="http://haproxy.1wt.eu/download/1.5/">Browse directory</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
 					</ul>
-					<div class="pagination-right">
-						<h4><small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-28</b> on <b>2012/11/03</b></small></h4>
-					</div>
+					<form class="navbar-search pull-right" onsubmit="search(this.keyword.value); return false">
+						<input id="searchKeyword" type="text" name="keyword" class="input-large search-query" placeholder="Search keyword" autocomplete="off"/>
+					</form>
 				</div>
 			</div>
-			
-			<div class="page-header">
-				<div class="row-fluid">
-					<div class="span8">
-						<h1>HAProxy <small>version 1.4.22-9</small></h1>
-						<h2>Configuration Manual</h2>
-					</div>
-					<div class="span4 pagination-right">
-						<div>2012/08/14</div>
-						<div>willy tarreau</div>
-					</div>
-				</div>
+		</div>
+		<div class="container">
+			<div class="pagination-right">
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.0.5-31</b> on <b>2012/11/04</b></small>
+			</div>
+			<div class="well pagination-centered">
+				<h1>HAProxy</h1>
+				<h2>Configuration Manual</h2>
+				<p>version 1.4.22-9</p>
+				<p>
+					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
+					willy tarreau<br>
+					2012/08/14
+				</p>
 			</div>
 			
-			<form class="well form-search" onsubmit="if (this.keyword.value) window.location.hash=this.keyword.value; return false">
-				<label>Search keyword:</label>
-				<input type="text" name="keyword" class="span3 search-query" style="margin: 0 auto;" data-provide="typeahead" data-source='["acl","addr","always_false","always_true","appsession","avg_queue","backlog","backup","balance","balance url_param","be_conn","be_id","be_sess_rate","bind","bind-process","block","capture","capture cookie","capture request","capture request header","capture response","capture response header","check","chroot","clear","clear counters","clear counters all","clitimeout","connslots","contimeout","cookie (Proxies)","cookie (Server and default-server options)","daemon","debug","default-server","default_backend","description","disable","disable server","disabled (Proxies)","disabled (Server and default-server options)","dispatch","downinter","dst","dst_conn","dst_port","enable","enable server","enabled","error-limit","errorfile","errorloc","errorloc302","errorloc303","fall","fastinter","fe_conn","fe_id","fe_sess_rate","force-persist","fullconn","get","get weight","gid","grace","group","hash-type","hdr","hdr_beg","hdr_cnt","hdr_dir","hdr_dom","hdr_end","hdr_ip","hdr_len","hdr_reg","hdr_sub","hdr_val","help","http-check","http-check disable-on-404","http-check expect","http-check send-state","http-request","http-send-name-header","http_first_req","id (Proxies)","id (Server and default-server options)","ignore-persist","inter","log (Global parameters)","log (Proxies)","log global","log-send-hostname","log-tag","maxconn (Global parameters)","maxconn (Proxies)","maxconn (Server and default-server options)","maxpipes","maxqueue","method","minconn","mode","monitor","monitor fail","monitor-net","monitor-uri","nbproc","nbsrv","no option","no option abortonclose","no option accept-invalid-http-request","no option accept-invalid-http-response","no option allbackups","no option checkcache","no option clitcpka","no option dontlog-normal","no option dontlognull","no option forceclose","no option http-no-delay","no option http-pretend-keepalive","no option http-server-close","no option http-use-proxy-header","no option http_proxy","no option httpclose","no option independant-streams","no option log-health-checks","no option log-separate-errors","no option logasap","no option nolinger","no option persist","no option redispatch","no option socket-stats","no option splice-auto","no option splice-request","no option splice-response","no option srvtcpka","no option tcp-smart-accept","no option tcp-smart-connect","no option transparent","node","noepoll","nokqueue","nopoll","nosepoll","nosplice","observe","on-error","option","option abortonclose","option accept-invalid-http-request","option accept-invalid-http-response","option allbackups","option checkcache","option clitcpka","option contstats","option dontlog-normal","option dontlognull","option forceclose","option forwardfor","option http-no-delay","option http-pretend-keepalive","option http-server-close","option http-use-proxy-header","option http_proxy","option httpchk","option httpclose","option httplog","option independant-streams","option ldap-check","option log-health-checks","option log-separate-errors","option logasap","option mysql-check","option nolinger","option originalto","option persist","option redispatch","option smtpchk","option socket-stats","option splice-auto","option splice-request","option splice-response","option srvtcpka","option ssl-hello-chk","option tcp-smart-accept","option tcp-smart-connect","option tcpka","option tcplog","option transparent","path","path_beg","path_dir","path_dom","path_end","path_len","path_reg","path_sub","persist","persist rdp-cookie","pidfile","port","prompt","queue","quiet","quit","rate-limit","rate-limit sessions","redir","redirect","redirect location","redirect prefix","redisp","redispatch","req_len","req_proto_http","req_rdp_cookie","req_rdp_cookie_cnt","req_ssl_ver","req_ver","reqadd","reqallow","reqdel","reqdeny","reqiallow","reqidel","reqideny","reqipass","reqirep","reqitarpit","reqpass","reqrep","reqtarpit","retries","rise","rspadd","rspdel","rspdeny","rspidel","rspideny","rspirep","rsprep","server","set","set timeout","set timeout cli","set weight","show","show errors","show info","show sess","show stat","slowstart","so_id","source (Proxies)","source (Server and default-server options)","spread-checks","src","src_port","srv_id","srv_is_up","srvtimeout","stats","stats admin","stats auth","stats enable","stats hide-version","stats http-request","stats maxconn","stats realm","stats refresh","stats scope","stats show-desc","stats show-legends","stats show-node","stats socket","stats timeout","stats uri","status","stick","stick match","stick on","stick store-request","stick-table","stick-table type","tcp-request","tcp-request content","tcp-request content accept","tcp-request content reject","tcp-request inspect-delay","timeout","timeout check","timeout client","timeout clitimeout","timeout connect","timeout contimeout","timeout http-keep-alive","timeout http-request","timeout queue","timeout server","timeout srvtimeout","timeout tarpit","track","transparent","tune.bufsize","tune.chksize","tune.maxaccept","tune.maxpollevents","tune.maxrewrite","tune.rcvbuf.client","tune.rcvbuf.server","tune.sndbuf.client","tune.sndbuf.server","uid","ulimit-n","url","url_beg","url_dir","url_dom","url_end","url_ip","url_len","url_port","url_reg","url_sub","use_backend","user","userlist","wait_end","weight"]' autocomplete="off"/>
-				<input class="btn btn-primary" type="submit" value="Go"/>
-			</form>
-
 			<div><pre class="text">This document covers the configuration language as implemented in the version
 specified above. It does not provide any hint, example or advice. For such
 documentation, please refer to the Reference Manual or the Architecture Manual.
@@ -8166,8 +8186,378 @@ the reader knows the output has not been truncated.
 </div>
 
 		</div>
+
+		<div id="searchModal" class="modal hide fade" style="display: none;" tabindex="-1">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">&times;</a>
+				<h3>Search keyword</h3>
+			</div>
+			<div class="modal-body">
+				<h4>Unknown keyword <code></code></h4>
+				<p>The keyword <code></code> you're looking for doesn't exist or is not detected by the documentation converter.</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+			</div>
+		</div>
+
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
+
+		<script>
+			keywords = [
+				"acl",
+				"addr",
+				"always_false",
+				"always_true",
+				"appsession",
+				"avg_queue",
+				"backlog",
+				"backup",
+				"balance",
+				"balance url_param",
+				"be_conn",
+				"be_id",
+				"be_sess_rate",
+				"bind",
+				"bind-process",
+				"block",
+				"capture",
+				"capture cookie",
+				"capture request",
+				"capture request header",
+				"capture response",
+				"capture response header",
+				"check",
+				"chroot",
+				"clear",
+				"clear counters",
+				"clear counters all",
+				"clitimeout",
+				"connslots",
+				"contimeout",
+				"cookie (Proxies)",
+				"cookie (Server and default-server options)",
+				"daemon",
+				"debug",
+				"default-server",
+				"default_backend",
+				"description",
+				"disable",
+				"disable server",
+				"disabled (Proxies)",
+				"disabled (Server and default-server options)",
+				"dispatch",
+				"downinter",
+				"dst",
+				"dst_conn",
+				"dst_port",
+				"enable",
+				"enable server",
+				"enabled",
+				"error-limit",
+				"errorfile",
+				"errorloc",
+				"errorloc302",
+				"errorloc303",
+				"fall",
+				"fastinter",
+				"fe_conn",
+				"fe_id",
+				"fe_sess_rate",
+				"force-persist",
+				"fullconn",
+				"get",
+				"get weight",
+				"gid",
+				"grace",
+				"group",
+				"hash-type",
+				"hdr",
+				"hdr_beg",
+				"hdr_cnt",
+				"hdr_dir",
+				"hdr_dom",
+				"hdr_end",
+				"hdr_ip",
+				"hdr_len",
+				"hdr_reg",
+				"hdr_sub",
+				"hdr_val",
+				"help",
+				"http-check",
+				"http-check disable-on-404",
+				"http-check expect",
+				"http-check send-state",
+				"http-request",
+				"http-send-name-header",
+				"http_first_req",
+				"id (Proxies)",
+				"id (Server and default-server options)",
+				"ignore-persist",
+				"inter",
+				"log (Global parameters)",
+				"log (Proxies)",
+				"log global",
+				"log-send-hostname",
+				"log-tag",
+				"maxconn (Global parameters)",
+				"maxconn (Proxies)",
+				"maxconn (Server and default-server options)",
+				"maxpipes",
+				"maxqueue",
+				"method",
+				"minconn",
+				"mode",
+				"monitor",
+				"monitor fail",
+				"monitor-net",
+				"monitor-uri",
+				"nbproc",
+				"nbsrv",
+				"no option",
+				"no option abortonclose",
+				"no option accept-invalid-http-request",
+				"no option accept-invalid-http-response",
+				"no option allbackups",
+				"no option checkcache",
+				"no option clitcpka",
+				"no option dontlog-normal",
+				"no option dontlognull",
+				"no option forceclose",
+				"no option http-no-delay",
+				"no option http-pretend-keepalive",
+				"no option http-server-close",
+				"no option http-use-proxy-header",
+				"no option http_proxy",
+				"no option httpclose",
+				"no option independant-streams",
+				"no option log-health-checks",
+				"no option log-separate-errors",
+				"no option logasap",
+				"no option nolinger",
+				"no option persist",
+				"no option redispatch",
+				"no option socket-stats",
+				"no option splice-auto",
+				"no option splice-request",
+				"no option splice-response",
+				"no option srvtcpka",
+				"no option tcp-smart-accept",
+				"no option tcp-smart-connect",
+				"no option transparent",
+				"node",
+				"noepoll",
+				"nokqueue",
+				"nopoll",
+				"nosepoll",
+				"nosplice",
+				"observe",
+				"on-error",
+				"option",
+				"option abortonclose",
+				"option accept-invalid-http-request",
+				"option accept-invalid-http-response",
+				"option allbackups",
+				"option checkcache",
+				"option clitcpka",
+				"option contstats",
+				"option dontlog-normal",
+				"option dontlognull",
+				"option forceclose",
+				"option forwardfor",
+				"option http-no-delay",
+				"option http-pretend-keepalive",
+				"option http-server-close",
+				"option http-use-proxy-header",
+				"option http_proxy",
+				"option httpchk",
+				"option httpclose",
+				"option httplog",
+				"option independant-streams",
+				"option ldap-check",
+				"option log-health-checks",
+				"option log-separate-errors",
+				"option logasap",
+				"option mysql-check",
+				"option nolinger",
+				"option originalto",
+				"option persist",
+				"option redispatch",
+				"option smtpchk",
+				"option socket-stats",
+				"option splice-auto",
+				"option splice-request",
+				"option splice-response",
+				"option srvtcpka",
+				"option ssl-hello-chk",
+				"option tcp-smart-accept",
+				"option tcp-smart-connect",
+				"option tcpka",
+				"option tcplog",
+				"option transparent",
+				"path",
+				"path_beg",
+				"path_dir",
+				"path_dom",
+				"path_end",
+				"path_len",
+				"path_reg",
+				"path_sub",
+				"persist",
+				"persist rdp-cookie",
+				"pidfile",
+				"port",
+				"prompt",
+				"queue",
+				"quiet",
+				"quit",
+				"rate-limit",
+				"rate-limit sessions",
+				"redir",
+				"redirect",
+				"redirect location",
+				"redirect prefix",
+				"redisp",
+				"redispatch",
+				"req_len",
+				"req_proto_http",
+				"req_rdp_cookie",
+				"req_rdp_cookie_cnt",
+				"req_ssl_ver",
+				"req_ver",
+				"reqadd",
+				"reqallow",
+				"reqdel",
+				"reqdeny",
+				"reqiallow",
+				"reqidel",
+				"reqideny",
+				"reqipass",
+				"reqirep",
+				"reqitarpit",
+				"reqpass",
+				"reqrep",
+				"reqtarpit",
+				"retries",
+				"rise",
+				"rspadd",
+				"rspdel",
+				"rspdeny",
+				"rspidel",
+				"rspideny",
+				"rspirep",
+				"rsprep",
+				"server",
+				"set",
+				"set timeout",
+				"set timeout cli",
+				"set weight",
+				"show",
+				"show errors",
+				"show info",
+				"show sess",
+				"show stat",
+				"slowstart",
+				"so_id",
+				"source (Proxies)",
+				"source (Server and default-server options)",
+				"spread-checks",
+				"src",
+				"src_port",
+				"srv_id",
+				"srv_is_up",
+				"srvtimeout",
+				"stats",
+				"stats admin",
+				"stats auth",
+				"stats enable",
+				"stats hide-version",
+				"stats http-request",
+				"stats maxconn",
+				"stats realm",
+				"stats refresh",
+				"stats scope",
+				"stats show-desc",
+				"stats show-legends",
+				"stats show-node",
+				"stats socket",
+				"stats timeout",
+				"stats uri",
+				"status",
+				"stick",
+				"stick match",
+				"stick on",
+				"stick store-request",
+				"stick-table",
+				"stick-table type",
+				"tcp-request",
+				"tcp-request content",
+				"tcp-request content accept",
+				"tcp-request content reject",
+				"tcp-request inspect-delay",
+				"timeout",
+				"timeout check",
+				"timeout client",
+				"timeout clitimeout",
+				"timeout connect",
+				"timeout contimeout",
+				"timeout http-keep-alive",
+				"timeout http-request",
+				"timeout queue",
+				"timeout server",
+				"timeout srvtimeout",
+				"timeout tarpit",
+				"track",
+				"transparent",
+				"tune.bufsize",
+				"tune.chksize",
+				"tune.maxaccept",
+				"tune.maxpollevents",
+				"tune.maxrewrite",
+				"tune.rcvbuf.client",
+				"tune.rcvbuf.server",
+				"tune.sndbuf.client",
+				"tune.sndbuf.server",
+				"uid",
+				"ulimit-n",
+				"url",
+				"url_beg",
+				"url_dir",
+				"url_dom",
+				"url_end",
+				"url_ip",
+				"url_len",
+				"url_port",
+				"url_reg",
+				"url_sub",
+				"use_backend",
+				"user",
+				"userlist",
+				"wait_end",
+				"weight"
+			];
+
+			function search(keyword) {
+				if (keyword) {
+					if (!!~$.inArray(keyword, keywords)) {
+						window.location.hash = keyword;
+					} else {
+						$("#searchModal code").text(keyword);
+						$("#searchModal").modal();
+					}
+				}
+			}
+			
+			$('#searchKeyword').typeahead({
+				source: keywords,
+				updater: function(item) {
+					search(item)
+					return item
+				}
+			})
+		</script>
+
 <!-- Piwik -->
 <script type="text/javascript">
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://stats.cdncdn.net/" : "http://stats.cdncdn.net/");
