@@ -32,6 +32,7 @@ from optparse import OptionParser
 
 from mako.template import Template
 from mako.lookup import TemplateLookup
+from mako.exceptions import TopLevelLookupException
 
 from parser import PContext
 from parser import remove_indent
@@ -411,6 +412,21 @@ def convert(infile, outfile):
     print >> sys.stderr, "Exporting to %s..." % outfile
 
     template = pctxt.templates.get_template('template.html')
+    try:
+	footerTemplate = pctxt.templates.get_template('footer.html')
+	footer = footerTemplate.render(
+            headers = pctxt.context['headers'],
+            document = document,
+            chapters = chapters,
+            chapterIndexes = chapterIndexes,
+            keywords = keywords,
+            keywordsCount = keywordsCount,
+            keyword_conflicts = keyword_conflicts,
+            version = VERSION,
+            date = datetime.datetime.now().strftime("%Y/%m/%d"),
+	)
+    except TopLevelLookupException:
+	footer = ""
 
     fd = open(outfile,'w')
 
@@ -423,7 +439,8 @@ def convert(infile, outfile):
             keywordsCount = keywordsCount,
             keyword_conflicts = keyword_conflicts,
             version = VERSION,
-            date = datetime.datetime.now().strftime("%Y/%m/%d")
+            date = datetime.datetime.now().strftime("%Y/%m/%d"),
+            footer = footer
     )
     fd.close()
 
