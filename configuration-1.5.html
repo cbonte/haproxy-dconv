@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-216 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-222 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/05</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/09</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-216</strong></p>
+				<p><strong>version 1.5-dev12-222</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1104,6 +1104,8 @@ The following keywords are supported in the &quot;global&quot; section :
    - tune.rcvbuf.server
    - tune.sndbuf.client
    - tune.sndbuf.server
+   - tune.zlib.memlevel
+   - tune.zlib.windowsize
 
  * Debugging
    - debug
@@ -1236,7 +1238,10 @@ global maxconn setting will apply to all connections. Setting this limit
 avoids having openssl use too much memory and crash when malloc returns NULL
 (since it unfortunately does not reliably check for such conditions). Note
 that the limit applies both to incoming and outgoing connections, so one
-connection which is deciphered then ciphered accounts for 2 SSL connections.</pre><a name="noepoll"></a><a name="3-noepoll"></a><a name="3.2-noepoll"></a><a name="noepoll (Global parameters)"></a><a name="noepoll (Performance tuning)"></a><div class="keyword"><b><a name="noepoll"></a><a href="#3-noepoll">noepoll</a></b></div><pre class="text">Disables the use of the &quot;epoll&quot; event polling system on Linux. It is
+connection which is deciphered then ciphered accounts for 2 SSL connections.</pre><a name="maxzlibmem"></a><a name="3-maxzlibmem"></a><a name="3.2-maxzlibmem"></a><a name="maxzlibmem (Global parameters)"></a><a name="maxzlibmem (Performance tuning)"></a><div class="keyword"><b><a name="maxzlibmem"></a><a href="#3-maxzlibmem">maxzlibmem</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of RAM in megabytes per process usable by the zlib.
+When the maximum amount is reached, future sessions will not compress as long
+as RAM is unavailable. When sets to 0, there is no limit.
+The default value is 0.</pre><a name="noepoll"></a><a name="3-noepoll"></a><a name="3.2-noepoll"></a><a name="noepoll (Global parameters)"></a><a name="noepoll (Performance tuning)"></a><div class="keyword"><b><a name="noepoll"></a><a href="#3-noepoll">noepoll</a></b></div><pre class="text">Disables the use of the &quot;epoll&quot; event polling system on Linux. It is
 equivalent to the command-line argument &quot;-de&quot;. The next polling system
 used will generally be &quot;poll&quot;. See also &quot;<a href="#nosepoll">nosepoll</a>&quot;, and &quot;<a href="#nopoll">nopoll</a>&quot;.</pre><a name="nokqueue"></a><a name="3-nokqueue"></a><a name="3.2-nokqueue"></a><a name="nokqueue (Global parameters)"></a><a name="nokqueue (Performance tuning)"></a><div class="keyword"><b><a name="nokqueue"></a><a href="#3-nokqueue">nokqueue</a></b></div><pre class="text">Disables the use of the &quot;kqueue&quot; event polling system on BSD. It is
 equivalent to the command-line argument &quot;-dk&quot;. The next polling system
@@ -1319,7 +1324,14 @@ order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
 Another use case is to prevent write timeouts with extremely slow clients due
 to the kernel waiting for a large part of the buffer to be read before
-notifying haproxy again.</pre></div>
+notifying haproxy again.</pre><a name="tune.zlib.memlevel"></a><a name="3-tune.zlib.memlevel"></a><a name="3.2-tune.zlib.memlevel"></a><a name="tune.zlib.memlevel (Global parameters)"></a><a name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a name="tune.zlib.memlevel"></a><a href="#3-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
+defines how much memory should be allocated for the intenal compression
+state. A value of 1 uses minimum memory but is slow and reduces compression
+ratio, a value of 9 uses maximum memory for optimal speed.  Can be a value
+between 1 and 9. The default value is 8.</pre><a name="tune.zlib.windowsize"></a><a name="3-tune.zlib.windowsize"></a><a name="3.2-tune.zlib.windowsize"></a><a name="tune.zlib.windowsize (Global parameters)"></a><a name="tune.zlib.windowsize (Performance tuning)"></a><div class="keyword"><b><a name="tune.zlib.windowsize"></a><a href="#3-tune.zlib.windowsize">tune.zlib.windowsize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the window size (the size of the history buffer) as a parameter of the
+zlib initialization for each session. Larger values of this parameter result
+in better compression at the expense of memory usage.  Can be a value between
+8 and 15.  The default value is 15.</pre></div>
 <a name="3.3"></a>
 <h2 id="3.3"><small>3.3.</small> Debugging</h2>
 <div><a name="debug"></a><a name="3-debug"></a><a name="3.3-debug"></a><a name="debug (Global parameters)"></a><a name="debug (Debugging)"></a><div class="keyword"><b><a name="debug"></a><a href="#3-debug">debug</a></b></div><pre class="text">Enables debug mode which dumps to stdout all exchanges, and disables forking
@@ -10502,6 +10514,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"maxpipes",
 				"maxqueue",
 				"maxsslconn",
+				"maxzlibmem",
 				"method",
 				"minconn",
 				"mode",
@@ -10842,6 +10855,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.rcvbuf.server",
 				"tune.sndbuf.client",
 				"tune.sndbuf.server",
+				"tune.zlib.memlevel",
+				"tune.zlib.windowsize",
 				"uid (Global parameters)",
 				"uid (Bind and Server options)",
 				"ulimit-n",
@@ -10935,7 +10950,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-216', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-222', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
