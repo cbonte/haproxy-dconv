@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-222 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-232 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/09</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/10</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-222</strong></p>
+				<p><strong>version 1.5-dev12-232</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1085,6 +1085,7 @@ The following keywords are supported in the &quot;global&quot; section :
  * Performance tuning
    - maxconn
    - maxconnrate
+   - maxcomprate
    - maxpipes
    - maxsslconn
    - noepoll
@@ -1095,6 +1096,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - spread-checks
    - tune.bufsize
    - tune.chksize
+   - tune.comp.maxlevel
    - tune.http.maxhdr
    - tune.maxaccept
    - tune.maxpollevents
@@ -1227,7 +1229,13 @@ important to note that this can only be used as a service protection measure,
 as there will not necessarily be a fair share between frontends when the
 limit is reached, so it's a good idea to also limit each frontend to some
 value close to its expected share. Also, lowering tune.maxaccept can improve
-fairness.</pre><a name="maxpipes"></a><a name="3-maxpipes"></a><a name="3.2-maxpipes"></a><a name="maxpipes (Global parameters)"></a><a name="maxpipes (Performance tuning)"></a><div class="keyword"><b><a name="maxpipes"></a><a href="#3-maxpipes">maxpipes</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of pipes to &lt;number&gt;. Currently, pipes
+fairness.</pre><a name="maxcomprate"></a><a name="3-maxcomprate"></a><a name="3.2-maxcomprate"></a><a name="maxcomprate (Global parameters)"></a><a name="maxcomprate (Performance tuning)"></a><div class="keyword"><b><a name="maxcomprate"></a><a href="#3-maxcomprate">maxcomprate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process input compression rate to &lt;number&gt; kilobytes
+pers second.  For each session, if the maximum is reached, the compression
+level will be decreased during the session. If the maximum is reached at the
+beginning of a session, the session will not compress at all. If the maximum
+is not reached, the compression level will be increased up to
+tune.comp.maxlevel.  A value of zero means there is no limit, this is the
+default value.</pre><a name="maxpipes"></a><a name="3-maxpipes"></a><a name="3.2-maxpipes"></a><a name="maxpipes (Global parameters)"></a><a name="maxpipes (Performance tuning)"></a><div class="keyword"><b><a name="maxpipes"></a><a href="#3-maxpipes">maxpipes</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of pipes to &lt;number&gt;. Currently, pipes
 are only used by kernel-based tcp splicing. Since a pipe contains two file
 descriptors, the &quot;<a href="#ulimit-n">ulimit-n</a>&quot; value will be increased accordingly. The default
 value is maxconn/4, which seems to be more than enough for most heavy usages.
@@ -1276,7 +1284,10 @@ than this size, haproxy will return HTTP 502 (Bad Gateway).</pre><a name="tune.c
 find string or regex patterns in very large pages, though doing so may imply
 more memory and CPU usage. The default value is 16384 and can be changed at
 build time. It is not recommended to change this value, but to use better
-checks whenever possible.</pre><a name="tune.http.maxhdr"></a><a name="3-tune.http.maxhdr"></a><a name="3.2-tune.http.maxhdr"></a><a name="tune.http.maxhdr (Global parameters)"></a><a name="tune.http.maxhdr (Performance tuning)"></a><div class="keyword"><b><a name="tune.http.maxhdr"></a><a href="#3-tune.http.maxhdr">tune.http.maxhdr</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of headers in a request. When a request comes with a
+checks whenever possible.</pre><a name="tune.comp.maxlevel"></a><a name="3-tune.comp.maxlevel"></a><a name="3.2-tune.comp.maxlevel"></a><a name="tune.comp.maxlevel (Global parameters)"></a><a name="tune.comp.maxlevel (Performance tuning)"></a><div class="keyword"><b><a name="tune.comp.maxlevel"></a><a href="#3-tune.comp.maxlevel">tune.comp.maxlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum compression level. The compression level affects CPU
+usage during compression. This value affects CPU usage during compression.
+Each session using compression initializes the compression algorithm with
+this value. The default value is 1.</pre><a name="tune.http.maxhdr"></a><a name="3-tune.http.maxhdr"></a><a name="3.2-tune.http.maxhdr"></a><a name="tune.http.maxhdr (Global parameters)"></a><a name="tune.http.maxhdr (Performance tuning)"></a><div class="keyword"><b><a name="tune.http.maxhdr"></a><a href="#3-tune.http.maxhdr">tune.http.maxhdr</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of headers in a request. When a request comes with a
 number of headers greater than this value (including the first line), it is
 rejected with a &quot;400 Bad Request&quot; status code. Similarly, too large responses
 are blocked with &quot;502 Bad Gateway&quot;. The default value is 101, which is enough
@@ -10134,7 +10145,9 @@ delayed until the threshold is reached. A value of zero restores the initial
 setting.</pre><a name="set"></a><a name="9-set"></a><a name="9.2-set"></a><a name="set (Statistics and monitoring)"></a><a name="set (Unix Socket commands)"></a><a name="set rate-limit"></a><a name="9-set rate-limit"></a><a name="9.2-set rate-limit"></a><a name="set rate-limit (Statistics and monitoring)"></a><a name="set rate-limit (Unix Socket commands)"></a><a name="set rate-limit connections"></a><a name="9-set rate-limit connections"></a><a name="9.2-set rate-limit connections"></a><a name="set rate-limit connections (Statistics and monitoring)"></a><a name="set rate-limit connections (Unix Socket commands)"></a><a name="set rate-limit connections global"></a><a name="9-set rate-limit connections global"></a><a name="9.2-set rate-limit connections global"></a><a name="set rate-limit connections global (Statistics and monitoring)"></a><a name="set rate-limit connections global (Unix Socket commands)"></a><div class="keyword"><b><a name="set rate-limit connections global"></a><a href="#9-set rate-limit connections global">set rate-limit connections global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide connection rate limit, which is set by the global
 'maxconnrate' setting. A value of zero disables the limitation. This limit
 applies to all frontends and the change has an immediate effect. The value
-is passed in number of connections per second.</pre><a name="set"></a><a name="9-set"></a><a name="9.2-set"></a><a name="set (Statistics and monitoring)"></a><a name="set (Unix Socket commands)"></a><a name="set table"></a><a name="9-set table"></a><a name="9.2-set table"></a><a name="set table (Statistics and monitoring)"></a><a name="set table (Unix Socket commands)"></a><div class="keyword"><b><a name="set table"></a><a href="#9-set table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
+is passed in number of connections per second.</pre><a name="set"></a><a name="9-set"></a><a name="9.2-set"></a><a name="set (Statistics and monitoring)"></a><a name="set (Unix Socket commands)"></a><a name="set rate-limit"></a><a name="9-set rate-limit"></a><a name="9.2-set rate-limit"></a><a name="set rate-limit (Statistics and monitoring)"></a><a name="set rate-limit (Unix Socket commands)"></a><a name="set rate-limit http-compression"></a><a name="9-set rate-limit http-compression"></a><a name="9.2-set rate-limit http-compression"></a><a name="set rate-limit http-compression (Statistics and monitoring)"></a><a name="set rate-limit http-compression (Unix Socket commands)"></a><a name="set rate-limit http-compression global"></a><a name="9-set rate-limit http-compression global"></a><a name="9.2-set rate-limit http-compression global"></a><a name="set rate-limit http-compression global (Statistics and monitoring)"></a><a name="set rate-limit http-compression global (Unix Socket commands)"></a><div class="keyword"><b><a name="set rate-limit http-compression global"></a><a href="#9-set rate-limit http-compression global">set rate-limit http-compression global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the maximum input compression rate, which is set by the global
+'maxcomprate' setting. A value of zero disables the limitation. The value is
+passed in number of kilobytes per second.</pre><a name="set"></a><a name="9-set"></a><a name="9.2-set"></a><a name="set (Statistics and monitoring)"></a><a name="set (Unix Socket commands)"></a><a name="set table"></a><a name="9-set table"></a><a name="9.2-set table"></a><a name="set table (Statistics and monitoring)"></a><a name="set table (Unix Socket commands)"></a><div class="keyword"><b><a name="set table"></a><a href="#9-set table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
 an entry is inserted. See stick-table in <a href="#4.2">section 4.2</a> to find all possible
 values for &lt;data_type&gt;. The most likely use consists in dynamically entering
 entries for source IP addresses, with a flag in gpc0 to dynamically block an
@@ -10507,6 +10520,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"log-format",
 				"log-send-hostname",
 				"log-tag",
+				"maxcomprate",
 				"maxconn (Global parameters)",
 				"maxconn (Proxies)",
 				"maxconn (Bind and Server options)",
@@ -10721,6 +10735,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"set rate-limit",
 				"set rate-limit connections",
 				"set rate-limit connections global",
+				"set rate-limit http-compression",
+				"set rate-limit http-compression global",
 				"set table",
 				"set timeout",
 				"set timeout cli",
@@ -10846,6 +10862,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"transparent",
 				"tune.bufsize",
 				"tune.chksize",
+				"tune.comp.maxlevel",
 				"tune.http.maxhdr",
 				"tune.maxaccept",
 				"tune.maxpollevents",
@@ -10950,7 +10967,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-222', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-232', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
