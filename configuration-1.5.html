@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-232 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-233 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/10</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/11</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-232</strong></p>
+				<p><strong>version 1.5-dev12-233</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -2230,16 +2230,34 @@ the system if the system's timeouts are not configured either.
 
 This parameter is provided for compatibility but is currently deprecated.
 Please use &quot;<a href="#timeout client">timeout client</a>&quot; instead.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout client">timeout client</a>&quot;, &quot;<a href="#timeout http-request">timeout http-request</a>&quot;, &quot;<a href="#timeout server">timeout server</a>&quot;, and &quot;<a href="#srvtimeout">srvtimeout</a>&quot;.</div>
-<a name="compression"></a><a name="4-compression"></a><a name="4.2-compression"></a><a name="compression (Proxies)"></a><a name="compression (Alphabetically sorted keywords reference)"></a><a name="compression algo"></a><a name="4-compression algo"></a><a name="4.2-compression algo"></a><a name="compression algo (Proxies)"></a><a name="compression algo (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="compression algo"></a><a href="#4-compression algo">compression algo</a></b> <span style="color: #008">[ gzip ]</span> ...</div><pre class="text">compression type ...</pre><a name="compression"></a><a name="4-compression"></a><a name="4.2-compression"></a><a name="compression (Proxies)"></a><a name="compression (Alphabetically sorted keywords reference)"></a><a name="compression offload"></a><a name="4-compression offload"></a><a name="4.2-compression offload"></a><a name="compression offload (Proxies)"></a><a name="compression offload (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="compression offload"></a><a href="#4-compression offload">compression offload</a></b></div><pre class="text">Enable HTTP compression.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<a name="compression"></a><a name="4-compression"></a><a name="4.2-compression"></a><a name="compression (Proxies)"></a><a name="compression (Alphabetically sorted keywords reference)"></a><a name="compression algo"></a><a name="4-compression algo"></a><a name="4.2-compression algo"></a><a name="compression algo (Proxies)"></a><a name="compression algo (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="compression algo"></a><a href="#4-compression algo">compression algo</a></b> <span style="color: #080">&lt;algorithm&gt;</span> ...</div><a name="compression"></a><a name="4-compression"></a><a name="4.2-compression"></a><a name="compression (Proxies)"></a><a name="compression (Alphabetically sorted keywords reference)"></a><a name="compression type"></a><a name="4-compression type"></a><a name="4.2-compression type"></a><a name="compression type (Proxies)"></a><a name="compression type (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="compression type"></a><a href="#4-compression type">compression type</a></b> <span style="color: #080">&lt;mime type&gt;</span> ...</div><a name="compression"></a><a name="4-compression"></a><a name="4.2-compression"></a><a name="compression (Proxies)"></a><a name="compression (Alphabetically sorted keywords reference)"></a><a name="compression offload"></a><a name="4-compression offload"></a><a name="4.2-compression offload"></a><a name="compression offload (Proxies)"></a><a name="compression offload (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="compression offload"></a><a href="#4-compression offload">compression offload</a></b></div><pre class="text">Enable HTTP compression.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">algo  is followed by the list of supported compression algorithms.
-type  is followed by the list of MIME types that will be compressed.
-offload makes haproxy work as a compression offloader only (see notes).</pre>
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">algo     is followed by the list of supported compression algorithms.
+type     is followed by the list of MIME types that will be compressed.
+offload  makes haproxy work as a compression offloader only (see notes).</pre>
 </div>
-<pre class="text">The &quot;offload&quot; setting makes haproxy remove the Accept-Encoding header to
+<pre class="text">The currently supported algorithms are :
+  identity  this is mostly for debugging, and it was useful for developping
+            the compression feature. Identity does not apply any change on
+            data.
+
+  gzip      applies gzip compression. This setting is only available when
+            support for zlib was built in.
+
+  deflate   same as gzip, but with deflate algorithm and zlib format.
+            Note that this algorithm has ambiguous support on many browsers
+            and no support at all from recent ones. It is strongly
+            recommended not to use it for anything else than experimentation.
+            This setting is only available when support for zlib was built
+            in.
+
+Compression will be activated depending of the Accept-Encoding request
+header. With identity, it does not take care of that header.
+
+The &quot;offload&quot; setting makes haproxy remove the Accept-Encoding header to
 prevent backend servers from compressing responses. It is strongly
 recommended not to do this because this means that all the compression work
 will be done on the single point where haproxy is located. However in some
@@ -8500,8 +8518,8 @@ The list of currently supported pattern fetch functions is the following :
                haproxy -vv). See also the &quot;<a href="#npn">npn</a>&quot; bind keyword.
 
   ssl_fc_protocol
-               Returns the name of the used protocol when the incoming connection
-               was made over an SSL/TLS transport layer.
+               Returns the name of the used protocol when the incoming
+               connection was made over an SSL/TLS transport layer.
 
   ssl_fc_session_id
                Returns the SSL ID of the front connection when the incoming
@@ -10424,6 +10442,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"compression",
 				"compression algo",
 				"compression offload",
+				"compression type",
 				"connslots",
 				"contimeout",
 				"cook",
@@ -10967,7 +10986,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-232', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-233', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
