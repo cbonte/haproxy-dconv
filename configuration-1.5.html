@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-233 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-246 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -68,7 +68,7 @@
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-233</strong></p>
+				<p><strong>version 1.5-dev12-246</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1091,7 +1091,6 @@ The following keywords are supported in the &quot;global&quot; section :
    - noepoll
    - nokqueue
    - nopoll
-   - nosepoll
    - nosplice
    - spread-checks
    - tune.bufsize
@@ -1251,15 +1250,12 @@ When the maximum amount is reached, future sessions will not compress as long
 as RAM is unavailable. When sets to 0, there is no limit.
 The default value is 0.</pre><a name="noepoll"></a><a name="3-noepoll"></a><a name="3.2-noepoll"></a><a name="noepoll (Global parameters)"></a><a name="noepoll (Performance tuning)"></a><div class="keyword"><b><a name="noepoll"></a><a href="#3-noepoll">noepoll</a></b></div><pre class="text">Disables the use of the &quot;epoll&quot; event polling system on Linux. It is
 equivalent to the command-line argument &quot;-de&quot;. The next polling system
-used will generally be &quot;poll&quot;. See also &quot;<a href="#nosepoll">nosepoll</a>&quot;, and &quot;<a href="#nopoll">nopoll</a>&quot;.</pre><a name="nokqueue"></a><a name="3-nokqueue"></a><a name="3.2-nokqueue"></a><a name="nokqueue (Global parameters)"></a><a name="nokqueue (Performance tuning)"></a><div class="keyword"><b><a name="nokqueue"></a><a href="#3-nokqueue">nokqueue</a></b></div><pre class="text">Disables the use of the &quot;kqueue&quot; event polling system on BSD. It is
+used will generally be &quot;poll&quot;. See also &quot;<a href="#nopoll">nopoll</a>&quot;.</pre><a name="nokqueue"></a><a name="3-nokqueue"></a><a name="3.2-nokqueue"></a><a name="nokqueue (Global parameters)"></a><a name="nokqueue (Performance tuning)"></a><div class="keyword"><b><a name="nokqueue"></a><a href="#3-nokqueue">nokqueue</a></b></div><pre class="text">Disables the use of the &quot;kqueue&quot; event polling system on BSD. It is
 equivalent to the command-line argument &quot;-dk&quot;. The next polling system
 used will generally be &quot;poll&quot;. See also &quot;<a href="#nopoll">nopoll</a>&quot;.</pre><a name="nopoll"></a><a name="3-nopoll"></a><a name="3.2-nopoll"></a><a name="nopoll (Global parameters)"></a><a name="nopoll (Performance tuning)"></a><div class="keyword"><b><a name="nopoll"></a><a href="#3-nopoll">nopoll</a></b></div><pre class="text">Disables the use of the &quot;poll&quot; event polling system. It is equivalent to the
 command-line argument &quot;-dp&quot;. The next polling system used will be &quot;select&quot;.
 It should never be needed to disable &quot;poll&quot; since it's available on all
-platforms supported by HAProxy. See also &quot;<a href="#nosepoll">nosepoll</a>&quot;, and &quot;<a href="#nopoll">nopoll</a>&quot; and
-&quot;<a href="#nokqueue">nokqueue</a>&quot;.</pre><a name="nosepoll"></a><a name="3-nosepoll"></a><a name="3.2-nosepoll"></a><a name="nosepoll (Global parameters)"></a><a name="nosepoll (Performance tuning)"></a><div class="keyword"><b><a name="nosepoll"></a><a href="#3-nosepoll">nosepoll</a></b></div><pre class="text">Disables the use of the &quot;speculative epoll&quot; event polling system on Linux. It
-is equivalent to the command-line argument &quot;-ds&quot;. The next polling system
-used will generally be &quot;epoll&quot;. See also &quot;<a href="#nosepoll">nosepoll</a>&quot;, and &quot;<a href="#nopoll">nopoll</a>&quot;.</pre><a name="nosplice"></a><a name="3-nosplice"></a><a name="3.2-nosplice"></a><a name="nosplice (Global parameters)"></a><a name="nosplice (Performance tuning)"></a><div class="keyword"><b><a name="nosplice"></a><a href="#3-nosplice">nosplice</a></b></div><pre class="text">Disables the use of kernel tcp splicing between sockets on Linux. It is
+platforms supported by HAProxy. See also &quot;<a href="#nokqueue">nokqueue</a>&quot; and &quot;<a href="#noepoll">noepoll</a>&quot;.</pre><a name="nosplice"></a><a name="3-nosplice"></a><a name="3.2-nosplice"></a><a name="nosplice (Global parameters)"></a><a name="nosplice (Performance tuning)"></a><div class="keyword"><b><a name="nosplice"></a><a href="#3-nosplice">nosplice</a></b></div><pre class="text">Disables the use of kernel tcp splicing between sockets on Linux. It is
 equivalent to the command line argument &quot;-dS&quot;.  Data will then be copied
 using conventional and more portable recv/send calls. Kernel tcp splicing is
 limited to some very recent instances of kernel 2.6. Most versions between
@@ -10602,7 +10598,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"nokqueue",
 				"non-stick",
 				"nopoll",
-				"nosepoll",
 				"nosplice",
 				"npn",
 				"observe",
@@ -10986,7 +10981,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-233', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-246', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
