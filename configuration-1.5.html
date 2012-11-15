@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-246 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-266 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/11</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/15</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-246</strong></p>
+				<p><strong>version 1.5-dev12-266</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1174,7 +1174,7 @@ of operation. For systems limited to small sets of file descriptors per
 process, it may be needed to fork multiple daemons. USING MULTIPLE PROCESSES
 IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">daemon</a>&quot;.</pre><a name="pidfile"></a><a name="3-pidfile"></a><a name="3.1-pidfile"></a><a name="pidfile (Global parameters)"></a><a name="pidfile (Process management and security)"></a><div class="keyword"><b><a name="pidfile"></a><a href="#3-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes pids of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
-starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.</pre><a name="stats"></a><a name="3-stats"></a><a name="3.1-stats"></a><a name="stats (Global parameters)"></a><a name="stats (Process management and security)"></a><a name="stats bind-process"></a><a name="3-stats bind-process"></a><a name="3.1-stats bind-process"></a><a name="stats bind-process (Global parameters)"></a><a name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a name="stats bind-process"></a><a href="#3-stats bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-32&gt;</span> ]</span> ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
+starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.</pre><a name="stats"></a><a name="3-stats"></a><a name="3.1-stats"></a><a name="stats (Global parameters)"></a><a name="stats (Process management and security)"></a><a name="stats bind-process"></a><a name="3-stats bind-process"></a><a name="3.1-stats bind-process"></a><a name="stats bind-process (Global parameters)"></a><a name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a name="stats bind-process"></a><a href="#3-stats bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-32&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-32&gt;</span>]</span> ]</span> ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
 stats socket is bound to all processes, causing a warning to be emitted when
 nbproc is greater than 1 because there is no way to select the target process
 when connecting. However, by using this setting, it becomes possible to pin
@@ -2019,7 +2019,7 @@ listen http_https_proxy
     bind :443 ssl crt /etc/haproxy/site.pem
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source (Proxies)">Proxies</a></li><li><a href="#source (Bind and Server options)">Bind and Server options</a></li></ul></span>&quot;, &quot;<a href="#option forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol documentation, and <a href="#5">section 5</a> about bind options.</div>
-<a name="bind-process"></a><a name="4-bind-process"></a><a name="4.2-bind-process"></a><a name="bind-process (Proxies)"></a><a name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="bind-process"></a><a href="#4-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-32&gt;</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<a name="bind-process"></a><a name="4-bind-process"></a><a name="4.2-bind-process"></a><a name="bind-process (Proxies)"></a><a name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="bind-process"></a><a href="#4-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-32&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-32&gt;</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
@@ -2035,10 +2035,11 @@ even          This instance will be enabled on processes 2,4,6,...32. This
               with less than 2 processes otherwise some instances might be
               missing from all processes.
 
-number        The instance will be enabled on this process number, between
-              1 and 32. You must be careful not to reference a process
-              number greater than the configured global.nbproc, otherwise
-              some instances might be missing from all processes.</pre>
+number        The instance will be enabled on this process number or range,
+              whose values must all be between 1 and 32. You must be
+              careful not to reference a process number greater than the
+              configured global.nbproc, otherwise some instances might be
+              missing from all processes.</pre>
 </div>
 <pre class="text">This keyword limits binding of certain instances to certain processes. This
 is useful in order not to have too many processes listening to the same
@@ -2066,6 +2067,10 @@ listen app_ip2
 listen management
     bind 10.0.0.3:80
     bind-process 1 2 3 4
+
+listen management
+    bind 10.0.0.4:80
+    bind-process 1-4
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#nbproc">nbproc</a>&quot; in global section.</div>
 <a name="block"></a><a name="4-block"></a><a name="4.2-block"></a><a name="block (Proxies)"></a><a name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="block"></a><a href="#4-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Block a layer 7 request if/unless a condition is matched</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -10981,7 +10986,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-246', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-266', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
