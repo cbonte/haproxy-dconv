@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-266 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-270 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/15</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/16</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-266</strong></p>
+				<p><strong>version 1.5-dev12-270</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1105,6 +1105,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - tune.rcvbuf.server
    - tune.sndbuf.client
    - tune.sndbuf.server
+   - tune.ssl.cachesize
    - tune.zlib.memlevel
    - tune.zlib.windowsize
 
@@ -1120,7 +1121,19 @@ dropping privileges. This increases the security level in case an unknown
 vulnerability would be exploited, since it would make it very hard for the
 attacker to exploit the system. This only works when the process is started
 with superuser privileges. It is important to ensure that &lt;jail_dir&gt; is both
-empty and unwritable to anyone.</pre><a name="crt-base"></a><a name="3-crt-base"></a><a name="3.1-crt-base"></a><a name="crt-base (Global parameters)"></a><a name="crt-base (Process management and security)"></a><div class="keyword"><b><a name="crt-base"></a><a href="#3-crt-base">crt-base</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a default directory to fetch SSL certificates from when a relative
+empty and unwritable to anyone.</pre><a name="cpu-map"></a><a name="3-cpu-map"></a><a name="3.1-cpu-map"></a><a name="cpu-map (Global parameters)"></a><a name="cpu-map (Process management and security)"></a><div class="keyword"><b><a name="cpu-map"></a><a href="#3-cpu-map">cpu-map</a></b> <span style="color: #080">&lt;&quot;all&quot;|&quot;odd&quot;|&quot;even&quot;|process_num&gt;</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">On Linux 2.6 and above, it is possible to bind a process to a specific CPU
+set. This means that the process will never run on other CPUs. The &quot;<a href="#cpu-map">cpu-map</a>&quot;
+directive specifies CPU sets for process sets. The first argument is the
+process number to bind. This process must have a number between 1 and 32,
+and any process IDs above nbproc are ignored. It is possible to specify all
+processes at once using &quot;all&quot;, only odd numbers using &quot;odd&quot; or even numbers
+using &quot;even&quot;, just like with the &quot;<a href="#bind-process">bind-process</a>&quot; directive. The second and
+forthcoming arguments are CPU sets. Each CPU set is either a unique number
+between 0 and 31 or a range with two such numbers delimited by a dash ('-').
+Multiple CPU numbers or ranges may be specified, and the processes will be
+allowed to bind to all of them. Obviously, multiple &quot;<a href="#cpu-map">cpu-map</a>&quot; directives may
+be specified. Each &quot;<a href="#cpu-map">cpu-map</a>&quot; directive will replace the previous ones when
+they overlap.</pre><a name="crt-base"></a><a name="3-crt-base"></a><a name="3.1-crt-base"></a><a name="crt-base (Global parameters)"></a><a name="crt-base (Process management and security)"></a><div class="keyword"><b><a name="crt-base"></a><a href="#3-crt-base">crt-base</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a default directory to fetch SSL certificates from when a relative
 path is used with &quot;crtfile&quot; directives. Absolute locations specified after
 &quot;crtfile&quot; prevail and ignore &quot;<a href="#crt-base">crt-base</a>&quot;.</pre><a name="daemon"></a><a name="3-daemon"></a><a name="3.1-daemon"></a><a name="daemon (Global parameters)"></a><a name="daemon (Process management and security)"></a><div class="keyword"><b><a name="daemon"></a><a href="#3-daemon">daemon</a></b></div><pre class="text">Makes the process fork into background. This is the recommended mode of
 operation. It is equivalent to the command line &quot;-D&quot; argument. It can be
@@ -1331,7 +1344,19 @@ order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
 Another use case is to prevent write timeouts with extremely slow clients due
 to the kernel waiting for a large part of the buffer to be read before
-notifying haproxy again.</pre><a name="tune.zlib.memlevel"></a><a name="3-tune.zlib.memlevel"></a><a name="3.2-tune.zlib.memlevel"></a><a name="tune.zlib.memlevel (Global parameters)"></a><a name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a name="tune.zlib.memlevel"></a><a href="#3-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
+notifying haproxy again.</pre><a name="tune.ssl.cachesize"></a><a name="3-tune.ssl.cachesize"></a><a name="3.2-tune.ssl.cachesize"></a><a name="tune.ssl.cachesize (Global parameters)"></a><a name="tune.ssl.cachesize (Performance tuning)"></a><div class="keyword"><b><a name="tune.ssl.cachesize"></a><a href="#3-tune.ssl.cachesize">tune.ssl.cachesize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the global SSL session cache, in number of sessions. Each
+entry uses approximately 600 bytes of memory. The default value may be forced
+at build time, otherwise defaults to 20000. When the cache is full, the most
+idle entries are purged and reassigned. Higher values reduce the occurrence
+of such a purge, hence the number of CPU-intensive SSL handshakes by ensuring
+that all users keep their session as long as possible. All entries are pre-
+allocated upon startup and are shared between all processes if &quot;<a href="#nbproc">nbproc</a>&quot; is
+greater than 1.</pre><a name="tune.ssl.lifetime"></a><a name="3-tune.ssl.lifetime"></a><a name="3.2-tune.ssl.lifetime"></a><a name="tune.ssl.lifetime (Global parameters)"></a><a name="tune.ssl.lifetime (Performance tuning)"></a><div class="keyword"><b><a name="tune.ssl.lifetime"></a><a href="#3-tune.ssl.lifetime">tune.ssl.lifetime</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets how long a cached SSL session may remain valid. This time is expressed
+in seconds and defaults to 300 (5 mn). It is important to understand that it
+does not guarantee that sessions will last that long, because if the cache is
+full, the longest idle sessions will be purged despite their configured
+lifetime. The real usefulness of this setting is to prevent sessions from
+being used for too long.</pre><a name="tune.zlib.memlevel"></a><a name="3-tune.zlib.memlevel"></a><a name="3.2-tune.zlib.memlevel"></a><a name="tune.zlib.memlevel (Global parameters)"></a><a name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a name="tune.zlib.memlevel"></a><a href="#3-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
 defines how much memory should be allocated for the intenal compression
 state. A value of 1 uses minimum memory but is slow and reduces compression
 ratio, a value of 9 uses maximum memory for optimal speed.  Can be a value
@@ -10458,6 +10483,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"cook_val",
 				"cookie (Proxies)",
 				"cookie (Bind and Server options)",
+				"cpu-map",
 				"crl-file",
 				"crt",
 				"crt-base",
@@ -10891,6 +10917,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.rcvbuf.server",
 				"tune.sndbuf.client",
 				"tune.sndbuf.server",
+				"tune.ssl.cachesize",
+				"tune.ssl.lifetime",
 				"tune.zlib.memlevel",
 				"tune.zlib.windowsize",
 				"uid (Global parameters)",
@@ -10986,7 +11014,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-266', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-270', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
