@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-270 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev12-275 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/16</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/19</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-270</strong></p>
+				<p><strong>version 1.5-dev12-275</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1304,14 +1304,16 @@ for all usages, considering that the widely deployed Apache server uses the
 same limit. It can be useful to push this limit further to temporarily allow
 a buggy application to work by the time it gets fixed. Keep in mind that each
 new header consumes 32bits of memory for each session, so don't push this
-limit too high.</pre><a name="tune.maxaccept"></a><a name="3-tune.maxaccept"></a><a name="3.2-tune.maxaccept"></a><a name="tune.maxaccept (Global parameters)"></a><a name="tune.maxaccept (Performance tuning)"></a><div class="keyword"><b><a name="tune.maxaccept"></a><a href="#3-tune.maxaccept">tune.maxaccept</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of consecutive accepts that a process may perform on
-a single wake up. High values give higher priority to high connection rates,
-while lower values give higher priority to already established connections.
-This value is limited to 100 by default in single process mode. However, in
-multi-process mode (nbproc &gt; 1), it defaults to 8 so that when one process
-wakes up, it does not take all incoming connections for itself and leaves a
-part of them to other processes. Setting this value to -1 completely disables
-the limitation. It should normally not be needed to tweak this value.</pre><a name="tune.maxpollevents"></a><a name="3-tune.maxpollevents"></a><a name="3.2-tune.maxpollevents"></a><a name="tune.maxpollevents (Global parameters)"></a><a name="tune.maxpollevents (Performance tuning)"></a><div class="keyword"><b><a name="tune.maxpollevents"></a><a href="#3-tune.maxpollevents">tune.maxpollevents</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of events that can be processed at once in a call to
+limit too high.</pre><a name="tune.maxaccept"></a><a name="3-tune.maxaccept"></a><a name="3.2-tune.maxaccept"></a><a name="tune.maxaccept (Global parameters)"></a><a name="tune.maxaccept (Performance tuning)"></a><div class="keyword"><b><a name="tune.maxaccept"></a><a href="#3-tune.maxaccept">tune.maxaccept</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of consecutive connections a process may accept in a
+row before switching to other work. In single process mode, higher numbers
+give better performance at high connection rates. However in multi-process
+modes, keeping a bit of fairness between processes generally is better to
+increase performance. This value applies individually to each listener, so
+that the number of processes a listener is bound to is taken into account.
+This value defaults to 64. In multi-process mode, it is divided by twice
+the number of processes the listener is bound to. Setting this value to -1
+completely disables the limitation. It should normally not be needed to tweak
+this value.</pre><a name="tune.maxpollevents"></a><a name="3-tune.maxpollevents"></a><a name="3.2-tune.maxpollevents"></a><a name="tune.maxpollevents (Global parameters)"></a><a name="tune.maxpollevents (Performance tuning)"></a><div class="keyword"><b><a name="tune.maxpollevents"></a><a href="#3-tune.maxpollevents">tune.maxpollevents</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of events that can be processed at once in a call to
 the polling system. The default value is adapted to the operating system. It
 has been noticed that reducing it below 200 tends to slightly decrease
 latency at the expense of network bandwidth, and increasing it above 200
@@ -11014,7 +11016,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-270', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-275', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
