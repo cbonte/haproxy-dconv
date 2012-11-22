@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev12-286 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev13 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,16 +63,16 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/21</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/22</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev12-286</strong></p>
+				<p><strong>version 1.5-dev13</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
-					2012/09/10
+					2012/11/22
 				</p>
 			</div>
 			
@@ -1097,6 +1097,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - tune.bufsize
    - tune.chksize
    - tune.comp.maxlevel
+   - tune.http.cookielen
    - tune.http.maxhdr
    - tune.maxaccept
    - tune.maxpollevents
@@ -1306,7 +1307,14 @@ build time. It is not recommended to change this value, but to use better
 checks whenever possible.</pre><a name="tune.comp.maxlevel"></a><a name="3-tune.comp.maxlevel"></a><a name="3.2-tune.comp.maxlevel"></a><a name="tune.comp.maxlevel (Global parameters)"></a><a name="tune.comp.maxlevel (Performance tuning)"></a><div class="keyword"><b><a name="tune.comp.maxlevel"></a><a href="#3-tune.comp.maxlevel">tune.comp.maxlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum compression level. The compression level affects CPU
 usage during compression. This value affects CPU usage during compression.
 Each session using compression initializes the compression algorithm with
-this value. The default value is 1.</pre><a name="tune.http.maxhdr"></a><a name="3-tune.http.maxhdr"></a><a name="3.2-tune.http.maxhdr"></a><a name="tune.http.maxhdr (Global parameters)"></a><a name="tune.http.maxhdr (Performance tuning)"></a><div class="keyword"><b><a name="tune.http.maxhdr"></a><a href="#3-tune.http.maxhdr">tune.http.maxhdr</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of headers in a request. When a request comes with a
+this value. The default value is 1.</pre><a name="tune.http.cookielen"></a><a name="3-tune.http.cookielen"></a><a name="3.2-tune.http.cookielen"></a><a name="tune.http.cookielen (Global parameters)"></a><a name="tune.http.cookielen (Performance tuning)"></a><div class="keyword"><b><a name="tune.http.cookielen"></a><a href="#3-tune.http.cookielen">tune.http.cookielen</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum length of captured cookies. This is the maximum value that
+the &quot;capture cookie xxx len yyy&quot; will be allowed to take, and any upper value
+will automatically be truncated to this one. It is important not to set too
+high a value because all cookie captures still allocate this size whatever
+their configured value (they share a same pool). This value is per request
+per response, so the memory allocated is twice this value per connection.
+When not specified, the limit is set to 63 characters. It is recommended not
+to change this value.</pre><a name="tune.http.maxhdr"></a><a name="3-tune.http.maxhdr"></a><a name="3.2-tune.http.maxhdr"></a><a name="tune.http.maxhdr (Global parameters)"></a><a name="tune.http.maxhdr (Performance tuning)"></a><div class="keyword"><b><a name="tune.http.maxhdr"></a><a href="#3-tune.http.maxhdr">tune.http.maxhdr</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of headers in a request. When a request comes with a
 number of headers greater than this value (including the first line), it is
 rejected with a &quot;400 Bad Request&quot; status code. Similarly, too large responses
 are blocked with &quot;502 Bad Gateway&quot;. The default value is 101, which is enough
@@ -2155,15 +2163,15 @@ server, a &quot;-&quot; is reported in the response column.
 The capture is performed in the frontend only because it is necessary that
 the log format does not change for a given frontend depending on the
 backends. This may change in the future. Note that there can be only one
-&quot;<a href="#capture cookie">capture cookie</a>&quot; statement in a frontend. The maximum capture length is
-configured in the sources by default to 64 characters. It is not possible to
-specify a capture in a &quot;defaults&quot; section.</pre><div class="separator">
+&quot;<a href="#capture cookie">capture cookie</a>&quot; statement in a frontend. The maximum capture length is set
+by the global &quot;<a href="#tune.http.cookielen">tune.http.cookielen</a>&quot; setting and defaults to 63 characters. It
+is not possible to specify a capture in a &quot;defaults&quot; section.</pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>capture cookie ASPSESSION len 32
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#capture request header">capture request header</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as <a href="#8">section 8</a> about logging.</div>
-<a name="capture"></a><a name="4-capture"></a><a name="4.2-capture"></a><a name="capture (Proxies)"></a><a name="capture (Alphabetically sorted keywords reference)"></a><a name="capture request"></a><a name="4-capture request"></a><a name="4.2-capture request"></a><a name="capture request (Proxies)"></a><a name="capture request (Alphabetically sorted keywords reference)"></a><a name="capture request header"></a><a name="4-capture request header"></a><a name="4.2-capture request header"></a><a name="capture request header (Proxies)"></a><a name="capture request header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="capture request header"></a><a href="#4-capture request header">capture request header</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log the first occurrence of the specified request header.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<a name="capture"></a><a name="4-capture"></a><a name="4.2-capture"></a><a name="capture (Proxies)"></a><a name="capture (Alphabetically sorted keywords reference)"></a><a name="capture request"></a><a name="4-capture request"></a><a name="4.2-capture request"></a><a name="capture request (Proxies)"></a><a name="capture request (Alphabetically sorted keywords reference)"></a><a name="capture request header"></a><a name="4-capture request header"></a><a name="4.2-capture request header"></a><a name="capture request header (Proxies)"></a><a name="capture request header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="capture request header"></a><a href="#4-capture request header">capture request header</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log the last occurrence of the specified request header.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td></tr>
 </table></div>
@@ -2178,7 +2186,7 @@ specify a capture in a &quot;defaults&quot; section.</pre><div class="separator"
           report in the logs. The string will be truncated on the right if
           it exceeds &lt;length&gt;.</pre>
 </div>
-<pre class="text">Only the first value of the last occurrence of the header is captured. The
+<pre class="text">The complete value of the last occurrence of the header is captured. The
 value will be added to the logs between braces ('{}'). If multiple headers
 are captured, they will be delimited by a vertical bar ('|') and will appear
 in the same order they were declared in the configuration. Non-existent
@@ -2193,10 +2201,11 @@ logged, making the log analysis more difficult. Thus be careful about what
 you log if you know your log parser is not smart enough to rely on the
 braces.
 
-There is no limit to the number of captured request headers, but each capture
-is limited to 64 characters. In order to keep log format consistent for a
-same frontend, header captures can only be declared in a frontend. It is not
-possible to specify a capture in a &quot;defaults&quot; section.</pre><div class="separator">
+There is no limit to the number of captured request headers nor to their
+length, though it is wise to keep them low to limit memory usage per session.
+In order to keep log format consistent for a same frontend, header captures
+can only be declared in a frontend. It is not possible to specify a capture
+in a &quot;defaults&quot; section.</pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>capture request header Host len 15
@@ -2204,7 +2213,7 @@ capture request header X-Forwarded-For len 15
 capture request header Referrer len 15
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#capture cookie">capture cookie</a>&quot;, &quot;<a href="#capture response header">capture response header</a>&quot; as well as <a href="#8">section 8</a> about logging.</div>
-<a name="capture"></a><a name="4-capture"></a><a name="4.2-capture"></a><a name="capture (Proxies)"></a><a name="capture (Alphabetically sorted keywords reference)"></a><a name="capture response"></a><a name="4-capture response"></a><a name="4.2-capture response"></a><a name="capture response (Proxies)"></a><a name="capture response (Alphabetically sorted keywords reference)"></a><a name="capture response header"></a><a name="4-capture response header"></a><a name="4.2-capture response header"></a><a name="capture response header (Proxies)"></a><a name="capture response header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="capture response header"></a><a href="#4-capture response header">capture response header</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log the first occurrence of the specified response header.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<a name="capture"></a><a name="4-capture"></a><a name="4.2-capture"></a><a name="capture (Proxies)"></a><a name="capture (Alphabetically sorted keywords reference)"></a><a name="capture response"></a><a name="4-capture response"></a><a name="4.2-capture response"></a><a name="capture response (Proxies)"></a><a name="capture response (Alphabetically sorted keywords reference)"></a><a name="capture response header"></a><a name="4-capture response header"></a><a name="4.2-capture response header"></a><a name="capture response header (Proxies)"></a><a name="capture response header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="capture response header"></a><a href="#4-capture response header">capture response header</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log the last occurrence of the specified response header.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td></tr>
 </table></div>
@@ -2219,7 +2228,7 @@ capture request header Referrer len 15
           report in the logs. The string will be truncated on the right if
           it exceeds &lt;length&gt;.</pre>
 </div>
-<pre class="text">Only the first value of the last occurrence of the header is captured. The
+<pre class="text">The complete value of the last occurrence of the header is captured. The
 result will be added to the logs between braces ('{}') after the captured
 request headers. If multiple headers are captured, they will be delimited by
 a vertical bar ('|') and will appear in the same order they were declared in
@@ -2228,10 +2237,11 @@ string. Common uses for response header captures include the &quot;Content-lengt
 header which indicates how many bytes are expected to be returned, the
 &quot;Location&quot; header to track redirections.
 
-There is no limit to the number of captured response headers, but each
-capture is limited to 64 characters. In order to keep log format consistent
-for a same frontend, header captures can only be declared in a frontend. It
-is not possible to specify a capture in a &quot;defaults&quot; section.</pre><div class="separator">
+There is no limit to the number of captured response headers nor to their
+length, though it is wise to keep them low to limit memory usage per session.
+In order to keep log format consistent for a same frontend, header captures
+can only be declared in a frontend. It is not possible to specify a capture
+in a &quot;defaults&quot; section.</pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>capture response header Content-length len 9
@@ -10073,7 +10083,10 @@ page. Both means provide a CSV format whose fields follow.
  47. req_rate_max: max number of HTTP requests per second observed
  48. req_tot: total number of HTTP requests received
  49. cli_abrt: number of data transfers aborted by the client
- 50. srv_abrt: number of data transfers aborted by the server (inc. in eresp)</pre></div>
+ 50. srv_abrt: number of data transfers aborted by the server (inc. in eresp)
+ 51. comp_in: number of HTTP response bytes fed to the compressor
+ 52. comp_out: number of HTTP response bytes emitted by the compressor
+ 53. comp_byp: number of bytes that bypassed the HTTP compressor (CPU/BW limit)</pre></div>
 <a name="9.2"></a>
 <h2 id="9.2"><small>9.2.</small> Unix Socket commands</h2>
 <div><pre class="text">The following commands are supported on the UNIX stats socket ; all of them
@@ -10931,6 +10944,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.bufsize",
 				"tune.chksize",
 				"tune.comp.maxlevel",
+				"tune.http.cookielen",
 				"tune.http.maxhdr",
 				"tune.maxaccept",
 				"tune.maxpollevents",
@@ -11037,7 +11051,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev12-286', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev13', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
