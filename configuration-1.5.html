@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev14 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev14-6 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -68,7 +68,7 @@
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev14</strong></p>
+				<p><strong>version 1.5-dev14-6</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -2317,7 +2317,9 @@ before the header is parsed, so that prevents haproxy from compressing. The
 
 Compression is disabled when:
   * the server is not HTTP/1.1.
+  * HTTP status code is not 200
   * requests does not contain Transfer-Encoding: chunked or Content-Length.
+  * Content-Type is multipart
   * the request contains &quot;Cache-control: no-transform&quot;.
   * User-Agent matches &quot;Mozilla/4&quot; except MSIE 6 with XP SP2, or MSIE 7 and later.
   * The response is already compressed (see compression offload).
@@ -11064,7 +11066,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14-6', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
