@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev13-31 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev14 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,16 +63,16 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/24</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/26</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev13-31</strong></p>
+				<p><strong>version 1.5-dev14</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
-					2012/11/22
+					2012/11/26
 				</p>
 			</div>
 			
@@ -10094,7 +10094,8 @@ page. Both means provide a CSV format whose fields follow.
  50. srv_abrt: number of data transfers aborted by the server (inc. in eresp)
  51. comp_in: number of HTTP response bytes fed to the compressor
  52. comp_out: number of HTTP response bytes emitted by the compressor
- 53. comp_byp: number of bytes that bypassed the HTTP compressor (CPU/BW limit)</pre></div>
+ 53. comp_byp: number of bytes that bypassed the HTTP compressor (CPU/BW limit)
+ 54. comp_rsp: number of HTTP responses that were compressed</pre></div>
 <a name="9.2"></a>
 <h2 id="9.2"><small>9.2.</small> Unix Socket commands</h2>
 <div><pre class="text">The following commands are supported on the UNIX stats socket ; all of them
@@ -10312,7 +10313,9 @@ This identifier is the first field at the beginning of the lines in the dumps
 of &quot;<a href="#show sess">show sess</a>&quot; (it corresponds to the session pointer). Those information are
 useless to most users but may be used by haproxy developers to troubleshoot a
 complex bug. The output format is intentionally not documented so that it can
-freely evolve depending on demands.</pre><a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show stat"></a><a name="9-show stat"></a><a name="9.2-show stat"></a><a name="show stat (Statistics and monitoring)"></a><a name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a name="show stat"></a><a href="#9-show stat">show stat</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span></div><pre class="text">Dump statistics in the CSV format. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is
+freely evolve depending on demands. The special id &quot;all&quot; dumps the states of
+all sessions, which can be avoided as much as possible as it is highly CPU
+intensive and can take a lot of time.</pre><a name="show"></a><a name="9-show"></a><a name="9.2-show"></a><a name="show (Statistics and monitoring)"></a><a name="show (Unix Socket commands)"></a><a name="show stat"></a><a name="9-show stat"></a><a name="9.2-show stat"></a><a name="show stat (Statistics and monitoring)"></a><a name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a name="show stat"></a><a href="#9-show stat">show stat</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span></div><pre class="text">Dump statistics in the CSV format. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is
 possible to dump only selected items :
   - &lt;iid&gt; is a proxy ID, -1 to dump everything
   - &lt;type&gt; selects the type of dumpable objects : 1 for frontends, 2 for
@@ -11061,7 +11064,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev13-31', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
