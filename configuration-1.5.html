@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev14-6 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev14-18 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/11/26</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/03</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev14-6</strong></p>
+				<p><strong>version 1.5-dev14-18</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -592,6 +592,19 @@ Note to documentation contributors :
 							<div class="tab">
 							<div class="tab">
 							<a href="#8.2.4">Custom log format</a>
+							</div>
+							</div>
+					</div>
+				</div>
+				
+			
+				
+				<div class="row-fluid">
+					<div class="span1 pagination-right noheight"><small>8.2.5.</small></div>
+					<div class="span11 noheight">
+							<div class="tab">
+							<div class="tab">
+							<a href="#8.2.5">Error log format</a>
 							</div>
 							</div>
 					</div>
@@ -2304,16 +2317,23 @@ offload  makes haproxy work as a compression offloader only (see notes).</pre>
 
 Compression will be activated depending on the Accept-Encoding request
 header. With identity, it does not take care of that header.
+If backend servers support HTTP compression, these directives
+will be no-op: haproxy will see the compressed response and will not
+compress again. If backend servers do not support HTTP compression and
+there is Accept-Encoding header in request, haproxy will compress the
+matching response.
 
 The &quot;offload&quot; setting makes haproxy remove the Accept-Encoding header to
 prevent backend servers from compressing responses. It is strongly
 recommended not to do this because this means that all the compression work
 will be done on the single point where haproxy is located. However in some
 deployment scenarios, haproxy may be installed in front of a buggy gateway
-and need to prevent it from emitting invalid payloads. In this case, simply
-removing the header in the configuration does not work because it applies
-before the header is parsed, so that prevents haproxy from compressing. The
-&quot;offload&quot; setting should then be used for such scenarios.
+with broken HTTP compression implementation which can't be turned off.
+In that case haproxy can be used to prevent that gateway from emitting
+invalid payloads. In this case, simply removing the header in the
+configuration does not work because it applies before the header is parsed,
+so that prevents haproxy from compressing. The &quot;offload&quot; setting should
+then be used for such scenarios.
 
 Compression is disabled when:
   * the server is not HTTP/1.1.
@@ -9318,6 +9338,30 @@ Please refer to the table below for currently defined variables :</pre><table cl
 <tr><td None></td><td None>%ts</td><td None>termination_state</td><td None>string</td></tr>
 <tr><td None>H</td><td None>%tsc</td><td None>termination_state with cookie status</td><td None>string</td></tr>
 </table><pre class="text">R = Restrictions : H = mode http only ; S = SSL only</pre></div>
+<a name="8.2.5"></a>
+<h3 id="8.2.5"><small>8.2.5.</small> Error log format</h3>
+<div><pre class="text">When an incoming connection fails due to an SSL handshake or an invalid PROXY
+protocol header, haproxy will log the event using a shorter, fixed line format.
+By default, logs are emitted at the LOG_INFO level, unless the option
+&quot;<a href="#option log-separate-errors">log-separate-errors</a>&quot; is set in the backend, in which case the LOG_ERR level
+will be used. Connections on which no data are exchanged (eg: probes) are not
+logged if the &quot;<a href="#option dontlognull">dontlognull</a>&quot; option is set.
+
+The format looks like this :
+
+    &gt;&gt;&gt; Dec  3 18:27:14 localhost \
+          haproxy[6103]: 127.0.0.1:56059 [03/Dec/2012:17:35:10.380] frt/f1: \
+          Connection error during SSL handshake
+
+  Field   Format                                Extract from the example above
+      1   process_name '[' pid ']:'                             haproxy[6103]:
+      2   client_ip ':' client_port                            127.0.0.1:56059
+      3   '[' accept_date ']'                       [03/Dec/2012:17:35:10.380]
+      4   frontend_name &quot;/&quot; bind_name &quot;:&quot;                              frt/f1:
+      5   message                        Connection error during SSL handshake
+
+These fields just provide minimal information to help debugging connection
+failures.</pre></div>
 <a name="8.3"></a>
 <h2 id="8.3"><small>8.3.</small> Advanced logging options</h2>
 <div><pre class="text">Some advanced logging options are often looked for but are not easy to find out
@@ -11066,7 +11110,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14-6', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14-18', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
