@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev14-22 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev14-24 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/04</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/06</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev14-22</strong></p>
+				<p><strong>version 1.5-dev14-24</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -7680,6 +7680,18 @@ backend dynamic
     acl being_scanned be_sess_rate gt 100
     redirect location /denied.html if being_scanned
 </code></pre>
+</div><a name="srv_sess_rate"></a><a name="7-srv_sess_rate"></a><a name="7.5.1-srv_sess_rate"></a><a name="srv_sess_rate (Using ACLs and pattern extraction)"></a><a name="srv_sess_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="srv_sess_rate"></a><a href="#7-srv_sess_rate">srv_sess_rate</a></b>(<span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the sessions creation rate on the server matches the
+specified values or ranges, in number of new sessions per second. This is
+used to switch to an alternate backend when an expensive or fragile one
+reaches too high a session rate, or to limit abuse of service (eg. prevent
+latent requests from overloading servers).</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># Redirect to a separate back</span>
+acl srv1_full srv_sess_rate(be1/srv1) gt 50
+acl srv2_full srv_sess_rate(be1/srv2) gt 50
+use_backend be2 if srv1_full or srv2_full
+</code></pre>
 </div><a name="connslots"></a><a name="7-connslots"></a><a name="7.5.1-connslots"></a><a name="connslots (Using ACLs and pattern extraction)"></a><a name="connslots (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="connslots"></a><a href="#7-connslots">connslots</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a name="connslots"></a><a name="7-connslots"></a><a name="7.5.1-connslots"></a><a name="connslots (Using ACLs and pattern extraction)"></a><a name="connslots (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="connslots"></a><a href="#7-connslots">connslots</a></b>(<span style="color: #080">&lt;backend&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">The basic idea here is to be able to measure the number of connection &quot;slots&quot;
 still available (connection + queue), so that anything beyond that (intended
 usage; see &quot;<a href="#use_backend">use_backend</a>&quot; keyword) can be redirected to a different backend.
@@ -10918,6 +10930,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"srv_conn",
 				"srv_id",
 				"srv_is_up",
+				"srv_sess_rate",
 				"srvtimeout",
 				"ssl",
 				"ssl_c_ca_err",
@@ -11112,7 +11125,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14-22', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14-24', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
