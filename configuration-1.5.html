@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev14-24 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev14-41 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/06</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/09</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev14-24</strong></p>
+				<p><strong>version 1.5-dev14-41</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -6185,9 +6185,12 @@ Three types of actions are supported :
       the per-frontend counters and the second set for the per-backend ones.
 
       These actions take one or two arguments :
-        &lt;key&gt;   is mandatory, and defines the criterion the tracking key will
-                be derived from. At the moment, only &quot;<a href="#src">src</a>&quot; is supported. With
-                it, the key will be the connection's source IPv4 address.
+        &lt;key&gt;   is mandatory, and is a pattern extraction rule as described
+                in <a href="#7.8">section 7.8</a>. It describes what elements of the incoming
+                request or connection will be analysed, extracted, combined,
+                and used to select which table entry to update the counters.
+                Note that &quot;<a href="#tcp-request connection">tcp-request connection</a>&quot; cannot use content-based
+                fetches.
 
        &lt;table&gt;  is an optional table to be used instead of the default one,
                 which is the stick-table declared in the current proxy. All
@@ -6199,6 +6202,11 @@ Three types of actions are supported :
       that entry is kept during all the session's life, and this entry's
       counters are updated as often as possible, every time the session's
       counters are updated, and also systematically when the session ends.
+      Counters are only updated for events that happen after the tracking has
+      been started. For example, connection counters will not be updated when
+      tracking layer 7 information, since the connection event happens before
+      layer7 information is extracted.
+
       If the entry tracks concurrent connection counters, one connection is
       counted for as long as the entry is tracked, and the entry will not
       expire during that time. Tracking counters also provides a performance
@@ -6265,9 +6273,12 @@ so please refer to that section for a complete description.
 Also, it is worth noting that if sticky counters are tracked from a rule
 defined in a backend, this tracking will automatically end when the session
 releases the backend. That allows per-backend counter tracking even in case
-of HTTP keep-alive requests when the backend changes. While there is nothing
-mandatory about it, it is recommended to use the track-sc1 pointer to track
-per-frontend counters and track-sc2 to track per-backend counters.
+of HTTP keep-alive requests when the backend changes. This makes a subtle
+difference because tracking rules in &quot;frontend&quot; and &quot;listen&quot; section last for
+all the session, as opposed to the backend rules. The difference appears when
+some layer 7 information is tracked. While there is nothing mandatory about
+it, it is recommended to use the track-sc1 pointer to track per-frontend
+counters and track-sc2 to track per-backend counters.
 
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
@@ -6278,7 +6289,12 @@ rules, since HTTP-specific ACL matches are able to preliminarily parse the
 contents of a buffer before extracting the required data. If the buffered
 contents do not parse as a valid HTTP message, then the ACL does not match.
 The parser which is involved there is exactly the same as for all other HTTP
-processing, so there is no risk of parsing something differently.</pre><div class="separator">
+processing, so there is no risk of parsing something differently.
+
+Tracking layer7 information is also possible provided that the information
+are present when the rule is processed. The current solution for making the
+rule engine wait for such information is to set an inspect delay and to
+condition its execution with an ACL relying on such information.</pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code><span class="comment"># Accept HTTP requests containing a Host header saying &quot;example.com&quot;</span>
@@ -6301,6 +6317,20 @@ tcp-request inspect-delay 30s
 acl content_present req_len gt 0
 tcp-request content accept if content_present
 tcp-request content reject
+</code></pre>
+</div><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># Track the last IP from X-Forwarded-For</span>
+tcp-request inspect-delay 10s
+tcp-request content track-sc1 hdr(x-forwarded-for,-1) if HTTP
+</code></pre>
+</div><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># track request counts per &quot;<a href="#base">base</a>&quot; (concatenation of Host+URL)</span>
+tcp-request inspect-delay 10s
+tcp-request content track-sc1 base table req-rate if HTTP
 </code></pre>
 </div><div class="separator">
 <span class="label label-success">Example:</span>
@@ -7813,7 +7843,12 @@ measured in amount of sessions over the period configured in the table. A
 session is a connection that got past the early &quot;<a href="#tcp-request connection">tcp-request connection</a>&quot;
 rules. A backend may count more sessions than connections because each
 connection could result in many backend sessions if some HTTP keep-alive is
-performed over the connection with the client. See also src_sess_rate.</pre><a name="so_id"></a><a name="7-so_id"></a><a name="7.5.1-so_id"></a><a name="so_id (Using ACLs and pattern extraction)"></a><a name="so_id (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="so_id"></a><a href="#7-so_id">so_id</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Applies to the socket's id. Useful in frontends with many bind keywords.</pre><a name="src"></a><a name="7-src"></a><a name="7.5.1-src"></a><a name="src (Using ACLs and pattern extraction)"></a><a name="src (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="src"></a><a href="#7-src">src</a></b> <span style="color: #080">&lt;ip_address&gt;</span></div><pre class="text">Applies to the client's IPv4 or IPv6 address. It is usually used to limit
+performed over the connection with the client. See also src_sess_rate.</pre><a name="sc1_trackers"></a><a name="7-sc1_trackers"></a><a name="7.5.1-sc1_trackers"></a><a name="sc1_trackers (Using ACLs and pattern extraction)"></a><a name="sc1_trackers (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="sc1_trackers"></a><a href="#7-sc1_trackers">sc1_trackers</a></b></div><a name="sc2_trackers"></a><a name="7-sc2_trackers"></a><a name="7.5.1-sc2_trackers"></a><a name="sc2_trackers (Using ACLs and pattern extraction)"></a><a name="sc2_trackers (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="sc2_trackers"></a><a href="#7-sc2_trackers">sc2_trackers</a></b></div><pre class="text">Returns the current amount of concurrent connections tracking the same
+tracked counters. This number is automatically incremented when tracking
+begins and decremented when tracking stops. It differs from sc1_conn_cur in
+that it does not rely on any stored information but on the table's reference
+count (the &quot;use&quot; value which is returned by &quot;<a href="#show table">show table</a>&quot; on the CLI). This
+may sometimes be more suited for layer7 tracking.</pre><a name="so_id"></a><a name="7-so_id"></a><a name="7.5.1-so_id"></a><a name="so_id (Using ACLs and pattern extraction)"></a><a name="so_id (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="so_id"></a><a href="#7-so_id">so_id</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Applies to the socket's id. Useful in frontends with many bind keywords.</pre><a name="src"></a><a name="7-src"></a><a name="7.5.1-src"></a><a name="src (Using ACLs and pattern extraction)"></a><a name="src (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="src"></a><a href="#7-src">src</a></b> <span style="color: #080">&lt;ip_address&gt;</span></div><pre class="text">Applies to the client's IPv4 or IPv6 address. It is usually used to limit
 access to certain resources such as statistics. Note that it is the TCP-level
 source address which is used, and not the address of a client behind a proxy.</pre><a name="src_bytes_in_rate"></a><a name="7-src_bytes_in_rate"></a><a name="7.5.1-src_bytes_in_rate"></a><a name="src_bytes_in_rate (Using ACLs and pattern extraction)"></a><a name="src_bytes_in_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="src_bytes_in_rate"></a><a href="#7-src_bytes_in_rate">src_bytes_in_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a name="src_bytes_in_rate"></a><a name="7-src_bytes_in_rate"></a><a name="7.5.1-src_bytes_in_rate"></a><a name="src_bytes_in_rate (Using ACLs and pattern extraction)"></a><a name="src_bytes_in_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="src_bytes_in_rate"></a><a href="#7-src_bytes_in_rate">src_bytes_in_rate</a></b>(<span style="color: #080">&lt;table&gt;</span>) <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average bytes rate from the connection's source IPv4 address in
 the current proxy's stick-table or in the designated stick-table, measured in
@@ -8413,6 +8448,17 @@ The list of currently supported pattern fetch functions is the following :
                shared caches efficiency. Using this with a limited size stick
                table also allows one to collect statistics about most commonly
                requested objects by host/path.
+
+  base32       This returns a 32-bit hash of the value returned by the &quot;<a href="#base">base</a>&quot;
+               fetch method above. This is useful to track per-URL activity on
+               high traffic sites without having to store all URLs. Instead a
+               shorter hash is stored, saving a lot of memory. The output type
+               is an unsigned integer.
+
+  base32+src   This returns the concatenation of the base32 fetch above and the
+               src fetch below. The resulting type is of type binary, with a
+               size of 8 or 20 bytes depending on the source address family.
+               This can be used to track per-IP, per-URL counters.
 
   src          This is the source IPv4 address of the client of the session.
                It is of type IPv4 and works on both IPv4 and IPv6 tables.
@@ -10862,6 +10908,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc1_kbytes_out",
 				"sc1_sess_cnt",
 				"sc1_sess_rate",
+				"sc1_trackers",
 				"sc2_bytes_in_rate",
 				"sc2_bytes_out_rate",
 				"sc2_clr_gpc0",
@@ -10878,6 +10925,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc2_kbytes_out",
 				"sc2_sess_cnt",
 				"sc2_sess_rate",
+				"sc2_trackers",
 				"send-proxy",
 				"server",
 				"set",
@@ -11125,7 +11173,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14-24', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev14-41', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
