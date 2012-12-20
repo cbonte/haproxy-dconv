@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev15 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev15-20 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/12</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/20</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev15</strong></p>
+				<p><strong>version 1.5-dev15-20</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -8054,7 +8054,8 @@ the string formatted as YYMMDDhhmmss[Z].</pre><a name="ssl_c_s_dn"></a><a name="
 layer, and the serial of the certificate presented by the client matches
 the value written in hexa.</pre><a name="ssl_c_sig_alg"></a><a name="7-ssl_c_sig_alg"></a><a name="7.5.2-ssl_c_sig_alg"></a><a name="ssl_c_sig_alg (Using ACLs and pattern extraction)"></a><a name="ssl_c_sig_alg (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_c_sig_alg"></a><a href="#7-ssl_c_sig_alg">ssl_c_sig_alg</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
 layer, and the name of the algorithm used to sign the certificate presented
-by the client matches the string.</pre><a name="ssl_c_verify"></a><a name="7-ssl_c_verify"></a><a name="7.5.2-ssl_c_verify"></a><a name="ssl_c_verify (Using ACLs and pattern extraction)"></a><a name="ssl_c_verify (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_c_verify"></a><a href="#7-ssl_c_verify">ssl_c_verify</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
+by the client matches the string.</pre><a name="ssl_c_used"></a><a name="7-ssl_c_used"></a><a name="7.5.2-ssl_c_used"></a><a name="ssl_c_used (Using ACLs and pattern extraction)"></a><a name="ssl_c_used (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_c_used"></a><a href="#7-ssl_c_used">ssl_c_used</a></b></div><pre class="text">Returns true if current SSL session uses a client certificate even if current
+connection uses SSL session resumption. See also &quot;<a href="#ssl_fc_has_crt">ssl_fc_has_crt</a>&quot;.</pre><a name="ssl_c_verify"></a><a name="7-ssl_c_verify"></a><a name="7.5.2-ssl_c_verify"></a><a name="ssl_c_verify (Using ACLs and pattern extraction)"></a><a name="ssl_c_verify (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_c_verify"></a><a href="#7-ssl_c_verify">ssl_c_verify</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
 layer, and the verify result matches the specified value (check man verify
 for possible values). Zero indicates no error was detected.</pre><a name="ssl_c_version"></a><a name="7-ssl_c_version"></a><a name="7.5.2-ssl_c_version"></a><a name="ssl_c_version (Using ACLs and pattern extraction)"></a><a name="ssl_c_version (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_c_version"></a><a href="#7-ssl_c_version">ssl_c_version</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
 layer, and the version of the certificate presented by the client matches
@@ -8091,7 +8092,11 @@ layer and is locally deciphered. This means it has matched a socket declared
 with a &quot;<a href="#bind">bind</a>&quot; line having the &quot;<a href="#ssl">ssl</a>&quot; option.</pre><a name="ssl_fc_alg_keysize"></a><a name="7-ssl_fc_alg_keysize"></a><a name="7.5.2-ssl_fc_alg_keysize"></a><a name="ssl_fc_alg_keysize (Using ACLs and pattern extraction)"></a><a name="ssl_fc_alg_keysize (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_fc_alg_keysize"></a><a href="#7-ssl_fc_alg_keysize">ssl_fc_alg_keysize</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
 layer and the symmetric cipher key size supported in bits matches the value.</pre><a name="ssl_fc_cipher"></a><a name="7-ssl_fc_cipher"></a><a name="7.5.2-ssl_fc_cipher"></a><a name="ssl_fc_cipher (Using ACLs and pattern extraction)"></a><a name="ssl_fc_cipher (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_fc_cipher"></a><a href="#7-ssl_fc_cipher">ssl_fc_cipher</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">returns true when the incoming connection was made over an ssl/tls transport
 layer and the name of the used cipher matches the string.</pre><a name="ssl_fc_has_crt"></a><a name="7-ssl_fc_has_crt"></a><a name="7.5.2-ssl_fc_has_crt"></a><a name="ssl_fc_has_crt (Using ACLs and pattern extraction)"></a><a name="ssl_fc_has_crt (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_fc_has_crt"></a><a href="#7-ssl_fc_has_crt">ssl_fc_has_crt</a></b></div><pre class="text">Returns true if a client certificate is present in an incoming connection over
-SSL/TLS transport layer. Useful if 'verify' statement is set to 'optional'.</pre><a name="ssl_fc_has_sni"></a><a name="7-ssl_fc_has_sni"></a><a name="7.5.2-ssl_fc_has_sni"></a><a name="ssl_fc_has_sni (Using ACLs and pattern extraction)"></a><a name="ssl_fc_has_sni (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_fc_has_sni"></a><a href="#7-ssl_fc_has_sni">ssl_fc_has_sni</a></b></div><pre class="text">This is used to check for presence of a Server Name Indication TLS extension
+SSL/TLS transport layer. Useful if 'verify' statement is set to 'optional'.
+Note: on SSL session resumption with Session ID or TLS ticket, client
+certificate is not present in the current connection but may be retrieved
+from the cache or the ticket. So prefer &quot;<a href="#ssl_c_used">ssl_c_used</a>&quot; if you want to check if
+current SSL session uses a client certificate.</pre><a name="ssl_fc_has_sni"></a><a name="7-ssl_fc_has_sni"></a><a name="7.5.2-ssl_fc_has_sni"></a><a name="ssl_fc_has_sni (Using ACLs and pattern extraction)"></a><a name="ssl_fc_has_sni (Matching contents at Layer 4)"></a><div class="keyword"><b><a name="ssl_fc_has_sni"></a><a href="#7-ssl_fc_has_sni">ssl_fc_has_sni</a></b></div><pre class="text">This is used to check for presence of a Server Name Indication TLS extension
 in an incoming connection was made over an SSL/TLS transport layer. Returns
 true when the incoming connection presents a TLS SNI field. This requires
 that the SSL library is build with support for TLS extensions enabled (check
@@ -8572,6 +8577,10 @@ The list of currently supported pattern fetch functions is the following :
                presented by the client when the incoming connection was made
                over an SSL/TLS transport layer.
 
+  ssl_c_used
+               Returns 1 if current SSL session use a client certificate,
+               otherwise 0. See also &quot;<a href="#ssl_fc_has_crt">ssl_fc_has_crt</a>&quot;.
+
   ssl_c_verify Returns the verify result errorID when the incoming connection
                was made over an SSL/TLS transport layer, otherwise zero if no
                error is encountered.
@@ -8649,6 +8658,11 @@ The list of currently supported pattern fetch functions is the following :
   ssl_fc_has_crt
                Returns 1 if a client certificate is present in the front
                connection over SSL/TLS transport layer, otherwise 0.
+               Note: on SSL session resumption with Session ID or TLS ticket,
+               client certificate is not present in the current connection but
+               may be retrieved from the cache or the ticket. So prefer
+               &quot;<a href="#ssl_c_used">ssl_c_used</a>&quot; if you want to check if current SSL session uses
+               a client certificate.
 
   ssl_fc_has_sni
                This checks the transport layer used by the front connection, and
@@ -9370,6 +9384,7 @@ Please refer to the table below for currently defined variables :</pre><table cl
 <tr><td None></td><td None>%Ts</td><td None>timestamp</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%Tt</td><td None>Tt</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%Tw</td><td None>Tw</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%U</td><td None>bytes_uploaded (from client to server)</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%ac</td><td None>actconn</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%b</td><td None>backend_name</td><td None>string</td></tr>
 <tr><td None></td><td None>%bc</td><td None>beconn</td><td None>numeric</td></tr>
@@ -10991,6 +11006,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl_c_s_dn",
 				"ssl_c_serial",
 				"ssl_c_sig_alg",
+				"ssl_c_used",
 				"ssl_c_verify",
 				"ssl_c_version",
 				"ssl_f_i_dn",
@@ -11173,7 +11189,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev15', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev15-20', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
