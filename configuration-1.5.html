@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev15-20 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev15-28 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/20</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/21</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev15-20</strong></p>
+				<p><strong>version 1.5-dev15-28</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -9323,7 +9323,7 @@ Detailed fields description :
     is the reason why this field must always remain the last one.</pre></div>
 <a name="8.2.4"></a>
 <h3 id="8.2.4"><small>8.2.4.</small> Custom log format</h3>
-<div><pre class="text">The directive log-format allows you to custom the logs in http mode and tcp
+<div><pre class="text">The directive log-format allows you to customize the logs in http mode and tcp
 mode. It takes a string as argument.
 
 HAproxy understands some log format variables. % precedes log format variables.
@@ -9334,6 +9334,11 @@ prefixing them with a '+' or '-' sign.
 Special variable &quot;%o&quot; may be used to propagate its flags to all other
 variables on the same format string. This is particularly handy with quoted
 string formats (&quot;Q&quot;).
+
+If a variable is named between square brackets ('[' .. ']') then it is used
+as a pattern extraction rule (see <a href="#7.8">section 7.8</a>). This it useful to add some
+less common information such as the client's SSL certificate's DN, or to log
+the key that would be used to store an entry into a stick table.
 
 Note: spaces must be escaped. A space character is considered as a separator.
 HAproxy will automatically merge consecutive separators.
@@ -9348,34 +9353,29 @@ log-format %{+Q}o\ %t\ %s\ %{-Q}r
 </code></pre>
 </div><pre class="text">At the moment, the default HTTP format is defined this way :
 
-    log-format %Ci:%Cp\ [%t]\ %ft\ %b/%s\ %Tq/%Tw/%Tc/%Tr/%Tt\ %st\ %B\ %cc\ \
-               %cs\ %tsc\ %ac/%fc/%bc/%sc/%rc\ %sq/%bq\ %hr\ %hs\ %{+Q}r
+    log-format %ci:%cp\ [%t]\ %ft\ %b/%s\ %Tq/%Tw/%Tc/%Tr/%Tt\ %ST\ %B\ %CC\ \
+               %CS\ %tsc\ %ac/%fc/%bc/%sc/%rc\ %sq/%bq\ %hr\ %hs\ %{+Q}r
 
 the default CLF format is defined this way :
 
-    log-format %{+Q}o\ %{-Q}Ci\ -\ -\ [%T]\ %r\ %st\ %B\ \&quot;\&quot;\ \&quot;\&quot;\ %Cp\ \
+    log-format %{+Q}o\ %{-Q}ci\ -\ -\ [%T]\ %r\ %ST\ %B\ \&quot;\&quot;\ \&quot;\&quot;\ %cp\ \
                %ms\ %ft\ %b\ %s\ \%Tq\ %Tw\ %Tc\ %Tr\ %Tt\ %tsc\ %ac\ %fc\ \
-               %bc\ %sc\ %rc\ %sq\ %bq\ %cc\ %cs\ \%hrl\ %hsl
+               %bc\ %sc\ %rc\ %sq\ %bq\ %CC\ %CS\ \%hrl\ %hsl
 
 and the default TCP format is defined this way :
 
-    log-format %Ci:%Cp\ [%t]\ %ft\ %b/%s\ %Tw/%Tc/%Tt\ %B\ %ts\ \
+    log-format %ci:%cp\ [%t]\ %ft\ %b/%s\ %Tw/%Tc/%Tt\ %B\ %ts\ \
                %ac/%fc/%bc/%sc/%rc\ %sq/%bq
 
 Please refer to the table below for currently defined variables :</pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>R</th><th>var</th><th>field name (8.2.2 and 8.2.3 for description)</th><th>type</th></tr></thead>
 <tr><td None></td><td None>%o</td><td None>special variable, apply flags on all next var</td><td None></td></tr>
-<tr><td None></td><td None>%B</td><td None>bytes_read</td><td None>numeric</td></tr>
-<tr><td None></td><td None>%Ci</td><td None>client_ip</td><td None>IP</td></tr>
-<tr><td None></td><td None>%Cp</td><td None>client_port</td><td None>numeric</td></tr>
-<tr><td None></td><td None>%Bi</td><td None>backend_source_ip</td><td None>IP</td></tr>
-<tr><td None></td><td None>%Bp</td><td None>backend_source_port</td><td None>numeric</td></tr>
-<tr><td None></td><td None>%Fi</td><td None>frontend_ip</td><td None>IP</td></tr>
-<tr><td None></td><td None>%Fp</td><td None>frontend_port</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%B</td><td None>bytes_read           (from server to client)</td><td None>numeric</td></tr>
+<tr><td None>H</td><td None>%CC</td><td None>captured_request_cookie</td><td None>string</td></tr>
+<tr><td None>H</td><td None>%CS</td><td None>captured_response_cookie</td><td None>string</td></tr>
 <tr><td None></td><td None>%H</td><td None>hostname</td><td None>string</td></tr>
 <tr><td None></td><td None>%ID</td><td None>unique-id</td><td None>string</td></tr>
-<tr><td None></td><td None>%Si</td><td None>server_IP</td><td None>IP</td></tr>
-<tr><td None></td><td None>%Sp</td><td None>server_port</td><td None>numeric</td></tr>
+<tr><td None>H</td><td None>%ST</td><td None>status_code</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%T</td><td None>gmt_date_time</td><td None>date</td></tr>
 <tr><td None></td><td None>%Tc</td><td None>Tc</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%Tl</td><td None>local_date_time</td><td None>date</td></tr>
@@ -9384,17 +9384,20 @@ Please refer to the table below for currently defined variables :</pre><table cl
 <tr><td None></td><td None>%Ts</td><td None>timestamp</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%Tt</td><td None>Tt</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%Tw</td><td None>Tw</td><td None>numeric</td></tr>
-<tr><td None></td><td None>%U</td><td None>bytes_uploaded (from client to server)</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%U</td><td None>bytes_uploaded       (from client to server)</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%ac</td><td None>actconn</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%b</td><td None>backend_name</td><td None>string</td></tr>
-<tr><td None></td><td None>%bc</td><td None>beconn</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%bc</td><td None>beconn      (backend concurrent connections)</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%bi</td><td None>backend_source_ip       (connecting address)</td><td None>IP</td></tr>
+<tr><td None></td><td None>%bp</td><td None>backend_source_port     (connecting address)</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%bq</td><td None>backend_queue</td><td None>numeric</td></tr>
-<tr><td None>H</td><td None>%cc</td><td None>captured_request_cookie</td><td None>string</td></tr>
-<tr><td None>H</td><td None>%rt</td><td None>http_request_counter</td><td None>numeric</td></tr>
-<tr><td None>H</td><td None>%cs</td><td None>captured_response_cookie</td><td None>string</td></tr>
+<tr><td None></td><td None>%ci</td><td None>client_ip                 (accepted address)</td><td None>IP</td></tr>
+<tr><td None></td><td None>%cp</td><td None>client_port               (accepted address)</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%f</td><td None>frontend_name</td><td None>string</td></tr>
+<tr><td None></td><td None>%fc</td><td None>feconn     (frontend concurrent connections)</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%fi</td><td None>frontend_ip              (accepting address)</td><td None>IP</td></tr>
+<tr><td None></td><td None>%fp</td><td None>frontend_port            (accepting address)</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%ft</td><td None>frontend_name_transport ('~' suffix for SSL)</td><td None>string</td></tr>
-<tr><td None></td><td None>%fc</td><td None>feconn</td><td None>numeric</td></tr>
 <tr><td None>H</td><td None>%hr</td><td None>captured_request_headers default style</td><td None>string</td></tr>
 <tr><td None>H</td><td None>%hrl</td><td None>captured_request_headers CLF style</td><td None>string list</td></tr>
 <tr><td None>H</td><td None>%hs</td><td None>captured_response_headers default style</td><td None>string</td></tr>
@@ -9403,13 +9406,15 @@ Please refer to the table below for currently defined variables :</pre><table cl
 <tr><td None></td><td None>%pid</td><td None>PID</td><td None>numeric</td></tr>
 <tr><td None>H</td><td None>%r</td><td None>http_request</td><td None>string</td></tr>
 <tr><td None></td><td None>%rc</td><td None>retries</td><td None>numeric</td></tr>
+<tr><td None>H</td><td None>%rt</td><td None>http_request_counter</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%s</td><td None>server_name</td><td None>string</td></tr>
-<tr><td None></td><td None>%sc</td><td None>srv_conn</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%sc</td><td None>srv_conn     (server concurrent connections)</td><td None>numeric</td></tr>
+<tr><td None></td><td None>%si</td><td None>server_IP                   (target address)</td><td None>IP</td></tr>
+<tr><td None></td><td None>%sp</td><td None>server_port                 (target address)</td><td None>numeric</td></tr>
 <tr><td None></td><td None>%sq</td><td None>srv_queue</td><td None>numeric</td></tr>
 <tr><td None>S</td><td None>%sslc</td><td None>ssl_ciphers (ex: AES-SHA)</td><td None>string</td></tr>
 <tr><td None>S</td><td None>%sslv</td><td None>ssl_version (ex: TLSv1)</td><td None>string</td></tr>
-<tr><td None>H</td><td None>%st</td><td None>status_code</td><td None>numeric</td></tr>
-<tr><td None></td><td None>%t</td><td None>date_time</td><td None>date</td></tr>
+<tr><td None></td><td None>%t</td><td None>date_time      (with millisecond resolution)</td><td None>date</td></tr>
 <tr><td None></td><td None>%ts</td><td None>termination_state</td><td None>string</td></tr>
 <tr><td None>H</td><td None>%tsc</td><td None>termination_state with cookie status</td><td None>string</td></tr>
 </table><pre class="text">R = Restrictions : H = mode http only ; S = SSL only</pre></div>
@@ -11189,7 +11194,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev15-20', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev15-28', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
