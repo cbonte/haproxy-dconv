@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev15-28 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev15-40 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/21</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-5</b> on <b>2012/12/24</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev15-28</strong></p>
+				<p><strong>version 1.5-dev15-40</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -2964,20 +2964,52 @@ no specific order some values available in the stats interface :
 Example of a header received by the application server :
   &gt;&gt;&gt;  X-Haproxy-Server-State: UP 2/3; name=bck/srv2; node=lb1; weight=1/2; \
          scur=13/22; qcur=0</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check disable-on-404">http-check disable-on-404</a>&quot;</div>
-<a name="http-request"></a><a name="4-http-request"></a><a name="4.2-http-request"></a><a name="http-request (Proxies)"></a><a name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="http-request"></a><a href="#4-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> }</span>
+<a name="http-request"></a><a name="4-http-request"></a><a name="4.2-http-request"></a><a name="http-request (Proxies)"></a><a name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="http-request"></a><a href="#4-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> |
+              add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> }</span>
              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 requests</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
-<pre class="text">These set of options allow to fine control access to a
-frontend/listen/backend. Each option may be followed by if/unless and acl.
-First option with matched condition (or option without condition) is final.
-For &quot;deny&quot; a 403 error will be returned, for &quot;allow&quot; normal processing is
-performed, for &quot;auth&quot; a 401/407 error code is returned so the client
-should be asked to enter a username and password.
+<pre class="text">The http-request statement defines a set of rules which apply to layer 7
+processing. The rules are evaluated in their declaration order when they are
+met in a frontend, listen or backend section. Any rule may optionally be
+followed by an ACL-based condition, in which case it will only be evaluated
+if the condition is true.
 
-There is no fixed limit to the number of http-request statements per
-instance.</pre><div class="separator">
+The first keyword is the rule's action. Currently supported actions include :
+  - &quot;allow&quot; : this stops the evaluation of the rules and lets the request
+    pass the check. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated.
+
+  - &quot;deny&quot; : this stops the evaluation of the rules and immediately rejects
+    the request and emits an HTTP 403 error. No further &quot;<a href="#http-request">http-request</a>&quot; rules
+    are evaluated.
+
+  - &quot;auth&quot; : this stops the evaluation of the rules and immediately responds
+    with an HTTP 401 or 407 error code to invite the user to present a valid
+    user name and password. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated. An
+    optional &quot;realm&quot; parameter is supported, it sets the authentication realm
+    that is returned with the response (typically the application's name).
+
+  - &quot;add-header&quot; appends an HTTP header field whose name is specified in
+    &lt;name&gt; and whose value is defined by &lt;fmt&gt; which follows the log-format
+    rules (see Custom Log Format in <a href="#8.2.4">section 8.2.4</a>). This is particularly
+    useful to pass connection-specific information to the server (eg: the
+    client's SSL certificate), or to combine several headers into one. This
+    rule is not final, so it is possible to add other similar rules. Note
+    that header addition is performed immediately, so one rule might reuse
+    the resulting header from a previous rule.
+
+  - &quot;set-header&quot; does the same as &quot;add-header&quot; except that the header name
+    is first removed if it existed. This is useful when passing security
+    information to the server, where the header must not be manipulated by
+    external users.
+
+There is no limit to the number of http-request statements per instance.
+
+It is important to know that http-request rules are processed very early in
+the HTTP processing, just after &quot;<a href="#block">block</a>&quot; rules and before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot;
+rules. That way, headers added by &quot;add-header&quot;/&quot;set-header&quot; are visible by
+almost all further ACL rules.</pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>acl nagios src 192.168.129.3
@@ -2993,8 +3025,20 @@ http-request deny
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>acl auth_ok http_auth_group(L1) G1
-
 http-request auth unless auth_ok
+</code></pre>
+</div><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request set-header X-Haproxy-Current-Date %T
+http-request set-header X-SSL                  %[ssl_fc]
+http-request set-header X-SSL-Session_ID       %[ssl_fc_session_id]
+http-request set-header X-SSL-Client-Verify    %[ssl_c_verify]
+http-request set-header X-SSL-Client-DN        %{+Q}[ssl_c_s_dn]
+http-request set-header X-SSL-Client-CN        %{+Q}[ssl_c_s_dn(cn)]
+http-request set-header X-SSL-Issuer           %{+Q}[ssl_c_i_dn]
+http-request set-header X-SSL-Client-NotBefore %{+Q}[ssl_c_notbefore]
+http-request set-header X-SSL-Client-NotAfter  %{+Q}[ssl_c_notafter]
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#stats http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
 <a name="http-send-name-header"></a><a name="4-http-send-name-header"></a><a name="4.2-http-send-name-header"></a><a name="http-send-name-header (Proxies)"></a><a name="http-send-name-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="http-send-name-header"></a><a href="#4-http-send-name-header">http-send-name-header</a></b> <span style="color: #008">[<span style="color: #080">&lt;header&gt;</span>]</span></div><pre class="text">Add the server name to a request. Use the header string given by &lt;header&gt;</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -11194,7 +11238,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev15-28', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev15-40', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
