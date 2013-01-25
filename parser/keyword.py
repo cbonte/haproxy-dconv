@@ -1,5 +1,6 @@
 import re
 import parser
+from urllib import quote
 
 class Parser(parser.Parser):
     def __init__(self, pctxt):
@@ -70,7 +71,7 @@ class Parser(parser.Parser):
 
                 parameters = self.colorize(parameters)
 
-                res += '<div class="keyword">%s<b><a name="%s"></a><a href="#%s-%s">%s</a></b>%s%s</div>' % (prefix, keyword, toplevel, keyword, keyword, parameters, suffix)
+                res += '<div class="keyword">%s<b><a name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, quote("%s-%s" % (toplevel, keyword)), keyword, parameters, suffix)
                 pctxt.next()
                 pctxt.stop = True
             elif line.startswith("/*"):

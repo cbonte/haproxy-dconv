@@ -1,3 +1,4 @@
+<% from urllib import quote %>
 <tr>\
 % for col in columns:
 <% data = col['data'] %>\
@@ -21,7 +22,7 @@
 %>\
 <td ${style}>\
 % if "keyword" in col:
-<a href="#${col['toplevel']}-${col['keyword']}">\
+<a href="#${quote("%s-%s" % (col['toplevel'], col['keyword']))}">\
 % for extra in col['extra']:
 <span class="pull-right">${extra}</span>\
 % endfor

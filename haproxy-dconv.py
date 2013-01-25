@@ -38,6 +38,8 @@ from parser import PContext
 from parser import remove_indent
 from parser import *
 
+from urllib import quote
+
 VERSION = ""
 HAPROXY_GIT_VERSION = False
 
@@ -139,7 +141,7 @@ def createLinks():
         if keyword in keyword_conflicts:
             chapter_list = ""
             for chapter in keyword_conflicts[keyword]:
-                chapter_list += '<li><a href="#%s (%s)">%s</a></li>' % (keyword, chapters[chapter]['title'], chapters[chapter]['title'])
+                chapter_list += '<li><a href="#%s">%s</a></li>' % (quote("%s (%s)" % (keyword, chapters[chapter]['title'])), chapters[chapter]['title'])
             document = document.replace('&quot;' + keyword + '&quot;',
                     '&quot;<span class="dropdown">' +
                     '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
@@ -152,14 +154,14 @@ def createLinks():
                     '</ul>' +
                     '</span>&quot;')
         else:
-            document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + keyword + '">' + keyword + '</a>&quot;')
+            document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + quote(keyword) + '">' + keyword + '</a>&quot;')
         if keyword.startswith("option "):
             shortKeyword = keyword[len("option "):]
             keywordsCount[shortKeyword] = document.count('&quot;' + shortKeyword + '&quot;')
             if (shortKeyword in keyword_conflicts) and (not keywordsCount[shortKeyword]):
             # The keyword is never used, we can remove it from the conflicts list
                 del keyword_conflicts[shortKeyword]
-            document = document.replace('&quot;' + shortKeyword + '&quot;', '&quot;<a href="#' + keyword + '">' + shortKeyword + '</a>&quot;')
+            document = document.replace('&quot;' + shortKeyword + '&quot;', '&quot;<a href="#' + quote(keyword) + '">' + shortKeyword + '</a>&quot;')
 
 def documentAppend(text, retline = True):
     global document
