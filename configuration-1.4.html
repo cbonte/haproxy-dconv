@@ -63,7 +63,7 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-8</b> on <b>2013/01/25</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-10</b> on <b>2013/02/10</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
@@ -713,7 +713,7 @@ Note to documentation contributors :
 </div>
 
 <a name="1"></a>
-<div class="page-header"><h1 id="1"><small>1.</small> Quick reminder about HTTP</h1>
+<div class="page-header"><h1 id="1"><small><a class="small" href="#1">1.</a></small> Quick reminder about HTTP</h1>
 </div><div><pre class="text">When haproxy is running in HTTP mode, both the request and the response are
 fully analyzed and indexed, thus it becomes possible to build matching criteria
 on almost anything found in the contents.
@@ -722,7 +722,7 @@ However, it is important to understand how HTTP requests and responses are
 formed, and how HAProxy decomposes them. It will then become easier to write
 correct rules and to debug existing configurations.</pre></div>
 <a name="1.1"></a>
-<h2 id="1.1"><small>1.1.</small> The HTTP transaction model</h2>
+<h2 id="1.1"><small><a class="small" href="#1.1">1.1.</a></small> The HTTP transaction model</h2>
 <div><pre class="text">The HTTP protocol is transaction-driven. This means that each request will lead
 to one and only one response. Traditionally, a TCP connection is established
 from the client to the server, a request is sent by the client on the
@@ -773,7 +773,7 @@ sides to HTTP close mode. &quot;<a href="#option%20forceclose">option forceclose
 http-pretend-keepalive&quot; help working around servers misbehaving in HTTP close
 mode.</pre></div>
 <a name="1.2"></a>
-<h2 id="1.2"><small>1.2.</small> HTTP request</h2>
+<h2 id="1.2"><small><a class="small" href="#1.2">1.2.</a></small> HTTP request</h2>
 <div><pre class="text">First, let's consider this HTTP request :
 
   Line     Contents
@@ -784,7 +784,7 @@ mode.</pre></div>
      4     Accept: image/jpeg, image/gif
      5     Accept: image/png</pre></div>
 <a name="1.2.1"></a>
-<h3 id="1.2.1"><small>1.2.1.</small> The Request line</h3>
+<h3 id="1.2.1"><small><a class="small" href="#1.2.1">1.2.1.</a></small> The Request line</h3>
 <div><pre class="text">Line 1 is the &quot;request line&quot;. It is always composed of 3 fields :
 
   - a METHOD      : GET
@@ -832,7 +832,7 @@ on the server. The part after the question mark is called the &quot;query string
 It is mostly used with GET requests sent to dynamic scripts and is very
 specific to the language, framework or application in use.</pre></div>
 <a name="1.2.2"></a>
-<h3 id="1.2.2"><small>1.2.2.</small> The request headers</h3>
+<h3 id="1.2.2"><small><a class="small" href="#1.2.2">1.2.2.</a></small> The request headers</h3>
 <div><pre class="text">The headers start at the second line. They are composed of a name at the
 beginning of the line, immediately followed by a colon (':'). Traditionally,
 an LWS is added after the colon but that's not required. Then come the values.
@@ -861,7 +861,7 @@ Important note:
    is necessary for proper analysis and helps less capable HTTP parsers to work
    correctly and not to be fooled by such complex constructs.</pre></div>
 <a name="1.3"></a>
-<h2 id="1.3"><small>1.3.</small> HTTP response</h2>
+<h2 id="1.3"><small><a class="small" href="#1.3">1.3.</a></small> HTTP response</h2>
 <div><pre class="text">An HTTP response looks very much like an HTTP request. Both are called HTTP
 messages. Let's consider this HTTP response :
 
@@ -886,7 +886,7 @@ over the same connection and that haproxy must switch to tunnel mode, just as
 if a CONNECT had occurred. Then the Upgrade header would contain additional
 information about the type of protocol the connection is switching to.</pre></div>
 <a name="1.3.1"></a>
-<h3 id="1.3.1"><small>1.3.1.</small> The Response line</h3>
+<h3 id="1.3.1"><small><a class="small" href="#1.3.1">1.3.1.</a></small> The Response line</h3>
 <div><pre class="text">Line 1 is the &quot;response line&quot;. It is always composed of 3 fields :
 
   - a version tag : HTTP/1.1
@@ -929,14 +929,14 @@ Haproxy may emit the following status codes by itself :
 The error 4xx and 5xx codes above may be customized (see &quot;<a href="#errorloc">errorloc</a>&quot; in section
 4.2).</pre></div>
 <a name="1.3.2"></a>
-<h3 id="1.3.2"><small>1.3.2.</small> The response headers</h3>
+<h3 id="1.3.2"><small><a class="small" href="#1.3.2">1.3.2.</a></small> The response headers</h3>
 <div><pre class="text">Response headers work exactly like request headers, and as such, HAProxy uses
 the same parsing function for both. Please refer to paragraph 1.2.2 for more
 details.</pre></div>
 <a name="2"></a>
-<div class="page-header"><h1 id="2"><small>2.</small> Configuring HAProxy</h1>
+<div class="page-header"><h1 id="2"><small><a class="small" href="#2">2.</a></small> Configuring HAProxy</h1>
 </div><a name="2.1"></a>
-<h2 id="2.1"><small>2.1.</small> Configuration file format</h2>
+<h2 id="2.1"><small><a class="small" href="#2.1">2.1.</a></small> Configuration file format</h2>
 <div><pre class="text">HAProxy's configuration process involves 3 major sources of parameters :
 
   - the arguments from the command-line, which always take precedence
@@ -950,7 +950,7 @@ delimited by spaces. If spaces have to be entered in strings, then they must be
 preceded by a backslash ('\') to be escaped. Backslashes also have to be
 escaped by doubling them.</pre></div>
 <a name="2.2"></a>
-<h2 id="2.2"><small>2.2.</small> Time format</h2>
+<h2 id="2.2"><small><a class="small" href="#2.2">2.2.</a></small> Time format</h2>
 <div><pre class="text">Some parameters involve values representing time, such as timeouts. These
 values are generally expressed in milliseconds (unless explicitly stated
 otherwise) but may be expressed in any other unit by suffixing the unit to the
@@ -964,7 +964,7 @@ for every keyword. Supported units are :
   - h  : hours.   1h = 60m = 3600s = 3600000ms
   - d  : days.    1d = 24h = 1440m = 86400s = 86400000ms</pre></div>
 <a name="2.3"></a>
-<h2 id="2.3"><small>2.3.</small> Examples</h2>
+<h2 id="2.3"><small><a class="small" href="#2.3">2.3.</a></small> Examples</h2>
 <div><pre class="text">    # Simple configuration for an HTTP proxy listening on port 80 on all
     # interfaces and forwarding requests to a single backend &quot;servers&quot; with a
     # single server &quot;server1&quot; listening on 127.0.0.1:8000
@@ -1007,7 +1007,7 @@ Assuming haproxy is in $PATH, test these configurations in a shell with:
 
     $ sudo haproxy -f configuration.conf -c</pre></div>
 <a name="3"></a>
-<div class="page-header"><h1 id="3"><small>3.</small> Global parameters</h1>
+<div class="page-header"><h1 id="3"><small><a class="small" href="#3">3.</a></small> Global parameters</h1>
 </div><div><pre class="text">Parameters in the &quot;global&quot; section are process-wide and often OS-specific. They
 are generally set once for all and do not need being changed once correct. Some
 of them have command-line equivalents.
@@ -1053,7 +1053,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - debug
    - quiet</pre></div>
 <a name="3.1"></a>
-<h2 id="3.1"><small>3.1.</small> Process management and security</h2>
+<h2 id="3.1"><small><a class="small" href="#3.1">3.1.</a></small> Process management and security</h2>
 <div><a name="chroot"></a><a name="3-chroot"></a><a name="3.1-chroot"></a><a name="chroot (Global parameters)"></a><a name="chroot (Process management and security)"></a><div class="keyword"><b><a name="chroot"></a><a href="#3-chroot">chroot</a></b> <span style="color: #080">&lt;jail dir&gt;</span></div><pre class="text">Changes current directory to &lt;jail dir&gt; and performs a chroot() there before
 dropping privileges. This increases the security level in case an unknown
 vulnerability would be exploited, since it would make it very hard for the
@@ -1152,7 +1152,7 @@ Please note that it is required to escape certain characters (# for example)
 and this text is inserted into a html page so you should avoid using
 &quot;&lt;&quot; and &quot;&gt;&quot; characters.</pre></div>
 <a name="3.2"></a>
-<h2 id="3.2"><small>3.2.</small> Performance tuning</h2>
+<h2 id="3.2"><small><a class="small" href="#3.2">3.2.</a></small> Performance tuning</h2>
 <div><a name="maxconn"></a><a name="3-maxconn"></a><a name="3.2-maxconn"></a><a name="maxconn (Global parameters)"></a><a name="maxconn (Performance tuning)"></a><div class="keyword"><b><a name="maxconn"></a><a href="#3-maxconn">maxconn</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of concurrent connections to &lt;number&gt;. It
 is equivalent to the command-line argument &quot;-n&quot;. Proxies will stop accepting
 connections when this limit is reached. The &quot;<a href="#ulimit-n">ulimit-n</a>&quot; parameter is
@@ -1230,14 +1230,14 @@ Another use case is to prevent write timeouts with extremely slow clients due
 to the kernel waiting for a large part of the buffer to be read before
 notifying haproxy again.</pre></div>
 <a name="3.3"></a>
-<h2 id="3.3"><small>3.3.</small> Debugging</h2>
+<h2 id="3.3"><small><a class="small" href="#3.3">3.3.</a></small> Debugging</h2>
 <div><a name="debug"></a><a name="3-debug"></a><a name="3.3-debug"></a><a name="debug (Global parameters)"></a><a name="debug (Debugging)"></a><div class="keyword"><b><a name="debug"></a><a href="#3-debug">debug</a></b></div><pre class="text">Enables debug mode which dumps to stdout all exchanges, and disables forking
 into background. It is the equivalent of the command-line argument &quot;-d&quot;. It
 should never be used in a production configuration since it may prevent full
 system startup.</pre><a name="quiet"></a><a name="3-quiet"></a><a name="3.3-quiet"></a><a name="quiet (Global parameters)"></a><a name="quiet (Debugging)"></a><div class="keyword"><b><a name="quiet"></a><a href="#3-quiet">quiet</a></b></div><pre class="text">Do not display any message during startup. It is equivalent to the command-
 line argument &quot;-q&quot;.</pre></div>
 <a name="3.4"></a>
-<h2 id="3.4"><small>3.4.</small> Userlists</h2>
+<h2 id="3.4"><small><a class="small" href="#3.4">3.4.</a></small> Userlists</h2>
 <div><pre class="text">It is possible to control access to frontend/backend/listen sections or to
 http stats by allowing only authenticated and authorized users. To do this,
 it is required to create at least one userlist and to define users.</pre><a name="userlist"></a><a name="3-userlist"></a><a name="3.4-userlist"></a><a name="userlist (Global parameters)"></a><a name="userlist (Userlists)"></a><div class="keyword"><b><a name="userlist"></a><a href="#3-userlist">userlist</a></b> <span style="color: #080">&lt;listname&gt;</span></div><pre class="text">Creates new userlist with name &lt;listname&gt;. Many independent userlists can be
@@ -1270,7 +1270,7 @@ userlist L2
 </code></pre>
 </div><pre class="text">Please note that both lists are functionally identical.</pre></div>
 <a name="4"></a>
-<div class="page-header"><h1 id="4"><small>4.</small> Proxies</h1>
+<div class="page-header"><h1 id="4"><small><a class="small" href="#4">4.</a></small> Proxies</h1>
 </div><div><pre class="text">Proxy configuration can be located in a set of sections :
  - defaults &lt;name&gt;
  - frontend &lt;name&gt;
@@ -1308,7 +1308,7 @@ protocol, and can interact with it by allowing, blocking, switching, adding,
 modifying, or removing arbitrary contents in requests or responses, based on
 arbitrary criteria.</pre></div>
 <a name="4.1"></a>
-<h2 id="4.1"><small>4.1.</small> Proxy keywords matrix</h2>
+<h2 id="4.1"><small><a class="small" href="#4.1">4.1.</a></small> Proxy keywords matrix</h2>
 <div><pre class="text">The following list of keywords is supported. Most of them may only be used in a
 limited set of section types. Some of them are marked as &quot;deprecated&quot; because
 they are inherited from an old syntax which may be confusing or functionally
@@ -1471,7 +1471,7 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-use_backend">use_backend</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 </table></div>
 <a name="4.2"></a>
-<h2 id="4.2"><small>4.2.</small> Alphabetically sorted keywords reference</h2>
+<h2 id="4.2"><small><a class="small" href="#4.2">4.2.</a></small> Alphabetically sorted keywords reference</h2>
 <div><pre class="text">This section provides a description of each keyword and its usage.</pre><a name="acl"></a><a name="4-acl"></a><a name="4.2-acl"></a><a name="acl (Proxies)"></a><a name="acl (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="acl"></a><a href="#4-acl">acl</a></b> <span style="color: #080">&lt;aclname&gt;</span> <span style="color: #080">&lt;criterion&gt;</span> <span style="color: #008">[flags]</span> <span style="color: #008">[operator]</span> <span style="color: #080">&lt;value&gt;</span> ...</div><pre class="text">Declare or complete an access list.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -5904,7 +5904,7 @@ a complete HTTP request to get in. This feature is useful when a frontend
 must decode several protocols on a unique port, one of them being HTTP.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#default_backend">default_backend</a>&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot;, and <a href="#7">section 7</a> about ACLs.</div>
 </div>
 <a name="5"></a>
-<div class="page-header"><h1 id="5"><small>5.</small> Server and default-server options</h1>
+<div class="page-header"><h1 id="5"><small><a class="small" href="#5">5.</a></small> Server and default-server options</h1>
 </div><div><pre class="text">The &quot;<a href="#server">server</a>&quot; and &quot;<a href="#default-server">default-server</a>&quot; keywords support a certain number of settings
 which are all passed as arguments on the server line. The order in which those
 arguments appear does not count, and they are all optional. Some of those
@@ -6112,7 +6112,7 @@ room above and below for later adjustments.
 
 Supported in default-server: Yes</pre></div>
 <a name="6"></a>
-<div class="page-header"><h1 id="6"><small>6.</small> HTTP header manipulation</h1>
+<div class="page-header"><h1 id="6"><small><a class="small" href="#6">6.</a></small> HTTP header manipulation</h1>
 </div><div><pre class="text">In HTTP mode, it is possible to rewrite, add or delete some of the request and
 response headers based on regular expressions. It is also possible to block a
 request or a response if a particular header matches a regular expression,
@@ -6210,7 +6210,7 @@ after the last header line. It can also use special character sequences above.</
   always the first one, but before &quot;<a href="#use_backend">use_backend</a>&quot; in order to permit rewriting
   before switching.</pre></div>
 <a name="7"></a>
-<div class="page-header"><h1 id="7"><small>7.</small> Using ACLs and pattern extraction</h1>
+<div class="page-header"><h1 id="7"><small><a class="small" href="#7">7.</a></small> Using ACLs and pattern extraction</h1>
 </div><div><pre class="text">The use of Access Control Lists (ACL) provides a flexible solution to perform
 content switching and generally to take decisions based on content extracted
 from the request, the response or any environmental status. The principle is
@@ -6275,7 +6275,7 @@ Supported types of values are :
   - regular expressions
   - IP addresses and networks</pre></div>
 <a name="7.1"></a>
-<h2 id="7.1"><small>7.1.</small> Matching integers</h2>
+<h2 id="7.1"><small><a class="small" href="#7.1">7.1.</a></small> Matching integers</h2>
 <div><pre class="text">Matching integers is special in that ranges and operators are permitted. Note
 that integer matching only applies to positive values. A range is a value
 expressed with a lower and an upper bound separated with a colon, both of which
@@ -6311,7 +6311,7 @@ This one matches SSL versions between 3.0 and 3.1 (inclusive) :
 
   acl sslv3 req_ssl_ver 3:3.1</pre></div>
 <a name="7.2"></a>
-<h2 id="7.2"><small>7.2.</small> Matching strings</h2>
+<h2 id="7.2"><small><a class="small" href="#7.2">7.2.</a></small> Matching strings</h2>
 <div><pre class="text">String matching applies to verbatim strings as they are passed, with the
 exception of the backslash (&quot;\&quot;) which makes it possible to escape some
 characters such as the space. If the &quot;-i&quot; flag is passed before the first
@@ -6319,7 +6319,7 @@ string, then the matching will be performed ignoring the case. In order
 to match the string &quot;-i&quot;, either set it second, or pass the &quot;--&quot; flag
 before the first string. Same applies of course to match the string &quot;--&quot;.</pre></div>
 <a name="7.3"></a>
-<h2 id="7.3"><small>7.3.</small> Matching regular expressions (regexes)</h2>
+<h2 id="7.3"><small><a class="small" href="#7.3">7.3.</a></small> Matching regular expressions (regexes)</h2>
 <div><pre class="text">Just like with string matching, regex matching applies to verbatim strings as
 they are passed, with the exception of the backslash (&quot;\&quot;) which makes it
 possible to escape some characters such as the space. If the &quot;-i&quot; flag is
@@ -6328,7 +6328,7 @@ the case. In order to match the string &quot;-i&quot;, either set it second, or 
 the &quot;--&quot; flag before the first string. Same principle applies of course to
 match the string &quot;--&quot;.</pre></div>
 <a name="7.4"></a>
-<h2 id="7.4"><small>7.4.</small> Matching IPv4 addresses</h2>
+<h2 id="7.4"><small><a class="small" href="#7.4">7.4.</a></small> Matching IPv4 addresses</h2>
 <div><pre class="text">IPv4 addresses values can be specified either as plain addresses or with a
 netmask appended, in which case the IPv4 address matches whenever it is
 within the network. Plain addresses may also be replaced with a resolvable
@@ -6338,9 +6338,9 @@ at least ensure that they are present in /etc/hosts so that the configuration
 does not depend on any random DNS match at the moment the configuration is
 parsed.</pre></div>
 <a name="7.5"></a>
-<h2 id="7.5"><small>7.5.</small> Available matching criteria</h2>
+<h2 id="7.5"><small><a class="small" href="#7.5">7.5.</a></small> Available matching criteria</h2>
 <a name="7.5.1"></a>
-<h3 id="7.5.1"><small>7.5.1.</small> Matching at Layer 4 and below</h3>
+<h3 id="7.5.1"><small><a class="small" href="#7.5.1">7.5.1.</a></small> Matching at Layer 4 and below</h3>
 <div><pre class="text">A first set of criteria applies to information which does not require any
 analysis of the request or response contents. Those generally include TCP/IP
 addresses and ports, as well as internal values independant on the stream.</pre><a name="always_false"></a><a name="7-always_false"></a><a name="7.5.1-always_false"></a><a name="always_false (Using ACLs and pattern extraction)"></a><a name="always_false (Matching at Layer 4 and below)"></a><div class="keyword"><b><a name="always_false"></a><a href="#7-always_false">always_false</a></b></div><pre class="text">This one never matches. All values and flags are ignored. It may be used as
@@ -6455,7 +6455,7 @@ Another possible use which is more of a hack consists in using dummy servers
 as boolean variables that can be enabled or disabled from the CLI, so that
 rules depending on those ACLs can be tweaked in realtime.</pre></div>
 <a name="7.5.2"></a>
-<h3 id="7.5.2"><small>7.5.2.</small> Matching contents at Layer 4</h3>
+<h3 id="7.5.2"><small><a class="small" href="#7.5.2">7.5.2.</a></small> Matching contents at Layer 4</h3>
 <div><pre class="text">A second set of criteria depends on data found in buffers, but which can change
 during analysis. This requires that some data has been buffered, for instance
 through TCP request content inspection. Please see the &quot;<a href="#tcp-request">tcp-request</a>&quot; keyword
@@ -6512,7 +6512,7 @@ tcp-request content reject
 </code></pre>
 </div></div>
 <a name="7.5.3"></a>
-<h3 id="7.5.3"><small>7.5.3.</small> Matching at Layer 7</h3>
+<h3 id="7.5.3"><small><a class="small" href="#7.5.3">7.5.3.</a></small> Matching at Layer 7</h3>
 <div><pre class="text">A third set of criteria applies to information which can be found at the
 application layer (layer 7). Those require that a full HTTP request has been
 read, and are only evaluated then. They may require slightly more CPU resources
@@ -6618,7 +6618,7 @@ used any time, but it is important to remember that regex matching is slower
 than other methods. See also &quot;<a href="#path_reg">path_reg</a>&quot; and all &quot;url_&quot; criteria.</pre><a name="url_sub"></a><a name="7-url_sub"></a><a name="7.5.3-url_sub"></a><a name="url_sub (Using ACLs and pattern extraction)"></a><a name="url_sub (Matching at Layer 7)"></a><div class="keyword"><b><a name="url_sub"></a><a href="#7-url_sub">url_sub</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Returns true when the URL contains one of the strings. It can be used to
 detect particular patterns in query strings for example. See also &quot;<a href="#path_sub">path_sub</a>&quot;.</pre></div>
 <a name="7.6"></a>
-<h2 id="7.6"><small>7.6.</small> Pre-defined ACLs</h2>
+<h2 id="7.6"><small><a class="small" href="#7.6">7.6.</a></small> Pre-defined ACLs</h2>
 <div><pre class="text">Some predefined ACLs are hard-coded so that they do not have to be declared in
 every frontend which needs them. They all have their names in upper case in
 order to avoid confusion. Their equivalence is provided below.</pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -6644,7 +6644,7 @@ order to avoid confusion. Their equivalence is provided below.</pre><table class
 <tr><td None>WAIT_END</td><td None>wait_end</td><td None>wait for end of content analysis</td></tr>
 </table></div>
 <a name="7.7"></a>
-<h2 id="7.7"><small>7.7.</small> Using ACLs to form conditions</h2>
+<h2 id="7.7"><small><a class="small" href="#7.7">7.7.</a></small> Using ACLs to form conditions</h2>
 <div><pre class="text">Some actions are only performed upon a valid condition. A condition is a
 combination of ACLs with operators. 3 operators are supported :
 
@@ -6714,7 +6714,7 @@ good use is the following :
 
 See <a href="#4.2">section 4.2</a> for detailed help on the &quot;<a href="#block">block</a>&quot; and &quot;<a href="#use_backend">use_backend</a>&quot; keywords.</pre></div>
 <a name="7.8"></a>
-<h2 id="7.8"><small>7.8.</small> Pattern extraction</h2>
+<h2 id="7.8"><small><a class="small" href="#7.8">7.8.</a></small> Pattern extraction</h2>
 <div><pre class="text">The stickiness features relies on pattern extraction in the request and
 response. Sometimes the data needs to be converted first before being stored,
 for instance converted from ASCII to IP or upper case to lower case.
@@ -6764,7 +6764,7 @@ The currently available list of transformations include :
                the same server. The mask can be passed in dotted form (eg:
                255.255.255.0) or in CIDR form (eg: 24).</pre></div>
 <a name="8"></a>
-<div class="page-header"><h1 id="8"><small>8.</small> Logging</h1>
+<div class="page-header"><h1 id="8"><small><a class="small" href="#8">8.</a></small> Logging</h1>
 </div><div><pre class="text">One of HAProxy's strong points certainly lies is its precise logs. It probably
 provides the finest level of information available for such a product, which is
 very important for troubleshooting complex environments. Standard information
@@ -6790,7 +6790,7 @@ while the application team might be monitoring the up/down for their servers in
 real time, and the security team might analyze the activity logs with one hour
 delay.</pre></div>
 <a name="8.1"></a>
-<h2 id="8.1"><small>8.1.</small> Log levels</h2>
+<h2 id="8.1"><small><a class="small" href="#8.1">8.1.</a></small> Log levels</h2>
 <div><pre class="text">TCP and HTTP connections can be logged with information such as the date, time,
 source IP address, destination address, connection duration, response times,
 HTTP request, HTTP return code, number of bytes transmitted, conditions
@@ -6799,7 +6799,7 @@ track a particular user's problems. All messages may be sent to up to two
 syslog servers. Check the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#log%20%28Global%20parameters%29">Global parameters</a></li><li><a href="#log%20%28Proxies%29">Proxies</a></li></ul></span>&quot; keyword in <a href="#4.2">section 4.2</a> for more information
 about log facilities.</pre></div>
 <a name="8.2"></a>
-<h2 id="8.2"><small>8.2.</small> Log formats</h2>
+<h2 id="8.2"><small><a class="small" href="#8.2">8.2.</a></small> Log formats</h2>
 <div><pre class="text">HAProxy supports 4 log formats. Several fields are common between these formats
 and will be detailed in the following sections. A few of them may vary
 slightly with the configuration, due to indicators specific to certain
@@ -6841,7 +6841,7 @@ Note : Since log lines may be quite long, the log examples in sections below
        broken into multiple lines, each non-final line will end with a
        backslash ('\') and the next line will start indented by two characters.</pre></div>
 <a name="8.2.1"></a>
-<h3 id="8.2.1"><small>8.2.1.</small> Default log format</h3>
+<h3 id="8.2.1"><small><a class="small" href="#8.2.1">8.2.1.</a></small> Default log format</h3>
 <div><pre class="text">This format is used when no specific option is set. The log is emitted as soon
 as the connection is accepted. One should note that this currently is the only
 format which logs the request's destination IP and ports.</pre><div class="separator">
@@ -6876,7 +6876,7 @@ Detailed fields description :
 It is advised not to use this deprecated format for newer installations as it
 will eventually disappear.</pre></div>
 <a name="8.2.2"></a>
-<h3 id="8.2.2"><small>8.2.2.</small> TCP log format</h3>
+<h3 id="8.2.2"><small><a class="small" href="#8.2.2">8.2.2.</a></small> TCP log format</h3>
 <div><pre class="text">The TCP format is used when &quot;<a href="#option%20tcplog">option tcplog</a>&quot; is specified in the frontend, and
 is the recommended format for pure TCP proxies. It provides a lot of precious
 information for troubleshooting. Since this format includes timers and byte
@@ -7036,7 +7036,7 @@ Detailed fields description :
     through both the server queue and the backend queue unless a redispatch
     occurs.</pre></div>
 <a name="8.2.3"></a>
-<h3 id="8.2.3"><small>8.2.3.</small> HTTP log format</h3>
+<h3 id="8.2.3"><small><a class="small" href="#8.2.3">8.2.3.</a></small> HTTP log format</h3>
 <div><pre class="text">The HTTP format is the most complete and the best suited for HTTP proxies. It
 is enabled by when &quot;<a href="#option%20httplog">option httplog</a>&quot; is specified in the frontend. It provides
 the same level of information as the TCP format with additional features which
@@ -7274,13 +7274,13 @@ Detailed fields description :
     huge and does not fit in the standard syslog buffer (1024 characters). This
     is the reason why this field must always remain the last one.</pre></div>
 <a name="8.3"></a>
-<h2 id="8.3"><small>8.3.</small> Advanced logging options</h2>
+<h2 id="8.3"><small><a class="small" href="#8.3">8.3.</a></small> Advanced logging options</h2>
 <div><pre class="text">Some advanced logging options are often looked for but are not easy to find out
 just by looking at the various options. Here is an entry point for the few
 options which can enable better logging. Please refer to the keywords reference
 for more information about their usage.</pre></div>
 <a name="8.3.1"></a>
-<h3 id="8.3.1"><small>8.3.1.</small> Disabling logging of external tests</h3>
+<h3 id="8.3.1"><small><a class="small" href="#8.3.1">8.3.1.</a></small> Disabling logging of external tests</h3>
 <div><pre class="text">It is quite common to have some monitoring tools perform health checks on
 haproxy. Sometimes it will be a layer 3 load-balancer such as LVS or any
 commercial load-balancer, and sometimes it will simply be a more complete
@@ -7302,7 +7302,7 @@ ask how to disable logging for those checks. There are three possibilities :
     this URI as dedicated to monitoring. Any host sending this request will
     only get the result of a health-check, and the request will not be logged.</pre></div>
 <a name="8.3.2"></a>
-<h3 id="8.3.2"><small>8.3.2.</small> Logging before waiting for the session to terminate</h3>
+<h3 id="8.3.2"><small><a class="small" href="#8.3.2">8.3.2.</a></small> Logging before waiting for the session to terminate</h3>
 <div><pre class="text">The problem with logging at end of connection is that you have no clue about
 what is happening during very long sessions, such as remote terminal sessions
 or large file downloads. This problem can be worked around by specifying
@@ -7314,7 +7314,7 @@ is the number of header bytes sent to the client. In order to avoid confusion
 with normal logs, the total time field and the number of bytes are prefixed
 with a '+' sign which means that real numbers are certainly larger.</pre></div>
 <a name="8.3.3"></a>
-<h3 id="8.3.3"><small>8.3.3.</small> Raising log level upon errors</h3>
+<h3 id="8.3.3"><small><a class="small" href="#8.3.3">8.3.3.</a></small> Raising log level upon errors</h3>
 <div><pre class="text">Sometimes it is more convenient to separate normal traffic from errors logs,
 for instance in order to ease error monitoring from log files. When the option
 &quot;<a href="#option%20log-separate-errors">log-separate-errors</a>&quot; is used, connections which experience errors, timeouts,
@@ -7325,7 +7325,7 @@ file too, so that log ordering is not altered. You should also be careful if
 you already have configured your syslog daemon to store all logs higher than
 &quot;notice&quot; in an &quot;admin&quot; file, because the &quot;err&quot; level is higher than &quot;notice&quot;.</pre></div>
 <a name="8.3.4"></a>
-<h3 id="8.3.4"><small>8.3.4.</small> Disabling logging of successful connections</h3>
+<h3 id="8.3.4"><small><a class="small" href="#8.3.4">8.3.4.</a></small> Disabling logging of successful connections</h3>
 <div><pre class="text">Although this may sound strange at first, some large sites have to deal with
 multiple thousands of logs per second and are experiencing difficulties keeping
 them intact for a long time or detecting errors within them. If the option
@@ -7337,7 +7337,7 @@ too. Of course, doing is is really discouraged as it will remove most of the
 useful information from the logs. Do this only if you have no other
 alternative.</pre></div>
 <a name="8.4"></a>
-<h2 id="8.4"><small>8.4.</small> Timing events</h2>
+<h2 id="8.4"><small><a class="small" href="#8.4">8.4.</a></small> Timing events</h2>
 <div><pre class="text">Timers provide a great help in troubleshooting network problems. All values are
 reported in milliseconds (ms). These timers should be used in conjunction with
 the session termination flags. In TCP mode with &quot;<a href="#option%20tcplog">option tcplog</a>&quot; set on the
@@ -7455,7 +7455,7 @@ Other noticeable HTTP log cases ('xx' means any value to be ignored) :
                    unexpectedly after Tt-(Tq+Tw+Tc) ms. Check the session
                    termination flags, then check the &quot;<a href="#timeout%20server">timeout server</a>&quot; setting.</pre></div>
 <a name="8.5"></a>
-<h2 id="8.5"><small>8.5.</small> Session state at disconnection</h2>
+<h2 id="8.5"><small><a class="small" href="#8.5">8.5.</a></small> Session state at disconnection</h2>
 <div><pre class="text">TCP and HTTP logs provide a session termination indicator in the
 &quot;termination_state&quot; field, just before the number of active connections. It is
 2-characters long in TCP mode, and is extended to 4 characters in HTTP mode,
@@ -7773,7 +7773,7 @@ re-authenticate. The commonly encountered flags are :
           be reached. A redispatch happened and selected another one, which was
           then advertised in the response.</pre></div>
 <a name="8.6"></a>
-<h2 id="8.6"><small>8.6.</small> Non-printable characters</h2>
+<h2 id="8.6"><small><a class="small" href="#8.6">8.6.</a></small> Non-printable characters</h2>
 <div><pre class="text">In order not to cause trouble to log analysis tools or terminals during log
 consulting, non-printable characters are not sent as-is into log files, but are
 converted to the two-digits hexadecimal representation of their ASCII code,
@@ -7791,7 +7791,7 @@ Last, it has been observed that some syslog daemons such as syslog-ng escape
 the quote ('&quot;') with a backslash ('\'). The reverse operation can safely be
 performed since no quote may appear anywhere else in the logs.</pre></div>
 <a name="8.7"></a>
-<h2 id="8.7"><small>8.7.</small> Capturing HTTP cookies</h2>
+<h2 id="8.7"><small><a class="small" href="#8.7">8.7.</a></small> Capturing HTTP cookies</h2>
 <div><pre class="text">Cookie capture simplifies the tracking a complete user session. This can be
 achieved using the &quot;<a href="#capture%20cookie">capture cookie</a>&quot; statement in the frontend. Please refer to
 <a href="#4.2">section 4.2</a> for more details. Only one cookie can be captured, and the same
@@ -7813,7 +7813,7 @@ capture cookie vgnvisitor= len 32
 </code></pre>
 </div></div>
 <a name="8.8"></a>
-<h2 id="8.8"><small>8.8.</small> Capturing HTTP headers</h2>
+<h2 id="8.8"><small><a class="small" href="#8.8">8.8.</a></small> Capturing HTTP headers</h2>
 <div><pre class="text">Header captures are useful to track unique request identifiers set by an upper
 proxy, virtual host names, user-agents, POST content-length, referrers, etc. In
 the response, one can search for information about the response length, how the
@@ -7886,7 +7886,7 @@ in the logs.</pre><div class="separator">
 </code></pre>
 </div></div>
 <a name="8.9"></a>
-<h2 id="8.9"><small>8.9.</small> Examples of logs</h2>
+<h2 id="8.9"><small><a class="small" href="#8.9">8.9.</a></small> Examples of logs</h2>
 <div><pre class="text">These are real-world examples of logs accompanied with an explanation. Some of
 them have been made up by hand. The syslog part has been removed for better
 reading. Their sole purpose is to explain how to decipher them.
@@ -7958,13 +7958,13 @@ reading. Their sole purpose is to explain how to decipher them.
        the global process. It is possible that the server refused the
        connection because of too many already established.</pre></div>
 <a name="9"></a>
-<div class="page-header"><h1 id="9"><small>9.</small> Statistics and monitoring</h1>
+<div class="page-header"><h1 id="9"><small><a class="small" href="#9">9.</a></small> Statistics and monitoring</h1>
 </div><div><pre class="text">It is possible to query HAProxy about its status. The most commonly used
 mechanism is the HTTP statistics page. This page also exposes an alternative
 CSV output format for monitoring tools. The same format is provided on the
 Unix socket.</pre></div>
 <a name="9.1"></a>
-<h2 id="9.1"><small>9.1.</small> CSV format</h2>
+<h2 id="9.1"><small><a class="small" href="#9.1">9.1.</a></small> CSV format</h2>
 <div><pre class="text">The statistics may be consulted either from the unix socket or from the HTTP
 page. Both means provide a CSV format whose fields follow.
 
@@ -8037,7 +8037,7 @@ page. Both means provide a CSV format whose fields follow.
  49. cli_abrt: number of data transfers aborted by the client
  50. srv_abrt: number of data transfers aborted by the server (inc. in eresp)</pre></div>
 <a name="9.2"></a>
-<h2 id="9.2"><small>9.2.</small> Unix Socket commands</h2>
+<h2 id="9.2"><small><a class="small" href="#9.2">9.2.</a></small> Unix Socket commands</h2>
 <div><pre class="text">The following commands are supported on the UNIX stats socket ; all of them
 must be terminated by a line feed. The socket supports pipelining, so that it
 is possible to chain multiple commands at once provided they are delimited by
@@ -8610,7 +8610,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
 piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.4.22-23', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-8', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
