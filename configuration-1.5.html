@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev17-51 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev17-59 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-10</b> on <b>2013/02/14</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-10</b> on <b>2013/02/24</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev17-51</strong></p>
+				<p><strong>version 1.5-dev17-59</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1121,6 +1121,8 @@ The following keywords are supported in the &quot;global&quot; section :
    - tune.sndbuf.client
    - tune.sndbuf.server
    - tune.ssl.cachesize
+   - tune.ssl.lifetime
+   - tune.ssl.maxrecord
    - tune.zlib.memlevel
    - tune.zlib.windowsize
 
@@ -1394,7 +1396,17 @@ in seconds and defaults to 300 (5 mn). It is important to understand that it
 does not guarantee that sessions will last that long, because if the cache is
 full, the longest idle sessions will be purged despite their configured
 lifetime. The real usefulness of this setting is to prevent sessions from
-being used for too long.</pre><a name="tune.zlib.memlevel"></a><a name="3-tune.zlib.memlevel"></a><a name="3.2-tune.zlib.memlevel"></a><a name="tune.zlib.memlevel (Global parameters)"></a><a name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a name="tune.zlib.memlevel"></a><a href="#3-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
+being used for too long.</pre><a name="tune.ssl.maxrecord"></a><a name="3-tune.ssl.maxrecord"></a><a name="3.2-tune.ssl.maxrecord"></a><a name="tune.ssl.maxrecord (Global parameters)"></a><a name="tune.ssl.maxrecord (Performance tuning)"></a><div class="keyword"><b><a name="tune.ssl.maxrecord"></a><a href="#3-tune.ssl.maxrecord">tune.ssl.maxrecord</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of bytes passed to SSL_write() at a time. Default
+value 0 means there is no limit. Over SSL/TLS, the client can decipher the
+data only once it has received a full record. With large records, it means
+that clients might have to download up to 16kB of data before starting to
+process them. Limiting the value can improve page load times on browsers
+located over high latency or low bandwidth networks. It is suggested to find
+optimal values which fit into 1 or 2 TCP segments (generally 1448 bytes over
+Ethernet with TCP timestamps enabled, or 1460 when timestamps are disabled),
+keeping in mind that SSL/TLS add some overhead. Typical values of 1419 and
+2859 gave good results during tests. Use &quot;strace -e trace=write&quot; to find the
+best value.</pre><a name="tune.zlib.memlevel"></a><a name="3-tune.zlib.memlevel"></a><a name="3.2-tune.zlib.memlevel"></a><a name="tune.zlib.memlevel (Global parameters)"></a><a name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a name="tune.zlib.memlevel"></a><a href="#3-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
 defines how much memory should be allocated for the intenal compression
 state. A value of 1 uses minimum memory but is slow and reduces compression
 ratio, a value of 9 uses maximum memory for optimal speed.  Can be a value
@@ -11209,6 +11221,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.sndbuf.server",
 				"tune.ssl.cachesize",
 				"tune.ssl.lifetime",
+				"tune.ssl.maxrecord",
 				"tune.zlib.memlevel",
 				"tune.zlib.windowsize",
 				"uid (Global parameters)",
@@ -11306,7 +11319,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-51', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-59', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
