@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev17-64 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev17-83 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
@@ -63,12 +63,12 @@
 		</div>
 		<div class="container">
 			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-10</b> on <b>2013/03/06</b></small>
+				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.1.0-10</b> on <b>2013/03/11</b></small>
 			</div>
 			<div class="well pagination-centered">
 				<h1>HAProxy</h1>
 				<h2>Configuration Manual</h2>
-				<p><strong>version 1.5-dev17-64</strong></p>
+				<p><strong>version 1.5-dev17-83</strong></p>
 				<p>
 					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 					willy tarreau<br>
@@ -1179,6 +1179,11 @@ configured with &quot;<a href="#log%20global">log global</a>&quot;.
         the chroot) and uid/gid (be sure the path is appropriately
         writeable).
 
+      Any part of the address string may reference any number of environment
+      variables by preceding their name with a dollar sign ('$') and
+      optionally enclosing them with braces ('{}'), similarly to what is done
+      in Bourne shell.
+
 &lt;facility&gt; must be one of the 24 standard syslog facilities :
 
         kern   user   mail   daemon auth   syslog lpr    news
@@ -1480,7 +1485,11 @@ connect the new one and initiate a complete replication (teaching process).
 It is strongly recommended to have the exact same peers declaration on all
 peers and to only rely on the &quot;-L&quot; command line argument to change the local
 peer name. This makes it easier to maintain coherent configuration files
-across all peers.</pre><div class="separator">
+across all peers.
+
+Any part of the address string may reference any number of environment
+variables by preceding their name with a dollar sign ('$') and optionally
+enclosing them with braces ('{}'), similarly to what is done in Bourne shell.</pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>peers mypeers
@@ -2043,6 +2052,20 @@ extension with &quot;url_param&quot; must be considered :
               listen on. If unset, all IPv4 addresses of the system will be
               listened on. The same will apply for '*' or the system's
               special address &quot;0.0.0.0&quot;. The IPv6 equivalent is '::'.
+              Optionally, an address family prefix may be used before the
+              address to force the family regardless of the address format,
+              which can be useful to specify a path to a unix socket with
+              no slash ('/'). Currently supported prefixes are :
+                - 'ipv4@'  -&gt; address is always IPv4
+                - 'ipv6@'  -&gt; address is always IPv6
+                - 'unix@'  -&gt; address is a path to a local unix socket
+                - 'fd@&lt;n&gt;' -&gt; use file descriptor &lt;n&gt; inherited from the
+                  parent. The fd must be bound and may or may not already
+                  be listening.
+              Any part of the address string may reference any number of
+              environment variables by preceding their name with a dollar
+              sign ('$') and optionally enclosing them with braces ('{}'),
+              similarly to what is done in Bourne shell.
 
 &lt;port_range&gt;  is either a unique TCP port, or a port range for which the
               proxy will accept connections for the IP address specified
@@ -2093,6 +2116,14 @@ in a frontend.</pre><div class="separator">
 listen http_https_proxy
     bind :80
     bind :443 ssl crt /etc/haproxy/site.pem
+
+listen http_https_proxy_explicit
+    bind ipv6@:80
+    bind ipv4@public_ssl:443 ssl crt /etc/haproxy/site.pem
+    bind unix@ssl-frontend.sock user root mode 600 accept-proxy
+
+listen external_bind_app1
+    bind fd@${FD_APP1}
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><div>This keyword is available in sections :</div><li><a href="#source%20%28Proxies%29">Proxies</a></li><li><a href="#source%20%28Bind%20and%20Server%20options%29">Bind and Server options</a></li></ul></span>&quot;, &quot;<a href="#option%20forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol documentation, and <a href="#5">section 5</a> about bind options.</div>
 <a name="bind-process"></a><a name="4-bind-process"></a><a name="4.2-bind-process"></a><a name="bind-process (Proxies)"></a><a name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="bind-process"></a><a href="#4-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-32&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-32&gt;</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -3151,6 +3182,11 @@ The persistence is ignored when an &quot;if&quot; condition is met, or unless an
              inside the chroot) and uid/gid (be sure the path is
              appropriately writeable).
 
+           Any part of the address string may reference any number of
+           environment variables by preceding their name with a dollar
+           sign ('$') and optionally enclosing them with braces ('{}'),
+           similarly to what is done in Bourne shell.
+
 &lt;facility&gt; must be one of the 24 standard syslog facilities :
 
              kern   user   mail   daemon auth   syslog lpr    news
@@ -3184,6 +3220,7 @@ Note : According to RFC3164, messages are truncated to 1024 bytes before
 <code>log global
 log 127.0.0.1:514 local0 notice         <span class="comment"># only send important events</span>
 log 127.0.0.1:514 local0 notice notice  <span class="comment"># same but limit output level</span>
+log ${LOCAL_SYSLOG}:514 local0 notice   <span class="comment"># send to local server</span>
 </code></pre>
 </div><a name="log-format"></a><a name="4-log-format"></a><a name="4.2-log-format"></a><a name="log-format (Proxies)"></a><a name="log-format (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="log-format"></a><a href="#4-log-format">log-format</a></b> <span style="color: #080">&lt;string&gt;</span>
    Allows you to custom a log line.</div><div class="page-header"><b>See also :</b> Custom Log Format (8.2.4)</div>
@@ -5167,7 +5204,17 @@ rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
           intercepted and haproxy must forward to the original destination
           address. This is more or less what the &quot;<a href="#option%20transparent">transparent</a>&quot; keyword does
           except that with a server it's possible to limit concurrency and
-          to report statistics.
+          to report statistics. Optionally, an address family prefix may be
+          used before the address to force the family regardless of the
+          address format, which can be useful to specify a path to a unix
+          socket with no slash ('/'). Currently supported prefixes are :
+                - 'ipv4@'  -&gt; address is always IPv4
+                - 'ipv6@'  -&gt; address is always IPv6
+                - 'unix@'  -&gt; address is a path to a local unix socket
+          Any part of the address string may reference any number of
+          environment variables by preceding their name with a dollar
+          sign ('$') and optionally enclosing them with braces ('{}'),
+          similarly to what is done in Bourne shell.
 
 &lt;port&gt;    is an optional port specification. If set, all connections will
           be sent to this port. If unset, the same port the client
@@ -5184,6 +5231,10 @@ rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
 <pre class="prettyprint">
 <code>server first  10.1.1.1:1080 cookie first  check inter 1000
 server second 10.1.1.2:1080 cookie second check inter 1000
+server transp ipv4@
+server backup ${SRV_BACKUP}:1080 backup
+server www1_dc1 ${LAN_DC1}.101:80
+server www1_dc2 ${LAN_DC2}.101:80
 </code></pre>
 </div><div class="page-header"><b>See also:</b> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about server options</div>
 <a name="source"></a><a name="4-source"></a><a name="4.2-source"></a><a name="source (Proxies)"></a><a name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="source"></a><a href="#4-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a name="source"></a><a name="4-source"></a><a name="4.2-source"></a><a name="source (Proxies)"></a><a name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="source"></a><a href="#4-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a name="source"></a><a name="4-source"></a><a name="4.2-source"></a><a name="source (Proxies)"></a><a name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a name="source"></a><a href="#4-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Set the source address for outgoing connections</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -5193,8 +5244,20 @@ server second 10.1.1.2:1080 cookie second check inter 1000
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;addr&gt;    is the IPv4 address HAProxy will bind to before connecting to a
           server. This address is also used as a source for health checks.
+
           The default value of 0.0.0.0 means that the system will select
-          the most appropriate address to reach its destination.
+          the most appropriate address to reach its destination. Optionally
+          an address family prefix may be used before the address to force
+          the family regardless of the address format, which can be useful
+          to specify a path to a unix socket with no slash ('/'). Currently
+          supported prefixes are :
+            - 'ipv4@' -&gt; address is always IPv4
+            - 'ipv6@' -&gt; address is always IPv6
+            - 'unix@' -&gt; address is a path to a local unix socket
+          Any part of the address string may reference any number of
+          environment variables by preceding their name with a dollar
+          sign ('$') and optionally enclosing them with braces ('{}'),
+          similarly to what is done in Bourne shell.
 
 &lt;port&gt;    is an optional port. It is normally not needed but may be useful
           in some very specific contexts. The default value of zero means
@@ -11319,7 +11382,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-64', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-83', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.1.0-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
