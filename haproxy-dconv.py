@@ -184,6 +184,8 @@ def init_parsers(pctxt):
 def convert(infile, outfile):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
 
+    hasSummary = False
+
     data = []
     fd = file(infile,"r")
     for line in fd:
@@ -260,6 +262,7 @@ def convert(infile, outfile):
             currentSection["content"] = currentSection["content"] + line + "\n"
             j += 1
             if currentSection["details"]["title"] == "Summary" and line != "":
+		hasSummary = True
                 # Learn chapters from the summary
                 details = getTitleDetails(line)
                 if details["chapter"]:
@@ -270,6 +273,21 @@ def convert(infile, outfile):
     chapterIndexes = sorted(chapters.keys())
 
     document = ""
+
+    # Complete the summary
+    for section in sections:
+        details = section["details"]
+        title = details["title"]
+        if title:
+            fulltitle = title
+            if details["chapter"]:
+                documentAppend("<a name=\"%s\"></a>" % details["chapter"])
+                fulltitle = details["chapter"] + ". " + title
+                if not details["chapter"] in chapters:
+                    print >> sys.stderr, "Adding '%s' to the summary" % details["title"]
+                    chapters[details["chapter"]] = details
+                    chapterIndexes = sorted(chapters.keys())
+
     for section in sections:
         details = section["details"]
         pctxt.details = details
@@ -279,24 +297,18 @@ def convert(infile, outfile):
 
         print >> sys.stderr, "Parsing chapter %s..." % title
 
-        if title == "Summary":
+        if (title == "Summary") or (title and not hasSummary):
             summaryTemplate = pctxt.templates.get_template('summary.html')
-
             documentAppend(summaryTemplate.render(
                 chapters = chapters,
                 chapterIndexes = chapterIndexes,
             ))
-            continue
+            if title and not hasSummary:
+                hasSummary = True
+            else:
+                continue
 
         if title:
-            fulltitle = title
-            if pctxt.details["chapter"]:
-                documentAppend("<a name=\"%s\"></a>" % details["chapter"])
-                fulltitle = details["chapter"] + ". " + title
-                if not details["chapter"] in chapters:
-                    print >> sys.stderr, "Adding '%s' to the summary" % details["title"]
-                    chapters[details["chapter"]] = details
-                    chapterIndexes = sorted(chapters.keys())
             if level == 1:
                 documentAppend("<div class=\"page-header\">", False)
             documentAppend('<h%d id="%s"><small><a class="small" href="#%s">%s.</a></small> %s</h%d>' % (level, details["chapter"], details["chapter"], details["chapter"], cgi.escape(title, True), level))
@@ -387,6 +399,16 @@ def convert(infile, outfile):
                 documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
             delay = []
             documentAppend('</div>')
+
+    if not hasSummary:
+        summaryTemplate = pctxt.templates.get_template('summary.html')
+        print chapters
+        document = summaryTemplate.render(
+            chapters = chapters,
+            chapterIndexes = chapterIndexes,
+        ) + document
+
+
     # Log warnings for keywords defined in several chapters
     keyword_conflicts = {}
     for keyword in keywords:
