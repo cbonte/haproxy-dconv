@@ -149,7 +149,7 @@ def createLinks():
                     '<span class="caret"></span>' +
                     '</a>' +
                     '<ul class="dropdown-menu">' +
-                    '<div>This keyword is available in sections :</div>' +
+                    '<li class="nav-header">This keyword is available in sections :</li>' +
                     chapter_list +
                     '</ul>' +
                     '</span>&quot;')
