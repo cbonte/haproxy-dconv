@@ -63,6 +63,9 @@
 					<input id="searchKeyword" type="text" name="keyword" class="search-query input-block-level" placeholder="Search keyword" autocomplete="off"/>
 				</form>
 				<div id="error"></div>
+				<div>
+					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.
+				</div>
 			</div>
 		</div>
 		<div class="container-fluid" id="main">
@@ -125,7 +128,9 @@
 			})
 
 			/* EXPERIMENTAL - Previous/Next navigation */
-			var headings = $(":header");
+			var headings = $(":header")
+			var previousTarget = false
+			var nextTarget = false
 			function refreshNavigation() {
 				var previous = false
 				var next = false
@@ -147,11 +152,13 @@
 					}
 					if (next) return false
 				})
+				previousTarget = previous ? previous.attr('data-target') : 'top'
 				$('#previous').html(
-					previous && previous.attr('data-target') ? '<a href="#' + previous.attr('data-target') + '">&larr; ' + previous.text() + '</a>' : '<a href="#top">&larr; Top</a>'
+					previous && previousTarget ? '<a href="#' + previousTarget + '">&larr; ' + previous.text() + '</a>' : '<a href="#top">&larr; Top</a>'
 				)
+				nextTarget = next ? next.attr('data-target') : 'bottom'
 				$('#next').html(
-					next && next.attr('data-target') ? '<a href="#' + next.attr('data-target') + '">' + next.text() + ' &rarr;</a>' : '<a href="#bottom">Bottom &rarr;</a>'
+					next && nextTarget ? '<a href="#' + nextTarget + '">' + next.text() + ' &rarr;</a>' : '<a href="#bottom">Bottom &rarr;</a>'
 				)
 			}
 
@@ -161,6 +168,22 @@
 			$(document).ready(function() {
 				refreshNavigation()
 			});
+
+			/* EXPERIMENTAL - Enable keyboard navigation */
+			$(document).keydown(function(e){
+				switch(e.which) {
+					case 37: // left
+					window.location.hash = previousTarget ? previousTarget : 'top'
+					break
+
+					case 39: // right
+					window.location.hash = nextTarget ? nextTarget : 'bottom'
+					break
+
+					default: return // exit this handler for other keys
+				}
+				e.preventDefault()
+			})
 		</script>
 		${footer}
 		<a class="anchor" name="bottom"></a>
