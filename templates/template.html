@@ -7,9 +7,9 @@
 		<link href="css/page.css" rel="stylesheet" />
 	</head>
 	<body>
-		<div class="navbar navbar-static-top">
+		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
-				<div class="container">
+				<div class="_container">
 					<a class="brand" href="#">${headers['title']} ${headers['subtitle']}</a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
@@ -44,53 +44,46 @@
 							</ul>
 						</li>
 					</ul>
-					<form class="navbar-search" onsubmit="search(this.keyword.value); return false">
-						<input id="searchKeyword" type="text" name="keyword" class="input-large search-query" placeholder="Search keyword" autocomplete="off"/>
-					</form>
 				</div>
 			</div>
 		</div>
-		<div class="navbar navbar-fixed-bottom">
+		<div class="navbar navbar-fixed-bottom navbar-inverse">
 			<div class="navbar-inner">
-				<div class="container">
-					<ul class="nav">
-						<li id="previous"></li>
-					</ul>
-					<ul class="nav pull-right">
-						<li id="next"></li>
-					</ul>
+				<ul class="nav">
+					<li id="previous"></li>
+				</ul>
+				<ul class="nav pull-right">
+					<li id="next"></li>
+				</ul>
+			</div>
+		</div>
+		<div class="affix" id="menu-left">
+			<div class="container-fluid">
+				<form class="form" onsubmit="search(this.keyword.value); return false">
+					<input id="searchKeyword" type="text" name="keyword" class="search-query input-block-level" placeholder="Search keyword" autocomplete="off"/>
+				</form>
+				<div id="error"></div>
+			</div>
+		</div>
+		<div class="container-fluid" id="main">
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="pagination-right">
+						<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b></small>
+					</div>
+					<div class="well pagination-centered">
+						<h1>${headers['title']}</h1>
+						<h2>${headers['subtitle']}</h2>
+						<p><strong>${headers['version']}</strong></p>
+						<p>
+							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
+							${headers['author']}<br>
+							${headers['date']}
+						</p>
+					</div>
+					
+					${document}
 				</div>
-			</div>
-		</div>
-		<div class="container">
-			<div class="pagination-right">
-				<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b></small>
-			</div>
-			<div class="well pagination-centered">
-				<h1>${headers['title']}</h1>
-				<h2>${headers['subtitle']}</h2>
-				<p><strong>${headers['version']}</strong></p>
-				<p>
-					<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
-					${headers['author']}<br>
-					${headers['date']}
-				</p>
-			</div>
-			
-			${document}
-		</div>
-
-		<div id="searchModal" class="modal hide fade" style="display: none;" tabindex="-1">
-			<div class="modal-header">
-				<a class="close" data-dismiss="modal">&times;</a>
-				<h3>Search keyword</h3>
-			</div>
-			<div class="modal-body">
-				<h4>Unknown keyword <code></code></h4>
-				<p>The keyword <code></code> you're looking for doesn't exist or is not detected by the documentation converter.</p>
-			</div>
-			<div class="modal-footer">
-				<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
 			</div>
 		</div>
 
@@ -101,15 +94,25 @@
 			/* Keyword search */
 			var keywords = [
 				"${'",\n\t\t\t\t"'.join(keywords)}"
-			];
+			]
 
 			function search(keyword) {
 				if (keyword) {
 					if (!!~$.inArray(keyword, keywords)) {
-						window.location.hash = keyword;
+						window.location.hash = keyword
+						$("#error").html('')
 					} else {
-						$("#searchModal code").text(keyword);
-						$("#searchModal").modal();
+						var error = $('<div/>', {
+							class: "alert alert-error"
+						})
+						error.html('\
+							<a class="close" href="#" data-dismiss="alert">&times;</a>\
+							<strong>Unknown keyword !</strong>\
+							<p>The keyword <code></code> you\'re looking for doesn\'t exist or is not detected by the documentation converter.</p>\
+						')
+						error.find("code").text(keyword)
+
+						$("#error").html(error)
 					}
 				}
 			}
@@ -129,20 +132,27 @@
 				var next = false
 				$.each(headings, function(item, value) {
 					var el = $(value)
-					if (! el.attr('id')) return true
-					if (el.offset().top < $(window).scrollTop()) {
+
+					// TODO : avoid target recalculation on each refresh
+					var target = el.attr('data-target')
+					if (! target) return true
+
+					var target_el = $('#' + target.replace(/\./, "\\."))
+					if (! target_el.attr('id')) return true
+
+					if (target_el.offset().top < $(window).scrollTop()) {
 						previous = el
 					}
-					if (el.offset().top - 1 > $(window).scrollTop()) {
+					if (target_el.offset().top - 1 > $(window).scrollTop()) {
 						next = el
 					}
 					if (next) return false
 				})
 				$('#previous').html(
-					previous && previous.attr('id') ? '<a href="#' + previous.attr('id') + '">&larr; ' + previous.text() + '</a>' : '<a href="#top">&larr; Top</a>'
+					previous && previous.attr('data-target') ? '<a href="#' + previous.attr('data-target') + '">&larr; ' + previous.text() + '</a>' : '<a href="#top">&larr; Top</a>'
 				)
 				$('#next').html(
-					next && next.attr('id') ? '<a href="#' + next.attr('id') + '">' + next.text() + ' &rarr;</a>' : '<a href="#bottom">Bottom &rarr;</a>'
+					next && next.attr('data-target') ? '<a href="#' + next.attr('data-target') + '">' + next.text() + ' &rarr;</a>' : '<a href="#bottom">Bottom &rarr;</a>'
 				)
 			}
 
@@ -154,6 +164,6 @@
 			});
 		</script>
 		${footer}
-		<a name="bottom"></a>
+		<a class="anchor" name="bottom"></a>
 	</body>
 </html>

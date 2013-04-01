@@ -42,11 +42,11 @@ class Parser(parser.Parser):
                         if not subKeyword in keywords:
                             keywords[subKeyword] = set()
                         keywords[subKeyword].add(toplevel)
-                    res += '<a name="%s"></a>' % subKeyword
-                    res += '<a name="%s-%s"></a>' % (toplevel, subKeyword)
-                    res += '<a name="%s-%s"></a>' % (pctxt.details["chapter"], subKeyword)
-                    res += '<a name="%s (%s)"></a>' % (subKeyword, chapters[toplevel]['title'])
-                    res += '<a name="%s (%s)"></a>' % (subKeyword, chapters[pctxt.details["chapter"]]['title'])
+                    res += '<a class="anchor" name="%s"></a>' % subKeyword
+                    res += '<a class="anchor" name="%s-%s"></a>' % (toplevel, subKeyword)
+                    res += '<a class="anchor" name="%s-%s"></a>' % (pctxt.details["chapter"], subKeyword)
+                    res += '<a class="anchor" name="%s (%s)"></a>' % (subKeyword, chapters[toplevel]['title'])
+                    res += '<a class="anchor" name="%s (%s)"></a>' % (subKeyword, chapters[pctxt.details["chapter"]]['title'])
 
                 deprecated = parameters.find("(deprecated)")
                 if deprecated != -1:
@@ -71,7 +71,7 @@ class Parser(parser.Parser):
 
                 parameters = self.colorize(parameters)
 
-                res += '<div class="keyword">%s<b><a name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, quote("%s-%s" % (toplevel, keyword)), keyword, parameters, suffix)
+                res += '<div class="keyword">%s<b><a class="anchor" name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, quote("%s-%s" % (toplevel, keyword)), keyword, parameters, suffix)
                 pctxt.next()
                 pctxt.stop = True
             elif line.startswith("/*"):

@@ -281,7 +281,7 @@ def convert(infile, outfile):
         if title:
             fulltitle = title
             if details["chapter"]:
-                documentAppend("<a name=\"%s\"></a>" % details["chapter"])
+                #documentAppend("<a name=\"%s\"></a>" % details["chapter"])
                 fulltitle = details["chapter"] + ". " + title
                 if not details["chapter"] in chapters:
                     print >> sys.stderr, "Adding '%s' to the summary" % details["title"]
@@ -309,9 +309,10 @@ def convert(infile, outfile):
                 continue
 
         if title:
+            documentAppend('<a class="anchor" id="%s" name="%s"></a>' % (details["chapter"], details["chapter"]))
             if level == 1:
                 documentAppend("<div class=\"page-header\">", False)
-            documentAppend('<h%d id="%s"><small><a class="small" href="#%s">%s.</a></small> %s</h%d>' % (level, details["chapter"], details["chapter"], details["chapter"], cgi.escape(title, True), level))
+            documentAppend('<h%d id="chapter-%s" data-target="%s"><small><a class="small" href="#%s">%s.</a></small> %s</h%d>' % (level, details["chapter"], details["chapter"], details["chapter"], details["chapter"], cgi.escape(title, True), level))
             if level == 1:
                 documentAppend("</div>", False)
 
