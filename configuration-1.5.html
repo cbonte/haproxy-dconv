@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev17-86 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev17-101 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-2" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-2" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev17-86</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev17-101</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -66,7 +66,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-2</b> on <b>2013/04/01</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-2</b> on <b>2013/04/02</b></small>
 				</p>
 			</div>
 		</div>
@@ -76,7 +76,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev17-86</strong></p>
+						<p><strong>version 1.5-dev17-101</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -983,6 +983,8 @@ Haproxy may emit the following status codes by itself :
    301  when performing a redirection, depending on the configured code
    302  when performing a redirection, depending on the configured code
    303  when performing a redirection, depending on the configured code
+   307  when performing a redirection, depending on the configured code
+   308  when performing a redirection, depending on the configured code
    400  for an invalid or too large request
    401  when an authentication is required to perform the action (when
         accessing the stats page)
@@ -4742,12 +4744,14 @@ response. If no condition is specified, the redirect applies unconditionally.</p
           HTTPS.
 
 &lt;code&gt;    The code is optional. It indicates which type of HTTP redirection
-          is desired. Only codes 301, 302 and 303 are supported, and 302 is
-          used if no code is specified. 301 means &quot;Moved permanently&quot;, and
-          a browser may cache the Location. 302 means &quot;Moved permanently&quot;
-          and means that the browser should not cache the redirection. 303
-          is equivalent to 302 except that the browser will fetch the
-          location with a GET method.
+          is desired. Only codes 301, 302, 303, 307 and 308 are supported,
+          with 302 used by default if no code is specified. 301 means
+          &quot;Moved permanently&quot;, and a browser may cache the Location. 302
+          means &quot;Moved permanently&quot; and means that the browser should not
+          cache the redirection. 303 is equivalent to 302 except that the
+          browser will fetch the location with a GET method. 307 is just
+          like 302 but makes it clear that the same method must be reused.
+          Likewise, 308 replaces 301 if the same method must be used.
 
 &lt;option&gt;  There are several options which can be specified to adjust the
           expected behaviour of a redirection :
@@ -7113,26 +7117,42 @@ negociated during the SSL/TLS handshake. The format of the string is defined
 in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string
 such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes).</pre><a class="anchor" name="crl-file"></a><a class="anchor" name="5-crl-file"></a><a class="anchor" name="5.1-crl-file"></a><a class="anchor" name="crl-file (Bind and Server options)"></a><a class="anchor" name="crl-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crl-file"></a><a href="#5-crl-file">crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 designates a PEM file from which to load certificate revocation list used
-to verify client's certificate.</pre><a class="anchor" name="crt"></a><a class="anchor" name="5-crt"></a><a class="anchor" name="5.1-crt"></a><a class="anchor" name="crt (Bind and Server options)"></a><a class="anchor" name="crt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt"></a><a href="#5-crt">crt</a></b> <span style="color: #080">&lt;cert&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in.
-It designates a PEM file from which to load both a certificate and the
-associated private key. This file can be built by concatenating both PEM
-files into one. If the OpenSSL used supports Diffie-Hellman, parameters
-present in this file are also loaded. If a directory name is used instead of a
-PEM file, then all files found in that directory will be loaded. This
-directive may be specified multiple times in order to load certificates from
-multiple files or directories. The certificates will be presented to clients
-who provide a valid TLS Server Name Indication field matching one of their CN
-or alt subjects. Wildcards are supported, where a wildcard character '*' is
-used instead of the first hostname component (eg: *.example.org matches
-www.example.org but not www.sub.example.org). If no SNI is provided by the
-client or if the SSL library does not support TLS extensions, or if the client
-provides and SNI which does not match any certificate, then the first loaded
-certificate will be presented. This means that when loading certificates from
-a directory, it is highly recommended to load the default one first as a file.
-Note that the same cert may be loaded multiple times without side effects.</pre><a class="anchor" name="crt-ignore-err"></a><a class="anchor" name="5-crt-ignore-err"></a><a class="anchor" name="5.1-crt-ignore-err"></a><a class="anchor" name="crt-ignore-err (Bind and Server options)"></a><a class="anchor" name="crt-ignore-err (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-ignore-err"></a><a href="#5-crt-ignore-err">crt-ignore-err</a></b> <span style="color: #080">&lt;errors&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in.
-Sets a comma separated list of errorIDs to ignore during verify at depth == 0.
-If set to 'all', all errors are ignored. SSL handshake is not abored if an
-error is ignored.</pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
+to verify client's certificate.</pre><a class="anchor" name="crt"></a><a class="anchor" name="5-crt"></a><a class="anchor" name="5.1-crt"></a><a class="anchor" name="crt (Bind and Server options)"></a><a class="anchor" name="crt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt"></a><a href="#5-crt">crt</a></b> <span style="color: #080">&lt;cert&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+designates a PEM file containing both the required certificates and any
+associated private keys. This file can be built by concatenating multiple
+PEM files into one (e.g. cat cert.pem key.pem &gt; combined.pem). If your CA
+requires an intermediate certificate, this can also be concatenated into this
+file.
+
+If the OpenSSL used supports Diffie-Hellman, parameters present in this file
+are loaded.
+
+If a directory name is used instead of a PEM file, then all files found in
+that directory will be loaded. This directive may be specified multiple times
+in order to load certificates from multiple files or directories. The
+certificates will be presented to clients who provide a valid TLS Server Name
+Indication field matching one of their CN or alt subjects. Wildcards are
+supported, where a wildcard character '*' is used instead of the first
+hostname component (eg: *.example.org matches www.example.org but not
+www.sub.example.org).
+
+If no SNI is provided by the client or if the SSL library does not support
+TLS extensions, or if the client provides an SNI hostname which does not
+match any certificate, then the first loaded certificate will be presented.
+This means that when loading certificates from a directory, it is highly
+recommended to load the default one first as a file.
+
+Note that the same cert may be loaded multiple times without side effects.
+
+Some CAs (such as Godaddy) offer a drop down list of server types that do not
+include HAProxy when obtaining a certificate. If this happens be sure to
+choose a webserver that the CA believes requires a intermediate CA (for
+Godaddy, selection Apache Tomcat will get the correct bundle, but many
+others, e.g. nginx, result in a wrong bundle that will not work for some
+clients).</pre><a class="anchor" name="crt-ignore-err"></a><a class="anchor" name="5-crt-ignore-err"></a><a class="anchor" name="5.1-crt-ignore-err"></a><a class="anchor" name="crt-ignore-err (Bind and Server options)"></a><a class="anchor" name="crt-ignore-err (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-ignore-err"></a><a href="#5-crt-ignore-err">crt-ignore-err</a></b> <span style="color: #080">&lt;errors&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. Sets a
+comma separated list of errorIDs to ignore during verify at depth == 0.  If
+set to 'all', all errors are ignored. SSL handshake is not abored if an error
+is ignored.</pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
 or at worst after the first retransmit. This should be used only on protocols
 for which the client talks first (eg: HTTP). It can slightly improve
@@ -11410,7 +11430,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-86', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-101', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-2', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
