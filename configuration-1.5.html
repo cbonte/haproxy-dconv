@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev17-101 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev17-108 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-2" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-2" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev17-101</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev17-108</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -76,7 +76,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev17-101</strong></p>
+						<p><strong>version 1.5-dev17-108</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -7152,7 +7152,18 @@ others, e.g. nginx, result in a wrong bundle that will not work for some
 clients).</pre><a class="anchor" name="crt-ignore-err"></a><a class="anchor" name="5-crt-ignore-err"></a><a class="anchor" name="5.1-crt-ignore-err"></a><a class="anchor" name="crt-ignore-err (Bind and Server options)"></a><a class="anchor" name="crt-ignore-err (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-ignore-err"></a><a href="#5-crt-ignore-err">crt-ignore-err</a></b> <span style="color: #080">&lt;errors&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. Sets a
 comma separated list of errorIDs to ignore during verify at depth == 0.  If
 set to 'all', all errors are ignored. SSL handshake is not abored if an error
-is ignored.</pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
+is ignored.</pre><a class="anchor" name="crt-list"></a><a class="anchor" name="5-crt-list"></a><a class="anchor" name="5.1-crt-list"></a><a class="anchor" name="crt-list (Bind and Server options)"></a><a class="anchor" name="crt-list (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-list"></a><a href="#5-crt-list">crt-list</a></b> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+designates a list of PEM file with an optional SNI filter per certificate,
+with the following format for each line :
+
+      &lt;crtfile&gt; [&lt;snifilter&gt;]
+
+Wildcards are supported in the SNI filter. The certificates will be presented
+to clients who provide a valid TLS Server Name Indication field matching one
+of SNI filter. If no SNI filter is specified the CN and alt subjects are
+used. This directive may be specified multiple times. See the &quot;<a href="#crt">crt</a>&quot; option
+for more information. The default certificate is still needed to meet OpenSSL
+expectations. If it is not used, the strict-sni option may be used.</pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
 or at worst after the first retransmit. This should be used only on protocols
 for which the client talks first (eg: HTTP). It can slightly improve
@@ -7262,7 +7273,9 @@ round-trip after the first connection. This only makes sense with protocols
 that use high connection rates and where each round trip matters. This can
 possibly cause issues with many firewalls which do not accept data on SYN
 packets, so this option should only be enabled once well tested. This option
-is only supported on TCPv4/TCPv6 sockets and ignored by other ones.</pre><a class="anchor" name="transparent"></a><a class="anchor" name="5-transparent"></a><a class="anchor" name="5.1-transparent"></a><a class="anchor" name="transparent (Bind and Server options)"></a><a class="anchor" name="transparent (Bind options)"></a><div class="keyword"><b><a class="anchor" name="transparent"></a><a href="#5-transparent">transparent</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
+is only supported on TCPv4/TCPv6 sockets and ignored by other ones. You may
+need to build HAProxy with USE_TFO=1 if your libc doesn't define
+TCP_FASTOPEN.</pre><a class="anchor" name="transparent"></a><a class="anchor" name="5-transparent"></a><a class="anchor" name="5.1-transparent"></a><a class="anchor" name="transparent (Bind and Server options)"></a><a class="anchor" name="transparent (Bind options)"></a><div class="keyword"><b><a class="anchor" name="transparent"></a><a href="#5-transparent">transparent</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 indicates that the addresses will be bound even if they do not belong to the
 local machine, and that packets targeting any of these addresses will be
 intercepted just as if the addresses were locally configured. This normally
@@ -10861,6 +10874,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"crt",
 				"crt-base",
 				"crt-ignore-err",
+				"crt-list",
 				"daemon",
 				"debug",
 				"default-server",
@@ -11430,7 +11444,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-101', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-108', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-2', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
