@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev17-108 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev18 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-2" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-2" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev17-108</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev18</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -66,7 +66,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-2</b> on <b>2013/04/02</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-2</b> on <b>2013/04/03</b></small>
 				</p>
 			</div>
 		</div>
@@ -76,11 +76,11 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev17-108</strong></p>
+						<p><strong>version 1.5-dev18</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
-							2012/12/28
+							2013/04/03
 						</p>
 					</div>
 					
@@ -7103,7 +7103,12 @@ indicated in the protocol, unless it is violated, in which case the real
 address will still be used.  This keyword combined with support from external
 components can be used as an efficient and reliable alternative to the
 X-Forwarded-For mechanism which is not always reliable and not even always
-usable.</pre><a class="anchor" name="backlog"></a><a class="anchor" name="5-backlog"></a><a class="anchor" name="5.1-backlog"></a><a class="anchor" name="backlog (Bind and Server options)"></a><a class="anchor" name="backlog (Bind options)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#5-backlog">backlog</a></b> <span style="color: #080">&lt;backlog&gt;</span></div><pre class="text">Sets the socket's backlog to this value. If unspecified, the frontend's
+usable.</pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.1-alpn"></a><a class="anchor" name="alpn (Bind and Server options)"></a><a class="anchor" name="alpn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
+list as supported on top of ALPN. The protocol list consists in a comma-
+delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
+quotes). This requires that the SSL library is build with support for TLS
+extensions enabled (check with haproxy -vv). The ALPN extension replaces the
+initial NPN extension.</pre><a class="anchor" name="backlog"></a><a class="anchor" name="5-backlog"></a><a class="anchor" name="5.1-backlog"></a><a class="anchor" name="backlog (Bind and Server options)"></a><a class="anchor" name="backlog (Bind options)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#5-backlog">backlog</a></b> <span style="color: #080">&lt;backlog&gt;</span></div><pre class="text">Sets the socket's backlog to this value. If unspecified, the frontend's
 backlog is used instead, which generally defaults to the maxconn value.</pre><a class="anchor" name="ecdhe"></a><a class="anchor" name="5-ecdhe"></a><a class="anchor" name="5.1-ecdhe"></a><a class="anchor" name="ecdhe (Bind and Server options)"></a><a class="anchor" name="ecdhe (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ecdhe"></a><a href="#5-ecdhe">ecdhe</a></b> <span style="color: #080">&lt;named curve&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the named curve (RFC 4492) used to generate ECDH ephemeral keys. By default,
 used named curve is prime256v1.</pre><a class="anchor" name="ca-file"></a><a class="anchor" name="5-ca-file"></a><a class="anchor" name="5.1-ca-file"></a><a class="anchor" name="ca-file (Bind and Server options)"></a><a class="anchor" name="ca-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ca-file"></a><a href="#5-ca-file">ca-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
@@ -7258,7 +7263,8 @@ and &quot;<a href="#force-sslv3">force-sslv3</a>&quot;.</pre><a class="anchor" n
 as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
 This requires that the SSL library is build with support for TLS extensions
-enabled (check with haproxy -vv).</pre><a class="anchor" name="ssl"></a><a class="anchor" name="5-ssl"></a><a class="anchor" name="5.1-ssl"></a><a class="anchor" name="ssl (Bind and Server options)"></a><a class="anchor" name="ssl (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl"></a><a href="#5-ssl">ssl</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+enabled (check with haproxy -vv). Note that the NPN extension has been
+replaced with the ALPN extension (see the &quot;<a href="#alpn">alpn</a>&quot; keyword).</pre><a class="anchor" name="ssl"></a><a class="anchor" name="5-ssl"></a><a class="anchor" name="5.1-ssl"></a><a class="anchor" name="ssl (Bind and Server options)"></a><a class="anchor" name="ssl (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl"></a><a href="#5-ssl">ssl</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 enables SSL deciphering on connections instanciated from this listener. A
 certificate is necessary (see &quot;<a href="#crt">crt</a>&quot; above). All contents in the buffers will
 appear in clear text, so that ACLs and HTTP processing will only have access
@@ -7790,7 +7796,73 @@ The following ACL flags are currently supported :
 
    -i : ignore case during matching of all subsequent patterns.
    -f : load patterns from a file.
+   -m : changes the pattern matching method
    -- : force end of flags. Useful when a string looks like one of the flags.
+
+The &quot;-m&quot; flag is special. It allows the default pattern matching method to be
+changed for the fetched sample. The default method depends on the keyword and
+is described later in this document. When &quot;-m&quot; is specified and followed by a
+pattern matching method name, this method is used instead. This makes it
+possible to match contents in ways that were not initially planned. There are
+some restrictions however. Not all methods can be used with all sample fetch
+methods. Also, if &quot;-m&quot; is used in conjunction with &quot;-f&quot;, it must be placed
+first. The pattern matching method must be one of the following :
+
+  - &quot;found&quot; : only check if the requested sample could be found in the stream,
+              but do not compare it against any pattern. It is recommended not
+              to pass any pattern to avoid any confusion. This matching method
+              is particularly useful to detect presence of certain contents
+              such as headers, cookies, etc... even if they are empty and
+              without comparing them to anything nor counting them.
+
+  - &quot;bool&quot;  : check the value as a boolean. It can only be applied to fetches
+              which return a boolean or integer value, and takes no pattern.
+              Value zero does not match, all other values do match.
+
+  - &quot;int&quot;   : match the value as an integer. It can be used with integer and
+              boolean samples.
+
+  - &quot;ip&quot;    : match the value as an IPv4 or IPv6 address. It is compatible
+              with IP addresse only.
+
+  - &quot;bin&quot;   : match the contents against an hexadecimal string representing a
+              binary sequence. This may be used with binary or string samples.
+
+  - &quot;len&quot;   : match the sample's length as an integer. This may be used with
+              binary or string samples.
+
+  - &quot;str&quot;   : match the contents against a string. This may be used with
+              binary or string samples.
+
+  - &quot;beg&quot;   : check that the contents begin like the provided string patterns.
+              This may be used with binary or string samples.
+
+  - &quot;sub&quot;   : check that the contents contain at least one of the provided
+              string patterns. This may be used with binary or string samples.
+
+  - &quot;dir&quot;   : check that a slash-delimited portion of the contents exactly
+              match one of the provided string patterns. This may be used with
+              binary or string samples.
+
+  - &quot;dom&quot;   : check that a dot-delimited portion of the contents exactly
+              match one of the provided string patterns. This may be used with
+              binary or string samples.
+
+  - &quot;end&quot;   : check that the contents end like the provided string patterns.
+              This may be used with binary or string samples.
+
+  - &quot;reg&quot;   : match the contents against a list of regular expressions. This
+              may be used with binary or string samples.
+
+For example, to quickly detect the presence of cookie &quot;JSESSIONID&quot; in an HTTP
+request, it is possible to do :
+
+    acl jsess_present cook(JSESSIONID) -m found
+
+In order to apply a regular expression on the 500 first bytes of data in the
+buffer, one would use the following acl :
+
+    acl script_tag payload(0,500) -m reg -i &lt;script&gt;
 
 The &quot;-f&quot; flag is special as it loads all of the lines it finds in the file
 specified in argument and loads all of them before continuing. It is even
@@ -7905,6 +7977,12 @@ following situations :
     applied in IPv6 using the supplied IPv6 mask.</pre></div>
 <a class="anchor" id="7.5" name="7.5"></a>
 <h2 id="chapter-7.5" data-target="7.5"><small><a class="small" href="#7.5">7.5.</a></small> Available matching criteria</h2>
+<div><pre class="text">A number of predefined criteria may be used to form ACL expressions. The ones
+that are ACL-specific are detailed here. In addition to these ones, all sample
+fetch methods described in <a href="#7.8">section 7.8</a> may be used. However, with these last
+ones, no default pattern matching method is defined, so it is mandatory to pass
+&quot;-m&quot; followed by a method. When a same keyword exists in both forms, the ACL
+compatible form prevails.</pre></div>
 <a class="anchor" id="7.5.1" name="7.5.1"></a>
 <h3 id="chapter-7.5.1" data-target="7.5.1"><small><a class="small" href="#7.5.1">7.5.1.</a></small> Matching at Layer 4 and below</h3>
 <div><pre class="text">A first set of criteria applies to information which does not require any
@@ -8188,8 +8266,8 @@ keyword for more detailed information on the subject.</pre><a class="anchor" nam
 or superior) hello message and handshake type is equal to &lt;integer&gt;.
 This test was designed to be used with TCP response content inspection: a
 SSL session ID may be fetched. Note that this only applies to raw contents
-found in the request buffer and not to contents deciphered via an SSL data
-layer, so this will not work with &quot;<a href="#bind">bind</a>&quot; lines having the &quot;<a href="#ssl">ssl</a>&quot; option.</pre><a class="anchor" name="req_len"></a><a class="anchor" name="7-req_len"></a><a class="anchor" name="7.5.2-req_len"></a><a class="anchor" name="req_len (Using ACLs and pattern extraction)"></a><a class="anchor" name="req_len (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="req_len"></a><a href="#7-req_len">req_len</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the length of the data in the request buffer matches the
+found in the response buffer and not to contents deciphered via an SSL data
+layer, so this will not work with &quot;<a href="#server">server</a>&quot; lines having the &quot;<a href="#ssl">ssl</a>&quot; option.</pre><a class="anchor" name="req_len"></a><a class="anchor" name="7-req_len"></a><a class="anchor" name="7.5.2-req_len"></a><a class="anchor" name="req_len (Using ACLs and pattern extraction)"></a><a class="anchor" name="req_len (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="req_len"></a><a href="#7-req_len">req_len</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the length of the data in the request buffer matches the
 specified range. It is important to understand that this test does not
 return false as long as the buffer is changing. This means that a check with
 equality to zero will almost always immediately match at the beginning of the
@@ -8315,7 +8393,14 @@ layer, and the version of the certificate presented by the frontend matches
 the value.</pre><a class="anchor" name="ssl_fc"></a><a class="anchor" name="7-ssl_fc"></a><a class="anchor" name="7.5.2-ssl_fc"></a><a class="anchor" name="ssl_fc (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc"></a><a href="#7-ssl_fc">ssl_fc</a></b></div><pre class="text">Returns true when the front connection was made via an SSL/TLS transport
 layer and is locally deciphered. This means it has matched a socket declared
 with a &quot;<a href="#bind">bind</a>&quot; line having the &quot;<a href="#ssl">ssl</a>&quot; option.</pre><a class="anchor" name="ssl_fc_alg_keysize"></a><a class="anchor" name="7-ssl_fc_alg_keysize"></a><a class="anchor" name="7.5.2-ssl_fc_alg_keysize"></a><a class="anchor" name="ssl_fc_alg_keysize (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_alg_keysize (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_alg_keysize"></a><a href="#7-ssl_fc_alg_keysize">ssl_fc_alg_keysize</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
-layer and the symmetric cipher key size supported in bits matches the value.</pre><a class="anchor" name="ssl_fc_cipher"></a><a class="anchor" name="7-ssl_fc_cipher"></a><a class="anchor" name="7.5.2-ssl_fc_cipher"></a><a class="anchor" name="ssl_fc_cipher (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_cipher (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipher"></a><a href="#7-ssl_fc_cipher">ssl_fc_cipher</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">returns true when the incoming connection was made over an ssl/tls transport
+layer and the symmetric cipher key size supported in bits matches the value.</pre><a class="anchor" name="ssl_fc_alpn"></a><a class="anchor" name="7-ssl_fc_alpn"></a><a class="anchor" name="7.5.2-ssl_fc_alpn"></a><a class="anchor" name="ssl_fc_alpn (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_alpn (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_alpn"></a><a href="#7-ssl_fc_alpn">ssl_fc_alpn</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
+layer which deciphered it and found a Next Protocol Negociation TLS extension
+sent by the client, matching the specified string. This requires that the SSL
+library is build with support for TLS extensions enabled (check haproxy -vv).
+Note that the TLS ALPN extension is not advertised unless the &quot;<a href="#alpn">alpn</a>&quot; keyword
+on the &quot;<a href="#bind">bind</a>&quot; line specifies a protocol list. Also, nothing forces the client
+to pick a protocol from this list, any other one may be requested. The TLS
+ALPN extension is meant to replace the TLS NPN extension.</pre><a class="anchor" name="ssl_fc_cipher"></a><a class="anchor" name="7-ssl_fc_cipher"></a><a class="anchor" name="7.5.2-ssl_fc_cipher"></a><a class="anchor" name="ssl_fc_cipher (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_cipher (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipher"></a><a href="#7-ssl_fc_cipher">ssl_fc_cipher</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">returns true when the incoming connection was made over an ssl/tls transport
 layer and the name of the used cipher matches the string.</pre><a class="anchor" name="ssl_fc_has_crt"></a><a class="anchor" name="7-ssl_fc_has_crt"></a><a class="anchor" name="7.5.2-ssl_fc_has_crt"></a><a class="anchor" name="ssl_fc_has_crt (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_has_crt (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_crt"></a><a href="#7-ssl_fc_has_crt">ssl_fc_has_crt</a></b></div><pre class="text">Returns true if a client certificate is present in an incoming connection over
 SSL/TLS transport layer. Useful if 'verify' statement is set to 'optional'.
 Note: on SSL session resumption with Session ID or TLS ticket, client
@@ -8331,7 +8416,8 @@ sent by the client, matching the specified string. This requires that the SSL
 library is build with support for TLS extensions enabled (check haproxy -vv).
 Note that the TLS NPN extension is not advertised unless the &quot;<a href="#npn">npn</a>&quot; keyword on
 the &quot;<a href="#bind">bind</a>&quot; line specifies a protocol list. Also, nothing forces the client to
-pick a protocol from this list, any other one may be requested.</pre><a class="anchor" name="ssl_fc_protocol"></a><a class="anchor" name="7-ssl_fc_protocol"></a><a class="anchor" name="7.5.2-ssl_fc_protocol"></a><a class="anchor" name="ssl_fc_protocol (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_protocol (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_protocol"></a><a href="#7-ssl_fc_protocol">ssl_fc_protocol</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
+pick a protocol from this list, any other one may be requested. Please note
+that the TLS NPN extension was replaced with ALPN.</pre><a class="anchor" name="ssl_fc_protocol"></a><a class="anchor" name="7-ssl_fc_protocol"></a><a class="anchor" name="7.5.2-ssl_fc_protocol"></a><a class="anchor" name="ssl_fc_protocol (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_protocol (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_protocol"></a><a href="#7-ssl_fc_protocol">ssl_fc_protocol</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
 layer and the name of the used protocol matches the string.</pre><a class="anchor" name="ssl_fc_sni"></a><a class="anchor" name="7-ssl_fc_sni"></a><a class="anchor" name="7.5.2-ssl_fc_sni"></a><a class="anchor" name="ssl_fc_sni (Using ACLs and pattern extraction)"></a><a class="anchor" name="ssl_fc_sni (Matching contents at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_sni"></a><a href="#7-ssl_fc_sni">ssl_fc_sni</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Returns true when the incoming connection was made over an SSL/TLS transport
 layer which deciphered it and found a Server Name Indication TLS extension
 sent by the client, matching the specified string. In HTTPS, the SNI field
@@ -8671,6 +8757,31 @@ equivalent used in ACLs.
 
 The list of currently supported pattern fetch functions is the following :
 
+  always_false
+               Always returns the boolean &quot;false&quot; value.
+
+  always_true
+               Always returns the boolean &quot;true&quot; value.
+
+  avg_queue([&lt;backend&gt;])
+               Returns the total number of queued connections of the designated
+               backend divided by the number of active servers. The current
+               backend is used if no backend is specified. This is very similar
+               to &quot;<a href="#queue">queue</a>&quot; except that the size of the farm is considered, in
+               order to give a more accurate measurement of the time it may
+               take for a new connection to be processed. The main usage is
+               with ACL to return a sorry page to new users when it becomes
+               certain they will get a degraded service, or to pass to the
+               backend servers in a header so that they decide to work in
+               degraded mode or to disable some functions to speed up the
+               processing a bit. Note that in the event there would not be
+               any active server anymore, we would consider twice the number
+               of queued connections as the measured value. This is a fair
+               estimate, as we expect one server to get back soon anyway, but
+               we still prefer to send new traffic to another backend if in
+               better shape. See also the &quot;<a href="#queue">queue</a>&quot;, &quot;<a href="#be_conn">be_conn</a>&quot;, and
+               &quot;<a href="#be_sess_rate">be_sess_rate</a>&quot; sample fetches.
+
   base         This returns the concatenation of the first Host header and the
                path part of the request, which starts at the first slash and
                ends before the question mark. It can be useful in virtual
@@ -8690,269 +8801,239 @@ The list of currently supported pattern fetch functions is the following :
                size of 8 or 20 bytes depending on the source address family.
                This can be used to track per-IP, per-URL counters.
 
-  src          This is the source IPv4 address of the client of the session.
-               It is of type IPv4 and works on both IPv4 and IPv6 tables.
-               On IPv6 tables, IPv4 address is mapped to its IPv6 equivalent,
-               according to RFC 4291.
+  be_conn([&lt;backend&gt;])
+               Returns the number of currently established connections on the
+               the backend, possibly including the connection being evaluated.
+               If no backend name is specified, the current one is used. But it
+               is also possible to check another backend. It can be used to use
+               a specific farm when the nominal one is full.  See also the
+               &quot;<a href="#fe_conn">fe_conn</a>&quot;, &quot;<a href="#queue">queue</a>&quot; and &quot;<a href="#be_sess_rate">be_sess_rate</a>&quot; criteria.
 
-  dst          This is the destination IPv4 address of the session on the
-               client side, which is the address the client connected to.
-               It can be useful when running in transparent mode. It is of
-               type IPv4 and works on both IPv4 and IPv6 tables.
-               On IPv6 tables, IPv4 address is mapped to its IPv6 equivalent,
-               according to RFC 4291.
+  be_id        Returns an integer containing the current backend's id.
 
-  dst_port     This is the destination TCP port of the session on the client
-               side, which is the port the client connected to. This might be
-               used when running in transparent mode or when assigning dynamic
-               ports to some clients for a whole application session. It is of
-               type integer and only works with such tables.
+  be_sess_rate([&lt;backend&gt;])
+               Returns an integer value corresponding to the sessions creation
+               rate on the backend, in number of new sessions per second. This
+               is used with ACLs to switch to an alternate backend when an
+               expensive or fragile one reaches too high a session rate, or to
+               limit abuse of service (eg. prevent sucking of an online
+               dictionary). It can also be useful to add this element to logs
+               using a log-format directive.
 
-  hdr(&lt;name&gt;[,&lt;occ&gt;])
-               This extracts the last occurrence of header &lt;name&gt; in an HTTP
-               request. Optionally, a specific occurrence might be specified as
-               a position number. Positive values indicate a position from the
-               first occurrence, with 1 being the first one. Negative values
-               indicate positions relative to the last one, with -1 being the
-               last one. A typical use is with the X-Forwarded-For header once
-               converted to IP, associated with an IP stick-table.
+  connslots([&lt;backend&gt;])
+               Returns an integer value corresponding to the number of
+               connection slots still available in the backend, by totalizing
+               the maximum amount of connections on all servers and the maximum
+               queue size. This is only used with ACLs. See the ACL &quot;<a href="#connslots">connslots</a>&quot;
+               keyword description for more information on possible caveats.
 
-  path         This extracts the request's URL path (without the host part). A
-               typical use is with prefetch-capable caches, and with portals
-               which need to aggregate multiple information from databases and
-               keep them in caches. Note that with outgoing caches, it would be
-               wiser to use &quot;<a href="#url">url</a>&quot; instead.
+  cook([&lt;name&gt;])
+               This is an alias for &quot;req.cook&quot;.
 
-  payload(&lt;offset&gt;,&lt;length&gt;)
-               This extracts a binary block of &lt;length&gt; bytes, and starting
-               at bytes &lt;offset&gt; in the buffer of request or response (request
-               on &quot;<a href="#stick%20on">stick on</a>&quot; or &quot;<a href="#stick%20match">stick match</a>&quot; or response in on &quot;stick store
-               response&quot;).
+  cookie([&lt;name&gt;])
+               This extracts the last occurrence of the cookie name &lt;name&gt; on a
+               &quot;Cookie&quot; header line from the request, or a &quot;Set-Cookie&quot; header
+               from the response, and returns its value as a string. A typical
+               use is to get multiple clients sharing a same profile use the
+               same server. This can be similar to what &quot;<a href="#appsession">appsession</a>&quot; does with
+               the &quot;request-learn&quot; statement, but with support for multi-peer
+               synchronization and state keeping across restarts. If no name is
+               specified, the first cookie value is returned.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#appsession">appsession</a>&quot;</div>
+<pre class="text">cook_cnt([&lt;name&gt;])
+             This is an alias for &quot;req.cook_cnt&quot;.
 
-  payload_lv(&lt;offset1&gt;,&lt;length&gt;[,&lt;offset2&gt;])
-               This extracts a binary block. In a first step the size of the
-               block is read from response or request buffer at &lt;offset&gt;
-               bytes and considered coded on &lt;length&gt; bytes. In a second step
-               data of the block are read from buffer at &lt;offset2&gt; bytes
-               (by default &lt;lengthoffset&gt; + &lt;lengthsize&gt;).
-               If &lt;offset2&gt; is prefixed by '+' or '-', it is relative to
-               &lt;lengthoffset&gt; + &lt;lengthsize&gt; else it is absolute.
-               Ex: see SSL session id  example in &quot;stick table&quot; chapter.
+cook_val([&lt;name&gt;])
+             This is an alias for &quot;req.cook_val&quot;.
 
-  src_port     This is the source TCP port of the session on the client side,
-               which is the port the client connected from. It is very unlikely
-               that this function will be useful but it's available at no cost.
-               It is of type integer and only works with such tables.
+dst          This is the destination IPv4 address of the session on the
+             client side, which is the address the client connected to.
+             It can be useful when running in transparent mode. It is of
+             type IPv4 and works on both IPv4 and IPv6 tables.
+             On IPv6 tables, IPv4 address is mapped to its IPv6 equivalent,
+             according to RFC 4291.
 
-  ssl_c_ca_err Returns the ID of the first error detected during verify of the
-               client certificate at depth &gt; 0, or 0 if no error was detected.
+dst_conn
+             Returns an integer value corresponding to the number of
+             currently established connections on the same socket including
+             the one being evaluated. It is normally used with ACLs but can
+             as well be used to pass the information to servers in an HTTP
+             header or in logs. See also &quot;<a href="#fe_conn">fe_conn</a>&quot; and &quot;<a href="#dst_conn">dst_conn</a>&quot;.
 
-  ssl_c_ca_err_depth
-               Returns the depth of the first error detected during verify. If
-               no error is encountered in the CA chain, zero is returned.
+dst_port     This is the destination TCP port of the session on the client
+             side, which is the port the client connected to. This might be
+             used when running in transparent mode or when assigning dynamic
+             ports to some clients for a whole application session. It is of
+             type integer and only works with such tables.
 
-  ssl_c_err    Returns the ID of the first error detected during verify of the
-               client certificate at depth == 0, or 0 if no errors.
+fe_conn([&lt;frontend&gt;])
+             Returns the number of currently established connections on the
+             the frontend, possibly including the connection being evaluated.
+             If no frontend name is specified, the current one is used. But
+             it is also possible to check another frontend. It can be used to
+             return a sorry page before hard-blocking, or to use a specific
+             backend to drain new requests when the farm is considered full.
+             This is mostly used with ACLs but can also be used to pass some
+             statistics to servers in HTTP headers. See also the &quot;<a href="#dst_conn">dst_conn</a>&quot;,
+             &quot;<a href="#be_conn">be_conn</a>&quot;, &quot;<a href="#fe_sess_rate">fe_sess_rate</a>&quot; criteria.
 
-  ssl_c_i_dn[(entry[,occ])]
-               If no entry specified, returns the full distinguished name of
-               the issuer of the certificate presented by the client when
-               the incoming connection was made over an SSL/TLS transport
-               layer. Otherwise returns the value of the first given entry
-               found from the beginning of the DN. If a positive/negative
-               occurrence number is specified as the optional second argument,
-               it returns the value of the nth given entry found from the
-               beginning/end of the DN. For instance to retrieve the common
-               name ssl_c_i_dn(CN) and the second organization unit
-               ssl_c_i_dn(OU,2).
+fe_id        Returns an integer containing the current frontend's id.
 
-  ssl_c_key_alg
-               Returns the name of the algorithm used to generate the key of
-               the certificate presented by the client when the incoming
-               connection was made over an SSL/TLS transport layer.
+fe_sess_rate([&lt;frontend&gt;])
+             Returns an integer value corresponding to the sessions creation
+             rate on the frontend, in number of new sessions per second. This
+             is used with ACLs to limit the incoming session rate to an
+             acceptable range in order to prevent abuse of service at the
+             earliest moment. It can also be useful to add this element to
+             logs using a log-format directive.
 
-  ssl_c_notafter
-               Returns the end date presented by the client as a formatted
-               string YYMMDDhhmmss[Z] when the incoming connection was made
-               over an SSL/TLS transport layer.
+hdr(&lt;name&gt;[,&lt;occ&gt;])
+             This is an alias for &quot;req.hdr&quot; or &quot;res.hdr&quot; depending whether it
+             is used on the request path or the response path. Since it is
+             ambiguous, it is recommended not to use this form.
 
-  ssl_c_notbefore
-               Returns the start date presented by the client as a formatted
-               string YYMMDDhhmmss[Z] when the incoming connection was made
-               over an SSL/TLS transport layer.
+hdr_cnt([&lt;name&gt;])
+             This is an alias for &quot;req.hdr_cnt&quot;.
 
-  ssl_c_s_dn[(entry[,occ])]
-               If no entry specified, returns the full distinguished name of
-               the subject of the certificate presented by the client when
-               the incoming connection was made over an SSL/TLS transport
-               layer. Otherwise returns the value of the first given entry
-               found from the beginning of the DN. If a positive/negative
-               occurrence number is specified as the optional second argument,
-               it returns the value of the nth given entry found from the
-               beginning/end of the DN. For instance to retrieve the common
-               name ssl_c_s_dn(CN) and the second organization unit
-               ssl_c_s_dn(OU,2).
+hdr_ip([&lt;name&gt;[,&lt;occ&gt;]])
+             This is an alias for &quot;req.hdr_ip&quot;.
 
-  ssl_c_serial Returns the serial of the certificate presented by the client
-               when the incoming connection was made over an SSL/TLS transport
-               layer.
+hdr_val([&lt;name&gt;[,&lt;occ&gt;]])
+             This is an alias for &quot;req.hdr_val&quot;.
 
-  ssl_c_sig_alg
-               Returns the name of the algorithm used to sign the certificate
-               presented by the client when the incoming connection was made
-               over an SSL/TLS transport layer.
+http_auth(&lt;userlist&gt;)
+http_auth_group(&lt;userlist&gt;)
+             Returns a boolean indicating whether the authentication data
+             received from the client match a username &amp; password stored in
+             the specified userlist. These fetch functions are not really
+             useful outside of ACLs.
 
-  ssl_c_used
-               Returns 1 if current SSL session use a client certificate,
-               otherwise 0. See also &quot;<a href="#ssl_fc_has_crt">ssl_fc_has_crt</a>&quot;.
+http_first_req
+             Returns true when the request being processed is the first one
+             of the connection. This can be used to add or remove headers
+             that may be missing from some requests when a request is not the
+             first one, or to help grouping requests in the logs.
 
-  ssl_c_verify Returns the verify result errorID when the incoming connection
-               was made over an SSL/TLS transport layer, otherwise zero if no
-               error is encountered.
+method
+             Returns an integer value corresponding to the to the method in
+             the HTTP request. For example, &quot;GET&quot; equals 1 (check sources to
+             establish the matching). Value 9 means &quot;other method&quot; and may be
+             converted to a string extracted from the stream. This should not
+             be used directly, this is only meant to be used from ACLs.
 
-  ssl_c_version
-               Returns the version of the certificate presented by the client
-               when the incoming connection was made over an SSL/TLS transport
-               layer.
+nbsrv([&lt;backend&gt;])
+             Returns an integer value corresponding to the number of usable
+             servers of either the current backend or the named backend. This
+             is mostly used with ACLs but can also be useful when added to
+             logs.
 
-  ssl_f_i_dn[(entry[,occ])]
-               If no entry specified, returns the full distinguished name of
-               the issuer of the certificate presented by the frontend when
-               the incoming connection was made over an SSL/TLS transport
-               layer. Otherwise returns the value of the first given entry
-               found from the beginning of the DN. If a positive/negative
-               occurrence number is specified as the optional second argument,
-               it returns the value of the nth given entry found from the
-               beginning/end of the DN. For instance to retrieve the common
-               name ssl_f_i_dn(CN) and the second organization unit
-               ssl_f_i_dn(OU,2).
+path         This extracts the request's URL path (without the host part). A
+             typical use is with prefetch-capable caches, and with portals
+             which need to aggregate multiple information from databases and
+             keep them in caches. Note that with outgoing caches, it would be
+             wiser to use &quot;<a href="#url">url</a>&quot; instead.
 
-  ssl_f_key_alg
-               Returns the name of the algorithm used to generate the key of
-               the certificate presented by the frontend when the incoming
-               connection was made over an SSL/TLS transport layer.
+payload(&lt;offset&gt;,&lt;length&gt;)
+             This is an alias for &quot;req.payload&quot; when used in the context of a
+             request (eg: &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20match">stick match</a>&quot;), and for &quot;res.payload&quot;
+             when used in the context of a response such as in
+             &quot;stick store response&quot;.
 
-  ssl_f_notafter
-               Returns the end date presented by the frontend as a formatted
-               string YYMMDDhhmmss[Z] when the incoming connection was made
-               over an SSL/TLS transport layer.
+payload_lv(&lt;offset1&gt;,&lt;length&gt;[,&lt;offset2&gt;])
+             This is an alias for &quot;req.payload_lv&quot; when used in the context
+             of a request (eg: &quot;<a href="#stick%20on">stick on</a>&quot; or &quot;<a href="#stick%20match">stick match</a>&quot;), and for
+             &quot;res.payload_lv&quot; when used in the context of a response such as
+             in &quot;stick store response&quot;.
 
-  ssl_f_notbefore
-               Returns the start date presented by the frontend as a formatted
-               string YYMMDDhhmmss[Z] when the incoming connection was made
-               over an SSL/TLS transport layer.
+queue([&lt;backend&gt;])
+             Returns the total number of queued connections of the designated
+             backend, including all the connections in server queues. If no
+             backend name is specified, the current one is used, but it is
+             also possible to check another one. This is useful with ACLs
+             or to pass statistics to backend servers.
 
-  ssl_f_s_dn[(entry[,occ])]
-               If no entry specified, returns the full distinguished name of
-               the subject of the certificate presented by the frontend when
-               the incoming connection was made over an SSL/TLS transport
-               layer. Otherwise returns the value of the first given entry
-               found from the beginning of the DN. If a positive/negative
-               occurrence number is specified as the optional second argument,
-               it returns the value of the nth given entry found from the
-               beginning/end of the DN. For instance to retrieve the common
-               name ssl_f_s_dn(CN) and the second organization unit
-               ssl_f_s_dn(OU,2).
+rdp_cookie(&lt;name&gt;)
+             This is an alias for &quot;req.rdp_cookie&quot;.
 
-  ssl_f_serial Returns the serial of the certificate presented by the frontend
-               when the incoming connection was made over an SSL/TLS transport
-               layer.
+rdp_cookie_cnt([name])
+             This is an alias for &quot;req.rdp_cookie_cnt&quot;.
 
-  ssl_f_sig_alg
-               Returns the name of the algorithm used to sign the certificate
-               presented by the frontend when the incoming connection was made
-               over an SSL/TLS transport layer.
+rep_ssl_hello_type
+             This is an alias for &quot;res.ssl_hello_type&quot;.
 
-  ssl_f_version
-               Returns the version of the certificate presented by the frontend
-               when the incoming connection was made over an SSL/TLS transport
-               layer.
+req.cook([&lt;name&gt;])
+             This extracts the last occurrence of the cookie name &lt;name&gt; on a
+             &quot;Cookie&quot; header line from the request, and returns its value as
+             string. If no name is specified, the first cookie value is
+             returned.
 
-  ssl_fc       This checks the transport layer used on the front connection,
-               and returns 1 if it was made via an SSL/TLS transport layer,
-               otherwise zero.
+req.cook_cnt([&lt;name&gt;])
+             Returns an integer value representing the number of occurrences of
+             the cookie &lt;name&gt; in the request, or all cookies if &lt;name&gt; is not
+             specified.
 
-  ssl_fc_alg_keysize
-               Returns the symmetric cipher key size support d in bits when the
-               incoming connection was made over an SSL/TLS transport layer.
+req.cook_val([&lt;name&gt;])
+             This extracts the last occurrence of the cookie name &lt;name&gt; on a
+             &quot;Cookie&quot; header line from the request, and converts its value to
+             an integer which is returned. If no name is specified, the first
+             cookie value is returned.
 
-  ssl_fc_cipher
-               Returns the name of the used cipher when the incoming connection
-               was made over an SSL/TLS transport layer.
+req.hdr(&lt;name&gt;[,&lt;occ&gt;])
+             This extracts the last occurrence of header &lt;name&gt; in an HTTP
+             request. Optionally, a specific occurrence might be specified as
+             a position number. Positive values indicate a position from the
+             first occurrence, with 1 being the first one. Negative values
+             indicate positions relative to the last one, with -1 being the
+             last one. A typical use is with the X-Forwarded-For header once
+             converted to IP, associated with an IP stick-table.
 
-  ssl_fc_has_crt
-               Returns 1 if a client certificate is present in the front
-               connection over SSL/TLS transport layer, otherwise 0.
-               Note: on SSL session resumption with Session ID or TLS ticket,
-               client certificate is not present in the current connection but
-               may be retrieved from the cache or the ticket. So prefer
-               &quot;<a href="#ssl_c_used">ssl_c_used</a>&quot; if you want to check if current SSL session uses
-               a client certificate.
+req.hdr_cnt([&lt;name&gt;])
+             Returns an integer value representing the number of occurrences
+             of request header field name &lt;name&gt;, or the total number of
+             header fields if &lt;name&gt; is not specified.
 
-  ssl_fc_has_sni
-               This checks the transport layer used by the front connection, and
-               returns 1 if the connection was made via an SSL/TLS transport
-               layer and the client sent a Server Name Indication TLS extension,
-               otherwise zero. This requires that the SSL library is build with
-               support for TLS extensions enabled (check haproxy -vv).
+req.hdr_ip([&lt;name&gt;[,&lt;occ&gt;]])
+             This extracts the last occurrence of header &lt;name&gt; in an HTTP
+             request, converts it to an IPv4 or IPv6 address and returns this
+             address. Optionally, a specific occurrence might be specified as
+             a position number. Positive values indicate a position from the
+             first occurrence, with 1 being the first one. Negative values
+             indicate positions relative to the last one, with -1 being the
+             last one. A typical use is with the X-Forwarded-For header.
 
-  ssl_fc_npn   This extracts the Next Protocol Negociation field from an
-               incoming connection made via an SSL/TLS transport layer and
-               locally deciphered by haproxy. The result is a string containing
-               the protocol name advertised by the client. The SSL library must
-               have been built with support for TLS extensions enabled (check
-               haproxy -vv). See also the &quot;<a href="#npn">npn</a>&quot; bind keyword.
+req.hdr_val([&lt;name&gt;[,&lt;occ&gt;]])
+             This extracts the last occurrence of header &lt;name&gt; in an HTTP
+             request, and converts it to an integer value. Optionally, a
+             specific occurrence might be specified as a position number.
+             Positive values indicate a position from the first occurrence,
+             with 1 being the first one. Negative values indicate positions
+             relative to the last one, with -1 being the last one. A typical
+             use is with the X-Forwarded-For header.
 
-  ssl_fc_protocol
-               Returns the name of the used protocol when the incoming
-               connection was made over an SSL/TLS transport layer.
+req.len      Returns an integer value corresponding to the number of bytes
+             present in the request buffer. This is mostly used in ACL.
 
-  ssl_fc_session_id
-               Returns the SSL ID of the front connection when the incoming
-               connection was made over an SSL/TLS transport layer. Useful to
-               stick on a given client.
+req.payload(&lt;offset&gt;,&lt;length&gt;)
+             This extracts a binary block of &lt;length&gt; bytes and starting at
+             bytes &lt;offset&gt; in the request buffer.
 
-  ssl_fc_sni   This extracts the Server Name Indication field from an incoming
-               connection made via an SSL/TLS transport layer and locally
-               deciphered by haproxy. The result typically is a string matching
-               the HTTPS host name (253 chars or less). The SSL library must
-               have been built with support for TLS extensions enabled (check
-               haproxy -vv).
+req.payload_lv(&lt;offset1&gt;,&lt;length&gt;[,&lt;offset2&gt;])
+             This extracts a binary block. In a first step the size of the
+             block is read from the request request buffer at &lt;offset&gt; bytes
+             and considered coded on &lt;length&gt; bytes. In a second step data of
+             the block are read from buffer at &lt;offset2&gt; bytes (by default
+             &lt;lengthoffset&gt; + &lt;lengthsize&gt;). If &lt;offset2&gt; is prefixed by '+'
+             or '-', it is relative to &lt;lengthoffset&gt; + &lt;lengthsize&gt; else it
+             is absolute. Ex: see SSL session id example in &quot;stick table&quot;
+             chapter.
 
-  ssl_fc_use_keysize
-               Returns the symmetric cipher key size used in bits when the
-               incoming connection was made over an SSL/TLS transport layer.
+req.proto_http
+             Returns true when data in the request buffer look like HTTP and
+             correctly parses as such. It is the same parser as the common
+             HTTP request parser which is used so there should be no
+             surprises. This test may be used to report the protocol in TCP
+             logs.
 
-  url          This extracts the request's URL as presented in the request. A
-               typical use is with prefetch-capable caches, and with portals
-               which need to aggregate multiple information from databases and
-               keep them in caches. See also &quot;<a href="#path">path</a>&quot;.
-
-  url_ip       This extracts the IP address from the request's URL when the
-               host part is presented as an IP address. Its use is very
-               limited. For instance, a monitoring system might use this field
-               as an alternative for the source IP in order to test what path a
-               given source address would follow, or to force an entry in a
-               table for a given source address.
-
-  url_port     This extracts the port part from the request's URL. It probably
-               is totally useless but it was available at no cost.
-
-  url_param(&lt;name&gt;[,&lt;delim&gt;])
-               This extracts the first occurrence of the parameter &lt;name&gt; in
-               the parameter string of the request and uses the corresponding
-               value to match. Optionally, a delimiter can be provided. If not
-               then the question mark '?' is used by default.
-               A typical use is to get sticky session through url for cases
-               where cookies cannot be used.</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code><span class="comment"># match http://example.com/foo?PHPSESSIONID=some_id</span>
-stick on url_param(PHPSESSIONID)
-<span class="comment"># match http://example.com/foo;JSESSIONID=some_id</span>
-stick on url_param(JSESSIONID,;)
-</code></pre>
-</div><pre class="text">rdp_cookie(&lt;name&gt;)
+req.rdp_cookie(&lt;name&gt;)
              This extracts the value of the rdp cookie &lt;name&gt; as a string
              and uses this value to match. This enables implementation of
              persistence based on the mstshash cookie. This is typically
@@ -8962,7 +9043,7 @@ stick on url_param(JSESSIONID,;)
              algorithm may be used and thus the distribution of clients
              to backend servers is not linked to a hash of the RDP
              cookie. It is envisaged that using a balancing algorithm
-             such as &quot;balance roundrobin&quot; or &quot;balance leastconnect&quot; will
+             such as &quot;balance roundrobin&quot; or &quot;balance leastconn&quot; will
              lead to a more even distribution of clients to backend
              servers than the hash used by &quot;balance rdp-cookie&quot;.</pre><div class="separator">
 <span class="label label-success">Example :</span>
@@ -8978,20 +9059,265 @@ stick on url_param(JSESSIONID,;)
     <span class="comment"># This is only useful makes sense if</span>
     <span class="comment"># balance rdp-cookie is not used</span>
     stick-table type string size 204800
-    stick on rdp_cookie(mstshash)
+    stick on req.rdp_cookie(mstshash)
     server srv1 1.1.1.1:3389
     server srv1 1.1.1.2:3389
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;balance rdp-cookie&quot;, &quot;<a href="#persist%20rdp-cookie">persist rdp-cookie</a>&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot; and the &quot;<a href="#req_rdp_cookie">req_rdp_cookie</a>&quot; ACL.</div>
-<pre class="text">cookie(&lt;name&gt;)
+<pre class="text">req.rdp_cookie_cnt([name])
+             Tries to parse the request buffer as RDP protocol, then returns
+             an integer corresponding to the number of RDP cookies found. If
+             an optional cookie name is passed, only cookies matching this
+             name are considered. This is mostly used in ACL.
+
+req.ssl_hello_type
+             Returns an integer value containing the type of the SSL hello
+             message found in the request buffer. Note that this only applies
+             to raw contents found in the request buffer and not to contents
+             deciphered via an SSL data layer, so this will not work with
+             &quot;<a href="#bind">bind</a>&quot; lines having the &quot;<a href="#ssl">ssl</a>&quot; option. This is mostly used in
+             ACL.
+
+req.ssl_sni  Returns a string containing the value of the Server Name TLS
+             extension sent by a client in a TLS stream passing through the
+             request buffer. Note that this only applies to raw contents
+             found in the request buffer and not to contents deciphered via
+             an SSL data layer, so this will not work with &quot;<a href="#bind">bind</a>&quot; lines
+             having the &quot;<a href="#ssl">ssl</a>&quot; option. This is mostly used in ACL.
+
+req.ssl_ver  Returns an integer value containing the version of the SSL/TLS
+             protocol of a stream present in the request buffer. The value is
+             composed of the major version multiplied by 65536, added to the
+             minor version. Note that this only applies to raw contents found
+             in the request buffer and not to contents deciphered via an SSL
+             data layer, so this will not work with &quot;<a href="#bind">bind</a>&quot; lines having the
+             &quot;<a href="#ssl">ssl</a>&quot; option. This is mostly used in ACL.
+
+req.ver      Returns the version string from the HTTP request, for example
+             &quot;1.1&quot;. This can be useful for logs, but is mostly there for ACL.
+
+req_len      This is an alias for &quot;req.len&quot;.
+
+req_proto_http
+             This is an alias for &quot;<a href="#req_proto_http">req_proto_http</a>&quot;.
+
+req_ssl_hello_type
+             This is an alias for &quot;req.ssl_hello_type&quot;.
+
+req_ssl_sni  This is an alias for &quot;req.ssl_sni&quot;.
+
+req_ssl_ver  This is an alias for &quot;req.ssl_ver&quot;.
+
+req_ver      This is an alias for &quot;req.ver&quot;.
+
+res.cook([&lt;name&gt;])
              This extracts the last occurrence of the cookie name &lt;name&gt; on a
-             &quot;Cookie&quot; header line from the request, or a &quot;Set-Cookie&quot; header
-             from the response, and uses the corresponding value to match. A
-             typical use is to get multiple clients sharing a same profile
-             use the same server. This can be similar to what &quot;<a href="#appsession">appsession</a>&quot;
-             does with the &quot;request-learn&quot; statement, but with support for
-             multi-peer synchronization and state keeping across restarts.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#appsession">appsession</a>&quot;</div>
-<pre class="text">set-cookie(&lt;name&gt;)
+             &quot;Set-Cookie&quot; header line from the response, and returns its
+             value as string. If no name is specified, the first cookie value
+             is returned.
+
+res.cook_cnt([&lt;name&gt;])
+             Returns an integer value representing the number of occurrences of
+             the cookie &lt;name&gt; in the response, or all cookies if &lt;name&gt; is not
+             specified.
+
+res.cook_val([&lt;name&gt;])
+             This extracts the last occurrence of the cookie name &lt;name&gt; on a
+             &quot;Set-Cookie&quot; header line from the response, and converts its
+             value to an integer which is returned. If no name is specified,
+             the first cookie value is returned.
+
+res.hdr(&lt;name&gt;[,&lt;occ&gt;])
+             This extracts the last occurrence of header &lt;name&gt; in an HTTP
+             response. Optionally, a specific occurrence might be specified
+             as a position number. Positive values indicate a position from
+             the first occurrence, with 1 being the first one. Negative
+             values indicate positions relative to the last one, with -1
+             being the last one. This can be useful to learn some data into
+             a stick-table.
+
+res.hdr_cnt([&lt;name&gt;])
+             Returns an integer value representing the number of occurrences
+             of response header field name &lt;name&gt;, or the total number of
+             header fields if &lt;name&gt; is not specified.
+
+res.hdr_ip([&lt;name&gt;[,&lt;occ&gt;]])
+             This extracts the last occurrence of header &lt;name&gt; in an HTTP
+             response, convert it to an IPv4 or IPv6 address and returns this
+             address. Optionally, a specific occurrence might be specified as
+             a position number. Positive values indicate a position from the
+             first occurrence, with 1 being the first one. Negative values
+             indicate positions relative to the last one, with -1 being the
+             last one. This can be useful to learn some data into a stick
+             table.
+
+res.hdr_val([&lt;name&gt;[,&lt;occ&gt;]])
+             This extracts the last occurrence of header &lt;name&gt; in an HTTP
+             response, and converts it to an integer value. Optionally, a
+             specific occurrence might be specified as a position number.
+             Positive values indicate a position from the first occurrence,
+             with 1 being the first one. Negative values indicate positions
+             relative to the last one, with -1 being the last one. This can
+             be useful to learn some data into a stick table.
+
+res.payload(&lt;offset&gt;,&lt;length&gt;)
+             This extracts a binary block of &lt;length&gt; bytes and starting at
+             bytes &lt;offset&gt; in the response buffer.
+
+res.payload_lv(&lt;offset1&gt;,&lt;length&gt;[,&lt;offset2&gt;])
+             This extracts a binary block. In a first step the size of the
+             block is read from the response request buffer at &lt;offset&gt; bytes
+             and considered coded on &lt;length&gt; bytes. In a second step data of
+             the block are read from buffer at &lt;offset2&gt; bytes (by default
+             &lt;lengthoffset&gt; + &lt;lengthsize&gt;). If &lt;offset2&gt; is prefixed by '+'
+             or '-', it is relative to &lt;lengthoffset&gt; + &lt;lengthsize&gt; else it
+             is absolute. Ex: see SSL session id example in &quot;stick table&quot;
+             chapter.
+
+res.ssl_hello_type
+             Returns an integer value containing the type of the SSL hello
+             message found in the response buffer. Note that this only
+             applies to raw contents found in the response buffer and not to
+             contents deciphered via an SSL data layer, so this will not work
+             with &quot;<a href="#server">server</a>&quot; lines having the &quot;<a href="#ssl">ssl</a>&quot; option. This is mostly used
+             in ACL.
+
+res.ver      Returns the version string from the HTTP response, for example
+             &quot;1.1&quot;. This can be useful for logs, but is mostly there for ACL.
+
+resp_ver     This is an alias for &quot;res.ver&quot;.
+
+sc1_bytes_in_rate
+sc2_bytes_in_rate
+             Returns the average client-to-server bytes rate from the
+             currently tracked counters, measured in amount of bytes over the
+             period configured in the table. See also src_bytes_in_rate.
+
+sc1_bytes_out_rate
+sc2_bytes_out_rate
+             Returns the average server-to-client bytes rate from the
+             currently tracked counters, measured in amount of bytes over the
+             period configured in the table. See also src_bytes_out_rate.
+
+sc1_clr_gpc0
+sc2_clr_gpc0
+             Clears the first General Purpose Counter associated to the
+             currently tracked counters, and returns its previous value.
+             This is only useful when used by ACLs.
+
+sc1_conn_cnt
+sc2_conn_cnt
+             Returns the cumulated number of incoming connections from
+             currently tracked counters. See also src_conn_cnt.
+
+sc1_conn_cur
+sc2_conn_cur
+             Returns the current amount of concurrent connections tracking
+             the same tracked counters. This number is automatically
+             incremented when tracking begins and decremented when tracking
+             stops. See also src_conn_cur.
+
+sc1_conn_rate
+sc2_conn_rate
+             Returns the average connection rate from the currently tracked
+             counters, measured in amount of connections over the period
+             configured in the table. See also src_conn_rate.
+
+sc1_get_gpc0
+sc2_get_gpc0
+             Returns the value of the first General Purpose Counter
+             associated to the currently tracked counters. See also
+             src_get_gpc0 and sc1/sc2_inc_gpc0.
+
+sc1_http_err_cnt
+sc2_http_err_cnt
+             Returns the cumulated number of HTTP errors from the currently
+             tracked counters. This includes the both request errors and 4xx
+             error responses. See also src_http_err_cnt.
+
+sc1_http_err_rate
+sc2_http_err_rate
+             Returns the average rate of HTTP errors from the currently
+             tracked counters, measured in amount of errors over the period
+             configured in the table. This includes the both request errors
+             and 4xx error responses. See also src_http_err_rate.
+
+sc1_http_req_cnt
+sc2_http_req_cnt
+             Returns the cumulated number of HTTP requests from the currently
+             tracked counters. This includes every started request, valid or
+             not. See also src_http_req_cnt.
+
+sc1_http_req_rate
+sc2_http_req_rate
+             Returns the average rate of HTTP requests from the currently
+             tracked counters, measured in amount of requests over the period
+             configured in the table. This includes every started request,
+             valid or not. See also src_http_req_rate.
+
+sc1_inc_gpc0
+sc2_inc_gpc0
+             Increments the first General Purpose Counter associated to the
+             currently tracked counters, and returns its new value. This is
+             only useful when used by ACLs.
+
+sc1_kbytes_in
+sc2_kbytes_in
+             Returns the amount of client-to-server data from the currently
+             tracked counters, measured in kilobytes over the period
+             configured in the table. The value being stored as a 32-bit
+             integer, it wraps at 4 terabytes. See also src_kbytes_in.
+
+sc1_kbytes_out
+sc2_kbytes_out
+             Returns the amount of server-to-client data from the currently
+             tracked counters, measured in kilobytes over the period
+             configured in the table. The value being stored as a 32-bit
+             integer, it wraps at 4 terabytes. See also src_kbytes_out.
+
+sc1_sess_cnt
+sc2_sess_cnt
+             Returns the cumulated number of incoming connections that were
+             transformed into sessions, which means that they were accepted
+             by a &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rule, from the currently tracked
+             counters. A backend may count more sessions than connections
+             because each connection could result in many backend sessions if
+             some HTTP keep-alive is performed over the connection with the
+             client. See also src_sess_cnt.
+
+sc1_sess_rate
+sc2_sess_rate
+             Returns the average session rate from the currently tracked
+             counters, measured in amount of sessions over the period
+             configured in the table. A session is a connection that got past
+             the early &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rules. A backend may count
+             more sessions than connections because each connection could
+             result in many backend sessions if some HTTP keep-alive is
+             performed over the connection with the client. See also
+             src_sess_rate.
+
+sc1_trackers
+sc2_trackers
+             Returns the current amount of concurrent connections tracking
+             the same tracked counters. This number is automatically
+             incremented when tracking begins and decremented when tracking
+             stops. It differs from sc1_conn_cur in that it does not rely on
+             any stored information but on the table's reference count (the
+             &quot;use&quot; value which is returned by &quot;<a href="#show%20table">show table</a>&quot; on the CLI). This
+             may sometimes be more suited for layer7 tracking. It can be used
+             to tell a server how many concurrent connections there are from
+             a given address for example.
+
+scook([&lt;name&gt;])
+             This is an alias for &quot;res.cook&quot;.
+
+scook_cnt([&lt;name&gt;])
+             This is an alias for &quot;res.cook_cnt&quot;.
+
+scook_val([&lt;name&gt;])
+             This is an alias for &quot;res.cook_val&quot;.
+
+set-cookie(&lt;name&gt;)
              This fetch function is deprecated and has been superseded by the
              &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="nav-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Proxies%29">Proxies</a></li><li><a href="#cookie%20%28Bind%20and%20Server%20options%29">Bind and Server options</a></li></ul></span>&quot; fetch which is capable of handling both requests and
              responses. This keyword will disappear soon.
@@ -9001,7 +9327,412 @@ stick on url_param(JSESSIONID,;)
              corresponding value to match. This can be comparable to what
              &quot;<a href="#appsession">appsession</a>&quot; does with default options, but with support for
               multi-peer synchronization and state keeping across restarts.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#appsession">appsession</a>&quot;</div>
-<pre class="text">The currently available list of transformations include :
+<pre class="text">shdr(&lt;name&gt;[,&lt;occ&gt;])
+             This is an alias for &quot;res.hdr&quot;.
+
+shdr_cnt([&lt;name&gt;])
+             This is an alias for &quot;res.hdr_cnt&quot;.
+
+shdr_ip([&lt;name&gt;[,&lt;occ&gt;]])
+             This is an alias for &quot;res.hdr_ip&quot;.
+
+shdr_val([&lt;name&gt;[,&lt;occ&gt;]])
+             This is an alias for &quot;res.hdr_val&quot;.
+
+so_id        Returns an integer containing the listening socket's id.
+
+src          This is the source IPv4 address of the client of the session.
+             It is of type IPv4 and works on both IPv4 and IPv6 tables.
+             On IPv6 tables, IPv4 address is mapped to its IPv6 equivalent,
+             according to RFC 4291.
+
+src_bytes_in_rate([&lt;table&gt;])
+             Returns the average bytes rate from the connection's source IPv4
+             address in the current proxy's stick-table or in the designated
+             stick-table, measured in amount of bytes over the period
+             configured in the table. If the address is not found, zero is
+             returned. See also sc1/sc2_bytes_in_rate.
+
+src_bytes_out_rate([&lt;table&gt;])
+             Returns the average bytes rate to the connection's source IPv4
+             address in the current proxy's stick-table or in the designated
+             stick-table, measured in amount of bytes over the period
+             configured in the table. If the address is not found, zero is
+             returned. See also sc1/sc2_bytes_out_rate.
+
+src_clr_gpc0([&lt;table&gt;])
+             Clears the first General Purpose Counter associated to the
+             connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick-table, and returns its
+             previous value. This is only useful when used by ACLs.
+
+src_conn_cnt([&lt;table&gt;])
+             Returns the cumulated number of connections initiated from the
+             current connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick-table. If the address is
+             not found, zero is returned. See also sc1/sc2_conn_cnt.
+
+src_conn_cur([&lt;table&gt;])
+             Returns the current amount of concurrent connections initiated
+             from the current connection's source IPv4 address in the current
+             proxy's stick-table or in the designated stick-table. If the
+             address is not found, zero is returned. See also
+             sc1/sc2_conn_cur.
+
+src_conn_rate([&lt;table&gt;])
+             Returns the average connection rate from the connection's source
+             IPv4 address in the current proxy's stick-table or in the
+             designated stick-table, measured in amount of connections over
+             the period configured in the table. If the address is not found,
+             zero is returned. See also sc1/sc2_conn_rate.
+
+src_get_gpc0([&lt;table&gt;])
+             Returns the value of the first General Purpose Counter
+             associated to the connection's source IPv4 address in the
+             current proxy's stick-table or in the designated stick-table. If
+             the address is not found, zero is returned.  See also
+             sc1/sc2_get_gpc0 and src_inc_gpc0.
+
+src_http_err_cnt([&lt;table&gt;])
+             Returns the cumulated number of HTTP errors from the current
+             connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick-table. This includes the
+             both request errors and 4xx error responses. If the address is
+             not found, zero is returned. See also sc1/sc2_http_err_cnt.
+
+src_http_err_rate([&lt;table&gt;])
+             Returns the average rate of HTTP errors from the current
+             connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick- table, measured in
+             amount of errors over the period configured in the table.  This
+             includes the both request errors and 4xx error responses. If the
+             address is not found, zero is returned. See also
+             sc1/sc2_http_err_rate.
+
+src_http_req_cnt([&lt;table&gt;])
+             Returns the cumulated number of HTTP requests from the current
+             connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick-table. This includes
+             every started request, valid or not. If the address is not
+             found, zero is returned. See also sc1/sc2_http_req_cnt.
+
+src_http_req_rate([&lt;table&gt;])
+             Returns the average rate of HTTP requests from the current
+             connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick-table, measured in amount
+             of requests over the period configured in the table. This
+             includes every started request, valid or not. If the address is
+             not found, zero is returned. See also sc1/sc2_http_req_rate.
+
+src_inc_gpc0([&lt;table&gt;])
+             Increments the first General Purpose Counter associated to the
+             connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick-table, and returns its
+             new value. This is only useful when used by ACLs.
+
+src_kbytes_in([&lt;table&gt;])
+             Returns the amount of data received from the connection's source
+             IPv4 address in the current proxy's stick-table or in the
+             designated stick-table, measured in kilobytes over the period
+             configured in the table. If the address is not found, zero is
+             returned. The value being stored as a 32-bit integer, it wraps
+             at 4 terabytes. See also sc1/sc2_kbytes_in.
+
+src_kbytes_out([&lt;table&gt;])
+             Returns the amount of data sent to the connection's source IPv4
+             address in the current proxy's stick-table or in the designated
+             stick-table, measured in kilobytes over the period configured in
+             the table. If the address is not found, zero is returned. The
+             value being stored as a 32-bit integer, it wraps at 4 terabytes.
+             See also sc1/sc2_kbytes_out.
+
+src_port     This is the source TCP port of the session on the client side,
+             which is the port the client connected from. It is very unlikely
+             that this function will be useful but it's available at no cost.
+             It is of type integer and only works with such tables.
+
+src_sess_cnt([&lt;table&gt;])
+             Returns the cumulated number of connections initiated from the
+             current connection's source IPv4 address in the current proxy's
+             stick-table or in the designated stick-table, that were
+             transformed into sessions, which means that they were accepted
+             by &quot;<a href="#tcp-request">tcp-request</a>&quot; rules. If the address is not found, zero is
+             returned. See also sc1/sc2_sess_cnt.
+
+src_sess_rate([&lt;table&gt;])
+             Returns the average session rate from the connection's source
+             IPv4 address in the current proxy's stick-table or in the
+             designated stick-table, measured in amount of sessions over the
+             period configured in the table. A session is a connection that
+             got past the early &quot;<a href="#tcp-request">tcp-request</a>&quot; rules. If the address is not
+             found, zero is returned. See also sc1/sc2_sess_rate.
+
+src_updt_conn_cnt([&lt;table&gt;])
+             Creates or updates the entry associated to the source IPv4
+             address in the current proxy's stick-table or in the designated
+             stick-table. This is only useful when used by ACLs.
+
+srv_conn(&lt;backend&gt;/&lt;server&gt;)
+             Returns an integer value corresponding to the number of
+             currently established connections on this server, possibly
+             including the connection being evaluated. It is only used with
+             ACLs.
+
+srv_id       Returns an integer containing the server's id when processing
+             the response. While it's almost only used with ACLs, it may be
+             used for logging or debugging.
+
+srv_is_up([&lt;backend&gt;/]&lt;server&gt;)
+             Returns a the boolean TRUE value when the designated server is
+             UP, and false when it is either DOWN or in maintenance mode. If
+             &lt;backend&gt; is omitted, then the server is looked up in the
+             current backend. It is almost only used with ACLs.
+
+srv_sess_rate(&lt;backend&gt;/&lt;server&gt;)
+             Returns an integer corresponding to the sessions creation rate
+             on the server, in number of new sessions per second. This is
+             used with ACLs but may make sense with logs too.
+
+ssl_c_ca_err Returns the ID of the first error detected during verify of the
+             client certificate at depth &gt; 0, or 0 if no error was detected.
+
+ssl_c_ca_err_depth
+             Returns the depth of the first error detected during verify. If
+             no error is encountered in the CA chain, zero is returned.
+
+ssl_c_err    Returns the ID of the first error detected during verify of the
+             client certificate at depth == 0, or 0 if no errors.
+
+ssl_c_i_dn[(entry[,occ])]
+             If no entry specified, returns the full distinguished name of
+             the issuer of the certificate presented by the client when
+             the incoming connection was made over an SSL/TLS transport
+             layer. Otherwise returns the value of the first given entry
+             found from the beginning of the DN. If a positive/negative
+             occurrence number is specified as the optional second argument,
+             it returns the value of the nth given entry found from the
+             beginning/end of the DN. For instance to retrieve the common
+             name ssl_c_i_dn(CN) and the second organization unit
+             ssl_c_i_dn(OU,2).
+
+ssl_c_key_alg
+             Returns the name of the algorithm used to generate the key of
+             the certificate presented by the client when the incoming
+             connection was made over an SSL/TLS transport layer.
+
+ssl_c_notafter
+             Returns the end date presented by the client as a formatted
+             string YYMMDDhhmmss[Z] when the incoming connection was made
+             over an SSL/TLS transport layer.
+
+ssl_c_notbefore
+             Returns the start date presented by the client as a formatted
+             string YYMMDDhhmmss[Z] when the incoming connection was made
+             over an SSL/TLS transport layer.
+
+ssl_c_s_dn[(entry[,occ])]
+             If no entry specified, returns the full distinguished name of
+             the subject of the certificate presented by the client when
+             the incoming connection was made over an SSL/TLS transport
+             layer. Otherwise returns the value of the first given entry
+             found from the beginning of the DN. If a positive/negative
+             occurrence number is specified as the optional second argument,
+             it returns the value of the nth given entry found from the
+             beginning/end of the DN. For instance to retrieve the common
+             name ssl_c_s_dn(CN) and the second organization unit
+             ssl_c_s_dn(OU,2).
+
+ssl_c_serial Returns the serial of the certificate presented by the client
+             when the incoming connection was made over an SSL/TLS transport
+             layer.
+
+ssl_c_sig_alg
+             Returns the name of the algorithm used to sign the certificate
+             presented by the client when the incoming connection was made
+             over an SSL/TLS transport layer.
+
+ssl_c_used
+             Returns 1 if current SSL session use a client certificate,
+             otherwise 0. See also &quot;<a href="#ssl_fc_has_crt">ssl_fc_has_crt</a>&quot;.
+
+ssl_c_verify Returns the verify result errorID when the incoming connection
+             was made over an SSL/TLS transport layer, otherwise zero if no
+             error is encountered.
+
+ssl_c_version
+             Returns the version of the certificate presented by the client
+             when the incoming connection was made over an SSL/TLS transport
+             layer.
+
+ssl_f_i_dn[(entry[,occ])]
+             If no entry specified, returns the full distinguished name of
+             the issuer of the certificate presented by the frontend when
+             the incoming connection was made over an SSL/TLS transport
+             layer. Otherwise returns the value of the first given entry
+             found from the beginning of the DN. If a positive/negative
+             occurrence number is specified as the optional second argument,
+             it returns the value of the nth given entry found from the
+             beginning/end of the DN. For instance to retrieve the common
+             name ssl_f_i_dn(CN) and the second organization unit
+             ssl_f_i_dn(OU,2).
+
+ssl_f_key_alg
+             Returns the name of the algorithm used to generate the key of
+             the certificate presented by the frontend when the incoming
+             connection was made over an SSL/TLS transport layer.
+
+ssl_f_notafter
+             Returns the end date presented by the frontend as a formatted
+             string YYMMDDhhmmss[Z] when the incoming connection was made
+             over an SSL/TLS transport layer.
+
+ssl_f_notbefore
+             Returns the start date presented by the frontend as a formatted
+             string YYMMDDhhmmss[Z] when the incoming connection was made
+             over an SSL/TLS transport layer.
+
+ssl_f_s_dn[(entry[,occ])]
+             If no entry specified, returns the full distinguished name of
+             the subject of the certificate presented by the frontend when
+             the incoming connection was made over an SSL/TLS transport
+             layer. Otherwise returns the value of the first given entry
+             found from the beginning of the DN. If a positive/negative
+             occurrence number is specified as the optional second argument,
+             it returns the value of the nth given entry found from the
+             beginning/end of the DN. For instance to retrieve the common
+             name ssl_f_s_dn(CN) and the second organization unit
+             ssl_f_s_dn(OU,2).
+
+ssl_f_serial Returns the serial of the certificate presented by the frontend
+             when the incoming connection was made over an SSL/TLS transport
+             layer.
+
+ssl_f_sig_alg
+             Returns the name of the algorithm used to sign the certificate
+             presented by the frontend when the incoming connection was made
+             over an SSL/TLS transport layer.
+
+ssl_f_version
+             Returns the version of the certificate presented by the frontend
+             when the incoming connection was made over an SSL/TLS transport
+             layer.
+
+ssl_fc       This checks the transport layer used on the front connection,
+             and returns 1 if it was made via an SSL/TLS transport layer,
+             otherwise zero.
+
+ssl_fc_alg_keysize
+             Returns the symmetric cipher key size support d in bits when the
+             incoming connection was made over an SSL/TLS transport layer.
+
+ssl_fc_cipher
+             Returns the name of the used cipher when the incoming connection
+             was made over an SSL/TLS transport layer.
+
+ssl_fc_has_crt
+             Returns 1 if a client certificate is present in the front
+             connection over SSL/TLS transport layer, otherwise 0.
+             Note: on SSL session resumption with Session ID or TLS ticket,
+             client certificate is not present in the current connection but
+             may be retrieved from the cache or the ticket. So prefer
+             &quot;<a href="#ssl_c_used">ssl_c_used</a>&quot; if you want to check if current SSL session uses
+             a client certificate.
+
+ssl_fc_has_sni
+             This checks the transport layer used by the front connection, and
+             returns 1 if the connection was made via an SSL/TLS transport
+             layer and the client sent a Server Name Indication TLS extension,
+             otherwise zero. This requires that the SSL library is build with
+             support for TLS extensions enabled (check haproxy -vv).
+
+ssl_fc_npn   This extracts the Next Protocol Negociation field from an
+             incoming connection made via an SSL/TLS transport layer and
+             locally deciphered by haproxy. The result is a string containing
+             the protocol name advertised by the client. The SSL library must
+             have been built with support for TLS extensions enabled (check
+             haproxy -vv). See also the &quot;<a href="#npn">npn</a>&quot; bind keyword.
+
+ssl_fc_protocol
+             Returns the name of the used protocol when the incoming
+             connection was made over an SSL/TLS transport layer.
+
+ssl_fc_session_id
+             Returns the SSL ID of the front connection when the incoming
+             connection was made over an SSL/TLS transport layer. Useful to
+             stick on a given client.
+
+ssl_fc_sni   This extracts the Server Name Indication field from an incoming
+             connection made via an SSL/TLS transport layer and locally
+             deciphered by haproxy. The result typically is a string matching
+             the HTTPS host name (253 chars or less). The SSL library must
+             have been built with support for TLS extensions enabled (check
+             haproxy -vv).
+
+ssl_fc_use_keysize
+             Returns the symmetric cipher key size used in bits when the
+             incoming connection was made over an SSL/TLS transport layer.
+
+status       Returns an integer containing the HTTP status code in the HTTP
+             response, for example, 302. It is mostly used within ACLs.
+
+table_avl([&lt;table&gt;])
+             Returns the total number of available entries in the current
+             proxy's stick-table or in the designated stick-table. See also
+             table_cnt.
+
+table_cnt([&lt;table&gt;])
+             Returns the total number of entries currently in use in the
+             current proxy's stick-table or in the designated stick-table.
+             See also src_conn_cnt and table_avl for other entry counting
+             methods.
+
+url          This extracts the request's URL as presented in the request. A
+             typical use is with prefetch-capable caches, and with portals
+             which need to aggregate multiple information from databases and
+             keep them in caches. See also &quot;<a href="#path">path</a>&quot;.
+
+urlp(&lt;name&gt;[,&lt;delim&gt;])
+             Note: all &quot;urlp*&quot; sample fetch methods apply only to the first
+             occurrence of the parameter &lt;name&gt; in the query string, which
+             is delimited by character &lt;delim&gt; if specified, otherwise '&amp;'.
+             The parameter name is case-sensitive. This one extracts a string
+             corresponding to the value of the parameter &lt;name&gt;. This can be
+             used for session stickiness.
+
+urlp_val(&lt;name&gt;[,&lt;delim&gt;])
+             See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in
+             the request and converts it ao an integer value. This can be
+             used for session stickiness.
+
+url_ip       This extracts the IP address from the request's URL when the
+             host part is presented as an IP address. Its use is very
+             limited. For instance, a monitoring system might use this field
+             as an alternative for the source IP in order to test what path a
+             given source address would follow, or to force an entry in a
+             table for a given source address.
+
+url_port     This extracts the port part from the request's URL. It probably
+             is totally useless but it was available at no cost.
+
+url_param(&lt;name&gt;[,&lt;delim&gt;])
+             This extracts the first occurrence of the parameter &lt;name&gt; in
+             the parameter string of the request and uses the corresponding
+             value to match. Optionally, a delimiter can be provided. If not
+             then the question mark '?' is used by default.
+             A typical use is to get sticky session through url for cases
+             where cookies cannot be used.</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># match http://example.com/foo?PHPSESSIONID=some_id</span>
+stick on url_param(PHPSESSIONID)
+<span class="comment"># match http://example.com/foo;JSESSIONID=some_id</span>
+stick on url_param(JSESSIONID,;)
+</code></pre>
+</div><pre class="text">  wait_end     Always returns true or does not fetch. This is only used for ACL
+               compatibility.
+
+
+The currently available list of transformations include :
 
   lower        Convert a string pattern to lower case. This can only be placed
                after a string pattern fetch function or after a conversion
@@ -10809,6 +11540,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"accept-proxy",
 				"acl",
 				"addr",
+				"alpn",
 				"always_false",
 				"always_true",
 				"appsession",
@@ -11239,6 +11971,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl_f_version",
 				"ssl_fc",
 				"ssl_fc_alg_keysize",
+				"ssl_fc_alpn",
 				"ssl_fc_cipher",
 				"ssl_fc_has_crt",
 				"ssl_fc_has_sni",
@@ -11444,7 +12177,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev17-108', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev18', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-2', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
