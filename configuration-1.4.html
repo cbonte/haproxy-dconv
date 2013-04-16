@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>HAProxy version 1.4.23 - Configuration Manual</title>
-		<link href="bootstrap/css/bootstrap.min.css?0.2.0-2" rel="stylesheet" />
-		<link href="css/page.css?0.2.0-2" rel="stylesheet" />
+		<link href="bootstrap/css/bootstrap.min.css?0.2.0-3" rel="stylesheet" />
+		<link href="css/page.css?0.2.0-3" rel="stylesheet" />
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top navbar-inverse">
@@ -63,10 +63,11 @@
 				</form>
 				<div id="error"></div>
 				<p>
-					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.
+					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
+					<span id="keyboardNavStatus"></span>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-2</b> on <b>2013/04/03</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-3</b> on <b>2013/04/17</b></small>
 				</p>
 			</div>
 		</div>
@@ -8216,11 +8217,12 @@ the reader knows the output has not been truncated.
 			</div>
 		</div>
 
-		<script src="js/jquery.min.js?0.2.0-2"></script>
-		<script src="bootstrap/js/bootstrap.min.js?0.2.0-2"></script>
+		<script src="js/jquery.min.js?0.2.0-3"></script>
+		<script src="bootstrap/js/bootstrap.min.js?0.2.0-3"></script>
 
 		<script>
 			/* Keyword search */
+			var searchFocus = false
 			var keywords = [
 				"acl",
 				"addr",
@@ -8553,6 +8555,11 @@ the reader knows the output has not been truncated.
 				"wait_end",
 				"weight"
 			]
+			
+			function updateKeyboardNavStatus() {
+				var status = searchFocus ? '<span class="label label-important">DISABLED</span>' : '<span class="label label-success">ENABLED</span>'
+				$('#keyboardNavStatus').html(status)
+			}
 
 			function search(keyword) {
 				if (keyword) {
@@ -8576,6 +8583,12 @@ the reader knows the output has not been truncated.
 					search(item)
 					return item
 				}
+			}).focus(function() {
+				searchFocus = true
+				updateKeyboardNavStatus()
+			}).blur(function() {
+				searchFocus = false
+				updateKeyboardNavStatus()
 			})
 
 			/* EXPERIMENTAL - Previous/Next navigation */
@@ -8618,10 +8631,13 @@ the reader knows the output has not been truncated.
 			});
 			$(document).ready(function() {
 				refreshNavigation()
+				updateKeyboardNavStatus()
 			});
 
 			/* EXPERIMENTAL - Enable keyboard navigation */
 			$(document).keydown(function(e){
+				if (searchFocus) return
+
 				switch(e.which) {
 					case 37: // left
 					window.location.hash = previousTarget ? previousTarget : 'top'
@@ -8644,7 +8660,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
 piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.4.23', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-2', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-3', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
