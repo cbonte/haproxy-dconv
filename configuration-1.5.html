@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev18-31 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev18-40 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-5" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-5" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev18-31</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev18-40</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-5</b> on <b>2013/04/25</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-5</b> on <b>2013/05/09</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev18-31</strong></p>
+						<p><strong>version 1.5-dev18-40</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -7162,17 +7162,19 @@ clients).</pre><a class="anchor" name="crt-ignore-err"></a><a class="anchor" nam
 comma separated list of errorIDs to ignore during verify at depth == 0.  If
 set to 'all', all errors are ignored. SSL handshake is not abored if an error
 is ignored.</pre><a class="anchor" name="crt-list"></a><a class="anchor" name="5-crt-list"></a><a class="anchor" name="5.1-crt-list"></a><a class="anchor" name="crt-list (Bind and Server options)"></a><a class="anchor" name="crt-list (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-list"></a><a href="#5-crt-list">crt-list</a></b> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
-designates a list of PEM file with an optional SNI filter per certificate,
-with the following format for each line :
+designates a list of PEM file with an optional list of SNI filter per
+certificate, with the following format for each line :
 
-      &lt;crtfile&gt; [&lt;snifilter&gt;]
+      &lt;crtfile&gt; [[!]&lt;snifilter&gt; ...]
 
-Wildcards are supported in the SNI filter. The certificates will be presented
-to clients who provide a valid TLS Server Name Indication field matching one
-of SNI filter. If no SNI filter is specified the CN and alt subjects are
-used. This directive may be specified multiple times. See the &quot;<a href="#crt">crt</a>&quot; option
-for more information. The default certificate is still needed to meet OpenSSL
-expectations. If it is not used, the strict-sni option may be used.</pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
+Wildcards are supported in the SNI filter. Negative filter are also supported,
+only useful in combination with a wildcard filter to exclude a particular SNI.
+The certificates will be presented to clients who provide a valid TLS Server
+Name Indication field matching one of the SNI filters. If no SNI filter is
+specified, the CN and alt subjects are used. This directive may be specified
+multiple times. See the &quot;<a href="#crt">crt</a>&quot; option for more information. The default
+certificate is still needed to meet OpenSSL expectations. If it is not used,
+the 'strict-sni' option may be used.</pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
 or at worst after the first retransmit. This should be used only on protocols
 for which the client talks first (eg: HTTP). It can slightly improve
@@ -12203,7 +12205,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev18-31', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev18-40', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
