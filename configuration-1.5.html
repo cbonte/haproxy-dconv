@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev18-47 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev18-50 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-5" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-5" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev18-47</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev18-50</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-5</b> on <b>2013/05/25</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-5</b> on <b>2013/05/29</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev18-47</strong></p>
+						<p><strong>version 1.5-dev18-50</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -6336,8 +6336,8 @@ backend https
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
-            actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc1&quot;, &quot;track-sc2&quot;.
-            See below for more details.
+            actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc1&quot;, &quot;track-sc2&quot;,
+            and &quot;track-sc3&quot;. See below for more details.
 
 &lt;condition&gt; is a standard layer4-only ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -6375,7 +6375,7 @@ Three types of actions are supported :
       logging is absolutely desired, then &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rules should
       be used instead.
 
-  - { track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
+  - { track-sc1 | track-sc2 | track-sc3 } &lt;key&gt; [table &lt;table&gt;] :
       enables tracking of sticky counters from current connection. These
       rules do not stop evaluation and do not change default action. Two sets
       of counters may be simultaneously tracked by the same connection. The
@@ -6384,6 +6384,7 @@ Three types of actions are supported :
       enables tracking of the counters of the specified table as the second
       set. It is a recommended practice to use the first set of counters for
       the per-frontend counters and the second set for the per-backend ones.
+      But this is just a guideline, all may be used everywhere.
 
       These actions take one or two arguments :
         &lt;key&gt;   is mandatory, and is a pattern extraction rule as described
@@ -6437,8 +6438,9 @@ tcp-request connection reject if { sc1_conn_rate gt 10 }
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
-            actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc1&quot;, &quot;track-sc2&quot;.
-            See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; above for their signification.
+            actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc1&quot;, &quot;track-sc2&quot;,
+            and &quot;track-sc3&quot;. See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; above for their
+            signification.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -6466,7 +6468,7 @@ inserted.
 Three types of actions are supported :
   - accept :
   - reject :
-  - { track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
+  - { track-sc1 | track-sc2 | track-sc3 } &lt;key&gt; [table &lt;table&gt;]
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
@@ -6479,7 +6481,8 @@ difference because tracking rules in &quot;frontend&quot; and &quot;listen&quot;
 all the session, as opposed to the backend rules. The difference appears when
 some layer 7 information is tracked. While there is nothing mandatory about
 it, it is recommended to use the track-sc1 pointer to track per-frontend
-counters and track-sc2 to track per-backend counters.
+counters and track-sc2 to track per-backend counters, but this is just a
+guideline and all counters may be used everywhere.
 
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
@@ -8098,11 +8101,11 @@ specified, the current one is used, but it is also possible to check another
 one. This can be used to take actions when queuing goes above a known level,
 generally indicating a surge of traffic or a massive slowdown on the servers.
 One possible action could be to reject new users but still accept old ones.
-See also the &quot;<a href="#avg_queue">avg_queue</a>&quot;, &quot;<a href="#be_conn">be_conn</a>&quot;, and &quot;<a href="#be_sess_rate">be_sess_rate</a>&quot; criteria.</pre><a class="anchor" name="sc1_bytes_in_rate"></a><a class="anchor" name="7-sc1_bytes_in_rate"></a><a class="anchor" name="7.5.1-sc1_bytes_in_rate"></a><a class="anchor" name="sc1_bytes_in_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_bytes_in_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_bytes_in_rate"></a><a href="#7-sc1_bytes_in_rate">sc1_bytes_in_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_bytes_in_rate"></a><a class="anchor" name="7-sc2_bytes_in_rate"></a><a class="anchor" name="7.5.1-sc2_bytes_in_rate"></a><a class="anchor" name="sc2_bytes_in_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_bytes_in_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_bytes_in_rate"></a><a href="#7-sc2_bytes_in_rate">sc2_bytes_in_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average client-to-server bytes rate from the currently tracked
+See also the &quot;<a href="#avg_queue">avg_queue</a>&quot;, &quot;<a href="#be_conn">be_conn</a>&quot;, and &quot;<a href="#be_sess_rate">be_sess_rate</a>&quot; criteria.</pre><a class="anchor" name="sc1_bytes_in_rate"></a><a class="anchor" name="7-sc1_bytes_in_rate"></a><a class="anchor" name="7.5.1-sc1_bytes_in_rate"></a><a class="anchor" name="sc1_bytes_in_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_bytes_in_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_bytes_in_rate"></a><a href="#7-sc1_bytes_in_rate">sc1_bytes_in_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_bytes_in_rate"></a><a class="anchor" name="7-sc2_bytes_in_rate"></a><a class="anchor" name="7.5.1-sc2_bytes_in_rate"></a><a class="anchor" name="sc2_bytes_in_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_bytes_in_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_bytes_in_rate"></a><a href="#7-sc2_bytes_in_rate">sc2_bytes_in_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_bytes_in_rate"></a><a class="anchor" name="7-sc3_bytes_in_rate"></a><a class="anchor" name="7.5.1-sc3_bytes_in_rate"></a><a class="anchor" name="sc3_bytes_in_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_bytes_in_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_bytes_in_rate"></a><a href="#7-sc3_bytes_in_rate">sc3_bytes_in_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average client-to-server bytes rate from the currently tracked
 counters, measured in amount of bytes over the period configured in the
-table. See also src_bytes_in_rate.</pre><a class="anchor" name="sc1_bytes_out_rate"></a><a class="anchor" name="7-sc1_bytes_out_rate"></a><a class="anchor" name="7.5.1-sc1_bytes_out_rate"></a><a class="anchor" name="sc1_bytes_out_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_bytes_out_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_bytes_out_rate"></a><a href="#7-sc1_bytes_out_rate">sc1_bytes_out_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_bytes_out_rate"></a><a class="anchor" name="7-sc2_bytes_out_rate"></a><a class="anchor" name="7.5.1-sc2_bytes_out_rate"></a><a class="anchor" name="sc2_bytes_out_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_bytes_out_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_bytes_out_rate"></a><a href="#7-sc2_bytes_out_rate">sc2_bytes_out_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average server-to-client bytes rate from the currently tracked
+table. See also src_bytes_in_rate.</pre><a class="anchor" name="sc1_bytes_out_rate"></a><a class="anchor" name="7-sc1_bytes_out_rate"></a><a class="anchor" name="7.5.1-sc1_bytes_out_rate"></a><a class="anchor" name="sc1_bytes_out_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_bytes_out_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_bytes_out_rate"></a><a href="#7-sc1_bytes_out_rate">sc1_bytes_out_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_bytes_out_rate"></a><a class="anchor" name="7-sc2_bytes_out_rate"></a><a class="anchor" name="7.5.1-sc2_bytes_out_rate"></a><a class="anchor" name="sc2_bytes_out_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_bytes_out_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_bytes_out_rate"></a><a href="#7-sc2_bytes_out_rate">sc2_bytes_out_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_bytes_out_rate"></a><a class="anchor" name="7-sc3_bytes_out_rate"></a><a class="anchor" name="7.5.1-sc3_bytes_out_rate"></a><a class="anchor" name="sc3_bytes_out_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_bytes_out_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_bytes_out_rate"></a><a href="#7-sc3_bytes_out_rate">sc3_bytes_out_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average server-to-client bytes rate from the currently tracked
 counters, measured in amount of bytes over the period configured in the
-table. See also src_bytes_out_rate.</pre><a class="anchor" name="sc1_clr_gpc0"></a><a class="anchor" name="7-sc1_clr_gpc0"></a><a class="anchor" name="7.5.1-sc1_clr_gpc0"></a><a class="anchor" name="sc1_clr_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_clr_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_clr_gpc0"></a><a href="#7-sc1_clr_gpc0">sc1_clr_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_clr_gpc0"></a><a class="anchor" name="7-sc2_clr_gpc0"></a><a class="anchor" name="7.5.1-sc2_clr_gpc0"></a><a class="anchor" name="sc2_clr_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_clr_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_clr_gpc0"></a><a href="#7-sc2_clr_gpc0">sc2_clr_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Clears the first General Purpose Counter associated to the currently tracked
+table. See also src_bytes_out_rate.</pre><a class="anchor" name="sc1_clr_gpc0"></a><a class="anchor" name="7-sc1_clr_gpc0"></a><a class="anchor" name="7.5.1-sc1_clr_gpc0"></a><a class="anchor" name="sc1_clr_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_clr_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_clr_gpc0"></a><a href="#7-sc1_clr_gpc0">sc1_clr_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_clr_gpc0"></a><a class="anchor" name="7-sc2_clr_gpc0"></a><a class="anchor" name="7.5.1-sc2_clr_gpc0"></a><a class="anchor" name="sc2_clr_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_clr_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_clr_gpc0"></a><a href="#7-sc2_clr_gpc0">sc2_clr_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_clr_gpc0"></a><a class="anchor" name="7-sc3_clr_gpc0"></a><a class="anchor" name="7.5.1-sc3_clr_gpc0"></a><a class="anchor" name="sc3_clr_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_clr_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_clr_gpc0"></a><a href="#7-sc3_clr_gpc0">sc3_clr_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Clears the first General Purpose Counter associated to the currently tracked
 counters, and returns its previous value. Before the first invocation, the
 stored value is zero, so first invocation will always return zero. This is
 typically used as a second ACL in an expression in order to mark a connection
@@ -8114,23 +8117,23 @@ when a first ACL was verified :
       acl kill  sc1_inc_gpc0 gt 5
       acl save  sc1_clr_gpc0 ge 0
       tcp-request connection accept if !abuse save
-      tcp-request connection reject if abuse kill</pre><a class="anchor" name="sc1_conn_cnt"></a><a class="anchor" name="7-sc1_conn_cnt"></a><a class="anchor" name="7.5.1-sc1_conn_cnt"></a><a class="anchor" name="sc1_conn_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_conn_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_cnt"></a><a href="#7-sc1_conn_cnt">sc1_conn_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_conn_cnt"></a><a class="anchor" name="7-sc2_conn_cnt"></a><a class="anchor" name="7.5.1-sc2_conn_cnt"></a><a class="anchor" name="sc2_conn_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_conn_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_cnt"></a><a href="#7-sc2_conn_cnt">sc2_conn_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of incoming connections from currently tracked
-counters. See also src_conn_cnt.</pre><a class="anchor" name="sc1_conn_cur"></a><a class="anchor" name="7-sc1_conn_cur"></a><a class="anchor" name="7.5.1-sc1_conn_cur"></a><a class="anchor" name="sc1_conn_cur (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_conn_cur (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_cur"></a><a href="#7-sc1_conn_cur">sc1_conn_cur</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_conn_cur"></a><a class="anchor" name="7-sc2_conn_cur"></a><a class="anchor" name="7.5.1-sc2_conn_cur"></a><a class="anchor" name="sc2_conn_cur (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_conn_cur (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_cur"></a><a href="#7-sc2_conn_cur">sc2_conn_cur</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the current amount of concurrent connections tracking the same
+      tcp-request connection reject if abuse kill</pre><a class="anchor" name="sc1_conn_cnt"></a><a class="anchor" name="7-sc1_conn_cnt"></a><a class="anchor" name="7.5.1-sc1_conn_cnt"></a><a class="anchor" name="sc1_conn_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_conn_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_cnt"></a><a href="#7-sc1_conn_cnt">sc1_conn_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_conn_cnt"></a><a class="anchor" name="7-sc2_conn_cnt"></a><a class="anchor" name="7.5.1-sc2_conn_cnt"></a><a class="anchor" name="sc2_conn_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_conn_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_cnt"></a><a href="#7-sc2_conn_cnt">sc2_conn_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_conn_cnt"></a><a class="anchor" name="7-sc3_conn_cnt"></a><a class="anchor" name="7.5.1-sc3_conn_cnt"></a><a class="anchor" name="sc3_conn_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_conn_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_conn_cnt"></a><a href="#7-sc3_conn_cnt">sc3_conn_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of incoming connections from currently tracked
+counters. See also src_conn_cnt.</pre><a class="anchor" name="sc1_conn_cur"></a><a class="anchor" name="7-sc1_conn_cur"></a><a class="anchor" name="7.5.1-sc1_conn_cur"></a><a class="anchor" name="sc1_conn_cur (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_conn_cur (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_cur"></a><a href="#7-sc1_conn_cur">sc1_conn_cur</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_conn_cur"></a><a class="anchor" name="7-sc2_conn_cur"></a><a class="anchor" name="7.5.1-sc2_conn_cur"></a><a class="anchor" name="sc2_conn_cur (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_conn_cur (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_cur"></a><a href="#7-sc2_conn_cur">sc2_conn_cur</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_conn_cur"></a><a class="anchor" name="7-sc3_conn_cur"></a><a class="anchor" name="7.5.1-sc3_conn_cur"></a><a class="anchor" name="sc3_conn_cur (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_conn_cur (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_conn_cur"></a><a href="#7-sc3_conn_cur">sc3_conn_cur</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the current amount of concurrent connections tracking the same
 tracked counters. This number is automatically incremented when tracking
-begins and decremented when tracking stops. See also src_conn_cur.</pre><a class="anchor" name="sc1_conn_rate"></a><a class="anchor" name="7-sc1_conn_rate"></a><a class="anchor" name="7.5.1-sc1_conn_rate"></a><a class="anchor" name="sc1_conn_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_conn_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_rate"></a><a href="#7-sc1_conn_rate">sc1_conn_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_conn_rate"></a><a class="anchor" name="7-sc2_conn_rate"></a><a class="anchor" name="7.5.1-sc2_conn_rate"></a><a class="anchor" name="sc2_conn_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_conn_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_rate"></a><a href="#7-sc2_conn_rate">sc2_conn_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average connection rate from the currently tracked counters,
+begins and decremented when tracking stops. See also src_conn_cur.</pre><a class="anchor" name="sc1_conn_rate"></a><a class="anchor" name="7-sc1_conn_rate"></a><a class="anchor" name="7.5.1-sc1_conn_rate"></a><a class="anchor" name="sc1_conn_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_conn_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_rate"></a><a href="#7-sc1_conn_rate">sc1_conn_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_conn_rate"></a><a class="anchor" name="7-sc2_conn_rate"></a><a class="anchor" name="7.5.1-sc2_conn_rate"></a><a class="anchor" name="sc2_conn_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_conn_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_rate"></a><a href="#7-sc2_conn_rate">sc2_conn_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_conn_rate"></a><a class="anchor" name="7-sc3_conn_rate"></a><a class="anchor" name="7.5.1-sc3_conn_rate"></a><a class="anchor" name="sc3_conn_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_conn_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_conn_rate"></a><a href="#7-sc3_conn_rate">sc3_conn_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average connection rate from the currently tracked counters,
 measured in amount of connections over the period configured in the table.
-See also src_conn_rate.</pre><a class="anchor" name="sc1_get_gpc0"></a><a class="anchor" name="7-sc1_get_gpc0"></a><a class="anchor" name="7.5.1-sc1_get_gpc0"></a><a class="anchor" name="sc1_get_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_get_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_get_gpc0"></a><a href="#7-sc1_get_gpc0">sc1_get_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_get_gpc0"></a><a class="anchor" name="7-sc2_get_gpc0"></a><a class="anchor" name="7.5.1-sc2_get_gpc0"></a><a class="anchor" name="sc2_get_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_get_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_get_gpc0"></a><a href="#7-sc2_get_gpc0">sc2_get_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the value of the first General Purpose Counter associated to the
-currently tracked counters. See also src_get_gpc0 and sc1/sc2_inc_gpc0.</pre><a class="anchor" name="sc1_http_err_cnt"></a><a class="anchor" name="7-sc1_http_err_cnt"></a><a class="anchor" name="7.5.1-sc1_http_err_cnt"></a><a class="anchor" name="sc1_http_err_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_err_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_err_cnt"></a><a href="#7-sc1_http_err_cnt">sc1_http_err_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_err_cnt"></a><a class="anchor" name="7-sc2_http_err_cnt"></a><a class="anchor" name="7.5.1-sc2_http_err_cnt"></a><a class="anchor" name="sc2_http_err_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_err_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_err_cnt"></a><a href="#7-sc2_http_err_cnt">sc2_http_err_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of HTTP errors from the currently tracked
+See also src_conn_rate.</pre><a class="anchor" name="sc1_get_gpc0"></a><a class="anchor" name="7-sc1_get_gpc0"></a><a class="anchor" name="7.5.1-sc1_get_gpc0"></a><a class="anchor" name="sc1_get_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_get_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_get_gpc0"></a><a href="#7-sc1_get_gpc0">sc1_get_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_get_gpc0"></a><a class="anchor" name="7-sc2_get_gpc0"></a><a class="anchor" name="7.5.1-sc2_get_gpc0"></a><a class="anchor" name="sc2_get_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_get_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_get_gpc0"></a><a href="#7-sc2_get_gpc0">sc2_get_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_get_gpc0"></a><a class="anchor" name="7-sc3_get_gpc0"></a><a class="anchor" name="7.5.1-sc3_get_gpc0"></a><a class="anchor" name="sc3_get_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_get_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_get_gpc0"></a><a href="#7-sc3_get_gpc0">sc3_get_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the value of the first General Purpose Counter associated to the
+currently tracked counters. See also src_get_gpc0 and sc1/sc2_inc_gpc0.</pre><a class="anchor" name="sc1_http_err_cnt"></a><a class="anchor" name="7-sc1_http_err_cnt"></a><a class="anchor" name="7.5.1-sc1_http_err_cnt"></a><a class="anchor" name="sc1_http_err_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_err_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_err_cnt"></a><a href="#7-sc1_http_err_cnt">sc1_http_err_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_err_cnt"></a><a class="anchor" name="7-sc2_http_err_cnt"></a><a class="anchor" name="7.5.1-sc2_http_err_cnt"></a><a class="anchor" name="sc2_http_err_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_err_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_err_cnt"></a><a href="#7-sc2_http_err_cnt">sc2_http_err_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_http_err_cnt"></a><a class="anchor" name="7-sc3_http_err_cnt"></a><a class="anchor" name="7.5.1-sc3_http_err_cnt"></a><a class="anchor" name="sc3_http_err_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_http_err_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_http_err_cnt"></a><a href="#7-sc3_http_err_cnt">sc3_http_err_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of HTTP errors from the currently tracked
 counters. This includes the both request errors and 4xx error responses.
-See also src_http_err_cnt.</pre><a class="anchor" name="sc1_http_err_rate"></a><a class="anchor" name="7-sc1_http_err_rate"></a><a class="anchor" name="7.5.1-sc1_http_err_rate"></a><a class="anchor" name="sc1_http_err_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_err_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_err_rate"></a><a href="#7-sc1_http_err_rate">sc1_http_err_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_err_rate"></a><a class="anchor" name="7-sc2_http_err_rate"></a><a class="anchor" name="7.5.1-sc2_http_err_rate"></a><a class="anchor" name="sc2_http_err_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_err_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_err_rate"></a><a href="#7-sc2_http_err_rate">sc2_http_err_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average rate of HTTP errors from the currently tracked counters,
+See also src_http_err_cnt.</pre><a class="anchor" name="sc1_http_err_rate"></a><a class="anchor" name="7-sc1_http_err_rate"></a><a class="anchor" name="7.5.1-sc1_http_err_rate"></a><a class="anchor" name="sc1_http_err_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_err_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_err_rate"></a><a href="#7-sc1_http_err_rate">sc1_http_err_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_err_rate"></a><a class="anchor" name="7-sc2_http_err_rate"></a><a class="anchor" name="7.5.1-sc2_http_err_rate"></a><a class="anchor" name="sc2_http_err_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_err_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_err_rate"></a><a href="#7-sc2_http_err_rate">sc2_http_err_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_http_err_rate"></a><a class="anchor" name="7-sc3_http_err_rate"></a><a class="anchor" name="7.5.1-sc3_http_err_rate"></a><a class="anchor" name="sc3_http_err_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_http_err_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_http_err_rate"></a><a href="#7-sc3_http_err_rate">sc3_http_err_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average rate of HTTP errors from the currently tracked counters,
 measured in amount of errors over the period configured in the table. This
 includes the both request errors and 4xx error responses. See also
-src_http_err_rate.</pre><a class="anchor" name="sc1_http_req_cnt"></a><a class="anchor" name="7-sc1_http_req_cnt"></a><a class="anchor" name="7.5.1-sc1_http_req_cnt"></a><a class="anchor" name="sc1_http_req_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_req_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_req_cnt"></a><a href="#7-sc1_http_req_cnt">sc1_http_req_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_req_cnt"></a><a class="anchor" name="7-sc2_http_req_cnt"></a><a class="anchor" name="7.5.1-sc2_http_req_cnt"></a><a class="anchor" name="sc2_http_req_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_req_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_req_cnt"></a><a href="#7-sc2_http_req_cnt">sc2_http_req_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of HTTP requests from the currently tracked
+src_http_err_rate.</pre><a class="anchor" name="sc1_http_req_cnt"></a><a class="anchor" name="7-sc1_http_req_cnt"></a><a class="anchor" name="7.5.1-sc1_http_req_cnt"></a><a class="anchor" name="sc1_http_req_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_req_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_req_cnt"></a><a href="#7-sc1_http_req_cnt">sc1_http_req_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_req_cnt"></a><a class="anchor" name="7-sc2_http_req_cnt"></a><a class="anchor" name="7.5.1-sc2_http_req_cnt"></a><a class="anchor" name="sc2_http_req_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_req_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_req_cnt"></a><a href="#7-sc2_http_req_cnt">sc2_http_req_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_http_req_cnt"></a><a class="anchor" name="7-sc3_http_req_cnt"></a><a class="anchor" name="7.5.1-sc3_http_req_cnt"></a><a class="anchor" name="sc3_http_req_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_http_req_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_http_req_cnt"></a><a href="#7-sc3_http_req_cnt">sc3_http_req_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of HTTP requests from the currently tracked
 counters. This includes every started request, valid or not. See also
-src_http_req_cnt.</pre><a class="anchor" name="sc1_http_req_rate"></a><a class="anchor" name="7-sc1_http_req_rate"></a><a class="anchor" name="7.5.1-sc1_http_req_rate"></a><a class="anchor" name="sc1_http_req_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_req_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_req_rate"></a><a href="#7-sc1_http_req_rate">sc1_http_req_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_req_rate"></a><a class="anchor" name="7-sc2_http_req_rate"></a><a class="anchor" name="7.5.1-sc2_http_req_rate"></a><a class="anchor" name="sc2_http_req_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_req_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_req_rate"></a><a href="#7-sc2_http_req_rate">sc2_http_req_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average rate of HTTP requests from the currently tracked
+src_http_req_cnt.</pre><a class="anchor" name="sc1_http_req_rate"></a><a class="anchor" name="7-sc1_http_req_rate"></a><a class="anchor" name="7.5.1-sc1_http_req_rate"></a><a class="anchor" name="sc1_http_req_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_http_req_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_http_req_rate"></a><a href="#7-sc1_http_req_rate">sc1_http_req_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_http_req_rate"></a><a class="anchor" name="7-sc2_http_req_rate"></a><a class="anchor" name="7.5.1-sc2_http_req_rate"></a><a class="anchor" name="sc2_http_req_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_http_req_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_http_req_rate"></a><a href="#7-sc2_http_req_rate">sc2_http_req_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_http_req_rate"></a><a class="anchor" name="7-sc3_http_req_rate"></a><a class="anchor" name="7.5.1-sc3_http_req_rate"></a><a class="anchor" name="sc3_http_req_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_http_req_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_http_req_rate"></a><a href="#7-sc3_http_req_rate">sc3_http_req_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average rate of HTTP requests from the currently tracked
 counters, measured in amount of requests over the period configured in
 the table. This includes every started request, valid or not. See also
-src_http_req_rate.</pre><a class="anchor" name="sc1_inc_gpc0"></a><a class="anchor" name="7-sc1_inc_gpc0"></a><a class="anchor" name="7.5.1-sc1_inc_gpc0"></a><a class="anchor" name="sc1_inc_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_inc_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_inc_gpc0"></a><a href="#7-sc1_inc_gpc0">sc1_inc_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_inc_gpc0"></a><a class="anchor" name="7-sc2_inc_gpc0"></a><a class="anchor" name="7.5.1-sc2_inc_gpc0"></a><a class="anchor" name="sc2_inc_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_inc_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_inc_gpc0"></a><a href="#7-sc2_inc_gpc0">sc2_inc_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Increments the first General Purpose Counter associated to the currently
+src_http_req_rate.</pre><a class="anchor" name="sc1_inc_gpc0"></a><a class="anchor" name="7-sc1_inc_gpc0"></a><a class="anchor" name="7.5.1-sc1_inc_gpc0"></a><a class="anchor" name="sc1_inc_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_inc_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_inc_gpc0"></a><a href="#7-sc1_inc_gpc0">sc1_inc_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_inc_gpc0"></a><a class="anchor" name="7-sc2_inc_gpc0"></a><a class="anchor" name="7.5.1-sc2_inc_gpc0"></a><a class="anchor" name="sc2_inc_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_inc_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_inc_gpc0"></a><a href="#7-sc2_inc_gpc0">sc2_inc_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_inc_gpc0"></a><a class="anchor" name="7-sc3_inc_gpc0"></a><a class="anchor" name="7.5.1-sc3_inc_gpc0"></a><a class="anchor" name="sc3_inc_gpc0 (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_inc_gpc0 (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_inc_gpc0"></a><a href="#7-sc3_inc_gpc0">sc3_inc_gpc0</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Increments the first General Purpose Counter associated to the currently
 tracked counters, and returns its new value. Before the first invocation,
 the stored value is zero, so first invocation will increase it to 1 and will
 return 1. This is typically used as a second ACL in an expression in order
@@ -8138,23 +8141,23 @@ to mark a connection when a first ACL was verified :
 
       acl abuse sc1_http_req_rate gt 10
       acl kill  sc1_inc_gpc0 gt 0
-      tcp-request connection reject if abuse kill</pre><a class="anchor" name="sc1_kbytes_in"></a><a class="anchor" name="7-sc1_kbytes_in"></a><a class="anchor" name="7.5.1-sc1_kbytes_in"></a><a class="anchor" name="sc1_kbytes_in (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_kbytes_in (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_in"></a><a href="#7-sc1_kbytes_in">sc1_kbytes_in</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_kbytes_in"></a><a class="anchor" name="7-sc2_kbytes_in"></a><a class="anchor" name="7.5.1-sc2_kbytes_in"></a><a class="anchor" name="sc2_kbytes_in (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_kbytes_in (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_in"></a><a href="#7-sc2_kbytes_in">sc2_kbytes_in</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the amount of client-to-server data from the currently tracked
+      tcp-request connection reject if abuse kill</pre><a class="anchor" name="sc1_kbytes_in"></a><a class="anchor" name="7-sc1_kbytes_in"></a><a class="anchor" name="7.5.1-sc1_kbytes_in"></a><a class="anchor" name="sc1_kbytes_in (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_kbytes_in (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_in"></a><a href="#7-sc1_kbytes_in">sc1_kbytes_in</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_kbytes_in"></a><a class="anchor" name="7-sc2_kbytes_in"></a><a class="anchor" name="7.5.1-sc2_kbytes_in"></a><a class="anchor" name="sc2_kbytes_in (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_kbytes_in (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_in"></a><a href="#7-sc2_kbytes_in">sc2_kbytes_in</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_kbytes_in"></a><a class="anchor" name="7-sc3_kbytes_in"></a><a class="anchor" name="7.5.1-sc3_kbytes_in"></a><a class="anchor" name="sc3_kbytes_in (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_kbytes_in (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_kbytes_in"></a><a href="#7-sc3_kbytes_in">sc3_kbytes_in</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the amount of client-to-server data from the currently tracked
 counters, measured in kilobytes over the period configured in the table. The
 test is currently performed on 32-bit integers, which limits values to 4
-terabytes. See also src_kbytes_in.</pre><a class="anchor" name="sc1_kbytes_out"></a><a class="anchor" name="7-sc1_kbytes_out"></a><a class="anchor" name="7.5.1-sc1_kbytes_out"></a><a class="anchor" name="sc1_kbytes_out (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_kbytes_out (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_out"></a><a href="#7-sc1_kbytes_out">sc1_kbytes_out</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_kbytes_out"></a><a class="anchor" name="7-sc2_kbytes_out"></a><a class="anchor" name="7.5.1-sc2_kbytes_out"></a><a class="anchor" name="sc2_kbytes_out (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_kbytes_out (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_out"></a><a href="#7-sc2_kbytes_out">sc2_kbytes_out</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the amount of server-to-client data from the currently tracked
+terabytes. See also src_kbytes_in.</pre><a class="anchor" name="sc1_kbytes_out"></a><a class="anchor" name="7-sc1_kbytes_out"></a><a class="anchor" name="7.5.1-sc1_kbytes_out"></a><a class="anchor" name="sc1_kbytes_out (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_kbytes_out (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_out"></a><a href="#7-sc1_kbytes_out">sc1_kbytes_out</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_kbytes_out"></a><a class="anchor" name="7-sc2_kbytes_out"></a><a class="anchor" name="7.5.1-sc2_kbytes_out"></a><a class="anchor" name="sc2_kbytes_out (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_kbytes_out (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_out"></a><a href="#7-sc2_kbytes_out">sc2_kbytes_out</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_kbytes_out"></a><a class="anchor" name="7-sc3_kbytes_out"></a><a class="anchor" name="7.5.1-sc3_kbytes_out"></a><a class="anchor" name="sc3_kbytes_out (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_kbytes_out (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_kbytes_out"></a><a href="#7-sc3_kbytes_out">sc3_kbytes_out</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the amount of server-to-client data from the currently tracked
 counters, measured in kilobytes over the period configured in the table. The
 test is currently performed on 32-bit integers, which limits values to 4
-terabytes. See also src_kbytes_out.</pre><a class="anchor" name="sc1_sess_cnt"></a><a class="anchor" name="7-sc1_sess_cnt"></a><a class="anchor" name="7.5.1-sc1_sess_cnt"></a><a class="anchor" name="sc1_sess_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_sess_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_sess_cnt"></a><a href="#7-sc1_sess_cnt">sc1_sess_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_sess_cnt"></a><a class="anchor" name="7-sc2_sess_cnt"></a><a class="anchor" name="7.5.1-sc2_sess_cnt"></a><a class="anchor" name="sc2_sess_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_sess_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_sess_cnt"></a><a href="#7-sc2_sess_cnt">sc2_sess_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of incoming connections that were transformed
+terabytes. See also src_kbytes_out.</pre><a class="anchor" name="sc1_sess_cnt"></a><a class="anchor" name="7-sc1_sess_cnt"></a><a class="anchor" name="7.5.1-sc1_sess_cnt"></a><a class="anchor" name="sc1_sess_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_sess_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_sess_cnt"></a><a href="#7-sc1_sess_cnt">sc1_sess_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_sess_cnt"></a><a class="anchor" name="7-sc2_sess_cnt"></a><a class="anchor" name="7.5.1-sc2_sess_cnt"></a><a class="anchor" name="sc2_sess_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_sess_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_sess_cnt"></a><a href="#7-sc2_sess_cnt">sc2_sess_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_sess_cnt"></a><a class="anchor" name="7-sc3_sess_cnt"></a><a class="anchor" name="7.5.1-sc3_sess_cnt"></a><a class="anchor" name="sc3_sess_cnt (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_sess_cnt (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_sess_cnt"></a><a href="#7-sc3_sess_cnt">sc3_sess_cnt</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the cumulated number of incoming connections that were transformed
 into sessions, which means that they were accepted by a &quot;tcp-request
 connection&quot; rule, from the currently tracked counters. A backend may count
 more sessions than connections because each connection could result in many
 backend sessions if some HTTP keep-alive is performed over the connection
-with the client. See also src_sess_cnt.</pre><a class="anchor" name="sc1_sess_rate"></a><a class="anchor" name="7-sc1_sess_rate"></a><a class="anchor" name="7.5.1-sc1_sess_rate"></a><a class="anchor" name="sc1_sess_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_sess_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_sess_rate"></a><a href="#7-sc1_sess_rate">sc1_sess_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_sess_rate"></a><a class="anchor" name="7-sc2_sess_rate"></a><a class="anchor" name="7.5.1-sc2_sess_rate"></a><a class="anchor" name="sc2_sess_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_sess_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_sess_rate"></a><a href="#7-sc2_sess_rate">sc2_sess_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average session rate from the currently tracked counters,
+with the client. See also src_sess_cnt.</pre><a class="anchor" name="sc1_sess_rate"></a><a class="anchor" name="7-sc1_sess_rate"></a><a class="anchor" name="7.5.1-sc1_sess_rate"></a><a class="anchor" name="sc1_sess_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_sess_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_sess_rate"></a><a href="#7-sc1_sess_rate">sc1_sess_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_sess_rate"></a><a class="anchor" name="7-sc2_sess_rate"></a><a class="anchor" name="7.5.1-sc2_sess_rate"></a><a class="anchor" name="sc2_sess_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_sess_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_sess_rate"></a><a href="#7-sc2_sess_rate">sc2_sess_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_sess_rate"></a><a class="anchor" name="7-sc3_sess_rate"></a><a class="anchor" name="7.5.1-sc3_sess_rate"></a><a class="anchor" name="sc3_sess_rate (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_sess_rate (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_sess_rate"></a><a href="#7-sc3_sess_rate">sc3_sess_rate</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the average session rate from the currently tracked counters,
 measured in amount of sessions over the period configured in the table. A
 session is a connection that got past the early &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 rules. A backend may count more sessions than connections because each
 connection could result in many backend sessions if some HTTP keep-alive is
-performed over the connection with the client. See also src_sess_rate.</pre><a class="anchor" name="sc1_trackers"></a><a class="anchor" name="7-sc1_trackers"></a><a class="anchor" name="7.5.1-sc1_trackers"></a><a class="anchor" name="sc1_trackers (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_trackers (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_trackers"></a><a href="#7-sc1_trackers">sc1_trackers</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_trackers"></a><a class="anchor" name="7-sc2_trackers"></a><a class="anchor" name="7.5.1-sc2_trackers"></a><a class="anchor" name="sc2_trackers (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_trackers (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_trackers"></a><a href="#7-sc2_trackers">sc2_trackers</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the current amount of concurrent connections tracking the same
+performed over the connection with the client. See also src_sess_rate.</pre><a class="anchor" name="sc1_trackers"></a><a class="anchor" name="7-sc1_trackers"></a><a class="anchor" name="7.5.1-sc1_trackers"></a><a class="anchor" name="sc1_trackers (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc1_trackers (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc1_trackers"></a><a href="#7-sc1_trackers">sc1_trackers</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc2_trackers"></a><a class="anchor" name="7-sc2_trackers"></a><a class="anchor" name="7.5.1-sc2_trackers"></a><a class="anchor" name="sc2_trackers (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc2_trackers (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc2_trackers"></a><a href="#7-sc2_trackers">sc2_trackers</a></b> <span style="color: #080">&lt;integer&gt;</span></div><a class="anchor" name="sc3_trackers"></a><a class="anchor" name="7-sc3_trackers"></a><a class="anchor" name="7.5.1-sc3_trackers"></a><a class="anchor" name="sc3_trackers (Using ACLs and pattern extraction)"></a><a class="anchor" name="sc3_trackers (Matching at Layer 4 and below)"></a><div class="keyword"><b><a class="anchor" name="sc3_trackers"></a><a href="#7-sc3_trackers">sc3_trackers</a></b> <span style="color: #080">&lt;integer&gt;</span></div><pre class="text">Returns the current amount of concurrent connections tracking the same
 tracked counters. This number is automatically incremented when tracking
 begins and decremented when tracking stops. It differs from sc1_conn_cur in
 that it does not rely on any stored information but on the table's reference
@@ -9202,29 +9205,34 @@ resp_ver     This is an alias for &quot;res.ver&quot;.
 
 sc1_bytes_in_rate
 sc2_bytes_in_rate
+sc3_bytes_in_rate
              Returns the average client-to-server bytes rate from the
              currently tracked counters, measured in amount of bytes over the
              period configured in the table. See also src_bytes_in_rate.
 
 sc1_bytes_out_rate
 sc2_bytes_out_rate
+sc3_bytes_out_rate
              Returns the average server-to-client bytes rate from the
              currently tracked counters, measured in amount of bytes over the
              period configured in the table. See also src_bytes_out_rate.
 
 sc1_clr_gpc0
 sc2_clr_gpc0
+sc3_clr_gpc0
              Clears the first General Purpose Counter associated to the
              currently tracked counters, and returns its previous value.
              This is only useful when used by ACLs.
 
 sc1_conn_cnt
 sc2_conn_cnt
+sc3_conn_cnt
              Returns the cumulated number of incoming connections from
              currently tracked counters. See also src_conn_cnt.
 
 sc1_conn_cur
 sc2_conn_cur
+sc3_conn_cur
              Returns the current amount of concurrent connections tracking
              the same tracked counters. This number is automatically
              incremented when tracking begins and decremented when tracking
@@ -9232,24 +9240,28 @@ sc2_conn_cur
 
 sc1_conn_rate
 sc2_conn_rate
+sc3_conn_rate
              Returns the average connection rate from the currently tracked
              counters, measured in amount of connections over the period
              configured in the table. See also src_conn_rate.
 
 sc1_get_gpc0
 sc2_get_gpc0
+sc3_get_gpc0
              Returns the value of the first General Purpose Counter
              associated to the currently tracked counters. See also
              src_get_gpc0 and sc1/sc2_inc_gpc0.
 
 sc1_http_err_cnt
 sc2_http_err_cnt
+sc3_http_err_cnt
              Returns the cumulated number of HTTP errors from the currently
              tracked counters. This includes the both request errors and 4xx
              error responses. See also src_http_err_cnt.
 
 sc1_http_err_rate
 sc2_http_err_rate
+sc3_http_err_rate
              Returns the average rate of HTTP errors from the currently
              tracked counters, measured in amount of errors over the period
              configured in the table. This includes the both request errors
@@ -9257,12 +9269,14 @@ sc2_http_err_rate
 
 sc1_http_req_cnt
 sc2_http_req_cnt
+sc3_http_req_cnt
              Returns the cumulated number of HTTP requests from the currently
              tracked counters. This includes every started request, valid or
              not. See also src_http_req_cnt.
 
 sc1_http_req_rate
 sc2_http_req_rate
+sc3_http_req_rate
              Returns the average rate of HTTP requests from the currently
              tracked counters, measured in amount of requests over the period
              configured in the table. This includes every started request,
@@ -9270,12 +9284,14 @@ sc2_http_req_rate
 
 sc1_inc_gpc0
 sc2_inc_gpc0
+sc3_inc_gpc0
              Increments the first General Purpose Counter associated to the
              currently tracked counters, and returns its new value. This is
              only useful when used by ACLs.
 
 sc1_kbytes_in
 sc2_kbytes_in
+sc3_kbytes_in
              Returns the amount of client-to-server data from the currently
              tracked counters, measured in kilobytes over the period
              configured in the table. The value being stored as a 32-bit
@@ -9283,6 +9299,7 @@ sc2_kbytes_in
 
 sc1_kbytes_out
 sc2_kbytes_out
+sc3_kbytes_out
              Returns the amount of server-to-client data from the currently
              tracked counters, measured in kilobytes over the period
              configured in the table. The value being stored as a 32-bit
@@ -9290,6 +9307,7 @@ sc2_kbytes_out
 
 sc1_sess_cnt
 sc2_sess_cnt
+sc3_sess_cnt
              Returns the cumulated number of incoming connections that were
              transformed into sessions, which means that they were accepted
              by a &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rule, from the currently tracked
@@ -9300,6 +9318,7 @@ sc2_sess_cnt
 
 sc1_sess_rate
 sc2_sess_rate
+sc3_sess_rate
              Returns the average session rate from the currently tracked
              counters, measured in amount of sessions over the period
              configured in the table. A session is a connection that got past
@@ -9311,6 +9330,7 @@ sc2_sess_rate
 
 sc1_trackers
 sc2_trackers
+sc3_trackers
              Returns the current amount of concurrent connections tracking
              the same tracked counters. This number is automatically
              incremented when tracking begins and decremented when tracking
@@ -11913,6 +11933,23 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc2_sess_cnt",
 				"sc2_sess_rate",
 				"sc2_trackers",
+				"sc3_bytes_in_rate",
+				"sc3_bytes_out_rate",
+				"sc3_clr_gpc0",
+				"sc3_conn_cnt",
+				"sc3_conn_cur",
+				"sc3_conn_rate",
+				"sc3_get_gpc0",
+				"sc3_http_err_cnt",
+				"sc3_http_err_rate",
+				"sc3_http_req_cnt",
+				"sc3_http_req_rate",
+				"sc3_inc_gpc0",
+				"sc3_kbytes_in",
+				"sc3_kbytes_out",
+				"sc3_sess_cnt",
+				"sc3_sess_rate",
+				"sc3_trackers",
 				"send-proxy",
 				"server",
 				"set",
@@ -12210,7 +12247,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev18-47', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev18-50', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-5', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
