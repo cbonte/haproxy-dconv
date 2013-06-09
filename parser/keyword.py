@@ -41,7 +41,7 @@ class Parser(parser.Parser):
                     if subKeyword != "no":
                         if not subKeyword in keywords:
                             keywords[subKeyword] = set()
-                        keywords[subKeyword].add(toplevel)
+                        keywords[subKeyword].add(pctxt.details["chapter"])
                     res += '<a class="anchor" name="%s"></a>' % subKeyword
                     res += '<a class="anchor" name="%s-%s"></a>' % (toplevel, subKeyword)
                     res += '<a class="anchor" name="%s-%s"></a>' % (pctxt.details["chapter"], subKeyword)
@@ -70,8 +70,7 @@ class Parser(parser.Parser):
 
 
                 parameters = self.colorize(parameters)
-
-                res += '<div class="keyword">%s<b><a class="anchor" name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, quote("%s-%s" % (toplevel, keyword)), keyword, parameters, suffix)
+                res += '<div class="keyword">%s<b><a class="anchor" name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, quote("%s-%s" % (pctxt.details["chapter"], keyword)), keyword, parameters, suffix)
                 pctxt.next()
                 pctxt.stop = True
             elif line.startswith("/*"):
