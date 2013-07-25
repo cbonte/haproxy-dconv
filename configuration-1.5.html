@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-13 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-21 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-13</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-21</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/07/22</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/07/25</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-13</strong></p>
+						<p><strong>version 1.5-dev19-21</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -8424,8 +8424,10 @@ sample fetch system. The &quot;<a href="#stick%20on">stick on</a>&quot;, and &qu
 support sample fetch rules which allow a list of transformations to be applied
 on top of the fetched sample, and the finaly result is automatically converted
 to the type of the table. These transformations are enumerated as a series
-of specific keywords after the sample fetch method. These keywords can also
-support some arguments (eg: a netmask) which must be passed in parenthesis.
+of specific keywords after the sample fetch method. These keywords may equally
+be appended immediately after the fetch keyword's argument, delimited by a
+comma. These keywords can also support some arguments (eg: a netmask) which
+must be passed in parenthesis.
 
 The currently available list of transformation keywords include :
 
@@ -8441,7 +8443,17 @@ The currently available list of transformation keywords include :
                  lookups and storage. This can be used to make all hosts within
                  a certain mask to share the same table entries and as such use
                  the same server. The mask can be passed in dotted form (eg:
-                 255.255.255.0) or in CIDR form (eg: 24).</pre></div>
+                 255.255.255.0) or in CIDR form (eg: 24).
+
+  http_date([&lt;offset&gt;])
+                 Converts an integer supposed to contain a date since epoch to
+                 a string representing this date in a format suitable for use
+                 in HTTP header fields. If an offset value is specified, then
+                 it is a number of seconds that is added to the date before the
+                 conversion is operated. This is particularly useful to emit
+                 Date header fields, Expires values in responses when combined
+                 with a positive offset, or Last-Modified values when the
+                 offset is negative.</pre></div>
 <a class="anchor" id="7.3.1" name="7.3.1"></a>
 <h3 id="chapter-7.3.1" data-target="7.3.1"><small><a class="small" href="#7.3.1">7.3.1.</a></small> Fetching samples from internal states</h3>
 <div><pre class="text">A first set of sample fetch methods applies to internal information which does
@@ -8521,7 +8533,18 @@ backend dynamic
   then this fetch clearly does not make sense, in which case the value returned
   will be -1.
 
-env(&lt;name&gt;) : string
+date([&lt;offset&gt;]) : integer
+  Returns the current date as the epoch (number of seconds since 01/01/1970).
+  If an offset value is specified, then it is a number of seconds that is added
+  to the current date before returning the value. This is particularly useful
+  to compute relative dates, as both positive and negative offsets are allowed.
+  It is useful combined with the http_date converter.</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># set an expires header to now+1 hour in every response</span>
+http-response set-header Expires %[date(3600),http_date]
+</code></pre>
+</div><pre class="text">env(&lt;name&gt;) : string
   Returns a string containing the value of environment variable &lt;name&gt;. As a
   reminder, environment variables are per-process and are sampled when the
   process starts. This can be useful to pass some information to a next hop
@@ -12231,7 +12254,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-13', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-21', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
