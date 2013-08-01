@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-22 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-49 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-22</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-49</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-22</strong></p>
+						<p><strong>version 1.5-dev19-49</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -8658,7 +8658,12 @@ closest to the connection, where no content is yet made available. The fetch
 methods described here are usable as low as the &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rule
 sets unless they require some future information. Those generally include
 TCP/IP addresses and ports, as well as elements from stick-tables related to
-the incoming connection.
+the incoming connection. For retrieving a value from a sticky counters, the
+counter number can be explicitly set as 0, 1, or 2 using the pre-defined
+&quot;sc0_&quot;, &quot;sc1_&quot;, or &quot;sc2_&quot; prefix, or it can be specified as the first integer
+argument when using the &quot;sc_&quot; prefix. An optional table may be specified with
+the &quot;sc*&quot; form, in which case the currently tracked key will be looked up into
+this alternate table instead of the table currently being tracked.
 
 be_id : integer
   Returns an integer containing the current backend's id. It can be used in
@@ -8694,23 +8699,26 @@ fe_id : integer
   backends to check from which backend it was called, or to stick all users
   coming via a same frontend to the same server.
 
-sc0_bytes_in_rate : integer
-sc1_bytes_in_rate : integer
-sc2_bytes_in_rate : integer
+sc_bytes_in_rate(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_bytes_in_rate([&lt;table&gt;]) : integer
+sc1_bytes_in_rate([&lt;table&gt;]) : integer
+sc2_bytes_in_rate([&lt;table&gt;]) : integer
   Returns the average client-to-server bytes rate from the currently tracked
   counters, measured in amount of bytes over the period configured in the
   table. See also src_bytes_in_rate.
 
-sc0_bytes_out_rate : integer
-sc1_bytes_out_rate : integer
-sc2_bytes_out_rate : integer
+sc_bytes_out_rate(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_bytes_out_rate([&lt;table&gt;]) : integer
+sc1_bytes_out_rate([&lt;table&gt;]) : integer
+sc2_bytes_out_rate([&lt;table&gt;]) : integer
   Returns the average server-to-client bytes rate from the currently tracked
   counters, measured in amount of bytes over the period configured in the
   table. See also src_bytes_out_rate.
 
-sc0_clr_gpc0 : integer
-sc1_clr_gpc0 : integer
-sc2_clr_gpc0 : integer
+sc_clr_gpc0(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_clr_gpc0([&lt;table&gt;]) : integer
+sc1_clr_gpc0([&lt;table&gt;]) : integer
+sc2_clr_gpc0([&lt;table&gt;]) : integer
   Clears the first General Purpose Counter associated to the currently tracked
   counters, and returns its previous value. Before the first invocation, the
   stored value is zero, so first invocation will always return zero. This is
@@ -8725,75 +8733,85 @@ sc2_clr_gpc0 : integer
         tcp-request connection accept if !abuse save
         tcp-request connection reject if abuse kill
 
-sc0_conn_cnt : integer
-sc1_conn_cnt : integer
-sc2_conn_cnt : integer
+sc_conn_cnt(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_conn_cnt([&lt;table&gt;]) : integer
+sc1_conn_cnt([&lt;table&gt;]) : integer
+sc2_conn_cnt([&lt;table&gt;]) : integer
   Returns the cumulated number of incoming connections from currently tracked
   counters. See also src_conn_cnt.
 
-sc0_conn_cur : integer
-sc1_conn_cur : integer
-sc2_conn_cur : integer
+sc_conn_cur(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_conn_cur([&lt;table&gt;]) : integer
+sc1_conn_cur([&lt;table&gt;]) : integer
+sc2_conn_cur([&lt;table&gt;]) : integer
   Returns the current amount of concurrent connections tracking the same
   tracked counters. This number is automatically incremented when tracking
   begins and decremented when tracking stops. See also src_conn_cur.
 
-sc0_conn_rate : integer
-sc1_conn_rate : integer
-sc2_conn_rate : integer
+sc_conn_rate(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_conn_rate([&lt;table&gt;]) : integer
+sc1_conn_rate([&lt;table&gt;]) : integer
+sc2_conn_rate([&lt;table&gt;]) : integer
   Returns the average connection rate from the currently tracked counters,
   measured in amount of connections over the period configured in the table.
   See also src_conn_rate.
 
-sc0_get_gpc0 : integer
-sc1_get_gpc0 : integer
-sc2_get_gpc0 : integer
+sc_get_gpc0(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_get_gpc0([&lt;table&gt;]) : integer
+sc1_get_gpc0([&lt;table&gt;]) : integer
+sc2_get_gpc0([&lt;table&gt;]) : integer
   Returns the value of the first General Purpose Counter associated to the
-  currently tracked counters. See also src_get_gpc0 and sc0/sc1/sc2_get_gpc0.
+  currently tracked counters. See also src_get_gpc0 and sc/sc0/sc1/sc2_inc_gpc0.
 
-sc0_gpc0_rate : integer
-sc1_gpc0_rate : integer
-sc2_gpc0_rate : integer
+sc_gpc0_rate(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_gpc0_rate([&lt;table&gt;]) : integer
+sc1_gpc0_rate([&lt;table&gt;]) : integer
+sc2_gpc0_rate([&lt;table&gt;]) : integer
   Returns the average increment rate of the first General Purpose Counter
   associated to the currently tracked counters. It reports the frequency
   which the gpc0 counter was incremented over the configured period. See also
-  src_gpc0_rate, sc0/sc1/sc2_get_gpc0, and sc0/sc1/sc2_inc_gpc0. Note that the
-  &quot;gpc0_rate&quot; counter must be stored in the stick-table for a value to be
-  returned, as &quot;gpc0&quot; only holds the event count.
+  src_gpc0_rate, sc/sc0/sc1/sc2_get_gpc0, and sc/sc0/sc1/sc2_inc_gpc0. Note
+  that the &quot;gpc0_rate&quot; counter must be stored in the stick-table for a value to
+  be returned, as &quot;gpc0&quot; only holds the event count.
 
-sc0_http_err_cnt : integer
-sc1_http_err_cnt : integer
-sc2_http_err_cnt : integer
+sc_http_err_cnt(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_http_err_cnt([&lt;table&gt;]) : integer
+sc1_http_err_cnt([&lt;table&gt;]) : integer
+sc2_http_err_cnt([&lt;table&gt;]) : integer
   Returns the cumulated number of HTTP errors from the currently tracked
   counters. This includes the both request errors and 4xx error responses.
   See also src_http_err_cnt.
 
-sc0_http_err_rate : integer
-sc1_http_err_rate : integer
-sc2_http_err_rate : integer
+sc_http_err_rate(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_http_err_rate([&lt;table&gt;]) : integer
+sc1_http_err_rate([&lt;table&gt;]) : integer
+sc2_http_err_rate([&lt;table&gt;]) : integer
   Returns the average rate of HTTP errors from the currently tracked counters,
   measured in amount of errors over the period configured in the table. This
   includes the both request errors and 4xx error responses. See also
   src_http_err_rate.
 
-sc0_http_req_cnt : integer
-sc1_http_req_cnt : integer
-sc2_http_req_cnt : integer
+sc_http_req_cnt(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_http_req_cnt([&lt;table&gt;]) : integer
+sc1_http_req_cnt([&lt;table&gt;]) : integer
+sc2_http_req_cnt([&lt;table&gt;]) : integer
   Returns the cumulated number of HTTP requests from the currently tracked
   counters. This includes every started request, valid or not. See also
   src_http_req_cnt.
 
-sc0_http_req_rate : integer
-sc1_http_req_rate : integer
-sc2_http_req_rate : integer
+sc_http_req_rate(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_http_req_rate([&lt;table&gt;]) : integer
+sc1_http_req_rate([&lt;table&gt;]) : integer
+sc2_http_req_rate([&lt;table&gt;]) : integer
   Returns the average rate of HTTP requests from the currently tracked
   counters, measured in amount of requests over the period configured in
   the table. This includes every started request, valid or not. See also
   src_http_req_rate.
 
-sc0_inc_gpc0 : integer
-sc1_inc_gpc0 : integer
-sc2_inc_gpc0 : integer
+sc_inc_gpc0(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_inc_gpc0([&lt;table&gt;]) : integer
+sc1_inc_gpc0([&lt;table&gt;]) : integer
+sc2_inc_gpc0([&lt;table&gt;]) : integer
   Increments the first General Purpose Counter associated to the currently
   tracked counters, and returns its new value. Before the first invocation,
   the stored value is zero, so first invocation will increase it to 1 and will
@@ -8804,25 +8822,28 @@ sc2_inc_gpc0 : integer
         acl kill  sc0_inc_gpc0 gt 0
         tcp-request connection reject if abuse kill
 
-sc0_kbytes_in : integer
-sc1_kbytes_in : integer
-sc2_kbytes_in : integer
+sc_kbytes_in(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_kbytes_in([&lt;table&gt;]) : integer
+sc1_kbytes_in([&lt;table&gt;]) : integer
+sc2_kbytes_in([&lt;table&gt;]) : integer
   Returns the amount of client-to-server data from the currently tracked
   counters, measured in kilobytes over the period configured in the table. The
   test is currently performed on 32-bit integers, which limits values to 4
   terabytes. See also src_kbytes_in.
 
-sc0_kbytes_out : integer
-sc1_kbytes_out : integer
-sc2_kbytes_out : integer
+sc_kbytes_out(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_kbytes_out([&lt;table&gt;]) : integer
+sc1_kbytes_out([&lt;table&gt;]) : integer
+sc2_kbytes_out([&lt;table&gt;]) : integer
   Returns the amount of server-to-client data from the currently tracked
   counters, measured in kilobytes over the period configured in the table. The
   test is currently performed on 32-bit integers, which limits values to 4
   terabytes. See also src_kbytes_out.
 
-sc0_sess_cnt : integer
-sc1_sess_cnt : integer
-sc2_sess_cnt : integer
+sc_sess_cnt(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_sess_cnt([&lt;table&gt;]) : integer
+sc1_sess_cnt([&lt;table&gt;]) : integer
+sc2_sess_cnt([&lt;table&gt;]) : integer
   Returns the cumulated number of incoming connections that were transformed
   into sessions, which means that they were accepted by a &quot;tcp-request
   connection&quot; rule, from the currently tracked counters. A backend may count
@@ -8830,9 +8851,10 @@ sc2_sess_cnt : integer
   backend sessions if some HTTP keep-alive is performed over the connection
   with the client. See also src_sess_cnt.
 
-sc0_sess_rate : integer
-sc1_sess_rate : integer
-sc2_sess_rate : integer
+sc_sess_rate(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_sess_rate([&lt;table&gt;]) : integer
+sc1_sess_rate([&lt;table&gt;]) : integer
+sc2_sess_rate([&lt;table&gt;]) : integer
   Returns the average session rate from the currently tracked counters,
   measured in amount of sessions over the period configured in the table. A
   session is a connection that got past the early &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
@@ -8840,16 +8862,18 @@ sc2_sess_rate : integer
   connection could result in many backend sessions if some HTTP keep-alive is
   performed over the connection with the client. See also src_sess_rate.
 
-sc0_tracked : boolean
-sc1_tracked : boolean
-sc2_tracked : boolean
+sc_tracked(&lt;ctr&gt;,[&lt;table&gt;]) : boolean
+sc0_tracked([&lt;table&gt;]) : boolean
+sc1_tracked([&lt;table&gt;]) : boolean
+sc2_tracked([&lt;table&gt;]) : boolean
   Returns true if the designated session counter is currently being tracked by
   the current session. This can be useful when deciding whether or not we want
   to set some values in a header passed to the server.
 
-sc0_trackers : integer
-sc1_trackers : integer
-sc2_trackers : integer
+sc_trackers(&lt;ctr&gt;,[&lt;table&gt;]) : integer
+sc0_trackers([&lt;table&gt;]) : integer
+sc1_trackers([&lt;table&gt;]) : integer
+sc2_trackers([&lt;table&gt;]) : integer
   Returns the current amount of concurrent connections tracking the same
   tracked counters. This number is automatically incremented when tracking
   begins and decremented when tracking stops. It differs from sc0_conn_cur in
@@ -8877,13 +8901,13 @@ src_bytes_in_rate([&lt;table&gt;]) : integer
   Returns the average bytes rate from the incoming connection's source address
   in the current proxy's stick-table or in the designated stick-table, measured
   in amount of bytes over the period configured in the table. If the address is
-  not found, zero is returned. See also sc0/sc1/sc2_bytes_in_rate.
+  not found, zero is returned. See also sc/sc0/sc1/sc2_bytes_in_rate.
 
 src_bytes_out_rate([&lt;table&gt;]) : integer
   Returns the average bytes rate to the incoming connection's source address in
   the current proxy's stick-table or in the designated stick-table, measured in
   amount of bytes over the period configured in the table. If the address is
-  not found, zero is returned. See also sc0/sc1/sc2_bytes_out_rate.
+  not found, zero is returned. See also sc/sc0/sc1/sc2_bytes_out_rate.
 
 src_clr_gpc0([&lt;table&gt;]) : integer
   Clears the first General Purpose Counter associated to the incoming
@@ -8905,40 +8929,40 @@ src_conn_cnt([&lt;table&gt;]) : integer
   Returns the cumulated number of connections initiated from the current
   incoming connection's source address in the current proxy's stick-table or in
   the designated stick-table. If the address is not found, zero is returned.
-  See also sc0/sc1/sc2_conn_cnt.
+  See also sc/sc0/sc1/sc2_conn_cnt.
 
 src_conn_cur([&lt;table&gt;]) : integer
   Returns the current amount of concurrent connections initiated from the
   current incoming connection's source address in the current proxy's
   stick-table or in the designated stick-table. If the address is not found,
-  zero is returned. See also sc0/sc1/sc2_conn_cur.
+  zero is returned. See also sc/sc0/sc1/sc2_conn_cur.
 
 src_conn_rate([&lt;table&gt;]) : integer
   Returns the average connection rate from the incoming connection's source
   address in the current proxy's stick-table or in the designated stick-table,
   measured in amount of connections over the period configured in the table. If
-  the address is not found, zero is returned. See also sc0/sc1/sc2_conn_rate.
+  the address is not found, zero is returned. See also sc/sc0/sc1/sc2_conn_rate.
 
 src_get_gpc0([&lt;table&gt;]) : integer
   Returns the value of the first General Purpose Counter associated to the
   incoming connection's source address in the current proxy's stick-table or in
   the designated stick-table. If the address is not found, zero is returned.
-  See also sc0/sc1/sc2_get_gpc0 and src_inc_gpc0.
+  See also sc/sc0/sc1/sc2_get_gpc0 and src_inc_gpc0.
 
 src_gpc0_rate([&lt;table&gt;]) : integer
   Returns the average increment rate of the first General Purpose Counter
   associated to the incoming connection's source address in the current proxy's
   stick-table or in the designated stick-table. It reports the frequency
   which the gpc0 counter was incremented over the configured period. See also
-  sc0/sc1/sc2_gpc0_rate, src_get_gpc0, and sc0/sc1/sc2_inc_gpc0. Note that the
-  &quot;gpc0_rate&quot; counter must be stored in the stick-table for a value to be
-  returned, as &quot;gpc0&quot; only holds the event count.
+  sc/sc0/sc1/sc2_gpc0_rate, src_get_gpc0, and sc/sc0/sc1/sc2_inc_gpc0. Note
+  that the &quot;gpc0_rate&quot; counter must be stored in the stick-table for a value to
+  be returned, as &quot;gpc0&quot; only holds the event count.
 
 src_http_err_cnt([&lt;table&gt;]) : integer
   Returns the cumulated number of HTTP errors from the incoming connection's
   source address in the current proxy's stick-table or in the designated
   stick-table. This includes the both request errors and 4xx error responses.
-  See also sc0/sc1/sc2_http_err_cnt. If the address is not found, zero is
+  See also sc/sc0/sc1/sc2_http_err_cnt. If the address is not found, zero is
   returned.
 
 src_http_err_rate([&lt;table&gt;]) : integer
@@ -8946,20 +8970,20 @@ src_http_err_rate([&lt;table&gt;]) : integer
   address in the current proxy's stick-table or in the designated stick-table,
   measured in amount of errors over the period configured in the table. This
   includes the both request errors and 4xx error responses. If the address is
-  not found, zero is returned. See also sc0/sc1/sc2_http_err_rate.
+  not found, zero is returned. See also sc/sc0/sc1/sc2_http_err_rate.
 
 src_http_req_cnt([&lt;table&gt;]) : integer
   Returns the cumulated number of HTTP requests from the incoming connection's
   source address in the current proxy's stick-table or in the designated stick-
   table. This includes every started request, valid or not. If the address is
-  not found, zero is returned. See also sc0/sc1/sc2_http_req_cnt.
+  not found, zero is returned. See also sc/sc0/sc1/sc2_http_req_cnt.
 
 src_http_req_rate([&lt;table&gt;]) : integer
   Returns the average rate of HTTP requests from the incoming connection's
   source address in the current proxy's stick-table or in the designated stick-
   table, measured in amount of requests over the period configured in the
   table. This includes every started request, valid or not. If the address is
-  not found, zero is returned. See also sc0/sc1/sc2_http_req_rate.
+  not found, zero is returned. See also sc/sc0/sc1/sc2_http_req_rate.
 
 src_inc_gpc0([&lt;table&gt;]) : integer
   Increments the first General Purpose Counter associated to the incoming
@@ -8978,14 +9002,15 @@ src_kbytes_in([&lt;table&gt;]) : integer
   address in the current proxy's stick-table or in the designated stick-table,
   measured in kilobytes over the period configured in the table. If the address
   is not found, zero is returned. The test is currently performed on 32-bit
-  integers, which limits values to 4 terabytes. See also sc0/sc1/sc2_kbytes_in.
+  integers, which limits values to 4 terabytes. See also
+  sc/sc0/sc1/sc2_kbytes_in.
 
 src_kbytes_out([&lt;table&gt;]) : integer
   Returns the amount of data sent to the incoming connection's source address
   in the current proxy's stick-table or in the designated stick-table, measured
   in kilobytes over the period configured in the table. If the address is not
   found, zero is returned. The test is currently performed on 32-bit integers,
-  which limits values to 4 terabytes. See also sc0/sc1/sc2_kbytes_out.
+  which limits values to 4 terabytes. See also sc/sc0/sc1/sc2_kbytes_out.
 
 src_port : integer
   Returns an integer value corresponding to the TCP source port of the
@@ -8998,14 +9023,14 @@ src_sess_cnt([&lt;table&gt;]) : integer
   connection's source IPv4 address in the current proxy's stick-table or in the
   designated stick-table, that were transformed into sessions, which means that
   they were accepted by &quot;<a href="#tcp-request">tcp-request</a>&quot; rules. If the address is not found, zero
-  is returned. See also sc0/sc1/sc2_sess_cnt.
+  is returned. See also sc/sc0/sc1/sc2_sess_cnt.
 
 src_sess_rate([&lt;table&gt;]) : integer
   Returns the average session rate from the incoming connection's source
   address in the current proxy's stick-table or in the designated stick-table,
   measured in amount of sessions over the period configured in the table. A
   session is a connection that went past the early &quot;<a href="#tcp-request">tcp-request</a>&quot; rules. If the
-  address is not found, zero is returned. See also sc0/sc1/sc2_sess_rate.
+  address is not found, zero is returned. See also sc/sc0/sc1/sc2_sess_rate.
 
 src_updt_conn_cnt([&lt;table&gt;]) : integer
   Creates or updates the entry associated to the incoming connection's source
@@ -11613,11 +11638,12 @@ applies to all frontends and the change has an immediate effect. The value
 is passed in number of connections per second.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression"></a><a class="anchor" name="9-set rate-limit http-compression"></a><a class="anchor" name="9.2-set rate-limit http-compression"></a><a class="anchor" name="set rate-limit http-compression (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression global"></a><a class="anchor" name="9-set rate-limit http-compression global"></a><a class="anchor" name="9.2-set rate-limit http-compression global"></a><a class="anchor" name="set rate-limit http-compression global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit http-compression global"></a><a href="#9.2-set%20rate-limit%20http-compression%20global">set rate-limit http-compression global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the maximum input compression rate, which is set by the global
 'maxcomprate' setting. A value of zero disables the limitation. The value is
 passed in number of kilobytes per second. The value is available in the &quot;show
-info&quot; on the line &quot;CompressBpsRateLim&quot; in bytes.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
+info&quot; on the line &quot;CompressBpsRateLim&quot; in bytes.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
 an entry is inserted. See stick-table in <a href="#4.2">section 4.2</a> to find all possible
 values for &lt;data_type&gt;. The most likely use consists in dynamically entering
 entries for source IP addresses, with a flag in gpc0 to dynamically block an
-IP address or affect its quality of service.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set timeout"></a><a class="anchor" name="9-set timeout"></a><a class="anchor" name="9.2-set timeout"></a><a class="anchor" name="set timeout (Statistics and monitoring)"></a><a class="anchor" name="set timeout (Unix Socket commands)"></a><a class="anchor" name="set timeout cli"></a><a class="anchor" name="9-set timeout cli"></a><a class="anchor" name="9.2-set timeout cli"></a><a class="anchor" name="set timeout cli (Statistics and monitoring)"></a><a class="anchor" name="set timeout cli (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set timeout cli"></a><a href="#9.2-set%20timeout%20cli">set timeout cli</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Change the CLI interface timeout for current connection. This can be useful
+IP address or affect its quality of service. It is possible to pass multiple
+data_types in a single call.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set timeout"></a><a class="anchor" name="9-set timeout"></a><a class="anchor" name="9.2-set timeout"></a><a class="anchor" name="set timeout (Statistics and monitoring)"></a><a class="anchor" name="set timeout (Unix Socket commands)"></a><a class="anchor" name="set timeout cli"></a><a class="anchor" name="9-set timeout cli"></a><a class="anchor" name="9.2-set timeout cli"></a><a class="anchor" name="set timeout cli (Statistics and monitoring)"></a><a class="anchor" name="set timeout cli (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set timeout cli"></a><a href="#9.2-set%20timeout%20cli">set timeout cli</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Change the CLI interface timeout for current connection. This can be useful
 during long debugging sessions where the user needs to constantly inspect
 some indicators without being disconnected. The delay is passed in seconds.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set weight"></a><a class="anchor" name="9-set weight"></a><a class="anchor" name="9.2-set weight"></a><a class="anchor" name="set weight (Statistics and monitoring)"></a><a class="anchor" name="set weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set weight"></a><a href="#9.2-set%20weight">set weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. If the value ends
 with the '%' sign, then the new weight will be relative to the initially
@@ -12319,7 +12345,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-22', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-49', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
