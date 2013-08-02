@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-49 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-50 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-49</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-50</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/08/01</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/08/02</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-49</strong></p>
+						<p><strong>version 1.5-dev19-50</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -9375,7 +9375,10 @@ req_len : integer (deprecated)
 
 req.payload(&lt;offset&gt;,&lt;length&gt;) : binary
   This extracts a binary block of &lt;length&gt; bytes and starting at byte &lt;offset&gt;
-  in the request buffer.
+  in the request buffer. As a special case, if the &lt;length&gt; argument is zero,
+  the the whole buffer from &lt;offset&gt; to the end is extracted. This can be used
+  with ACLs in order to check for the presence of some content in a buffer at
+  any location.
 
   ACL alternatives :
     payload(&lt;offset&gt;,&lt;length&gt;) : hex binary match
@@ -9516,7 +9519,10 @@ req_ssl_ver : integer (deprecated)
 
 res.payload(&lt;offset&gt;,&lt;length&gt;) : binary
   This extracts a binary block of &lt;length&gt; bytes and starting at byte &lt;offset&gt;
-  in the response buffer.
+  in the response buffer. As a special case, if the &lt;length&gt; argument is zero,
+  the the whole buffer from &lt;offset&gt; to the end is extracted. This can be used
+  with ACLs in order to check for the presence of some content in a buffer at
+  any location.
 
 res.payload_lv(&lt;offset1&gt;,&lt;length&gt;[,&lt;offset2&gt;]) : binary
   This extracts a binary block whose size is specified at &lt;offset1&gt; for &lt;length&gt;
@@ -12345,7 +12351,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-49', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-50', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
