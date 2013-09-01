@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-50 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-59 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-50</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-59</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/08/02</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/09/01</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-50</strong></p>
+						<p><strong>version 1.5-dev19-59</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -7861,6 +7861,13 @@ is aborted. It is critically important to verify server certificates when
 using SSL to connect to servers, otherwise the communication is prone to
 trivial man-in-the-middle attacks rendering SSL totally useless.
 
+Supported in default-server: No</pre><a class="anchor" name="verifyhost"></a><a class="anchor" name="5-verifyhost"></a><a class="anchor" name="5.2-verifyhost"></a><a class="anchor" name="verifyhost (Bind and Server options)"></a><a class="anchor" name="verifyhost (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verifyhost"></a><a href="#5.2-verifyhost">verifyhost</a></b> <span style="color: #080">&lt;hostname&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in, and
+only takes effect if 'verify required' is also specified. When set, the
+hostnames in the subject and subjectAlternateNames of the certificate
+provided by the server are checked. If none of the hostnames in the
+certificate match the specified hostname, the handshake is aborted. The
+hostnames in the server-provided certificate may include wildcards.
+
 Supported in default-server: No</pre><a class="anchor" name="weight"></a><a class="anchor" name="5-weight"></a><a class="anchor" name="5.2-weight"></a><a class="anchor" name="weight (Bind and Server options)"></a><a class="anchor" name="weight (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="weight"></a><a href="#5.2-weight">weight</a></b> <span style="color: #080">&lt;weight&gt;</span></div><pre class="text">The &quot;<a href="#weight">weight</a>&quot; parameter is used to adjust the server's weight relative to
 other servers. All servers will receive a load proportional to their weight
 relative to the sum of all weights, so the higher the weight, the higher the
@@ -11101,7 +11108,8 @@ easier finding and understanding.
      PD   The proxy blocked an incorrectly formatted chunked encoded message in
           a request or a response, after the server has emitted its headers. In
           most cases, this will indicate an invalid message from the server to
-          the client.
+          the client. Haproxy supports chunk sizes of up to 2GB - 1 (2147483647
+          bytes). Any larger size will be considered as an error.
 
      PH   The proxy blocked the server's response, because it was invalid,
           incomplete, dangerous (cache control), or matched a security filter.
@@ -12245,6 +12253,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"v6only",
 				"verify (Bind options)",
 				"verify (Server and default-server options)",
+				"verifyhost",
 				"weight"
 			]
 			
@@ -12351,7 +12360,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-50', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-59', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
