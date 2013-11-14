@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-82 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-102 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-82</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-102</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/10/10</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/11/14</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-82</strong></p>
+						<p><strong>version 1.5-dev19-102</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -2928,45 +2928,84 @@ needed by the equipment to detect the failure.
 
 Note that currently, there is very little benefit in using this parameter,
 and it may in fact complicate the soft-reconfiguration process more than
-simplify it.</pre><a class="anchor" name="hash-type"></a><a class="anchor" name="4-hash-type"></a><a class="anchor" name="4.2-hash-type"></a><a class="anchor" name="hash-type (Proxies)"></a><a class="anchor" name="hash-type (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="hash-type"></a><a href="#4.2-hash-type">hash-type</a></b> <span style="color: #080">&lt;method&gt;</span></div><pre class="text">Specify a method to use for mapping hashes to servers</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+simplify it.</pre><a class="anchor" name="hash-type"></a><a class="anchor" name="4-hash-type"></a><a class="anchor" name="4.2-hash-type"></a><a class="anchor" name="hash-type (Proxies)"></a><a class="anchor" name="hash-type (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="hash-type"></a><a href="#4.2-hash-type">hash-type</a></b> <span style="color: #080">&lt;method&gt;</span> <span style="color: #080">&lt;function&gt;</span> <span style="color: #080">&lt;modifier&gt;</span></div><pre class="text">Specify a method to use for mapping hashes to servers</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">map-based   the hash table is a static array containing all alive servers.
-            The hashes will be very smooth, will consider weights, but will
-            be static in that weight changes while a server is up will be
-            ignored. This means that there will be no slow start. Also,
-            since a server is selected by its position in the array, most
-            mappings are changed when the server count changes. This means
-            that when a server goes up or down, or when a server is added
-            to a farm, most connections will be redistributed to different
-            servers. This can be inconvenient with caches for instance.
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;method&gt; is the method used to select a server from the hash computed by
+         the &lt;function&gt; :
 
-avalanche   this mechanism uses the default map-based hashing described
-            above but applies a full avalanche hash before performing the
-            mapping. The result is a slightly less smooth hash for most
-            situations, but the hash becomes better than pure map-based
-            hashes when the number of servers is a multiple of the size of
-            the input set. When using URI hash with a number of servers
-            multiple of 64, it's desirable to change the hash type to
-            this value.
+  map-based   the hash table is a static array containing all alive servers.
+              The hashes will be very smooth, will consider weights, but
+              will be static in that weight changes while a server is up
+              will be ignored. This means that there will be no slow start.
+              Also, since a server is selected by its position in the array,
+              most mappings are changed when the server count changes. This
+              means that when a server goes up or down, or when a server is
+              added to a farm, most connections will be redistributed to
+              different servers. This can be inconvenient with caches for
+              instance.
 
-consistent  the hash table is a tree filled with many occurrences of each
-            server. The hash key is looked up in the tree and the closest
-            server is chosen. This hash is dynamic, it supports changing
-            weights while the servers are up, so it is compatible with the
-            slow start feature. It has the advantage that when a server
-            goes up or down, only its associations are moved. When a server
-            is added to the farm, only a few part of the mappings are
-            redistributed, making it an ideal algorithm for caches.
-            However, due to its principle, the algorithm will never be very
-            smooth and it may sometimes be necessary to adjust a server's
-            weight or its ID to get a more balanced distribution. In order
-            to get the same distribution on multiple load balancers, it is
-            important that all servers have the same IDs.</pre>
+  consistent  the hash table is a tree filled with many occurrences of each
+              server. The hash key is looked up in the tree and the closest
+              server is chosen. This hash is dynamic, it supports changing
+              weights while the servers are up, so it is compatible with the
+              slow start feature. It has the advantage that when a server
+              goes up or down, only its associations are moved. When a
+              server is added to the farm, only a few part of the mappings
+              are redistributed, making it an ideal method for caches.
+              However, due to its principle, the distribution will never be
+              very smooth and it may sometimes be necessary to adjust a
+              server's weight or its ID to get a more balanced distribution.
+              In order to get the same distribution on multiple load
+              balancers, it is important that all servers have the exact
+              same IDs. Note: consistent hash uses sdbm and avalanche if no
+              hash function is specified.
+
+&lt;function&gt; is the hash function to be used :
+
+   sdbm   this function was created intially for sdbm (a public-domain
+          reimplementation of ndbm) database library. It was found to do
+          well in scrambling bits, causing better distribution of the keys
+          and fewer splits. It also happens to be a good general hashing
+          function with good distribution, unless the total server weight
+          is a multiple of 64, in which case applying the avalanche
+          modifier may help.
+
+   djb2   this function was first proposed by Dan Bernstein many years ago
+          on comp.lang.c. Studies have shown that for certain workload this
+          function provides a better distribution than sdbm. It generally
+          works well with text-based inputs though it can perform extremely
+          poorly with numeric-only input or when the total server weight is
+          a multiple of 33, unless the avalanche modifier is also used.
+
+   wt6    this function was designed for haproxy while testing other
+          functions in the past. It is not as smooth as the other ones, but
+          is much less sensible to the input data set or to the number of
+          servers. It can make sense as an alternative to sdbm+avalanche or
+          djb2+avalanche for consistent hashing or when hashing on numeric
+          data such as a source IP address or a visitor identifier in a URL
+          parameter.
+
+&lt;modifier&gt; indicates an optional method applied after hashing the key :
+
+   avalanche   This directive indicates that the result from the hash
+               function above should not be used in its raw form but that
+               a 4-byte full avalanche hash must be applied first. The
+               purpose of this step is to mix the resulting bits from the
+               previous hash in order to avoid any undesired effect when
+               the input contains some limited values or when the number of
+               servers is a multiple of one of the hash's components (64
+               for SDBM, 33 for DJB2). Enabling avalanche tends to make the
+               result less predictable, but it's also not as smooth as when
+               using the original function. Some testing might be needed
+               with some workloads. This hash is one of the many proposed
+               by Bob Jenkins.</pre>
 </div>
-<pre class="text">The default hash type is &quot;map-based&quot; and is recommended for most usages.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#server">server</a>&quot;</div>
+<pre class="text">The default hash type is &quot;map-based&quot; and is recommended for most usages. The
+default function is &quot;sdbm&quot;, the selection of a function should be based on
+the range of the values being hashed.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#server">server</a>&quot;</div>
 <a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check disable-on-404"></a><a class="anchor" name="4-http-check disable-on-404"></a><a class="anchor" name="4.2-http-check disable-on-404"></a><a class="anchor" name="http-check disable-on-404 (Proxies)"></a><a class="anchor" name="http-check disable-on-404 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check disable-on-404"></a><a href="#4.2-http-check%20disable-on-404">http-check disable-on-404</a></b></div><pre class="text">Enable a maintenance mode upon HTTP/404 response to health-checks</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -12391,7 +12430,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-82', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-102', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
