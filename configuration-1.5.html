@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-102 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-135 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-102</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-135</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/11/14</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/11/25</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-102</strong></p>
+						<p><strong>version 1.5-dev19-135</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -1382,11 +1382,12 @@ limited to some very recent instances of kernel 2.6. Most versions between
 2.6.25 and 2.6.28 are buggy and will forward corrupted data, so they must not
 be used. This option makes it easier to globally disable kernel splicing in
 case of doubt. See also &quot;<a href="#option%20splice-auto">option splice-auto</a>&quot;, &quot;<a href="#option%20splice-request">option splice-request</a>&quot; and
-&quot;<a href="#option%20splice-response">option splice-response</a>&quot;.</pre><a class="anchor" name="spread-checks"></a><a class="anchor" name="3-spread-checks"></a><a class="anchor" name="3.2-spread-checks"></a><a class="anchor" name="spread-checks (Global parameters)"></a><a class="anchor" name="spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="spread-checks"></a><a href="#3.2-spread-checks">spread-checks</a></b> <span style="color: #080">&lt;0..50, in percent&gt;</span></div><pre class="text">Sometimes it is desirable to avoid sending health checks to servers at exact
-intervals, for instance when many logical servers are located on the same
-physical server. With the help of this parameter, it becomes possible to add
-some randomness in the check interval between 0 and +/- 50%. A value between
-2 and 5 seems to show good results. The default value remains at 0.</pre><a class="anchor" name="tune.bufsize"></a><a class="anchor" name="3-tune.bufsize"></a><a class="anchor" name="3.2-tune.bufsize"></a><a class="anchor" name="tune.bufsize (Global parameters)"></a><a class="anchor" name="tune.bufsize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.bufsize"></a><a href="#3.2-tune.bufsize">tune.bufsize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the buffer size to this size (in bytes). Lower values allow more
+&quot;<a href="#option%20splice-response">option splice-response</a>&quot;.</pre><a class="anchor" name="spread-checks"></a><a class="anchor" name="3-spread-checks"></a><a class="anchor" name="3.2-spread-checks"></a><a class="anchor" name="spread-checks (Global parameters)"></a><a class="anchor" name="spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="spread-checks"></a><a href="#3.2-spread-checks">spread-checks</a></b> <span style="color: #080">&lt;0..50, in percent&gt;</span></div><pre class="text">Sometimes it is desirable to avoid sending agent and health checks to
+servers at exact intervals, for instance when many logical servers are
+located on the same physical server. With the help of this parameter, it
+becomes possible to add some randomness in the check interval between 0
+and +/- 50%. A value between 2 and 5 seems to show good results. The
+default value remains at 0.</pre><a class="anchor" name="tune.bufsize"></a><a class="anchor" name="3-tune.bufsize"></a><a class="anchor" name="3.2-tune.bufsize"></a><a class="anchor" name="tune.bufsize (Global parameters)"></a><a class="anchor" name="tune.bufsize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.bufsize"></a><a href="#3.2-tune.bufsize">tune.bufsize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the buffer size to this size (in bytes). Lower values allow more
 sessions to coexist in the same amount of RAM, and higher values allow some
 applications with very large cookies to work. The default value is 16384 and
 can be changed at build time. It is strongly recommended not to change this
@@ -1696,7 +1697,6 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-option%20http_proxy"><span class="pull-right"><span>(*)</span></span>option http_proxy</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20independent-streams"><span class="pull-right"><span>(*)</span></span>option independent-streams</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-option%20lb-agent-chk">option lb-agent-chk</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20ldap-check">option ldap-check</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20log-health-checks"><span class="pull-right"><span>(*)</span></span>option log-health-checks</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20log-separate-errors"><span class="pull-right"><span>(*)</span></span>option log-separate-errors</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -1714,8 +1714,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-option%20splice-request"><span class="pull-right"><span>(*)</span></span>option splice-request</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-option%20tcp-smart-accept"><span class="pull-right"><span>(*)</span></span>option tcp-smart-accept</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20tcp-smart-connect"><span class="pull-right"><span>(*)</span></span>option tcp-smart-connect</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20tcpka">option tcpka</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1735,8 +1735,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-reqideny">reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqipass">reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqirep">reqirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-reqisetbe">reqisetbe</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-reqitarpit">reqitarpit</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqpass">reqpass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqrep">reqrep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1756,8 +1756,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-stats%20hide-version">stats hide-version</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-stats%20http-request">stats http-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20realm">stats realm</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20refresh">stats refresh</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1777,8 +1777,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-tcp-response%20content">tcp-response content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-response%20inspect-delay">tcp-response inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20check">timeout check</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-timeout%20client">timeout client</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-timeout%20clitimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout clitimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-timeout%20connect">timeout connect</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20contimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout contimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -4141,7 +4141,7 @@ backend https_relay
     option httpchk OPTIONS * HTTP/1.1\r\nHost:\ www
     server apache1 192.168.1.1:443 check port 80
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20lb-agent-chk">option lb-agent-chk</a>&quot;, &quot;<a href="#option%20ssl-hello-chk">option ssl-hello-chk</a>&quot;, &quot;<a href="#option%20smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option%20mysql-check">option mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#http-check">http-check</a>&quot; and the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#port">port</a>&quot; and &quot;<a href="#inter">inter</a>&quot; server options.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20ssl-hello-chk">option ssl-hello-chk</a>&quot;, &quot;<a href="#option%20smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option%20mysql-check">option mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#http-check">http-check</a>&quot; and the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#port">port</a>&quot; and &quot;<a href="#inter">inter</a>&quot; server options.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpclose"></a><a class="anchor" name="4-option httpclose"></a><a class="anchor" name="4.2-option httpclose"></a><a class="anchor" name="option httpclose (Proxies)"></a><a class="anchor" name="option httpclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpclose"></a><a href="#4.2-option%20httpclose">option httpclose</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option httpclose"></a><a class="anchor" name="4-no option httpclose"></a><a class="anchor" name="4.2-no option httpclose"></a><a class="anchor" name="no option httpclose (Proxies)"></a><a class="anchor" name="no option httpclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option httpclose"></a><a href="#4.2-no%20option%20httpclose">no option httpclose</a></b></div><pre class="text">Enable or disable passive HTTP connection closing</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -4261,44 +4261,7 @@ slow lines, so use it with caution.
 Note: older versions used to call this setting &quot;option independant-streams&quot;
       with a spelling mistake. This spelling is still supported but
       deprecated.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option lb-agent-chk"></a><a class="anchor" name="4-option lb-agent-chk"></a><a class="anchor" name="4.2-option lb-agent-chk"></a><a class="anchor" name="option lb-agent-chk (Proxies)"></a><a class="anchor" name="option lb-agent-chk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option lb-agent-chk"></a><a href="#4.2-option%20lb-agent-chk">option lb-agent-chk</a></b></div><pre class="text">Use a TCP connection to obtain a metric of server health</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
-</table></div>
-<div class="separator">
-<span class="label label-info">Arguments :</span> none
-</div>
-<pre class="text">This alters health checking behaviour by connecting making a TCP
-connection and reading an ASCII string. The string should have one of
-the following forms:
-
-* An ASCII representation of an positive integer percentage.
-   e.g. &quot;75%&quot;
-
-   Values in this format will set the weight proportional to the initial
-   weight of a server as configured when haproxy starts.
-
-* The string &quot;drain&quot;.
-
-  This will cause the weight of a server to be set to 0, and thus it will
-  not accept any new connections other than those that are accepted via
-  persistence.
-
-* The string &quot;down&quot;, optionally followed by a description string.
-
-  Mark the server as down and log the description string as the reason.
-
-* The string &quot;stopped&quot;, optionally followed by a description string.
-
-  This currently has the same behaviour as down (iii).
-
-* The string &quot;fail&quot;, optionally followed by a description string.
-
-  This currently has the same behaviour as down (iii).
-
-The use of an alternate check-port, used to obtain agent heath check
-information described above as opposed to the port of the service, may be
-useful in conjunction with this option.</pre><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option ldap-check"></a><a class="anchor" name="4-option ldap-check"></a><a class="anchor" name="4.2-option ldap-check"></a><a class="anchor" name="option ldap-check (Proxies)"></a><a class="anchor" name="option ldap-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option ldap-check"></a><a href="#4.2-option%20ldap-check">option ldap-check</a></b></div><pre class="text">Use LDAPv3 health checks for server testing</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option ldap-check"></a><a class="anchor" name="4-option ldap-check"></a><a class="anchor" name="4.2-option ldap-check"></a><a class="anchor" name="option ldap-check (Proxies)"></a><a class="anchor" name="option ldap-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option ldap-check"></a><a href="#4.2-option%20ldap-check">option ldap-check</a></b></div><pre class="text">Use LDAPv3 health checks for server testing</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
@@ -7599,7 +7562,62 @@ address to specific component able to perform complex tests which are more
 suitable to health-checks than the application. This parameter is ignored if
 the &quot;<a href="#check">check</a>&quot; parameter is not set. See also the &quot;<a href="#port">port</a>&quot; parameter.
 
-Supported in default-server: No</pre><a class="anchor" name="backup"></a><a class="anchor" name="5-backup"></a><a class="anchor" name="5.2-backup"></a><a class="anchor" name="backup (Bind and Server options)"></a><a class="anchor" name="backup (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="backup"></a><a href="#5.2-backup">backup</a></b></div><pre class="text">When &quot;<a href="#backup">backup</a>&quot; is present on a server line, the server is only used in load
+Supported in default-server: No</pre><a class="anchor" name="agent-check"></a><a class="anchor" name="5-agent-check"></a><a class="anchor" name="5.2-agent-check"></a><a class="anchor" name="agent-check (Bind and Server options)"></a><a class="anchor" name="agent-check (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-check"></a><a href="#5.2-agent-check">agent-check</a></b></div><pre class="text">Enable an auxiliary agent check which is run independently of a regular
+health check. An agent health check is performed by making a TCP
+connection to the port set by the &quot;<a href="#agent-port">agent-port</a>&quot; parameter&quot; and reading
+an ASCII string. The string should have one of the following forms:
+
+* An ASCII representation of an positive integer percentage.
+  e.g. &quot;75%&quot;
+
+  Values in this format will set the weight proportional to the initial
+  weight of a server as configured when haproxy starts.
+
+* The string &quot;drain&quot;.
+
+  This will cause the weight of a server to be set to 0, and thus it will
+  not accept any new connections other than those that are accepted via
+  persistence.
+
+* The string &quot;down&quot;, optionally followed by a description string.
+
+  Mark the server as down and log the description string as the reason.
+
+* The string &quot;stopped&quot;, optionally followed by a description string.
+
+  This currently has the same behaviour as &quot;down&quot;.
+
+* The string &quot;fail&quot;, optionally followed by a description string.
+
+  This currently has the same behaviour as &quot;down&quot;.
+
+Failure to connect to the agent is not considered an error as connectivity
+is tested by the regular health check which is enabled by the &quot;<a href="#check">check</a>&quot;
+parameter.
+
+Requires the &quot;&quot;<a href="#agent-port">agent-port</a>&quot; parameter to be set.
+See also the &quot;<a href="#agent-check">agent-check</a>&quot; parameter.
+
+Supported in default-server: No</pre><a class="anchor" name="agent-inter"></a><a class="anchor" name="5-agent-inter"></a><a class="anchor" name="5.2-agent-inter"></a><a class="anchor" name="agent-inter (Bind and Server options)"></a><a class="anchor" name="agent-inter (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-inter"></a><a href="#5.2-agent-inter">agent-inter</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">The &quot;<a href="#agent-inter">agent-inter</a>&quot; parameter sets the interval between two agent checks
+to &lt;delay&gt; milliseconds. If left unspecified, the delay defaults to 2000 ms.
+
+Just as with every other time-based parameter, it may be entered in any
+other explicit unit among { us, ms, s, m, h, d }. The &quot;<a href="#agent-inter">agent-inter</a>&quot;
+parameter also serves as a timeout for agent checks &quot;<a href="#timeout%20check">timeout check</a>&quot; is
+not set. In order to reduce &quot;resonance&quot; effects when multiple servers are
+hosted on the same hardware, the agent and health checks of all servers
+are started with a small time offset between them. It is also possible to
+add some random noise in the agent and health checks interval using the
+global &quot;<a href="#spread-checks">spread-checks</a>&quot; keyword. This makes sense for instance when a lot
+of backends use the same servers.
+
+See also the &quot;<a href="#agent-check">agent-check</a>&quot; and &quot;<a href="#agent-port">agent-port</a>&quot; parameters.
+
+Supported in default-server: Yes</pre><a class="anchor" name="agent-port"></a><a class="anchor" name="5-agent-port"></a><a class="anchor" name="5.2-agent-port"></a><a class="anchor" name="agent-port (Bind and Server options)"></a><a class="anchor" name="agent-port (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-port"></a><a href="#5.2-agent-port">agent-port</a></b> <span style="color: #080">&lt;port&gt;</span></div><pre class="text">The &quot;<a href="#agent-port">agent-port</a>&quot; parameter sets the TCP port used for agent checks.
+
+See also the &quot;<a href="#agent-check">agent-check</a>&quot; and &quot;<a href="#agent-inter">agent-inter</a>&quot; parameters.
+
+Supported in default-server: Yes</pre><a class="anchor" name="backup"></a><a class="anchor" name="5-backup"></a><a class="anchor" name="5.2-backup"></a><a class="anchor" name="backup (Bind and Server options)"></a><a class="anchor" name="backup (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="backup"></a><a href="#5.2-backup">backup</a></b></div><pre class="text">When &quot;<a href="#backup">backup</a>&quot; is present on a server line, the server is only used in load
 balancing when all other non-backup servers are unavailable. Requests coming
 with a persistence cookie referencing the server will always be served
 though. By default, only the first operational backup server is used, unless
@@ -7618,10 +7636,9 @@ server, and the default source is the same as the one defined in the
 backend. It is possible to change the address using the &quot;<a href="#addr">addr</a>&quot; parameter, the
 port using the &quot;<a href="#port">port</a>&quot; parameter, the source address using the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="nav-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
 address, and the interval and timers using the &quot;<a href="#inter">inter</a>&quot;, &quot;<a href="#rise">rise</a>&quot; and &quot;<a href="#fall">fall</a>&quot;
-parameters. The request method is define in the backend using the
-&quot;<a href="#option%20httpchk">httpchk</a>&quot;, &quot;<a href="#option%20lb-agent-chk">lb-agent-chk</a>&quot;, &quot;<a href="#option%20smtpchk">smtpchk</a>&quot;, &quot;<a href="#option%20mysql-check">mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">pgsql-check</a>&quot; and
-&quot;<a href="#option%20ssl-hello-chk">ssl-hello-chk</a>&quot; options. Please refer to those options and parameters for
-more information.
+parameters. The request method is define in the backend using the &quot;<a href="#option%20httpchk">httpchk</a>&quot;,
+&quot;<a href="#option%20smtpchk">smtpchk</a>&quot;, &quot;<a href="#option%20mysql-check">mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">pgsql-check</a>&quot; and &quot;<a href="#option%20ssl-hello-chk">ssl-hello-chk</a>&quot; options. Please
+refer to those options and parameters for more information.
 
 Supported in default-server: No</pre><a class="anchor" name="check-send-proxy"></a><a class="anchor" name="5-check-send-proxy"></a><a class="anchor" name="5.2-check-send-proxy"></a><a class="anchor" name="check-send-proxy (Bind and Server options)"></a><a class="anchor" name="check-send-proxy (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-send-proxy"></a><a href="#5.2-check-send-proxy">check-send-proxy</a></b></div><pre class="text">This option forces emission of a PROXY protocol line with outgoing health
 checks, regardless of whether the server uses send-proxy or not for the
@@ -7713,11 +7730,11 @@ between checks depending on the server state :</pre><table class="table table-bo
 other explicit unit among { us, ms, s, m, h, d }. The &quot;<a href="#inter">inter</a>&quot; parameter also
 serves as a timeout for health checks sent to servers if &quot;<a href="#timeout%20check">timeout check</a>&quot; is
 not set. In order to reduce &quot;resonance&quot; effects when multiple servers are
-hosted on the same hardware, the health-checks of all servers are started
-with a small time offset between them. It is also possible to add some random
-noise in the health checks interval using the global &quot;<a href="#spread-checks">spread-checks</a>&quot;
-keyword. This makes sense for instance when a lot of backends use the same
-servers.
+hosted on the same hardware, the agent and health checks of all servers
+are started with a small time offset between them. It is also possible to
+add some random noise in the agent and health checks interval using the
+global &quot;<a href="#spread-checks">spread-checks</a>&quot; keyword. This makes sense for instance when a lot
+of backends use the same servers.
 
 Supported in default-server: Yes</pre><a class="anchor" name="maxconn"></a><a class="anchor" name="5-maxconn"></a><a class="anchor" name="5.2-maxconn"></a><a class="anchor" name="maxconn (Bind and Server options)"></a><a class="anchor" name="maxconn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="maxconn"></a><a href="#5.2-maxconn">maxconn</a></b> <span style="color: #080">&lt;maxconn&gt;</span></div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><li class="nav-header">This keyword is available in sections :</li><li><a href="#maxconn%20%28Performance%20tuning%29">Performance tuning</a></li><li><a href="#maxconn%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#maxconn%20%28Bind%20options%29">Bind options</a></li><li><a href="#maxconn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter specifies the maximal number of concurrent
 connections that will be sent to this server. If the number of incoming
@@ -11649,7 +11666,26 @@ string.</pre><div class="separator">
     $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
 &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
 </code></pre>
-</div><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable frontend"></a><a class="anchor" name="9-disable frontend"></a><a class="anchor" name="9.2-disable frontend"></a><a class="anchor" name="disable frontend (Statistics and monitoring)"></a><a class="anchor" name="disable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable frontend"></a><a href="#9.2-disable%20frontend">disable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Mark the frontend as temporarily stopped. This corresponds to the mode which
+</div><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable agent"></a><a class="anchor" name="9-enable agent"></a><a class="anchor" name="9.2-enable agent"></a><a class="anchor" name="enable agent (Statistics and monitoring)"></a><a class="anchor" name="enable agent (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable agent"></a><a href="#9.2-enable%20agent">enable agent</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the auxiliary agent check as temporarily stopped.
+
+In the case where an agent check is being run as a auxiliary check, due
+to the agent-check parameter of a server directive, new checks are only
+initialised when the agent is in the enabled. Thus, disable agent will
+prevent any new agent checks from begin initiated until the agent
+re-enabled using enable agent.
+
+When an agent is disabled the processing of an auxiliary agent check that
+was initiated while the agent was set as enabled is as follows: All
+results that would alter the weight, specifically &quot;drain&quot; or a weight
+returned by the agent, are ignored. The processing of agent check is
+otherwise unchanged.
+
+The motivation for this feature is to allow the weight changing effects
+of the agent checks to be paused to allow the weight of a server to be
+configured using set weight without being overridden by the agent.
+
+This command is restricted and can only be issued on sockets configured for
+level &quot;admin&quot;.</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable frontend"></a><a class="anchor" name="9-disable frontend"></a><a class="anchor" name="9.2-disable frontend"></a><a class="anchor" name="disable frontend (Statistics and monitoring)"></a><a class="anchor" name="disable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable frontend"></a><a href="#9.2-disable%20frontend">disable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Mark the frontend as temporarily stopped. This corresponds to the mode which
 is used during a soft restart : the frontend releases the port but can be
 enabled again if needed. This should be used with care as some non-Linux OSes
 are unable to enable it back. This is intended to be used in environments
@@ -11672,6 +11708,12 @@ In the statistics page, a server DOWN for maintenance will appear with a
 
 Both the backend and the server may be specified either by their name or by
 their numeric ID, prefixed with a sharp ('#').
+
+This command is restricted and can only be issued on sockets configured for
+level &quot;admin&quot;.</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable agent"></a><a class="anchor" name="9-enable agent"></a><a class="anchor" name="9.2-enable agent"></a><a class="anchor" name="enable agent (Statistics and monitoring)"></a><a class="anchor" name="enable agent (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable agent"></a><a href="#9.2-enable%20agent">enable agent</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Resume auxiliary agent check that was temporarily stopped.
+
+See &quot;disable agent&quot; for details of the effect of temporarily starting
+and stopping an auxiliary agent.
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable frontend"></a><a class="anchor" name="9-enable frontend"></a><a class="anchor" name="9.2-enable frontend"></a><a class="anchor" name="enable frontend (Statistics and monitoring)"></a><a class="anchor" name="enable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable frontend"></a><a href="#9.2-enable%20frontend">enable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Resume a frontend which was temporarily stopped. It is possible that some of
@@ -11946,6 +11988,9 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"accept-proxy",
 				"acl",
 				"addr",
+				"agent-check",
+				"agent-inter",
+				"agent-port",
 				"alpn",
 				"appsession",
 				"backlog (Alphabetically sorted keywords reference)",
@@ -12007,6 +12052,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"downinter",
 				"ecdhe",
 				"enable",
+				"enable agent",
 				"enable frontend",
 				"enable server",
 				"enabled",
@@ -12145,7 +12191,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"option httpclose",
 				"option httplog",
 				"option independent-streams",
-				"option lb-agent-chk",
 				"option ldap-check",
 				"option log-health-checks",
 				"option log-separate-errors",
@@ -12430,7 +12475,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-102', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-135', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
