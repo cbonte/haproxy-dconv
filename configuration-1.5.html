@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-135 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-170 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-135</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-170</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/11/25</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/12/03</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-135</strong></p>
+						<p><strong>version 1.5-dev19-170</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -3187,7 +3187,8 @@ The first keyword is the rule's action. Currently supported actions include :
   - &quot;<a href="#redirect">redirect</a>&quot; : this performs an HTTP redirection based on a redirect rule.
     This is exactly the same as the &quot;<a href="#redirect">redirect</a>&quot; statement except that it
     inserts a redirect rule which can be processed in the middle of other
-    &quot;<a href="#http-request">http-request</a>&quot; rules. See the &quot;<a href="#redirect">redirect</a>&quot; keyword for the rule's syntax.
+    &quot;<a href="#http-request">http-request</a>&quot; rules and that these rules use the &quot;<a href="#log-format">log-format</a>&quot; strings.
+    See the &quot;<a href="#redirect">redirect</a>&quot; keyword for the rule's syntax.
 
   - &quot;add-header&quot; appends an HTTP header field whose name is specified in
     &lt;name&gt; and whose value is defined by &lt;fmt&gt; which follows the log-format
@@ -4914,14 +4915,19 @@ no delay is needed at all to detect the threshold.</pre><div class="separator">
 <pre class="text">If/unless the condition is matched, the HTTP request will lead to a redirect
 response. If no condition is specified, the redirect applies unconditionally.</pre><div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;loc&gt;     With &quot;<a href="#redirect%20location">redirect location</a>&quot;, the exact value in &lt;loc&gt; is placed into
-          the HTTP &quot;Location&quot; header.
+          the HTTP &quot;Location&quot; header. When used in an &quot;<a href="#http-request">http-request</a>&quot; rule,
+          &lt;loc&gt; value follows the log-format rules and can include some
+          dynamic values (see Custom Log Format in <a href="#8.2.4">section 8.2.4</a>).
 
 &lt;pfx&gt;     With &quot;<a href="#redirect%20prefix">redirect prefix</a>&quot;, the &quot;Location&quot; header is built from the
           concatenation of &lt;pfx&gt; and the complete URI path, including the
           query string, unless the &quot;drop-query&quot; option is specified (see
           below). As a special case, if &lt;pfx&gt; equals exactly &quot;/&quot;, then
           nothing is inserted before the original URI. It allows one to
-          redirect to the same URL (for instance, to insert a cookie).
+          redirect to the same URL (for instance, to insert a cookie). When
+          used in an &quot;<a href="#http-request">http-request</a>&quot; rule, &lt;pfx&gt; value follows the log-format
+          rules and can include some dynamic values (see Custom Log Format
+          in <a href="#8.2.4">section 8.2.4</a>).
 
 &lt;sch&gt;     With &quot;<a href="#redirect%20scheme">redirect scheme</a>&quot;, then the &quot;Location&quot; header is built by
           concatenating &lt;sch&gt; with &quot;://&quot; then the first occurrence of the
@@ -4931,7 +4937,9 @@ response. If no condition is specified, the redirect applies unconditionally.</p
           no &quot;Host&quot; header is found, then an empty host component will be
           returned, which most recent browsers interprete as redirecting to
           the same host. This directive is mostly used to redirect HTTP to
-          HTTPS.
+          HTTPS. When used in an &quot;<a href="#http-request">http-request</a>&quot; rule, &lt;sch&gt; value follows
+          the log-format rules and can include some dynamic values (see
+          Custom Log Format in <a href="#8.2.4">section 8.2.4</a>).
 
 &lt;code&gt;    The code is optional. It indicates which type of HTTP redirection
           is desired. Only codes 301, 302, 303, 307 and 308 are supported,
@@ -5000,6 +5008,12 @@ redirect code 301 prefix / drop-query append-slash if missing_slash
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <div class="example-desc">Redirect all HTTP traffic to HTTPS when SSL is handled by haproxy.</div><code>redirect scheme https if !{ ssl_fc }
+</code></pre>
+</div><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Append 'www.' prefix in front of all hosts not having it</div><code>http-request redirect code 301 location www.%[hdr(host)]%[req.uri] \
+  unless { hdr_beg(host) -i www }
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.</pre><a class="anchor" name="redisp"></a><a class="anchor" name="4-redisp"></a><a class="anchor" name="4.2-redisp"></a><a class="anchor" name="redisp (Proxies)"></a><a class="anchor" name="redisp (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="redisp"></a><a href="#4.2-redisp">redisp</a></b> <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="redispatch"></a><a class="anchor" name="4-redispatch"></a><a class="anchor" name="4.2-redispatch"></a><a class="anchor" name="redispatch (Proxies)"></a><a class="anchor" name="redispatch (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="redispatch"></a><a href="#4.2-redispatch">redispatch</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">Enable or disable session redistribution in case of connection failure</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8069,6 +8083,7 @@ from the request, the response or any environmental status. The principle is
 simple :
 
   - extract a data sample from a stream, table or the environment
+  - optionally apply some format conversion to the extracted sample
   - apply one or multiple pattern matching methods on this sample
   - perform actions only when a pattern matches the sample
 
@@ -8082,8 +8097,10 @@ In order to define a test, the &quot;<a href="#acl">acl</a>&quot; keyword is use
 This creates a new ACL &lt;aclname&gt; or completes an existing one with new tests.
 Those tests apply to the portion of request/response specified in &lt;criterion&gt;
 and may be adjusted with optional flags [flags]. Some criteria also support
-an operator which may be specified before the set of values. The values are
-of the type supported by the criterion, and are separated by spaces.
+an operator which may be specified before the set of values. Optionally some
+conversion operators may be applied to the sample, and they will be specified
+as a comma-delimited list of keywords just after the first keyword. The values
+are of the type supported by the criterion, and are separated by spaces.
 
 ACL names must be formed from upper and lower case letters, digits, '-' (dash),
 '_' (underscore) , '.' (dot) and ':' (colon). ACL names are case-sensitive,
@@ -8095,7 +8112,8 @@ performance, they just consume a small amount of memory.
 The criterion generally is the name of a sample fetch method, or one of its ACL
 specific declinations. The default test method is implied by the output type of
 this sample fetch method. The ACL declinations can describe alternate matching
-methods of a same sample fetch method.
+methods of a same sample fetch method. The sample fetch methods are the only
+ones supporting a conversion.
 
 Sample fetch methods return data which can be of the following types :
   - boolean
@@ -8103,6 +8121,12 @@ Sample fetch methods return data which can be of the following types :
   - IPv4 or IPv6 address
   - string
   - data block
+
+Converters transform any of these data into any of these. For example, some
+converters might convert a string to a lower-case string while other ones
+would turn a string to an IPv4 address, or apply a netmask to an IP address.
+The resulting sample is of the type of the last converter applied to the list,
+which defaults to the type of the sample fetch method.
 
 The ACL engine can match these types against patterns of the following types :
   - boolean
@@ -8211,6 +8235,11 @@ buffer, one would use the following acl :
 
     acl script_tag payload(0,500) -m reg -i &lt;script&gt;
 
+On systems where the regex library is much slower when using &quot;-i&quot;, it is
+possible to convert the sample to lowercase before matching, like this :
+
+    acl script_tag payload(0,500),lower -m reg &lt;script&gt;
+
 All ACL-specific criteria imply a default matching method. Most often, these
 criteria are composed by concatenating the name of the original sample fetch
 method and the matching method. For example, &quot;hdr_beg&quot; applies the &quot;beg&quot; match
@@ -8228,7 +8257,7 @@ example, all ACLs below are exact equivalent :
     acl alternate3  hdr(host)     -m beg www.
 
 
-The table below summarizes the compatibility matrix between sample fetch types
+The table below summarizes the compatibility matrix between sample types
 and the pattern types to fetch against. It indicates for each compatible
 combination the name of the matching method to be used, prefixed with &quot;*&quot; when
 the method is implicit and will work by default without &quot;-m&quot;.
@@ -8502,15 +8531,17 @@ Thus, the syntax of a standard sample fetch method is one of the following :
    - name(arg1)
    - name(arg1,arg2)
 
-At the moment, the stickiness features are the most advanced users of the
-sample fetch system. The &quot;<a href="#stick%20on">stick on</a>&quot;, and &quot;<a href="#stick%20store-request">stick store-request</a>&quot; directives
-support sample fetch rules which allow a list of transformations to be applied
-on top of the fetched sample, and the finaly result is automatically converted
-to the type of the table. These transformations are enumerated as a series
-of specific keywords after the sample fetch method. These keywords may equally
-be appended immediately after the fetch keyword's argument, delimited by a
-comma. These keywords can also support some arguments (eg: a netmask) which
-must be passed in parenthesis.
+Sample fetch methods may be combined with transformations to be applied on top
+of the fetched sample (also called &quot;converters&quot;). These combinations form what
+is called &quot;sample expressions&quot; and the result is a &quot;sample&quot;. Initially this
+was only supported by &quot;<a href="#stick%20on">stick on</a>&quot; and &quot;<a href="#stick%20store-request">stick store-request</a>&quot; directives but this
+has now be extended to all places where samples may be used (acls, log-format,
+unique-id-format, add-header, ...).
+
+These transformations are enumerated as a series of specific keywords after the
+sample fetch method. These keywords may equally be appended immediately after
+the fetch keyword's argument, delimited by a comma. These keywords can also
+support some arguments (eg: a netmask) which must be passed in parenthesis.
 
 The currently available list of transformation keywords include :
 
@@ -8536,7 +8567,61 @@ The currently available list of transformation keywords include :
                  conversion is operated. This is particularly useful to emit
                  Date header fields, Expires values in responses when combined
                  with a positive offset, or Last-Modified values when the
-                 offset is negative.</pre></div>
+                 offset is negative.
+
+  map(&lt;map_file&gt;[,&lt;default_value&gt;])
+  map_&lt;match_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
+  map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
+                 Search the input value from &lt;map_file&gt; using the &lt;match_type&gt;
+                 matching method, and return the associated value converted to
+                 the type &lt;output_type&gt;. If the input value cannot be found in
+                 the &lt;map_file&gt;, the converter returns the &lt;default_value&gt;. If
+                 the &lt;default_value&gt; is not set, the converter fails and acts
+                 as if no input value could be fetched. If the &lt;match_type&gt; is
+                 not set, it defaults to &quot;str&quot;. Likewise, if the &lt;output_type&gt;
+                 is not set, it defaults to &quot;str&quot;. For convenience, the &quot;map&quot;
+                 keyword is an alias for &quot;map_str&quot; and maps a string to another
+                 string. The following array contains contains the list of all
+                 the map* converters.
+
+                 It is important to avoid overlapping between the keys : IP
+                 addresses and strings are stored in trees, so the first of the
+                 finest match will be used. Other keys are stored in lists, so
+                 the first matching occurrence will be used.
+
+                 +----+----------+---------+-------------+------------+
+                 |     `-_   out |         |             |            |
+                 | input  `-_    |   str   |     int     |     ip     |
+                 | / match   `-_ |         |             |            |
+                 +---------------+---------+-------------+------------+
+                 | str   / str   | map_str | map_str_int | map_str_ip |
+                 | str   / sub   | map_sub | map_sub_int | map_sub_ip |
+                 | str   / dir   | map_dir | map_dir_int | map_dir_ip |
+                 | str   / dom   | map_dom | map_dom_int | map_dom_ip |
+                 | str   / end   | map_end | map_end_int | map_end_ip |
+                 | str   / reg   | map_reg | map_reg_int | map_reg_ip |
+                 | int   / int   | map_int | map_int_int | map_int_ip |
+                 | ip    / ip    | map_ip  | map_ip_int  | map_ip_ip  |
+                 +---------------+---------+-------------+------------+
+
+                 The file contains one key + value per line. Lines which start
+                 with '#' are ignored, just like empty lines. Leading tabs and
+                 spaces are stripped. The key is then the first &quot;word&quot; (series
+                 of non-space/tabs characters), and the value is what follows
+                 this series of space/tab till the end of the line excluding
+                 trailing spaces/tabs.</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>                 
+</code></pre>
+</div><pre class="text"># this is a comment and is ignored
+   2.22.246.0/23    United Kingdom      \n
+&lt;-&gt;&lt;-----------&gt;&lt;--&gt;&lt;------------&gt;&lt;----&gt;
+ |       |      |         |         `- trailing spaces ignored
+ |       |      |         `----------- value
+ |       |      `--------------------- middle spaces ignored
+ |       `---------------------------- key
+ `------------------------------------ leading spaces ignored</pre></div>
 <a class="anchor" id="7.3.1" name="7.3.1"></a>
 <h3 id="chapter-7.3.1" data-target="7.3.1"><small><a class="small" href="#7.3.1">7.3.1.</a></small> Fetching samples from internal states</h3>
 <div><pre class="text">A first set of sample fetch methods applies to internal information which does
@@ -8978,9 +9063,13 @@ src : ip
   TCP-level source address which is used, and not the address of a client
   behind a proxy. However if the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; bind directive is used, it can
   be the address of a client behind another PROXY-protocol compatible component
-  for all rule sets except &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.
-
-src_bytes_in_rate([&lt;table&gt;]) : integer
+  for all rule sets except &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># add an HTTP header in requests with the originating address' country</span>
+http-request set-header X-Country %[src,map_ip(geoip.lst)]
+</code></pre>
+</div><pre class="text">src_bytes_in_rate([&lt;table&gt;]) : integer
   Returns the average bytes rate from the incoming connection's source address
   in the current proxy's stick-table or in the designated stick-table, measured
   in amount of bytes over the period configured in the table. If the address is
@@ -10641,7 +10730,8 @@ less common information such as the client's SSL certificate's DN, or to log
 the key that would be used to store an entry into a stick table.
 
 Note: spaces must be escaped. A space character is considered as a separator.
-HAproxy will automatically merge consecutive separators.
+In order to emit a verbatim '%', it must be preceeded by another '%' resulting
+in '%%'. HAProxy will automatically merge consecutive separators.
 
 Flags are :
   * Q: quote a string
@@ -12475,7 +12565,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-135', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-170', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
