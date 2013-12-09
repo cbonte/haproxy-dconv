@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-195 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-205 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-195</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-205</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/12/06</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/12/09</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-195</strong></p>
+						<p><strong>version 1.5-dev19-205</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -6383,7 +6383,12 @@ makes it possible to store up to 8 criteria, all extracted from either the
 request or the response, regardless of the number of rules. Only the 8 first
 ones which match will be kept. Using this, it is possible to feed multiple
 tables at once in the hope to increase the chance to recognize a user on
-another protocol or access method.
+another protocol or access method. Using multiple store-request rules with
+the same table is possible and may be used to find the best criterion to rely
+on, by arranging the rules by decreasing preference order. Only the first
+extracted criterion for a given table will be stored. All subsequent store-
+request rules referencing the same table will be skipped and their ACLs will
+not be evaluated.
 
 The &quot;store-request&quot; rules are evaluated once the server connection has been
 established, so that the table will contain the real server that processed
@@ -6679,7 +6684,15 @@ makes it possible to store up to 8 criteria, all extracted from either the
 request or the response, regardless of the number of rules. Only the 8 first
 ones which match will be kept. Using this, it is possible to feed multiple
 tables at once in the hope to increase the chance to recognize a user on
-another protocol or access method.
+another protocol or access method. Using multiple store-response rules with
+the same table is possible and may be used to find the best criterion to rely
+on, by arranging the rules by decreasing preference order. Only the first
+extracted criterion for a given table will be stored. All subsequent store-
+response rules referencing the same table will be skipped and their ACLs will
+not be evaluated. However, even if a store-request rule references a table, a
+store-response rule may also use the same table. This means that each table
+may learn exactly one element from the request and one element from the
+response at once.
 
 The table will contain the real server that processed the request.</pre><div class="separator">
 <span class="label label-success">Example :</span>
@@ -12748,7 +12761,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-195', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-205', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
