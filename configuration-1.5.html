@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev19-282 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev19-303 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-282</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev19-303</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/12/11</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2013/12/12</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev19-282</strong></p>
+						<p><strong>version 1.5-dev19-303</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -8462,27 +8462,27 @@ the method is implicit and will work by default without &quot;-m&quot;.
     +----------------------+---------+---------+---------+---------+---------+
     | none (presence only) |  found  |  found  |  found  |  found  |  found  |
     +----------------------+---------+---------+---------+---------+---------+
-    | none (boolean value) |  *bool  |   bool  |         |         |         |
+    | none (boolean value) |  *bool  |   bool  |         |   bool  |         |
     +----------------------+---------+---------+---------+---------+---------+
-    | integer (value)      |   int   |   *int  |         |         |         |
+    | integer (value)      |   int   |   *int  |   int   |   int   |         |
     +----------------------+---------+---------+---------+---------+---------+
-    | integer (length)     |         |         |         |   len   |   len   |
+    | integer (length)     |   len   |   len   |   len   |   len   |   len   |
     +----------------------+---------+---------+---------+---------+---------+
-    | IP address           |         |         |   *ip   |         |         |
+    | IP address           |         |         |   *ip   |    ip   |    ip   |
     +----------------------+---------+---------+---------+---------+---------+
-    | exact string         |         |         |         |   str   |   str   |
+    | exact string         |   str   |   str   |   str   |   str   |   str   |
     +----------------------+---------+---------+---------+---------+---------+
-    | prefix               |         |         |         |   beg   |   beg   |
+    | prefix               |   beg   |   beg   |   beg   |   beg   |   beg   |
     +----------------------+---------+---------+---------+---------+---------+
-    | suffix               |         |         |         |   end   |   end   |
+    | suffix               |   end   |   end   |   end   |   end   |   end   |
     +----------------------+---------+---------+---------+---------+---------+
-    | substring            |         |         |         |   sub   |   sub   |
+    | substring            |   sub   |   sub   |   sub   |   sub   |   sub   |
     +----------------------+---------+---------+---------+---------+---------+
-    | subdir               |         |         |         |   dir   |   dir   |
+    | subdir               |   dir   |   dir   |   dir   |   dir   |   dir   |
     +----------------------+---------+---------+---------+---------+---------+
-    | domain               |         |         |         |   dom   |   dom   |
+    | domain               |   dom   |   dom   |   dom   |   dom   |   dom   |
     +----------------------+---------+---------+---------+---------+---------+
-    | regex                |         |         |         |   reg   |   reg   |
+    | regex                |   reg   |   reg   |   reg   |   reg   |   reg   |
     +----------------------+---------+---------+---------+---------+---------+
     | hex block            |         |         |         |   bin   |   bin   |
     +----------------------+---------+---------+---------+---------+---------+</pre></div>
@@ -11896,13 +11896,15 @@ own stats.
 The list of commands currently supported on the stats socket is provided below.
 If an unknown command is sent, haproxy displays the usage message which reminds
 all supported commands. Some commands support a more complex syntax, generally
-it will explain what part of the command is invalid when this happens.</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.2-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters"></a><a href="#9.2-clear%20counters">clear counters</a></b></div><pre class="text">Clear the max values of the statistics counters in each proxy (frontend &amp;
+it will explain what part of the command is invalid when this happens.</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.2-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.2-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.2-add%20map">add map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Add an entry into the map &lt;map&gt; to associate the value &lt;value&gt; to the key
+&lt;key&gt;. This command does not verify if the entry already exists. It is
+mainly used to fill a map after a clear operation.</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.2-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters"></a><a href="#9.2-clear%20counters">clear counters</a></b></div><pre class="text">Clear the max values of the statistics counters in each proxy (frontend &amp;
 backend) and in each server. The cumulated counters are not affected. This
 can be used to get clean counters after an incident, without having to
 restart nor to clear traffic counters. This command is restricted and can
 only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.2-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><a class="anchor" name="clear counters all"></a><a class="anchor" name="9-clear counters all"></a><a class="anchor" name="9.2-clear counters all"></a><a class="anchor" name="clear counters all (Statistics and monitoring)"></a><a class="anchor" name="clear counters all (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters all"></a><a href="#9.2-clear%20counters%20all">clear counters all</a></b></div><pre class="text">Clear all statistics counters in each proxy (frontend &amp; backend) and in each
 server. This has the same effect as restarting. This command is restricted
-and can only be issued on sockets configured for level &quot;admin&quot;.</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear table"></a><a class="anchor" name="9-clear table"></a><a class="anchor" name="9.2-clear table"></a><a class="anchor" name="clear table (Statistics and monitoring)"></a><a class="anchor" name="clear table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear table"></a><a href="#9.2-clear%20table">clear table</a></b> <span style="color: #080">&lt;table&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div><pre class="text">Remove entries from the stick-table &lt;table&gt;.
+and can only be issued on sockets configured for level &quot;admin&quot;.</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear map"></a><a class="anchor" name="9-clear map"></a><a class="anchor" name="9.2-clear map"></a><a class="anchor" name="clear map (Statistics and monitoring)"></a><a class="anchor" name="clear map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear map"></a><a href="#9.2-clear%20map">clear map</a></b> <span style="color: #080">&lt;map&gt;</span></div><pre class="text">Remove all entries from the map &lt;map&gt;.</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear table"></a><a class="anchor" name="9-clear table"></a><a class="anchor" name="9.2-clear table"></a><a class="anchor" name="clear table (Statistics and monitoring)"></a><a class="anchor" name="clear table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear table"></a><a href="#9.2-clear%20table">clear table</a></b> <span style="color: #080">&lt;table&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div><pre class="text">Remove entries from the stick-table &lt;table&gt;.
 
 This is typically used to unblock some users complaining they have been
 abusively denied access to a service, but this can also be used to clear some
@@ -11968,7 +11970,7 @@ of the agent checks to be paused to allow the weight of a server to be
 configured using set weight without being overridden by the agent.
 
 This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable frontend"></a><a class="anchor" name="9-disable frontend"></a><a class="anchor" name="9.2-disable frontend"></a><a class="anchor" name="disable frontend (Statistics and monitoring)"></a><a class="anchor" name="disable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable frontend"></a><a href="#9.2-disable%20frontend">disable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Mark the frontend as temporarily stopped. This corresponds to the mode which
+level &quot;admin&quot;.</pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.2-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del map"></a><a class="anchor" name="9-del map"></a><a class="anchor" name="9.2-del map"></a><a class="anchor" name="del map (Statistics and monitoring)"></a><a class="anchor" name="del map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del map"></a><a href="#9.2-del%20map">del map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span></div><pre class="text">Delete all the map entries from the map &lt;map&gt; corresponding to the key &lt;key&gt;.</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable frontend"></a><a class="anchor" name="9-disable frontend"></a><a class="anchor" name="9.2-disable frontend"></a><a class="anchor" name="disable frontend (Statistics and monitoring)"></a><a class="anchor" name="disable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable frontend"></a><a href="#9.2-disable%20frontend">disable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Mark the frontend as temporarily stopped. This corresponds to the mode which
 is used during a soft restart : the frontend releases the port but can be
 enabled again if needed. This should be used with care as some non-Linux OSes
 are unable to enable it back. This is intended to be used in environments
@@ -12029,7 +12031,8 @@ the interpreter is waiting for a new command. The prompt consists in a right
 angle bracket followed by a space &quot;&gt; &quot;. This mode is particularly convenient
 when one wants to periodically check information such as stats or errors.
 It is also a good idea to enter interactive mode before issuing a &quot;<a href="#help">help</a>&quot;
-command.</pre><a class="anchor" name="quit"></a><a class="anchor" name="9-quit"></a><a class="anchor" name="9.2-quit"></a><a class="anchor" name="quit (Statistics and monitoring)"></a><a class="anchor" name="quit (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="quit"></a><a href="#9.2-quit">quit</a></b></div><pre class="text">Close the connection when in interactive mode.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.2-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn frontend"></a><a class="anchor" name="9-set maxconn frontend"></a><a class="anchor" name="9.2-set maxconn frontend"></a><a class="anchor" name="set maxconn frontend (Statistics and monitoring)"></a><a class="anchor" name="set maxconn frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn frontend"></a><a href="#9.2-set%20maxconn%20frontend">set maxconn frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Dynamically change the specified frontend's maxconn setting. Any positive
+command.</pre><a class="anchor" name="quit"></a><a class="anchor" name="9-quit"></a><a class="anchor" name="9.2-quit"></a><a class="anchor" name="quit (Statistics and monitoring)"></a><a class="anchor" name="quit (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="quit"></a><a href="#9.2-quit">quit</a></b></div><pre class="text">Close the connection when in interactive mode.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set map"></a><a class="anchor" name="9-set map"></a><a class="anchor" name="9.2-set map"></a><a class="anchor" name="set map (Statistics and monitoring)"></a><a class="anchor" name="set map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set map"></a><a href="#9.2-set%20map">set map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Modify the value corresponding to each key &lt;key&gt; in a map &lt;map&gt;. The new value
+is &lt;value&gt;.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.2-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn frontend"></a><a class="anchor" name="9-set maxconn frontend"></a><a class="anchor" name="9.2-set maxconn frontend"></a><a class="anchor" name="set maxconn frontend (Statistics and monitoring)"></a><a class="anchor" name="set maxconn frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn frontend"></a><a href="#9.2-set%20maxconn%20frontend">set maxconn frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Dynamically change the specified frontend's maxconn setting. Any positive
 value is allowed including zero, but setting values larger than the global
 maxconn does not make much sense. If the limit is increased and connections
 were pending, they will immediately be accepted. If it is lowered to a value
@@ -12119,7 +12122,8 @@ received by frontend fe-eth0 whose ID is 1. The total response length was
 is the slash ('/') in header name &quot;header/bizarre&quot;, which is not a valid
 HTTP character for a header name.
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.2-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.2-show%20info">show info</a></b></div><pre class="text">Dump info about haproxy status on current process.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.2-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.2-show%20info">show info</a></b></div><pre class="text">Dump info about haproxy status on current process.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show map"></a><a class="anchor" name="9-show map"></a><a class="anchor" name="9.2-show map"></a><a class="anchor" name="show map (Statistics and monitoring)"></a><a class="anchor" name="show map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show map"></a><a href="#9.2-show%20map">show map</a></b> <span style="color: #008">[<span style="color: #080">&lt;map&gt;</span>]</span></div><pre class="text">Dump info about map converters. Without argument, the list of all available
+maps is returned. If a &lt;map&gt; is specified, its contents are dumped.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
 configured for levels &quot;operator&quot; or &quot;admin&quot;.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Display a lot of internal information about the specified session identifier.
 This identifier is the first field at the beginning of the lines in the dumps
@@ -12270,6 +12274,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 			var keywords = [
 				"accept-proxy",
 				"acl",
+				"add",
+				"add map",
 				"addr",
 				"agent-check",
 				"agent-inter",
@@ -12302,6 +12308,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"clear",
 				"clear counters",
 				"clear counters all",
+				"clear map",
 				"clear table",
 				"clitimeout",
 				"compression",
@@ -12324,6 +12331,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"default-server",
 				"default_backend",
 				"defer-accept",
+				"del",
+				"del map",
 				"description (Process management and security)",
 				"description (Alphabetically sorted keywords reference)",
 				"disable",
@@ -12541,6 +12550,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"send-proxy",
 				"server",
 				"set",
+				"set map",
 				"set maxconn",
 				"set maxconn frontend",
 				"set maxconn global",
@@ -12556,6 +12566,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"show",
 				"show errors",
 				"show info",
+				"show map",
 				"show sess",
 				"show stat",
 				"show table",
@@ -12763,7 +12774,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-282', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev19-303', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
