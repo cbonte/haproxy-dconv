@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev21-49 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev21-76 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev21-49</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev21-76</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/01/25</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/01/28</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev21-49</strong></p>
+						<p><strong>version 1.5-dev21-76</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -1175,7 +1175,9 @@ The following keywords are supported in the &quot;global&quot; section :
    - maxcomprate
    - maxcompcpuusage
    - maxpipes
+   - maxsessrate
    - maxsslconn
+   - maxsslrate
    - noepoll
    - nokqueue
    - nopoll
@@ -1357,13 +1359,29 @@ are only used by kernel-based tcp splicing. Since a pipe contains two file
 descriptors, the &quot;<a href="#ulimit-n">ulimit-n</a>&quot; value will be increased accordingly. The default
 value is maxconn/4, which seems to be more than enough for most heavy usages.
 The splice code dynamically allocates and releases pipes, and can fall back
-to standard copy, so setting this value too low may only impact performance.</pre><a class="anchor" name="maxsslconn"></a><a class="anchor" name="3-maxsslconn"></a><a class="anchor" name="3.2-maxsslconn"></a><a class="anchor" name="maxsslconn (Global parameters)"></a><a class="anchor" name="maxsslconn (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxsslconn"></a><a href="#3.2-maxsslconn">maxsslconn</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of concurrent SSL connections to
+to standard copy, so setting this value too low may only impact performance.</pre><a class="anchor" name="maxsessrate"></a><a class="anchor" name="3-maxsessrate"></a><a class="anchor" name="3.2-maxsessrate"></a><a class="anchor" name="maxsessrate (Global parameters)"></a><a class="anchor" name="maxsessrate (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxsessrate"></a><a href="#3.2-maxsessrate">maxsessrate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of sessions per second to &lt;number&gt;.
+Proxies will stop accepting connections when this limit is reached. It can be
+used to limit the global capacity regardless of each frontend capacity. It is
+important to note that this can only be used as a service protection measure,
+as there will not necessarily be a fair share between frontends when the
+limit is reached, so it's a good idea to also limit each frontend to some
+value close to its expected share. Also, lowering tune.maxaccept can improve
+fairness.</pre><a class="anchor" name="maxsslconn"></a><a class="anchor" name="3-maxsslconn"></a><a class="anchor" name="3.2-maxsslconn"></a><a class="anchor" name="maxsslconn (Global parameters)"></a><a class="anchor" name="maxsslconn (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxsslconn"></a><a href="#3.2-maxsslconn">maxsslconn</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of concurrent SSL connections to
 &lt;number&gt;. By default there is no SSL-specific limit, which means that the
 global maxconn setting will apply to all connections. Setting this limit
 avoids having openssl use too much memory and crash when malloc returns NULL
 (since it unfortunately does not reliably check for such conditions). Note
 that the limit applies both to incoming and outgoing connections, so one
-connection which is deciphered then ciphered accounts for 2 SSL connections.</pre><a class="anchor" name="maxzlibmem"></a><a class="anchor" name="3-maxzlibmem"></a><a class="anchor" name="3.2-maxzlibmem"></a><a class="anchor" name="maxzlibmem (Global parameters)"></a><a class="anchor" name="maxzlibmem (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxzlibmem"></a><a href="#3.2-maxzlibmem">maxzlibmem</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of RAM in megabytes per process usable by the zlib.
+connection which is deciphered then ciphered accounts for 2 SSL connections.</pre><a class="anchor" name="maxsslrate"></a><a class="anchor" name="3-maxsslrate"></a><a class="anchor" name="3.2-maxsslrate"></a><a class="anchor" name="maxsslrate (Global parameters)"></a><a class="anchor" name="maxsslrate (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxsslrate"></a><a href="#3.2-maxsslrate">maxsslrate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of SSL sessions per second to &lt;number&gt;.
+SSL listeners will stop accepting connections when this limit is reached. It
+can be used to limit the global SSL CPU usage regardless of each frontend
+capacity. It is important to note that this can only be used as a service
+protection measure, as there will not necessarily be a fair share between
+frontends when the limit is reached, so it's a good idea to also limit each
+frontend to some value close to its expected share. It is also important to
+note that the sessions are accounted before they enter the SSL stack and not
+after, which also protects the stack against bad handshakes. Also, lowering
+tune.maxaccept can improve fairness.</pre><a class="anchor" name="maxzlibmem"></a><a class="anchor" name="3-maxzlibmem"></a><a class="anchor" name="3.2-maxzlibmem"></a><a class="anchor" name="maxzlibmem (Global parameters)"></a><a class="anchor" name="maxzlibmem (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxzlibmem"></a><a href="#3.2-maxzlibmem">maxzlibmem</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of RAM in megabytes per process usable by the zlib.
 When the maximum amount is reached, future sessions will not compress as long
 as RAM is unavailable. When sets to 0, there is no limit.
 The default value is 0. The value is available in bytes on the UNIX socket
@@ -12127,7 +12145,14 @@ applies to all frontends and the change has an immediate effect. The value
 is passed in number of connections per second.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression"></a><a class="anchor" name="9-set rate-limit http-compression"></a><a class="anchor" name="9.2-set rate-limit http-compression"></a><a class="anchor" name="set rate-limit http-compression (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression global"></a><a class="anchor" name="9-set rate-limit http-compression global"></a><a class="anchor" name="9.2-set rate-limit http-compression global"></a><a class="anchor" name="set rate-limit http-compression global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit http-compression global"></a><a href="#9.2-set%20rate-limit%20http-compression%20global">set rate-limit http-compression global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the maximum input compression rate, which is set by the global
 'maxcomprate' setting. A value of zero disables the limitation. The value is
 passed in number of kilobytes per second. The value is available in the &quot;show
-info&quot; on the line &quot;CompressBpsRateLim&quot; in bytes.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
+info&quot; on the line &quot;CompressBpsRateLim&quot; in bytes.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit sessions"></a><a class="anchor" name="9-set rate-limit sessions"></a><a class="anchor" name="9.2-set rate-limit sessions"></a><a class="anchor" name="set rate-limit sessions (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit sessions (Unix Socket commands)"></a><a class="anchor" name="set rate-limit sessions global"></a><a class="anchor" name="9-set rate-limit sessions global"></a><a class="anchor" name="9.2-set rate-limit sessions global"></a><a class="anchor" name="set rate-limit sessions global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit sessions global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit sessions global"></a><a href="#9.2-set%20rate-limit%20sessions%20global">set rate-limit sessions global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide session rate limit, which is set by the global
+'maxsessrate' setting. A value of zero disables the limitation. This limit
+applies to all frontends and the change has an immediate effect. The value
+is passed in number of sessions per second.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit ssl-sessions"></a><a class="anchor" name="9-set rate-limit ssl-sessions"></a><a class="anchor" name="9.2-set rate-limit ssl-sessions"></a><a class="anchor" name="set rate-limit ssl-sessions (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit ssl-sessions (Unix Socket commands)"></a><a class="anchor" name="set rate-limit ssl-sessions global"></a><a class="anchor" name="9-set rate-limit ssl-sessions global"></a><a class="anchor" name="9.2-set rate-limit ssl-sessions global"></a><a class="anchor" name="set rate-limit ssl-sessions global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit ssl-sessions global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit ssl-sessions global"></a><a href="#9.2-set%20rate-limit%20ssl-sessions%20global">set rate-limit ssl-sessions global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide SSL session rate limit, which is set by the global
+'maxsslrate' setting. A value of zero disables the limitation. This limit
+applies to all frontends and the change has an immediate effect. The value
+is passed in number of sessions per second sent to the SSL stack. It applies
+before the handshake in order to protect the stack against handshake abuses.</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
 an entry is inserted. See stick-table in <a href="#4.2">section 4.2</a> to find all possible
 values for &lt;data_type&gt;. The most likely use consists in dynamically entering
 entries for source IP addresses, with a flag in gpc0 to dynamically block an
@@ -12201,7 +12226,10 @@ is the slash ('/') in header name &quot;header/bizarre&quot;, which is not a val
 HTTP character for a header name.
 </code></pre>
 </div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.2-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.2-show%20info">show info</a></b></div><pre class="text">Dump info about haproxy status on current process.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show map"></a><a class="anchor" name="9-show map"></a><a class="anchor" name="9.2-show map"></a><a class="anchor" name="show map (Statistics and monitoring)"></a><a class="anchor" name="show map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show map"></a><a href="#9.2-show%20map">show map</a></b> <span style="color: #008">[<span style="color: #080">&lt;map&gt;</span>]</span></div><pre class="text">Dump info about map converters. Without argument, the list of all available
-maps is returned. If a &lt;map&gt; is specified, its contents are dumped.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
+maps is returned. If a &lt;map&gt; is specified, its contents are dumped.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show pools"></a><a class="anchor" name="9-show pools"></a><a class="anchor" name="9.2-show pools"></a><a class="anchor" name="show pools (Statistics and monitoring)"></a><a class="anchor" name="show pools (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show pools"></a><a href="#9.2-show%20pools">show pools</a></b></div><pre class="text">Dump the status of internal memory pools. This is useful to track memory
+usage when suspecting a memory leak for example. It does exactly the same
+as the SIGQUIT when running in foreground except that it does not flush
+the pools.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
 configured for levels &quot;operator&quot; or &quot;admin&quot;.</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Display a lot of internal information about the specified session identifier.
 This identifier is the first field at the beginning of the lines in the dumps
@@ -12479,7 +12507,9 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"maxconnrate",
 				"maxpipes",
 				"maxqueue",
+				"maxsessrate",
 				"maxsslconn",
+				"maxsslrate",
 				"maxzlibmem",
 				"minconn",
 				"mode",
@@ -12641,6 +12671,10 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"set rate-limit connections global",
 				"set rate-limit http-compression",
 				"set rate-limit http-compression global",
+				"set rate-limit sessions",
+				"set rate-limit sessions global",
+				"set rate-limit ssl-sessions",
+				"set rate-limit ssl-sessions global",
 				"set table",
 				"set timeout",
 				"set timeout cli",
@@ -12649,6 +12683,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"show errors",
 				"show info",
 				"show map",
+				"show pools",
 				"show sess",
 				"show stat",
 				"show table",
@@ -12856,7 +12891,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev21-49', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev21-76', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
