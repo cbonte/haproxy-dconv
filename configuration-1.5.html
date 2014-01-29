@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev21-78 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev21-84 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev21-78</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev21-84</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/01/28</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/01/29</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev21-78</strong></p>
+						<p><strong>version 1.5-dev21-84</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -1165,6 +1165,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - ulimit-n
    - user
    - stats
+   - ssl-server-verify
    - node
    - description
    - unix-bind
@@ -1293,7 +1294,9 @@ nbproc is greater than 1 because there is no way to select the target process
 when connecting. However, by using this setting, it becomes possible to pin
 the stats socket to a specific set of processes, typically the first one. The
 warning will automatically be disabled when this setting is used, whatever
-the number of processes used.</pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
+the number of processes used.</pre><a class="anchor" name="ssl-server-verify"></a><a class="anchor" name="3-ssl-server-verify"></a><a class="anchor" name="3.1-ssl-server-verify"></a><a class="anchor" name="ssl-server-verify (Global parameters)"></a><a class="anchor" name="ssl-server-verify (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-server-verify"></a><a href="#3.1-ssl-server-verify">ssl-server-verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">The default behavior for SSL verify on servers side. If specified to 'none',
+servers certificates are not verified. The default is 'required' except if
+forced using cmdline option '-dV'.</pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
 Connections to this socket will return various statistics outputs and even
 allow some commands to be issued to change some runtime settings. Please
 consult <a href="#9.2">section 9.2</a> &quot;Unix Socket commands&quot; for more details.
@@ -8234,9 +8237,10 @@ one. If &lt;proxy&gt; is omitted the current one is used. If disable-on-404 is
 used, it has to be enabled on both proxies.
 
 Supported in default-server: No</pre><a class="anchor" name="verify"></a><a class="anchor" name="5-verify"></a><a class="anchor" name="5.2-verify"></a><a class="anchor" name="verify (Bind and Server options)"></a><a class="anchor" name="verify (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verify"></a><a href="#5.2-verify">verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. If set
-to 'none', server certificate is not verified. This is the default. In the
-other case, The certificate provided by the server is verified using CAs from
-'ca-file' and optional CRLs from 'crl-file'. On verify failure the handshake
+to 'none', server certificate is not verified. In the other case, The
+certificate provided by the server is verified using CAs from 'ca-file'
+and optional CRLs from 'crl-file'. If 'ssl_server_verify' is not specified
+in global  section, this is the default. On verify failure the handshake
 is aborted. It is critically important to verify server certificates when
 using SSL to connect to servers, otherwise the communication is prone to
 trivial man-in-the-middle attacks rendering SSL totally useless.
@@ -12705,6 +12709,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"srvtimeout",
 				"ssl (Bind options)",
 				"ssl (Server and default-server options)",
+				"ssl-server-verify",
 				"stats",
 				"stats admin",
 				"stats auth",
@@ -12898,7 +12903,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev21-78', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev21-84', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
