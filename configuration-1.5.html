@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev21-84 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev21-87 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev21-84</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev21-87</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/01/29</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/01/30</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev21-84</strong></p>
+						<p><strong>version 1.5-dev21-87</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -896,16 +896,18 @@ correctly support pipelining since there is no way to associate a response with
 the corresponding request in HTTP. For this reason, it is mandatory for the
 server to reply in the exact same order as the requests were received.
 
-By default HAProxy operates in a tunnel-like mode with regards to persistent
-connections: for each connection it processes the first request and forwards
-everything else (including additional requests) to selected server. Once
-established, the connection is persisted both on the client and server
-sides. Use &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; to preserve client persistent connections
-while handling every incoming request individually, dispatching them one after
-another to servers, in HTTP close mode. Use &quot;<a href="#option%20httpclose">option httpclose</a>&quot; to switch both
-sides to HTTP close mode. &quot;<a href="#option%20forceclose">option forceclose</a>&quot; and &quot;option
-http-pretend-keepalive&quot; help working around servers misbehaving in HTTP close
-mode.</pre></div>
+By default HAProxy operates in keep-alive mode with regards to persistent
+connections: for each connection it processes each request and response, and
+leaves the connection idle on both sides between the end of a response and the
+start of a new request.
+
+HAProxy supports 5 connection modes :
+  - keep alive    : all requests and responses are processed (default)
+  - tunnel        : only the first request and response are processed,
+                    everything else is forwarded with no analysis.
+  - passive close : tunnel with &quot;Connection: close&quot; added in both directions.
+  - server close  : the server-facing connection is closed after the response.
+  - forced close  : the connection is actively closed after end of response.</pre></div>
 <a class="anchor" id="1.2" name="1.2"></a>
 <h2 id="chapter-1.2" data-target="1.2"><small><a class="small" href="#1.2">1.2.</a></small> HTTP request</h2>
 <div><pre class="text">First, let's consider this HTTP request :
@@ -1640,7 +1642,43 @@ and &quot;http&quot;, also known as layer 7. In layer 4 mode, HAProxy simply for
 bidirectional traffic between two sides. In layer 7 mode, HAProxy analyzes the
 protocol, and can interact with it by allowing, blocking, switching, adding,
 modifying, or removing arbitrary contents in requests or responses, based on
-arbitrary criteria.</pre></div>
+arbitrary criteria.
+
+In HTTP mode, the processing applied to requests and responses flowing over
+a connection depends in the combination of the frontend's HTTP options and
+the backend's. HAProxy supports 5 connection modes :
+
+  - KAL : keep alive (&quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;) which is the default mode : all
+    requests and responses are processed, and connections remain open but idle
+    between responses and new requests.
+
+  - TUN: tunnel (&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;) : this was the default mode for versions
+    1.0 to 1.5-dev21 : only the first request and response are processed, and
+    everything else is forwarded with no analysis at all. This mode should not
+    be used as it creates lots of trouble with logging and HTTP processing.
+
+  - PCL: passive close (&quot;<a href="#option%20httpclose">option httpclose</a>&quot;) : exactly the same as tunnel mode,
+    but with &quot;Connection: close&quot; appended in both directions to try to make
+    both ends close after the first request/response exchange.
+
+  - SCL: server close (&quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;) : the server-facing
+    connection is closed after the end of the response is received, but the
+    client-facing connection remains open.
+
+  - FCL: forced close (&quot;<a href="#option%20forceclose">option forceclose</a>&quot;) : the connection is actively closed
+    after the end of the response.
+
+The effective mode that will be applied to a connection passing through a
+frontend and a backend can be determined by both proxy modes according to the
+following matrix, but in short, the modes are symmetric, keep-alive is the
+weakest option and force close is the strongest.
+
+                          Backend mode</pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th></th><th>KAL</th><th>TUN</th><th>PCL</th><th>SCL</th><th>FCL</th></tr></thead>
+<tr><td None>KAL</td><td None>KAL</td><td None>TUN</td><td None>PCL</td><td None>SCL</td><td None>FCL</td></tr>
+<tr><td None>TUN<br />Frontend   ----+-----+-----+-----+-----+----<br />mode     PCL</td><td None>TUN<br />PCL</td><td None>TUN<br />PCL</td><td None>PCL<br />PCL</td><td None>SCL<br />FCL</td><td None>FCL<br />FCL</td></tr>
+<tr><td None>SCL</td><td None>SCL</td><td None>SCL</td><td None>FCL</td><td None>SCL</td><td None>FCL</td></tr>
+</table></div>
 <a class="anchor" id="4.1" name="4.1"></a>
 <h2 id="chapter-4.1" data-target="4.1"><small><a class="small" href="#4.1">4.1.</a></small> Proxy keywords matrix</h2>
 <div><pre class="text">The following list of keywords is supported. Most of them may only be used in a
@@ -1716,6 +1754,7 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-option%20http-pretend-keepalive"><span class="pull-right"><span>(*)</span></span>option http-pretend-keepalive</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20http-server-close"><span class="pull-right"><span>(*)</span></span>option http-server-close</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-option%20http-tunnel"><span class="pull-right"><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20http-use-proxy-header"><span class="pull-right"><span>(*)</span></span>option http-use-proxy-header</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20httpchk">option httpchk</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20httpclose"><span class="pull-right"><span>(*)</span></span>option httpclose</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1735,8 +1774,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-option%20redis-check">option redis-check</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20smtpchk">option smtpchk</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20socket-stats"><span class="pull-right"><span>(*)</span></span>option socket-stats</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td None><a href="#4-option%20splice-auto"><span class="pull-right"><span>(*)</span></span>option splice-auto</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-option%20splice-auto"><span class="pull-right"><span>(*)</span></span>option splice-auto</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-request"><span class="pull-right"><span>(*)</span></span>option splice-request</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1756,8 +1795,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-reqallow">reqallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqdel">reqdel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqdeny">reqdeny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-reqiallow">reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-reqiallow">reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqidel">reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqideny">reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqipass">reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1777,8 +1816,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-rspirep">rspirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-rsprep">rsprep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-server">server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-source">source</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-source">source</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1798,8 +1837,8 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-stick%20store-response">stick store-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stick-table">stick-table</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td None><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20inspect-delay">tcp-request inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-response%20content">tcp-response content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-response%20inspect-delay">tcp-response inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1819,6 +1858,7 @@ specified in a previous &quot;defaults&quot; section.</pre><table class="table t
 <tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use_backend">use_backend</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-use-server">use-server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 </table></div>
 <a class="anchor" id="4.2" name="4.2"></a>
@@ -4029,14 +4069,14 @@ global session times in the logs.
 
 When this happens, it is possible to use &quot;<a href="#option%20forceclose">option forceclose</a>&quot;. It will
 actively close the outgoing server channel as soon as the server has finished
-to respond. This option implicitly enables the &quot;<a href="#option%20httpclose">httpclose</a>&quot; option. Note that
-this option also enables the parsing of the full request and response, which
-means we can close the connection to the server very quickly, releasing some
-resources earlier than with httpclose.
+to respond and release some resources earlier than with 'option httpclose'.
 
 This option may also be combined with &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, which
 will disable sending of the &quot;Connection: close&quot; header, but will still cause
 the connection to be closed once the whole response is received.
+
+This option disables and replaces any previous 'option httpclose', 'option
+http-server-close', 'option http-keep-alive', or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot; and &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;</div>
@@ -4086,13 +4126,7 @@ least one of them uses it, the header will be added. Note that the backend's
 setting of the header subargument takes precedence over the frontend's if
 both are defined. In the case of the &quot;if-none&quot; argument, if at least one of
 the frontend or the backend does not specify it, it wants the addition to be
-mandatory, so it wins.
-
-It is important to note that by default, HAProxy works in tunnel mode and
-only inspects the first request of a connection, meaning that only the first
-request will have the header appended, which is certainly not what you want.
-In order to fix this, ensure that any of the &quot;<a href="#option%20httpclose">httpclose</a>&quot;, &quot;<a href="#option%20forceclose">forceclose</a>&quot; or
-&quot;<a href="#option%20http-server-close">http-server-close</a>&quot; options is set when using this option.</pre><div class="separator">
+mandatory, so it wins.</pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
 <code><span class="comment"># Public HTTP address also used by stunnel on the same machine</span>
@@ -4105,7 +4139,7 @@ backend www
     mode http
     option forwardfor header X-Client
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-keep-alive"></a><a class="anchor" name="4-option http-keep-alive"></a><a class="anchor" name="4.2-option http-keep-alive"></a><a class="anchor" name="option http-keep-alive (Proxies)"></a><a class="anchor" name="option http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-keep-alive"></a><a href="#4.2-option%20http-keep-alive">option http-keep-alive</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-keep-alive"></a><a class="anchor" name="4-no option http-keep-alive"></a><a class="anchor" name="4.2-no option http-keep-alive"></a><a class="anchor" name="no option http-keep-alive (Proxies)"></a><a class="anchor" name="no option http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-keep-alive"></a><a href="#4.2-no%20option%20http-keep-alive">no option http-keep-alive</a></b></div><pre class="text">Enable or disable HTTP keep-alive from client to server</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -4113,10 +4147,16 @@ backend www
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, when a client communicates with a server, HAProxy will only
-analyze, log, and process the first request of each connection. Setting
-&quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot; enables HTTP keep-alive mode on the client- and
-server- sides. This provides the lowest latency on the client side (slow
+<pre class="text">By default HAProxy operates in keep-alive mode with regards to persistent
+connections: for each connection it processes each request and response, and
+leaves the connection idle on both sides between the end of a response and the
+start of a new request. This mode may be changed by several options such as
+&quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
+&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. This option allows to set back the keep-alive mode,
+which can be useful when another mode was used in a defaults section.
+
+Setting &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot; enables HTTP keep-alive mode on the client-
+and server- sides. This provides the lowest latency on the client side (slow
 network) and the fastest session reuse on the server side at the expense
 of maintaining idle connections to the servers. In general, it is possible
 with this option to achieve approximately twice the request rate that the
@@ -4150,13 +4190,10 @@ waiting for a new request. The keep-alive request time is still bound to the
 timeout defined by &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot; or &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot; if
 not set.
 
-This option may be set both in a frontend and in a backend. It is enabled if
-at least one of the frontend or backend holding a connection has it enabled.
-It is worth noting that &quot;<a href="#option%20forceclose">option forceclose</a>&quot; and &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;
-have precedence over &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;.
-
-If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
-in a specific instance by prepending the &quot;no&quot; keyword before it.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20prefer-last-server">option prefer-last-server</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
+This option disables and replaces any previous 'option httpclose', 'option
+http-server-close', 'option forceclose' or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. When backend
+and frontend options differ, all of these 4 options have precedence over
+'option http-keep-alive'.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20prefer-last-server">option prefer-last-server</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-no-delay"></a><a class="anchor" name="4-option http-no-delay"></a><a class="anchor" name="4.2-option http-no-delay"></a><a class="anchor" name="option http-no-delay (Proxies)"></a><a class="anchor" name="option http-no-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-no-delay"></a><a href="#4.2-option%20http-no-delay">option http-no-delay</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-no-delay"></a><a class="anchor" name="4-no option http-no-delay"></a><a class="anchor" name="4.2-no option http-no-delay"></a><a class="anchor" name="no option http-no-delay (Proxies)"></a><a class="anchor" name="no option http-no-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-no-delay"></a><a href="#4.2-no%20option%20http-no-delay">no option http-no-delay</a></b></div><pre class="text">Instruct the system to favor low interactive delays over performance in HTTP</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -4232,18 +4269,22 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.</pre>
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, when a client communicates with a server, HAProxy will only
-analyze, log, and process the first request of each connection. Setting
-&quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; enables HTTP connection-close mode on the server
-side while keeping the ability to support HTTP keep-alive and pipelining on
-the client side.  This provides the lowest latency on the client side (slow
-network) and the fastest session reuse on the server side to save server
-resources, similarly to &quot;<a href="#option%20forceclose">option forceclose</a>&quot;. It also permits non-keepalive
-capable servers to be served in keep-alive mode to the clients if they
-conform to the requirements of RFC2616. Please note that some servers do not
-always conform to those requirements when they see &quot;Connection: close&quot; in the
-request. The effect will be that keep-alive will never be used. A workaround
-consists in enabling &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;.
+<pre class="text">By default HAProxy operates in keep-alive mode with regards to persistent
+connections: for each connection it processes each request and response, and
+leaves the connection idle on both sides between the end of a response and
+the start of a new request. This mode may be changed by several options such
+as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
+&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. Setting &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; enables HTTP
+connection-close mode on the server side while keeping the ability to support
+HTTP keep-alive and pipelining on the client side.  This provides the lowest
+latency on the client side (slow network) and the fastest session reuse on
+the server side to save server resources, similarly to &quot;<a href="#option%20forceclose">option forceclose</a>&quot;.
+It also permits non-keepalive capable servers to be served in keep-alive mode
+to the clients if they conform to the requirements of RFC2616. Please note
+that some servers do not always conform to those requirements when they see
+&quot;Connection: close&quot; in the request. The effect will be that keep-alive will
+never be used. A workaround consists in enabling &quot;option
+http-pretend-keepalive&quot;.
 
 At the moment, logs will not indicate whether requests came from the same
 session or not. The accept date reported in the logs corresponds to the end
@@ -4254,12 +4295,39 @@ not set.
 
 This option may be set both in a frontend and in a backend. It is enabled if
 at least one of the frontend or backend holding a connection has it enabled.
-It is worth noting that &quot;<a href="#option%20forceclose">option forceclose</a>&quot; has precedence over &quot;option
-http-server-close&quot; and that combining &quot;<a href="#option%20http-server-close">http-server-close</a>&quot; with &quot;<a href="#option%20httpclose">httpclose</a>&quot;
-basically achieve the same result as &quot;<a href="#option%20forceclose">forceclose</a>&quot;.
+It disables and replaces any previous 'option httpclose', 'option forceclose',
+'option http-tunnel' or 'option http-keep-alive'. Please check <a href="#4">section 4</a>
+(&quot;Proxies&quot;) to see how this option combines with others when frontend and
+backend options differ.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-tunnel"></a><a class="anchor" name="4-option http-tunnel"></a><a class="anchor" name="4.2-option http-tunnel"></a><a class="anchor" name="option http-tunnel (Proxies)"></a><a class="anchor" name="option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-tunnel"></a><a href="#4.2-option%20http-tunnel">option http-tunnel</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-tunnel"></a><a class="anchor" name="4-no option http-tunnel"></a><a class="anchor" name="4.2-no option http-tunnel"></a><a class="anchor" name="no option http-tunnel (Proxies)"></a><a class="anchor" name="no option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-tunnel"></a><a href="#4.2-no%20option%20http-tunnel">no option http-tunnel</a></b></div><pre class="text">Disable or enable HTTP connection processing after first transaction</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span> none
+</div>
+<pre class="text">By default HAProxy operates in keep-alive mode with regards to persistent
+connections: for each connection it processes each request and response, and
+leaves the connection idle on both sides between the end of a response and
+the start of a new request. This mode may be changed by several options such
+as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
+&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
+
+Option &quot;<a href="#option%20http-tunnel">http-tunnel</a>&quot; disables any HTTP processing past the first request and
+the first respones. This is the mode which was used by default in versions
+1.0 to 1.5-dev21. It is the mode with the lowest processing overhead, which
+is normally not needed anymore unless in very specific cases such as when
+using an in-house protocol that looks like HTTP but is not compatible, or
+just to log one request per client in order to reduce log size. Note that
+everything which works at the HTTP level, including header parsing/addition,
+cookie processing or content switching will only work for the first request
+and will be ignored after the first response.
+
+If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+in a specific instance by prepending the &quot;no&quot; keyword before it.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-use-proxy-header"></a><a class="anchor" name="4-option http-use-proxy-header"></a><a class="anchor" name="4.2-option http-use-proxy-header"></a><a class="anchor" name="option http-use-proxy-header (Proxies)"></a><a class="anchor" name="option http-use-proxy-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-use-proxy-header"></a><a href="#4.2-option%20http-use-proxy-header">option http-use-proxy-header</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-use-proxy-header"></a><a class="anchor" name="4-no option http-use-proxy-header"></a><a class="anchor" name="4.2-no option http-use-proxy-header"></a><a class="anchor" name="no option http-use-proxy-header (Proxies)"></a><a class="anchor" name="no option http-use-proxy-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-use-proxy-header"></a><a href="#4.2-no%20option%20http-use-proxy-header">no option http-use-proxy-header</a></b></div><pre class="text">Make use of non-standard Proxy-Connection header instead of Connection</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td></tr>
@@ -4338,13 +4406,21 @@ backend https_relay
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, when a client communicates with a server, HAProxy will only
-analyze, log, and process the first request of each connection. If &quot;option
-httpclose&quot; is set, it will check if a &quot;Connection: close&quot; header is already
-set in each direction, and will add one if missing. Each end should react to
-this by actively closing the TCP connection after each transfer, thus
-resulting in a switch to the HTTP close mode. Any &quot;Connection&quot; header
-different from &quot;close&quot; will also be removed.
+<pre class="text">By default HAProxy operates in keep-alive mode with regards to persistent
+connections: for each connection it processes each request and response, and
+leaves the connection idle on both sides between the end of a response and
+the start of a new request. This mode may be changed by several options such
+as &quot;option http-serve-close&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
+&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
+
+If &quot;<a href="#option%20httpclose">option httpclose</a>&quot; is set, HAProxy will work in HTTP tunnel mode and check
+if a &quot;Connection: close&quot; header is already set in each direction, and will
+add one if missing. Each end should react to this by actively closing the TCP
+connection after each transfer, thus resulting in a switch to the HTTP close
+mode. Any &quot;Connection&quot; header different from &quot;close&quot; will also be removed.
+Note that this option is deprecated since what it does is very cheap but not
+reliable. Using &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; or &quot;<a href="#option%20forceclose">option forceclose</a>&quot; is strongly
+recommended instead.
 
 It seldom happens that some servers incorrectly ignore this header and do not
 close the connection even though they reply &quot;Connection: close&quot;. For this
@@ -4356,9 +4432,10 @@ the client to acknowledge it.
 
 This option may be set both in a frontend and in a backend. It is enabled if
 at least one of the frontend or backend holding a connection has it enabled.
-If &quot;<a href="#option%20forceclose">option forceclose</a>&quot; is specified too, it has precedence over &quot;<a href="#option%20httpclose">httpclose</a>&quot;.
-If &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; is enabled at the same time as &quot;<a href="#option%20httpclose">httpclose</a>&quot;, it
-basically achieves the same result as &quot;<a href="#option%20forceclose">option forceclose</a>&quot;.
+It disables and replaces any previous 'option http-server-close',
+'option forceclose', 'option http-keep-alive' or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. Please
+check <a href="#4">section 4</a> (&quot;Proxies&quot;) to see how this option combines with others when
+frontend and backend options differ.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; and &quot;1.1. The HTTP transaction model&quot;.</div>
@@ -4642,13 +4719,7 @@ private networks or 127.0.0.1.
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend's
 setting of the header subargument takes precedence over the frontend's if
-both are defined.
-
-It is important to note that by default, HAProxy works in tunnel mode and
-only inspects the first request of a connection, meaning that only the first
-request will have the header appended, which is certainly not what you want.
-In order to fix this, ensure that any of the &quot;<a href="#option%20httpclose">httpclose</a>&quot;, &quot;<a href="#option%20forceclose">forceclose</a>&quot; or
-&quot;<a href="#option%20http-server-close">http-server-close</a>&quot; options is set when using this option.</pre><div class="separator">
+both are defined.</pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
 <code><span class="comment"># Original Destination address</span>
@@ -8269,20 +8340,16 @@ Supported in default-server: Yes</pre></div>
 response headers based on regular expressions. It is also possible to block a
 request or a response if a particular header matches a regular expression,
 which is enough to stop most elementary protocol attacks, and to protect
-against information leak from the internal network. But there is a limitation
-to this : since HAProxy's HTTP engine does not support keep-alive, only headers
-passed during the first request of a TCP session will be seen. All subsequent
-headers will be considered data only and not analyzed. Furthermore, HAProxy
-never touches data contents, it stops analysis at the end of headers.
+against information leak from the internal network.
 
-There is an exception though. If HAProxy encounters an &quot;Informational Response&quot;
-(status code 1xx), it is able to process all rsp* rules which can allow, deny,
-rewrite or delete a header, but it will refuse to add a header to any such
-messages as this is not HTTP-compliant. The reason for still processing headers
-in such responses is to stop and/or fix any possible information leak which may
-happen, for instance because another downstream equipment would unconditionally
-add a header, or if a server name appears there. When such messages are seen,
-normal processing still occurs on the next non-informational messages.
+If HAProxy encounters an &quot;Informational Response&quot; (status code 1xx), it is able
+to process all rsp* rules which can allow, deny, rewrite or delete a header,
+but it will refuse to add a header to any such messages as this is not
+HTTP-compliant. The reason for still processing headers in such responses is to
+stop and/or fix any possible information leak which may happen, for instance
+because another downstream equipment would unconditionally add a header, or if
+a server name appears there. When such messages are seen, normal processing
+still occurs on the next non-informational messages.
 
 This section covers common usage of the following keywords, described in detail
 in <a href="#4.2">section 4.2</a> :
@@ -12547,6 +12614,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"no option http-no-delay",
 				"no option http-pretend-keepalive",
 				"no option http-server-close",
+				"no option http-tunnel",
 				"no option http-use-proxy-header",
 				"no option http_proxy",
 				"no option httpclose",
@@ -12599,6 +12667,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"option http-no-delay",
 				"option http-pretend-keepalive",
 				"option http-server-close",
+				"option http-tunnel",
 				"option http-use-proxy-header",
 				"option http_proxy",
 				"option httpchk",
@@ -12903,7 +12972,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev21-84', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev21-87', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
