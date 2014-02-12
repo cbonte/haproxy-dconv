@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev22-11 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev22-17 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev22-11</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev22-17</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/02/10</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/02/12</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev22-11</strong></p>
+						<p><strong>version 1.5-dev22-17</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -1191,6 +1191,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - tune.comp.maxlevel
    - tune.http.cookielen
    - tune.http.maxhdr
+   - tune.idletimer
    - tune.maxaccept
    - tune.maxpollevents
    - tune.maxrewrite
@@ -1442,7 +1443,15 @@ for all usages, considering that the widely deployed Apache server uses the
 same limit. It can be useful to push this limit further to temporarily allow
 a buggy application to work by the time it gets fixed. Keep in mind that each
 new header consumes 32bits of memory for each session, so don't push this
-limit too high.</pre><a class="anchor" name="tune.maxaccept"></a><a class="anchor" name="3-tune.maxaccept"></a><a class="anchor" name="3.2-tune.maxaccept"></a><a class="anchor" name="tune.maxaccept (Global parameters)"></a><a class="anchor" name="tune.maxaccept (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.maxaccept"></a><a href="#3.2-tune.maxaccept">tune.maxaccept</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of consecutive connections a process may accept in a
+limit too high.</pre><a class="anchor" name="tune.idletimer"></a><a class="anchor" name="3-tune.idletimer"></a><a class="anchor" name="3.2-tune.idletimer"></a><a class="anchor" name="tune.idletimer (Global parameters)"></a><a class="anchor" name="tune.idletimer (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.idletimer"></a><a href="#3.2-tune.idletimer">tune.idletimer</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets the duration after which haproxy will consider that an empty buffer is
+probably associated with an idle stream. This is used to optimally adjust
+some packet sizes while forwarding large and small data alternatively. The
+decision to use splice() or to send large buffers in SSL is modulated by this
+parameter. The value is in milliseconds between 0 and 65535. A value of zero
+means that haproxy will not try to detect idle streams. The default is 1000,
+which seems to correctly detect end user pauses (eg: read a page before
+clicking). There should be not reason for changing this value. Please check
+tune.ssl.maxrecord below.</pre><a class="anchor" name="tune.maxaccept"></a><a class="anchor" name="3-tune.maxaccept"></a><a class="anchor" name="3.2-tune.maxaccept"></a><a class="anchor" name="tune.maxaccept (Global parameters)"></a><a class="anchor" name="tune.maxaccept (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.maxaccept"></a><a href="#3.2-tune.maxaccept">tune.maxaccept</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of consecutive connections a process may accept in a
 row before switching to other work. In single process mode, higher numbers
 give better performance at high connection rates. However in multi-process
 modes, keeping a bit of fairness between processes generally is better to
@@ -1509,7 +1518,8 @@ optimal values which fit into 1 or 2 TCP segments (generally 1448 bytes over
 Ethernet with TCP timestamps enabled, or 1460 when timestamps are disabled),
 keeping in mind that SSL/TLS add some overhead. Typical values of 1419 and
 2859 gave good results during tests. Use &quot;strace -e trace=write&quot; to find the
-best value.</pre><a class="anchor" name="tune.zlib.memlevel"></a><a class="anchor" name="3-tune.zlib.memlevel"></a><a class="anchor" name="3.2-tune.zlib.memlevel"></a><a class="anchor" name="tune.zlib.memlevel (Global parameters)"></a><a class="anchor" name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.zlib.memlevel"></a><a href="#3.2-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
+best value. Haproxy will automatically switch to this setting after an idle
+stream has been detected (see tune.idletimer above).</pre><a class="anchor" name="tune.zlib.memlevel"></a><a class="anchor" name="3-tune.zlib.memlevel"></a><a class="anchor" name="3.2-tune.zlib.memlevel"></a><a class="anchor" name="tune.zlib.memlevel (Global parameters)"></a><a class="anchor" name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.zlib.memlevel"></a><a href="#3.2-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
 defines how much memory should be allocated for the intenal compression
 state. A value of 1 uses minimum memory but is slow and reduces compression
 ratio, a value of 9 uses maximum memory for optimal speed.  Can be a value
@@ -12906,6 +12916,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.comp.maxlevel",
 				"tune.http.cookielen",
 				"tune.http.maxhdr",
+				"tune.idletimer",
 				"tune.maxaccept",
 				"tune.maxpollevents",
 				"tune.maxrewrite",
@@ -13042,7 +13053,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-11', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-17', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
