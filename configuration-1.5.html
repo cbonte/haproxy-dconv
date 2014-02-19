@@ -2,15 +2,15 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev22-19 - Configuration Manual</title>
-		<link href="bootstrap/css/bootstrap.min.css?0.2.0-8" rel="stylesheet" />
-		<link href="css/page.css?0.2.0-8" rel="stylesheet" />
+		<title>HAProxy version 1.5-dev22-25 - Configuration Manual</title>
+		<link href="bootstrap/css/bootstrap.min.css?0.2.0-9" rel="stylesheet" />
+		<link href="css/page.css?0.2.0-9" rel="stylesheet" />
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev22-19</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev22-25</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-8</b> on <b>2014/02/14</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-9</b> on <b>2014/02/20</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev22-19</strong></p>
+						<p><strong>version 1.5-dev22-25</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -1694,12 +1694,19 @@ frontend and a backend can be determined by both proxy modes according to the
 following matrix, but in short, the modes are symmetric, keep-alive is the
 weakest option and force close is the strongest.
 
-                          Backend mode</pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th></th><th>KAL</th><th>TUN</th><th>PCL</th><th>SCL</th><th>FCL</th></tr></thead>
-<tr><td None>KAL</td><td None>KAL</td><td None>TUN</td><td None>PCL</td><td None>SCL</td><td None>FCL</td></tr>
-<tr><td None>TUN<br />Frontend   ----+-----+-----+-----+-----+----<br />mode     PCL</td><td None>TUN<br />PCL</td><td None>TUN<br />PCL</td><td None>PCL<br />PCL</td><td None>SCL<br />FCL</td><td None>FCL<br />FCL</td></tr>
-<tr><td None>SCL</td><td None>SCL</td><td None>SCL</td><td None>FCL</td><td None>SCL</td><td None>FCL</td></tr>
-</table></div>
+                          Backend mode
+
+                | KAL | TUN | PCL | SCL | FCL
+            ----+-----+-----+-----+-----+----
+            KAL | KAL | TUN | PCL | SCL | FCL
+            ----+-----+-----+-----+-----+----
+            TUN | TUN | TUN | PCL | SCL | FCL
+ Frontend   ----+-----+-----+-----+-----+----
+   mode     PCL | PCL | PCL | PCL | FCL | FCL
+            ----+-----+-----+-----+-----+----
+            SCL | SCL | SCL | FCL | SCL | FCL
+            ----+-----+-----+-----+-----+----
+            FCL | FCL | FCL | FCL | FCL | FCL</pre></div>
 <a class="anchor" id="4.1" name="4.1"></a>
 <h2 id="chapter-4.1" data-target="4.1"><small><a class="small" href="#4.1">4.1.</a></small> Proxy keywords matrix</h2>
 <div><pre class="text">The following list of keywords is supported. Most of them may only be used in a
@@ -12545,8 +12552,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 			</div>
 		</div>
 
-		<script src="js/jquery.min.js?0.2.0-8"></script>
-		<script src="bootstrap/js/bootstrap.min.js?0.2.0-8"></script>
+		<script src="js/jquery.min.js?0.2.0-9"></script>
+		<script src="bootstrap/js/bootstrap.min.js?0.2.0-9"></script>
 
 		<script>
 			/* Keyword search */
@@ -13073,8 +13080,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-19', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-8', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-25', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-9', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
