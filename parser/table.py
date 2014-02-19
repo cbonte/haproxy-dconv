@@ -16,6 +16,9 @@ class Parser(parser.Parser):
         if pctxt.context['headers']['subtitle'] != 'Configuration Manual':
             # Quick exit
             return line
+        elif pctxt.details['chapter'] == "4":
+            # BUG: the matrix in chapter 4. Proxies is not well displayed, we skip this chapter
+            return line
 
         if pctxt.has_more_lines(1):
             nextline = pctxt.get_line(1)
