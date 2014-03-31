@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev22-111 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev22-115 - Configuration Manual</title>
 		<link href="bootstrap/css/bootstrap.min.css?0.2.0-9" rel="stylesheet" />
 		<link href="css/page.css?0.2.0-9" rel="stylesheet" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="_container">
-					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev22-111</small></a>
+					<a class="brand" href="#">HAProxy Configuration Manual <small>1.5-dev22-115</small></a>
 					<ul class="nav">
 						<li class="divider-vertical"></li>
 						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-9</b> on <b>2014/03/28</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-9</b> on <b>2014/03/31</b></small>
 				</p>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 					<div class="well pagination-centered">
 						<h1>HAProxy</h1>
 						<h2>Configuration Manual</h2>
-						<p><strong>version 1.5-dev22-111</strong></p>
+						<p><strong>version 1.5-dev22-115</strong></p>
 						<p>
 							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 							willy tarreau<br>
@@ -2997,7 +2997,9 @@ exceptional loads.
 
 Since it's hard to get this value right, haproxy automatically sets it to
 10% of the sum of the maxconns of all frontends that may branch to this
-backend. That way it's safe to leave it unset.</pre><div class="separator">
+backend (based on &quot;<a href="#use_backend">use_backend</a>&quot; and &quot;<a href="#default_backend">default_backend</a>&quot; rules). That way it's
+safe to leave it unset. However, &quot;<a href="#use_backend">use_backend</a>&quot; involving dynamic names are
+not counted since there is no way to know if they could match or not.</pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># The servers will accept between 100 and 1000 concurrent connections each</span>
@@ -7684,7 +7686,8 @@ See also: &quot;<a href="#unique-id-format">unique-id-format</a>&quot;
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;backend&gt;   is the name of a valid backend or &quot;listen&quot; section.
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;backend&gt;   is the name of a valid backend or &quot;listen&quot; section, or a
+            &quot;<a href="#log-format">log-format</a>&quot; string resolving to a backend name.
 
 &lt;condition&gt; is a condition composed of ACLs, as described in <a href="#7">section 7</a>.</pre>
 </div>
@@ -7711,7 +7714,21 @@ Note that it is possible to switch from a TCP frontend to an HTTP backend. In
 this case, either the frontend has already checked that the protocol is HTTP,
 and backend processing will immediately follow, or the backend will wait for
 a complete HTTP request to get in. This feature is useful when a frontend
-must decode several protocols on a unique port, one of them being HTTP.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#default_backend">default_backend</a>&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot;, and <a href="#7">section 7</a> about ACLs.</div>
+must decode several protocols on a unique port, one of them being HTTP.
+
+When &lt;backend&gt; is a simple name, it is resolved at configuration time, and an
+error is reported if the specified backend does not exist. If &lt;backend&gt; is
+a log-format string instead, no check may be done at configuration time, so
+the backend name is resolved dynamically at run time. If the resulting
+backend name does not correspond to any valid backend, no other rule is
+evaluated, and the default_backend directive is applied instead. Note that
+when using dynamic backend names, it is highly recommended to use a prefix
+that no other backend uses in order to ensure that an unauthorized backend
+cannot be forced from the request.
+
+It is worth mentionning that &quot;<a href="#use_backend">use_backend</a>&quot; rules with an explicit name are
+used to detect the association between frontends and backends to compute the
+backend's &quot;<a href="#fullconn">fullconn</a>&quot; setting. This cannot be done for dynamic names.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#default_backend">default_backend</a>&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot;, &quot;<a href="#fullconn">fullconn</a>&quot;, &quot;<a href="#log-format">log-format</a>&quot;, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="use-server"></a><a class="anchor" name="4-use-server"></a><a class="anchor" name="4.2-use-server"></a><a class="anchor" name="use-server (Proxies)"></a><a class="anchor" name="use-server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="use-server"></a><a href="#4.2-use-server">use-server</a></b> <span style="color: #080">&lt;server&gt;</span> if <span style="color: #080">&lt;condition&gt;</span></div><a class="anchor" name="use-server"></a><a class="anchor" name="4-use-server"></a><a class="anchor" name="4.2-use-server"></a><a class="anchor" name="use-server (Proxies)"></a><a class="anchor" name="use-server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="use-server"></a><a href="#4.2-use-server">use-server</a></b> <span style="color: #080">&lt;server&gt;</span> unless <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Only use a specific server if/unless an ACL-based condition is matched.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -13176,7 +13193,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-111', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-115', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.2.0-9', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
