@@ -3,66 +3,32 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>${headers['title']} ${headers['version']} - ${headers['subtitle']}</title>
-		<link href="bootstrap/css/bootstrap.min.css?${version}" rel="stylesheet" />
+		<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/page.css?${version}" rel="stylesheet" />
 	</head>
 	<body>
-		<div class="navbar navbar-fixed-top navbar-inverse">
-			<div class="navbar-inner">
-				<div class="_container">
-					<a class="brand" href="#">${headers['title']} ${headers['subtitle']} <small>${headers['version'].replace("version ", "")}</small></a>
-					<ul class="nav">
-						<li class="divider-vertical"></li>
-						<li><a href="http://haproxy.1wt.eu/">HAProxy home page</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								Versions
-								<b class="caret"></b>
-							</a>
-							<ul class="dropdown-menu">
-								## TODO : provide a structure to dynamically generate per version links
-								<li class="dropdown-submenu">
-									 <a tabindex="-1" href="#">HAProxy 1.4</a>
-									 <ul class="dropdown-menu">
-										<li><a href="configuration-1.4.html">Configuration Manual</a></li>
-										<li class="divider"></li>
-										<li><a href="http://git.1wt.eu/git/haproxy-1.4.git/">GIT Repository</a></li>
-										<li><a href="http://haproxy.1wt.eu/git/?p=haproxy-1.4.git">Browse repository</a></li>
-										<li><a href="http://haproxy.1wt.eu/download/1.4/">Browse directory</a></li>
-									</ul>
-								</li>
-								<li class="dropdown-submenu">
-									 <a tabindex="-1" href="#">HAProxy 1.5</a>
-									 <ul class="dropdown-menu">
-										<li><a href="configuration-1.5.html">Configuration Manual</a></li>
-										<li class="divider"></li>
-										<li><a href="http://git.1wt.eu/git/haproxy.git/">GIT Repository</a></li>
-										<li><a href="http://haproxy.1wt.eu/git/?p=haproxy.git">Browse repository</a></li>
-										<li><a href="http://haproxy.1wt.eu/download/1.5/">Browse directory</a></li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</div>
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">${headers['title']} ${headers['subtitle']} <small>${headers['version'].replace("version ", "")}</small></a>
 			</div>
-		</div>
-		<div class="navbar navbar-fixed-bottom navbar-inverse">
-			<div class="navbar-inner">
-				<ul class="nav">
-					<li id="previous"></li>
-				</ul>
-				<ul class="nav pull-right">
-					<li id="next"></li>
-				</ul>
-			</div>
-		</div>
-		<div class="affix" id="menu-left">
-			<div class="container-fluid">
-				<form class="form" onsubmit="search(this.keyword.value); return false">
-					<input id="searchKeyword" type="text" name="keyword" class="search-query input-block-level" placeholder="Search keyword" autocomplete="off"/>
+			<!-- /.navbar-header -->
+		</nav>
+		<!-- /.navbar-static-side -->
+
+		<div id="wrapper">
+
+			<div id="sidebar">
+				<form onsubmit="search(this.keyword.value); return false" role="form">
+					<div id="searchKeyword" class="form-group">
+						<input type="text" class="form-control typeahead" id="keyword" name="keyword" placeholder="Search..." autocomplete="off">
+					</div>
 				</form>
-				<div id="error"></div>
 				<p>
 					Keyboard navigation&nbsp;: <span id="keyboardNavStatus"></span>
 				</p>
@@ -71,82 +37,124 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b></small>
+					<small>Converted with <a href="http://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.2.0-9</b> on <b>2014/04/05</b></small>
 				</p>
 			</div>
-		</div>
-		<div class="container-fluid" id="main">
-			<div class="row-fluid">
-				<div class="span12">
-					<div class="well pagination-centered">
-						<h1>${headers['title']}</h1>
-						<h2>${headers['subtitle']}</h2>
-						<p><strong>${headers['version']}</strong></p>
-						<p>
-							<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
-							${headers['author']}<br>
-							${headers['date']}
-						</p>
+			<!-- /.sidebar -->
+
+			<div id="page-wrapper">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="text-center">
+							<h1>${headers['title']}</h1>
+							<h2>${headers['subtitle']}</h2>
+							<p><strong>${headers['version']}</strong></p>
+							<p>
+								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
+								${headers['author']}<br>
+								${headers['date']}
+							</p>
+						</div>
+
+						${document}
 					</div>
-					
-					${document}
+					<!-- /.col-lg-12 -->
+				</div>
+				<!-- /.row -->
+				<div style="position: fixed; z-index: 1000; bottom: 0; left: 0; right: 0; padding: 10px">
+					<ul class="pager" style="margin: 0">
+						<li class="previous"><a id="previous" href="#"></a></li>
+						<li class="next"><a id="next" href="#"></a></li>
+					</ul>
 				</div>
 			</div>
+			<!-- /#page-wrapper -->
+
 		</div>
+		<!-- /#wrapper -->
 
-		<script src="js/jquery.min.js?${version}"></script>
-		<script src="bootstrap/js/bootstrap.min.js?${version}"></script>
+<!--
+		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+			<a class="navbar-brand" href="#">${headers['title']} ${headers['subtitle']} <small>${headers['version'].replace("version ", "")}</small></a>
+			<ul class="nav navbar-nav">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Versions
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						## TODO : provide a structure to dynamically generate per version links
+						<li class="dropdown-header">HAProxy 1.4</li>
+						<li><a href="configuration-1.4.html">Configuration Manual</a></li>
+						<li><a href="http://git.1wt.eu/git/haproxy-1.4.git/">GIT Repository</a></li>
+						<li><a href="http://haproxy.1wt.eu/git/?p=haproxy-1.4.git">Browse repository</a></li>
+						<li><a href="http://haproxy.1wt.eu/download/1.4/">Browse directory</a></li>
+						<li class="divider"></li>
+						<li class="dropdown-header">HAProxy 1.5</li>
+						<li><a href="configuration-1.5.html">Configuration Manual</a></li>
+						<li><a href="http://git.1wt.eu/git/haproxy.git/">GIT Repository</a></li>
+						<li><a href="http://haproxy.1wt.eu/git/?p=haproxy.git">Browse repository</a></li>
+						<li><a href="http://haproxy.1wt.eu/download/1.5/">Browse directory</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+-->
 
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.2/typeahead.bundle.min.js"></script>
 		<script>
 			/* Keyword search */
 			var searchFocus = false
 			var keywords = [
 				"${'",\n\t\t\t\t"'.join(keywords)}"
 			]
-			
+
 			function updateKeyboardNavStatus() {
 				var status = searchFocus ? '<span class="label label-disabled">Disabled</span>' : '<span class="label label-success">Enabled</span>'
 				$('#keyboardNavStatus').html(status)
 			}
 
 			function search(keyword) {
-				if (keyword) {
-					if (!!~$.inArray(keyword, keywords)) {
-						window.location.hash = keyword
-						$("#error").html('')
-					} else {
-						var error = $('<div/>', {
-							"class": "alert alert-error"
-						}).html('\
-							<a class="close" href="#" data-dismiss="alert">&times;</a>\
-							<strong>Unknown keyword !</strong>\
-							<p>The keyword <strong class="unknown"></strong> you\'re looking for doesn\'t exist or is not detected by the documentation converter.</p>\
-						')
-						error.find(".unknown").text(keyword)
-
-						$("#error").html(error)
-					}
+				if (keyword && !!~$.inArray(keyword, keywords)) {
+					window.location.hash = keyword
 				}
 			}
-			
-			$('#searchKeyword').typeahead({
-				source: keywords,
-				updater: function(item) {
-					search(item)
-					return item
-				}
+			// constructs the suggestion engine
+			var kwbh = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				local: $.map(keywords, function(keyword) { return { value: keyword }; })
+			});
+			kwbh.initialize()
+
+			$('#searchKeyword .typeahead').typeahead({
+				hint: true,
+				highlight: true,
+				minLength: 1,
+				autoselect: true
+			},
+			{
+				name: 'keywords',
+				displayKey: 'value',
+				 source: kwbh.ttAdapter()
 			}).focus(function() {
 				searchFocus = true
 				updateKeyboardNavStatus()
 			}).blur(function() {
 				searchFocus = false
 				updateKeyboardNavStatus()
+			}).bind('typeahead:selected', function ($e, datum) {
+				search(datum.value)
 			})
 
 			/* EXPERIMENTAL - Previous/Next navigation */
 			var headings = $(":header")
 			var previousTarget = false
 			var nextTarget = false
+			var $previous = $('#previous')
+			var $next = $('#next')
 			function refreshNavigation() {
 				var previous = false
 				var next = false
@@ -168,14 +176,20 @@
 					}
 					if (next) return false
 				})
+
 				previousTarget = previous ? previous.attr('data-target') : 'top'
-				$('#previous').html(
-					previous && previousTarget ? '<a href="#' + previousTarget + '">&larr; ' + previous.text() + '</a>' : '<a href="#top">&larr; Top</a>'
-				)
+				$previous.html(
+					previous && previousTarget ?
+						'<span class="glyphicon glyphicon-arrow-left"></span> ' + previous.text() :
+						'<span class="glyphicon glyphicon-arrow-up"></span> Top'
+				).attr('href', '#' + previousTarget)
+
 				nextTarget = next ? next.attr('data-target') : 'bottom'
-				$('#next').html(
-					next && nextTarget ? '<a href="#' + nextTarget + '">' + next.text() + ' &rarr;</a>' : '<a href="#bottom">Bottom &rarr;</a>'
-				)
+				$next.html(
+					next && nextTarget ?
+						next.text() + ' <span class="glyphicon glyphicon-arrow-right"></span>' :
+						'Bottom <span class="glyphicon glyphicon-arrow-down"></span>'
+				).attr('href', '#' + nextTarget)
 			}
 
 			$(window).scroll(function () {
