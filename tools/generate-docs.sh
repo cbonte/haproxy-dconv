@@ -118,11 +118,6 @@ echo "Synchronize generated documentations..."
 cd $WORK_DIR/haproxy-dconv/gh-pages || exit 1
 	push=0
 
-	rsync -av --delete ../master/bootstrap/ bootstrap/ &&
-		if [ "$(git status -s bootstrap/)" != "" ];
-		then
-			git commit -m "Updating Bootstrap from haproxy-dconv $version" bootstrap/ && push=1
-		fi &&
 	rsync -av --delete ../master/js/ js/ &&
 		if [ "$(git status -s js/)" != "" ];
 		then
