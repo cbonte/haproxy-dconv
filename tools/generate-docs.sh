@@ -118,11 +118,6 @@ echo "Synchronize generated documentations..."
 cd $WORK_DIR/haproxy-dconv/gh-pages || exit 1
 	push=0
 
-	rsync -av --delete ../master/js/ js/ &&
-		if [ "$(git status -s js/)" != "" ];
-		then
-			git commit -m "Updating jquery from haproxy-dconv $version" js/ && push=1
-		fi &&
 	rsync -av --delete ../master/css/ css/ &&
 		if [ "$(git status -s css/)" != "" ];
 		then
