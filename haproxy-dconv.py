@@ -72,7 +72,7 @@ def main():
 # Temporarily determine the version from git to follow which commit generated
 # the documentation
 def get_git_version():
-    if not os.path.isdir(".git"):
+    if not os.path.isdir(os.path.join(os.path.dirname(__file__), ".git")):
         print >> sys.stderr, "This does not appear to be a Git repository."
         return
     try:
