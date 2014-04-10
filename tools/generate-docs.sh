@@ -1,141 +1,164 @@
 #!/bin/bash
 
-WORK_DIR=work/
-
 PROJECT_HOME=$(dirname $(readlink -f $0))
 cd $PROJECT_HOME || exit 1
 
-export updated=0
-export updated14=0
-export updated15=0
-export version=""
-export force=0
-
-if [ "$1" == "force" ];
-then
-	force=1
-fi
+WORK_DIR=$PROJECT_HOME/work
 
 function on_exit()
 {
 	echo "-- END $(date)"
 }
-trap on_exit EXIT
 
-echo
-echo "-- START $(date)"
-echo "PROJECT_HOME = $PROJECT_HOME"
+function init()
+{
+	trap on_exit EXIT
 
-echo "Preparing work directories..."
-mkdir -p $WORK_DIR || exit 1
-mkdir -p $WORK_DIR/haproxy || exit 1
-mkdir -p $WORK_DIR/haproxy-dconv || exit 1
+	echo
+	echo "-- START $(date)"
+	echo "PROJECT_HOME = $PROJECT_HOME"
 
+	echo "Preparing work directories..."
+	mkdir -p $WORK_DIR || exit 1
+	mkdir -p $WORK_DIR/haproxy || exit 1
+	mkdir -p $WORK_DIR/haproxy-dconv || exit 1
 
-echo "Fetching HAProxy 1.4 repository..."
-if [ ! -e $WORK_DIR/haproxy/1.4 ];
-then
-	git clone -v http://git.1wt.eu/git/haproxy-1.4.git/ $WORK_DIR/haproxy/1.4 || exit 1
-fi
-cd $WORK_DIR/haproxy/1.4 || exit 1
-	OLD_MD5=$(md5sum doc/configuration.txt)
-	git checkout master && git pull -v
-	haproxy14_git_version=$(git describe --tags --match 'v*')
-	haproxy14_git_version=${haproxy14_git_version%-g*}
-	NEW_MD5=$(md5sum doc/configuration.txt)
-	if [ "$OLD_MD5" != "$NEW_MD5" ];
+	UPDATED=0
+	PUSH=0
+
+}
+
+# Needed as "git -C" is only available since git 1.8.5
+function git-C()
+{
+	_gitpath=$1
+	shift
+	echo "git --git-dir=$_gitpath/.git --work-tree=$_gitpath $@" >&2
+	git --git-dir=$_gitpath/.git --work-tree=$_gitpath "$@"
+}
+
+function fetch_haproxy_dconv()
+{
+	echo "Fetching latest haproxy-dconv public version..."
+	if [ ! -e $WORK_DIR/haproxy-dconv/master ];
 	then
-		updated14=1
+		git clone -v git://github.com/cbonte/haproxy-dconv.git $WORK_DIR/haproxy-dconv/master || exit 1
 	fi
-cd $PROJECT_HOME
+	GIT="git-C $WORK_DIR/haproxy-dconv/master"
 
-echo "Fetching HAProxy 1.5 repository..."
-if [ ! -e $WORK_DIR/haproxy/1.5 ];
-then
-	git clone -v http://git.1wt.eu/git/haproxy.git/ $WORK_DIR/haproxy/1.5 || exit 1
-fi
-cd $WORK_DIR/haproxy/1.5 || exit 1
-	OLD_MD5=$(md5sum doc/configuration.txt)
-	git checkout master && git pull -v
-	haproxy15_git_version=$(git describe --tags --match 'v*')
-	haproxy15_git_version=${haproxy15_git_version%-g*}
-	NEW_MD5=$(md5sum doc/configuration.txt)
-	if [ "$OLD_MD5" != "$NEW_MD5" ];
-	then
-		updated15=1
-	fi
-cd $PROJECT_HOME
-
-echo "Fetching last haproxy-dconv public version..."
-if [ ! -e $WORK_DIR/haproxy-dconv/master ];
-then
-	git clone -v git://github.com/cbonte/haproxy-dconv.git $WORK_DIR/haproxy-dconv/master || exit 1
-fi
-cd $WORK_DIR/haproxy-dconv/master || exit 1
-	OLD_MD5="$(git log -1 | md5sum) $(git describe --tags)"
-	git checkout master && git pull -v
-	version=$(git describe --tags)
+	OLD_MD5="$($GIT log -1 | md5sum) $($GIT describe --tags)"
+	$GIT checkout master && $GIT pull -v
+	version=$($GIT describe --tags)
 	version=${version%-g*}
-	NEW_MD5="$(git log -1 | md5sum) $(git describe --tags)"
+	NEW_MD5="$($GIT log -1 | md5sum) $($GIT describe --tags)"
 	if [ "$OLD_MD5" != "$NEW_MD5" ];
 	then
-		export updated=1
+		UPDATED=1
 	fi
-cd $PROJECT_HOME
 
-echo "Fetching last haproxy-dconv public pages version..."
-if [ ! -e $WORK_DIR/haproxy-dconv/gh-pages ];
-then
-	git clone -v -b gh-pages git@github.com:cbonte/haproxy-dconv.git $WORK_DIR/haproxy-dconv/gh-pages || exit 1
-fi
-cd $WORK_DIR/haproxy-dconv/gh-pages || exit 1
-	git checkout gh-pages && git pull -v
-cd $PROJECT_HOME
+	echo "Fetching last haproxy-dconv public pages version..."
+	if [ ! -e $WORK_DIR/haproxy-dconv/gh-pages ];
+	then
+		cp -a $WORK_DIR/haproxy-dconv/master $WORK_DIR/haproxy-dconv/gh-pages || exit 1
+	fi
+	GIT="git-C $WORK_DIR/haproxy-dconv/gh-pages"
 
-if [ "$force" == 1 -o "$updated" == "1" -o "$updated14" == "1" ];
-then
-	echo "Generating documentation for HAProxy 1.4..."
-	cd $WORK_DIR/haproxy-dconv/master || exit 1
-		./haproxy-dconv.py -i ../../haproxy/1.4/doc/configuration.txt -o ../gh-pages/configuration-1.4.html &&
-		sed -i "s/\(<\!-- VERSION-1\.4 -->\)\(.*\)\(<\!-- \/VERSION-1\.4 -->\)/\1${haproxy14_git_version}\3/" ../gh-pages/index.html
-	cd $PROJECT_HOME
-fi
+	$GIT checkout gh-pages && $GIT pull -v
+}
 
-if [ "$force" == 1 -o "$updated" == "1" -o "$updated15" == "1" ];
-then
-	echo "Generating documentation for HAProxy 1.5..."
-	cd $WORK_DIR/haproxy-dconv/master || exit 1
-		./haproxy-dconv.py -i ../../haproxy/1.5/doc/configuration.txt -o ../gh-pages/configuration-1.5.html &&
-		sed -i "s/\(<\!-- VERSION-1\.5 -->\)\(.*\)\(<\!-- \/VERSION-1\.5 -->\)/\1${haproxy15_git_version}\3/" ../gh-pages/index.html
-	cd $PROJECT_HOME
-fi
+function fetch_haproxy()
+{
+	url=$1
+	path=$2
 
-echo "- haproxy-1.4 version : $haproxy14_git_version"
-echo "- haproxy-1.5 version : $haproxy15_git_version"
-echo "- haproxy-dconv version : $version"
+	echo "Fetching HAProxy 1.4 repository..."
+	if [ ! -e $path ];
+	then
+		git clone -v $url $path || exit 1
+	fi
+	GIT="git-C $path"
 
-echo "Synchronize generated documentations..."
-cd $WORK_DIR/haproxy-dconv/gh-pages || exit 1
-	push=0
+	$GIT checkout master && $GIT pull -v
+}
 
-	rsync -av --delete ../master/css/ css/ &&
-		if [ "$(git status -s css/)" != "" ];
+function _generate_file()
+{
+	destfile=$1
+	git_version=$2
+	state=$3
+
+	$GIT checkout $git_version
+
+	doc_version=$(tail -n1 $destfile 2>/dev/null | grep " git:" | sed 's/.* git:\([^ ]*\).*/\1/')
+	if [ $UPDATED -eq 1 -o "$git_version" != "$doc_version" ];
+	then
+		if [ "$state" == "snapshot" ];
 		then
-			git commit -m "Updating custom Bootstrap style from haproxy-dconv $version" css/ && push=1
-		fi &&
-	if [ "$(git status -s configuration-1.4.html)" != "" ];
-	then
-		git commit -m "Updating HAProxy documentation ${haproxy14_git_version} generated by haproxy-dconv $version" configuration-1.4.html && push=1
-	fi &&
-	if [ "$(git status -s configuration-1.5.html)" != "" ];
-	then
-		git commit -m "Updating HAProxy documentation ${haproxy15_git_version} generated by haproxy-dconv $version" configuration-1.5.html && push=1
-	fi &&
-	if [ "$(git status -s)" != "" ];
-	then
-		git commit -a -m "Generated documentations based on haproxy-dconv $version" && push=1
-	fi &&
-	if [ "$push" == "1" ];
-	then
-		git push origin gh-pages
+			base=".."
+		else
+			base="."
+		fi
+		$WORK_DIR/haproxy-dconv/master/haproxy-dconv.py -i $gitpath/doc/configuration.txt -o $destfile --base=$base &&
+		echo "<!-- git:$git_version -->" >> $destfile
+
+	else
+		echo "Already up to date."
 	fi
+
+	if [ "$doc_version" != "" ];
+	then
+		changelog=$($GIT log --oneline $doc_version..$git_version doc/configuration.txt)
+	else
+		changelog=""
+	fi
+
+	GITDOC="git-C $docroot"
+	if [ "$($GITDOC status -s $destfile)" != "" ];
+	then
+		git_version_simple=${git_version%-g*}
+		$GITDOC add $destfile &&
+		$GITDOC commit -m "Updating HAProxy $state documentation ${git_version_simple} generated by haproxy-dconv $version" -m "$changelog" $destfile &&
+		PUSH=1
+	fi
+}
+
+function generate_docs()
+{
+	url=$1
+	gitpath=$2
+	docroot=$3
+	filename=$4
+
+	#TODO: fetch_haproxy $url $gitpath
+
+	GIT="git-C $gitpath"
+
+	$GIT checkout master
+	git_version=$($GIT describe --tags --match 'v*')
+	git_version_stable=${git_version%-*-g*}
+
+	echo "Generating snapshot version $git_version..."
+	_generate_file $docroot/snapshot/$filename $git_version snapshot
+
+	echo "Generating stable version $git_version..."
+	_generate_file $docroot/$filename $git_version_stable stable
+}
+
+function push()
+{
+	docroot=$1
+	GITDOC="git-C $docroot"
+
+	if [ $PUSH -eq 1 ];
+	then
+		$GITDOC push origin gh-pages
+	fi
+
+}
+
+
+init
+fetch_haproxy_dconv
+generate_docs http://git.1wt.eu/git/haproxy-1.4.git/ $WORK_DIR/haproxy/1.4 $WORK_DIR/haproxy-dconv/gh-pages configuration-1.4.html
+generate_docs http://git.1wt.eu/git/haproxy.git/ $WORK_DIR/haproxy/1.5 $WORK_DIR/haproxy-dconv/gh-pages configuration-1.5.html
+push $WORK_DIR/haproxy-dconv/gh-pages
