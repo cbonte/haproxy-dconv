@@ -57,6 +57,7 @@ def main():
                           usage=usage)
     optparser.add_option('--infile', '-i', help='Input file mostly the configuration.txt')
     optparser.add_option('--outfile','-o', help='Output file')
+    optparser.add_option('--base','-b', help='Base directory for relative links')
     (option, args) = optparser.parse_args()
 
     if not (option.infile  and option.outfile) or len(args) > 0:
@@ -65,7 +66,7 @@ def main():
 
     HAPROXY_GIT_VERSION = get_haproxy_git_version(os.path.dirname(option.infile))
 
-    convert(option.infile, option.outfile)
+    convert(option.infile, option.outfile, option.base)
 
 
 # Temporarily determine the version from git to follow which commit generated
@@ -181,7 +182,7 @@ def init_parsers(pctxt):
     ]
 
 # The parser itself
-def convert(infile, outfile):
+def convert(infile, outfile, base='.'):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
 
     hasSummary = False
@@ -457,6 +458,7 @@ def convert(infile, outfile):
 
     print >> fd, template.render(
             headers = pctxt.context['headers'],
+            base = base,
             document = document,
             chapters = chapters,
             chapterIndexes = chapterIndexes,
