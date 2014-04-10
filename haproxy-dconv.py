@@ -46,10 +46,6 @@ HAPROXY_GIT_VERSION = False
 def main():
     global VERSION, HAPROXY_GIT_VERSION
 
-    VERSION = get_git_version()
-    if not VERSION:
-        sys.exit(1)
-
     usage="Usage: %prog --infile <infile> --outfile <outfile>"
 
     optparser = OptionParser(description='Generate HTML Document from HAProxy configuation.txt',
@@ -64,6 +60,15 @@ def main():
         optparser.print_help()
         exit(1)
 
+    option.infile = os.path.abspath(option.infile)
+    option.outfile = os.path.abspath(option.outfile)
+
+    os.chdir(os.path.dirname(__file__))
+
+    VERSION = get_git_version()
+    if not VERSION:
+        sys.exit(1)
+
     HAPROXY_GIT_VERSION = get_haproxy_git_version(os.path.dirname(option.infile))
 
     convert(option.infile, option.outfile, option.base)
@@ -72,7 +77,7 @@ def main():
 # Temporarily determine the version from git to follow which commit generated
 # the documentation
 def get_git_version():
-    if not os.path.isdir(os.path.join(os.path.dirname(__file__), ".git")):
+    if not os.path.isdir(".git"):
         print >> sys.stderr, "This does not appear to be a Git repository."
         return
     try:
@@ -198,7 +203,7 @@ def convert(infile, outfile, base='.'):
     pctxt = PContext(
         TemplateLookup(
             directories=[
-                os.path.join(os.path.dirname(__file__), 'templates')
+                'templates'
             ]
         )
     )
