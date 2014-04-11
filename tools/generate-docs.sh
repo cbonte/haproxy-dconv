@@ -111,7 +111,7 @@ function _generate_file()
 		echo "Already up to date."
 	fi
 
-	if [ "$doc_version" != "" ];
+	if [ "$doc_version" != "" -a "$git_version" != "$doc_version" ];
 	then
 		changelog=$($GIT log --oneline $doc_version..$git_version doc/configuration.txt)
 	else
