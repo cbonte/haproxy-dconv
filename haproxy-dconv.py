@@ -53,7 +53,7 @@ def main():
                           usage=usage)
     optparser.add_option('--infile', '-i', help='Input file mostly the configuration.txt')
     optparser.add_option('--outfile','-o', help='Output file')
-    optparser.add_option('--base','-b', help='Base directory for relative links')
+    optparser.add_option('--base','-b', default = '', help='Base directory for relative links')
     (option, args) = optparser.parse_args()
 
     if not (option.infile  and option.outfile) or len(args) > 0:
@@ -187,8 +187,11 @@ def init_parsers(pctxt):
     ]
 
 # The parser itself
-def convert(infile, outfile, base='.'):
+def convert(infile, outfile, base=''):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
+
+    if len(base) > 0 and base[:-1] != '/':
+	base += '/'
 
     hasSummary = False
 
