@@ -52,12 +52,13 @@ class Parser(parser.Parser):
                     pctxt.next()
             elif parser.get_indent(pctxt.get_line()) == indent:
                 # Simple example that can't have empty lines
-                if add_empty_line:
+                if add_empty_line and desc:
                     # This means that the example was on the same line as the 'Example' tag
+                    # and was not a description
                     content.append(" " * indent + desc)
                     desc = False
                 else:
-                    while pctxt.has_more_lines() and (parser.get_indent(pctxt.get_line()) == indent):
+                    while pctxt.has_more_lines() and (parser.get_indent(pctxt.get_line()) >= indent):
                         content.append(pctxt.get_line())
                         pctxt.next()
                     pctxt.eat_empty_lines() # Skip empty remaining lines
