@@ -2,9 +2,9 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev22-123 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev22-137 - Configuration Manual</title>
 		<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.3.1-8" rel="stylesheet" />
+		<link href="../css/page.css?0.3.1-9" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -62,7 +62,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-8</b> on <b>2014/04/11</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-9</b> on <b>2014/04/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -73,7 +73,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev22-123</strong></p>
+							<p><strong>version 1.5-dev22-137</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1178,6 +1178,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - nokqueue
    - nopoll
    - nosplice
+   - nogetaddrinfo
    - spread-checks
    - tune.bufsize
    - tune.chksize
@@ -1292,13 +1293,13 @@ the stats socket to a specific set of processes, typically the first one. The
 warning will automatically be disabled when this setting is used, whatever
 the number of processes used.</pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
-that are negociated during the SSL/TLS handshake for all &quot;<a href="#bind">bind</a>&quot; lines which
+that are negotiated during the SSL/TLS handshake for all &quot;<a href="#bind">bind</a>&quot; lines which
 do not explicitly define theirs. The format of the string is defined in
 &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string such
 as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes). Please check the
 &quot;<a href="#bind">bind</a>&quot; keyword for more information.</pre><a class="anchor" name="ssl-default-server-ciphers"></a><a class="anchor" name="3-ssl-default-server-ciphers"></a><a class="anchor" name="3.1-ssl-default-server-ciphers"></a><a class="anchor" name="ssl-default-server-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphers"></a><a href="#3.1-ssl-default-server-ciphers">ssl-default-server-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 sets the default string describing the list of cipher algorithms that are
-negociated during the SSL/TLS handshake with the server, for all &quot;<a href="#server">server</a>&quot;
+negotiated during the SSL/TLS handshake with the server, for all &quot;<a href="#server">server</a>&quot;
 lines which do not explicitly define theirs. The format of the string is
 defined in &quot;man 1 ciphers&quot;. Please check the &quot;<a href="#server">server</a>&quot; keyword for more
 information.</pre><a class="anchor" name="ssl-server-verify"></a><a class="anchor" name="3-ssl-server-verify"></a><a class="anchor" name="3.1-ssl-server-verify"></a><a class="anchor" name="ssl-server-verify (Global parameters)"></a><a class="anchor" name="ssl-server-verify (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-server-verify"></a><a href="#3.1-ssl-server-verify">ssl-server-verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">The default behavior for SSL verify on servers side. If specified to 'none',
@@ -1352,7 +1353,7 @@ as there will not necessarily be a fair share between frontends when the
 limit is reached, so it's a good idea to also limit each frontend to some
 value close to its expected share. Also, lowering tune.maxaccept can improve
 fairness.</pre><a class="anchor" name="maxcomprate"></a><a class="anchor" name="3-maxcomprate"></a><a class="anchor" name="3.2-maxcomprate"></a><a class="anchor" name="maxcomprate (Global parameters)"></a><a class="anchor" name="maxcomprate (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxcomprate"></a><a href="#3.2-maxcomprate">maxcomprate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process input compression rate to &lt;number&gt; kilobytes
-pers second.  For each session, if the maximum is reached, the compression
+per second.  For each session, if the maximum is reached, the compression
 level will be decreased during the session. If the maximum is reached at the
 beginning of a session, the session will not compress at all. If the maximum
 is not reached, the compression level will be increased up to
@@ -1410,7 +1411,8 @@ limited to some very recent instances of kernel 2.6. Most versions between
 2.6.25 and 2.6.28 are buggy and will forward corrupted data, so they must not
 be used. This option makes it easier to globally disable kernel splicing in
 case of doubt. See also &quot;<a href="#option%20splice-auto">option splice-auto</a>&quot;, &quot;<a href="#option%20splice-request">option splice-request</a>&quot; and
-&quot;<a href="#option%20splice-response">option splice-response</a>&quot;.</pre><a class="anchor" name="spread-checks"></a><a class="anchor" name="3-spread-checks"></a><a class="anchor" name="3.2-spread-checks"></a><a class="anchor" name="spread-checks (Global parameters)"></a><a class="anchor" name="spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="spread-checks"></a><a href="#3.2-spread-checks">spread-checks</a></b> <span style="color: #080">&lt;0..50, in percent&gt;</span></div><pre class="text">Sometimes it is desirable to avoid sending agent and health checks to
+&quot;<a href="#option%20splice-response">option splice-response</a>&quot;.</pre><a class="anchor" name="nogetaddrinfo"></a><a class="anchor" name="3-nogetaddrinfo"></a><a class="anchor" name="3.2-nogetaddrinfo"></a><a class="anchor" name="nogetaddrinfo (Global parameters)"></a><a class="anchor" name="nogetaddrinfo (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="nogetaddrinfo"></a><a href="#3.2-nogetaddrinfo">nogetaddrinfo</a></b></div><pre class="text">Disables the use of getaddrinfo(3) for name resolving. It is equivalent to
+the command line argument &quot;-dG&quot;. Deprecated gethostbyname(3) will be used.</pre><a class="anchor" name="spread-checks"></a><a class="anchor" name="3-spread-checks"></a><a class="anchor" name="3.2-spread-checks"></a><a class="anchor" name="spread-checks (Global parameters)"></a><a class="anchor" name="spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="spread-checks"></a><a href="#3.2-spread-checks">spread-checks</a></b> <span style="color: #080">&lt;0..50, in percent&gt;</span></div><pre class="text">Sometimes it is desirable to avoid sending agent and health checks to
 servers at exact intervals, for instance when many logical servers are
 located on the same physical server. With the help of this parameter, it
 becomes possible to add some randomness in the check interval between 0
@@ -1500,7 +1502,7 @@ to the kernel waiting for a large part of the buffer to be read before
 notifying haproxy again.</pre><a class="anchor" name="tune.ssl.cachesize"></a><a class="anchor" name="3-tune.ssl.cachesize"></a><a class="anchor" name="3.2-tune.ssl.cachesize"></a><a class="anchor" name="tune.ssl.cachesize (Global parameters)"></a><a class="anchor" name="tune.ssl.cachesize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.cachesize"></a><a href="#3.2-tune.ssl.cachesize">tune.ssl.cachesize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the global SSL session cache, in a number of blocks. A block
 is large enough to contain an encoded session without peer certificate.
 An encoded session with peer certificate is stored in multiple blocks
-depending on the size of the peer certificate. A block use approximatively
+depending on the size of the peer certificate. A block uses approximately
 200 bytes of memory. The default value may be forced at build time, otherwise
 defaults to 20000.  When the cache is full, the most idle entries are purged
 and reassigned. Higher values reduce the occurrence of such a purge, hence
@@ -1508,7 +1510,7 @@ the number of CPU-intensive SSL handshakes by ensuring that all users keep
 their session as long as possible. All entries are pre-allocated upon startup
 and are shared between all processes if &quot;<a href="#nbproc">nbproc</a>&quot; is greater than 1. Setting
 this value to 0 disables the SSL session cache.</pre><a class="anchor" name="tune.ssl.lifetime"></a><a class="anchor" name="3-tune.ssl.lifetime"></a><a class="anchor" name="3.2-tune.ssl.lifetime"></a><a class="anchor" name="tune.ssl.lifetime (Global parameters)"></a><a class="anchor" name="tune.ssl.lifetime (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.lifetime"></a><a href="#3.2-tune.ssl.lifetime">tune.ssl.lifetime</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets how long a cached SSL session may remain valid. This time is expressed
-in seconds and defaults to 300 (5 mn). It is important to understand that it
+in seconds and defaults to 300 (5 min). It is important to understand that it
 does not guarantee that sessions will last that long, because if the cache is
 full, the longest idle sessions will be purged despite their configured
 lifetime. The real usefulness of this setting is to prevent sessions from
@@ -1524,7 +1526,7 @@ keeping in mind that SSL/TLS add some overhead. Typical values of 1419 and
 2859 gave good results during tests. Use &quot;strace -e trace=write&quot; to find the
 best value. Haproxy will automatically switch to this setting after an idle
 stream has been detected (see tune.idletimer above).</pre><a class="anchor" name="tune.zlib.memlevel"></a><a class="anchor" name="3-tune.zlib.memlevel"></a><a class="anchor" name="3.2-tune.zlib.memlevel"></a><a class="anchor" name="tune.zlib.memlevel (Global parameters)"></a><a class="anchor" name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.zlib.memlevel"></a><a href="#3.2-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
-defines how much memory should be allocated for the intenal compression
+defines how much memory should be allocated for the internal compression
 state. A value of 1 uses minimum memory but is slow and reduces compression
 ratio, a value of 9 uses maximum memory for optimal speed.  Can be a value
 between 1 and 9. The default value is 8.</pre><a class="anchor" name="tune.zlib.windowsize"></a><a class="anchor" name="3-tune.zlib.windowsize"></a><a class="anchor" name="3.2-tune.zlib.windowsize"></a><a class="anchor" name="tune.zlib.windowsize (Global parameters)"></a><a class="anchor" name="tune.zlib.windowsize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.zlib.windowsize"></a><a href="#3.2-tune.zlib.windowsize">tune.zlib.windowsize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the window size (the size of the history buffer) as a parameter of the
@@ -1551,7 +1553,7 @@ insecure (unencrypted) passwords can be used. Encrypted passwords are
 evaluated using the crypt(3) function so depending of the system's
 capabilities, different algorithms are supported. For example modern Glibc
 based Linux system supports MD5, SHA-256, SHA-512 and of course classic,
-DES-based method of crypting passwords.</pre><div class="separator">
+DES-based method of encrypting passwords.</pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>userlist L1
@@ -2024,7 +2026,7 @@ two, and never more than some limits (usually 32768).</pre><div class="page-head
               adjusted on the fly for slow starts for instance.
 
   first       The first server with available connection slots receives the
-              connection. The servers are choosen from the lowest numeric
+              connection. The servers are chosen from the lowest numeric
               identifier to the highest (see server parameter &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;), which
               defaults to the server's position in the farm. Once a server
               reaches its maxconn value, the next server is used. It does
@@ -3057,7 +3059,7 @@ simplify it.</pre><a class="anchor" name="hash-type"></a><a class="anchor" name=
 
 &lt;function&gt; is the hash function to be used :
 
-   sdbm   this function was created intially for sdbm (a public-domain
+   sdbm   this function was created initially for sdbm (a public-domain
           reimplementation of ndbm) database library. It was found to do
           well in scrambling bits, causing better distribution of the keys
           and fewer splits. It also happens to be a good general hashing
@@ -3267,7 +3269,7 @@ The first keyword is the rule's action. Currently supported actions include :
     when they're limited on the number of concurrent requests. It can be very
     efficient against very dumb robots, and will significantly reduce the
     load on firewalls compared to a &quot;deny&quot; rule. But when facing &quot;correctly&quot;
-    developped robots, it can make things worse by forcing haproxy and the
+    developed robots, it can make things worse by forcing haproxy and the
     front firewall to support insane number of concurrent connections.
 
   - &quot;auth&quot; : this stops the evaluation of the rules and immediately responds
@@ -3636,7 +3638,7 @@ and running).
 The &quot;<a href="#ignore-persist">ignore-persist</a>&quot; statement allows one to declare various ACL-based
 conditions which, when met, will cause a request to ignore persistence.
 This is sometimes useful to load balance requests for static files, which
-oftenly don't require persistence. This can also be used to fully disable
+often don't require persistence. This can also be used to fully disable
 persistence for a specific User-Agent (for example, some web crawler bots).
 
 Combined with &quot;<a href="#appsession">appsession</a>&quot;, it can also help reduce HAProxy memory usage, as
@@ -4395,7 +4397,7 @@ as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot
 &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
 
 Option &quot;<a href="#option%20http-tunnel">http-tunnel</a>&quot; disables any HTTP processing past the first request and
-the first respones. This is the mode which was used by default in versions
+the first response. This is the mode which was used by default in versions
 1.0 to 1.5-dev21. It is the mode with the lowest processing overhead, which
 is normally not needed anymore unless in very specific cases such as when
 using an in-house protocol that looks like HTTP but is not compatible, or
@@ -4602,7 +4604,7 @@ the option is set on the backend, it will disable read timeout updates on
 data sent to the server. Doing so will typically break large HTTP posts from
 slow lines, so use it with caution.
 
-Note: older versions used to call this setting &quot;option independant-streams&quot;
+Note: older versions used to call this setting &quot;<a href="#option%20independent-streams">option independent-streams</a>&quot;
       with a spelling mistake. This spelling is still supported but
       deprecated.</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option ldap-check"></a><a class="anchor" name="4-option ldap-check"></a><a class="anchor" name="4.2-option ldap-check"></a><a class="anchor" name="option ldap-check (Proxies)"></a><a class="anchor" name="option ldap-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option ldap-check"></a><a href="#4.2-option%20ldap-check">option ldap-check</a></b></div><pre class="text">Use LDAPv3 health checks for server testing</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -5089,23 +5091,23 @@ TCP checks currently support 4 modes of operations :
   - no &quot;<a href="#option%20tcp-check">tcp-check</a>&quot; directive : the health check only consists in a connection
     attempt, which remains the default mode.
 
-  - &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot; or &quot;<a href="#tcp-check%20send-binary">tcp-check send-binary</a>&quot; only is mentionned : this is
+  - &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot; or &quot;<a href="#tcp-check%20send-binary">tcp-check send-binary</a>&quot; only is mentioned : this is
     used to send a string along with a connection opening. With some
     protocols, it helps sending a &quot;QUIT&quot; message for example that prevents
     the server from logging a connection error for each health check. The
     check result will still be based on the ability to open the connection
     only.
 
-  - &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot; only is mentionned : this is used to test a banner.
+  - &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot; only is mentioned : this is used to test a banner.
     The connection is opened and haproxy waits for the server to present some
     contents which must validate some rules. The check result will be based
     on the matching between the contents and the rules. This is suited for
     POP, IMAP, SMTP, FTP, SSH, TELNET.
 
-  - both &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot; and &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot; are mentionned : this is
+  - both &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot; and &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot; are mentioned : this is
     used to test a hello-type protocol. Haproxy sends a message, the server
     responds and its response is analysed. the check result will be based on
-    the maching between the response contents and the rules. This is often
+    the matching between the response contents and the rules. This is often
     suited for protocols which require a binding or a request/response model.
     LDAP, MySQL, Redis and SSL are example of such protocols, though they
     already all have their dedicated checks with a deeper understanding of
@@ -5124,7 +5126,7 @@ tcp-check expect string *\ OK\ IMAP4\ ready
 
 <span class="comment"># look for the redis master server after ensuring it speaks well</span>
 <span class="comment"># redis protocol, then it exits properly.</span>
-<span class="comment"># (send a command then analyse the response 3 tims)</span>
+<span class="comment"># (send a command then analyse the response 3 times)</span>
 option tcp-check
 tcp-check send PING\r\n
 tcp-check expect +PONG
@@ -5363,7 +5365,7 @@ response. If no condition is specified, the redirect applies unconditionally.</p
           unless the &quot;drop-query&quot; option is specified (see below). If no
           path is found or if the path is &quot;*&quot;, then &quot;/&quot; is used instead. If
           no &quot;Host&quot; header is found, then an empty host component will be
-          returned, which most recent browsers interprete as redirecting to
+          returned, which most recent browsers interpret as redirecting to
           the same host. This directive is mostly used to redirect HTTP to
           HTTPS. When used in an &quot;<a href="#http-request">http-request</a>&quot; rule, &lt;sch&gt; value follows
           the log-format rules and can include some dynamic values (see
@@ -6387,7 +6389,7 @@ backend private_monitoring
     stats refresh   5s
 </code></pre>
 </div><div class="page-header"><b>See also:</b> &quot;show-node&quot;, &quot;<a href="#stats%20enable">stats enable</a>&quot;, &quot;<a href="#stats%20uri">stats uri</a>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">description<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#description%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#description%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; in global section.</div>
-<a class="anchor" name="stats"></a><a class="anchor" name="4-stats"></a><a class="anchor" name="4.2-stats"></a><a class="anchor" name="stats (Proxies)"></a><a class="anchor" name="stats (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stats show-legends"></a><a class="anchor" name="4-stats show-legends"></a><a class="anchor" name="4.2-stats show-legends"></a><a class="anchor" name="stats show-legends (Proxies)"></a><a class="anchor" name="stats show-legends (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stats show-legends"></a><a href="#4.2-stats%20show-legends">stats show-legends</a></b></div><pre class="text">Enable reporting additional informations on the statistics page :
+<a class="anchor" name="stats"></a><a class="anchor" name="4-stats"></a><a class="anchor" name="4.2-stats"></a><a class="anchor" name="stats (Proxies)"></a><a class="anchor" name="stats (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stats show-legends"></a><a class="anchor" name="4-stats show-legends"></a><a class="anchor" name="4.2-stats show-legends"></a><a class="anchor" name="stats show-legends (Proxies)"></a><a class="anchor" name="stats show-legends (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stats show-legends"></a><a href="#4.2-stats%20show-legends">stats show-legends</a></b></div><pre class="text">Enable reporting additional information on the statistics page :
   - cap: capabilities (proxy)
   - mode: one of tcp, http or health (proxy)
   - id: SNMP ID (proxy, socket, server)
@@ -7124,7 +7126,7 @@ what sticky counters were assigned by a &quot;<a href="#tcp-request%20connection
 &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rule, and flushes all the content-related ones after
 processing an HTTP request, so that they may be evaluated again by the rules
 being evaluated again for the next request. This is of particular importance
-when the rule tracks some L7 information or when it is conditionned by an
+when the rule tracks some L7 information or when it is conditioned by an
 L7-based ACL, since tracking may change between requests.
 
 Content-based rules are evaluated in their exact declaration order. If no
@@ -7301,7 +7303,7 @@ Two types of actions are supported :
       this action is to force a connection to be finished between a client
       and a server after an exchange when the application protocol expects
       some long time outs to elapse first. The goal is to eliminate idle
-      connections which take signifiant resources on servers with certain
+      connections which take significant resources on servers with certain
       protocols.
 
   - reject :
@@ -7719,7 +7721,7 @@ when using dynamic backend names, it is highly recommended to use a prefix
 that no other backend uses in order to ensure that an unauthorized backend
 cannot be forced from the request.
 
-It is worth mentionning that &quot;<a href="#use_backend">use_backend</a>&quot; rules with an explicit name are
+It is worth mentioning that &quot;<a href="#use_backend">use_backend</a>&quot; rules with an explicit name are
 used to detect the association between frontends and backends to compute the
 backend's &quot;<a href="#fullconn">fullconn</a>&quot; setting. This cannot be done for dynamic names.</pre><div class="page-header"><b>See also:</b> &quot;<a href="#default_backend">default_backend</a>&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot;, &quot;<a href="#fullconn">fullconn</a>&quot;, &quot;<a href="#log-format">log-format</a>&quot;, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="use-server"></a><a class="anchor" name="4-use-server"></a><a class="anchor" name="4.2-use-server"></a><a class="anchor" name="use-server (Proxies)"></a><a class="anchor" name="use-server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="use-server"></a><a href="#4.2-use-server">use-server</a></b> <span style="color: #080">&lt;server&gt;</span> if <span style="color: #080">&lt;condition&gt;</span></div><a class="anchor" name="use-server"></a><a class="anchor" name="4-use-server"></a><a class="anchor" name="4.2-use-server"></a><a class="anchor" name="use-server (Proxies)"></a><a class="anchor" name="use-server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="use-server"></a><a href="#4.2-use-server">use-server</a></b> <span style="color: #080">&lt;server&gt;</span> unless <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Only use a specific server if/unless an ACL-based condition is matched.</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -7772,7 +7774,7 @@ server     mail 192.168.0.1:993 weight 0
 <span class="comment"># all the rest is forwarded to this server</span>
 server  default 192.168.0.2:443 check
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#use_backend">use_backend</a>&quot;, serction 5 about server and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#use_backend">use_backend</a>&quot;, <a href="#5">section 5</a> about server and <a href="#7">section 7</a> about ACLs.</div>
 </div>
 <a class="anchor" id="5" name="5"></a>
 <div class="page-header"><h1 id="chapter-5" data-target="5"><small><a class="small" href="#5">5.</a></small> Bind and Server options</h1>
@@ -7815,7 +7817,7 @@ Sets a comma separated list of errorIDs to ignore during verify at depth &gt; 0.
 If set to 'all', all errors are ignored. SSL handshake is not aborted if an
 error is ignored.</pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.1-ciphers"></a><a class="anchor" name="ciphers (Bind and Server options)"></a><a class="anchor" name="ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.1-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the string describing the list of cipher algorithms (&quot;cipher suite&quot;) that are
-negociated during the SSL/TLS handshake. The format of the string is defined
+negotiated during the SSL/TLS handshake. The format of the string is defined
 in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string
 such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes).</pre><a class="anchor" name="crl-file"></a><a class="anchor" name="5-crl-file"></a><a class="anchor" name="5.1-crl-file"></a><a class="anchor" name="crl-file (Bind and Server options)"></a><a class="anchor" name="crl-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crl-file"></a><a href="#5.1-crl-file">crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 designates a PEM file from which to load certificate revocation list used
@@ -7853,7 +7855,7 @@ Godaddy, selection Apache Tomcat will get the correct bundle, but many
 others, e.g. nginx, result in a wrong bundle that will not work for some
 clients).</pre><a class="anchor" name="crt-ignore-err"></a><a class="anchor" name="5-crt-ignore-err"></a><a class="anchor" name="5.1-crt-ignore-err"></a><a class="anchor" name="crt-ignore-err (Bind and Server options)"></a><a class="anchor" name="crt-ignore-err (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-ignore-err"></a><a href="#5.1-crt-ignore-err">crt-ignore-err</a></b> <span style="color: #080">&lt;errors&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. Sets a
 comma separated list of errorIDs to ignore during verify at depth == 0.  If
-set to 'all', all errors are ignored. SSL handshake is not abored if an error
+set to 'all', all errors are ignored. SSL handshake is not aborted if an error
 is ignored.</pre><a class="anchor" name="crt-list"></a><a class="anchor" name="5-crt-list"></a><a class="anchor" name="5.1-crt-list"></a><a class="anchor" name="crt-list (Bind and Server options)"></a><a class="anchor" name="crt-list (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-list"></a><a href="#5.1-crt-list">crt-list</a></b> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 designates a list of PEM file with an optional list of SNI filter per
 certificate, with the following format for each line :
@@ -7877,11 +7879,11 @@ connections which don't talk. It is important to note that this option is
 broken in all kernels up to 2.6.31, as the connection is never accepted until
 the client talks. This can cause issues with front firewalls which would see
 an established connection while the proxy will only see it in SYN_RECV. This
-option is only supported on TCPv4/TCPv6 sockets and ignored by other ones.</pre><a class="anchor" name="force-sslv3"></a><a class="anchor" name="5-force-sslv3"></a><a class="anchor" name="5.1-force-sslv3"></a><a class="anchor" name="force-sslv3 (Bind and Server options)"></a><a class="anchor" name="force-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-sslv3"></a><a href="#5.1-force-sslv3">force-sslv3</a></b></div><pre class="text">This option enforces use of SSLv3 only on SSL connections instanciated from
+option is only supported on TCPv4/TCPv6 sockets and ignored by other ones.</pre><a class="anchor" name="force-sslv3"></a><a class="anchor" name="5-force-sslv3"></a><a class="anchor" name="5.1-force-sslv3"></a><a class="anchor" name="force-sslv3 (Bind and Server options)"></a><a class="anchor" name="force-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-sslv3"></a><a href="#5.1-force-sslv3">force-sslv3</a></b></div><pre class="text">This option enforces use of SSLv3 only on SSL connections instantiated from
 this listener. SSLv3 is generally less expensive than the TLS counterparts
-for high connection rates. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.</pre><a class="anchor" name="force-tlsv10"></a><a class="anchor" name="5-force-tlsv10"></a><a class="anchor" name="5.1-force-tlsv10"></a><a class="anchor" name="force-tlsv10 (Bind and Server options)"></a><a class="anchor" name="force-tlsv10 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv10"></a><a href="#5.1-force-tlsv10">force-tlsv10</a></b></div><pre class="text">This option enforces use of TLSv1.0 only on SSL connections instanciated from
-this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.</pre><a class="anchor" name="force-tlsv11"></a><a class="anchor" name="5-force-tlsv11"></a><a class="anchor" name="5.1-force-tlsv11"></a><a class="anchor" name="force-tlsv11 (Bind and Server options)"></a><a class="anchor" name="force-tlsv11 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv11"></a><a href="#5.1-force-tlsv11">force-tlsv11</a></b></div><pre class="text">This option enforces use of TLSv1.1 only on SSL connections instanciated from
-this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.</pre><a class="anchor" name="force-tlsv12"></a><a class="anchor" name="5-force-tlsv12"></a><a class="anchor" name="5.1-force-tlsv12"></a><a class="anchor" name="force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="force-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv12"></a><a href="#5.1-force-tlsv12">force-tlsv12</a></b></div><pre class="text">This option enforces use of TLSv1.2 only on SSL connections instanciated from
+for high connection rates. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.</pre><a class="anchor" name="force-tlsv10"></a><a class="anchor" name="5-force-tlsv10"></a><a class="anchor" name="5.1-force-tlsv10"></a><a class="anchor" name="force-tlsv10 (Bind and Server options)"></a><a class="anchor" name="force-tlsv10 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv10"></a><a href="#5.1-force-tlsv10">force-tlsv10</a></b></div><pre class="text">This option enforces use of TLSv1.0 only on SSL connections instantiated from
+this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.</pre><a class="anchor" name="force-tlsv11"></a><a class="anchor" name="5-force-tlsv11"></a><a class="anchor" name="5.1-force-tlsv11"></a><a class="anchor" name="force-tlsv11 (Bind and Server options)"></a><a class="anchor" name="force-tlsv11 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv11"></a><a href="#5.1-force-tlsv11">force-tlsv11</a></b></div><pre class="text">This option enforces use of TLSv1.1 only on SSL connections instantiated from
+this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.</pre><a class="anchor" name="force-tlsv12"></a><a class="anchor" name="5-force-tlsv12"></a><a class="anchor" name="5.1-force-tlsv12"></a><a class="anchor" name="force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="force-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv12"></a><a href="#5.1-force-tlsv12">force-tlsv12</a></b></div><pre class="text">This option enforces use of TLSv1.2 only on SSL connections instantiated from
 this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.</pre><a class="anchor" name="gid"></a><a class="anchor" name="5-gid"></a><a class="anchor" name="5.1-gid"></a><a class="anchor" name="gid (Bind and Server options)"></a><a class="anchor" name="gid (Bind options)"></a><div class="keyword"><b><a class="anchor" name="gid"></a><a href="#5.1-gid">gid</a></b> <span style="color: #080">&lt;gid&gt;</span></div><pre class="text">Sets the group of the UNIX sockets to the designated system gid. It can also
 be set by default in the global section's &quot;<a href="#unix-bind">unix-bind</a>&quot; statement. Note that
 some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
@@ -7940,22 +7942,22 @@ and high values are generally recommended for CPU intensive tasks such as SSL
 processing or bulk transfers which are less sensible to latency. For example,
 it may make sense to use a positive value for an SMTP socket and a negative
 one for an RDP socket.</pre><a class="anchor" name="no-sslv3"></a><a class="anchor" name="5-no-sslv3"></a><a class="anchor" name="5.1-no-sslv3"></a><a class="anchor" name="no-sslv3 (Bind and Server options)"></a><a class="anchor" name="no-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-sslv3"></a><a href="#5.1-no-sslv3">no-sslv3</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
-disables support for SSLv3 on any sockets instanciated from the listener when
+disables support for SSLv3 on any sockets instantiated from the listener when
 SSL is supported. Note that SSLv2 is forced disabled in the code and cannot
 be enabled using any configuration option. See also &quot;force-tls*&quot;,
 and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.</pre><a class="anchor" name="no-tls-tickets"></a><a class="anchor" name="5-no-tls-tickets"></a><a class="anchor" name="5.1-no-tls-tickets"></a><a class="anchor" name="no-tls-tickets (Bind and Server options)"></a><a class="anchor" name="no-tls-tickets (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tls-tickets"></a><a href="#5.1-no-tls-tickets">no-tls-tickets</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables the stateless session resumption (RFC 5077 TLS Ticket
 extension) and force to use stateful session resumption. Stateless
 session resumption is more expensive in CPU usage.</pre><a class="anchor" name="no-tlsv10"></a><a class="anchor" name="5-no-tlsv10"></a><a class="anchor" name="5.1-no-tlsv10"></a><a class="anchor" name="no-tlsv10 (Bind and Server options)"></a><a class="anchor" name="no-tlsv10 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv10"></a><a href="#5.1-no-tlsv10">no-tlsv10</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
-disables support for TLSv1.0 on any sockets instanciated from the listener
+disables support for TLSv1.0 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
 cannot be enabled using any configuration option. See also &quot;force-tls*&quot;,
 and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.</pre><a class="anchor" name="no-tlsv11"></a><a class="anchor" name="5-no-tlsv11"></a><a class="anchor" name="5.1-no-tlsv11"></a><a class="anchor" name="no-tlsv11 (Bind and Server options)"></a><a class="anchor" name="no-tlsv11 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv11"></a><a href="#5.1-no-tlsv11">no-tlsv11</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
-disables support for TLSv1.1 on any sockets instanciated from the listener
+disables support for TLSv1.1 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
 cannot be enabled using any configuration option. See also &quot;force-tls*&quot;,
 and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.</pre><a class="anchor" name="no-tlsv12"></a><a class="anchor" name="5-no-tlsv12"></a><a class="anchor" name="5.1-no-tlsv12"></a><a class="anchor" name="no-tlsv12 (Bind and Server options)"></a><a class="anchor" name="no-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv12"></a><a href="#5.1-no-tlsv12">no-tlsv12</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
-disables support for TLSv1.2 on any sockets instanciated from the listener
+disables support for TLSv1.2 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
 cannot be enabled using any configuration option. See also &quot;force-tls*&quot;,
 and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.</pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.1-npn"></a><a class="anchor" name="npn (Bind and Server options)"></a><a class="anchor" name="npn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.1-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
@@ -7964,7 +7966,7 @@ list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quo
 This requires that the SSL library is build with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
 replaced with the ALPN extension (see the &quot;<a href="#alpn">alpn</a>&quot; keyword).</pre><a class="anchor" name="ssl"></a><a class="anchor" name="5-ssl"></a><a class="anchor" name="5.1-ssl"></a><a class="anchor" name="ssl (Bind and Server options)"></a><a class="anchor" name="ssl (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl"></a><a href="#5.1-ssl">ssl</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
-enables SSL deciphering on connections instanciated from this listener. A
+enables SSL deciphering on connections instantiated from this listener. A
 certificate is necessary (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; above). All contents in the buffers will
 appear in clear text, so that ACLs and HTTP processing will only have access
 to deciphered contents.</pre><a class="anchor" name="strict-sni"></a><a class="anchor" name="5-strict-sni"></a><a class="anchor" name="5.1-strict-sni"></a><a class="anchor" name="strict-sni (Bind and Server options)"></a><a class="anchor" name="strict-sni (Bind options)"></a><div class="keyword"><b><a class="anchor" name="strict-sni"></a><a href="#5.1-strict-sni">strict-sni</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. The
@@ -7993,7 +7995,7 @@ so check for support with your vendor.</pre><a class="anchor" name="v4v6"></a><a
 including Linux kernels &gt;= 2.4.21. It is used to bind a socket to both IPv4
 and IPv6 when it uses the default address. Doing so is sometimes necessary
 on systems which bind to IPv6 only by default. It has no effect on non-IPv6
-sockets, and is overriden by the &quot;<a href="#v6only">v6only</a>&quot; option.</pre><a class="anchor" name="v6only"></a><a class="anchor" name="5-v6only"></a><a class="anchor" name="5.1-v6only"></a><a class="anchor" name="v6only (Bind and Server options)"></a><a class="anchor" name="v6only (Bind options)"></a><div class="keyword"><b><a class="anchor" name="v6only"></a><a href="#5.1-v6only">v6only</a></b></div><pre class="text">Is an optional keyword which is supported only on most recent systems
+sockets, and is overridden by the &quot;<a href="#v6only">v6only</a>&quot; option.</pre><a class="anchor" name="v6only"></a><a class="anchor" name="5-v6only"></a><a class="anchor" name="5.1-v6only"></a><a class="anchor" name="v6only (Bind and Server options)"></a><a class="anchor" name="v6only (Bind options)"></a><div class="keyword"><b><a class="anchor" name="v6only"></a><a href="#5.1-v6only">v6only</a></b></div><pre class="text">Is an optional keyword which is supported only on most recent systems
 including Linux kernels &gt;= 2.4.21. It is used to bind a socket to IPv6 only
 when it uses the default address. Doing so is sometimes preferred to doing it
 system-wide as it is per-listener. It has no effect on non-IPv6 sockets and
@@ -8123,14 +8125,14 @@ Supported in default-server: No</pre><a class="anchor" name="check-ssl"></a><a c
 whether the server uses SSL or not for the normal traffic. This is generally
 used when an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive is specified and SSL health
 checks are not inherited. It is important to understand that this option
-inserts an SSL transport layer below the ckecks, so that a simple TCP connect
+inserts an SSL transport layer below the checks, so that a simple TCP connect
 check becomes an SSL connect, which replaces the old ssl-hello-chk. The most
 common use is to send HTTPS checks by combining &quot;<a href="#option%20httpchk">httpchk</a>&quot; with SSL checks.
 All SSL settings are common to health checks and traffic (eg: ciphers).
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information.
 
 Supported in default-server: No</pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.2-ciphers"></a><a class="anchor" name="ciphers (Bind and Server options)"></a><a class="anchor" name="ciphers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.2-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This option sets the string describing the list of cipher algorithms that is
-is negociated during the SSL/TLS handshake with the server. The format of the
+is negotiated during the SSL/TLS handshake with the server. The format of the
 string is defined in &quot;man 1 ciphers&quot;. When SSL is used to communicate with
 servers on the local network, it is common to see a weaker set of algorithms
 than what is used over the internet. Doing so reduces CPU usage on both the
@@ -8392,7 +8394,7 @@ connect to servers, otherwise the communication is prone to trivial man in
 the-middle attacks rendering SSL useless. When this option is used, health
 checks are automatically sent in SSL too unless there is a &quot;<a href="#port">port</a>&quot; or an
 &quot;<a href="#addr">addr</a>&quot; directive indicating the check should be sent to a different location.
-See the &quot;<a href="#check-ssl">check-ssl</a>&quot; optino to force SSL health checks.
+See the &quot;<a href="#check-ssl">check-ssl</a>&quot; option to force SSL health checks.
 
 Supported in default-server: No</pre><a class="anchor" name="track"></a><a class="anchor" name="5-track"></a><a class="anchor" name="5.2-track"></a><a class="anchor" name="track (Bind and Server options)"></a><a class="anchor" name="track (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="track"></a><a href="#5.2-track">track</a></b> <span style="color: #008">[<span style="color: #080">&lt;proxy&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span></div><pre class="text">This option enables ability to set the current state of the server by
 tracking another one. Only a server with checks enabled can be tracked
@@ -8724,8 +8726,8 @@ criteria rely on a sample fetch method, it is always possible instead to use
 the original sample fetch method and the explicit matching method using &quot;-m&quot;.
 
 If an alternate match is specified using &quot;-m&quot; on an ACL-specific criterion,
-the mathing method is simply applied to the underlying sample fetch method. For
-example, all ACLs below are exact equivalent :
+the matching method is simply applied to the underlying sample fetch method.
+For example, all ACLs below are exact equivalent :
 
     acl short_form  hdr_beg(host)        www.
     acl alternate1  hdr_beg(host) -m beg www.
@@ -9050,47 +9052,77 @@ The currently available list of transformation keywords include :
                  with a positive offset, or Last-Modified values when the
                  offset is negative.
 
-  map(&lt;map_file&gt;[,&lt;default_value&gt;])
-  map_&lt;match_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
-  map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
-                 Search the input value from &lt;map_file&gt; using the &lt;match_type&gt;
-                 matching method, and return the associated value converted to
-                 the type &lt;output_type&gt;. If the input value cannot be found in
-                 the &lt;map_file&gt;, the converter returns the &lt;default_value&gt;. If
-                 the &lt;default_value&gt; is not set, the converter fails and acts
-                 as if no input value could be fetched. If the &lt;match_type&gt; is
-                 not set, it defaults to &quot;str&quot;. Likewise, if the &lt;output_type&gt;
-                 is not set, it defaults to &quot;str&quot;. For convenience, the &quot;map&quot;
-                 keyword is an alias for &quot;map_str&quot; and maps a string to another
-                 string. The following array contains contains the list of all
-                 the map* converters.
+  language(&lt;value[;value[;value[;...]]]&gt;[,&lt;default&gt;])
+                 Returns the value with the highest q-factor from a list as
+                 extracted from the &quot;accept-language&quot; header using &quot;req.fhdr&quot;.
+                 Values with no q-factor have a q-factor of 1. Values with a
+                 q-factor of 0 are dropped. Only values which belong to the
+                 list of semi-colon delimited &lt;values&gt; will be considered. If
+                 no value matches the given list and a default value is
+                 provided, it is returned. Note that language names may have
+                 a variant after a dash ('-'). If this variant is present in
+                 the list, it will be matched, but if it is not, only the base
+                 language is checked. The match is case-sensitive, and the
+                 output string is always one of those provided in arguments.
+                 The ordering of arguments is meaningless, only the ordering
+                 of the values in the request counts, as the first value among
+                 multiple sharing the same q-factor is used.</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># this configuration switches to the backend matching a</span>
+<span class="comment"># given language based on the request :</span>
 
-                 It is important to avoid overlapping between the keys : IP
-                 addresses and strings are stored in trees, so the first of the
-                 finest match will be used. Other keys are stored in lists, so
-                 the first matching occurrence will be used.
+acl de req.fhdr(accept-language),language(de;es;fr;en) de
+acl es req.fhdr(accept-language),language(de;es;fr;en) es
+acl fr req.fhdr(accept-language),language(de;es;fr;en) fr
+acl en req.fhdr(accept-language),language(de;es;fr;en) en
+use_backend german  if de
+use_backend spanish if es
+use_backend french  if fr
+use_backend english if en
+default_backend choose_your_language
+</code></pre>
+</div><pre class="text">map(&lt;map_file&gt;[,&lt;default_value&gt;])
+map_&lt;match_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
+map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
+               Search the input value from &lt;map_file&gt; using the &lt;match_type&gt;
+               matching method, and return the associated value converted to
+               the type &lt;output_type&gt;. If the input value cannot be found in
+               the &lt;map_file&gt;, the converter returns the &lt;default_value&gt;. If
+               the &lt;default_value&gt; is not set, the converter fails and acts
+               as if no input value could be fetched. If the &lt;match_type&gt; is
+               not set, it defaults to &quot;str&quot;. Likewise, if the &lt;output_type&gt;
+               is not set, it defaults to &quot;str&quot;. For convenience, the &quot;map&quot;
+               keyword is an alias for &quot;map_str&quot; and maps a string to another
+               string. The following array contains contains the list of all
+               the map* converters.
 
-                 +----+----------+---------+-------------+------------+
-                 |     `-_   out |         |             |            |
-                 | input  `-_    |   str   |     int     |     ip     |
-                 | / match   `-_ |         |             |            |
-                 +---------------+---------+-------------+------------+
-                 | str   / str   | map_str | map_str_int | map_str_ip |
-                 | str   / sub   | map_sub | map_sub_int | map_sub_ip |
-                 | str   / dir   | map_dir | map_dir_int | map_dir_ip |
-                 | str   / dom   | map_dom | map_dom_int | map_dom_ip |
-                 | str   / end   | map_end | map_end_int | map_end_ip |
-                 | str   / reg   | map_reg | map_reg_int | map_reg_ip |
-                 | int   / int   | map_int | map_int_int | map_int_ip |
-                 | ip    / ip    | map_ip  | map_ip_int  | map_ip_ip  |
-                 +---------------+---------+-------------+------------+
+               It is important to avoid overlapping between the keys : IP
+               addresses and strings are stored in trees, so the first of the
+               finest match will be used. Other keys are stored in lists, so
+               the first matching occurrence will be used.
 
-                 The file contains one key + value per line. Lines which start
-                 with '#' are ignored, just like empty lines. Leading tabs and
-                 spaces are stripped. The key is then the first &quot;word&quot; (series
-                 of non-space/tabs characters), and the value is what follows
-                 this series of space/tab till the end of the line excluding
-                 trailing spaces/tabs.</pre><div class="separator">
+               +----+----------+---------+-------------+------------+
+               |     `-_   out |         |             |            |
+               | input  `-_    |   str   |     int     |     ip     |
+               | / match   `-_ |         |             |            |
+               +---------------+---------+-------------+------------+
+               | str   / str   | map_str | map_str_int | map_str_ip |
+               | str   / sub   | map_sub | map_sub_int | map_sub_ip |
+               | str   / dir   | map_dir | map_dir_int | map_dir_ip |
+               | str   / dom   | map_dom | map_dom_int | map_dom_ip |
+               | str   / end   | map_end | map_end_int | map_end_ip |
+               | str   / reg   | map_reg | map_reg_int | map_reg_ip |
+               | int   / int   | map_int | map_int_int | map_int_ip |
+               | ip    / ip    | map_ip  | map_ip_int  | map_ip_ip  |
+               +---------------+---------+-------------+------------+
+
+               The file contains one key + value per line. Lines which start
+               with '#' are ignored, just like empty lines. Leading tabs and
+               spaces are stripped. The key is then the first &quot;word&quot; (series
+               of non-space/tabs characters), and the value is what follows
+               this series of space/tab till the end of the line excluding
+               trailing spaces/tabs.</pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code>                 
@@ -9158,7 +9190,7 @@ backend dynamic
 </code></pre>
 </div><pre class="text">connslots([&lt;backend&gt;]) : integer
   Returns an integer value corresponding to the number of connection slots
-  still available in the backend, by totalizing the maximum amount of
+  still available in the backend, by totaling the maximum amount of
   connections on all servers and the maximum queue size. This is probably only
   used with ACLs.
 
@@ -9287,7 +9319,7 @@ srv_is_up([&lt;backend&gt;/]&lt;server&gt;) : boolean
 srv_sess_rate([&lt;backend&gt;/]&lt;server&gt;) : integer
   Returns an integer corresponding to the sessions creation rate on the
   designated server, in number of new sessions per second. If &lt;backend&gt; is
-  omitted, then the server is looked up in the current backend. This is mosly
+  omitted, then the server is looked up in the current backend. This is mostly
   used with ACLs but can make sense with logs too. This is used to switch to an
   alternate backend when an expensive or fragile one reaches too high a session
   rate, or to limit abuse of service (eg. prevent latent requests from
@@ -9724,7 +9756,7 @@ listen ssh
 closest to the session once all the connection handshakes are finished, but
 when no content is yet made available. The fetch methods described here are
 usable as low as the &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rule sets unless they require some
-future information. Those generally include the results of SSL negociations.
+future information. Those generally include the results of SSL negotiations.
 
 ssl_c_ca_err : integer
   When the incoming connection was made over an SSL/TLS transport layer,
@@ -9918,7 +9950,7 @@ listen http-https
   connection was made over an SSL/TLS transport layer.
 
 ssl_fc_alpn : string
-  This extracts the Application Layer Protocol Negociation field from an
+  This extracts the Application Layer Protocol Negotiation field from an
   incoming connection made via a TLS transport layer and locally deciphered by
   haproxy. The result is a string containing the protocol name advertised by
   the client. The SSL library must have been built with support for TLS
@@ -9954,7 +9986,7 @@ ssl_fc_has_sni : boolean
   haproxy -vv).
 
 ssl_fc_npn : string
-  This extracts the Next Protocol Negociation field from an incoming connection
+  This extracts the Next Protocol Negotiation field from an incoming connection
   made via a TLS transport layer and locally deciphered by haproxy. The result
   is a string containing the protocol name advertised by the client. The SSL
   library must have been built with support for TLS extensions enabled (check
@@ -10341,7 +10373,7 @@ cookie([&lt;name&gt;]) : string (deprecated)
   used on responses. Please refer to these respective fetches for more details.
   In case of doubt about the fetch direction, please use the explicit ones.
   Note that contrary to the hdr() sample fetch method, the hdr_* ACL keywords
-  unambiguouslly apply to the request headers.
+  unambiguously apply to the request headers.
 
 req.fhdr(&lt;name&gt;[,&lt;occ&gt;]) : string
   This extracts the last occurrence of header &lt;name&gt; in an HTTP request. When
@@ -10896,7 +10928,7 @@ Detailed fields description :
     &quot;Timers&quot; below for more details.
 
   - &quot;Tt&quot; is the total time in milliseconds elapsed between the accept and the
-    last close. It covers all possible processings. There is one exception, if
+    last close. It covers all possible processing. There is one exception, if
     &quot;<a href="#option%20logasap">option logasap</a>&quot; was specified, then the time counting stops at the moment
     the log is emitted. In this case, a '+' sign is prepended before the value,
     indicating that the final one will be larger. See &quot;Timers&quot; below for more
@@ -11089,7 +11121,7 @@ Detailed fields description :
     for more details.
 
   - &quot;Tt&quot; is the total time in milliseconds elapsed between the accept and the
-    last close. It covers all possible processings. There is one exception, if
+    last close. It covers all possible processing. There is one exception, if
     &quot;<a href="#option%20logasap">option logasap</a>&quot; was specified, then the time counting stops at the moment
     the log is emitted. In this case, a '+' sign is prepended before the value,
     indicating that the final one will be larger. See &quot;Timers&quot; below for more
@@ -11245,7 +11277,7 @@ less common information such as the client's SSL certificate's DN, or to log
 the key that would be used to store an entry into a stick table.
 
 Note: spaces must be escaped. A space character is considered as a separator.
-In order to emit a verbatim '%', it must be preceeded by another '%' resulting
+In order to emit a verbatim '%', it must be preceded by another '%' resulting
 in '%%'. HAProxy will automatically merge consecutive separators.
 
 Flags are :
@@ -11375,7 +11407,7 @@ ask how to disable logging for those checks. There are three possibilities :
   - if the connection come from a known source network, use &quot;<a href="#monitor-net">monitor-net</a>&quot; to
     declare this network as monitoring only. Any host in this network will then
     only be able to perform health checks, and their requests will not be
-    logged. This is generally appropriate to designate a list of equipments
+    logged. This is generally appropriate to designate a list of equipment
     such as other load-balancers.
 
   - if the tests are performed on a known URI, use &quot;<a href="#monitor-uri">monitor-uri</a>&quot; to declare
@@ -11458,7 +11490,7 @@ mode, 5 control points are reported under the form &quot;Tq/Tw/Tc/Tr/Tt&quot; :
     and the moment both ends were closed. The exception is when the &quot;<a href="#option%20logasap">logasap</a>&quot;
     option is specified. In this case, it only equals (Tq+Tw+Tc+Tr), and is
     prefixed with a '+' sign. From this field, we can deduce &quot;Td&quot;, the data
-    transmission time, by substracting other timers when valid :
+    transmission time, by subtracting other timers when valid :
 
         Td = Tt - (Tq + Tw + Tc + Tr)
 
@@ -11531,7 +11563,7 @@ Other noticeable HTTP log cases ('xx' means any value to be ignored) :
                    the client connection was maintained open.
 
   Tq/Tw/Tc/-1/Tt   The server has accepted the connection but did not return
-                   a complete response in time, or it closed its connexion
+                   a complete response in time, or it closed its connection
                    unexpectedly after Tt-(Tq+Tw+Tc) ms. Check the session
                    termination flags, then check the &quot;<a href="#timeout%20server">timeout server</a>&quot; setting.</pre></div>
 <a class="anchor" id="8.5" name="8.5"></a>
@@ -11664,7 +11696,7 @@ each of which has a special meaning :
 
         U : the proxy UPDATED the last date in the cookie that was presented by
             the client. This can only happen in insert mode with &quot;maxidle&quot;. It
-            happens everytime there is activity at a different date than the
+            happens every time there is activity at a different date than the
             date indicated in the cookie. If any other change happens, such as
             a redispatch, then the cookie will be marked as inserted instead.
 
@@ -12868,6 +12900,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"no-tlsv12",
 				"node",
 				"noepoll",
+				"nogetaddrinfo",
 				"nokqueue",
 				"non-stick",
 				"nopoll",
@@ -13214,8 +13247,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-123', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-8', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-137', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-9', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
@@ -13226,4 +13259,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev22-123-g57d2297 -->
+<!-- git:v1.5-dev22-137-gad90351 -->
