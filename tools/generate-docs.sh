@@ -134,7 +134,7 @@ function generate_docs()
 	docroot=$3
 	filename=$4
 
-	#TODO: fetch_haproxy $url $gitpath
+	fetch_haproxy $url $gitpath
 
 	GIT="git-C $gitpath"
 
