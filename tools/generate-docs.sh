@@ -113,7 +113,7 @@ function _generate_file()
 
 	if [ "$doc_version" != "" -a "$git_version" != "$doc_version" ];
 	then
-		changelog=$($GIT log --oneline $doc_version..$git_version doc/configuration.txt)
+		changelog=$($GIT log --oneline $doc_version..$git_version $gitpath/doc/configuration.txt)
 	else
 		changelog=""
 	fi
