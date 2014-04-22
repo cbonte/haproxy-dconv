@@ -25,7 +25,11 @@ class Parser(parser.Parser):
                 keyword = parsed.group(1)
                 arg     = parsed.group(4)
                 parameters = line[len(keyword) + len(arg):]
-                if parameters != "" and not re.match("^ +(&lt;|\[|\{|/|(: [a-z]+)|\(deprecated\))", parameters):
+                if (parameters != "" and not re.match("^ +((&lt;|\[|\{|/).*|(: [a-z +]+))?(\(deprecated\))?$", parameters)):
+                    # Dirty hack
+                    # - parameters should only start with the characer "<", "[", "{", "/"
+                    # - or a column (":") followed by a alpha keywords to identify fetching samples (optionally separated by the character "+")
+                    # - or the string "(deprecated)" at the end
                     keyword = False
                 else:
                     splitKeyword = keyword.split(" ")
