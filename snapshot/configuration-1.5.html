@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev22-145 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev22-146 - Configuration Manual</title>
 		<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-12" rel="stylesheet" />
 	</head>
@@ -73,7 +73,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev22-145</strong></p>
+							<p><strong>version 1.5-dev22-146</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3240,8 +3240,8 @@ Example of a header received by the application server :
          scur=13/22; qcur=0</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;</div>
 <a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
               add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> |
-              set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> |
-              set-mark <span style="color: #080">&lt;mark&gt;</span> }</span>
+              del-header <span style="color: #080">&lt;name&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
+              set-tos <span style="color: #080">&lt;tos&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> }</span>
              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 requests</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -3297,6 +3297,9 @@ The first keyword is the rule's action. Currently supported actions include :
     is first removed if it existed. This is useful when passing security
     information to the server, where the header must not be manipulated by
     external users.
+
+  - &quot;del-header&quot; removes all HTTP header fields whose name is specified in
+    &lt;name&gt;.
 
   - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
     It only has effect against the other requests being processed at the same
@@ -3370,8 +3373,8 @@ http-request set-header X-SSL-Client-NotAfter  %{+Q}[ssl_c_notafter]
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#stats%20http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
 <a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response"></a><a href="#4.2-http-response">http-response</a></b> <span style="color: #800">{ allow | deny | add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> |
-                set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
-                set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> }</span>
+                set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
+                set-log-level <span style="color: #080">&lt;level&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> }</span>
               <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 responses</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -3404,6 +3407,9 @@ The first keyword is the rule's action. Currently supported actions include :
     is first removed if it existed. This is useful when passing security
     information to the server, where the header must not be manipulated by
     external users.
+
+  - &quot;del-header&quot; removes all HTTP header fields whose name is specified in
+    &lt;name&gt;.
 
   - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
     It only has effect against the other requests being processed at the same
@@ -12686,7 +12692,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev22-145 &ndash; Configuration Manual<br>
+							HAProxy 1.5-dev22-146 &ndash; Configuration Manual<br>
 							<small>2014/02/03, willy tarreau</small>
 						</blockquote>
 					</div>
@@ -13251,7 +13257,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-145', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev22-146', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -13263,4 +13269,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev22-145-gff11554 -->
+<!-- git:v1.5-dev22-146-gdad3d1d -->
