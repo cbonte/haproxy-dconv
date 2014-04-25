@@ -138,8 +138,15 @@ def createLinks():
 
     print >> sys.stderr, "Generating keywords links..."
 
+    delimiters = [
+        dict(start='&quot;', end='&quot;', multi=True ),
+        dict(start='- '    , end='\n'    , multi=False),
+    ]
+
     for keyword in keywords:
-        keywordsCount[keyword] = document.count('&quot;' + keyword + '&quot;')
+        keywordsCount[keyword] = 0
+        for delimiter in delimiters:
+            keywordsCount[keyword] += document.count(delimiter['start'] + keyword + delimiter['end'])
         if (keyword in keyword_conflicts) and (not keywordsCount[keyword]):
             # The keyword is never used, we can remove it from the conflicts list
             del keyword_conflicts[keyword]
@@ -148,26 +155,34 @@ def createLinks():
             chapter_list = ""
             for chapter in keyword_conflicts[keyword]:
                 chapter_list += '<li><a href="#%s">%s</a></li>' % (quote("%s (%s)" % (keyword, chapters[chapter]['title'])), chapters[chapter]['title'])
-            document = document.replace('&quot;' + keyword + '&quot;',
-                    '&quot;<span class="dropdown">' +
-                    '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                    keyword +
-                    '<span class="caret"></span>' +
-                    '</a>' +
-                    '<ul class="dropdown-menu">' +
-                    '<li class="dropdown-header">This keyword is available in sections :</li>' +
-                    chapter_list +
-                    '</ul>' +
-                    '</span>&quot;')
+            for delimiter in delimiters:
+                if delimiter['multi']:
+                    document = document.replace(delimiter['start'] + keyword + delimiter['end'],
+                            delimiter['start'] + '<span class="dropdown">' +
+                            '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+                            keyword +
+                            '<span class="caret"></span>' +
+                            '</a>' +
+                            '<ul class="dropdown-menu">' +
+                            '<li class="dropdown-header">This keyword is available in sections :</li>' +
+                            chapter_list +
+                            '</ul>' +
+                            '</span>' + delimiter['end'])
+                else:
+                    document = document.replace(delimiter['start'] + keyword + delimiter['end'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + keyword + '</a>' + delimiter['end'])
         else:
-            document = document.replace('&quot;' + keyword + '&quot;', '&quot;<a href="#' + quote(keyword) + '">' + keyword + '</a>&quot;')
+            for delimiter in delimiters:
+                document = document.replace(delimiter['start'] + keyword + delimiter['end'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + keyword + '</a>' + delimiter['end'])
         if keyword.startswith("option "):
             shortKeyword = keyword[len("option "):]
-            keywordsCount[shortKeyword] = document.count('&quot;' + shortKeyword + '&quot;')
+            keywordsCount[shortKeyword] = 0
+            for delimiter in delimiters:
+                keywordsCount[keyword] += document.count(delimiter['start'] + shortKeyword + delimiter['end'])
             if (shortKeyword in keyword_conflicts) and (not keywordsCount[shortKeyword]):
             # The keyword is never used, we can remove it from the conflicts list
                 del keyword_conflicts[shortKeyword]
-            document = document.replace('&quot;' + shortKeyword + '&quot;', '&quot;<a href="#' + quote(keyword) + '">' + shortKeyword + '</a>&quot;')
+            for delimiter in delimiters:
+                document = document.replace(delimiter['start'] + shortKeyword + delimiter['start'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + shortKeyword + '</a>' + delimiter['end'])
 
 def documentAppend(text, retline = True):
     global document
@@ -389,7 +404,7 @@ def convert(infile, outfile, base=''):
                         del delay[-1]
                     if delay:
                         remove_indent(delay)
-                        documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
+                        documentAppend('<pre class="text">%s\n</pre>' % "\n".join(delay), False)
                     delay = []
                     documentAppend(line, False)
                 else:
@@ -397,7 +412,7 @@ def convert(infile, outfile, base=''):
                         del delay[-1]
                     if delay:
                         remove_indent(delay)
-                        documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
+                        documentAppend('<pre class="text">%s\n</pre>' % "\n".join(delay), False)
                     delay = []
                     documentAppend(line, True)
                     pctxt.next()
@@ -406,7 +421,7 @@ def convert(infile, outfile, base=''):
                 del delay[-1]
             if delay:
                 remove_indent(delay)
-                documentAppend('<pre class="text">%s</pre>' % "\n".join(delay), False)
+                documentAppend('<pre class="text">%s\n</pre>' % "\n".join(delay), False)
             delay = []
             documentAppend('</div>')
 
