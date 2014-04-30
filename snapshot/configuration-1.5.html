@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev24-26 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev24-32 - Configuration Manual</title>
 		<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-16" rel="stylesheet" />
 	</head>
@@ -73,7 +73,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev24-26</strong></p>
+							<p><strong>version 1.5-dev24-32</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -9679,6 +9679,9 @@ the fetch keyword's argument, delimited by a comma. These keywords can also
 support some arguments (eg: a netmask) which must be passed in parenthesis.
 
 The currently available list of transformation keywords include :
+</pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
+transfer binary content in a way that can be reliably transferred (eg:
+an SSL ID can be copied in a header).
 </pre><a class="anchor" name="lower"></a><a class="anchor" name="7-lower"></a><a class="anchor" name="7.3.1-lower"></a><a class="anchor" name="lower (Using ACLs and fetching samples)"></a><a class="anchor" name="lower (Converters)"></a><div class="keyword"><b><a class="anchor" name="lower"></a><a href="#7.3.1-lower">lower</a></b></div><pre class="text">Convert a string sample to lower case. This can only be placed after a string
 sample fetch function or after a transformation keyword returning a string
 type. The result is of type string.
@@ -10223,6 +10226,23 @@ closest to the session once all the connection handshakes are finished, but
 when no content is yet made available. The fetch methods described here are
 usable as low as the &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rule sets unless they require some
 future information. Those generally include the results of SSL negotiations.
+</pre><a class="anchor" name="ssl_bc"></a><a class="anchor" name="7-ssl_bc"></a><a class="anchor" name="7.3.4-ssl_bc"></a><a class="anchor" name="ssl_bc (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc"></a><a href="#7.3.4-ssl_bc">ssl_bc</a></b> : boolean</div><pre class="text">Returns true when the back connection was made via an SSL/TLS transport
+layer and is locally deciphered. This means the outgoing connection was made
+other a server with the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
+</pre><a class="anchor" name="ssl_bc_alg_keysize"></a><a class="anchor" name="7-ssl_bc_alg_keysize"></a><a class="anchor" name="7.3.4-ssl_bc_alg_keysize"></a><a class="anchor" name="ssl_bc_alg_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_alg_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_alg_keysize"></a><a href="#7.3.4-ssl_bc_alg_keysize">ssl_bc_alg_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size supported in bits when the outgoing
+connection was made over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_cipher"></a><a class="anchor" name="7-ssl_bc_cipher"></a><a class="anchor" name="7.3.4-ssl_bc_cipher"></a><a class="anchor" name="ssl_bc_cipher (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_cipher (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_cipher"></a><a href="#7.3.4-ssl_bc_cipher">ssl_bc_cipher</a></b> : string</div><pre class="text">Returns the name of the used cipher when the outgoing connection was made
+over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_protocol"></a><a class="anchor" name="7-ssl_bc_protocol"></a><a class="anchor" name="7.3.4-ssl_bc_protocol"></a><a class="anchor" name="ssl_bc_protocol (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_protocol (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_protocol"></a><a href="#7.3.4-ssl_bc_protocol">ssl_bc_protocol</a></b> : string</div><pre class="text">Returns the name of the used protocol when the outgoing connection was made
+over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_unique_id"></a><a class="anchor" name="7-ssl_bc_unique_id"></a><a class="anchor" name="7.3.4-ssl_bc_unique_id"></a><a class="anchor" name="ssl_bc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_unique_id"></a><a href="#7.3.4-ssl_bc_unique_id">ssl_bc_unique_id</a></b> : binary</div><pre class="text">When the outgoing connection was made over an SSL/TLS transport layer,
+returns the TLS unique ID as defined in RFC5929 <a href="#3">section 3</a>. The unique id
+can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot;.
+</pre><a class="anchor" name="ssl_bc_session_id"></a><a class="anchor" name="7-ssl_bc_session_id"></a><a class="anchor" name="7.3.4-ssl_bc_session_id"></a><a class="anchor" name="ssl_bc_session_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_session_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_session_id"></a><a href="#7.3.4-ssl_bc_session_id">ssl_bc_session_id</a></b> : binary</div><pre class="text">Returns the SSL ID of the back connection when the outgoing connection was
+made over an SSL/TLS transport layer. It is useful to log if we want to know
+if session was reused or not.
+</pre><a class="anchor" name="ssl_bc_use_keysize"></a><a class="anchor" name="7-ssl_bc_use_keysize"></a><a class="anchor" name="7.3.4-ssl_bc_use_keysize"></a><a class="anchor" name="ssl_bc_use_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_use_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_use_keysize"></a><a href="#7.3.4-ssl_bc_use_keysize">ssl_bc_use_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size used in bits when the outgoing
+connection was made over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_c_ca_err"></a><a class="anchor" name="7-ssl_c_ca_err"></a><a class="anchor" name="7.3.4-ssl_c_ca_err"></a><a class="anchor" name="ssl_c_ca_err (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_ca_err (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_ca_err"></a><a href="#7.3.4-ssl_c_ca_err">ssl_c_ca_err</a></b> : integer</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the ID of the first error detected during verification of the client
 certificate at depth &gt; 0, or 0 if no error was encountered during this
@@ -10245,27 +10265,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_c_i_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_c_i_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_c_i_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_c_key_alg"></a><a class="anchor" name="7-ssl_c_key_alg"></a><a class="anchor" name="7.3.4-ssl_c_key_alg"></a><a class="anchor" name="ssl_c_key_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_key_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_key_alg"></a><a href="#7.3.4-ssl_c_key_alg">ssl_c_key_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to generate the key of the certificate
 presented by the client when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_c_key_alg : exact string match
 </pre><a class="anchor" name="ssl_c_notafter"></a><a class="anchor" name="7-ssl_c_notafter"></a><a class="anchor" name="7.3.4-ssl_c_notafter"></a><a class="anchor" name="ssl_c_notafter (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_notafter (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_notafter"></a><a href="#7.3.4-ssl_c_notafter">ssl_c_notafter</a></b> : string</div><pre class="text">Returns the end date presented by the client as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_c_notafter : exact string match
 </pre><a class="anchor" name="ssl_c_notbefore"></a><a class="anchor" name="7-ssl_c_notbefore"></a><a class="anchor" name="7.3.4-ssl_c_notbefore"></a><a class="anchor" name="ssl_c_notbefore (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_notbefore (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_notbefore"></a><a href="#7.3.4-ssl_c_notbefore">ssl_c_notbefore</a></b> : string</div><pre class="text">Returns the start date presented by the client as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_c_notbefore : exact string match
 </pre><a class="anchor" name="ssl_c_s_dn"></a><a class="anchor" name="7-ssl_c_s_dn"></a><a class="anchor" name="7.3.4-ssl_c_s_dn"></a><a class="anchor" name="ssl_c_s_dn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_s_dn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_s_dn"></a><a href="#7.3.4-ssl_c_s_dn">ssl_c_s_dn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;entry&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the full distinguished name of the subject of the certificate
 presented by the client when no &lt;entry&gt; is specified, or the value of the
@@ -10274,24 +10282,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_c_s_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_c_s_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_c_s_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_c_serial"></a><a class="anchor" name="7-ssl_c_serial"></a><a class="anchor" name="7.3.4-ssl_c_serial"></a><a class="anchor" name="ssl_c_serial (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_serial (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_serial"></a><a href="#7.3.4-ssl_c_serial">ssl_c_serial</a></b> : binary</div><pre class="text">Returns the serial of the certificate presented by the client when the
 incoming connection was made over an SSL/TLS transport layer. When used for
 an ACL, the value(s) to match against can be passed in hexadecimal form.
-
-ACL derivatives :
-  ssl_c_serial : hex block match
 </pre><a class="anchor" name="ssl_c_sha1"></a><a class="anchor" name="7-ssl_c_sha1"></a><a class="anchor" name="7.3.4-ssl_c_sha1"></a><a class="anchor" name="ssl_c_sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sha1 (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sha1"></a><a href="#7.3.4-ssl_c_sha1">ssl_c_sha1</a></b> : binary</div><pre class="text">Returns the SHA-1 fingerprint of the certificate presented by the client when
 the incoming connection was made over an SSL/TLS transport layer. This can be
 used to stick a client to a server, or to pass this information to a server.
 </pre><a class="anchor" name="ssl_c_sig_alg"></a><a class="anchor" name="7-ssl_c_sig_alg"></a><a class="anchor" name="7.3.4-ssl_c_sig_alg"></a><a class="anchor" name="ssl_c_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sig_alg"></a><a href="#7.3.4-ssl_c_sig_alg">ssl_c_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
 the client when the incoming connection was made over an SSL/TLS transport
 layer.
-
-ACL derivatives :
-  ssl_c_sig_alg : exact string match
 </pre><a class="anchor" name="ssl_c_used"></a><a class="anchor" name="7-ssl_c_used"></a><a class="anchor" name="7.3.4-ssl_c_used"></a><a class="anchor" name="ssl_c_used (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_used (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_used"></a><a href="#7.3.4-ssl_c_used">ssl_c_used</a></b> : boolean</div><pre class="text">Returns true if current SSL session uses a client certificate even if current
 connection uses SSL session resumption. See also &quot;<a href="#ssl_fc_has_crt">ssl_fc_has_crt</a>&quot;.
 </pre><a class="anchor" name="ssl_c_verify"></a><a class="anchor" name="7-ssl_c_verify"></a><a class="anchor" name="7.3.4-ssl_c_verify"></a><a class="anchor" name="ssl_c_verify (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_verify (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_verify"></a><a href="#7.3.4-ssl_c_verify">ssl_c_verify</a></b> : integer</div><pre class="text">Returns the verify result error ID when the incoming connection was made over
@@ -10308,27 +10307,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_f_i_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_f_i_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_f_i_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_f_key_alg"></a><a class="anchor" name="7-ssl_f_key_alg"></a><a class="anchor" name="7.3.4-ssl_f_key_alg"></a><a class="anchor" name="ssl_f_key_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_key_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_key_alg"></a><a href="#7.3.4-ssl_f_key_alg">ssl_f_key_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to generate the key of the certificate
 presented by the frontend when the incoming connection was made over an
 SSL/TLS transport layer.
-
-ACL derivatives :
-  ssl_f_key_alg : exact string match
 </pre><a class="anchor" name="ssl_f_notafter"></a><a class="anchor" name="7-ssl_f_notafter"></a><a class="anchor" name="7.3.4-ssl_f_notafter"></a><a class="anchor" name="ssl_f_notafter (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_notafter (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_notafter"></a><a href="#7.3.4-ssl_f_notafter">ssl_f_notafter</a></b> : string</div><pre class="text">Returns the end date presented by the frontend as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_f_notafter : exact string match
 </pre><a class="anchor" name="ssl_f_notbefore"></a><a class="anchor" name="7-ssl_f_notbefore"></a><a class="anchor" name="7.3.4-ssl_f_notbefore"></a><a class="anchor" name="ssl_f_notbefore (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_notbefore (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_notbefore"></a><a href="#7.3.4-ssl_f_notbefore">ssl_f_notbefore</a></b> : string</div><pre class="text">Returns the start date presented by the frontend as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_f_notbefore : exact string match
 </pre><a class="anchor" name="ssl_f_s_dn"></a><a class="anchor" name="7-ssl_f_s_dn"></a><a class="anchor" name="7.3.4-ssl_f_s_dn"></a><a class="anchor" name="ssl_f_s_dn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_s_dn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_s_dn"></a><a href="#7.3.4-ssl_f_s_dn">ssl_f_s_dn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;entry&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the full distinguished name of the subject of the certificate
 presented by the frontend when no &lt;entry&gt; is specified, or the value of the
@@ -10337,21 +10324,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_f_s_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_f_s_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_f_s_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_f_serial"></a><a class="anchor" name="7-ssl_f_serial"></a><a class="anchor" name="7.3.4-ssl_f_serial"></a><a class="anchor" name="ssl_f_serial (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_serial (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_serial"></a><a href="#7.3.4-ssl_f_serial">ssl_f_serial</a></b> : binary</div><pre class="text">Returns the serial of the certificate presented by the frontend when the
 incoming connection was made over an SSL/TLS transport layer. When used for
 an ACL, the value(s) to match against can be passed in hexadecimal form.
-
-ACL derivatives :
-  ssl_f_serial : hex block match
+</pre><a class="anchor" name="ssl_f_sha1"></a><a class="anchor" name="7-ssl_f_sha1"></a><a class="anchor" name="7.3.4-ssl_f_sha1"></a><a class="anchor" name="ssl_f_sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_sha1 (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_sha1"></a><a href="#7.3.4-ssl_f_sha1">ssl_f_sha1</a></b> : binary</div><pre class="text">Returns the SHA-1 fingerprint of the certificate presented by the frontend
+when the incoming connection was made over an SSL/TLS transport layer. This
+can be used to know which certificate was chosen using SNI.
 </pre><a class="anchor" name="ssl_f_sig_alg"></a><a class="anchor" name="7-ssl_f_sig_alg"></a><a class="anchor" name="7.3.4-ssl_f_sig_alg"></a><a class="anchor" name="ssl_f_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_sig_alg"></a><a href="#7.3.4-ssl_f_sig_alg">ssl_f_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
 the frontend when the incoming connection was made over an SSL/TLS transport
 layer.
-
-ACL derivatives :
-  ssl_f_sig_alg : exact string match
 </pre><a class="anchor" name="ssl_f_version"></a><a class="anchor" name="7-ssl_f_version"></a><a class="anchor" name="7.3.4-ssl_f_version"></a><a class="anchor" name="ssl_f_version (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_version (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_version"></a><a href="#7.3.4-ssl_f_version">ssl_f_version</a></b> : integer</div><pre class="text">Returns the version of the certificate presented by the frontend when the
 incoming connection was made over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_fc"></a><a class="anchor" name="7-ssl_fc"></a><a class="anchor" name="7.3.4-ssl_fc"></a><a class="anchor" name="ssl_fc (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc"></a><a href="#7.3.4-ssl_fc">ssl_fc</a></b> : boolean</div><pre class="text">Returns true when the front connection was made via an SSL/TLS transport
@@ -10377,14 +10358,8 @@ not advertised unless the &quot;<a href="#alpn">alpn</a>&quot; keyword on the &q
 protocol list. Also, nothing forces the client to pick a protocol from this
 list, any other one may be requested. The TLS ALPN extension is meant to
 replace the TLS NPN extension. See also &quot;<a href="#ssl_fc_npn">ssl_fc_npn</a>&quot;.
-
-ACL derivatives :
-  ssl_fc_alpn : exact string match
 </pre><a class="anchor" name="ssl_fc_cipher"></a><a class="anchor" name="7-ssl_fc_cipher"></a><a class="anchor" name="7.3.4-ssl_fc_cipher"></a><a class="anchor" name="ssl_fc_cipher (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_cipher (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipher"></a><a href="#7.3.4-ssl_fc_cipher">ssl_fc_cipher</a></b> : string</div><pre class="text">Returns the name of the used cipher when the incoming connection was made
 over an SSL/TLS transport layer.
-
-ACL derivatives :
-  ssl_fc_cipher : exact string match
 </pre><a class="anchor" name="ssl_fc_has_crt"></a><a class="anchor" name="7-ssl_fc_has_crt"></a><a class="anchor" name="7.3.4-ssl_fc_has_crt"></a><a class="anchor" name="ssl_fc_has_crt (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_crt (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_crt"></a><a href="#7.3.4-ssl_fc_has_crt">ssl_fc_has_crt</a></b> : boolean</div><pre class="text">Returns true if a client certificate is present in an incoming connection over
 SSL/TLS transport layer. Useful if 'verify' statement is set to 'optional'.
 Note: on SSL session resumption with Session ID or TLS ticket, client
@@ -10404,17 +10379,11 @@ haproxy -vv). Note that the TLS NPN extension is not advertised unless the
 &quot;<a href="#npn">npn</a>&quot; keyword on the &quot;<a href="#bind">bind</a>&quot; line specifies a protocol list. Also, nothing
 forces the client to pick a protocol from this list, any other one may be
 requested. Please note that the TLS NPN extension was replaced with ALPN.
-
-ACL derivatives :
-  ssl_fc_npn : exact string match
 </pre><a class="anchor" name="ssl_fc_protocol"></a><a class="anchor" name="7-ssl_fc_protocol"></a><a class="anchor" name="7.3.4-ssl_fc_protocol"></a><a class="anchor" name="ssl_fc_protocol (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_protocol (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_protocol"></a><a href="#7.3.4-ssl_fc_protocol">ssl_fc_protocol</a></b> : string</div><pre class="text">Returns the name of the used protocol when the incoming connection was made
 over an SSL/TLS transport layer.
-
-ACL derivatives :
-  ssl_fc_protocol : exact string match
-</pre><a class="anchor" name="ssl_fc_unique_id"></a><a class="anchor" name="7-ssl_fc_unique_id"></a><a class="anchor" name="7.3.4-ssl_fc_unique_id"></a><a class="anchor" name="ssl_fc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_unique_id"></a><a href="#7.3.4-ssl_fc_unique_id">ssl_fc_unique_id</a></b> : string</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
-returns a base64 encoded string containing the TLS unique ID as defined
-in RFC5929 <a href="#3">section 3</a>.
+</pre><a class="anchor" name="ssl_fc_unique_id"></a><a class="anchor" name="7-ssl_fc_unique_id"></a><a class="anchor" name="7.3.4-ssl_fc_unique_id"></a><a class="anchor" name="ssl_fc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_unique_id"></a><a href="#7.3.4-ssl_fc_unique_id">ssl_fc_unique_id</a></b> : binary</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
+returns the TLS unique ID as defined in RFC5929 <a href="#3">section 3</a>. The unique id
+can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot;.
 </pre><a class="anchor" name="ssl_fc_session_id"></a><a class="anchor" name="7-ssl_fc_session_id"></a><a class="anchor" name="7.3.4-ssl_fc_session_id"></a><a class="anchor" name="ssl_fc_session_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_session_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_session_id"></a><a href="#7.3.4-ssl_fc_session_id">ssl_fc_session_id</a></b> : binary</div><pre class="text">Returns the SSL ID of the front connection when the incoming connection was
 made over an SSL/TLS transport layer. It is useful to stick a given client to
 a server. It is important to note that some browsers refresh their session ID
@@ -10432,7 +10401,6 @@ requires that the SSL library is build with support for TLS extensions
 enabled (check haproxy -vv).
 
 ACL derivatives :
-  ssl_fc_sni     : exact string match
   ssl_fc_sni_end : suffix match
   ssl_fc_sni_reg : regex match
 </pre><a class="anchor" name="ssl_fc_use_keysize"></a><a class="anchor" name="7-ssl_fc_use_keysize"></a><a class="anchor" name="7.3.4-ssl_fc_use_keysize"></a><a class="anchor" name="ssl_fc_use_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_use_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_use_keysize"></a><a href="#7.3.4-ssl_fc_use_keysize">ssl_fc_use_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size used in bits when the incoming
@@ -13050,7 +13018,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev24-26 &ndash; Configuration Manual<br>
+							HAProxy 1.5-dev24-32 &ndash; Configuration Manual<br>
 							<small>2014/04/26, willy tarreau</small>
 						</blockquote>
 					</div>
@@ -13097,6 +13065,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"balance url_param",
 				"base",
 				"base32",
+				"base64",
 				"be_conn",
 				"be_id",
 				"be_sess_rate",
@@ -13612,6 +13581,13 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl-default-bind-ciphers",
 				"ssl-default-server-ciphers",
 				"ssl-server-verify",
+				"ssl_bc",
+				"ssl_bc_alg_keysize",
+				"ssl_bc_cipher",
+				"ssl_bc_protocol",
+				"ssl_bc_session_id",
+				"ssl_bc_unique_id",
+				"ssl_bc_use_keysize",
 				"ssl_c_ca_err",
 				"ssl_c_ca_err_depth",
 				"ssl_c_err",
@@ -13632,6 +13608,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl_f_notbefore",
 				"ssl_f_s_dn",
 				"ssl_f_serial",
+				"ssl_f_sha1",
 				"ssl_f_sig_alg",
 				"ssl_f_version",
 				"ssl_fc",
@@ -13864,7 +13841,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev24-26', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev24-32', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-16', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -13876,4 +13853,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev24-26-g644c101 -->
+<!-- git:v1.5-dev24-32-gb73a9b0 -->
