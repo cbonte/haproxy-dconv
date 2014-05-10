@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev24 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev25 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-19" rel="stylesheet" />
 	</head>
@@ -62,7 +62,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/05/03</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/05/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -73,11 +73,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev24</strong></p>
+							<p><strong>version 1.5-dev25</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2014/04/26
+								2014/05/10
 							</p>
 						</div>
 
@@ -1222,6 +1222,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.sndbuf.server">tune.sndbuf.server</a>
    - <a href="#tune.ssl.cachesize">tune.ssl.cachesize</a>
    - <a href="#tune.ssl.lifetime">tune.ssl.lifetime</a>
+   - <a href="#tune.ssl.force-private-cache">tune.ssl.force-private-cache</a>
    - <a href="#tune.ssl.maxrecord">tune.ssl.maxrecord</a>
    - <a href="#tune.zlib.memlevel">tune.zlib.memlevel</a>
    - <a href="#tune.zlib.windowsize">tune.zlib.windowsize</a>
@@ -1244,16 +1245,16 @@ empty and unwritable to anyone.
 </pre><a class="anchor" name="cpu-map"></a><a class="anchor" name="3-cpu-map"></a><a class="anchor" name="3.1-cpu-map"></a><a class="anchor" name="cpu-map (Global parameters)"></a><a class="anchor" name="cpu-map (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="cpu-map"></a><a href="#3.1-cpu-map">cpu-map</a></b> <span style="color: #080">&lt;&quot;all&quot;|&quot;odd&quot;|&quot;even&quot;|process_num&gt;</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">On Linux 2.6 and above, it is possible to bind a process to a specific CPU
 set. This means that the process will never run on other CPUs. The &quot;<a href="#cpu-map">cpu-map</a>&quot;
 directive specifies CPU sets for process sets. The first argument is the
-process number to bind. This process must have a number between 1 and 32,
-and any process IDs above nbproc are ignored. It is possible to specify all
-processes at once using &quot;all&quot;, only odd numbers using &quot;odd&quot; or even numbers
-using &quot;even&quot;, just like with the &quot;<a href="#bind-process">bind-process</a>&quot; directive. The second and
-forthcoming arguments are CPU sets. Each CPU set is either a unique number
-between 0 and 31 or a range with two such numbers delimited by a dash ('-').
-Multiple CPU numbers or ranges may be specified, and the processes will be
-allowed to bind to all of them. Obviously, multiple &quot;<a href="#cpu-map">cpu-map</a>&quot; directives may
-be specified. Each &quot;<a href="#cpu-map">cpu-map</a>&quot; directive will replace the previous ones when
-they overlap.
+process number to bind. This process must have a number between 1 and 32 or
+64, depending on the machine's word size, and any process IDs above nbproc
+are ignored. It is possible to specify all processes at once using &quot;all&quot;,
+only odd numbers using &quot;odd&quot; or even numbers using &quot;even&quot;, just like with the
+&quot;<a href="#bind-process">bind-process</a>&quot; directive. The second and forthcoming arguments are CPU sets.
+Each CPU set is either a unique number between 0 and 31 or 63 or a range with
+two such numbers delimited by a dash ('-'). Multiple CPU numbers or ranges
+may be specified, and the processes will be allowed to bind to all of them.
+Obviously, multiple &quot;<a href="#cpu-map">cpu-map</a>&quot; directives may be specified. Each &quot;<a href="#cpu-map">cpu-map</a>&quot;
+directive will replace the previous ones when they overlap.
 </pre><a class="anchor" name="crt-base"></a><a class="anchor" name="3-crt-base"></a><a class="anchor" name="3.1-crt-base"></a><a class="anchor" name="crt-base (Global parameters)"></a><a class="anchor" name="crt-base (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="crt-base"></a><a href="#3.1-crt-base">crt-base</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a default directory to fetch SSL certificates from when a relative
 path is used with &quot;crtfile&quot; directives. Absolute locations specified after
 &quot;crtfile&quot; prevail and ignore &quot;<a href="#crt-base">crt-base</a>&quot;.
@@ -1324,13 +1325,15 @@ IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">d
 </pre><a class="anchor" name="pidfile"></a><a class="anchor" name="3-pidfile"></a><a class="anchor" name="3.1-pidfile"></a><a class="anchor" name="pidfile (Global parameters)"></a><a class="anchor" name="pidfile (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="pidfile"></a><a href="#3.1-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes pids of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
 starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.
-</pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats bind-process"></a><a class="anchor" name="3-stats bind-process"></a><a class="anchor" name="3.1-stats bind-process"></a><a class="anchor" name="stats bind-process (Global parameters)"></a><a class="anchor" name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats bind-process"></a><a href="#3.1-stats%20bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-32&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-32&gt;</span>]</span> ]</span> ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
+</pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats bind-process"></a><a class="anchor" name="3-stats bind-process"></a><a class="anchor" name="3.1-stats bind-process"></a><a class="anchor" name="stats bind-process (Global parameters)"></a><a class="anchor" name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats bind-process"></a><a href="#3.1-stats%20bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
 stats socket is bound to all processes, causing a warning to be emitted when
 nbproc is greater than 1 because there is no way to select the target process
 when connecting. However, by using this setting, it becomes possible to pin
 the stats socket to a specific set of processes, typically the first one. The
 warning will automatically be disabled when this setting is used, whatever
-the number of processes used.
+the number of processes used. The maximum process ID depends on the machine's
+word size (32 or 64). A better option consists in using the &quot;<a href="#process">process</a>&quot; setting
+of the &quot;<a href="#stats%20socket">stats socket</a>&quot; line to force the process on each line.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
 that are negotiated during the SSL/TLS handshake for all &quot;<a href="#bind">bind</a>&quot; lines which
@@ -1597,6 +1600,12 @@ the number of CPU-intensive SSL handshakes by ensuring that all users keep
 their session as long as possible. All entries are pre-allocated upon startup
 and are shared between all processes if &quot;<a href="#nbproc">nbproc</a>&quot; is greater than 1. Setting
 this value to 0 disables the SSL session cache.
+</pre><a class="anchor" name="tune.ssl.force-private-cache"></a><a class="anchor" name="3-tune.ssl.force-private-cache"></a><a class="anchor" name="3.2-tune.ssl.force-private-cache"></a><a class="anchor" name="tune.ssl.force-private-cache (Global parameters)"></a><a class="anchor" name="tune.ssl.force-private-cache (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.force-private-cache"></a><a href="#3.2-tune.ssl.force-private-cache">tune.ssl.force-private-cache</a></b></div><pre class="text">This boolean disables SSL session cache sharing between all processes. It
+should normally not be used since it will force many renegotiations due to
+clients hitting a random process. But it may be required on some operating
+systems where none of the SSL cache synchronization method may be used. In
+this case, adding a first layer of hash-based load balancing before the SSL
+layer might limit the impact of the lack of session sharing.
 </pre><a class="anchor" name="tune.ssl.lifetime"></a><a class="anchor" name="3-tune.ssl.lifetime"></a><a class="anchor" name="3.2-tune.ssl.lifetime"></a><a class="anchor" name="tune.ssl.lifetime (Global parameters)"></a><a class="anchor" name="tune.ssl.lifetime (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.lifetime"></a><a href="#3.2-tune.ssl.lifetime">tune.ssl.lifetime</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets how long a cached SSL session may remain valid. This time is expressed
 in seconds and defaults to 300 (5 min). It is important to understand that it
 does not guarantee that sessions will last that long, because if the cache is
@@ -1973,6 +1982,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-tcp-response%20inspect-delay">tcp-response inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20check">timeout check</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20client">timeout client</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<tr><td None><a href="#4-timeout%20client-fin">timeout client-fin</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-timeout%20clitimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout clitimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-timeout%20connect">timeout connect</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20contimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout contimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1980,12 +1990,13 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-timeout%20http-request">timeout http-request</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20queue">timeout queue</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20server">timeout server</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-timeout%20server-fin">timeout server-fin</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use_backend">use_backend</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use-server">use-server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -2328,6 +2339,7 @@ extension with &quot;<a href="#url_param">url_param</a>&quot; must be considered
                 - 'ipv4@'  -&gt; address is always IPv4
                 - 'ipv6@'  -&gt; address is always IPv6
                 - 'unix@'  -&gt; address is a path to a local unix socket
+                - 'abns@'  -&gt; address is in abstract namespace (Linux only)
                 - 'fd@&lt;n&gt;' -&gt; use file descriptor &lt;n&gt; inherited from the
                   parent. The fd must be bound and may or may not already
                   be listening.
@@ -2396,7 +2408,7 @@ listen external_bind_app1
     bind fd@${FD_APP1}
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#option%20forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol documentation, and <a href="#5">section 5</a> about bind options.</div>
-<a class="anchor" name="bind-process"></a><a class="anchor" name="4-bind-process"></a><a class="anchor" name="4.2-bind-process"></a><a class="anchor" name="bind-process (Proxies)"></a><a class="anchor" name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind-process"></a><a href="#4.2-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-32&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-32&gt;</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.
+<a class="anchor" name="bind-process"></a><a class="anchor" name="4-bind-process"></a><a class="anchor" name="4.2-bind-process"></a><a class="anchor" name="bind-process (Proxies)"></a><a class="anchor" name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind-process"></a><a href="#4.2-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -2405,19 +2417,20 @@ listen external_bind_app1
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">all           All process will see this instance. This is the default. It
               may be used to override a default value.
 
-odd           This instance will be enabled on processes 1,3,5,...31. This
+odd           This instance will be enabled on processes 1,3,5,...63. This
               option may be combined with other numbers.
 
-even          This instance will be enabled on processes 2,4,6,...32. This
+even          This instance will be enabled on processes 2,4,6,...64. This
               option may be combined with other numbers. Do not use it
               with less than 2 processes otherwise some instances might be
               missing from all processes.
 
 number        The instance will be enabled on this process number or range,
-              whose values must all be between 1 and 32. You must be
-              careful not to reference a process number greater than the
-              configured global.nbproc, otherwise some instances might be
-              missing from all processes.</pre>
+              whose values must all be between 1 and 32 or 64 depending on
+              the machine's word size. If a proxy is bound to process
+              numbers greater than the configured global.nbproc, it will
+              either be forced to process #1 if a single process was
+              specified, or to all processes otherwise.</pre>
 </div>
 <pre class="text">This keyword limits binding of certain instances to certain processes. This
 is useful in order not to have too many processes listening to the same
@@ -2425,10 +2438,13 @@ ports. For instance, on a dual-core machine, it might make sense to set
 'nbproc 2' in the global section, then distributes the listeners among 'odd'
 and 'even' instances.
 
-At the moment, it is not possible to reference more than 32 processes using
-this keyword, but this should be more than enough for most setups. Please
-note that 'all' really means all processes and is not limited to the first
-32.
+At the moment, it is not possible to reference more than 32 or 64 processes
+using this keyword, but this should be more than enough for most setups.
+Please note that 'all' really means all processes regardless of the machine's
+word size, and is not limited to the first 32 or 64.
+
+Each &quot;<a href="#bind">bind</a>&quot; line may further be limited to a subset of the proxy's processes,
+please consult the &quot;<a href="#process">process</a>&quot; bind keyword in <a href="#5.1">section 5.1</a>.
 
 If some backends are referenced by frontends bound to other processes, the
 backend automatically inherits the frontend's processes.
@@ -2451,7 +2467,7 @@ listen management
     bind 10.0.0.4:80
     bind-process 1-4
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#nbproc">nbproc</a>&quot; in global section.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#nbproc">nbproc</a>&quot; in global section, and &quot;<a href="#process">process</a>&quot; in <a href="#5.1">section 5.1</a>.</div>
 <a class="anchor" name="block"></a><a class="anchor" name="4-block"></a><a class="anchor" name="4.2-block"></a><a class="anchor" name="block (Proxies)"></a><a class="anchor" name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="block"></a><a href="#4.2-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Block a layer 7 request if/unless a condition is matched
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -6152,6 +6168,7 @@ rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
                 - 'ipv4@'  -&gt; address is always IPv4
                 - 'ipv6@'  -&gt; address is always IPv6
                 - 'unix@'  -&gt; address is a path to a local unix socket
+                - 'abns@'  -&gt; address is in abstract namespace (Linux only)
           Any part of the address string may reference any number of
           environment variables by preceding their name with a dollar
           sign ('$') and optionally enclosing them with braces ('{}'),
@@ -6196,6 +6213,7 @@ server www1_dc2 ${LAN_DC2}.101:80
             - 'ipv4@' -&gt; address is always IPv4
             - 'ipv6@' -&gt; address is always IPv6
             - 'unix@' -&gt; address is a path to a local unix socket
+            - 'abns@' -&gt; address is in abstract namespace (Linux only)
           Any part of the address string may reference any number of
           environment variables by preceding their name with a dollar
           sign ('$') and optionally enclosing them with braces ('{}'),
@@ -7906,7 +7924,8 @@ situations to debug. It is a good practice to cover one or several TCP packet
 losses by specifying timeouts that are slightly above multiples of 3 seconds
 (eg: 4 or 5 seconds). If some long-lived sessions are mixed with short-lived
 sessions (eg: WebSocket and HTTP), it's worth considering &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;,
-which overrides &quot;<a href="#timeout%20client">timeout client</a>&quot; and &quot;<a href="#timeout%20server">timeout server</a>&quot; for tunnels.
+which overrides &quot;<a href="#timeout%20client">timeout client</a>&quot; and &quot;<a href="#timeout%20server">timeout server</a>&quot; for tunnels, as well as
+&quot;<a href="#timeout%20client-fin">timeout client-fin</a>&quot; for half-closed connections.
 
 This parameter is specific to frontends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
@@ -7919,6 +7938,29 @@ This parameter replaces the old, deprecated &quot;<a href="#clitimeout">clitimeo
 to use it to write new configurations. The form &quot;<a href="#timeout%20clitimeout">timeout clitimeout</a>&quot; is
 provided only by backwards compatibility but its use is strongly discouraged.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#clitimeout">clitimeout</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
+<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout client-fin"></a><a class="anchor" name="4-timeout client-fin"></a><a class="anchor" name="4.2-timeout client-fin"></a><a class="anchor" name="timeout client-fin (Proxies)"></a><a class="anchor" name="timeout client-fin (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout client-fin"></a><a href="#4.2-timeout%20client-fin">timeout client-fin</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the inactivity timeout on the client side for half-closed connections.
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;timeout&gt; is the timeout value specified in milliseconds by default, but
+          can be in any other unit if the number is suffixed by the unit,
+          as explained at the top of this document.</pre>
+</div>
+<pre class="text">The inactivity timeout applies when the client is expected to acknowledge or
+send data while one direction is already shut down. This timeout is different
+from &quot;<a href="#timeout%20client">timeout client</a>&quot; in that it only applies to connections which are closed
+in one direction. This is particularly useful to avoid keeping connections in
+FIN_WAIT state for too long when clients do not disconnect cleanly. This
+problem is particularly common long connections such as RDP or WebSocket.
+Note that this timeout can override &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot; when a connection shuts
+down in one direction.
+
+This parameter is specific to frontends, but can be specified once for all in
+&quot;defaults&quot; sections. By default it is not set, so half-closed connections
+will use the other timeouts (timeout.client or timeout.tunnel).
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20server-fin">timeout server-fin</a>&quot;, and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout connect"></a><a class="anchor" name="4-timeout connect"></a><a class="anchor" name="4.2-timeout connect"></a><a class="anchor" name="timeout connect (Proxies)"></a><a class="anchor" name="timeout connect (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout connect"></a><a href="#4.2-timeout%20connect">timeout connect</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout contimeout"></a><a class="anchor" name="4-timeout contimeout"></a><a class="anchor" name="4.2-timeout contimeout"></a><a class="anchor" name="timeout contimeout (Proxies)"></a><a class="anchor" name="timeout contimeout (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout contimeout"></a><a href="#4.2-timeout%20contimeout">timeout contimeout</a></b> <span style="color: #080">&lt;timeout&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Set the maximum time to wait for a connection attempt to a server to succeed.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8083,6 +8125,30 @@ This parameter replaces the old, deprecated &quot;<a href="#srvtimeout">srvtimeo
 to use it to write new configurations. The form &quot;<a href="#timeout%20srvtimeout">timeout srvtimeout</a>&quot; is
 provided only by backwards compatibility but its use is strongly discouraged.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#srvtimeout">srvtimeout</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
+<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout server-fin"></a><a class="anchor" name="4-timeout server-fin"></a><a class="anchor" name="4.2-timeout server-fin"></a><a class="anchor" name="timeout server-fin (Proxies)"></a><a class="anchor" name="timeout server-fin (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout server-fin"></a><a href="#4.2-timeout%20server-fin">timeout server-fin</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the inactivity timeout on the server side for half-closed connections.
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;timeout&gt; is the timeout value specified in milliseconds by default, but
+          can be in any other unit if the number is suffixed by the unit,
+          as explained at the top of this document.</pre>
+</div>
+<pre class="text">The inactivity timeout applies when the server is expected to acknowledge or
+send data while one direction is already shut down. This timeout is different
+from &quot;<a href="#timeout%20server">timeout server</a>&quot; in that it only applies to connections which are closed
+in one direction. This is particularly useful to avoid keeping connections in
+FIN_WAIT state for too long when a remote server does not disconnect cleanly.
+This problem is particularly common long connections such as RDP or WebSocket.
+Note that this timeout can override &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot; when a connection shuts
+down in one direction. This setting was provided for completeness, but in most
+situations, it should not be needed.
+
+This parameter is specific to backends, but can be specified once for all in
+&quot;defaults&quot; sections. By default it is not set, so half-closed connections
+will use the other timeouts (timeout.server or timeout.tunnel).
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client-fin">timeout client-fin</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout tarpit"></a><a class="anchor" name="4-timeout tarpit"></a><a class="anchor" name="4.2-timeout tarpit"></a><a class="anchor" name="timeout tarpit (Proxies)"></a><a class="anchor" name="timeout tarpit (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout tarpit"></a><a href="#4.2-timeout%20tarpit">timeout tarpit</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the duration for which tarpitted connections will be maintained
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8123,6 +8189,14 @@ when switching to the WebSocket protocol, or forwarding a CONNECT request
 to a proxy), or after the first response when no keepalive/close option is
 specified.
 
+Since this timeout is usually used in conjunction with long-lived connections,
+it usually is a good idea to also set &quot;<a href="#timeout%20client-fin">timeout client-fin</a>&quot; to handle the
+situation where a client suddenly disappears from the net and does not
+acknowledge a close, or sends a shutdown and does not acknowledge pending
+data anymore. This can happen in lossy networks where firewalls are present,
+and is detected by the presence of large amounts of sessions in a FIN_WAIT
+state.
+
 The value is specified in milliseconds by default, but can be in any other
 unit if the number is suffixed by the unit, as specified at the top of this
 document. Whatever the expected normal idle time, it is a good practice to
@@ -8139,11 +8213,11 @@ forget about it.
     option http-server-close
     timeout connect 5s
     timeout client 30s
-    timeout client 30s
+    timeout client-fin 30s
     timeout server 30s
     timeout tunnel  1h    <span class="comment"># timeout to use with WebSocket and CONNECT</span>
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20client-fin">timeout client-fin</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;.</div>
 <a class="anchor" name="transparent"></a><a class="anchor" name="4-transparent"></a><a class="anchor" name="4.2-transparent"></a><a class="anchor" name="transparent (Proxies)"></a><a class="anchor" name="transparent (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="transparent"></a><a href="#4.2-transparent">transparent</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">Enable client-side transparent proxying
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8550,6 +8624,20 @@ list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quo
 This requires that the SSL library is build with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
 replaced with the ALPN extension (see the &quot;<a href="#alpn">alpn</a>&quot; keyword).
+</pre><a class="anchor" name="process"></a><a class="anchor" name="5-process"></a><a class="anchor" name="5.1-process"></a><a class="anchor" name="process (Bind and Server options)"></a><a class="anchor" name="process (Bind options)"></a><div class="keyword"><b><a class="anchor" name="process"></a><a href="#5.1-process">process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span></div><pre class="text">This restricts the list of processes on which this listener is allowed to
+run. It does not enforce any process but eliminates those which do not match.
+If the frontend uses a &quot;<a href="#bind-process">bind-process</a>&quot; setting, the intersection between the
+two is applied. If in the end the listener is not allowed to run on any
+remaining process, a warning is emitted, and the listener will either run on
+the first process of the listener if a single process was specified, or on
+all of its processes if multiple processes were specified. For the unlikely
+case where several ranges are needed, this directive may be repeated. The
+main purpose of this directive is to be used with the stats sockets and have
+one different socket per process. The second purpose is to have multiple bind
+lines sharing the same IP:port but not the same process in a listener, so
+that the system can distribute the incoming connections into multiple queues
+and allow a smoother inter-process load balancing. Currently Linux 3.9 and
+above is known for supporting this. See also &quot;<a href="#bind-process">bind-process</a>&quot; and &quot;<a href="#nbproc">nbproc</a>&quot;.
 </pre><a class="anchor" name="ssl"></a><a class="anchor" name="5-ssl"></a><a class="anchor" name="5.1-ssl"></a><a class="anchor" name="ssl (Bind and Server options)"></a><a class="anchor" name="ssl (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl"></a><a href="#5.1-ssl">ssl</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 enables SSL deciphering on connections instantiated from this listener. A
 certificate is necessary (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; above). All contents in the buffers will
@@ -8990,6 +9078,36 @@ to the server, the PROXY protocol is automatically used when this option is
 set, unless there is an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive, in which case an
 explicit &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; directive would also be needed to use the PROXY
 protocol. See also the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot; keyword.
+
+Supported in default-server: No
+</pre><a class="anchor" name="send-proxy-v2"></a><a class="anchor" name="5-send-proxy-v2"></a><a class="anchor" name="5.2-send-proxy-v2"></a><a class="anchor" name="send-proxy-v2 (Bind and Server options)"></a><a class="anchor" name="send-proxy-v2 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy-v2"></a><a href="#5.2-send-proxy-v2">send-proxy-v2</a></b></div><pre class="text">The &quot;<a href="#send-proxy-v2">send-proxy-v2</a>&quot; parameter enforces use of the PROXY protocol version 2
+over any connection established to this server. The PROXY protocol informs
+the other end about the layer 3/4 addresses of the incoming connection, so
+that it can know the client's address or the public address it accessed to,
+whatever the upper layer protocol. This setting must not be used if the
+server isn't aware of this version of the protocol. See also the &quot;<a href="#send-proxy">send-proxy</a>&quot;
+option of the &quot;<a href="#bind">bind</a>&quot; keyword.
+
+Supported in default-server: No
+</pre><a class="anchor" name="send-proxy-v2-ssl"></a><a class="anchor" name="5-send-proxy-v2-ssl"></a><a class="anchor" name="5.2-send-proxy-v2-ssl"></a><a class="anchor" name="send-proxy-v2-ssl (Bind and Server options)"></a><a class="anchor" name="send-proxy-v2-ssl (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy-v2-ssl"></a><a href="#5.2-send-proxy-v2-ssl">send-proxy-v2-ssl</a></b></div><pre class="text">The &quot;<a href="#send-proxy-v2-ssl">send-proxy-v2-ssl</a>&quot; parameter enforces use of the PROXY protocol version
+2 over any connection established to this server. The PROXY protocol informs
+the other end about the layer 3/4 addresses of the incoming connection, so
+that it can know the client's address or the public address it accessed to,
+whatever the upper layer protocol. In addition, the SSL information extension
+of the PROXY protocol is added to the PROXY protocol header. This setting
+must not be used if the server isn't aware of this version of the protocol.
+See also the &quot;<a href="#send-proxy-v2">send-proxy-v2</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot; keyword.
+
+Supported in default-server: No
+</pre><a class="anchor" name="send-proxy-v2-ssl-cn"></a><a class="anchor" name="5-send-proxy-v2-ssl-cn"></a><a class="anchor" name="5.2-send-proxy-v2-ssl-cn"></a><a class="anchor" name="send-proxy-v2-ssl-cn (Bind and Server options)"></a><a class="anchor" name="send-proxy-v2-ssl-cn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy-v2-ssl-cn"></a><a href="#5.2-send-proxy-v2-ssl-cn">send-proxy-v2-ssl-cn</a></b></div><pre class="text">The &quot;<a href="#send-proxy-v2-ssl">send-proxy-v2-ssl</a>&quot; parameter enforces use of the PROXY protocol version
+2 over any connection established to this server. The PROXY protocol informs
+the other end about the layer 3/4 addresses of the incoming connection, so
+that it can know the client's address or the public address it accessed to,
+whatever the upper layer protocol. In addition, the SSL information extension
+of the PROXY protocol, along along with the Common Name from the subject of
+the client certificate (if any), is added to the PROXY protocol header. This
+setting must not be used if the server isn't aware of this version of the
+protocol. See also the &quot;<a href="#send-proxy-v2">send-proxy-v2</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot; keyword.
 
 Supported in default-server: No
 </pre><a class="anchor" name="slowstart"></a><a class="anchor" name="5-slowstart"></a><a class="anchor" name="5.2-slowstart"></a><a class="anchor" name="slowstart (Bind and Server options)"></a><a class="anchor" name="slowstart (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="slowstart"></a><a href="#5.2-slowstart">slowstart</a></b> <span style="color: #080">&lt;start_time_in_ms&gt;</span></div><pre class="text">The &quot;<a href="#slowstart">slowstart</a>&quot; parameter for a server accepts a value in milliseconds which
@@ -9679,6 +9797,9 @@ the fetch keyword's argument, delimited by a comma. These keywords can also
 support some arguments (eg: a netmask) which must be passed in parenthesis.
 
 The currently available list of transformation keywords include :
+</pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
+transfer binary content in a way that can be reliably transferred (eg:
+an SSL ID can be copied in a header).
 </pre><a class="anchor" name="lower"></a><a class="anchor" name="7-lower"></a><a class="anchor" name="7.3.1-lower"></a><a class="anchor" name="lower (Using ACLs and fetching samples)"></a><a class="anchor" name="lower (Converters)"></a><div class="keyword"><b><a class="anchor" name="lower"></a><a href="#7.3.1-lower">lower</a></b></div><pre class="text">Convert a string sample to lower case. This can only be placed after a string
 sample fetch function or after a transformation keyword returning a string
 type. The result is of type string.
@@ -9745,6 +9866,7 @@ map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&g
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>input type</th><th>match method</th><th>output type str</th><th>output type int</th><th>output type ip</th></tr></thead>
 <tr><td None>str</td><td None>str</td><td None>map_str</td><td None>map_str_int</td><td None>map_str_ip</td></tr>
+<tr><td None>str</td><td None>beg</td><td None>map_beg</td><td None>map_beg_int</td><td None>map_end_ip</td></tr>
 <tr><td None>str</td><td None>sub</td><td None>map_sub</td><td None>map_sub_int</td><td None>map_sub_ip</td></tr>
 <tr><td None>str</td><td None>dir</td><td None>map_dir</td><td None>map_dir_int</td><td None>map_dir_ip</td></tr>
 <tr><td None>str</td><td None>dom</td><td None>map_dom</td><td None>map_dom_int</td><td None>map_dom_ip</td></tr>
@@ -10223,6 +10345,23 @@ closest to the session once all the connection handshakes are finished, but
 when no content is yet made available. The fetch methods described here are
 usable as low as the &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rule sets unless they require some
 future information. Those generally include the results of SSL negotiations.
+</pre><a class="anchor" name="ssl_bc"></a><a class="anchor" name="7-ssl_bc"></a><a class="anchor" name="7.3.4-ssl_bc"></a><a class="anchor" name="ssl_bc (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc"></a><a href="#7.3.4-ssl_bc">ssl_bc</a></b> : boolean</div><pre class="text">Returns true when the back connection was made via an SSL/TLS transport
+layer and is locally deciphered. This means the outgoing connection was made
+other a server with the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
+</pre><a class="anchor" name="ssl_bc_alg_keysize"></a><a class="anchor" name="7-ssl_bc_alg_keysize"></a><a class="anchor" name="7.3.4-ssl_bc_alg_keysize"></a><a class="anchor" name="ssl_bc_alg_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_alg_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_alg_keysize"></a><a href="#7.3.4-ssl_bc_alg_keysize">ssl_bc_alg_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size supported in bits when the outgoing
+connection was made over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_cipher"></a><a class="anchor" name="7-ssl_bc_cipher"></a><a class="anchor" name="7.3.4-ssl_bc_cipher"></a><a class="anchor" name="ssl_bc_cipher (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_cipher (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_cipher"></a><a href="#7.3.4-ssl_bc_cipher">ssl_bc_cipher</a></b> : string</div><pre class="text">Returns the name of the used cipher when the outgoing connection was made
+over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_protocol"></a><a class="anchor" name="7-ssl_bc_protocol"></a><a class="anchor" name="7.3.4-ssl_bc_protocol"></a><a class="anchor" name="ssl_bc_protocol (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_protocol (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_protocol"></a><a href="#7.3.4-ssl_bc_protocol">ssl_bc_protocol</a></b> : string</div><pre class="text">Returns the name of the used protocol when the outgoing connection was made
+over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_unique_id"></a><a class="anchor" name="7-ssl_bc_unique_id"></a><a class="anchor" name="7.3.4-ssl_bc_unique_id"></a><a class="anchor" name="ssl_bc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_unique_id"></a><a href="#7.3.4-ssl_bc_unique_id">ssl_bc_unique_id</a></b> : binary</div><pre class="text">When the outgoing connection was made over an SSL/TLS transport layer,
+returns the TLS unique ID as defined in RFC5929 <a href="#3">section 3</a>. The unique id
+can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot;.
+</pre><a class="anchor" name="ssl_bc_session_id"></a><a class="anchor" name="7-ssl_bc_session_id"></a><a class="anchor" name="7.3.4-ssl_bc_session_id"></a><a class="anchor" name="ssl_bc_session_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_session_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_session_id"></a><a href="#7.3.4-ssl_bc_session_id">ssl_bc_session_id</a></b> : binary</div><pre class="text">Returns the SSL ID of the back connection when the outgoing connection was
+made over an SSL/TLS transport layer. It is useful to log if we want to know
+if session was reused or not.
+</pre><a class="anchor" name="ssl_bc_use_keysize"></a><a class="anchor" name="7-ssl_bc_use_keysize"></a><a class="anchor" name="7.3.4-ssl_bc_use_keysize"></a><a class="anchor" name="ssl_bc_use_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_use_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_use_keysize"></a><a href="#7.3.4-ssl_bc_use_keysize">ssl_bc_use_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size used in bits when the outgoing
+connection was made over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_c_ca_err"></a><a class="anchor" name="7-ssl_c_ca_err"></a><a class="anchor" name="7.3.4-ssl_c_ca_err"></a><a class="anchor" name="ssl_c_ca_err (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_ca_err (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_ca_err"></a><a href="#7.3.4-ssl_c_ca_err">ssl_c_ca_err</a></b> : integer</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the ID of the first error detected during verification of the client
 certificate at depth &gt; 0, or 0 if no error was encountered during this
@@ -10245,27 +10384,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_c_i_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_c_i_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_c_i_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_c_key_alg"></a><a class="anchor" name="7-ssl_c_key_alg"></a><a class="anchor" name="7.3.4-ssl_c_key_alg"></a><a class="anchor" name="ssl_c_key_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_key_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_key_alg"></a><a href="#7.3.4-ssl_c_key_alg">ssl_c_key_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to generate the key of the certificate
 presented by the client when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_c_key_alg : exact string match
 </pre><a class="anchor" name="ssl_c_notafter"></a><a class="anchor" name="7-ssl_c_notafter"></a><a class="anchor" name="7.3.4-ssl_c_notafter"></a><a class="anchor" name="ssl_c_notafter (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_notafter (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_notafter"></a><a href="#7.3.4-ssl_c_notafter">ssl_c_notafter</a></b> : string</div><pre class="text">Returns the end date presented by the client as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_c_notafter : exact string match
 </pre><a class="anchor" name="ssl_c_notbefore"></a><a class="anchor" name="7-ssl_c_notbefore"></a><a class="anchor" name="7.3.4-ssl_c_notbefore"></a><a class="anchor" name="ssl_c_notbefore (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_notbefore (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_notbefore"></a><a href="#7.3.4-ssl_c_notbefore">ssl_c_notbefore</a></b> : string</div><pre class="text">Returns the start date presented by the client as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_c_notbefore : exact string match
 </pre><a class="anchor" name="ssl_c_s_dn"></a><a class="anchor" name="7-ssl_c_s_dn"></a><a class="anchor" name="7.3.4-ssl_c_s_dn"></a><a class="anchor" name="ssl_c_s_dn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_s_dn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_s_dn"></a><a href="#7.3.4-ssl_c_s_dn">ssl_c_s_dn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;entry&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the full distinguished name of the subject of the certificate
 presented by the client when no &lt;entry&gt; is specified, or the value of the
@@ -10274,24 +10401,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_c_s_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_c_s_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_c_s_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_c_serial"></a><a class="anchor" name="7-ssl_c_serial"></a><a class="anchor" name="7.3.4-ssl_c_serial"></a><a class="anchor" name="ssl_c_serial (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_serial (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_serial"></a><a href="#7.3.4-ssl_c_serial">ssl_c_serial</a></b> : binary</div><pre class="text">Returns the serial of the certificate presented by the client when the
 incoming connection was made over an SSL/TLS transport layer. When used for
 an ACL, the value(s) to match against can be passed in hexadecimal form.
-
-ACL derivatives :
-  ssl_c_serial : hex block match
 </pre><a class="anchor" name="ssl_c_sha1"></a><a class="anchor" name="7-ssl_c_sha1"></a><a class="anchor" name="7.3.4-ssl_c_sha1"></a><a class="anchor" name="ssl_c_sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sha1 (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sha1"></a><a href="#7.3.4-ssl_c_sha1">ssl_c_sha1</a></b> : binary</div><pre class="text">Returns the SHA-1 fingerprint of the certificate presented by the client when
 the incoming connection was made over an SSL/TLS transport layer. This can be
 used to stick a client to a server, or to pass this information to a server.
 </pre><a class="anchor" name="ssl_c_sig_alg"></a><a class="anchor" name="7-ssl_c_sig_alg"></a><a class="anchor" name="7.3.4-ssl_c_sig_alg"></a><a class="anchor" name="ssl_c_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sig_alg"></a><a href="#7.3.4-ssl_c_sig_alg">ssl_c_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
 the client when the incoming connection was made over an SSL/TLS transport
 layer.
-
-ACL derivatives :
-  ssl_c_sig_alg : exact string match
 </pre><a class="anchor" name="ssl_c_used"></a><a class="anchor" name="7-ssl_c_used"></a><a class="anchor" name="7.3.4-ssl_c_used"></a><a class="anchor" name="ssl_c_used (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_used (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_used"></a><a href="#7.3.4-ssl_c_used">ssl_c_used</a></b> : boolean</div><pre class="text">Returns true if current SSL session uses a client certificate even if current
 connection uses SSL session resumption. See also &quot;<a href="#ssl_fc_has_crt">ssl_fc_has_crt</a>&quot;.
 </pre><a class="anchor" name="ssl_c_verify"></a><a class="anchor" name="7-ssl_c_verify"></a><a class="anchor" name="7.3.4-ssl_c_verify"></a><a class="anchor" name="ssl_c_verify (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_verify (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_verify"></a><a href="#7.3.4-ssl_c_verify">ssl_c_verify</a></b> : integer</div><pre class="text">Returns the verify result error ID when the incoming connection was made over
@@ -10308,27 +10426,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_f_i_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_f_i_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_f_i_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_f_key_alg"></a><a class="anchor" name="7-ssl_f_key_alg"></a><a class="anchor" name="7.3.4-ssl_f_key_alg"></a><a class="anchor" name="ssl_f_key_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_key_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_key_alg"></a><a href="#7.3.4-ssl_f_key_alg">ssl_f_key_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to generate the key of the certificate
 presented by the frontend when the incoming connection was made over an
 SSL/TLS transport layer.
-
-ACL derivatives :
-  ssl_f_key_alg : exact string match
 </pre><a class="anchor" name="ssl_f_notafter"></a><a class="anchor" name="7-ssl_f_notafter"></a><a class="anchor" name="7.3.4-ssl_f_notafter"></a><a class="anchor" name="ssl_f_notafter (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_notafter (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_notafter"></a><a href="#7.3.4-ssl_f_notafter">ssl_f_notafter</a></b> : string</div><pre class="text">Returns the end date presented by the frontend as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_f_notafter : exact string match
 </pre><a class="anchor" name="ssl_f_notbefore"></a><a class="anchor" name="7-ssl_f_notbefore"></a><a class="anchor" name="7.3.4-ssl_f_notbefore"></a><a class="anchor" name="ssl_f_notbefore (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_notbefore (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_notbefore"></a><a href="#7.3.4-ssl_f_notbefore">ssl_f_notbefore</a></b> : string</div><pre class="text">Returns the start date presented by the frontend as a formatted string
 YYMMDDhhmmss[Z] when the incoming connection was made over an SSL/TLS
 transport layer.
-
-ACL derivatives :
-  ssl_f_notbefore : exact string match
 </pre><a class="anchor" name="ssl_f_s_dn"></a><a class="anchor" name="7-ssl_f_s_dn"></a><a class="anchor" name="7.3.4-ssl_f_s_dn"></a><a class="anchor" name="ssl_f_s_dn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_s_dn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_s_dn"></a><a href="#7.3.4-ssl_f_s_dn">ssl_f_s_dn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;entry&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the full distinguished name of the subject of the certificate
 presented by the frontend when no &lt;entry&gt; is specified, or the value of the
@@ -10337,21 +10443,15 @@ occurrence number is specified as the optional second argument, it returns
 the value of the nth given entry value from the beginning/end of the DN.
 For instance, &quot;ssl_f_s_dn(OU,2)&quot; the second organization unit, and
 &quot;ssl_f_s_dn(CN)&quot; retrieves the common name.
-
-ACL derivatives :
-  ssl_f_s_dn([&lt;entry&gt;[,&lt;occ&gt;]]) : exact string match
 </pre><a class="anchor" name="ssl_f_serial"></a><a class="anchor" name="7-ssl_f_serial"></a><a class="anchor" name="7.3.4-ssl_f_serial"></a><a class="anchor" name="ssl_f_serial (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_serial (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_serial"></a><a href="#7.3.4-ssl_f_serial">ssl_f_serial</a></b> : binary</div><pre class="text">Returns the serial of the certificate presented by the frontend when the
 incoming connection was made over an SSL/TLS transport layer. When used for
 an ACL, the value(s) to match against can be passed in hexadecimal form.
-
-ACL derivatives :
-  ssl_f_serial : hex block match
+</pre><a class="anchor" name="ssl_f_sha1"></a><a class="anchor" name="7-ssl_f_sha1"></a><a class="anchor" name="7.3.4-ssl_f_sha1"></a><a class="anchor" name="ssl_f_sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_sha1 (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_sha1"></a><a href="#7.3.4-ssl_f_sha1">ssl_f_sha1</a></b> : binary</div><pre class="text">Returns the SHA-1 fingerprint of the certificate presented by the frontend
+when the incoming connection was made over an SSL/TLS transport layer. This
+can be used to know which certificate was chosen using SNI.
 </pre><a class="anchor" name="ssl_f_sig_alg"></a><a class="anchor" name="7-ssl_f_sig_alg"></a><a class="anchor" name="7.3.4-ssl_f_sig_alg"></a><a class="anchor" name="ssl_f_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_sig_alg"></a><a href="#7.3.4-ssl_f_sig_alg">ssl_f_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
 the frontend when the incoming connection was made over an SSL/TLS transport
 layer.
-
-ACL derivatives :
-  ssl_f_sig_alg : exact string match
 </pre><a class="anchor" name="ssl_f_version"></a><a class="anchor" name="7-ssl_f_version"></a><a class="anchor" name="7.3.4-ssl_f_version"></a><a class="anchor" name="ssl_f_version (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_version (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_version"></a><a href="#7.3.4-ssl_f_version">ssl_f_version</a></b> : integer</div><pre class="text">Returns the version of the certificate presented by the frontend when the
 incoming connection was made over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_fc"></a><a class="anchor" name="7-ssl_fc"></a><a class="anchor" name="7.3.4-ssl_fc"></a><a class="anchor" name="ssl_fc (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc"></a><a href="#7.3.4-ssl_fc">ssl_fc</a></b> : boolean</div><pre class="text">Returns true when the front connection was made via an SSL/TLS transport
@@ -10377,14 +10477,8 @@ not advertised unless the &quot;<a href="#alpn">alpn</a>&quot; keyword on the &q
 protocol list. Also, nothing forces the client to pick a protocol from this
 list, any other one may be requested. The TLS ALPN extension is meant to
 replace the TLS NPN extension. See also &quot;<a href="#ssl_fc_npn">ssl_fc_npn</a>&quot;.
-
-ACL derivatives :
-  ssl_fc_alpn : exact string match
 </pre><a class="anchor" name="ssl_fc_cipher"></a><a class="anchor" name="7-ssl_fc_cipher"></a><a class="anchor" name="7.3.4-ssl_fc_cipher"></a><a class="anchor" name="ssl_fc_cipher (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_cipher (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipher"></a><a href="#7.3.4-ssl_fc_cipher">ssl_fc_cipher</a></b> : string</div><pre class="text">Returns the name of the used cipher when the incoming connection was made
 over an SSL/TLS transport layer.
-
-ACL derivatives :
-  ssl_fc_cipher : exact string match
 </pre><a class="anchor" name="ssl_fc_has_crt"></a><a class="anchor" name="7-ssl_fc_has_crt"></a><a class="anchor" name="7.3.4-ssl_fc_has_crt"></a><a class="anchor" name="ssl_fc_has_crt (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_crt (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_crt"></a><a href="#7.3.4-ssl_fc_has_crt">ssl_fc_has_crt</a></b> : boolean</div><pre class="text">Returns true if a client certificate is present in an incoming connection over
 SSL/TLS transport layer. Useful if 'verify' statement is set to 'optional'.
 Note: on SSL session resumption with Session ID or TLS ticket, client
@@ -10404,17 +10498,11 @@ haproxy -vv). Note that the TLS NPN extension is not advertised unless the
 &quot;<a href="#npn">npn</a>&quot; keyword on the &quot;<a href="#bind">bind</a>&quot; line specifies a protocol list. Also, nothing
 forces the client to pick a protocol from this list, any other one may be
 requested. Please note that the TLS NPN extension was replaced with ALPN.
-
-ACL derivatives :
-  ssl_fc_npn : exact string match
 </pre><a class="anchor" name="ssl_fc_protocol"></a><a class="anchor" name="7-ssl_fc_protocol"></a><a class="anchor" name="7.3.4-ssl_fc_protocol"></a><a class="anchor" name="ssl_fc_protocol (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_protocol (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_protocol"></a><a href="#7.3.4-ssl_fc_protocol">ssl_fc_protocol</a></b> : string</div><pre class="text">Returns the name of the used protocol when the incoming connection was made
 over an SSL/TLS transport layer.
-
-ACL derivatives :
-  ssl_fc_protocol : exact string match
-</pre><a class="anchor" name="ssl_fc_unique_id"></a><a class="anchor" name="7-ssl_fc_unique_id"></a><a class="anchor" name="7.3.4-ssl_fc_unique_id"></a><a class="anchor" name="ssl_fc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_unique_id"></a><a href="#7.3.4-ssl_fc_unique_id">ssl_fc_unique_id</a></b> : string</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
-returns a base64 encoded string containing the TLS unique ID as defined
-in RFC5929 <a href="#3">section 3</a>.
+</pre><a class="anchor" name="ssl_fc_unique_id"></a><a class="anchor" name="7-ssl_fc_unique_id"></a><a class="anchor" name="7.3.4-ssl_fc_unique_id"></a><a class="anchor" name="ssl_fc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_unique_id"></a><a href="#7.3.4-ssl_fc_unique_id">ssl_fc_unique_id</a></b> : binary</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
+returns the TLS unique ID as defined in RFC5929 <a href="#3">section 3</a>. The unique id
+can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot;.
 </pre><a class="anchor" name="ssl_fc_session_id"></a><a class="anchor" name="7-ssl_fc_session_id"></a><a class="anchor" name="7.3.4-ssl_fc_session_id"></a><a class="anchor" name="ssl_fc_session_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_session_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_session_id"></a><a href="#7.3.4-ssl_fc_session_id">ssl_fc_session_id</a></b> : binary</div><pre class="text">Returns the SSL ID of the front connection when the incoming connection was
 made over an SSL/TLS transport layer. It is useful to stick a given client to
 a server. It is important to note that some browsers refresh their session ID
@@ -10432,7 +10520,6 @@ requires that the SSL library is build with support for TLS extensions
 enabled (check haproxy -vv).
 
 ACL derivatives :
-  ssl_fc_sni     : exact string match
   ssl_fc_sni_end : suffix match
   ssl_fc_sni_reg : regex match
 </pre><a class="anchor" name="ssl_fc_use_keysize"></a><a class="anchor" name="7-ssl_fc_use_keysize"></a><a class="anchor" name="7.3.4-ssl_fc_use_keysize"></a><a class="anchor" name="ssl_fc_use_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_use_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_use_keysize"></a><a href="#7.3.4-ssl_fc_use_keysize">ssl_fc_use_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size used in bits when the incoming
@@ -13050,8 +13137,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev24 &ndash; Configuration Manual<br>
-							<small>2014/04/26, willy tarreau</small>
+							HAProxy 1.5-dev25 &ndash; Configuration Manual<br>
+							<small>2014/05/10, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -13097,6 +13184,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"balance url_param",
 				"base",
 				"base32",
+				"base64",
 				"be_conn",
 				"be_id",
 				"be_sess_rate",
@@ -13379,6 +13467,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"persist rdp-cookie",
 				"pidfile",
 				"port",
+				"process",
 				"prompt",
 				"queue",
 				"quiet",
@@ -13540,6 +13629,9 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"scook_cnt",
 				"scook_val",
 				"send-proxy",
+				"send-proxy-v2",
+				"send-proxy-v2-ssl",
+				"send-proxy-v2-ssl-cn",
 				"server",
 				"set",
 				"set map",
@@ -13612,6 +13704,13 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl-default-bind-ciphers",
 				"ssl-default-server-ciphers",
 				"ssl-server-verify",
+				"ssl_bc",
+				"ssl_bc_alg_keysize",
+				"ssl_bc_cipher",
+				"ssl_bc_protocol",
+				"ssl_bc_session_id",
+				"ssl_bc_unique_id",
+				"ssl_bc_use_keysize",
 				"ssl_c_ca_err",
 				"ssl_c_ca_err_depth",
 				"ssl_c_err",
@@ -13632,6 +13731,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl_f_notbefore",
 				"ssl_f_s_dn",
 				"ssl_f_serial",
+				"ssl_f_sha1",
 				"ssl_f_sig_alg",
 				"ssl_f_version",
 				"ssl_fc",
@@ -13691,6 +13791,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"timeout",
 				"timeout check",
 				"timeout client",
+				"timeout client-fin",
 				"timeout clitimeout",
 				"timeout connect",
 				"timeout contimeout",
@@ -13698,6 +13799,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"timeout http-request",
 				"timeout queue",
 				"timeout server",
+				"timeout server-fin",
 				"timeout srvtimeout",
 				"timeout tarpit",
 				"timeout tunnel",
@@ -13718,6 +13820,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.sndbuf.client",
 				"tune.sndbuf.server",
 				"tune.ssl.cachesize",
+				"tune.ssl.force-private-cache",
 				"tune.ssl.lifetime",
 				"tune.ssl.maxrecord",
 				"tune.zlib.memlevel",
@@ -13864,7 +13967,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev24', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev25', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-19', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -13876,4 +13979,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev24 -->
+<!-- git:v1.5-dev25 -->
