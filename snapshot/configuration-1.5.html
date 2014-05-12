@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev25-3 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev25-5 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-19" rel="stylesheet" />
 	</head>
@@ -73,7 +73,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev25-3</strong></p>
+							<p><strong>version 1.5-dev25-5</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -9348,6 +9348,29 @@ would turn a string to an IPv4 address, or apply a netmask to an IP address.
 The resulting sample is of the type of the last converter applied to the list,
 which defaults to the type of the sample fetch method.
 
+Each sample or converter returns data of a specific type, specified with its
+keyword in this documentation. When an ACL is declared using a standard sample
+fetch method, certain types automatically involved a default matching method
+which are summarized in the table below :
+
+   +---------------------+-----------------+
+   | Sample or converter | Default         |
+   |    output type      | matching method |
+   +---------------------+-----------------+
+   | boolean             | bool            |
+   +---------------------+-----------------+
+   | integer             | int             |
+   +---------------------+-----------------+
+   | ip                  | ip              |
+   +---------------------+-----------------+
+   | string              | str             |
+   +---------------------+-----------------+
+   | binary              | none, use &quot;-m&quot;  |
+   +---------------------+-----------------+
+
+Note that in order to match a binary samples, it is mandatory to specify a
+matching method, see below.
+
 The ACL engine can match these types against patterns of the following types :
   - boolean
   - integer or integer range
@@ -9499,27 +9522,28 @@ For example, all ACLs below are exact equivalent :
     acl alternate3  hdr(host)     -m beg www.
 
 
-The table below summarizes the compatibility matrix between sample types
-and the pattern types to fetch against. It indicates for each compatible
-combination the name of the matching method to be used, prefixed with &quot;*&quot; when
-the method is implicit and will work by default without &quot;-m&quot;.
+The table below summarizes the compatibility matrix between sample or converter
+types and the pattern types to fetch against. It indicates for each compatible
+combination the name of the matching method to be used, surrounded with angle
+brackets &quot;&gt;&quot; and &quot;&lt;&quot; when the method is the default one and will work by
+default without &quot;-m&quot;.
 
                            +-------------------------------------------------+
                            |                Input sample type                |
     +----------------------+---------+---------+---------+---------+---------+
-    |     pattern type     | boolean | integer |   IP    | string  | binary  |
+    |     pattern type     | boolean | integer |   ip    | string  | binary  |
     +----------------------+---------+---------+---------+---------+---------+
     | none (presence only) |  found  |  found  |  found  |  found  |  found  |
     +----------------------+---------+---------+---------+---------+---------+
-    | none (boolean value) |  *bool  |   bool  |         |   bool  |         |
+    | none (boolean value) |&gt;  bool &lt;|   bool  |         |   bool  |         |
     +----------------------+---------+---------+---------+---------+---------+
-    | integer (value)      |   int   |   *int  |   int   |   int   |         |
+    | integer (value)      |   int   |&gt;  int  &lt;|   int   |   int   |         |
     +----------------------+---------+---------+---------+---------+---------+
     | integer (length)     |   len   |   len   |   len   |   len   |   len   |
     +----------------------+---------+---------+---------+---------+---------+
-    | IP address           |         |         |   *ip   |    ip   |    ip   |
+    | IP address           |         |         |&gt;   ip  &lt;|    ip   |    ip   |
     +----------------------+---------+---------+---------+---------+---------+
-    | exact string         |   str   |   str   |   str   |   str   |   str   |
+    | exact string         |   str   |   str   |   str   |&gt;  str  &lt;|   str   |
     +----------------------+---------+---------+---------+---------+---------+
     | prefix               |   beg   |   beg   |   beg   |   beg   |   beg   |
     +----------------------+---------+---------+---------+---------+---------+
@@ -13137,7 +13161,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev25-3 &ndash; Configuration Manual<br>
+							HAProxy 1.5-dev25-5 &ndash; Configuration Manual<br>
 							<small>2014/05/10, willy tarreau</small>
 						</div>
 					</div>
@@ -13967,7 +13991,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev25-3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev25-5', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-19', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -13979,4 +14003,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev25-3-gc7fa7db -->
+<!-- git:v1.5-dev25-5-g2a06e39 -->
