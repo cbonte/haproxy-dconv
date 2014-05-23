@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev25-51 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev25-54 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-19" rel="stylesheet" />
 	</head>
@@ -73,7 +73,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev25-51</strong></p>
+							<p><strong>version 1.5-dev25-54</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3046,6 +3046,7 @@ simple method for developing those files consists in associating them to the
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code>errorfile 400 /etc/haproxy/errorfiles/400badreq.http
+errorfile 408 /dev/null  <span class="comment"># workaround Chrome pre-connect bug</span>
 errorfile 403 /etc/haproxy/errorfiles/403forbid.http
 errorfile 503 /etc/haproxy/errorfiles/503sorry.http
 </code></pre>
@@ -8050,7 +8051,13 @@ nothing is sent. The client timeout cannot offer a good protection against
 this abuse because it is an inactivity timeout, which means that if the
 attacker sends one character every now and then, the timeout will not
 trigger. With the HTTP request timeout, no matter what speed the client
-types, the request will be aborted if it does not complete in time.
+types, the request will be aborted if it does not complete in time. When the
+timeout expires, an HTTP 408 response is sent to the client to inform it
+about the problem, and the connection is closed. The logs will report
+termination codes &quot;cR&quot;. Some recent browsers are having problems with this
+standard, well-documented behaviour, so it might be needed to hide the 408
+code using &quot;errorfile 408 /dev/null&quot;. See more details in the explanations of
+the &quot;cR&quot; termination code in <a href="#8.5">section 8.5</a>.
 
 Note that this timeout only applies to the header part of the request, and
 not to any data. As soon as the empty line is received, this timeout is not
@@ -8067,7 +8074,7 @@ If this parameter is not set, the client timeout still applies between each
 chunk of the incoming request. It should be set in the frontend to take
 effect, unless the frontend is in TCP mode, in which case the HTTP backend's
 timeout will be used.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout queue"></a><a class="anchor" name="4-timeout queue"></a><a class="anchor" name="4.2-timeout queue"></a><a class="anchor" name="timeout queue (Proxies)"></a><a class="anchor" name="timeout queue (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout queue"></a><a href="#4.2-timeout%20queue">timeout queue</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum time to wait in the queue for a connection slot to be free
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -12206,7 +12213,20 @@ easier finding and understanding.
           client side for PPPoE networks which cannot transport full-sized
           packets, or by clients sending requests by hand and not typing fast
           enough, or forgetting to enter the empty line at the end of the
-          request. The HTTP status code is likely a 408 here.
+          request. The HTTP status code is likely a 408 here. Note: recently,
+          some browsers such as Google Chrome started to break the deployed Web
+          infrastructure by aggressively implementing a new &quot;pre-connect&quot;
+          feature, consisting in sending connections to sites recently visited
+          without sending any request on them until the user starts to browse
+          the site. This mechanism causes massive disruption among resource-
+          limited servers, and causes a lot of 408 errors in HAProxy logs.
+          Worse, some people report that sometimes the browser displays the 408
+          error when the user expects to see the actual content (Mozilla fixed
+          this bug in 2004, while Chrome users continue to report it in 2014),
+          so in this case, using &quot;errorfile 408 /dev/null&quot; can be used as a
+          workaround. More information on the subject is available here :
+              https://bugzilla.mozilla.org/show_bug.cgi?id=248827
+              https://code.google.com/p/chromium/issues/detail?id=85229
 
      CT   The client aborted while its session was tarpitted. It is important to
           check if this happens on valid requests, in order to be sure that no
@@ -13210,7 +13230,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev25-51 &ndash; Configuration Manual<br>
+							HAProxy 1.5-dev25-54 &ndash; Configuration Manual<br>
 							<small>2014/05/10, willy tarreau</small>
 						</div>
 					</div>
@@ -14043,7 +14063,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev25-51', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev25-54', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-19', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14055,4 +14075,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev25-51-g248a60e -->
+<!-- git:v1.5-dev25-54-g2705a61 -->
