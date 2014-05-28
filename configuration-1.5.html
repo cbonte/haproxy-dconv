@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev25 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev26 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-19" rel="stylesheet" />
 	</head>
@@ -62,7 +62,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/05/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/05/28</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -73,11 +73,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev25</strong></p>
+							<p><strong>version 1.5-dev26</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2014/05/10
+								2014/05/28
 							</p>
 						</div>
 
@@ -3046,6 +3046,7 @@ simple method for developing those files consists in associating them to the
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code>errorfile 400 /etc/haproxy/errorfiles/400badreq.http
+errorfile 408 /dev/null  <span class="comment"># workaround Chrome pre-connect bug</span>
 errorfile 403 /etc/haproxy/errorfiles/403forbid.http
 errorfile 503 /etc/haproxy/errorfiles/503sorry.http
 </code></pre>
@@ -4855,7 +4856,7 @@ configure it.
 <code>option ldap-check
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option log-health-checks"></a><a class="anchor" name="4-option log-health-checks"></a><a class="anchor" name="4.2-option log-health-checks"></a><a class="anchor" name="option log-health-checks (Proxies)"></a><a class="anchor" name="option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option log-health-checks"></a><a href="#4.2-option%20log-health-checks">option log-health-checks</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option log-health-checks"></a><a class="anchor" name="4-no option log-health-checks"></a><a class="anchor" name="4.2-no option log-health-checks"></a><a class="anchor" name="no option log-health-checks (Proxies)"></a><a class="anchor" name="no option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option log-health-checks"></a><a href="#4.2-no%20option%20log-health-checks">no option log-health-checks</a></b></div><pre class="text">Enable or disable logging of health checks
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option log-health-checks"></a><a class="anchor" name="4-option log-health-checks"></a><a class="anchor" name="4.2-option log-health-checks"></a><a class="anchor" name="option log-health-checks (Proxies)"></a><a class="anchor" name="option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option log-health-checks"></a><a href="#4.2-option%20log-health-checks">option log-health-checks</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option log-health-checks"></a><a class="anchor" name="4-no option log-health-checks"></a><a class="anchor" name="4.2-no option log-health-checks"></a><a class="anchor" name="no option log-health-checks (Proxies)"></a><a class="anchor" name="no option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option log-health-checks"></a><a href="#4.2-no%20option%20log-health-checks">no option log-health-checks</a></b></div><pre class="text">Enable or disable logging of health checks status updates
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -4863,14 +4864,19 @@ configure it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">Enable health checks logging so it possible to check for example what
-was happening before a server crash. Failed health check are logged if
-server is UP and succeeded health checks if server is DOWN, so the amount
-of additional information is limited.
+<pre class="text">By default, failed health check are logged if server is UP and successful
+health checks are logged if server is DOWN, so the amount of additional
+information is limited.
 
-If health check logging is enabled no health check status is printed
-when servers is set up UP/DOWN/ENABLED/DISABLED.
-</pre><div class="page-header"><b>See also:</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; and <a href="#8">section 8</a> about logging.</div>
+When this option is enabled, any change of the health check status or to
+the server's health will be logged, so that it becomes possible to know
+that a server was failing occasional checks before crashing, or exactly when
+it failed to respond a valid HTTP status, then when the port started to
+reject connections, then when the server stopped responding at all.
+
+Note that status changes not caused by health checks (eg: enable/disable on
+the CLI) are intentionally not logged by this option.
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#option%20ldap-check">option ldap-check</a>&quot;, &quot;<a href="#option%20mysql-check">option mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#option%20redis-check">option redis-check</a>&quot;, &quot;<a href="#option%20smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option log-separate-errors"></a><a class="anchor" name="4-option log-separate-errors"></a><a class="anchor" name="4.2-option log-separate-errors"></a><a class="anchor" name="option log-separate-errors (Proxies)"></a><a class="anchor" name="option log-separate-errors (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option log-separate-errors"></a><a href="#4.2-option%20log-separate-errors">option log-separate-errors</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option log-separate-errors"></a><a class="anchor" name="4-no option log-separate-errors"></a><a class="anchor" name="4.2-no option log-separate-errors"></a><a class="anchor" name="no option log-separate-errors (Proxies)"></a><a class="anchor" name="no option log-separate-errors (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option log-separate-errors"></a><a href="#4.2-no%20option%20log-separate-errors">no option log-separate-errors</a></b></div><pre class="text">Change log level for non-completely successful connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8045,7 +8051,13 @@ nothing is sent. The client timeout cannot offer a good protection against
 this abuse because it is an inactivity timeout, which means that if the
 attacker sends one character every now and then, the timeout will not
 trigger. With the HTTP request timeout, no matter what speed the client
-types, the request will be aborted if it does not complete in time.
+types, the request will be aborted if it does not complete in time. When the
+timeout expires, an HTTP 408 response is sent to the client to inform it
+about the problem, and the connection is closed. The logs will report
+termination codes &quot;cR&quot;. Some recent browsers are having problems with this
+standard, well-documented behaviour, so it might be needed to hide the 408
+code using &quot;errorfile 408 /dev/null&quot;. See more details in the explanations of
+the &quot;cR&quot; termination code in <a href="#8.5">section 8.5</a>.
 
 Note that this timeout only applies to the header part of the request, and
 not to any data. As soon as the empty line is received, this timeout is not
@@ -8062,7 +8074,7 @@ If this parameter is not set, the client timeout still applies between each
 chunk of the incoming request. It should be set in the frontend to take
 effect, unless the frontend is in TCP mode, in which case the HTTP backend's
 timeout will be used.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout queue"></a><a class="anchor" name="4-timeout queue"></a><a class="anchor" name="4.2-timeout queue"></a><a class="anchor" name="timeout queue (Proxies)"></a><a class="anchor" name="timeout queue (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout queue"></a><a href="#4.2-timeout%20queue">timeout queue</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum time to wait in the queue for a connection slot to be free
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8720,40 +8732,56 @@ the &quot;<a href="#check">check</a>&quot; parameter is not set. See also the &q
 
 Supported in default-server: No
 </pre><a class="anchor" name="agent-check"></a><a class="anchor" name="5-agent-check"></a><a class="anchor" name="5.2-agent-check"></a><a class="anchor" name="agent-check (Bind and Server options)"></a><a class="anchor" name="agent-check (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-check"></a><a href="#5.2-agent-check">agent-check</a></b></div><pre class="text">Enable an auxiliary agent check which is run independently of a regular
-health check. An agent health check is performed by making a TCP
-connection to the port set by the &quot;<a href="#agent-port">agent-port</a>&quot; parameter&quot; and reading
-an ASCII string. The string should have one of the following forms:
+health check. An agent health check is performed by making a TCP connection
+to the port set by the &quot;<a href="#agent-port">agent-port</a>&quot; parameter and reading an ASCII string.
+The string is made of a series of words delimited by spaces, tabs or commas
+in any order, optionally terminated by '\r' and/or '\n', each consisting of :
 
-* An ASCII representation of an positive integer percentage.
-  e.g. &quot;75%&quot;
-
+- An ASCII representation of a positive integer percentage, e.g. &quot;75%&quot;.
   Values in this format will set the weight proportional to the initial
   weight of a server as configured when haproxy starts.
 
-* The string &quot;drain&quot;.
+- The word &quot;ready&quot;. This will turn the server's administrative state to the
+  READY mode, thus cancelling any DRAIN or MAINT state
 
-  This will cause the weight of a server to be set to 0, and thus it will
-  not accept any new connections other than those that are accepted via
-  persistence.
+- The word &quot;drain&quot;. This will turn the server's administrative state to the
+  DRAIN mode, thus it will not accept any new connections other than those
+  that are accepted via persistence.
 
-* The string &quot;down&quot;, optionally followed by a description string.
+- The word &quot;maint&quot;. This will turn the server's administrative state to the
+  MAINT mode, thus it will not accept any new connections at all, and health
+  checks will be stopped.
 
-  Mark the server as down and log the description string as the reason.
+- The words &quot;down&quot;, &quot;failed&quot;, or &quot;stopped&quot;, optionally followed by a
+  description string after a sharp ('#'). All of these mark the server's
+  operating state as DOWN, but since the word itself is reported on the stats
+  page, the difference allows an administrator to know if the situation was
+  expected or not : the service may intentionally be stopped, may appear up
+  but fail some validity tests, or may be seen as down (eg: missing process,
+  or port not responding).
 
-* The string &quot;stopped&quot;, optionally followed by a description string.
+- The word &quot;up&quot; sets back the server's operating state as UP if health checks
+  also report that the service is accessible.
 
-  This currently has the same behaviour as &quot;down&quot;.
-
-* The string &quot;fail&quot;, optionally followed by a description string.
-
-  This currently has the same behaviour as &quot;down&quot;.
+Parameters which are not advertised by the agent are not changed. For
+example, an agent might be designed to monitor CPU usage and only report a
+relative weight and never interact with the operating status. Similarly, an
+agent could be designed as an end-user interface with 3 radio buttons
+allowing an administrator to change only the administrative state. However,
+it is important to consider that only the agent may revert its own actions,
+so if a server is set to DRAIN mode or to DOWN state using the agent, the
+agent must implement the other equivalent actions to bring the service into
+operations again.
 
 Failure to connect to the agent is not considered an error as connectivity
 is tested by the regular health check which is enabled by the &quot;<a href="#check">check</a>&quot;
-parameter.
+parameter. Warning though, it is not a good idea to stop an agent after it
+reports &quot;down&quot;, since only an agent reporting &quot;up&quot; will be able to turn the
+server up again. Note that the CLI on the Unix stats socket is also able to
+force an agent's result in order to workaround a bogus agent if needed.
 
-Requires the &quot;&quot;<a href="#agent-port">agent-port</a>&quot; parameter to be set.
-See also the &quot;<a href="#agent-check">agent-check</a>&quot; parameter.
+Requires the &quot;<a href="#agent-port">agent-port</a>&quot; parameter to be set. See also the &quot;<a href="#agent-inter">agent-inter</a>&quot;
+parameter.
 
 Supported in default-server: No
 </pre><a class="anchor" name="agent-inter"></a><a class="anchor" name="5-agent-inter"></a><a class="anchor" name="5.2-agent-inter"></a><a class="anchor" name="agent-inter (Bind and Server options)"></a><a class="anchor" name="agent-inter (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-inter"></a><a href="#5.2-agent-inter">agent-inter</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">The &quot;<a href="#agent-inter">agent-inter</a>&quot; parameter sets the interval between two agent checks
@@ -9153,10 +9181,10 @@ checks are automatically sent in SSL too unless there is a &quot;<a href="#port"
 See the &quot;<a href="#check-ssl">check-ssl</a>&quot; option to force SSL health checks.
 
 Supported in default-server: No
-</pre><a class="anchor" name="track"></a><a class="anchor" name="5-track"></a><a class="anchor" name="5.2-track"></a><a class="anchor" name="track (Bind and Server options)"></a><a class="anchor" name="track (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="track"></a><a href="#5.2-track">track</a></b> <span style="color: #008">[<span style="color: #080">&lt;proxy&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span></div><pre class="text">This option enables ability to set the current state of the server by
-tracking another one. Only a server with checks enabled can be tracked
-so it is not possible for example to track a server that tracks another
-one. If &lt;proxy&gt; is omitted the current one is used. If disable-on-404 is
+</pre><a class="anchor" name="track"></a><a class="anchor" name="5-track"></a><a class="anchor" name="5.2-track"></a><a class="anchor" name="track (Bind and Server options)"></a><a class="anchor" name="track (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="track"></a><a href="#5.2-track">track</a></b> <span style="color: #008">[<span style="color: #080">&lt;proxy&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span></div><pre class="text">This option enables ability to set the current state of the server by tracking
+another one. It is possible to track a server which itself tracks another
+server, provided that at the end of the chain, a server has health checks
+enabled. If &lt;proxy&gt; is omitted the current one is used. If disable-on-404 is
 used, it has to be enabled on both proxies.
 
 Supported in default-server: No
@@ -9348,6 +9376,29 @@ would turn a string to an IPv4 address, or apply a netmask to an IP address.
 The resulting sample is of the type of the last converter applied to the list,
 which defaults to the type of the sample fetch method.
 
+Each sample or converter returns data of a specific type, specified with its
+keyword in this documentation. When an ACL is declared using a standard sample
+fetch method, certain types automatically involved a default matching method
+which are summarized in the table below :
+
+   +---------------------+-----------------+
+   | Sample or converter | Default         |
+   |    output type      | matching method |
+   +---------------------+-----------------+
+   | boolean             | bool            |
+   +---------------------+-----------------+
+   | integer             | int             |
+   +---------------------+-----------------+
+   | ip                  | ip              |
+   +---------------------+-----------------+
+   | string              | str             |
+   +---------------------+-----------------+
+   | binary              | none, use &quot;-m&quot;  |
+   +---------------------+-----------------+
+
+Note that in order to match a binary samples, it is mandatory to specify a
+matching method, see below.
+
 The ACL engine can match these types against patterns of the following types :
   - boolean
   - integer or integer range
@@ -9499,27 +9550,28 @@ For example, all ACLs below are exact equivalent :
     acl alternate3  hdr(host)     -m beg www.
 
 
-The table below summarizes the compatibility matrix between sample types
-and the pattern types to fetch against. It indicates for each compatible
-combination the name of the matching method to be used, prefixed with &quot;*&quot; when
-the method is implicit and will work by default without &quot;-m&quot;.
+The table below summarizes the compatibility matrix between sample or converter
+types and the pattern types to fetch against. It indicates for each compatible
+combination the name of the matching method to be used, surrounded with angle
+brackets &quot;&gt;&quot; and &quot;&lt;&quot; when the method is the default one and will work by
+default without &quot;-m&quot;.
 
                            +-------------------------------------------------+
                            |                Input sample type                |
     +----------------------+---------+---------+---------+---------+---------+
-    |     pattern type     | boolean | integer |   IP    | string  | binary  |
+    |     pattern type     | boolean | integer |   ip    | string  | binary  |
     +----------------------+---------+---------+---------+---------+---------+
     | none (presence only) |  found  |  found  |  found  |  found  |  found  |
     +----------------------+---------+---------+---------+---------+---------+
-    | none (boolean value) |  *bool  |   bool  |         |   bool  |         |
+    | none (boolean value) |&gt;  bool &lt;|   bool  |         |   bool  |         |
     +----------------------+---------+---------+---------+---------+---------+
-    | integer (value)      |   int   |   *int  |   int   |   int   |         |
+    | integer (value)      |   int   |&gt;  int  &lt;|   int   |   int   |         |
     +----------------------+---------+---------+---------+---------+---------+
     | integer (length)     |   len   |   len   |   len   |   len   |   len   |
     +----------------------+---------+---------+---------+---------+---------+
-    | IP address           |         |         |   *ip   |    ip   |    ip   |
+    | IP address           |         |         |&gt;   ip  &lt;|    ip   |    ip   |
     +----------------------+---------+---------+---------+---------+---------+
-    | exact string         |   str   |   str   |   str   |   str   |   str   |
+    | exact string         |   str   |   str   |   str   |&gt;  str  &lt;|   str   |
     +----------------------+---------+---------+---------+---------+---------+
     | prefix               |   beg   |   beg   |   beg   |   beg   |   beg   |
     +----------------------+---------+---------+---------+---------+---------+
@@ -12161,7 +12213,20 @@ easier finding and understanding.
           client side for PPPoE networks which cannot transport full-sized
           packets, or by clients sending requests by hand and not typing fast
           enough, or forgetting to enter the empty line at the end of the
-          request. The HTTP status code is likely a 408 here.
+          request. The HTTP status code is likely a 408 here. Note: recently,
+          some browsers such as Google Chrome started to break the deployed Web
+          infrastructure by aggressively implementing a new &quot;pre-connect&quot;
+          feature, consisting in sending connections to sites recently visited
+          without sending any request on them until the user starts to browse
+          the site. This mechanism causes massive disruption among resource-
+          limited servers, and causes a lot of 408 errors in HAProxy logs.
+          Worse, some people report that sometimes the browser displays the 408
+          error when the user expects to see the actual content (Mozilla fixed
+          this bug in 2004, while Chrome users continue to report it in 2014),
+          so in this case, using &quot;errorfile 408 /dev/null&quot; can be used as a
+          workaround. More information on the subject is available here :
+              https://bugzilla.mozilla.org/show_bug.cgi?id=248827
+              https://code.google.com/p/chromium/issues/detail?id=85229
 
      CT   The client aborted while its session was tarpitted. It is important to
           check if this happens on valid requests, in order to be sure that no
@@ -12771,6 +12836,13 @@ prefixed with a sharp ('#').
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
+</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable health"></a><a class="anchor" name="9-disable health"></a><a class="anchor" name="9.2-disable health"></a><a class="anchor" name="disable health (Statistics and monitoring)"></a><a class="anchor" name="disable health (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable health"></a><a href="#9.2-disable%20health">disable health</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the primary health check as temporarily stopped. This will disable
+sending of health checks, and the last health check result will be ignored.
+The server will be in unchecked state and considered UP unless an auxiliary
+agent check forces it down.
+
+This command is restricted and can only be issued on sockets configured for
+level &quot;admin&quot;.
 </pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable server"></a><a class="anchor" name="9-disable server"></a><a class="anchor" name="9.2-disable server"></a><a class="anchor" name="disable server (Statistics and monitoring)"></a><a class="anchor" name="disable server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable server"></a><a href="#9.2-disable%20server">disable server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the server DOWN for maintenance. In this mode, no more checks will be
 performed on the server until it leaves maintenance.
 If the server is tracked by other servers, those servers will be set to DOWN
@@ -12799,6 +12871,11 @@ which was disabled.
 
 The frontend may be specified either by its name or by its numeric ID,
 prefixed with a sharp ('#').
+
+This command is restricted and can only be issued on sockets configured for
+level &quot;admin&quot;.
+</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable health"></a><a class="anchor" name="9-enable health"></a><a class="anchor" name="9.2-enable health"></a><a class="anchor" name="enable health (Statistics and monitoring)"></a><a class="anchor" name="enable health (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable health"></a><a href="#9.2-enable%20health">enable health</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Resume a primary health check that was temporarily stopped. This will enable
+sending of health checks again. Please see &quot;<a href="#disable%20health">disable health</a>&quot; for details.
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
@@ -12892,6 +12969,22 @@ is passed in number of sessions per second.
 applies to all frontends and the change has an immediate effect. The value
 is passed in number of sessions per second sent to the SSL stack. It applies
 before the handshake in order to protect the stack against handshake abuses.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent <span style="color: #008">[ up | down ]</span></div><pre class="text">Force a server's agent to a new state. This can be useful to immediately
+switch a server's state regardless of some slow agent checks for example.
+Note that the change is propagated to tracking servers if any.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> health <span style="color: #008">[ up | stopping | down ]</span></div><pre class="text">Force a server's health to a new state. This can be useful to immediately
+switch a server's state regardless of some slow health checks for example.
+Note that the change is propagated to tracking servers if any.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> state <span style="color: #008">[ ready | drain | maint ]</span></div><pre class="text">Force a server's administrative state to a new state. This can be useful to
+disable load balancing and/or any traffic to a server. Setting the state to
+&quot;ready&quot; puts the server in normal mode, and the command is the equivalent of
+the &quot;<a href="#enable%20server">enable server</a>&quot; command. Setting the state to &quot;maint&quot; disables any traffic
+to the server as well as any health checks. This is the equivalent of the
+&quot;<a href="#disable%20server">disable server</a>&quot; command. Setting the mode to &quot;drain&quot; only removes the server
+from load balancing but still allows it to be checked and to accept new
+persistent connections. Changes are propagated to tracking servers if any.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> weight <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. This is the exact
+equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command below.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
 an entry is inserted. See stick-table in <a href="#4.2">section 4.2</a> to find all possible
 values for &lt;data_type&gt;. The most likely use consists in dynamically entering
@@ -13137,8 +13230,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev25 &ndash; Configuration Manual<br>
-							<small>2014/05/10, willy tarreau</small>
+							HAProxy 1.5-dev26 &ndash; Configuration Manual<br>
+							<small>2014/05/28, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -13253,6 +13346,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"disable",
 				"disable agent",
 				"disable frontend",
+				"disable health",
 				"disable server",
 				"disabled (Alphabetically sorted keywords reference)",
 				"disabled (Server and default-server options)",
@@ -13265,6 +13359,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"enable",
 				"enable agent",
 				"enable frontend",
+				"enable health",
 				"enable server",
 				"enabled",
 				"env",
@@ -13647,6 +13742,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"set rate-limit sessions global",
 				"set rate-limit ssl-sessions",
 				"set rate-limit ssl-sessions global",
+				"set server",
 				"set table",
 				"set timeout",
 				"set timeout cli",
@@ -13967,7 +14063,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev25', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev26', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-19', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -13979,4 +14075,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev25 -->
+<!-- git:v1.5-dev26 -->
