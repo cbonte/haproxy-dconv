@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev26-30 - Configuration Manual</title>
+		<title>HAProxy version 1.5-dev26-38 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-19" rel="stylesheet" />
 	</head>
@@ -62,7 +62,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/06/16</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/06/17</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -73,7 +73,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev26-30</strong></p>
+							<p><strong>version 1.5-dev26-38</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3421,6 +3421,8 @@ Example of a header received by the application server :
 <a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
               add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> |
               del-header <span style="color: #080">&lt;name&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
+              replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
+              replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
               set-tos <span style="color: #080">&lt;tos&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> |
               add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
               del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -3486,6 +3488,47 @@ The first keyword is the rule's action. Currently supported actions include :
 
   - &quot;del-header&quot; removes all HTTP header fields whose name is specified in
     &lt;name&gt;.
+
+  - &quot;replace-header&quot; matches the regular expression in all occurrences of
+    header field &lt;name&gt; according to &lt;match-regex&gt;, and replaces them with
+    the &lt;replace-fmt&gt; argument. Format characters are allowed in replace-fmt
+    and work like in &lt;fmt&gt; arguments in &quot;add-header&quot;. The match is only
+    case-sensitive. It is important to understand that this action only
+    considers whole header lines, regardless of the number of values they
+    may contain. This usage is suited to headers naturally containing commas
+    in their value, such as If-Modified-Since and so on.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request replace-header Cookie foo=([^;]*);(.*) foo=\1;ip=%bi;\2
+</code></pre>
+</div><pre class="text">  applied to:
+
+    Cookie: foo=foobar; expires=Tue, 14-Jun-2016 01:40:45 GMT;
+
+  outputs:
+
+    Cookie: foo=foobar;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT;
+
+  assuming the backend IP is 192.168.1.20
+
+- &quot;replace-value&quot; works like &quot;replace-header&quot; except that it matches the
+  regex against every comma-delimited value of the header field &lt;name&gt;
+  instead of the entire header. This is suited for all headers which are
+  allowed to carry more than one value. An example could be the Accept
+  header.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request replace-value X-Forwarded-For ^192\.168\.(.*)$ 172.16.\1
+</code></pre>
+</div><pre class="text">    applied to:
+
+      X-Forwarded-For: 192.168.10.1, 192.168.13.24, 10.0.0.37
+
+    outputs:
+
+      X-Forwarded-For: 172.16.10.1, 172.16.13.24, 10.0.0.37
 
   - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
     It only has effect against the other requests being processed at the same
@@ -3618,6 +3661,8 @@ http-request del-map(map.lst) %[src]                     if delmap
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#stats%20http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
 <a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response"></a><a href="#4.2-http-response">http-response</a></b> <span style="color: #800">{ allow | deny | add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> |
                 set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
+                replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
+                replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
                 set-log-level <span style="color: #080">&lt;level&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> |
                 add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -3660,6 +3705,47 @@ The first keyword is the rule's action. Currently supported actions include :
 
   - &quot;del-header&quot; removes all HTTP header fields whose name is specified in
     &lt;name&gt;.
+
+  - &quot;replace-header&quot; matches the regular expression in all occurrences of
+    header field &lt;name&gt; according to &lt;match-regex&gt;, and replaces them with
+    the &lt;replace-fmt&gt; argument. Format characters are allowed in replace-fmt
+    and work like in &lt;fmt&gt; arguments in &quot;add-header&quot;. The match is only
+    case-sensitive. It is important to understand that this action only
+    considers whole header lines, regardless of the number of values they
+    may contain. This usage is suited to headers naturally containing commas
+    in their value, such as Set-Cookie, Expires and so on.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response replace-header Set-Cookie (C=[^;]*);(.*) \1;ip=%bi;\2
+</code></pre>
+</div><pre class="text">  applied to:
+
+    Set-Cookie: C=1; expires=Tue, 14-Jun-2016 01:40:45 GMT
+
+  outputs:
+
+    Set-Cookie: C=1;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT
+
+  assuming the backend IP is 192.168.1.20.
+
+- &quot;replace-value&quot; works like &quot;replace-header&quot; except that it matches the
+  regex against every comma-delimited value of the header field &lt;name&gt;
+  instead of the entire header. This is suited for all headers which are
+  allowed to carry more than one value. An example could be the Accept
+  header.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response replace-value Cache-control ^public$ private
+</code></pre>
+</div><pre class="text">    applied to:
+
+      Cache-Control: max-age=3600, public
+
+    outputs:
+
+      Cache-Control: max-age=3600, private
 
   - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
     It only has effect against the other requests being processed at the same
@@ -12593,7 +12679,15 @@ Unix socket.
 <a class="anchor" id="9.1" name="9.1"></a>
 <h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> CSV format</h2>
 <div><pre class="text">The statistics may be consulted either from the unix socket or from the HTTP
-page. Both means provide a CSV format whose fields follow.
+page. Both means provide a CSV format whose fields follow. The first line
+begins with a sharp ('#') and has one word per comma-delimited field which
+represents the title of the column. All other lines starting at the second one
+use a classical CSV format using a comma as the delimiter, and the double quote
+('&quot;') as an optional text delimiter, but only if the enclosed text is ambiguous
+(if it contains a quote or a comma). The double-quote character ('&quot;') in the
+text is doubled ('&quot;&quot;'), which is the format that most tools recognize. Please
+do not insert any column before these ones in order not to break tools which
+use hard-coded column positions.
 
   0. pxname: proxy name
   1. svname: service name (FRONTEND for frontend, BACKEND for backend, any name
@@ -12668,6 +12762,12 @@ page. Both means provide a CSV format whose fields follow.
  53. comp_byp: number of bytes that bypassed the HTTP compressor (CPU/BW limit)
  54. comp_rsp: number of HTTP responses that were compressed
  55. lastsess: number of seconds since last session assigned to server/backend
+ 56. last_chk: last health check contents or textual error
+ 57. last_agt: last agent check contents or textual error
+ 58. qtime: the average queue time in ms over the 1024 last requests
+ 59. ctime: the average connect time in ms over the 1024 last requests
+ 60. rtime: the average response time in ms over the 1024 last requests (0 for TCP)
+ 61. ttime: the average total session time in ms over the 1024 last requests
 </pre></div>
 <a class="anchor" id="9.2" name="9.2"></a>
 <h2 id="chapter-9.2" data-target="9.2"><small><a class="small" href="#9.2">9.2.</a></small> Unix Socket commands</h2>
@@ -13258,7 +13358,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev26-30 &ndash; Configuration Manual<br>
+							HAProxy 1.5-dev26-38 &ndash; Configuration Manual<br>
 							<small>2014/05/28, willy tarreau</small>
 						</div>
 					</div>
@@ -14092,7 +14192,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev26-30', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev26-38', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-19', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14104,4 +14204,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev26-30-g148f408 -->
+<!-- git:v1.5-dev26-38-gb854392 -->
