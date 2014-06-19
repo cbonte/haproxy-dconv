@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5-dev26 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-19" rel="stylesheet" />
 	</head>
@@ -62,7 +62,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/05/28</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-19</b> on <b>2014/06/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -73,11 +73,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5-dev26</strong></p>
+							<p><strong>version 1.6-dev0</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2014/05/28
+								2014/06/19
 							</p>
 						</div>
 
@@ -1224,6 +1224,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.ssl.lifetime">tune.ssl.lifetime</a>
    - <a href="#tune.ssl.force-private-cache">tune.ssl.force-private-cache</a>
    - <a href="#tune.ssl.maxrecord">tune.ssl.maxrecord</a>
+   - <a href="#tune.ssl.default-dh-param">tune.ssl.default-dh-param</a>
    - <a href="#tune.zlib.memlevel">tune.zlib.memlevel</a>
    - <a href="#tune.zlib.windowsize">tune.zlib.windowsize</a>
 
@@ -1408,7 +1409,11 @@ shorter intervals, their intervals will be respected though.
 </pre><a class="anchor" name="maxconn"></a><a class="anchor" name="3-maxconn"></a><a class="anchor" name="3.2-maxconn"></a><a class="anchor" name="maxconn (Global parameters)"></a><a class="anchor" name="maxconn (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxconn"></a><a href="#3.2-maxconn">maxconn</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of concurrent connections to &lt;number&gt;. It
 is equivalent to the command-line argument &quot;-n&quot;. Proxies will stop accepting
 connections when this limit is reached. The &quot;<a href="#ulimit-n">ulimit-n</a>&quot; parameter is
-automatically adjusted according to this value. See also &quot;<a href="#ulimit-n">ulimit-n</a>&quot;.
+automatically adjusted according to this value. See also &quot;<a href="#ulimit-n">ulimit-n</a>&quot;. Note:
+the &quot;select&quot; poller cannot reliably use more than 1024 file descriptors on
+some platforms. If your platform only supports select and reports &quot;select
+FAILED&quot; on startup, you need to reduce maxconn until it works (slightly
+below 500 in general).
 </pre><a class="anchor" name="maxconnrate"></a><a class="anchor" name="3-maxconnrate"></a><a class="anchor" name="3.2-maxconnrate"></a><a class="anchor" name="maxconnrate (Global parameters)"></a><a class="anchor" name="maxconnrate (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxconnrate"></a><a href="#3.2-maxconnrate">maxconnrate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of connections per second to &lt;number&gt;.
 Proxies will stop accepting connections when this limit is reached. It can be
 used to limit the global capacity regardless of each frontend capacity. It is
@@ -1624,6 +1629,14 @@ keeping in mind that SSL/TLS add some overhead. Typical values of 1419 and
 2859 gave good results during tests. Use &quot;strace -e trace=write&quot; to find the
 best value. Haproxy will automatically switch to this setting after an idle
 stream has been detected (see tune.idletimer above).
+</pre><a class="anchor" name="tune.ssl.default-dh-param"></a><a class="anchor" name="3-tune.ssl.default-dh-param"></a><a class="anchor" name="3.2-tune.ssl.default-dh-param"></a><a class="anchor" name="tune.ssl.default-dh-param (Global parameters)"></a><a class="anchor" name="tune.ssl.default-dh-param (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.default-dh-param"></a><a href="#3.2-tune.ssl.default-dh-param">tune.ssl.default-dh-param</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum size of the Diffie-Hellman parameters used for generating
+the ephemeral/temporary Diffie-Hellman key in case of DHE key exchange. The
+final size will try to match the size of the server's RSA (or DSA) key (e.g,
+a 2048 bits temporary DH key for a 2048 bits RSA key), but will not exceed
+this maximum value. Default value if 1024. Only 1024 or higher values are
+allowed. Higher values will increase the CPU load, and values greater than
+1024 bits are not supported by Java 7 and earlier clients. This value is not
+used if static Diffie-Hellman parameters are supplied via the certificate file.
 </pre><a class="anchor" name="tune.zlib.memlevel"></a><a class="anchor" name="3-tune.zlib.memlevel"></a><a class="anchor" name="3.2-tune.zlib.memlevel"></a><a class="anchor" name="tune.zlib.memlevel (Global parameters)"></a><a class="anchor" name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.zlib.memlevel"></a><a href="#3.2-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
 defines how much memory should be allocated for the internal compression
 state. A value of 1 uses minimum memory but is slow and reduces compression
@@ -3412,6 +3425,8 @@ Example of a header received by the application server :
 <a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
               add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> |
               del-header <span style="color: #080">&lt;name&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
+              replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
+              replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
               set-tos <span style="color: #080">&lt;tos&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> |
               add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
               del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -3477,6 +3492,47 @@ The first keyword is the rule's action. Currently supported actions include :
 
   - &quot;del-header&quot; removes all HTTP header fields whose name is specified in
     &lt;name&gt;.
+
+  - &quot;replace-header&quot; matches the regular expression in all occurrences of
+    header field &lt;name&gt; according to &lt;match-regex&gt;, and replaces them with
+    the &lt;replace-fmt&gt; argument. Format characters are allowed in replace-fmt
+    and work like in &lt;fmt&gt; arguments in &quot;add-header&quot;. The match is only
+    case-sensitive. It is important to understand that this action only
+    considers whole header lines, regardless of the number of values they
+    may contain. This usage is suited to headers naturally containing commas
+    in their value, such as If-Modified-Since and so on.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request replace-header Cookie foo=([^;]*);(.*) foo=\1;ip=%bi;\2
+</code></pre>
+</div><pre class="text">  applied to:
+
+    Cookie: foo=foobar; expires=Tue, 14-Jun-2016 01:40:45 GMT;
+
+  outputs:
+
+    Cookie: foo=foobar;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT;
+
+  assuming the backend IP is 192.168.1.20
+
+- &quot;replace-value&quot; works like &quot;replace-header&quot; except that it matches the
+  regex against every comma-delimited value of the header field &lt;name&gt;
+  instead of the entire header. This is suited for all headers which are
+  allowed to carry more than one value. An example could be the Accept
+  header.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request replace-value X-Forwarded-For ^192\.168\.(.*)$ 172.16.\1
+</code></pre>
+</div><pre class="text">    applied to:
+
+      X-Forwarded-For: 192.168.10.1, 192.168.13.24, 10.0.0.37
+
+    outputs:
+
+      X-Forwarded-For: 172.16.10.1, 172.16.13.24, 10.0.0.37
 
   - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
     It only has effect against the other requests being processed at the same
@@ -3609,6 +3665,8 @@ http-request del-map(map.lst) %[src]                     if delmap
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#stats%20http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
 <a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response"></a><a href="#4.2-http-response">http-response</a></b> <span style="color: #800">{ allow | deny | add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> |
                 set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
+                replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
+                replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
                 set-log-level <span style="color: #080">&lt;level&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> |
                 add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -3651,6 +3709,47 @@ The first keyword is the rule's action. Currently supported actions include :
 
   - &quot;del-header&quot; removes all HTTP header fields whose name is specified in
     &lt;name&gt;.
+
+  - &quot;replace-header&quot; matches the regular expression in all occurrences of
+    header field &lt;name&gt; according to &lt;match-regex&gt;, and replaces them with
+    the &lt;replace-fmt&gt; argument. Format characters are allowed in replace-fmt
+    and work like in &lt;fmt&gt; arguments in &quot;add-header&quot;. The match is only
+    case-sensitive. It is important to understand that this action only
+    considers whole header lines, regardless of the number of values they
+    may contain. This usage is suited to headers naturally containing commas
+    in their value, such as Set-Cookie, Expires and so on.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response replace-header Set-Cookie (C=[^;]*);(.*) \1;ip=%bi;\2
+</code></pre>
+</div><pre class="text">  applied to:
+
+    Set-Cookie: C=1; expires=Tue, 14-Jun-2016 01:40:45 GMT
+
+  outputs:
+
+    Set-Cookie: C=1;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT
+
+  assuming the backend IP is 192.168.1.20.
+
+- &quot;replace-value&quot; works like &quot;replace-header&quot; except that it matches the
+  regex against every comma-delimited value of the header field &lt;name&gt;
+  instead of the entire header. This is suited for all headers which are
+  allowed to carry more than one value. An example could be the Accept
+  header.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response replace-value Cache-control ^public$ private
+</code></pre>
+</div><pre class="text">    applied to:
+
+      Cache-Control: max-age=3600, public
+
+    outputs:
+
+      Cache-Control: max-age=3600, private
 
   - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
     It only has effect against the other requests being processed at the same
@@ -4930,14 +5029,15 @@ bytes are expected to be transferred.
       &quot;GET /image.iso HTTP/1.0&quot;
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httplog">option httplog</a>&quot;, &quot;<a href="#capture%20response%20header">capture response header</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option mysql-check"></a><a class="anchor" name="4-option mysql-check"></a><a class="anchor" name="4.2-option mysql-check"></a><a class="anchor" name="option mysql-check (Proxies)"></a><a class="anchor" name="option mysql-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option mysql-check"></a><a href="#4.2-option%20mysql-check">option mysql-check</a></b> <span style="color: #008">[ user <span style="color: #080">&lt;username&gt;</span> ]</span></div><pre class="text">Use MySQL health checks for server testing
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option mysql-check"></a><a class="anchor" name="4-option mysql-check"></a><a class="anchor" name="4.2-option mysql-check"></a><a class="anchor" name="option mysql-check (Proxies)"></a><a class="anchor" name="option mysql-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option mysql-check"></a><a href="#4.2-option%20mysql-check">option mysql-check</a></b> <span style="color: #008">[ user <span style="color: #080">&lt;username&gt;</span> <span style="color: #008">[ post-41 ]</span> ]</span></div><pre class="text">Use MySQL health checks for server testing
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;username&gt; This is the username which will be used when connecting to MySQL
-           server.</pre>
+           server.
+post-41    Send post v4.1 client compatible checks</pre>
 </div>
 <pre class="text">If you specify a username, the check consists of sending two MySQL packet,
 one Client Authentication packet, and one QUIT packet, to correctly close
@@ -6832,7 +6932,7 @@ backend private_monitoring
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;pattern&gt;  is a pattern extraction rule as described in <a href="#7.3">section 7.3</a>. It
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;pattern&gt;  is a sample expression rule as described in <a href="#7.3">section 7.3</a>. It
            describes what elements of the incoming request or connection
            will be analysed in the hope to find a matching entry in a
            stickiness table. This rule is mandatory.
@@ -6898,7 +6998,7 @@ backend smtp
     server s1 192.168.1.1:25
     server s2 192.168.1.1:25
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a> about ACLs and pattern extraction.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a> about ACLs and samples fetching.</div>
 <a class="anchor" name="stick"></a><a class="anchor" name="4-stick"></a><a class="anchor" name="4.2-stick"></a><a class="anchor" name="stick (Proxies)"></a><a class="anchor" name="stick (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stick on"></a><a class="anchor" name="4-stick on"></a><a class="anchor" name="4.2-stick on"></a><a class="anchor" name="stick on (Proxies)"></a><a class="anchor" name="stick on (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stick on"></a><a href="#4.2-stick%20on">stick on</a></b> <span style="color: #080">&lt;pattern&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Define a request pattern to associate a user to a server
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -6948,7 +7048,7 @@ backend https
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;pattern&gt;  is a pattern extraction rule as described in <a href="#7.3">section 7.3</a>. It
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;pattern&gt;  is a sample expression rule as described in <a href="#7.3">section 7.3</a>. It
            describes what elements of the incoming request or connection
            will be analysed, extracted and stored in the table once a
            server is selected.
@@ -7028,7 +7128,7 @@ backend smtp
     server s1 192.168.1.1:25
     server s2 192.168.1.1:25
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a> about ACLs and pattern extraction.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#nbproc">nbproc</a>&quot;, &quot;<a href="#bind-process">bind-process</a>&quot; and <a href="#7">section 7</a> about ACLs and sample fetching.</div>
 <a class="anchor" name="stick-table"></a><a class="anchor" name="4-stick-table"></a><a class="anchor" name="4.2-stick-table"></a><a class="anchor" name="stick-table (Proxies)"></a><a class="anchor" name="stick-table (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stick-table type"></a><a class="anchor" name="4-stick-table type"></a><a class="anchor" name="4.2-stick-table type"></a><a class="anchor" name="stick-table type (Proxies)"></a><a class="anchor" name="stick-table type (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stick-table type"></a><a href="#4.2-stick-table%20type">stick-table type</a></b> <span style="color: #800">{ip | integer | string <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> | binary <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span>}</span>
             size <span style="color: #080">&lt;size&gt;</span> <span style="color: #008">[expire <span style="color: #080">&lt;expire&gt;</span>]</span> <span style="color: #008">[nopurge]</span> <span style="color: #008">[peers <span style="color: #080">&lt;peersect&gt;</span>]</span>
             <span style="color: #008">[store <span style="color: #080">&lt;data_type&gt;</span>]</span>*</div><pre class="text">Configure the stickiness table for the current section
@@ -7062,7 +7162,7 @@ backend smtp
  binary     a table declared with &quot;type binary&quot; will store binary blocks
             of &lt;len&gt; bytes. If the block provided by the pattern
             extractor is larger than &lt;len&gt;, it will be truncated before
-            being stored. If the block provided by the pattern extractor
+            being stored. If the block provided by the sample expression
             is shorter than &lt;len&gt;, it will be padded by 0. When not
             specified, the block is automatically limited to 32 bytes.
 
@@ -7256,7 +7356,7 @@ stick-table type ip size 1m expire 5m store gpc0,conn_rate(30s)
 <tr><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;pattern&gt;  is a pattern extraction rule as described in <a href="#7.3">section 7.3</a>. It
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;pattern&gt;  is a sample expression rule as described in <a href="#7.3">section 7.3</a>. It
            describes what elements of the response or connection will
            be analysed, extracted and stored in the table once a
            server is selected.
@@ -7541,7 +7641,7 @@ order. If no rule matches or if there is no rule, the default action is to
 accept the incoming connection. There is no specific limit to the number of
 rules which may be inserted.
 
-Three types of actions are supported :
+Five types of actions are supported :
   - accept :
       accepts the connection if the condition is true (when used with &quot;if&quot;)
       or false (when used with &quot;unless&quot;). The first such rule executed ends
@@ -7570,6 +7670,18 @@ Three types of actions are supported :
       of load balancers are passed through by traffic coming from public
       hosts.
 
+  - capture &lt;sample&gt; len &lt;length&gt; :
+      This only applies to &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rules. It captures sample
+      expression &lt;sample&gt; from the request buffer, and converts it to a
+      string of at most &lt;len&gt; characters. The resulting string is stored into
+      the next request &quot;<a href="#capture">capture</a>&quot; slot, so it will possibly appear next to
+      some captured HTTP headers. It will then automatically appear in the
+      logs, and it will be possible to extract it using sample fetch rules to
+      feed it into headers or anything. The length should be limited given
+      that this size will be allocated for each capture during the whole
+      session life. Since it applies to Please check <a href="#7.3">section 7.3</a> (Fetching
+      samples) and &quot;<a href="#capture%20request%20header">capture request header</a>&quot; for more information.
+
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
       enables tracking of sticky counters from current connection. These
       rules do not stop evaluation and do not change default action. Two sets
@@ -7584,7 +7696,7 @@ Three types of actions are supported :
       guideline, all may be used everywhere.
 
       These actions take one or two arguments :
-        &lt;key&gt;   is mandatory, and is a pattern extraction rule as described
+        &lt;key&gt;   is mandatory, and is a sample expression rule as described
                 in <a href="#7.3">section 7.3</a>. It describes what elements of the incoming
                 request or connection will be analysed, extracted, combined,
                 and used to select which table entry to update the counters.
@@ -7644,8 +7756,8 @@ tcp-request connection reject if { sc0_conn_rate gt 10 }
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
             actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc0&quot;, &quot;track-sc1&quot;,
-            and &quot;track-sc2&quot;. See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; above for their
-            signification.
+            &quot;track-sc2&quot; and &quot;<a href="#capture">capture</a>&quot;. See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; above
+            for their signification.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -7673,9 +7785,10 @@ rule matches or if there is no rule, the default action is to accept the
 contents. There is no specific limit to the number of rules which may be
 inserted.
 
-Three types of actions are supported :
-  - accept :
-  - reject :
+Four types of actions are supported :
+  - accept : the request is accepted
+  - reject : the request is rejected and the connection is closed
+  - capture : the specified sample expression is captured
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
@@ -8432,7 +8545,8 @@ provided immediately after the setting name.
 
 The currently supported settings are the following ones.
 </pre><a class="anchor" name="accept-proxy"></a><a class="anchor" name="5-accept-proxy"></a><a class="anchor" name="5.1-accept-proxy"></a><a class="anchor" name="accept-proxy (Bind and Server options)"></a><a class="anchor" name="accept-proxy (Bind options)"></a><div class="keyword"><b><a class="anchor" name="accept-proxy"></a><a href="#5.1-accept-proxy">accept-proxy</a></b></div><pre class="text">Enforces the use of the PROXY protocol over any connection accepted by any of
-the sockets declared on the same line. The PROXY protocol dictates the layer
+the sockets declared on the same line. Versions 1 and 2 of the PROXY protocol
+are supported and correctly detected. The PROXY protocol dictates the layer
 3/4 addresses of the incoming connection to be used everywhere an address is
 used, with the only exception of &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rules which will
 only see the real connection address. Logs will reflect the addresses
@@ -8479,7 +8593,8 @@ If the OpenSSL used supports Diffie-Hellman, parameters present in this file
 are loaded.
 
 If a directory name is used instead of a PEM file, then all files found in
-that directory will be loaded. This directive may be specified multiple times
+that directory will be loaded unless their name ends with '.issuer' or
+'.ocsp' (reserved extensions). This directive may be specified multiple times
 in order to load certificates from multiple files or directories. The
 certificates will be presented to clients who provide a valid TLS Server Name
 Indication field matching one of their CN or alt subjects. Wildcards are
@@ -8501,6 +8616,20 @@ choose a webserver that the CA believes requires an intermediate CA (for
 Godaddy, selection Apache Tomcat will get the correct bundle, but many
 others, e.g. nginx, result in a wrong bundle that will not work for some
 clients).
+
+For each PEM file, haproxy checks for the presence of file at the same path
+suffixed by &quot;.ocsp&quot;. If such file is found, support for the TLS Certificate
+Status Request extension (also known as &quot;OCSP stapling&quot;) is automatically
+enabled. The content of this file is optional. If not empty, it must contain
+a valid OCSP Response in DER format. In order to be valid an OCSP Response
+must comply with the following rules: it has to indicate a good status,
+it has to be a single response for the certificate of the PEM file, and it
+has to be valid at the moment of addition. If these rules are not respected
+the OCSP Response is ignored and a warning is emitted. In order to  identify
+which certificate an OCSP Response applies to, the issuer's certificate is
+necessary. If the issuer's certificate is not found in the PEM file, it will
+be loaded from a file at the same path as the PEM file suffixed by &quot;.issuer&quot;
+if it exists otherwise it will fail with an error.
 </pre><a class="anchor" name="crt-ignore-err"></a><a class="anchor" name="5-crt-ignore-err"></a><a class="anchor" name="5.1-crt-ignore-err"></a><a class="anchor" name="crt-ignore-err (Bind and Server options)"></a><a class="anchor" name="crt-ignore-err (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-ignore-err"></a><a href="#5.1-crt-ignore-err">crt-ignore-err</a></b> <span style="color: #080">&lt;errors&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. Sets a
 comma separated list of errorIDs to ignore during verify at depth == 0.  If
 set to 'all', all errors are ignored. SSL handshake is not aborted if an error
@@ -11712,7 +11841,7 @@ variables on the same format string. This is particularly handy with quoted
 string formats (&quot;Q&quot;).
 
 If a variable is named between square brackets ('[' .. ']') then it is used
-as a pattern extraction rule (see <a href="#7.3">section 7.3</a>). This it useful to add some
+as a sample expression rule (see <a href="#7.3">section 7.3</a>). This it useful to add some
 less common information such as the client's SSL certificate's DN, or to log
 the key that would be used to store an entry into a stick table.
 
@@ -11757,7 +11886,7 @@ Please refer to the table below for currently defined variables :
   | H | %CS  | captured_response_cookie                      | string      |
   |   | %H   | hostname                                      | string      |
   |   | %ID  | unique-id                                     | string      |
-  | H | %ST  | status_code                                   | numeric     |
+  |   | %ST  | status_code                                   | numeric     |
   |   | %T   | gmt_date_time                                 | date        |
   |   | %Tc  | Tc                                            | numeric     |
   |   | %Tl  | local_date_time                               | date        |
@@ -11780,10 +11909,10 @@ Please refer to the table below for currently defined variables :
   |   | %fi  | frontend_ip              (accepting address)  | IP          |
   |   | %fp  | frontend_port            (accepting address)  | numeric     |
   |   | %ft  | frontend_name_transport ('~' suffix for SSL)  | string      |
-  | H | %hr  | captured_request_headers default style        | string      |
-  | H | %hrl | captured_request_headers CLF style            | string list |
-  | H | %hs  | captured_response_headers default style       | string      |
-  | H | %hsl | captured_response_headers CLF style           | string list |
+  |   | %hr  | captured_request_headers default style        | string      |
+  |   | %hrl | captured_request_headers CLF style            | string list |
+  |   | %hs  | captured_response_headers default style       | string      |
+  |   | %hsl | captured_response_headers CLF style           | string list |
   |   | %ms  | accept date milliseconds                      | numeric     |
   |   | %pid | PID                                           | numeric     |
   | H | %r   | http_request                                  | string      |
@@ -12427,6 +12556,10 @@ and delimited with a vertical bar '|' without any space. Response headers
 follow the same representation, but are displayed after a space following the
 request headers block. These blocks are displayed just before the HTTP request
 in the logs.
+
+As a special case, it is possible to specify an HTTP header capture in a TCP
+frontend. The purpose is to enable logging of headers which will be parsed in
+an HTTP backend if the request is then switched to this HTTP backend.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -12565,7 +12698,15 @@ Unix socket.
 <a class="anchor" id="9.1" name="9.1"></a>
 <h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> CSV format</h2>
 <div><pre class="text">The statistics may be consulted either from the unix socket or from the HTTP
-page. Both means provide a CSV format whose fields follow.
+page. Both means provide a CSV format whose fields follow. The first line
+begins with a sharp ('#') and has one word per comma-delimited field which
+represents the title of the column. All other lines starting at the second one
+use a classical CSV format using a comma as the delimiter, and the double quote
+('&quot;') as an optional text delimiter, but only if the enclosed text is ambiguous
+(if it contains a quote or a comma). The double-quote character ('&quot;') in the
+text is doubled ('&quot;&quot;'), which is the format that most tools recognize. Please
+do not insert any column before these ones in order not to break tools which
+use hard-coded column positions.
 
   0. pxname: proxy name
   1. svname: service name (FRONTEND for frontend, BACKEND for backend, any name
@@ -12640,6 +12781,12 @@ page. Both means provide a CSV format whose fields follow.
  53. comp_byp: number of bytes that bypassed the HTTP compressor (CPU/BW limit)
  54. comp_rsp: number of HTTP responses that were compressed
  55. lastsess: number of seconds since last session assigned to server/backend
+ 56. last_chk: last health check contents or textual error
+ 57. last_agt: last agent check contents or textual error
+ 58. qtime: the average queue time in ms over the 1024 last requests
+ 59. ctime: the average connect time in ms over the 1024 last requests
+ 60. rtime: the average response time in ms over the 1024 last requests (0 for TCP)
+ 61. ttime: the average total session time in ms over the 1024 last requests
 </pre></div>
 <a class="anchor" id="9.2" name="9.2"></a>
 <h2 id="chapter-9.2" data-target="9.2"><small><a class="small" href="#9.2">9.2.</a></small> Unix Socket commands</h2>
@@ -12985,7 +13132,19 @@ from load balancing but still allows it to be checked and to accept new
 persistent connections. Changes are propagated to tracking servers if any.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> weight <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. This is the exact
 equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command below.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.2-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.2-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.2-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+on &quot;<a href="#bind">bind</a>&quot; lines). Same controls are performed as during the initial loading of
+the response. The &lt;response&gt; must be passed as a base64 encoded string of the
+DER encoded response from the OCSP server.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>openssl ocsp -issuer issuer.pem -cert server.pem \
+             -host ocsp.issuer.com:80 -respout resp.der
+echo &quot;set ssl ocsp-response $(base64 -w 10000 resp.der)&quot; | \
+             socat stdio /var/run/haproxy.stat
+</code></pre>
+</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
 an entry is inserted. See stick-table in <a href="#4.2">section 4.2</a> to find all possible
 values for &lt;data_type&gt;. The most likely use consists in dynamically entering
 entries for source IP addresses, with a flag in gpc0 to dynamically block an
@@ -13230,8 +13389,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5-dev26 &ndash; Configuration Manual<br>
-							<small>2014/05/28, willy tarreau</small>
+							HAProxy 1.6-dev0 &ndash; Configuration Manual<br>
+							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -13743,6 +13902,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"set rate-limit ssl-sessions",
 				"set rate-limit ssl-sessions global",
 				"set server",
+				"set ssl",
+				"set ssl ocsp-response",
 				"set table",
 				"set timeout",
 				"set timeout cli",
@@ -13916,6 +14077,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.sndbuf.client",
 				"tune.sndbuf.server",
 				"tune.ssl.cachesize",
+				"tune.ssl.default-dh-param",
 				"tune.ssl.force-private-cache",
 				"tune.ssl.lifetime",
 				"tune.ssl.maxrecord",
@@ -14063,7 +14225,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5-dev26', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-19', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14075,4 +14237,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5-dev26 -->
+<!-- git:v1.6-dev0 -->
