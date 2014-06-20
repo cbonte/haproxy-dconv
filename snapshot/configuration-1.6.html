@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-20" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-20</b> on <b>2014/06/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-20</b> on <b>2014/06/20</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0</strong></p>
+							<p><strong>version 1.6-dev0-2</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1182,6 +1182,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#chroot">chroot</a>
    - <a href="#crt-base">crt-base</a>
    - <a href="#daemon">daemon</a>
+   - <a href="#external-check">external-check</a>
    - <a href="#gid">gid</a>
    - <a href="#group">group</a>
    - <a href="#log">log</a>
@@ -1269,6 +1270,9 @@ path is used with &quot;crtfile&quot; directives. Absolute locations specified a
 </pre><a class="anchor" name="daemon"></a><a class="anchor" name="3-daemon"></a><a class="anchor" name="3.1-daemon"></a><a class="anchor" name="daemon (Global parameters)"></a><a class="anchor" name="daemon (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="daemon"></a><a href="#3.1-daemon">daemon</a></b></div><pre class="text">Makes the process fork into background. This is the recommended mode of
 operation. It is equivalent to the command line &quot;-D&quot; argument. It can be
 disabled by the command line &quot;-db&quot; argument.
+</pre><a class="anchor" name="external-check"></a><a class="anchor" name="3-external-check"></a><a class="anchor" name="3.1-external-check"></a><a class="anchor" name="external-check (Global parameters)"></a><a class="anchor" name="external-check (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="external-check"></a><a href="#3.1-external-check">external-check</a></b></div><pre class="text">Allows the use of an external agent to perform health checks.
+This is disabled by default as a security precaution.
+See &quot;<a href="#option%20external-check">option external-check</a>&quot;.
 </pre><a class="anchor" name="gid"></a><a class="anchor" name="3-gid"></a><a class="anchor" name="3.1-gid"></a><a class="anchor" name="gid (Global parameters)"></a><a class="anchor" name="gid (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="gid"></a><a href="#3.1-gid">gid</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Changes the process' group ID to &lt;number&gt;. It is recommended that the group
 ID is dedicated to HAProxy or to a small set of similar daemons. HAProxy must
 be started with a user belonging to this group, or with superuser privileges.
@@ -1916,6 +1920,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-option%20http_proxy"><span class="pull-right"><span>(*)</span></span>option http_proxy</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20independent-streams"><span class="pull-right"><span>(*)</span></span>option independent-streams</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20ldap-check">option ldap-check</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-option%20external-check">option external-check</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20log-health-checks"><span class="pull-right"><span>(*)</span></span>option log-health-checks</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20log-separate-errors"><span class="pull-right"><span>(*)</span></span>option log-separate-errors</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20logasap"><span class="pull-right"><span>(*)</span></span>option logasap</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -1929,8 +1934,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-option%20smtpchk">option smtpchk</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20socket-stats"><span class="pull-right"><span>(*)</span></span>option socket-stats</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20splice-auto"><span class="pull-right"><span>(*)</span></span>option splice-auto</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-option%20splice-request"><span class="pull-right"><span>(*)</span></span>option splice-request</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-option%20splice-request"><span class="pull-right"><span>(*)</span></span>option splice-request</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1940,6 +1945,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-option%20tcpka">option tcpka</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20tcplog">option tcplog</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20transparent"><span class="pull-right"><span>(*)</span></span>option transparent</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-external-check%20command">external-check command</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-external-check%20path">external-check path</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-persist%20rdp-cookie">persist rdp-cookie</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-rate-limit%20sessions">rate-limit sessions</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-redirect">redirect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1948,10 +1955,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-reqadd">reqadd</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqallow">reqallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqdel">reqdel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-reqdeny">reqdeny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqiallow">reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqidel">reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-reqideny">reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqipass">reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqirep">reqirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1969,10 +1976,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-rspideny">rspideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-rspirep">rspirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-rsprep">rsprep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-server">server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-source">source</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -1990,10 +1997,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-stick%20store-request">stick store-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stick%20store-response">stick store-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stick-table">stick-table</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-tcp-check%20connect">tcp-check connect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20send">tcp-check send</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-tcp-check%20send-binary">tcp-check send-binary</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
@@ -2011,10 +2018,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-timeout%20queue">timeout queue</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20server">timeout server</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20server-fin">timeout server-fin</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -4962,6 +4969,17 @@ configure it.
 <code>option ldap-check
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;</div>
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option external-check"></a><a class="anchor" name="4-option external-check"></a><a class="anchor" name="4.2-option external-check"></a><a class="anchor" name="option external-check (Proxies)"></a><a class="anchor" name="option external-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option external-check"></a><a href="#4.2-option%20external-check">option external-check</a></b></div><pre class="text">Use external processes for server health checks
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<pre class="text">It is possible to test the health of a server using an external command.
+This is achieved by running the executable set using &quot;external-check
+command&quot;.
+
+Requires the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">external-check<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#external-check%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#external-check%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; global to be set.
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">external-check<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#external-check%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#external-check%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#external-check%20command">external-check command</a>&quot;, &quot;<a href="#external-check%20path">external-check path</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option log-health-checks"></a><a class="anchor" name="4-option log-health-checks"></a><a class="anchor" name="4.2-option log-health-checks"></a><a class="anchor" name="option log-health-checks (Proxies)"></a><a class="anchor" name="option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option log-health-checks"></a><a href="#4.2-option%20log-health-checks">option log-health-checks</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option log-health-checks"></a><a class="anchor" name="4-no option log-health-checks"></a><a class="anchor" name="4.2-no option log-health-checks"></a><a class="anchor" name="no option log-health-checks (Proxies)"></a><a class="anchor" name="no option log-health-checks (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option log-health-checks"></a><a href="#4.2-no%20option%20log-health-checks">no option log-health-checks</a></b></div><pre class="text">Enable or disable logging of health checks status updates
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -5656,6 +5674,51 @@ appropriate server.
 Note that contrary to a common belief, this option does NOT make HAProxy
 present the client's IP to the server when establishing the connection.
 </pre><div class="page-header"><b>See also:</b> the &quot;usesrc&quot; argument of the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, and the &quot;<a href="#option%20transparent">transparent</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot; keyword.</div>
+<a class="anchor" name="external-check"></a><a class="anchor" name="4-external-check"></a><a class="anchor" name="4.2-external-check"></a><a class="anchor" name="external-check (Proxies)"></a><a class="anchor" name="external-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="external-check command"></a><a class="anchor" name="4-external-check command"></a><a class="anchor" name="4.2-external-check command"></a><a class="anchor" name="external-check command (Proxies)"></a><a class="anchor" name="external-check command (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="external-check command"></a><a href="#4.2-external-check%20command">external-check command</a></b> <span style="color: #080">&lt;command&gt;</span></div><pre class="text">Executable to run when performing an external-check
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;command&gt; is the external command to run</pre>
+</div>
+<pre class="text">The PATH environment variable used when executing the
+command may be set using &quot;<a href="#external-check%20path">external-check path</a>&quot;.
+
+The arguments passed to the to the command are:
+
+proxy_address proxy_port server_address server_port
+
+The proxy_address and proxy_port are derived from the first listener
+that is either IPv4, IPv6 or a UNIX socket. It is an error for no such
+listeners to exist. In the case of a UNIX socket listener the
+proxy_address will be the path of the socket and the proxy_port will
+be the string &quot;NOT_USED&quot;.
+
+If the command executed and exits with a zero status then the check is
+considered to have passed, otherwise the check is considered to have
+failed.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>external-check command /bin/true
+</code></pre>
+</div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">external-check<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#external-check%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#external-check%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20external-check">option external-check</a>&quot;, &quot;<a href="#external-check%20path">external-check path</a>&quot;</div>
+<a class="anchor" name="external-check"></a><a class="anchor" name="4-external-check"></a><a class="anchor" name="4.2-external-check"></a><a class="anchor" name="external-check (Proxies)"></a><a class="anchor" name="external-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="external-check path"></a><a class="anchor" name="4-external-check path"></a><a class="anchor" name="4.2-external-check path"></a><a class="anchor" name="external-check path (Proxies)"></a><a class="anchor" name="external-check path (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="external-check path"></a><a href="#4.2-external-check%20path">external-check path</a></b> <span style="color: #080">&lt;path&gt;</span></div><pre class="text">The value of the PATH environment variable used when running an external-check
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;path&gt; is the path used when executing external command to run</pre>
+</div>
+<pre class="text">The default path is &quot;&quot;.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>external-check path &quot;/usr/bin:/bin&quot;
+</code></pre>
+</div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">external-check<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#external-check%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#external-check%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20external-check">option external-check</a>&quot;, &quot;<a href="#external-check%20command">external-check command</a>&quot;</div>
 <a class="anchor" name="persist"></a><a class="anchor" name="4-persist"></a><a class="anchor" name="4.2-persist"></a><a class="anchor" name="persist (Proxies)"></a><a class="anchor" name="persist (Alphabetically sorted keywords reference)"></a><a class="anchor" name="persist rdp-cookie"></a><a class="anchor" name="4-persist rdp-cookie"></a><a class="anchor" name="4.2-persist rdp-cookie"></a><a class="anchor" name="persist rdp-cookie (Proxies)"></a><a class="anchor" name="persist rdp-cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="persist rdp-cookie"></a><a href="#4.2-persist%20rdp-cookie">persist rdp-cookie</a></b></div><a class="anchor" name="persist"></a><a class="anchor" name="4-persist"></a><a class="anchor" name="4.2-persist"></a><a class="anchor" name="persist (Proxies)"></a><a class="anchor" name="persist (Alphabetically sorted keywords reference)"></a><a class="anchor" name="persist rdp-cookie"></a><a class="anchor" name="4-persist rdp-cookie"></a><a class="anchor" name="4.2-persist rdp-cookie"></a><a class="anchor" name="persist rdp-cookie (Proxies)"></a><a class="anchor" name="persist rdp-cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="persist rdp-cookie"></a><a href="#4.2-persist%20rdp-cookie">persist rdp-cookie</a></b>(<span style="color: #080">&lt;name&gt;</span>)</div><pre class="text">Enable RDP cookie-based persistence
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13396,7 +13459,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-2 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -13534,6 +13597,9 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"errorloc",
 				"errorloc302",
 				"errorloc303",
+				"external-check",
+				"external-check command",
+				"external-check path",
 				"fall",
 				"fastinter",
 				"fe_conn",
@@ -13681,6 +13747,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"option contstats",
 				"option dontlog-normal",
 				"option dontlognull",
+				"option external-check",
 				"option forceclose",
 				"option forwardfor",
 				"option http-keep-alive",
@@ -14232,7 +14299,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-20', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14244,4 +14311,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0 -->
+<!-- git:v1.6-dev0-2-g98637e5 -->
