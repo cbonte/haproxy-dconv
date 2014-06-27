@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5.1-7 - Configuration Manual</title>
+		<title>HAProxy version 1.5.1-9 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-20" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-20</b> on <b>2014/06/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-20</b> on <b>2014/06/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5.1-7</strong></p>
+							<p><strong>version 1.5.1-9</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1277,7 +1277,7 @@ will only be able to drop these groups if started with superuser privileges.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.1-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.1-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
-</pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Up to two global servers can be defined. They
+</pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Up to two global servers can be defined. They
 will receive logs for startups and exits, as well as all logs from proxies
 configured with &quot;<a href="#log%20global">log global</a>&quot;.
 
@@ -1300,6 +1300,18 @@ configured with &quot;<a href="#log%20global">log global</a>&quot;.
       variables by preceding their name with a dollar sign ('$') and
       optionally enclosing them with braces ('{}'), similarly to what is done
       in Bourne shell.
+
+&lt;length&gt; is an optional maximum line length. Log lines larger than this value
+         will be truncated before being sent. The reason is that syslog
+         servers act differently on log line length. All servers support the
+         default value of 1024, but some servers simply drop larger lines
+         while others do log them. If a server supports long lines, it may
+         make sense to set this value here in order to avoid truncating long
+         lines. Similarly, if a server drops long lines, it is preferable to
+         truncate them before sending them. Accepted values are 80 to 65535
+         inclusive. The default value of 1024 is generally fine for all
+         standard usages. Some specific cases of long captures or
+         JSON-formated logs may require larger values.
 
 &lt;facility&gt; must be one of the 24 standard syslog facilities :
 
@@ -3896,7 +3908,7 @@ the appsession table won't grow if persistence is ignored.
 The persistence is ignored when an &quot;if&quot; condition is met, or unless an
 &quot;unless&quot; condition is met.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#force-persist">force-persist</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, and <a href="#7">section 7</a> about ACL usage.</div>
-<a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><a class="anchor" name="log global"></a><a class="anchor" name="4-log global"></a><a class="anchor" name="4.2-log global"></a><a class="anchor" name="log global (Proxies)"></a><a class="anchor" name="log global (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log global"></a><a href="#4.2-log%20global">log global</a></b></div><a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#4.2-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no log"></a><a class="anchor" name="4-no log"></a><a class="anchor" name="4.2-no log"></a><a class="anchor" name="no log (Proxies)"></a><a class="anchor" name="no log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no log"></a><a href="#4.2-no%20log">no log</a></b></div><pre class="text">Enable per-instance logging of events and traffic.
+<a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><a class="anchor" name="log global"></a><a class="anchor" name="4-log global"></a><a class="anchor" name="4.2-log global"></a><a class="anchor" name="log global (Proxies)"></a><a class="anchor" name="log global (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log global"></a><a href="#4.2-log%20global">log global</a></b></div><a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#4.2-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no log"></a><a class="anchor" name="4-no log"></a><a class="anchor" name="4.2-no log"></a><a class="anchor" name="no log (Proxies)"></a><a class="anchor" name="no log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no log"></a><a href="#4.2-no%20log">no log</a></b></div><pre class="text">Enable per-instance logging of events and traffic.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="css/check.png" alt="yes" title="yes" /></td></tr>
@@ -3933,6 +3945,18 @@ The persistence is ignored when an &quot;if&quot; condition is met, or unless an
            environment variables by preceding their name with a dollar
            sign ('$') and optionally enclosing them with braces ('{}'),
            similarly to what is done in Bourne shell.
+
+&lt;length&gt;   is an optional maximum line length. Log lines larger than this
+           value will be truncated before being sent. The reason is that
+           syslog servers act differently on log line length. All servers
+           support the default value of 1024, but some servers simply drop
+           larger lines while others do log them. If a server supports long
+           lines, it may make sense to set this value here in order to avoid
+           truncating long lines. Similarly, if a server drops long lines,
+           it is preferable to truncate them before sending them. Accepted
+           values are 80 to 65535 inclusive. The default value of 1024 is
+           generally fine for all standard usages. Some specific cases of
+           long captures or JSON-formated logs may require larger values.
 
 &lt;facility&gt; must be one of the 24 standard syslog facilities :
 
@@ -13396,7 +13420,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5.1-7 &ndash; Configuration Manual<br>
+							HAProxy 1.5.1-9 &ndash; Configuration Manual<br>
 							<small>2014/06/24, willy tarreau</small>
 						</div>
 					</div>
@@ -14232,7 +14256,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.1-7', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.1-9', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-20', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14244,4 +14268,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5.1-7-ge726fd6 -->
+<!-- git:v1.5.1-9-gdc2695c -->
