@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5.1-9 - Configuration Manual</title>
+		<title>HAProxy version 1.5.1-12 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-20" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-20</b> on <b>2014/06/27</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-20</b> on <b>2014/07/03</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5.1-9</strong></p>
+							<p><strong>version 1.5.1-12</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10619,6 +10619,10 @@ an ACL, the value(s) to match against can be passed in hexadecimal form.
 </pre><a class="anchor" name="ssl_c_sha1"></a><a class="anchor" name="7-ssl_c_sha1"></a><a class="anchor" name="7.3.4-ssl_c_sha1"></a><a class="anchor" name="ssl_c_sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sha1 (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sha1"></a><a href="#7.3.4-ssl_c_sha1">ssl_c_sha1</a></b> : binary</div><pre class="text">Returns the SHA-1 fingerprint of the certificate presented by the client when
 the incoming connection was made over an SSL/TLS transport layer. This can be
 used to stick a client to a server, or to pass this information to a server.
+Note that the output is binary, so if you want to pass that signature to the
+server, you need to encode it in hex or base64, such as in the example below:
+
+   http-request set-header X-SSL-Client-SHA1 %[ssl_c_sha1,hex]
 </pre><a class="anchor" name="ssl_c_sig_alg"></a><a class="anchor" name="7-ssl_c_sig_alg"></a><a class="anchor" name="7.3.4-ssl_c_sig_alg"></a><a class="anchor" name="ssl_c_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sig_alg"></a><a href="#7.3.4-ssl_c_sig_alg">ssl_c_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
 the client when the incoming connection was made over an SSL/TLS transport
 layer.
@@ -13420,7 +13424,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5.1-9 &ndash; Configuration Manual<br>
+							HAProxy 1.5.1-12 &ndash; Configuration Manual<br>
 							<small>2014/06/24, willy tarreau</small>
 						</div>
 					</div>
@@ -14256,7 +14260,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.1-9', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.1-12', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-20', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14268,4 +14272,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5.1-9-gdc2695c -->
+<!-- git:v1.5.1-12-g9fe4cb6 -->
