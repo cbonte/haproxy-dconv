@@ -1,17 +1,18 @@
 <% from urllib import quote %>
+<% base = pctxt.context['base'] %>
 <tr>\
 % for col in columns:
 <% data = col['data'] %>\
 <%
     if data in ['yes']:
         style = "class=\"alert-success pagination-centered\""
-        data = 'yes<br /><img src="${base}css/check.png" alt="yes" title="yes" />'
+        data = 'yes<br /><img src="%scss/check.png" alt="yes" title="yes" />' % base
     elif data in ['no']:
         style = "class=\"alert-error pagination-centered\""
-        data = 'no<br /><img src="${base}css/cross.png" alt="no" title="no" />'
+        data = 'no<br /><img src="%scss/cross.png" alt="no" title="no" />' % base
     elif data in ['X']:
         style = "class=\"pagination-centered\""
-        data = '<img src="${base}css/check.png" alt="X" title="yes" />'
+        data = '<img src="%scss/check.png" alt="X" title="yes" />' % base
     elif data in ['-']:
         style = "class=\"pagination-centered\""
         data = '&nbsp;'

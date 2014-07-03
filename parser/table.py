@@ -227,6 +227,7 @@ class Parser(parser.Parser):
             mode = "td"
 
             line = row_template.render(
+                pctxt=pctxt,
                 columns=cols
             ).strip()
             if i == 0:
@@ -237,6 +238,7 @@ class Parser(parser.Parser):
             i += 1
 
         return template.render(
+            pctxt=pctxt,
             title=title,
-            rows=rows
+            rows=rows,
         )

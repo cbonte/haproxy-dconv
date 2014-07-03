@@ -8,7 +8,7 @@ class Parser(parser.Parser):
             nextline = pctxt.get_line(1)
             if (len(line) > 0) and (len(nextline) > 0) and (nextline[0] == '-') and ("-" * len(line) == nextline):
                 template = pctxt.templates.get_template("parser/underline.tpl")
-                line = template.render(data=line).strip()
+                line = template.render(pctxt=pctxt, data=line).strip()
                 pctxt.next(2)
                 pctxt.eat_empty_lines()
                 pctxt.stop = True

@@ -24,6 +24,7 @@ class Parser(parser.Parser):
 
             template = pctxt.templates.get_template("parser/seealso.tpl")
             return template.render(
+                pctxt=pctxt,
                 label=label,
                 desc=desc,
             )

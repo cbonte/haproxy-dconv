@@ -229,8 +229,9 @@ def convert(infile, outfile, base=''):
     parsers = init_parsers(pctxt)
 
     pctxt.context = {
-            'headers':      {},
-            'document':     ""
+            'headers':  {},
+            'document': "",
+            'base':     base,
     }
 
     sections = []
@@ -324,6 +325,7 @@ def convert(infile, outfile, base=''):
         if (title == "Summary") or (title and not hasSummary):
             summaryTemplate = pctxt.templates.get_template('summary.html')
             documentAppend(summaryTemplate.render(
+                pctxt = pctxt,
                 chapters = chapters,
                 chapterIndexes = chapterIndexes,
             ))
@@ -429,6 +431,7 @@ def convert(infile, outfile, base=''):
         summaryTemplate = pctxt.templates.get_template('summary.html')
         print chapters
         document = summaryTemplate.render(
+            pctxt = pctxt,
             chapters = chapters,
             chapterIndexes = chapterIndexes,
         ) + document
@@ -464,6 +467,7 @@ def convert(infile, outfile, base=''):
     try:
 	footerTemplate = pctxt.templates.get_template('footer.html')
 	footer = footerTemplate.render(
+            pctxt = pctxt,
             headers = pctxt.context['headers'],
             document = document,
             chapters = chapters,
@@ -480,6 +484,7 @@ def convert(infile, outfile, base=''):
     fd = open(outfile,'w')
 
     print >> fd, template.render(
+            pctxt = pctxt,
             headers = pctxt.context['headers'],
             base = base,
             document = document,

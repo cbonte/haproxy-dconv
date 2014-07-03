@@ -6,7 +6,7 @@ class Parser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         template = pctxt.templates.get_template("parser/example/comment.tpl")
-        self.comment = template.render().strip()
+        self.comment = template.render(pctxt=pctxt).strip()
 
 
     def parse(self, line):
@@ -69,6 +69,7 @@ class Parser(parser.Parser):
 
             template = pctxt.templates.get_template("parser/example.tpl")
             return template.render(
+                pctxt=pctxt,
                 label=label,
                 desc=desc,
                 content=content
