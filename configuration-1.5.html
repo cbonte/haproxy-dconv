@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5.1 - Configuration Manual</title>
+		<title>HAProxy version 1.5.2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-23" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/07/03</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/07/12</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,11 +80,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5.1</strong></p>
+							<p><strong>version 1.5.2</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2014/06/24
+								2014/07/12
 							</p>
 						</div>
 
@@ -1277,7 +1277,7 @@ will only be able to drop these groups if started with superuser privileges.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.1-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.1-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
-</pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Up to two global servers can be defined. They
+</pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Up to two global servers can be defined. They
 will receive logs for startups and exits, as well as all logs from proxies
 configured with &quot;<a href="#log%20global">log global</a>&quot;.
 
@@ -1300,6 +1300,18 @@ configured with &quot;<a href="#log%20global">log global</a>&quot;.
       variables by preceding their name with a dollar sign ('$') and
       optionally enclosing them with braces ('{}'), similarly to what is done
       in Bourne shell.
+
+&lt;length&gt; is an optional maximum line length. Log lines larger than this value
+         will be truncated before being sent. The reason is that syslog
+         servers act differently on log line length. All servers support the
+         default value of 1024, but some servers simply drop larger lines
+         while others do log them. If a server supports long lines, it may
+         make sense to set this value here in order to avoid truncating long
+         lines. Similarly, if a server drops long lines, it is preferable to
+         truncate them before sending them. Accepted values are 80 to 65535
+         inclusive. The default value of 1024 is generally fine for all
+         standard usages. Some specific cases of long captures or
+         JSON-formated logs may require larger values.
 
 &lt;facility&gt; must be one of the 24 standard syslog facilities :
 
@@ -2359,7 +2371,13 @@ extension with &quot;<a href="#url_param">url_param</a>&quot; must be considered
                 - 'ipv4@'  -&gt; address is always IPv4
                 - 'ipv6@'  -&gt; address is always IPv6
                 - 'unix@'  -&gt; address is a path to a local unix socket
-                - 'abns@'  -&gt; address is in abstract namespace (Linux only)
+                - 'abns@'  -&gt; address is in abstract namespace (Linux only).
+                  Note: since abstract sockets are not &quot;rebindable&quot;, they
+                        do not cope well with multi-process mode during
+                        soft-restart, so it is better to avoid them if
+                        nbproc is greater than 1. The effect is that if the
+                        new process fails to start, only one of the old ones
+                        will be able to rebind to the socket.
                 - 'fd@&lt;n&gt;' -&gt; use file descriptor &lt;n&gt; inherited from the
                   parent. The fd must be bound and may or may not already
                   be listening.
@@ -2702,7 +2720,8 @@ In that case haproxy can be used to prevent that gateway from emitting
 invalid payloads. In this case, simply removing the header in the
 configuration does not work because it applies before the header is parsed,
 so that prevents haproxy from compressing. The &quot;offload&quot; setting should
-then be used for such scenarios.
+then be used for such scenarios. Note: for now, the &quot;offload&quot; setting is
+ignored when set in a defaults section.
 
 Compression is disabled when:
   * the request does not advertise a supported compression algorithm in the
@@ -3896,7 +3915,7 @@ the appsession table won't grow if persistence is ignored.
 The persistence is ignored when an &quot;if&quot; condition is met, or unless an
 &quot;unless&quot; condition is met.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#force-persist">force-persist</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, and <a href="#7">section 7</a> about ACL usage.</div>
-<a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><a class="anchor" name="log global"></a><a class="anchor" name="4-log global"></a><a class="anchor" name="4.2-log global"></a><a class="anchor" name="log global (Proxies)"></a><a class="anchor" name="log global (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log global"></a><a href="#4.2-log%20global">log global</a></b></div><a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#4.2-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no log"></a><a class="anchor" name="4-no log"></a><a class="anchor" name="4.2-no log"></a><a class="anchor" name="no log (Proxies)"></a><a class="anchor" name="no log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no log"></a><a href="#4.2-no%20log">no log</a></b></div><pre class="text">Enable per-instance logging of events and traffic.
+<a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><a class="anchor" name="log global"></a><a class="anchor" name="4-log global"></a><a class="anchor" name="4.2-log global"></a><a class="anchor" name="log global (Proxies)"></a><a class="anchor" name="log global (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log global"></a><a href="#4.2-log%20global">log global</a></b></div><a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#4.2-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no log"></a><a class="anchor" name="4-no log"></a><a class="anchor" name="4.2-no log"></a><a class="anchor" name="no log (Proxies)"></a><a class="anchor" name="no log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no log"></a><a href="#4.2-no%20log">no log</a></b></div><pre class="text">Enable per-instance logging of events and traffic.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td></tr>
@@ -3933,6 +3952,18 @@ The persistence is ignored when an &quot;if&quot; condition is met, or unless an
            environment variables by preceding their name with a dollar
            sign ('$') and optionally enclosing them with braces ('{}'),
            similarly to what is done in Bourne shell.
+
+&lt;length&gt;   is an optional maximum line length. Log lines larger than this
+           value will be truncated before being sent. The reason is that
+           syslog servers act differently on log line length. All servers
+           support the default value of 1024, but some servers simply drop
+           larger lines while others do log them. If a server supports long
+           lines, it may make sense to set this value here in order to avoid
+           truncating long lines. Similarly, if a server drops long lines,
+           it is preferable to truncate them before sending them. Accepted
+           values are 80 to 65535 inclusive. The default value of 1024 is
+           generally fine for all standard usages. Some specific cases of
+           long captures or JSON-formated logs may require larger values.
 
 &lt;facility&gt; must be one of the 24 standard syslog facilities :
 
@@ -9988,26 +10019,20 @@ The currently available list of transformation keywords include :
 </pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
 transfer binary content in a way that can be reliably transferred (eg:
 an SSL ID can be copied in a header).
-</pre><a class="anchor" name="lower"></a><a class="anchor" name="7-lower"></a><a class="anchor" name="7.3.1-lower"></a><a class="anchor" name="lower (Using ACLs and fetching samples)"></a><a class="anchor" name="lower (Converters)"></a><div class="keyword"><b><a class="anchor" name="lower"></a><a href="#7.3.1-lower">lower</a></b></div><pre class="text">Convert a string sample to lower case. This can only be placed after a string
-sample fetch function or after a transformation keyword returning a string
-type. The result is of type string.
-</pre><a class="anchor" name="upper"></a><a class="anchor" name="7-upper"></a><a class="anchor" name="7.3.1-upper"></a><a class="anchor" name="upper (Using ACLs and fetching samples)"></a><a class="anchor" name="upper (Converters)"></a><div class="keyword"><b><a class="anchor" name="upper"></a><a href="#7.3.1-upper">upper</a></b></div><pre class="text">Convert a string sample to upper case. This can only be placed after a string
-sample fetch function or after a transformation keyword returning a string
-type. The result is of type string.
 </pre><a class="anchor" name="hex"></a><a class="anchor" name="7-hex"></a><a class="anchor" name="7.3.1-hex"></a><a class="anchor" name="hex (Using ACLs and fetching samples)"></a><a class="anchor" name="hex (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex"></a><a href="#7.3.1-hex">hex</a></b></div><pre class="text">Converts a binary input sample to an hex string containing two hex digits per
 input byte. It is used to log or transfer hex dumps of some binary input data
 in a way that can be reliably transferred (eg: an SSL ID can be copied in a
 header).
-</pre><a class="anchor" name="ipmask"></a><a class="anchor" name="7-ipmask"></a><a class="anchor" name="7.3.1-ipmask"></a><a class="anchor" name="ipmask (Using ACLs and fetching samples)"></a><a class="anchor" name="ipmask (Converters)"></a><div class="keyword"><b><a class="anchor" name="ipmask"></a><a href="#7.3.1-ipmask">ipmask</a></b>(<span style="color: #080">&lt;mask&gt;</span>)</div><pre class="text">Apply a mask to an IPv4 address, and use the result for lookups and storage.
-This can be used to make all hosts within a certain mask to share the same
-table entries and as such use the same server. The mask can be passed in
-dotted form (eg: 255.255.255.0) or in CIDR form (eg: 24).
 </pre><a class="anchor" name="http_date"></a><a class="anchor" name="7-http_date"></a><a class="anchor" name="7.3.1-http_date"></a><a class="anchor" name="http_date (Using ACLs and fetching samples)"></a><a class="anchor" name="http_date (Converters)"></a><div class="keyword"><b><a class="anchor" name="http_date"></a><a href="#7.3.1-http_date">http_date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>)</div><pre class="text">Converts an integer supposed to contain a date since epoch to a string
 representing this date in a format suitable for use in HTTP header fields. If
 an offset value is specified, then it is a number of seconds that is added to
 the date before the conversion is operated. This is particularly useful to
 emit Date header fields, Expires values in responses when combined with a
 positive offset, or Last-Modified values when the offset is negative.
+</pre><a class="anchor" name="ipmask"></a><a class="anchor" name="7-ipmask"></a><a class="anchor" name="7.3.1-ipmask"></a><a class="anchor" name="ipmask (Using ACLs and fetching samples)"></a><a class="anchor" name="ipmask (Converters)"></a><div class="keyword"><b><a class="anchor" name="ipmask"></a><a href="#7.3.1-ipmask">ipmask</a></b>(<span style="color: #080">&lt;mask&gt;</span>)</div><pre class="text">Apply a mask to an IPv4 address, and use the result for lookups and storage.
+This can be used to make all hosts within a certain mask to share the same
+table entries and as such use the same server. The mask can be passed in
+dotted form (eg: 255.255.255.0) or in CIDR form (eg: 24).
 </pre><a class="anchor" name="language"></a><a class="anchor" name="7-language"></a><a class="anchor" name="7.3.1-language"></a><a class="anchor" name="language (Using ACLs and fetching samples)"></a><a class="anchor" name="language (Converters)"></a><div class="keyword"><b><a class="anchor" name="language"></a><a href="#7.3.1-language">language</a></b>(<span style="color: #080">&lt;value&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;default&gt;</span>]</span>)</div><pre class="text">Returns the value with the highest q-factor from a list as extracted from the
 &quot;accept-language&quot; header using &quot;<a href="#req.fhdr">req.fhdr</a>&quot;. Values with no q-factor have a
 q-factor of 1. Values with a q-factor of 0 are dropped. Only values which
@@ -10034,7 +10059,10 @@ use_backend french  if fr
 use_backend english if en
 default_backend choose_your_language
 </code></pre>
-</div><a class="anchor" name="map"></a><a class="anchor" name="7-map"></a><a class="anchor" name="7.3.1-map"></a><a class="anchor" name="map (Using ACLs and fetching samples)"></a><a class="anchor" name="map (Converters)"></a><div class="keyword"><b><a class="anchor" name="map"></a><a href="#7.3.1-map">map</a></b>(<span style="color: #080">&lt;map_file&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;default_value&gt;</span>]</span>)</div><pre class="text">map_&lt;match_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
+</div><a class="anchor" name="lower"></a><a class="anchor" name="7-lower"></a><a class="anchor" name="7.3.1-lower"></a><a class="anchor" name="lower (Using ACLs and fetching samples)"></a><a class="anchor" name="lower (Converters)"></a><div class="keyword"><b><a class="anchor" name="lower"></a><a href="#7.3.1-lower">lower</a></b></div><pre class="text">Convert a string sample to lower case. This can only be placed after a string
+sample fetch function or after a transformation keyword returning a string
+type. The result is of type string.
+</pre><a class="anchor" name="map"></a><a class="anchor" name="7-map"></a><a class="anchor" name="7.3.1-map"></a><a class="anchor" name="map (Using ACLs and fetching samples)"></a><a class="anchor" name="map (Converters)"></a><div class="keyword"><b><a class="anchor" name="map"></a><a href="#7.3.1-map">map</a></b>(<span style="color: #080">&lt;map_file&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;default_value&gt;</span>]</span>)</div><pre class="text">map_&lt;match_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
 map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&gt;])
   Search the input value from &lt;map_file&gt; using the &lt;match_type&gt; matching method,
   and return the associated value converted to the type &lt;output_type&gt;. If the
@@ -10079,7 +10107,10 @@ trailing spaces/tabs.
  |       `---------------------------- key
  `------------------------------------ leading spaces ignored
 </code></pre>
-</div></div>
+</div><a class="anchor" name="upper"></a><a class="anchor" name="7-upper"></a><a class="anchor" name="7.3.1-upper"></a><a class="anchor" name="upper (Using ACLs and fetching samples)"></a><a class="anchor" name="upper (Converters)"></a><div class="keyword"><b><a class="anchor" name="upper"></a><a href="#7.3.1-upper">upper</a></b></div><pre class="text">Convert a string sample to upper case. This can only be placed after a string
+sample fetch function or after a transformation keyword returning a string
+type. The result is of type string.
+</pre></div>
 <a class="anchor" id="7.3.2" name="7.3.2"></a>
 <h3 id="chapter-7.3.2" data-target="7.3.2"><small><a class="small" href="#7.3.2">7.3.2.</a></small> Fetching samples from internal states</h3>
 <div><pre class="text">A first set of sample fetch methods applies to internal information which does
@@ -10354,14 +10385,12 @@ to mark a connection when a first ACL was verified :
       acl abuse sc0_http_req_rate gt 10
       acl kill  sc0_inc_gpc0 gt 0
       tcp-request connection reject if abuse kill
-</pre><a class="anchor" name="sc_kbytes_in"></a><a class="anchor" name="7-sc_kbytes_in"></a><a class="anchor" name="7.3.3-sc_kbytes_in"></a><a class="anchor" name="sc_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_kbytes_in"></a><a href="#7.3.3-sc_kbytes_in">sc_kbytes_in</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_kbytes_in"></a><a class="anchor" name="7-sc0_kbytes_in"></a><a class="anchor" name="7.3.3-sc0_kbytes_in"></a><a class="anchor" name="sc0_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_kbytes_in"></a><a href="#7.3.3-sc0_kbytes_in">sc0_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_kbytes_in"></a><a class="anchor" name="7-sc1_kbytes_in"></a><a class="anchor" name="7.3.3-sc1_kbytes_in"></a><a class="anchor" name="sc1_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_in"></a><a href="#7.3.3-sc1_kbytes_in">sc1_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_kbytes_in"></a><a class="anchor" name="7-sc2_kbytes_in"></a><a class="anchor" name="7.3.3-sc2_kbytes_in"></a><a class="anchor" name="sc2_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_in"></a><a href="#7.3.3-sc2_kbytes_in">sc2_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the amount of client-to-server data from the currently tracked
-counters, measured in kilobytes over the period configured in the table. The
-test is currently performed on 32-bit integers, which limits values to 4
-terabytes. See also src_kbytes_in.
-</pre><a class="anchor" name="sc_kbytes_out"></a><a class="anchor" name="7-sc_kbytes_out"></a><a class="anchor" name="7.3.3-sc_kbytes_out"></a><a class="anchor" name="sc_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_kbytes_out"></a><a href="#7.3.3-sc_kbytes_out">sc_kbytes_out</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_kbytes_out"></a><a class="anchor" name="7-sc0_kbytes_out"></a><a class="anchor" name="7.3.3-sc0_kbytes_out"></a><a class="anchor" name="sc0_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_kbytes_out"></a><a href="#7.3.3-sc0_kbytes_out">sc0_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_kbytes_out"></a><a class="anchor" name="7-sc1_kbytes_out"></a><a class="anchor" name="7.3.3-sc1_kbytes_out"></a><a class="anchor" name="sc1_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_out"></a><a href="#7.3.3-sc1_kbytes_out">sc1_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_kbytes_out"></a><a class="anchor" name="7-sc2_kbytes_out"></a><a class="anchor" name="7.3.3-sc2_kbytes_out"></a><a class="anchor" name="sc2_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_out"></a><a href="#7.3.3-sc2_kbytes_out">sc2_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the amount of server-to-client data from the currently tracked
-counters, measured in kilobytes over the period configured in the table. The
-test is currently performed on 32-bit integers, which limits values to 4
-terabytes. See also src_kbytes_out.
+</pre><a class="anchor" name="sc_kbytes_in"></a><a class="anchor" name="7-sc_kbytes_in"></a><a class="anchor" name="7.3.3-sc_kbytes_in"></a><a class="anchor" name="sc_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_kbytes_in"></a><a href="#7.3.3-sc_kbytes_in">sc_kbytes_in</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_kbytes_in"></a><a class="anchor" name="7-sc0_kbytes_in"></a><a class="anchor" name="7.3.3-sc0_kbytes_in"></a><a class="anchor" name="sc0_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_kbytes_in"></a><a href="#7.3.3-sc0_kbytes_in">sc0_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_kbytes_in"></a><a class="anchor" name="7-sc1_kbytes_in"></a><a class="anchor" name="7.3.3-sc1_kbytes_in"></a><a class="anchor" name="sc1_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_in"></a><a href="#7.3.3-sc1_kbytes_in">sc1_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_kbytes_in"></a><a class="anchor" name="7-sc2_kbytes_in"></a><a class="anchor" name="7.3.3-sc2_kbytes_in"></a><a class="anchor" name="sc2_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_in"></a><a href="#7.3.3-sc2_kbytes_in">sc2_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of client-to-server data from the currently tracked
+counters, measured in kilobytes. The test is currently performed on 32-bit
+integers, which limits values to 4 terabytes. See also src_kbytes_in.
+</pre><a class="anchor" name="sc_kbytes_out"></a><a class="anchor" name="7-sc_kbytes_out"></a><a class="anchor" name="7.3.3-sc_kbytes_out"></a><a class="anchor" name="sc_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_kbytes_out"></a><a href="#7.3.3-sc_kbytes_out">sc_kbytes_out</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_kbytes_out"></a><a class="anchor" name="7-sc0_kbytes_out"></a><a class="anchor" name="7.3.3-sc0_kbytes_out"></a><a class="anchor" name="sc0_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_kbytes_out"></a><a href="#7.3.3-sc0_kbytes_out">sc0_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_kbytes_out"></a><a class="anchor" name="7-sc1_kbytes_out"></a><a class="anchor" name="7.3.3-sc1_kbytes_out"></a><a class="anchor" name="sc1_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_out"></a><a href="#7.3.3-sc1_kbytes_out">sc1_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_kbytes_out"></a><a class="anchor" name="7-sc2_kbytes_out"></a><a class="anchor" name="7.3.3-sc2_kbytes_out"></a><a class="anchor" name="sc2_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_out"></a><a href="#7.3.3-sc2_kbytes_out">sc2_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of server-to-client data from the currently tracked
+counters, measured in kilobytes. The test is currently performed on 32-bit
+integers, which limits values to 4 terabytes. See also src_kbytes_out.
 </pre><a class="anchor" name="sc_sess_cnt"></a><a class="anchor" name="7-sc_sess_cnt"></a><a class="anchor" name="7.3.3-sc_sess_cnt"></a><a class="anchor" name="sc_sess_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_sess_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_sess_cnt"></a><a href="#7.3.3-sc_sess_cnt">sc_sess_cnt</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_sess_cnt"></a><a class="anchor" name="7-sc0_sess_cnt"></a><a class="anchor" name="7.3.3-sc0_sess_cnt"></a><a class="anchor" name="sc0_sess_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_sess_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_sess_cnt"></a><a href="#7.3.3-sc0_sess_cnt">sc0_sess_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_sess_cnt"></a><a class="anchor" name="7-sc1_sess_cnt"></a><a class="anchor" name="7.3.3-sc1_sess_cnt"></a><a class="anchor" name="sc1_sess_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_sess_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_sess_cnt"></a><a href="#7.3.3-sc1_sess_cnt">sc1_sess_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_sess_cnt"></a><a class="anchor" name="7-sc2_sess_cnt"></a><a class="anchor" name="7.3.3-sc2_sess_cnt"></a><a class="anchor" name="sc2_sess_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_sess_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_sess_cnt"></a><a href="#7.3.3-sc2_sess_cnt">sc2_sess_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the cumulated number of incoming connections that were transformed
 into sessions, which means that they were accepted by a &quot;tcp-request
 connection&quot; rule, from the currently tracked counters. A backend may count
@@ -10475,17 +10504,16 @@ connection when a first ACL was verified :
       acl abuse src_http_req_rate gt 10
       acl kill  src_inc_gpc0 gt 0
       tcp-request connection reject if abuse kill
-</pre><a class="anchor" name="src_kbytes_in"></a><a class="anchor" name="7-src_kbytes_in"></a><a class="anchor" name="7.3.3-src_kbytes_in"></a><a class="anchor" name="src_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="src_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_kbytes_in"></a><a href="#7.3.3-src_kbytes_in">src_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the amount of data received from the incoming connection's source
+</pre><a class="anchor" name="src_kbytes_in"></a><a class="anchor" name="7-src_kbytes_in"></a><a class="anchor" name="7.3.3-src_kbytes_in"></a><a class="anchor" name="src_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="src_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_kbytes_in"></a><a href="#7.3.3-src_kbytes_in">src_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of data received from the incoming connection's
+source address in the current proxy's stick-table or in the designated
+stick-table, measured in kilobytes. If the address is not found, zero is
+returned. The test is currently performed on 32-bit integers, which limits
+values to 4 terabytes. See also sc/sc0/sc1/sc2_kbytes_in.
+</pre><a class="anchor" name="src_kbytes_out"></a><a class="anchor" name="7-src_kbytes_out"></a><a class="anchor" name="7.3.3-src_kbytes_out"></a><a class="anchor" name="src_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="src_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_kbytes_out"></a><a href="#7.3.3-src_kbytes_out">src_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of data sent to the incoming connection's source
 address in the current proxy's stick-table or in the designated stick-table,
-measured in kilobytes over the period configured in the table. If the address
-is not found, zero is returned. The test is currently performed on 32-bit
-integers, which limits values to 4 terabytes. See also
-sc/sc0/sc1/sc2_kbytes_in.
-</pre><a class="anchor" name="src_kbytes_out"></a><a class="anchor" name="7-src_kbytes_out"></a><a class="anchor" name="7.3.3-src_kbytes_out"></a><a class="anchor" name="src_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="src_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_kbytes_out"></a><a href="#7.3.3-src_kbytes_out">src_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the amount of data sent to the incoming connection's source address
-in the current proxy's stick-table or in the designated stick-table, measured
-in kilobytes over the period configured in the table. If the address is not
-found, zero is returned. The test is currently performed on 32-bit integers,
-which limits values to 4 terabytes. See also sc/sc0/sc1/sc2_kbytes_out.
+measured in kilobytes. If the address is not found, zero is returned. The
+test is currently performed on 32-bit integers, which limits values to 4
+terabytes. See also sc/sc0/sc1/sc2_kbytes_out.
 </pre><a class="anchor" name="src_port"></a><a class="anchor" name="7-src_port"></a><a class="anchor" name="7.3.3-src_port"></a><a class="anchor" name="src_port (Using ACLs and fetching samples)"></a><a class="anchor" name="src_port (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_port"></a><a href="#7.3.3-src_port">src_port</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the TCP source port of the
 connection on the client side, which is the port the client connected from.
 Usage of this function is very limited as modern protocols do not care much
@@ -10595,6 +10623,10 @@ an ACL, the value(s) to match against can be passed in hexadecimal form.
 </pre><a class="anchor" name="ssl_c_sha1"></a><a class="anchor" name="7-ssl_c_sha1"></a><a class="anchor" name="7.3.4-ssl_c_sha1"></a><a class="anchor" name="ssl_c_sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sha1 (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sha1"></a><a href="#7.3.4-ssl_c_sha1">ssl_c_sha1</a></b> : binary</div><pre class="text">Returns the SHA-1 fingerprint of the certificate presented by the client when
 the incoming connection was made over an SSL/TLS transport layer. This can be
 used to stick a client to a server, or to pass this information to a server.
+Note that the output is binary, so if you want to pass that signature to the
+server, you need to encode it in hex or base64, such as in the example below:
+
+   http-request set-header X-SSL-Client-SHA1 %[ssl_c_sha1,hex]
 </pre><a class="anchor" name="ssl_c_sig_alg"></a><a class="anchor" name="7-ssl_c_sig_alg"></a><a class="anchor" name="7.3.4-ssl_c_sig_alg"></a><a class="anchor" name="ssl_c_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sig_alg"></a><a href="#7.3.4-ssl_c_sig_alg">ssl_c_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
 the client when the incoming connection was made over an SSL/TLS transport
 layer.
@@ -12715,44 +12747,76 @@ text is doubled ('&quot;&quot;'), which is the format that most tools recognize.
 do not insert any column before these ones in order not to break tools which
 use hard-coded column positions.
 
-  0. pxname: proxy name
-  1. svname: service name (FRONTEND for frontend, BACKEND for backend, any name
-    for server)
-  2. qcur: current queued requests
-  3. qmax: max queued requests
-  4. scur: current sessions
-  5. smax: max sessions
-  6. slim: sessions limit
-  7. stot: total sessions
-  8. bin: bytes in
-  9. bout: bytes out
- 10. dreq: denied requests
- 11. dresp: denied responses
- 12. ereq: request errors
- 13. econ: connection errors
- 14. eresp: response errors (among which srv_abrt)
- 15. wretr: retries (warning)
- 16. wredis: redispatches (warning)
- 17. status: status (UP/DOWN/NOLB/MAINT/MAINT(via)...)
- 18. weight: server weight (server), total weight (backend)
- 19. act: server is active (server), number of active servers (backend)
- 20. bck: server is backup (server), number of backup servers (backend)
- 21. chkfail: number of failed checks
- 22. chkdown: number of UP-&gt;DOWN transitions
- 23. lastchg: last status change (in seconds)
- 24. downtime: total downtime (in seconds)
- 25. qlimit: queue limit
- 26. pid: process id (0 for first instance, 1 for second, ...)
- 27. iid: unique proxy id
- 28. sid: service id (unique inside a proxy)
- 29. throttle: warm up status
- 30. lbtot: total number of times a server was selected
- 31. tracked: id of proxy/server if tracking is enabled
- 32. type (0=frontend, 1=backend, 2=server, 3=socket)
- 33. rate: number of sessions per second over last elapsed second
- 34. rate_lim: limit on new sessions per second
- 35. rate_max: max number of new sessions per second
- 36. check_status: status of last health check, one of:
+In brackets after each field name are the types which may have a value for
+that field. The types are L (Listeners), F (Frontends), B (Backends), and
+S (Servers).
+
+  0. pxname [LFBS]: proxy name
+  1. svname [LFBS]: service name (FRONTEND for frontend, BACKEND for backend,
+     any name for server/listener)
+  2. qcur [..BS]: current queued requests. For the backend this reports the
+     number queued without a server assigned.
+  3. qmax [..BS]: max value of qcur
+  4. scur [LFBS]: current sessions
+  5. smax [LFBS]: max sessions
+  6. slim [LFBS]: configured session limit
+  7. stot [LFBS]: cumulative number of connections
+  8. bin [LFBS]: bytes in
+  9. bout [LFBS]: bytes out
+ 10. dreq [LFB.]: requests denied because of security concerns.
+     - For tcp this is because of a matched tcp-request content rule.
+     - For http this is because of a matched http-request or tarpit rule.
+ 11. dresp [LFBS]: responses denied because of security concerns.
+     - For http this is because of a matched http-request rule, or
+       &quot;<a href="#option%20checkcache">option checkcache</a>&quot;.
+ 12. ereq [LF..]: request errors. Some of the possible causes are:
+     - early termination from the client, before the request has been sent.
+     - read error from the client
+     - client timeout
+     - client closed connection
+     - various bad requests from the client.
+     - request was tarpitted.
+ 13. econ [..BS]: number of requests that encountered an error trying to
+     connect to a backend server. The backend stat is the sum of the stat
+     for all servers of that backend, plus any connection errors not
+     associated with a particular server (such as the backend having no
+     active servers).
+ 14. eresp [..BS]: response errors. srv_abrt will be counted here also.
+     Some other errors are:
+     - write error on the client socket (won't be counted for the server stat)
+     - failure applying filters to the response.
+ 15. wretr [..BS]: number of times a connection to a server was retried.
+ 16. wredis [..BS]: number of times a request was redispatched to another
+     server. The server value counts the number of times that server was
+     switched away from.
+ 17. status [LFBS]: status (UP/DOWN/NOLB/MAINT/MAINT(via)...)
+ 18. weight [..BS]: server weight (server), total weight (backend)
+ 19. act [..BS]: server is active (server), number of active servers (backend)
+ 20. bck [..BS]: server is backup (server), number of backup servers (backend)
+ 21. chkfail [...S]: number of failed checks. (Only counts checks failed when
+     the server is up.)
+ 22. chkdown [..BS]: number of UP-&gt;DOWN transitions. The backend counter counts
+     transitions to the whole backend being down, rather than the sum of the
+     counters for each server.
+ 23. lastchg [..BS]: number of seconds since the last UP&lt;-&gt;DOWN transition
+ 24. downtime [..BS]: total downtime (in seconds). The value for the backend
+     is the downtime for the whole backend, not the sum of the server downtime.
+ 25. qlimit [...S]: configured maxqueue for the server, or nothing in the
+     value is 0 (default, meaning no limit)
+ 26. pid [LFBS]: process id (0 for first instance, 1 for second, ...)
+ 27. iid [LFBS]: unique proxy id
+ 28. sid [L..S]: server id (unique inside a proxy)
+ 29. throttle [...S]: current throttle percentage for the server, when
+     slowstart is active, or no value if not in slowstart.
+ 30. lbtot [..BS]: total number of times a server was selected, either for new
+     sessions, or when re-dispatching. The server counter is the number
+     of times that server was selected.
+ 31. tracked [...S]: id of proxy/server if tracking is enabled.
+ 32. type [LFBS]: (0=frontend, 1=backend, 2=server, 3=socket/listener)
+ 33. rate [.FBS]: number of sessions per second over last elapsed second
+ 34. rate_lim [.F..]: configured limit on new sessions per second
+ 35. rate_max [.FBS]: max number of new sessions per second
+ 36. check_status [...S]: status of last health check, one of:
         UNK     -&gt; unknown
         INI     -&gt; initializing
         SOCKERR -&gt; socket error
@@ -12769,31 +12833,36 @@ use hard-coded column positions.
         L7TOUT  -&gt; layer 7 (HTTP/SMTP) timeout
         L7RSP   -&gt; layer 7 invalid response - protocol error
         L7STS   -&gt; layer 7 response error, for example HTTP 5xx
- 37. check_code: layer5-7 code, if available
- 38. check_duration: time in ms took to finish last health check
- 39. hrsp_1xx: http responses with 1xx code
- 40. hrsp_2xx: http responses with 2xx code
- 41. hrsp_3xx: http responses with 3xx code
- 42. hrsp_4xx: http responses with 4xx code
- 43. hrsp_5xx: http responses with 5xx code
- 44. hrsp_other: http responses with other codes (protocol error)
- 45. hanafail: failed health checks details
- 46. req_rate: HTTP requests per second over last elapsed second
- 47. req_rate_max: max number of HTTP requests per second observed
- 48. req_tot: total number of HTTP requests received
- 49. cli_abrt: number of data transfers aborted by the client
- 50. srv_abrt: number of data transfers aborted by the server (inc. in eresp)
- 51. comp_in: number of HTTP response bytes fed to the compressor
- 52. comp_out: number of HTTP response bytes emitted by the compressor
- 53. comp_byp: number of bytes that bypassed the HTTP compressor (CPU/BW limit)
- 54. comp_rsp: number of HTTP responses that were compressed
- 55. lastsess: number of seconds since last session assigned to server/backend
- 56. last_chk: last health check contents or textual error
- 57. last_agt: last agent check contents or textual error
- 58. qtime: the average queue time in ms over the 1024 last requests
- 59. ctime: the average connect time in ms over the 1024 last requests
- 60. rtime: the average response time in ms over the 1024 last requests (0 for TCP)
- 61. ttime: the average total session time in ms over the 1024 last requests
+ 37. check_code [...S]: layer5-7 code, if available
+ 38. check_duration [...S]: time in ms took to finish last health check
+ 39. hrsp_1xx [.FBS]: http responses with 1xx code
+ 40. hrsp_2xx [.FBS]: http responses with 2xx code
+ 41. hrsp_3xx [.FBS]: http responses with 3xx code
+ 42. hrsp_4xx [.FBS]: http responses with 4xx code
+ 43. hrsp_5xx [.FBS]: http responses with 5xx code
+ 44. hrsp_other [.FBS]: http responses with other codes (protocol error)
+ 45. hanafail [...S]: failed health checks details
+ 46. req_rate [.F..]: HTTP requests per second over last elapsed second
+ 47. req_rate_max [.F..]: max number of HTTP requests per second observed
+ 48. req_tot [.F..]: total number of HTTP requests received
+ 49. cli_abrt [..BS]: number of data transfers aborted by the client
+ 50. srv_abrt [..BS]: number of data transfers aborted by the server
+     (inc. in eresp)
+ 51. comp_in [.FB.]: number of HTTP response bytes fed to the compressor
+ 52. comp_out [.FB.]: number of HTTP response bytes emitted by the compressor
+ 53. comp_byp [.FB.]: number of bytes that bypassed the HTTP compressor
+     (CPU/BW limit)
+ 54. comp_rsp [.FB.]: number of HTTP responses that were compressed
+ 55. lastsess [..BS]: number of seconds since last session assigned to
+     server/backend
+ 56. last_chk [...S]: last health check contents or textual error
+ 57. last_agt [...S]: last agent check contents or textual error
+ 58. qtime [..BS]: the average queue time in ms over the 1024 last requests
+ 59. ctime [..BS]: the average connect time in ms over the 1024 last requests
+ 60. rtime [..BS]: the average response time in ms over the 1024 last requests
+     (0 for TCP)
+ 61. ttime [..BS]: the average total session time in ms over the 1024 last
+     requests
 </pre></div>
 <a class="anchor" id="9.2" name="9.2"></a>
 <h2 id="chapter-9.2" data-target="9.2"><small><a class="small" href="#9.2">9.2.</a></small> Unix Socket commands</h2>
@@ -13396,8 +13465,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5.1 &ndash; Configuration Manual<br>
-							<small>2014/06/24, willy tarreau</small>
+							HAProxy 1.5.2 &ndash; Configuration Manual<br>
+							<small>2014/07/12, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -14232,7 +14301,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-23', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14244,4 +14313,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5.1 -->
+<!-- git:v1.5.2 -->
