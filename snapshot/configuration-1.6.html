@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-42 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-50 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-23" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/07/15</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/07/16</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-42</strong></p>
+							<p><strong>version 1.6-dev0-50</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3308,7 +3308,7 @@ simplify it.
                by Bob Jenkins.</pre>
 </div>
 <pre class="text">The default hash type is &quot;map-based&quot; and is recommended for most usages. The
-default function is &quot;sdbm&quot;, the selection of a function should be based on
+default function is &quot;<a href="#sdbm">sdbm</a>&quot;, the selection of a function should be based on
 the range of the values being hashed.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#server">server</a>&quot;</div>
 <a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check disable-on-404"></a><a class="anchor" name="4-http-check disable-on-404"></a><a class="anchor" name="4.2-http-check disable-on-404"></a><a class="anchor" name="http-check disable-on-404 (Proxies)"></a><a class="anchor" name="http-check disable-on-404 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check disable-on-404"></a><a href="#4.2-http-check%20disable-on-404">http-check disable-on-404</a></b></div><pre class="text">Enable a maintenance mode upon HTTP/404 response to health-checks
@@ -10082,6 +10082,15 @@ The currently available list of transformation keywords include :
 </pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
 transfer binary content in a way that can be reliably transferred (eg:
 an SSL ID can be copied in a header).
+</pre><a class="anchor" name="djb2"></a><a class="anchor" name="7-djb2"></a><a class="anchor" name="7.3.1-djb2"></a><a class="anchor" name="djb2 (Using ACLs and fetching samples)"></a><a class="anchor" name="djb2 (Converters)"></a><div class="keyword"><b><a class="anchor" name="djb2"></a><a href="#7.3.1-djb2">djb2</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the DJB2
+hash function. Optionally, it is possible to apply a full avalanche hash
+function to the output if the optional &lt;avalanche&gt; argument equals 1. This
+converter uses the same functions as used by the various hash-based load
+balancing algorithms, so it will provide exactly the same results. It is
+mostly intended for debugging, but can be used as a stick-table entry to
+collect rough statistics. It must not be used for security purposes as a
+32-bit hash is trivial to break. See also &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the &quot;<a href="#hash-type">hash-type</a>&quot;
+directive.
 </pre><a class="anchor" name="hex"></a><a class="anchor" name="7-hex"></a><a class="anchor" name="7.3.1-hex"></a><a class="anchor" name="hex (Using ACLs and fetching samples)"></a><a class="anchor" name="hex (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex"></a><a href="#7.3.1-hex">hex</a></b></div><pre class="text">Converts a binary input sample to an hex string containing two hex digits per
 input byte. It is used to log or transfer hex dumps of some binary input data
 in a way that can be reliably transferred (eg: an SSL ID can be copied in a
@@ -10188,7 +10197,16 @@ trailing spaces/tabs.
  |       `---------------------------- key
  `------------------------------------ leading spaces ignored
 </code></pre>
-</div><a class="anchor" name="table_bytes_in_rate"></a><a class="anchor" name="7-table_bytes_in_rate"></a><a class="anchor" name="7.3.1-table_bytes_in_rate"></a><a class="anchor" name="table_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="table_bytes_in_rate (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_bytes_in_rate"></a><a href="#7.3.1-table_bytes_in_rate">table_bytes_in_rate</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
+</div><a class="anchor" name="sdbm"></a><a class="anchor" name="7-sdbm"></a><a class="anchor" name="7.3.1-sdbm"></a><a class="anchor" name="sdbm (Using ACLs and fetching samples)"></a><a class="anchor" name="sdbm (Converters)"></a><div class="keyword"><b><a class="anchor" name="sdbm"></a><a href="#7.3.1-sdbm">sdbm</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the SDBM
+hash function. Optionally, it is possible to apply a full avalanche hash
+function to the output if the optional &lt;avalanche&gt; argument equals 1. This
+converter uses the same functions as used by the various hash-based load
+balancing algorithms, so it will provide exactly the same results. It is
+mostly intended for debugging, but can be used as a stick-table entry to
+collect rough statistics. It must not be used for security purposes as a
+32-bit hash is trivial to break. See also &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the &quot;<a href="#hash-type">hash-type</a>&quot;
+directive.
+</pre><a class="anchor" name="table_bytes_in_rate"></a><a class="anchor" name="7-table_bytes_in_rate"></a><a class="anchor" name="7.3.1-table_bytes_in_rate"></a><a class="anchor" name="table_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="table_bytes_in_rate (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_bytes_in_rate"></a><a href="#7.3.1-table_bytes_in_rate">table_bytes_in_rate</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
 the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the average client-to-server
 bytes rate associated with the input sample in the designated table, measured
@@ -10308,7 +10326,16 @@ by your operating system. See also the ltime converter.
 <span class="comment"># Eg:  20140710162350 127.0.0.1:57325</span>
 log-format %[date,utime(%Y%m%d%H%M%S)]\ %ci:%cp
 </code></pre>
-</div></div>
+</div><a class="anchor" name="wt6"></a><a class="anchor" name="7-wt6"></a><a class="anchor" name="7.3.1-wt6"></a><a class="anchor" name="wt6 (Using ACLs and fetching samples)"></a><a class="anchor" name="wt6 (Converters)"></a><div class="keyword"><b><a class="anchor" name="wt6"></a><a href="#7.3.1-wt6">wt6</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the WT6
+hash function. Optionally, it is possible to apply a full avalanche hash
+function to the output if the optional &lt;avalanche&gt; argument equals 1. This
+converter uses the same functions as used by the various hash-based load
+balancing algorithms, so it will provide exactly the same results. It is
+mostly intended for debugging, but can be used as a stick-table entry to
+collect rough statistics. It must not be used for security purposes as a
+32-bit hash is trivial to break. See also &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, and the &quot;<a href="#hash-type">hash-type</a>&quot;
+directive.
+</pre></div>
 <a class="anchor" id="7.3.2" name="7.3.2"></a>
 <h3 id="chapter-7.3.2" data-target="7.3.2"><small><a class="small" href="#7.3.2">7.3.2.</a></small> Fetching samples from internal states</h3>
 <div><pre class="text">A first set of sample fetch methods applies to internal information which does
@@ -11172,7 +11199,9 @@ ACL derivatives :
 </pre><a class="anchor" name="base32"></a><a class="anchor" name="7-base32"></a><a class="anchor" name="7.3.6-base32"></a><a class="anchor" name="base32 (Using ACLs and fetching samples)"></a><a class="anchor" name="base32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="base32"></a><a href="#7.3.6-base32">base32</a></b> : integer</div><pre class="text">  This returns a 32-bit hash of the value returned by the &quot;<a href="#base">base</a>&quot; fetch method
   above. This is useful to track per-URL activity on high traffic sites without
   having to store all URLs. Instead a shorter hash is stored, saving a lot of
-  memory. The output type is an unsigned integer.
+  memory. The output type is an unsigned integer. The hash function used is
+  SDBM with full avalanche on the output. Technically, base32 is exactly equal
+  to &quot;base,sdbm(1)&quot;.
 
 base32+src : binary
   This returns the concatenation of the base32 fetch above and the src fetch
@@ -13663,7 +13692,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-42 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-50 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -13784,6 +13813,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"disabled (Alphabetically sorted keywords reference)",
 				"disabled (Server and default-server options)",
 				"dispatch",
+				"djb2",
 				"downinter",
 				"dst",
 				"dst_conn",
@@ -14162,6 +14192,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"scook",
 				"scook_cnt",
 				"scook_val",
+				"sdbm",
 				"send-proxy",
 				"send-proxy-v2",
 				"send-proxy-v2-ssl",
@@ -14407,7 +14438,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"verify (Server and default-server options)",
 				"verifyhost",
 				"wait_end",
-				"weight"
+				"weight",
+				"wt6"
 			]
 
 			function updateKeyboardNavStatus() {
@@ -14524,7 +14556,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-42', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-50', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-23', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14536,4 +14568,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-42-g8de5415 -->
+<!-- git:v1.6-dev0-50-gbbfd1a2 -->
