@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5.4 - Configuration Manual</title>
+		<title>HAProxy version 1.5.5 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-23" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/09/02</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/10/08</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5.4</strong></p>
+							<p><strong>version 1.5.5</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -2483,6 +2483,10 @@ word size, and is not limited to the first 32 or 64.
 
 Each &quot;<a href="#bind">bind</a>&quot; line may further be limited to a subset of the proxy's processes,
 please consult the &quot;<a href="#process">process</a>&quot; bind keyword in <a href="#5.1">section 5.1</a>.
+
+When a frontend has no explicit &quot;<a href="#bind-process">bind-process</a>&quot; line, it tries to bind to all
+the processes referenced by its &quot;<a href="#bind">bind</a>&quot; lines. That means that frontends can
+easily adapt to their listeners' processes.
 
 If some backends are referenced by frontends bound to other processes, the
 backend automatically inherits the frontend's processes.
@@ -7853,9 +7857,9 @@ backend connected to from an HTTP frontend, it is guaranteed that HTTP
 contents will always be immediately present when the rule is evaluated first.
 
 Tracking layer7 information is also possible provided that the information
-are present when the rule is processed. The current solution for making the
-rule engine wait for such information is to set an inspect delay and to
-condition its execution with an ACL relying on such information.
+are present when the rule is processed. The rule processing engine is able to
+wait until the inspect delay expires when the data to be tracked is not yet
+available.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -7885,14 +7889,14 @@ tcp-request content reject
 <pre class="prettyprint">
 <code><span class="comment"># Track the last IP from X-Forwarded-For</span>
 tcp-request inspect-delay 10s
-tcp-request content track-sc0 hdr(x-forwarded-for,-1) if HTTP
+tcp-request content track-sc0 hdr(x-forwarded-for,-1)
 </code></pre>
 </div><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code><span class="comment"># track request counts per &quot;<a href="#base">base</a>&quot; (concatenation of Host+URL)</span>
 tcp-request inspect-delay 10s
-tcp-request content track-sc0 base table req-rate if HTTP
+tcp-request content track-sc0 base table req-rate
 </code></pre>
 </div><div class="separator">
 <span class="label label-success">Example:</span>
@@ -8906,7 +8910,9 @@ in any order, optionally terminated by '\r' and/or '\n', each consisting of :
 
 - An ASCII representation of a positive integer percentage, e.g. &quot;75%&quot;.
   Values in this format will set the weight proportional to the initial
-  weight of a server as configured when haproxy starts.
+  weight of a server as configured when haproxy starts. Note that a zero
+  weight is reported on the stats page as &quot;DRAIN&quot; since it has the same
+  effect on the server (it's removed from the LB farm).
 
 - The word &quot;ready&quot;. This will turn the server's administrative state to the
   READY mode, thus cancelling any DRAIN or MAINT state
@@ -13323,9 +13329,11 @@ This identifier is the first field at the beginning of the lines in the dumps
 of &quot;<a href="#show%20sess">show sess</a>&quot; (it corresponds to the session pointer). Those information are
 useless to most users but may be used by haproxy developers to troubleshoot a
 complex bug. The output format is intentionally not documented so that it can
-freely evolve depending on demands. The special id &quot;all&quot; dumps the states of
-all sessions, which can be avoided as much as possible as it is highly CPU
-intensive and can take a lot of time.
+freely evolve depending on demands. You may find a description of all fields
+returned in src/dumpstats.c
+
+The special id &quot;all&quot; dumps the states of all sessions, which must be avoided
+as much as possible as it is highly CPU intensive and can take a lot of time.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.2-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.2-show%20stat">show stat</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span></div><pre class="text">Dump statistics in the CSV format. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is
 possible to dump only selected items :
   - &lt;iid&gt; is a proxy ID, -1 to dump everything
@@ -13465,7 +13473,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5.4 &ndash; Configuration Manual<br>
+							HAProxy 1.5.5 &ndash; Configuration Manual<br>
 							<small>2014/09/02, willy tarreau</small>
 						</div>
 					</div>
@@ -14302,7 +14310,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.5', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-23', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14314,4 +14322,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5.4 -->
+<!-- git:v1.5.5 -->
