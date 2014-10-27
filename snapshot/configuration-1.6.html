@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-112 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-114 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-23" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/10/24</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/10/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-112</strong></p>
+							<p><strong>version 1.6-dev0-114</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10156,6 +10156,45 @@ or not a source IP address or an Authorization header was already seen).
 This can be used to make all hosts within a certain mask to share the same
 table entries and as such use the same server. The mask can be passed in
 dotted form (eg: 255.255.255.0) or in CIDR form (eg: 24).
+</pre><a class="anchor" name="json"></a><a class="anchor" name="7-json"></a><a class="anchor" name="7.3.1-json"></a><a class="anchor" name="json (Using ACLs and fetching samples)"></a><a class="anchor" name="json (Converters)"></a><div class="keyword"><b><a class="anchor" name="json"></a><a href="#7.3.1-json">json</a></b>(<span style="color: #008">[<span style="color: #080">&lt;input-code&gt;</span>]</span>)</div><pre class="text">Escapes the input string and produces an ASCII ouput string ready to use as a
+JSON string. The converter tries to decode the input string according to the
+&lt;input-code&gt; parameter. It can be &quot;ascii&quot;, &quot;utf8&quot;, &quot;utf8s&quot;, &quot;utf8&quot;&quot; or
+&quot;utf8ps&quot;. The &quot;ascii&quot; decoder never fails. The &quot;utf8&quot; decoder detects 3 types
+of errors:
+ - bad UTF-8 sequence (lone continuation byte, bad number of continuation
+   bytes, ...)
+ - invalid range (the decoded value is within a UTF-8 prohibited range),
+ - code overlong (the value is encoded with more bytes than necessary).
+
+The UTF-8 JSON encoding can produce a &quot;too long value&quot; error when the UTF-8
+character is greater than 0xffff because the JSON string escape specification
+only authorizes 4 hex digits for the value encoding. The UTF-8 decoder exists
+in 4 variants designated by a combination of two suffix letters : &quot;p&quot; for
+&quot;permissive&quot; and &quot;s&quot; for &quot;silently ignore&quot;. The behaviors of the decoders
+are :
+ - &quot;ascii&quot;  : never fails ;
+ - &quot;utf8&quot;   : fails on any detected errors ;
+ - &quot;utf8s&quot;  : never fails, but removes characters corresponding to errors ;
+ - &quot;utf8p&quot;  : accepts and fixes the overlong errors, but fails on any other
+              error ;
+ - &quot;utf8ps&quot; : never fails, accepts and fixes the overlong errors, but removes
+              characters corresponding to the other errors.
+
+This converter is particularly useful for building properly escaped JSON for
+logging to servers which consume JSON-formated traffic logs.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>capture request header user-agent len 150
+capture request header Host len 15
+log-format {&quot;ip&quot;:&quot;%[src]&quot;,&quot;user-agent&quot;:&quot;%[capture.req.hdr(1),json]&quot;}
+</code></pre>
+</div><pre class="text">Input request from client 127.0.0.1:
+   GET / HTTP/1.0
+   User-Agent: Very &quot;Ugly&quot; UA 1/2
+
+Output log:
+   {&quot;ip&quot;:&quot;127.0.0.1&quot;,&quot;user-agent&quot;:&quot;Very \&quot;Ugly\&quot; UA 1\/2&quot;}
 </pre><a class="anchor" name="language"></a><a class="anchor" name="7-language"></a><a class="anchor" name="7.3.1-language"></a><a class="anchor" name="language (Using ACLs and fetching samples)"></a><a class="anchor" name="language (Converters)"></a><div class="keyword"><b><a class="anchor" name="language"></a><a href="#7.3.1-language">language</a></b>(<span style="color: #080">&lt;value&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;default&gt;</span>]</span>)</div><pre class="text">Returns the value with the highest q-factor from a list as extracted from the
 &quot;accept-language&quot; header using &quot;<a href="#req.fhdr">req.fhdr</a>&quot;. Values with no q-factor have a
 q-factor of 1. Values with a q-factor of 0 are dropped. Only values which
@@ -13741,7 +13780,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-112 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-114 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -13931,6 +13970,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"inter",
 				"interface",
 				"ipmask",
+				"json",
 				"language",
 				"level",
 				"log (Process management and security)",
@@ -14605,7 +14645,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-112', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-114', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-23', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14617,4 +14657,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-112-gfb20e46 -->
+<!-- git:v1.6-dev0-114-ga616ba6 -->
