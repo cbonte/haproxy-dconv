@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-115 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-117 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-23" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-115</strong></p>
+							<p><strong>version 1.6-dev0-117</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10897,6 +10897,9 @@ find the exhaustive list of error codes.
 returns the depth in the CA chain of the first error detected during the
 verification of the client certificate. If no error is encountered, 0 is
 returned.
+</pre><a class="anchor" name="ssl_c_der"></a><a class="anchor" name="7-ssl_c_der"></a><a class="anchor" name="7.3.4-ssl_c_der"></a><a class="anchor" name="ssl_c_der (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_der (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_der"></a><a href="#7.3.4-ssl_c_der">ssl_c_der</a></b> : binary</div><pre class="text">Returns the DER formatted certificate presented by the client when the
+incoming connection was made over an SSL/TLS transport layer. When used for
+an ACL, the value(s) to match against can be passed in hexadecimal form.
 </pre><a class="anchor" name="ssl_c_err"></a><a class="anchor" name="7-ssl_c_err"></a><a class="anchor" name="7.3.4-ssl_c_err"></a><a class="anchor" name="ssl_c_err (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_err (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_err"></a><a href="#7.3.4-ssl_c_err">ssl_c_err</a></b> : integer</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the ID of the first error detected during verification at depth 0, or
 0 if no error was encountered during this verification process. Please refer
@@ -10948,6 +10951,9 @@ refer to your SSL library's documentation for an exhaustive list of error
 codes.
 </pre><a class="anchor" name="ssl_c_version"></a><a class="anchor" name="7-ssl_c_version"></a><a class="anchor" name="7.3.4-ssl_c_version"></a><a class="anchor" name="ssl_c_version (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_version (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_version"></a><a href="#7.3.4-ssl_c_version">ssl_c_version</a></b> : integer</div><pre class="text">Returns the version of the certificate presented by the client when the
 incoming connection was made over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_f_der"></a><a class="anchor" name="7-ssl_f_der"></a><a class="anchor" name="7.3.4-ssl_f_der"></a><a class="anchor" name="ssl_f_der (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_der (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_der"></a><a href="#7.3.4-ssl_f_der">ssl_f_der</a></b> : binary</div><pre class="text">Returns the DER formatted certificate presented by the frontend when the
+incoming connection was made over an SSL/TLS transport layer. When used for
+an ACL, the value(s) to match against can be passed in hexadecimal form.
 </pre><a class="anchor" name="ssl_f_i_dn"></a><a class="anchor" name="7-ssl_f_i_dn"></a><a class="anchor" name="7.3.4-ssl_f_i_dn"></a><a class="anchor" name="ssl_f_i_dn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_f_i_dn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_f_i_dn"></a><a href="#7.3.4-ssl_f_i_dn">ssl_f_i_dn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;entry&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the full distinguished name of the issuer of the certificate
 presented by the frontend when no &lt;entry&gt; is specified, or the value of the
@@ -13780,7 +13786,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-115 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-117 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14371,6 +14377,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl_bc_use_keysize",
 				"ssl_c_ca_err",
 				"ssl_c_ca_err_depth",
+				"ssl_c_der",
 				"ssl_c_err",
 				"ssl_c_i_dn",
 				"ssl_c_key_alg",
@@ -14383,6 +14390,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl_c_used",
 				"ssl_c_verify",
 				"ssl_c_version",
+				"ssl_f_der",
 				"ssl_f_i_dn",
 				"ssl_f_key_alg",
 				"ssl_f_notafter",
@@ -14645,7 +14653,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-115', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-117', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-23', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14657,4 +14665,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-115-g955f461 -->
+<!-- git:v1.6-dev0-117-g5e0d0e0 -->
