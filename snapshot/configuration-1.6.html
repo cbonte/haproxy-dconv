@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-117 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-118 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-23" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/10/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/10/30</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-117</strong></p>
+							<p><strong>version 1.6-dev0-118</strong></p>
 							<p>
 								<a href="http://haproxy.1wt.eu/" title="HAProxy Home Page"><img src="http://haproxy.1wt.eu/img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1365,12 +1365,24 @@ do not explicitly define theirs. The format of the string is defined in
 &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string such
 as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes). Please check the
 &quot;<a href="#bind">bind</a>&quot; keyword for more information.
-</pre><a class="anchor" name="ssl-default-server-ciphers"></a><a class="anchor" name="3-ssl-default-server-ciphers"></a><a class="anchor" name="3.1-ssl-default-server-ciphers"></a><a class="anchor" name="ssl-default-server-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphers"></a><a href="#3.1-ssl-default-server-ciphers">ssl-default-server-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+</pre><a class="anchor" name="ssl-default-bind-options"></a><a class="anchor" name="3-ssl-default-bind-options"></a><a class="anchor" name="3.1-ssl-default-bind-options"></a><a class="anchor" name="ssl-default-bind-options (Global parameters)"></a><a class="anchor" name="ssl-default-bind-options (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-options"></a><a href="#3.1-ssl-default-bind-options">ssl-default-bind-options</a></b> <span style="color: #008">[<span style="color: #080">&lt;option&gt;</span>]</span>...</div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
+default ssl-options to force on all &quot;<a href="#bind">bind</a>&quot; lines. Please check the &quot;<a href="#bind">bind</a>&quot;
+keyword to see available options.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>global
+   ssl-default-bind-options no-sslv3 no-tls-tickets
+</code></pre>
+</div><a class="anchor" name="ssl-default-server-ciphers"></a><a class="anchor" name="3-ssl-default-server-ciphers"></a><a class="anchor" name="3.1-ssl-default-server-ciphers"></a><a class="anchor" name="ssl-default-server-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphers"></a><a href="#3.1-ssl-default-server-ciphers">ssl-default-server-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 sets the default string describing the list of cipher algorithms that are
 negotiated during the SSL/TLS handshake with the server, for all &quot;<a href="#server">server</a>&quot;
 lines which do not explicitly define theirs. The format of the string is
 defined in &quot;man 1 ciphers&quot;. Please check the &quot;<a href="#server">server</a>&quot; keyword for more
 information.
+</pre><a class="anchor" name="ssl-default-server-options"></a><a class="anchor" name="3-ssl-default-server-options"></a><a class="anchor" name="3.1-ssl-default-server-options"></a><a class="anchor" name="ssl-default-server-options (Global parameters)"></a><a class="anchor" name="ssl-default-server-options (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-options"></a><a href="#3.1-ssl-default-server-options">ssl-default-server-options</a></b> <span style="color: #008">[<span style="color: #080">&lt;option&gt;</span>]</span>...</div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
+default ssl-options to force on all &quot;<a href="#server">server</a>&quot; lines. Please check the &quot;<a href="#server">server</a>&quot;
+keyword to see available options.
 </pre><a class="anchor" name="ssl-server-verify"></a><a class="anchor" name="3-ssl-server-verify"></a><a class="anchor" name="3.1-ssl-server-verify"></a><a class="anchor" name="ssl-server-verify (Global parameters)"></a><a class="anchor" name="ssl-server-verify (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-server-verify"></a><a href="#3.1-ssl-server-verify">ssl-server-verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">The default behavior for SSL verify on servers side. If specified to 'none',
 servers certificates are not verified. The default is 'required' except if
 forced using cmdline option '-dV'.
@@ -8806,13 +8818,17 @@ an established connection while the proxy will only see it in SYN_RECV. This
 option is only supported on TCPv4/TCPv6 sockets and ignored by other ones.
 </pre><a class="anchor" name="force-sslv3"></a><a class="anchor" name="5-force-sslv3"></a><a class="anchor" name="5.1-force-sslv3"></a><a class="anchor" name="force-sslv3 (Bind and Server options)"></a><a class="anchor" name="force-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-sslv3"></a><a href="#5.1-force-sslv3">force-sslv3</a></b></div><pre class="text">This option enforces use of SSLv3 only on SSL connections instantiated from
 this listener. SSLv3 is generally less expensive than the TLS counterparts
-for high connection rates. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.
+for high connection rates. This option is also available on global statement
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="force-tlsv10"></a><a class="anchor" name="5-force-tlsv10"></a><a class="anchor" name="5.1-force-tlsv10"></a><a class="anchor" name="force-tlsv10 (Bind and Server options)"></a><a class="anchor" name="force-tlsv10 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv10"></a><a href="#5.1-force-tlsv10">force-tlsv10</a></b></div><pre class="text">This option enforces use of TLSv1.0 only on SSL connections instantiated from
-this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.
+this listener. This option is also available on global statement
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="force-tlsv11"></a><a class="anchor" name="5-force-tlsv11"></a><a class="anchor" name="5.1-force-tlsv11"></a><a class="anchor" name="force-tlsv11 (Bind and Server options)"></a><a class="anchor" name="force-tlsv11 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv11"></a><a href="#5.1-force-tlsv11">force-tlsv11</a></b></div><pre class="text">This option enforces use of TLSv1.1 only on SSL connections instantiated from
-this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.
+this listener. This option is also available on global statement
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="force-tlsv12"></a><a class="anchor" name="5-force-tlsv12"></a><a class="anchor" name="5.1-force-tlsv12"></a><a class="anchor" name="force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="force-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv12"></a><a href="#5.1-force-tlsv12">force-tlsv12</a></b></div><pre class="text">This option enforces use of TLSv1.2 only on SSL connections instantiated from
-this listener. See also &quot;force-tls*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and &quot;no-tls*&quot;.
+this listener. This option is also available on global statement
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="gid"></a><a class="anchor" name="5-gid"></a><a class="anchor" name="5.1-gid"></a><a class="anchor" name="gid (Bind and Server options)"></a><a class="anchor" name="gid (Bind options)"></a><div class="keyword"><b><a class="anchor" name="gid"></a><a href="#5.1-gid">gid</a></b> <span style="color: #080">&lt;gid&gt;</span></div><pre class="text">Sets the group of the UNIX sockets to the designated system gid. It can also
 be set by default in the global section's &quot;<a href="#unix-bind">unix-bind</a>&quot; statement. Note that
 some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
@@ -8883,27 +8899,32 @@ one for an RDP socket.
 </pre><a class="anchor" name="no-sslv3"></a><a class="anchor" name="5-no-sslv3"></a><a class="anchor" name="5.1-no-sslv3"></a><a class="anchor" name="no-sslv3 (Bind and Server options)"></a><a class="anchor" name="no-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-sslv3"></a><a href="#5.1-no-sslv3">no-sslv3</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for SSLv3 on any sockets instantiated from the listener when
 SSL is supported. Note that SSLv2 is forced disabled in the code and cannot
-be enabled using any configuration option. See also &quot;force-tls*&quot;,
+be enabled using any configuration option. This option is also available on
+global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;force-tls*&quot;,
 and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="no-tls-tickets"></a><a class="anchor" name="5-no-tls-tickets"></a><a class="anchor" name="5.1-no-tls-tickets"></a><a class="anchor" name="no-tls-tickets (Bind and Server options)"></a><a class="anchor" name="no-tls-tickets (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tls-tickets"></a><a href="#5.1-no-tls-tickets">no-tls-tickets</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables the stateless session resumption (RFC 5077 TLS Ticket
 extension) and force to use stateful session resumption. Stateless
-session resumption is more expensive in CPU usage.
+session resumption is more expensive in CPU usage. This option is also
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;.
 </pre><a class="anchor" name="no-tlsv10"></a><a class="anchor" name="5-no-tlsv10"></a><a class="anchor" name="5.1-no-tlsv10"></a><a class="anchor" name="no-tlsv10 (Bind and Server options)"></a><a class="anchor" name="no-tlsv10 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv10"></a><a href="#5.1-no-tlsv10">no-tlsv10</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for TLSv1.0 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
-cannot be enabled using any configuration option. See also &quot;force-tls*&quot;,
-and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+cannot be enabled using any configuration option. This option is also
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also
+&quot;force-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="no-tlsv11"></a><a class="anchor" name="5-no-tlsv11"></a><a class="anchor" name="5.1-no-tlsv11"></a><a class="anchor" name="no-tlsv11 (Bind and Server options)"></a><a class="anchor" name="no-tlsv11 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv11"></a><a href="#5.1-no-tlsv11">no-tlsv11</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for TLSv1.1 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
-cannot be enabled using any configuration option. See also &quot;force-tls*&quot;,
-and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+cannot be enabled using any configuration option. This option is also
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also
+&quot;force-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="no-tlsv12"></a><a class="anchor" name="5-no-tlsv12"></a><a class="anchor" name="5.1-no-tlsv12"></a><a class="anchor" name="no-tlsv12 (Bind and Server options)"></a><a class="anchor" name="no-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv12"></a><a href="#5.1-no-tlsv12">no-tlsv12</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for TLSv1.2 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
-cannot be enabled using any configuration option. See also &quot;force-tls*&quot;,
-and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+cannot be enabled using any configuration option. This option is also
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also
+&quot;force-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.1-npn"></a><a class="anchor" name="npn (Bind and Server options)"></a><a class="anchor" name="npn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.1-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
 as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
@@ -9179,19 +9200,23 @@ unspecified. See also the &quot;<a href="#check">check</a>&quot;, &quot;<a href=
 Supported in default-server: Yes
 </pre><a class="anchor" name="force-sslv3"></a><a class="anchor" name="5-force-sslv3"></a><a class="anchor" name="5.2-force-sslv3"></a><a class="anchor" name="force-sslv3 (Bind and Server options)"></a><a class="anchor" name="force-sslv3 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-sslv3"></a><a href="#5.2-force-sslv3">force-sslv3</a></b></div><pre class="text">This option enforces use of SSLv3 only when SSL is used to communicate with
 the server. SSLv3 is generally less expensive than the TLS counterparts for
-high connection rates. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+high connection rates. This option is also available on global statement
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="force-tlsv10"></a><a class="anchor" name="5-force-tlsv10"></a><a class="anchor" name="5.2-force-tlsv10"></a><a class="anchor" name="force-tlsv10 (Bind and Server options)"></a><a class="anchor" name="force-tlsv10 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv10"></a><a href="#5.2-force-tlsv10">force-tlsv10</a></b></div><pre class="text">This option enforces use of TLSv1.0 only when SSL is used to communicate with
-the server. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+the server. This option is also available on global statement
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="force-tlsv11"></a><a class="anchor" name="5-force-tlsv11"></a><a class="anchor" name="5.2-force-tlsv11"></a><a class="anchor" name="force-tlsv11 (Bind and Server options)"></a><a class="anchor" name="force-tlsv11 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv11"></a><a href="#5.2-force-tlsv11">force-tlsv11</a></b></div><pre class="text">This option enforces use of TLSv1.1 only when SSL is used to communicate with
-the server. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+the server. This option is also available on global statement
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="force-tlsv12"></a><a class="anchor" name="5-force-tlsv12"></a><a class="anchor" name="5.2-force-tlsv12"></a><a class="anchor" name="force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="force-tlsv12 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv12"></a><a href="#5.2-force-tlsv12">force-tlsv12</a></b></div><pre class="text">This option enforces use of TLSv1.2 only when SSL is used to communicate with
-the server. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+the server. This option is also available on global statement
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="id"></a><a class="anchor" name="5-id"></a><a class="anchor" name="5.2-id"></a><a class="anchor" name="id (Bind and Server options)"></a><a class="anchor" name="id (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="id"></a><a href="#5.2-id">id</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Set a persistent ID for the server. This ID must be positive and unique for
@@ -9256,28 +9281,32 @@ Supported in default-server: No
 </pre><a class="anchor" name="no-tls-tickets"></a><a class="anchor" name="5-no-tls-tickets"></a><a class="anchor" name="5.2-no-tls-tickets"></a><a class="anchor" name="no-tls-tickets (Bind and Server options)"></a><a class="anchor" name="no-tls-tickets (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tls-tickets"></a><a href="#5.2-no-tls-tickets">no-tls-tickets</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables the stateless session resumption (RFC 5077 TLS Ticket
 extension) and force to use stateful session resumption. Stateless
-session resumption is more expensive in CPU usage for servers.
+session resumption is more expensive in CPU usage for servers. This option
+is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="no-tlsv10"></a><a class="anchor" name="5-no-tlsv10"></a><a class="anchor" name="5.2-no-tlsv10"></a><a class="anchor" name="no-tlsv10 (Bind and Server options)"></a><a class="anchor" name="no-tlsv10 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv10"></a><a href="#5.2-no-tlsv10">no-tlsv10</a></b></div><pre class="text">This option disables support for TLSv1.0 when SSL is used to communicate with
 the server. Note that SSLv2 is disabled in the code and cannot be enabled
 using any configuration option. TLSv1 is more expensive than SSLv3 so it
-often makes sense to disable it when communicating with local servers. See
-also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
+often makes sense to disable it when communicating with local servers. This
+option is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="no-tlsv11"></a><a class="anchor" name="5-no-tlsv11"></a><a class="anchor" name="5.2-no-tlsv11"></a><a class="anchor" name="no-tlsv11 (Bind and Server options)"></a><a class="anchor" name="no-tlsv11 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv11"></a><a href="#5.2-no-tlsv11">no-tlsv11</a></b></div><pre class="text">This option disables support for TLSv1.1 when SSL is used to communicate with
 the server. Note that SSLv2 is disabled in the code and cannot be enabled
 using any configuration option. TLSv1 is more expensive than SSLv3 so it
-often makes sense to disable it when communicating with local servers. See
-also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
+often makes sense to disable it when communicating with local servers. This
+option is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="no-tlsv12"></a><a class="anchor" name="5-no-tlsv12"></a><a class="anchor" name="5.2-no-tlsv12"></a><a class="anchor" name="no-tlsv12 (Bind and Server options)"></a><a class="anchor" name="no-tlsv12 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv12"></a><a href="#5.2-no-tlsv12">no-tlsv12</a></b></div><pre class="text">This option disables support for TLSv1.2 when SSL is used to communicate with
 the server. Note that SSLv2 is disabled in the code and cannot be enabled
 using any configuration option. TLSv1 is more expensive than SSLv3 so it
-often makes sense to disable it when communicating with local servers. See
-also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
+often makes sense to disable it when communicating with local servers. This
+option is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
 
 Supported in default-server: No
 </pre><a class="anchor" name="non-stick"></a><a class="anchor" name="5-non-stick"></a><a class="anchor" name="5.2-non-stick"></a><a class="anchor" name="non-stick (Bind and Server options)"></a><a class="anchor" name="non-stick (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="non-stick"></a><a href="#5.2-non-stick">non-stick</a></b></div><pre class="text">Never add connections allocated to this sever to a stick-table.
@@ -13786,7 +13815,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-117 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-118 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14366,7 +14395,9 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ssl (Bind options)",
 				"ssl (Server and default-server options)",
 				"ssl-default-bind-ciphers",
+				"ssl-default-bind-options",
 				"ssl-default-server-ciphers",
+				"ssl-default-server-options",
 				"ssl-server-verify",
 				"ssl_bc",
 				"ssl_bc_alg_keysize",
@@ -14653,7 +14684,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-117', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-118', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-23', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14665,4 +14696,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-117-g5e0d0e0 -->
+<!-- git:v1.6-dev0-118-g2c86cbf -->
