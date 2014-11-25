@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>HAProxy version 1.4.25 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="./css/page.css?0.3.1-23" rel="stylesheet" />
+		<link href="./css/page.css?0.3.1-24" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-23</b> on <b>2014/07/03</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-24</b> on <b>2014/11/25</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -7107,19 +7107,18 @@ and to every request on the &quot;img&quot;, &quot;video&quot;, &quot;download&q
 It is also possible to form rules using &quot;anonymous ACLs&quot;. Those are unnamed ACL
 expressions that are built on the fly without needing to be declared. They must
 be enclosed between braces, with a space before and after each brace (because
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>The following rule :
+the braces must be seen as independant words). Example :
 
-    acl missing_cl hdr_cnt(Content-length) eq 0
-    block if METH_POST missing_cl
+   The following rule :
 
-Can also be written that way :
+       acl missing_cl hdr_cnt(Content-length) eq 0
+       block if METH_POST missing_cl
 
-    block if METH_POST { hdr_cnt(Content-length) eq 0 }
-</code></pre>
-</div><pre class="text">It is generally not recommended to use this construct because it's a lot easier
+   Can also be written that way :
+
+       block if METH_POST { hdr_cnt(Content-length) eq 0 }
+
+It is generally not recommended to use this construct because it's a lot easier
 to leave errors in the configuration when written that way. However, for very
 simple rules matching only one source IP address for instance, it can make more
 sense to use them than to declare ACLs with random names. Another example of
@@ -9144,7 +9143,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
 piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.4.25', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-23', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-24', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
