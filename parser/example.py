@@ -12,12 +12,12 @@ class Parser(parser.Parser):
     def parse(self, line):
         pctxt = self.pctxt
 
-        result = re.search(r'(Examples? *:)', line)
+        result = re.search(r'^ *(Examples? *:)(.*)', line)
         if result:
-            label = result.group(0)
+            label = result.group(1)
 
             desc_indent = False
-            desc = re.sub(r'.*Examples? *:', '', line).strip()
+            desc = result.group(2).strip()
 
             # Some examples have a description
             if desc:
