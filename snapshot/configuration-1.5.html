@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>HAProxy version 1.5.9-2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.3.1-26" rel="stylesheet" />
+		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-26</b> on <b>2014/11/27</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2014/11/29</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -11020,16 +11020,14 @@ ACL derivatives :
   base_len : length match
   base_reg : regex match
   base_sub : substring match
-</pre><a class="anchor" name="base32"></a><a class="anchor" name="7-base32"></a><a class="anchor" name="7.3.6-base32"></a><a class="anchor" name="base32 (Using ACLs and fetching samples)"></a><a class="anchor" name="base32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="base32"></a><a href="#7.3.6-base32">base32</a></b> : integer</div><pre class="text">  This returns a 32-bit hash of the value returned by the &quot;<a href="#base">base</a>&quot; fetch method
-  above. This is useful to track per-URL activity on high traffic sites without
-  having to store all URLs. Instead a shorter hash is stored, saving a lot of
-  memory. The output type is an unsigned integer.
-
-base32+src : binary
-  This returns the concatenation of the base32 fetch above and the src fetch
-  below. The resulting type is of type binary, with a size of 8 or 20 bytes
-  depending on the source address family. This can be used to track per-IP,
-  per-URL counters.
+</pre><a class="anchor" name="base32"></a><a class="anchor" name="7-base32"></a><a class="anchor" name="7.3.6-base32"></a><a class="anchor" name="base32 (Using ACLs and fetching samples)"></a><a class="anchor" name="base32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="base32"></a><a href="#7.3.6-base32">base32</a></b> : integer</div><pre class="text">This returns a 32-bit hash of the value returned by the &quot;<a href="#base">base</a>&quot; fetch method
+above. This is useful to track per-URL activity on high traffic sites without
+having to store all URLs. Instead a shorter hash is stored, saving a lot of
+memory. The output type is an unsigned integer.
+</pre><a class="anchor" name="base32+src"></a><a class="anchor" name="7-base32+src"></a><a class="anchor" name="7.3.6-base32+src"></a><a class="anchor" name="base32+src (Using ACLs and fetching samples)"></a><a class="anchor" name="base32+src (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="base32+src"></a><a href="#7.3.6-base32%2Bsrc">base32+src</a></b> : binary</div><pre class="text">This returns the concatenation of the base32 fetch above and the src fetch
+below. The resulting type is of type binary, with a size of 8 or 20 bytes
+depending on the source address family. This can be used to track per-IP,
+per-URL counters.
 </pre><a class="anchor" name="capture.req.hdr"></a><a class="anchor" name="7-capture.req.hdr"></a><a class="anchor" name="7.3.6-capture.req.hdr"></a><a class="anchor" name="capture.req.hdr (Using ACLs and fetching samples)"></a><a class="anchor" name="capture.req.hdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="capture.req.hdr"></a><a href="#7.3.6-capture.req.hdr">capture.req.hdr</a></b>(<span style="color: #080">&lt;idx&gt;</span>) : string</div><pre class="text">This extracts the content of the header captured by the &quot;capture request
 header&quot;, idx is the position of the capture keyword in the configuration.
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#capture%20request%20header">capture request header</a>&quot;.</div>
@@ -13563,6 +13561,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"balance url_param",
 				"base",
 				"base32",
+				"base32+src",
 				"base64",
 				"be_conn",
 				"be_id",
@@ -14361,7 +14360,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
 piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.9-2', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-26', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
