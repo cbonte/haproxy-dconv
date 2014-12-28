@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-193 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-195 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2014/12/25</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2014/12/28</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-193</strong></p>
+							<p><strong>version 1.6-dev0-195</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -5786,10 +5786,7 @@ present the client's IP to the server when establishing the connection.
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;command&gt; is the external command to run</pre>
 </div>
-<pre class="text">The PATH environment variable used when executing the
-command may be set using &quot;<a href="#external-check%20path">external-check path</a>&quot;.
-
-The arguments passed to the to the command are:
+<pre class="text">The arguments passed to the to the command are:
 
 &lt;proxy_address&gt; &lt;proxy_port&gt; &lt;server_address&gt; &lt;server_port&gt;
 
@@ -5799,6 +5796,36 @@ listener the proxy_address will be the path of the socket and the
 &lt;proxy_port&gt; will be the string &quot;NOT_USED&quot;. In a backend section, it's not
 possible to determine a listener, and both &lt;proxy_address&gt; and &lt;proxy_port&gt;
 will have the string value &quot;NOT_USED&quot;.
+
+Some values are also provided through environment variables.
+
+Environment variables :
+  HAPROXY_PROXY_ADDR      The first bind address if available (or empty if not
+                          applicable, for example in a &quot;backend&quot; section).
+
+  HAPROXY_PROXY_ID        The backend id.
+
+  HAPROXY_PROXY_NAME      The backend name.
+
+  HAPROXY_PROXY_PORT      The first bind port if available (or empty if not
+                          applicable, for example in a &quot;backend&quot; section or
+                          for a UNIX socket).
+
+  HAPROXY_SERVER_ADDR     The server address.
+
+  HAPROXY_SERVER_CURCONN  The current number of connections on the server.
+
+  HAPROXY_SERVER_ID       The server id.
+
+  HAPROXY_SERVER_MAXCONN  The server max connections.
+
+  HAPROXY_SERVER_NAME     The server name.
+
+  HAPROXY_SERVER_PORT     The server port if available (or empty for a UNIX
+                          socket).
+
+  PATH                    The PATH environment variable used when executing
+                          the command may be set using &quot;<a href="#external-check%20path">external-check path</a>&quot;.
 
 If the command executed and exits with a zero status then the check is
 considered to have passed, otherwise the check is considered to have
@@ -13847,7 +13874,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-193 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-195 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14725,7 +14752,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-193', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-195', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14737,4 +14764,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-193-g56efc48 -->
+<!-- git:v1.6-dev0-195-g72cda2a -->
