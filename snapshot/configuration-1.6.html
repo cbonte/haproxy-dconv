@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-214 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-218 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/15</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/16</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-214</strong></p>
+							<p><strong>version 1.6-dev0-218</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1448,7 +1448,11 @@ automatically adjusted according to this value. See also &quot;<a href="#ulimit-
 the &quot;select&quot; poller cannot reliably use more than 1024 file descriptors on
 some platforms. If your platform only supports select and reports &quot;select
 FAILED&quot; on startup, you need to reduce maxconn until it works (slightly
-below 500 in general).
+below 500 in general). If this value is not set, it will default to the value
+set in DEFAULT_MAXCONN at build time (reported in haproxy -vv) if no memory
+limit is enforced, or will be computed based on the memory limit, the buffer
+size, memory allocated to compression, SSL cache size, and use or not of SSL
+and the associated maxsslconn (which can also be automatic).
 </pre><a class="anchor" name="maxconnrate"></a><a class="anchor" name="3-maxconnrate"></a><a class="anchor" name="3.2-maxconnrate"></a><a class="anchor" name="maxconnrate (Global parameters)"></a><a class="anchor" name="maxconnrate (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxconnrate"></a><a href="#3.2-maxconnrate">maxconnrate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of connections per second to &lt;number&gt;.
 Proxies will stop accepting connections when this limit is reached. It can be
 used to limit the global capacity regardless of each frontend capacity. It is
@@ -1493,6 +1497,13 @@ avoids having openssl use too much memory and crash when malloc returns NULL
 (since it unfortunately does not reliably check for such conditions). Note
 that the limit applies both to incoming and outgoing connections, so one
 connection which is deciphered then ciphered accounts for 2 SSL connections.
+If this value is not set, but a memory limit is enforced, this value will be
+automatically computed based on the memory limit, maxconn,  the buffer size,
+memory allocated to compression, SSL cache size, and use of SSL in either
+frontends, backends or both. If neither maxconn nor maxsslconn are specified
+when there is a memory limit, haproxy will automatically adjust these values
+so that 100% of the connections can be made over SSL with no risk, and will
+consider the sides where it is enabled (frontend, backend, both).
 </pre><a class="anchor" name="maxsslrate"></a><a class="anchor" name="3-maxsslrate"></a><a class="anchor" name="3.2-maxsslrate"></a><a class="anchor" name="maxsslrate (Global parameters)"></a><a class="anchor" name="maxsslrate (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxsslrate"></a><a href="#3.2-maxsslrate">maxsslrate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of SSL sessions per second to &lt;number&gt;.
 SSL listeners will stop accepting connections when this limit is reached. It
 can be used to limit the global SSL CPU usage regardless of each frontend
@@ -13898,7 +13909,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-214 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-218 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14777,7 +14788,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-214', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-218', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14789,4 +14800,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-214-g8c97ab5 -->
+<!-- git:v1.6-dev0-218-gd025648 -->
