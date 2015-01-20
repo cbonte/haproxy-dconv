@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-218 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-222 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/16</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/20</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-218</strong></p>
+							<p><strong>version 1.6-dev0-222</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3339,6 +3339,11 @@ simplify it.
           djb2+avalanche for consistent hashing or when hashing on numeric
           data such as a source IP address or a visitor identifier in a URL
           parameter.
+
+   crc32  this is the most common CRC32 implementation as used in Ethernet,
+          gzip, PNG, etc. It is slower than the other ones but may provide
+          a better distribution or less predictable results especially when
+          used on strings.
 
 &lt;modifier&gt; indicates an optional method applied after hashing the key :
 
@@ -10239,6 +10244,17 @@ an SSL ID can be copied in a header).
 </pre><a class="anchor" name="bytes"></a><a class="anchor" name="7-bytes"></a><a class="anchor" name="7.3.1-bytes"></a><a class="anchor" name="bytes (Using ACLs and fetching samples)"></a><a class="anchor" name="bytes (Converters)"></a><div class="keyword"><b><a class="anchor" name="bytes"></a><a href="#7.3.1-bytes">bytes</a></b>(<span style="color: #080">&lt;offset&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;length&gt;</span>]</span>)</div><pre class="text">Extracts some bytes from an input binary sample. The result is a binary
 sample starting at an offset (in bytes) of the original sample and
 optionnaly truncated at the given length.
+</pre><a class="anchor" name="crc32"></a><a class="anchor" name="7-crc32"></a><a class="anchor" name="7.3.1-crc32"></a><a class="anchor" name="crc32 (Using ACLs and fetching samples)"></a><a class="anchor" name="crc32 (Converters)"></a><div class="keyword"><b><a class="anchor" name="crc32"></a><a href="#7.3.1-crc32">crc32</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the CRC32
+hash function. Optionally, it is possible to apply a full avalanche hash
+function to the output if the optional &lt;avalanche&gt; argument equals 1. This
+converter uses the same functions as used by the various hash-based load
+balancing algorithms, so it will provide exactly the same results. It is
+provided for compatibility with other software which want a CRC32 to be
+computed on some input keys, so it follows the most common implementation as
+found in Ethernet, Gzip, PNG, etc... It is slower than the other algorithms
+but may provide a better or at least less predictable distribution. It must
+not be used for security purposes as a 32-bit hash is trivial to break. See
+also &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the &quot;<a href="#hash-type">hash-type</a>&quot; directive.
 </pre><a class="anchor" name="djb2"></a><a class="anchor" name="7-djb2"></a><a class="anchor" name="7.3.1-djb2"></a><a class="anchor" name="djb2 (Using ACLs and fetching samples)"></a><a class="anchor" name="djb2 (Converters)"></a><div class="keyword"><b><a class="anchor" name="djb2"></a><a href="#7.3.1-djb2">djb2</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the DJB2
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -10246,8 +10262,8 @@ converter uses the same functions as used by the various hash-based load
 balancing algorithms, so it will provide exactly the same results. It is
 mostly intended for debugging, but can be used as a stick-table entry to
 collect rough statistics. It must not be used for security purposes as a
-32-bit hash is trivial to break. See also &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the &quot;<a href="#hash-type">hash-type</a>&quot;
-directive.
+32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the
+&quot;<a href="#hash-type">hash-type</a>&quot; directive.
 </pre><a class="anchor" name="field"></a><a class="anchor" name="7-field"></a><a class="anchor" name="7.3.1-field"></a><a class="anchor" name="field (Using ACLs and fetching samples)"></a><a class="anchor" name="field (Converters)"></a><div class="keyword"><b><a class="anchor" name="field"></a><a href="#7.3.1-field">field</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span>)</div><pre class="text">Extracts the substring at the given index considering given delimiters from
 an input string. Indexes start at 1 and delimiters are a string formatted
 list of chars.
@@ -10403,8 +10419,8 @@ converter uses the same functions as used by the various hash-based load
 balancing algorithms, so it will provide exactly the same results. It is
 mostly intended for debugging, but can be used as a stick-table entry to
 collect rough statistics. It must not be used for security purposes as a
-32-bit hash is trivial to break. See also &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the &quot;<a href="#hash-type">hash-type</a>&quot;
-directive.
+32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the
+&quot;<a href="#hash-type">hash-type</a>&quot; directive.
 </pre><a class="anchor" name="table_bytes_in_rate"></a><a class="anchor" name="7-table_bytes_in_rate"></a><a class="anchor" name="7.3.1-table_bytes_in_rate"></a><a class="anchor" name="table_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="table_bytes_in_rate (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_bytes_in_rate"></a><a href="#7.3.1-table_bytes_in_rate">table_bytes_in_rate</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
 the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the average client-to-server
@@ -10534,8 +10550,8 @@ converter uses the same functions as used by the various hash-based load
 balancing algorithms, so it will provide exactly the same results. It is
 mostly intended for debugging, but can be used as a stick-table entry to
 collect rough statistics. It must not be used for security purposes as a
-32-bit hash is trivial to break. See also &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, and the &quot;<a href="#hash-type">hash-type</a>&quot;
-directive.
+32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, and the
+&quot;<a href="#hash-type">hash-type</a>&quot; directive.
 </pre></div>
 <a class="anchor" id="7.3.2" name="7.3.2"></a>
 <h3 id="chapter-7.3.2" data-target="7.3.2"><small><a class="small" href="#7.3.2">7.3.2.</a></small> Fetching samples from internal states</h3>
@@ -11592,6 +11608,12 @@ ACL derivatives :
   path_len : length match
   path_reg : regex match
   path_sub : substring match
+</pre><a class="anchor" name="query"></a><a class="anchor" name="7-query"></a><a class="anchor" name="7.3.6-query"></a><a class="anchor" name="query (Using ACLs and fetching samples)"></a><a class="anchor" name="query (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="query"></a><a href="#7.3.6-query">query</a></b> : string</div><pre class="text">This extracts the request's query string, which starts after the first
+question mark. If no question mark is present, this fetch returns nothing. If
+a question mark is present but nothing follows, it returns an empty string.
+This means it's possible to easily know whether a query string is present
+using the &quot;found&quot; matching method. This fetch is the completemnt of &quot;<a href="#path">path</a>&quot;
+which stops before the question mark.
 </pre><a class="anchor" name="req.ver"></a><a class="anchor" name="7-req.ver"></a><a class="anchor" name="7.3.6-req.ver"></a><a class="anchor" name="req.ver (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ver (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.ver"></a><a href="#7.3.6-req.ver">req.ver</a></b> : string</div><a class="anchor" name="req_ver"></a><a class="anchor" name="7-req_ver"></a><a class="anchor" name="7.3.6-req_ver"></a><a class="anchor" name="req_ver (Using ACLs and fetching samples)"></a><a class="anchor" name="req_ver (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req_ver"></a><a href="#7.3.6-req_ver">req_ver</a></b> : string <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns the version string from the HTTP request, for example &quot;1.1&quot;. This can
 be useful for logs, but is mostly there for ACL. Some predefined ACL already
 check for versions 1.0 and 1.1.
@@ -13909,7 +13931,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-218 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-222 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14006,6 +14028,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"cookie (Server and default-server options)",
 				"cookie (Fetching HTTP samples (Layer 7))",
 				"cpu-map",
+				"crc32",
 				"crl-file (Bind options)",
 				"crl-file (Server and default-server options)",
 				"crt (Bind options)",
@@ -14257,6 +14280,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"proc",
 				"process",
 				"prompt",
+				"query",
 				"queue",
 				"quiet",
 				"quit",
@@ -14788,7 +14812,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-218', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-222', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14800,4 +14824,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-218-gd025648 -->
+<!-- git:v1.6-dev0-222-g324f07f -->
