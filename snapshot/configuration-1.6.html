@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-224 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-230 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/21</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/22</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-224</strong></p>
+							<p><strong>version 1.6-dev0-230</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10413,6 +10413,27 @@ trailing spaces/tabs.
  |       `---------------------------- key
  `------------------------------------ leading spaces ignored
 </code></pre>
+</div><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>)</span></div><pre class="text">Applies a regex-based substitution to the input string. It does the same
+operation as the well-known &quot;sed&quot; utility with &quot;s/&lt;regex&gt;/&lt;subst&gt;/&quot;. By
+default it will replace in the input string the first occurrence of the
+largest part matching the regular expression &lt;regex&gt; with the substitution
+string &lt;subst&gt;. It is possible to replace all occurrences instead by adding
+the flag &quot;g&quot; in the third argument &lt;flags&gt;. It is also possible to make the
+regex case insensitive by adding the flag &quot;i&quot; in &lt;flags&gt;. Since &lt;flags&gt; is a
+string, it is made up from the concatenation of all desired flags. Thus if
+both &quot;i&quot; and &quot;g&quot; are desired, using &quot;gi&quot; or &quot;ig&quot; will have the same effect.
+It is important to note that due to the current limitations of the
+configuration parser, some characters such as closing parenthesis or comma
+are not possible to use in the arguments. The first use of this converter is
+to replace certain characters or sequence of characters with other ones.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># de-duplicate &quot;/&quot; in header &quot;x-path&quot;.</span>
+<span class="comment"># input:  x-path: /////a///b/c/xzxyz/</span>
+<span class="comment"># output: x-path: /a/b/c/xzxyz/</span>
+http-request set-header x-path %[hdr(x-path),regsub(/+,/,g)]
+</code></pre>
 </div><a class="anchor" name="sdbm"></a><a class="anchor" name="7-sdbm"></a><a class="anchor" name="7.3.1-sdbm"></a><a class="anchor" name="sdbm (Using ACLs and fetching samples)"></a><a class="anchor" name="sdbm (Converters)"></a><div class="keyword"><b><a class="anchor" name="sdbm"></a><a href="#7.3.1-sdbm">sdbm</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the SDBM
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -13932,7 +13953,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-224 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-230 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14297,6 +14318,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"redirect scheme",
 				"redisp",
 				"redispatch",
+				"regsub",
 				"rep_ssl_hello_type",
 				"req.cook",
 				"req.cook_cnt",
@@ -14813,7 +14835,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-224', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-230', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14825,4 +14847,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-224-g8560328 -->
+<!-- git:v1.6-dev0-230-g7eda849 -->
