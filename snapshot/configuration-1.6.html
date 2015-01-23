@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-232 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-235 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-232</strong></p>
+							<p><strong>version 1.6-dev0-235</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3513,7 +3513,8 @@ Example of a header received by the application server :
               del-header <span style="color: #080">&lt;name&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
               replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
               replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
-              set-tos <span style="color: #080">&lt;tos&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> |
+              set-method <span style="color: #080">&lt;fmt&gt;</span> | set-path <span style="color: #080">&lt;fmt&gt;</span> | set-query <span style="color: #080">&lt;fmt&gt;</span> |
+              set-uri <span style="color: #080">&lt;fmt&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> |
               add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
               del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
               del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -3614,13 +3615,51 @@ The first keyword is the rule's action. Currently supported actions include :
 <pre class="prettyprint">
 <code>http-request replace-value X-Forwarded-For ^192\.168\.(.*)$ 172.16.\1
 </code></pre>
-</div><pre class="text">    applied to:
+</div><pre class="text">  applied to:
 
-      X-Forwarded-For: 192.168.10.1, 192.168.13.24, 10.0.0.37
+    X-Forwarded-For: 192.168.10.1, 192.168.13.24, 10.0.0.37
 
-    outputs:
+  outputs:
 
-      X-Forwarded-For: 172.16.10.1, 172.16.13.24, 10.0.0.37
+    X-Forwarded-For: 172.16.10.1, 172.16.13.24, 10.0.0.37
+
+- &quot;set-method&quot; rewrites the request method with the result of the
+  evaluation of format string &lt;fmt&gt;. There should be very few valid reasons
+  for having to do so as this is more likely to break something than to fix
+  it.
+
+- &quot;set-path&quot; rewrites the request path with the result of the evaluation of
+  format string &lt;fmt&gt;. The query string, if any, is left intact. If a
+  scheme and authority is found before the path, they are left intact as
+  well. If the request doesn't have a path (&quot;*&quot;), this one is replaced with
+  the format. This can be used to prepend a directory component in front of
+  a path for example. See also &quot;set-query&quot; and &quot;set-uri&quot;.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># prepend the host name before the path</span>
+http-request set-path /%[hdr(host)]%[path]
+</code></pre>
+</div><pre class="text">- &quot;set-query&quot; rewrites the request's query string which appears after the
+  first question mark (&quot;?&quot;) with the result of the evaluation of format
+  string &lt;fmt&gt;. The part prior to the question mark is left intact. If the
+  request doesn't contain a question mark and the new value is not empty,
+  then one is added at the end of the URI, followed by the new value. If
+  a question mark was present, it will never be removed even if the value
+  is empty. This can be used to add or remove parameters from the query
+  string. See also &quot;set-query&quot; and &quot;set-uri&quot;.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># replace &quot;%3D&quot; with &quot;=&quot; in the query string</span>
+http-request set-query %[query,regsub(%3D,=,g)]
+</code></pre>
+</div><pre class="text">  - &quot;set-uri&quot; rewrites the request URI with the result of the evaluation of
+    format string &lt;fmt&gt;. The scheme, authority, path and query string are all
+    replaced at once. This can be used to rewrite hosts in front of proxies,
+    or to perform complex modifications to the URI such as moving parts
+    between the path and the query string. See also &quot;set-path&quot; and
+    &quot;set-query&quot;.
 
   - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
     It only has effect against the other requests being processed at the same
@@ -10413,7 +10452,7 @@ trailing spaces/tabs.
  |       `---------------------------- key
  `------------------------------------ leading spaces ignored
 </code></pre>
-</div><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>)</span></div><pre class="text">Applies a regex-based substitution to the input string. It does the same
+</div><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>]</span>)</div><pre class="text">Applies a regex-based substitution to the input string. It does the same
 operation as the well-known &quot;sed&quot; utility with &quot;s/&lt;regex&gt;/&lt;subst&gt;/&quot;. By
 default it will replace in the input string the first occurrence of the
 largest part matching the regular expression &lt;regex&gt; with the substitution
@@ -13953,7 +13992,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-232 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-235 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14835,7 +14874,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-232', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-235', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14847,4 +14886,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-232-g0766e44 -->
+<!-- git:v1.6-dev0-235-gc4dc350 -->
