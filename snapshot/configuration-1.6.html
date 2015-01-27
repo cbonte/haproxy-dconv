@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-236 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-237 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/25</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/01/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-236</strong></p>
+							<p><strong>version 1.6-dev0-237</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1251,13 +1251,13 @@ vulnerability would be exploited, since it would make it very hard for the
 attacker to exploit the system. This only works when the process is started
 with superuser privileges. It is important to ensure that &lt;jail_dir&gt; is both
 empty and unwritable to anyone.
-</pre><a class="anchor" name="cpu-map"></a><a class="anchor" name="3-cpu-map"></a><a class="anchor" name="3.1-cpu-map"></a><a class="anchor" name="cpu-map (Global parameters)"></a><a class="anchor" name="cpu-map (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="cpu-map"></a><a href="#3.1-cpu-map">cpu-map</a></b> <span style="color: #080">&lt;&quot;all&quot;|&quot;odd&quot;|&quot;even&quot;|process_num&gt;</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">On Linux 2.6 and above, it is possible to bind a process to a specific CPU
+</pre><a class="anchor" name="cpu-map"></a><a class="anchor" name="3-cpu-map"></a><a class="anchor" name="3.1-cpu-map"></a><a class="anchor" name="cpu-map (Global parameters)"></a><a class="anchor" name="cpu-map (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="cpu-map"></a><a href="#3.1-cpu-map">cpu-map</a></b> <span style="color: #080">&lt;&quot;all&quot;|&quot;<a href="#odd">odd</a>&quot;|&quot;<a href="#even">even</a>&quot;|process_num&gt;</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">On Linux 2.6 and above, it is possible to bind a process to a specific CPU
 set. This means that the process will never run on other CPUs. The &quot;<a href="#cpu-map">cpu-map</a>&quot;
 directive specifies CPU sets for process sets. The first argument is the
 process number to bind. This process must have a number between 1 and 32 or
 64, depending on the machine's word size, and any process IDs above nbproc
 are ignored. It is possible to specify all processes at once using &quot;all&quot;,
-only odd numbers using &quot;odd&quot; or even numbers using &quot;even&quot;, just like with the
+only odd numbers using &quot;<a href="#odd">odd</a>&quot; or even numbers using &quot;<a href="#even">even</a>&quot;, just like with the
 &quot;<a href="#bind-process">bind-process</a>&quot; directive. The second and forthcoming arguments are CPU sets.
 Each CPU set is either a unique number between 0 and 31 or 63 or a range with
 two such numbers delimited by a dash ('-'). Multiple CPU numbers or ranges
@@ -9909,7 +9909,7 @@ be placed first. The pattern matching method must be one of the following :
               as headers, cookies, etc... even if they are empty and without
               comparing them to anything nor counting them.
 
-  - &quot;bool&quot;  : check the value as a boolean. It can only be applied to fetches
+  - &quot;<a href="#bool">bool</a>&quot;  : check the value as a boolean. It can only be applied to fetches
               which return a boolean or integer value, and takes no pattern.
               Value zero or false does not match, all other values do match.
 
@@ -9928,7 +9928,7 @@ be placed first. The pattern matching method must be one of the following :
   - &quot;str&quot;   : exact match : match the contents against a string. This may be
               used with binary or string samples.
 
-  - &quot;sub&quot;   : substring match : check that the contents contain at least one of
+  - &quot;<a href="#sub">sub</a>&quot;   : substring match : check that the contents contain at least one of
               the provided string patterns. This may be used with binary or
               string samples.
 
@@ -10161,7 +10161,7 @@ following situations :
 combination of ACLs with operators. 3 operators are supported :
 
   - AND (implicit)
-  - OR  (explicit with the &quot;or&quot; keyword or the &quot;||&quot; operator)
+  - OR  (explicit with the &quot;<a href="#or">or</a>&quot; keyword or the &quot;||&quot; operator)
   - Negation with the exclamation mark (&quot;!&quot;)
 
 A condition is formed as a disjunctive form:
@@ -10278,13 +10278,29 @@ sample fetch method. These keywords may equally be appended immediately after
 the fetch keyword's argument, delimited by a comma. These keywords can also
 support some arguments (eg: a netmask) which must be passed in parenthesis.
 
+A certain category of converters are bitwise and arithmetic operators which
+support performing basic operations on integers. Some bitwise operations are
+supported (and, or, xor, cpl) and some arithmetic operations are supported
+(add, sub, mul, div, mod, neg). Some comparators are provided (odd, even, not,
+bool) which make it possible to report a match without having to write an ACL.
+
 The currently available list of transformation keywords include :
+</pre><a class="anchor" name="add"></a><a class="anchor" name="7-add"></a><a class="anchor" name="7.3.1-add"></a><a class="anchor" name="add (Using ACLs and fetching samples)"></a><a class="anchor" name="add (Converters)"></a><div class="keyword"><b><a class="anchor" name="add"></a><a href="#7.3.1-add">add</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Adds &lt;value&gt; to the input value of type unsigned integer, and returns the
+result as an unsigned integer.
+</pre><a class="anchor" name="and"></a><a class="anchor" name="7-and"></a><a class="anchor" name="7.3.1-and"></a><a class="anchor" name="and (Using ACLs and fetching samples)"></a><a class="anchor" name="and (Converters)"></a><div class="keyword"><b><a class="anchor" name="and"></a><a href="#7.3.1-and">and</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;AND&quot; between &lt;value&gt; and the input value of type unsigned
+integer, and returns the result as an unsigned integer.
 </pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
 transfer binary content in a way that can be reliably transferred (eg:
 an SSL ID can be copied in a header).
+</pre><a class="anchor" name="bool"></a><a class="anchor" name="7-bool"></a><a class="anchor" name="7.3.1-bool"></a><a class="anchor" name="bool (Using ACLs and fetching samples)"></a><a class="anchor" name="bool (Converters)"></a><div class="keyword"><b><a class="anchor" name="bool"></a><a href="#7.3.1-bool">bool</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type unsigned integer is
+non-null, otherwise returns FALSE. Used in conjunction with and(), it can be
+used to report true/false for bit testing on input values (eg: verify the
+presence of a flag).
 </pre><a class="anchor" name="bytes"></a><a class="anchor" name="7-bytes"></a><a class="anchor" name="7.3.1-bytes"></a><a class="anchor" name="bytes (Using ACLs and fetching samples)"></a><a class="anchor" name="bytes (Converters)"></a><div class="keyword"><b><a class="anchor" name="bytes"></a><a href="#7.3.1-bytes">bytes</a></b>(<span style="color: #080">&lt;offset&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;length&gt;</span>]</span>)</div><pre class="text">Extracts some bytes from an input binary sample. The result is a binary
 sample starting at an offset (in bytes) of the original sample and
 optionnaly truncated at the given length.
+</pre><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type unsigned integer, applies a twos-complement
+(flips all bits) and returns the result as an unsigned integer.
 </pre><a class="anchor" name="crc32"></a><a class="anchor" name="7-crc32"></a><a class="anchor" name="7.3.1-crc32"></a><a class="anchor" name="crc32 (Using ACLs and fetching samples)"></a><a class="anchor" name="crc32 (Converters)"></a><div class="keyword"><b><a class="anchor" name="crc32"></a><a href="#7.3.1-crc32">crc32</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the CRC32
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -10296,6 +10312,9 @@ found in Ethernet, Gzip, PNG, etc... It is slower than the other algorithms
 but may provide a better or at least less predictable distribution. It must
 not be used for security purposes as a 32-bit hash is trivial to break. See
 also &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the &quot;<a href="#hash-type">hash-type</a>&quot; directive.
+</pre><a class="anchor" name="div"></a><a class="anchor" name="7-div"></a><a class="anchor" name="7.3.1-div"></a><a class="anchor" name="div (Using ACLs and fetching samples)"></a><a class="anchor" name="div (Converters)"></a><div class="keyword"><b><a class="anchor" name="div"></a><a href="#7.3.1-div">div</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type unsigned integer by &lt;value&gt;, and returns the
+result as an unsigned integer. If &lt;value&gt; is null, the largest unsigned
+integer is returned (typically 2^32-1).
 </pre><a class="anchor" name="djb2"></a><a class="anchor" name="7-djb2"></a><a class="anchor" name="7.3.1-djb2"></a><a class="anchor" name="djb2 (Using ACLs and fetching samples)"></a><a class="anchor" name="djb2 (Converters)"></a><div class="keyword"><b><a class="anchor" name="djb2"></a><a href="#7.3.1-djb2">djb2</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the DJB2
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -10305,6 +10324,8 @@ mostly intended for debugging, but can be used as a stick-table entry to
 collect rough statistics. It must not be used for security purposes as a
 32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the
 &quot;<a href="#hash-type">hash-type</a>&quot; directive.
+</pre><a class="anchor" name="even"></a><a class="anchor" name="7-even"></a><a class="anchor" name="7.3.1-even"></a><a class="anchor" name="even (Using ACLs and fetching samples)"></a><a class="anchor" name="even (Converters)"></a><div class="keyword"><b><a class="anchor" name="even"></a><a href="#7.3.1-even">even</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type unsigned integer is even
+otherwise returns FALSE. It is functionally equivalent to &quot;not,and(1),bool&quot;.
 </pre><a class="anchor" name="field"></a><a class="anchor" name="7-field"></a><a class="anchor" name="7.3.1-field"></a><a class="anchor" name="field (Using ACLs and fetching samples)"></a><a class="anchor" name="field (Converters)"></a><div class="keyword"><b><a class="anchor" name="field"></a><a href="#7.3.1-field">field</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span>)</div><pre class="text">Extracts the substring at the given index considering given delimiters from
 an input string. Indexes start at 1 and delimiters are a string formatted
 list of chars.
@@ -10453,7 +10474,24 @@ trailing spaces/tabs.
  |       `---------------------------- key
  `------------------------------------ leading spaces ignored
 </code></pre>
-</div><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>]</span>)</div><pre class="text">Applies a regex-based substitution to the input string. It does the same
+</div><a class="anchor" name="mod"></a><a class="anchor" name="7-mod"></a><a class="anchor" name="7.3.1-mod"></a><a class="anchor" name="mod (Using ACLs and fetching samples)"></a><a class="anchor" name="mod (Converters)"></a><div class="keyword"><b><a class="anchor" name="mod"></a><a href="#7.3.1-mod">mod</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type unsigned integer by &lt;value&gt;, and returns the
+remainder as an unsigned integer. If &lt;value&gt; is null, then zero is returned.
+</pre><a class="anchor" name="mul"></a><a class="anchor" name="7-mul"></a><a class="anchor" name="7.3.1-mul"></a><a class="anchor" name="mul (Using ACLs and fetching samples)"></a><a class="anchor" name="mul (Converters)"></a><div class="keyword"><b><a class="anchor" name="mul"></a><a href="#7.3.1-mul">mul</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Multiplies the input value of type unsigned integer by &lt;value&gt;, and returns
+the product as an unsigned integer. In case of overflow, the higher bits are
+lost, leading to seemingly strange values.
+</pre><a class="anchor" name="neg"></a><a class="anchor" name="7-neg"></a><a class="anchor" name="7.3.1-neg"></a><a class="anchor" name="neg (Using ACLs and fetching samples)"></a><a class="anchor" name="neg (Converters)"></a><div class="keyword"><b><a class="anchor" name="neg"></a><a href="#7.3.1-neg">neg</a></b></div><pre class="text">Takes the input value of type unsigned integer, computes the opposite value,
+and returns the remainder as an unsigned integer. 0 is identity. This
+operator is provided for reversed subtracts : in order to subtract the input
+from a constant, simply perform a &quot;neg,add(value)&quot;.
+</pre><a class="anchor" name="not"></a><a class="anchor" name="7-not"></a><a class="anchor" name="7.3.1-not"></a><a class="anchor" name="not (Using ACLs and fetching samples)"></a><a class="anchor" name="not (Converters)"></a><div class="keyword"><b><a class="anchor" name="not"></a><a href="#7.3.1-not">not</a></b></div><pre class="text">Returns a boolean FALSE if the input value of type unsigned integer is
+non-null, otherwise returns TRUE. Used in conjunction with and(), it can be
+used to report true/false for bit testing on input values (eg: verify the
+absence of a flag).
+</pre><a class="anchor" name="odd"></a><a class="anchor" name="7-odd"></a><a class="anchor" name="7.3.1-odd"></a><a class="anchor" name="odd (Using ACLs and fetching samples)"></a><a class="anchor" name="odd (Converters)"></a><div class="keyword"><b><a class="anchor" name="odd"></a><a href="#7.3.1-odd">odd</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type unsigned integer is odd
+otherwise returns FALSE. It is functionally equivalent to &quot;and(1),bool&quot;.
+</pre><a class="anchor" name="or"></a><a class="anchor" name="7-or"></a><a class="anchor" name="7.3.1-or"></a><a class="anchor" name="or (Using ACLs and fetching samples)"></a><a class="anchor" name="or (Converters)"></a><div class="keyword"><b><a class="anchor" name="or"></a><a href="#7.3.1-or">or</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;OR&quot; between &lt;value&gt; and the input value of type unsigned
+integer, and returns the result as an unsigned integer.
+</pre><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>]</span>)</div><pre class="text">Applies a regex-based substitution to the input string. It does the same
 operation as the well-known &quot;sed&quot; utility with &quot;s/&lt;regex&gt;/&lt;subst&gt;/&quot;. By
 default it will replace in the input string the first occurrence of the
 largest part matching the regular expression &lt;regex&gt; with the substitution
@@ -10483,6 +10521,9 @@ mostly intended for debugging, but can be used as a stick-table entry to
 collect rough statistics. It must not be used for security purposes as a
 32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the
 &quot;<a href="#hash-type">hash-type</a>&quot; directive.
+</pre><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type unsigned integer, and returns
+the result as an unsigned integer. Note: in order to subtract the input from
+a constant, simply perform a &quot;neg,add(value)&quot;.
 </pre><a class="anchor" name="table_bytes_in_rate"></a><a class="anchor" name="7-table_bytes_in_rate"></a><a class="anchor" name="7.3.1-table_bytes_in_rate"></a><a class="anchor" name="table_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="table_bytes_in_rate (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_bytes_in_rate"></a><a href="#7.3.1-table_bytes_in_rate">table_bytes_in_rate</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
 the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the average client-to-server
@@ -10614,6 +10655,8 @@ mostly intended for debugging, but can be used as a stick-table entry to
 collect rough statistics. It must not be used for security purposes as a
 32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, and the
 &quot;<a href="#hash-type">hash-type</a>&quot; directive.
+</pre><a class="anchor" name="xor"></a><a class="anchor" name="7-xor"></a><a class="anchor" name="7.3.1-xor"></a><a class="anchor" name="xor (Using ACLs and fetching samples)"></a><a class="anchor" name="xor (Converters)"></a><div class="keyword"><b><a class="anchor" name="xor"></a><a href="#7.3.1-xor">xor</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;XOR&quot; (exclusive OR) between &lt;value&gt; and the input value
+of type unsigned integer, and returns the result as an unsigned integer.
 </pre></div>
 <a class="anchor" id="7.3.2" name="7.3.2"></a>
 <h3 id="chapter-7.3.2" data-target="7.3.2"><small><a class="small" href="#7.3.2">7.3.2.</a></small> Fetching samples from internal states</h3>
@@ -13644,8 +13687,8 @@ matching type. Each line is composed by space-delimited series of words.
 
 The first two words are:
 
-   &lt;match method&gt;:   The match method applied. It can be &quot;found&quot;, &quot;bool&quot;,
-                     &quot;int&quot;, &quot;ip&quot;, &quot;bin&quot;, &quot;len&quot;, &quot;str&quot;, &quot;beg&quot;, &quot;sub&quot;, &quot;dir&quot;,
+   &lt;match method&gt;:   The match method applied. It can be &quot;found&quot;, &quot;<a href="#bool">bool</a>&quot;,
+                     &quot;int&quot;, &quot;ip&quot;, &quot;bin&quot;, &quot;len&quot;, &quot;str&quot;, &quot;beg&quot;, &quot;<a href="#sub">sub</a>&quot;, &quot;dir&quot;,
                      &quot;dom&quot;, &quot;end&quot; or &quot;reg&quot;.
 
    &lt;match result&gt;:   The result. Can be &quot;match&quot; or &quot;no-match&quot;.
@@ -13993,7 +14036,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-236 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-237 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14031,6 +14074,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"alpn",
 				"always_false",
 				"always_true",
+				"and",
 				"appsession",
 				"avg_queue",
 				"backlog (Alphabetically sorted keywords reference)",
@@ -14048,6 +14092,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"bind",
 				"bind-process",
 				"block",
+				"bool",
 				"bytes",
 				"ca-base",
 				"ca-file (Bind options)",
@@ -14089,6 +14134,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"cookie (Alphabetically sorted keywords reference)",
 				"cookie (Server and default-server options)",
 				"cookie (Fetching HTTP samples (Layer 7))",
+				"cpl",
 				"cpu-map",
 				"crc32",
 				"crl-file (Bind options)",
@@ -14117,6 +14163,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"disabled (Alphabetically sorted keywords reference)",
 				"disabled (Server and default-server options)",
 				"dispatch",
+				"div",
 				"djb2",
 				"downinter",
 				"dst",
@@ -14135,6 +14182,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"errorloc",
 				"errorloc302",
 				"errorloc303",
+				"even",
 				"external-check",
 				"external-check command",
 				"external-check path",
@@ -14217,16 +14265,19 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"maxzlibmem",
 				"method",
 				"minconn",
+				"mod",
 				"mode",
 				"monitor",
 				"monitor fail",
 				"monitor-net",
 				"monitor-uri",
 				"mss",
+				"mul",
 				"name",
 				"nbproc (Process management and security)",
 				"nbproc (Fetching samples from internal states)",
 				"nbsrv",
+				"neg",
 				"nice",
 				"no log",
 				"no option",
@@ -14276,8 +14327,10 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"non-stick",
 				"nopoll",
 				"nosplice",
+				"not",
 				"npn",
 				"observe",
+				"odd",
 				"on-error",
 				"on-marked-down",
 				"on-marked-up",
@@ -14330,6 +14383,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"option tcpka",
 				"option tcplog",
 				"option transparent",
+				"or",
 				"path",
 				"payload",
 				"payload_lv",
@@ -14658,6 +14712,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"stick-table type",
 				"stopping",
 				"strict-sni",
+				"sub",
 				"table_avl",
 				"table_bytes_in_rate",
 				"table_bytes_out_rate",
@@ -14758,7 +14813,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"wait_end",
 				"weight",
 				"word",
-				"wt6"
+				"wt6",
+				"xor"
 			]
 
 			function updateKeyboardNavStatus() {
@@ -14875,7 +14931,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-236', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-237', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14887,4 +14943,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-236-g3180f7b -->
+<!-- git:v1.6-dev0-237-g9770787 -->
