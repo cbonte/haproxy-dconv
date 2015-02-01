@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.4.25 - Configuration Manual</title>
+		<title>HAProxy version 1.4.26 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2014/11/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/02/01</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,11 +80,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.4.25</strong></p>
+							<p><strong>version 1.4.26</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2014/03/27
+								2015/02/01
 							</p>
 						</div>
 
@@ -2737,6 +2737,10 @@ However, it is worth keeping in mind that parsing very large responses can
 waste some CPU cycles, especially when regular expressions are used, and that
 it is always better to focus the checks on smaller resources.
 
+Also &quot;<a href="#http-check%20expect">http-check expect</a>&quot; doesn't support HTTP keep-alive. Keep in mind that it
+will automatically append a &quot;Connection: close&quot; header, meaning that this
+header should not be present in the request provided by &quot;<a href="#option%20httpchk">option httpchk</a>&quot;.
+
 Last, if &quot;<a href="#http-check%20expect">http-check expect</a>&quot; is combined with &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;,
 then this last one has precedence when the server responds with 404.
 </pre><div class="separator">
@@ -3708,10 +3712,8 @@ ports.
 
 This option may be set either in the frontend or the backend.
 
-If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
-in a specific instance by prepending the &quot;no&quot; keyword before it. Specifying
-only &quot;<a href="#option%20httplog">option httplog</a>&quot; will automatically clear the 'clf' mode if it was set
-by default.
+Specifying only &quot;<a href="#option%20httplog">option httplog</a>&quot; will automatically clear the 'clf' mode
+if it was set by default.
 </pre><div class="page-header"><b>See also :</b> <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http_proxy"></a><a class="anchor" name="4-option http_proxy"></a><a class="anchor" name="4.2-option http_proxy"></a><a class="anchor" name="option http_proxy (Proxies)"></a><a class="anchor" name="option http_proxy (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http_proxy"></a><a href="#4.2-option%20http_proxy">option http_proxy</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http_proxy"></a><a class="anchor" name="4-no option http_proxy"></a><a class="anchor" name="4.2-no option http_proxy"></a><a class="anchor" name="no option http_proxy (Proxies)"></a><a class="anchor" name="no option http_proxy (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http_proxy"></a><a href="#4.2-no%20option%20http_proxy">no option http_proxy</a></b></div><pre class="text">Enable or disable plain HTTP proxy mode
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -8664,8 +8666,8 @@ the reader knows the output has not been truncated.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.4.25 &ndash; Configuration Manual<br>
-							<small>2014/03/27, willy tarreau</small>
+							HAProxy 1.4.26 &ndash; Configuration Manual<br>
+							<small>2015/02/01, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -9142,7 +9144,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.4.25', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.4.26', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -9154,4 +9156,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.4.25 -->
+<!-- git:v1.4.26 -->
