@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-252 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-253 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/02/03</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/02/04</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-252</strong></p>
+							<p><strong>version 1.6-dev0-253</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -9176,6 +9176,17 @@ to deciphered contents.
 SSL/TLS negotiation is allow only if the client provided an SNI which match
 a certificate. The default certificate is not used.
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information.
+</pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.1-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.1-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all incoming connections instanciated from this
+listening socket. This option is available on Linux since version 2.6.37. It
+allows haproxy to configure a timeout for sockets which contain data not
+receiving an acknoledgement for the configured delay. This is especially
+useful on long-lived connections experiencing long idle periods such as
+remote terminals or database connection pools, where the client and server
+timeouts must remain high to allow a long period of idle, but where it is
+important to detect that the client has disappeared in order to release all
+resources associated with its connection (and the server's session). The
+argument is a delay expressed in milliseconds by default. This only works
+for regular TCP connections, and is ignored for other protocols.
 </pre><a class="anchor" name="tfo"></a><a class="anchor" name="5-tfo"></a><a class="anchor" name="5.1-tfo"></a><a class="anchor" name="tfo (Bind and Server options)"></a><a class="anchor" name="tfo (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tfo"></a><a href="#5.1-tfo">tfo</a></b></div><pre class="text">Is an optional keyword which is supported only on Linux kernels &gt;= 3.7. It
 enables TCP Fast Open on the listening socket, which means that clients which
 support this feature will be able to send a request and receive a response
@@ -14132,7 +14143,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-252 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-253 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14846,6 +14857,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tcp-response",
 				"tcp-response content",
 				"tcp-response inspect-delay",
+				"tcp-ut",
 				"tfo",
 				"timeout",
 				"timeout check",
@@ -15033,7 +15045,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-252', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-253', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15045,4 +15057,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-252-g51a1cf6 -->
+<!-- git:v1.6-dev0-253-g2af207a -->
