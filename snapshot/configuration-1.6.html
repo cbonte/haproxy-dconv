@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-256 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-259 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-256</strong></p>
+							<p><strong>version 1.6-dev0-259</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -9524,6 +9524,12 @@ overloading the server during exceptional loads. See also the &quot;<span class=
 and &quot;<a href="#maxqueue">maxqueue</a>&quot; parameters, as well as the &quot;<a href="#fullconn">fullconn</a>&quot; backend keyword.
 
 Supported in default-server: Yes
+</pre><a class="anchor" name="no-ssl-reuse"></a><a class="anchor" name="5-no-ssl-reuse"></a><a class="anchor" name="5.2-no-ssl-reuse"></a><a class="anchor" name="no-ssl-reuse (Bind and Server options)"></a><a class="anchor" name="no-ssl-reuse (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-ssl-reuse"></a><a href="#5.2-no-ssl-reuse">no-ssl-reuse</a></b></div><pre class="text">This option disables SSL session reuse when SSL is used to communicate with
+the server. It will force the server to perform a full handshake for every
+new connection. It's probably only useful for benchmarking, troubleshooting,
+and for paranoid users.
+
+Supported in default-server: No
 </pre><a class="anchor" name="no-sslv3"></a><a class="anchor" name="5-no-sslv3"></a><a class="anchor" name="5.2-no-sslv3"></a><a class="anchor" name="no-sslv3 (Bind and Server options)"></a><a class="anchor" name="no-sslv3 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-sslv3"></a><a href="#5.2-no-sslv3">no-sslv3</a></b></div><pre class="text">This option disables support for SSLv3 when SSL is used to communicate with
 the server. Note that SSLv2 is disabled in the code and cannot be enabled
 using any configuration option. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
@@ -14161,7 +14167,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-256 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-259 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14446,6 +14452,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"no option tcp-smart-accept",
 				"no option tcp-smart-connect",
 				"no option transparent",
+				"no-ssl-reuse",
 				"no-sslv3 (Bind options)",
 				"no-sslv3 (Server and default-server options)",
 				"no-tls-tickets",
@@ -15064,7 +15071,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-256', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-259', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15076,4 +15083,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-256-g64e3416 -->
+<!-- git:v1.6-dev0-259-g73bc285 -->
