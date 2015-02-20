@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-260 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-262 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/02/14</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/02/20</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-260</strong></p>
+							<p><strong>version 1.6-dev0-262</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -11850,6 +11850,10 @@ a question mark is present but nothing follows, it returns an empty string.
 This means it's possible to easily know whether a query string is present
 using the &quot;found&quot; matching method. This fetch is the completemnt of &quot;<a href="#path">path</a>&quot;
 which stops before the question mark.
+</pre><a class="anchor" name="req.hdr_names"></a><a class="anchor" name="7-req.hdr_names"></a><a class="anchor" name="7.3.6-req.hdr_names"></a><a class="anchor" name="req.hdr_names (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_names (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_names"></a><a href="#7.3.6-req.hdr_names">req.hdr_names</a></b>(<span style="color: #008">[<span style="color: #080">&lt;delim&gt;</span>]</span>) : string</div><pre class="text">This builds a string made from the concatenation of all header names as they
+appear in the request when the rule is evaluated. The default delimiter is
+the comma (',') but it may be overridden as an optional argument &lt;delim&gt;. In
+this case, only the first character of &lt;delim&gt; is considered.
 </pre><a class="anchor" name="req.ver"></a><a class="anchor" name="7-req.ver"></a><a class="anchor" name="7.3.6-req.ver"></a><a class="anchor" name="req.ver (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ver (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.ver"></a><a href="#7.3.6-req.ver">req.ver</a></b> : string</div><a class="anchor" name="req_ver"></a><a class="anchor" name="7-req_ver"></a><a class="anchor" name="7.3.6-req_ver"></a><a class="anchor" name="req_ver (Using ACLs and fetching samples)"></a><a class="anchor" name="req_ver (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req_ver"></a><a href="#7.3.6-req_ver">req_ver</a></b> : string <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns the version string from the HTTP request, for example &quot;1.1&quot;. This can
 be useful for logs, but is mostly there for ACL. Some predefined ACL already
 check for versions 1.0 and 1.1.
@@ -11917,6 +11921,10 @@ specific occurrence might be specified as a position number. Positive values
 indicate a position from the first occurrence, with 1 being the first one.
 Negative values indicate positions relative to the last one, with -1 being
 the last one. This can be useful to learn some data into a stick table.
+</pre><a class="anchor" name="res.hdr_names"></a><a class="anchor" name="7-res.hdr_names"></a><a class="anchor" name="7.3.6-res.hdr_names"></a><a class="anchor" name="res.hdr_names (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_names (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_names"></a><a href="#7.3.6-res.hdr_names">res.hdr_names</a></b>(<span style="color: #008">[<span style="color: #080">&lt;delim&gt;</span>]</span>) : string</div><pre class="text">This builds a string made from the concatenation of all header names as they
+appear in the response when the rule is evaluated. The default delimiter is
+the comma (',') but it may be overridden as an optional argument &lt;delim&gt;. In
+this case, only the first character of &lt;delim&gt; is considered.
 </pre><a class="anchor" name="res.hdr_val"></a><a class="anchor" name="7-res.hdr_val"></a><a class="anchor" name="7.3.6-res.hdr_val"></a><a class="anchor" name="res.hdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_val"></a><a href="#7.3.6-res.hdr_val">res.hdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer</div><a class="anchor" name="shdr_val"></a><a class="anchor" name="7-shdr_val"></a><a class="anchor" name="7.3.6-shdr_val"></a><a class="anchor" name="shdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_val"></a><a href="#7.3.6-shdr_val">shdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP response, and
 converts it to an integer value. Optionally, a specific occurrence might be
 specified as a position number. Positive values indicate a position from the
@@ -14167,7 +14175,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-260 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-262 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14561,6 +14569,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"req.hdr",
 				"req.hdr_cnt",
 				"req.hdr_ip",
+				"req.hdr_names",
 				"req.hdr_val",
 				"req.len",
 				"req.payload",
@@ -14601,6 +14610,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"res.hdr",
 				"res.hdr_cnt",
 				"res.hdr_ip",
+				"res.hdr_names",
 				"res.hdr_val",
 				"res.len",
 				"res.payload",
@@ -15071,7 +15081,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-260', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-262', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15083,4 +15093,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-260-g2d7ec46 -->
+<!-- git:v1.6-dev0-262-geb27ec7 -->
