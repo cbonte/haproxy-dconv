@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev0-271 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev0-319 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/02/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/03/01</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev0-271</strong></p>
+							<p><strong>version 1.6-dev0-319</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -9216,6 +9216,16 @@ packets, so this option should only be enabled once well tested. This option
 is only supported on TCPv4/TCPv6 sockets and ignored by other ones. You may
 need to build HAProxy with USE_TFO=1 if your libc doesn't define
 TCP_FASTOPEN.
+</pre><a class="anchor" name="tls-ticket-keys"></a><a class="anchor" name="5-tls-ticket-keys"></a><a class="anchor" name="5.1-tls-ticket-keys"></a><a class="anchor" name="tls-ticket-keys (Bind and Server options)"></a><a class="anchor" name="tls-ticket-keys (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tls-ticket-keys"></a><a href="#5.1-tls-ticket-keys">tls-ticket-keys</a></b> <span style="color: #080">&lt;keyfile&gt;</span></div><pre class="text">Sets the TLS ticket keys file to load the keys from. The keys need to be 48
+bytes long, encoded with base64 (ex. openssl rand -base64 48). Number of keys
+is specified by the TLS_TICKETS_NO build option (default 3) and at least as
+many keys need to be present in the file. Last TLS_TICKETS_NO keys will be
+used for decryption and the penultimate one for encryption. This enables easy
+key rotation by just appending new key to the file and reloading the process.
+Keys must be periodically rotated (ex. every 12h) or Perfect Forward Secrecy
+is compromised. It is also a good idea to keep the keys off any permanent
+storage such as hard drives (hint: use tmpfs and don't swap those files).
+Lifetime hint can be changed using tune.ssl.timeout.
 </pre><a class="anchor" name="transparent"></a><a class="anchor" name="5-transparent"></a><a class="anchor" name="5.1-transparent"></a><a class="anchor" name="transparent (Bind and Server options)"></a><a class="anchor" name="transparent (Bind options)"></a><div class="keyword"><b><a class="anchor" name="transparent"></a><a href="#5.1-transparent">transparent</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 indicates that the addresses will be bound even if they do not belong to the
 local machine, and that packets targeting any of these addresses will be
@@ -14175,7 +14185,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev0-271 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev0-319 &ndash; Configuration Manual<br>
 							<small>2014/06/19, willy tarreau</small>
 						</div>
 					</div>
@@ -14910,6 +14920,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"timeout srvtimeout",
 				"timeout tarpit",
 				"timeout tunnel",
+				"tls-ticket-keys",
 				"track",
 				"transparent",
 				"tune.buffers.limit",
@@ -15081,7 +15092,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-271', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev0-319', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15093,4 +15104,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev0-271-geaabd52 -->
+<!-- git:v1.6-dev0-319-g05ac424 -->
