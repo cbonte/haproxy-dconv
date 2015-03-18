@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-42 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-43 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-42</strong></p>
+							<p><strong>version 1.6-dev1-43</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1232,6 +1232,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.http.maxhdr">tune.http.maxhdr</a>
    - <a href="#tune.idletimer">tune.idletimer</a>
    - <a href="#tune.lua.forced-yield">tune.lua.forced-yield</a>
+   - <a href="#tune.lua.maxmem">tune.lua.maxmem</a>
    - <a href="#tune.lua.session-timeout">tune.lua.session-timeout</a>
    - <a href="#tune.lua.task-timeout">tune.lua.task-timeout</a>
    - <a href="#tune.maxaccept">tune.maxaccept</a>
@@ -1634,6 +1635,10 @@ forwarding traffic. The default value is 10000 instructions. If HAProxy often
 executes some Lua code but more reactivity is required, this value can be
 lowered. If the Lua code is quite long and its result is absolutely required
 to process the data, the &lt;number&gt; can be increased.
+</pre><a class="anchor" name="tune.lua.maxmem"></a><a class="anchor" name="3-tune.lua.maxmem"></a><a class="anchor" name="3.2-tune.lua.maxmem"></a><a class="anchor" name="tune.lua.maxmem (Global parameters)"></a><a class="anchor" name="tune.lua.maxmem (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.lua.maxmem"></a><a href="#3.2-tune.lua.maxmem">tune.lua.maxmem</a></b></div><pre class="text">Sets the maximum amount of RAM in megabytes per process usable by Lua. By
+default it is zero which means unlimited. It is important to set a limit to
+ensure that a bug in a script will not result in the system running out of
+memory.
 </pre><a class="anchor" name="tune.lua.session-timeout"></a><a class="anchor" name="3-tune.lua.session-timeout"></a><a class="anchor" name="3.2-tune.lua.session-timeout"></a><a class="anchor" name="tune.lua.session-timeout (Global parameters)"></a><a class="anchor" name="tune.lua.session-timeout (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.lua.session-timeout"></a><a href="#3.2-tune.lua.session-timeout">tune.lua.session-timeout</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">This is the execution timeout for the Lua sessions. This is useful for
 preventing infinite loops or spending too much time in Lua. This timeout has a
 priority over other timeouts. For example, if this timeout is set to 4s and
@@ -14232,7 +14237,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-42 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-43 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -14980,6 +14985,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.http.maxhdr",
 				"tune.idletimer",
 				"tune.lua.forced-yield",
+				"tune.lua.maxmem",
 				"tune.lua.session-timeout",
 				"tune.lua.task-timeout",
 				"tune.maxaccept",
@@ -15143,7 +15149,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-42', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-43', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15155,4 +15161,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-42-g36d1374 -->
+<!-- git:v1.6-dev1-43-g32f61e2 -->
