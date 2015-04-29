@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-166 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-171 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-166</strong></p>
+							<p><strong>version 1.6-dev1-171</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1238,6 +1238,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.maxaccept">tune.maxaccept</a>
    - <a href="#tune.maxpollevents">tune.maxpollevents</a>
    - <a href="#tune.maxrewrite">tune.maxrewrite</a>
+   - <a href="#tune.pattern.cache-size">tune.pattern.cache-size</a>
    - <a href="#tune.pipesize">tune.pipesize</a>
    - <a href="#tune.rcvbuf.client">tune.rcvbuf.client</a>
    - <a href="#tune.rcvbuf.server">tune.rcvbuf.server</a>
@@ -1673,6 +1674,23 @@ to already large requests or to POST requests. It is generally wise to set it
 to about 1024. It is automatically readjusted to half of bufsize if it is
 larger than that. This means you don't have to worry about it when changing
 bufsize.
+</pre><a class="anchor" name="tune.pattern.cache-size"></a><a class="anchor" name="3-tune.pattern.cache-size"></a><a class="anchor" name="3.2-tune.pattern.cache-size"></a><a class="anchor" name="tune.pattern.cache-size (Global parameters)"></a><a class="anchor" name="tune.pattern.cache-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pattern.cache-size"></a><a href="#3.2-tune.pattern.cache-size">tune.pattern.cache-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the pattern lookup cache to &lt;number&gt; entries. This is an LRU
+cache which reminds previous lookups and their results. It is used by ACLs
+and maps on slow pattern lookups, namely the ones using the &quot;<a href="#sub">sub</a>&quot;, &quot;reg&quot;,
+&quot;dir&quot;, &quot;dom&quot;, &quot;end&quot;, &quot;bin&quot; match methods as well as the case-insensitive
+strings. It applies to pattern expressions which means that it will be able
+to memorize the result of a lookup among all the patterns specified on a
+configuration line (including all those loaded from files). It automatically
+invalidates entries which are updated using HTTP actions or on the CLI. The
+default cache size is set to 10000 entries, which limits its footprint to
+about 5 MB on 32-bit systems and 8 MB on 64-bit systems. There is a very low
+risk of collision in this cache, which is in the order of the size of the
+cache divided by 2^64. Typically, at 10000 requests per second with the
+default cache size of 10000 entries, there's 1% chance that a brute force
+attack could cause a single collision after 60 years, or 0.1% after 6 years.
+This is considered much lower than the risk of a memory corruption caused by
+aging components. If this is not acceptable, the cache can be disabled by
+setting this parameter to 0.
 </pre><a class="anchor" name="tune.pipesize"></a><a class="anchor" name="3-tune.pipesize"></a><a class="anchor" name="3.2-tune.pipesize"></a><a class="anchor" name="tune.pipesize (Global parameters)"></a><a class="anchor" name="tune.pipesize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pipesize"></a><a href="#3.2-tune.pipesize">tune.pipesize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the kernel pipe buffer size to this size (in bytes). By default, pipes
 are the default size for the system. But sometimes when using TCP splicing,
 it can improve performance to increase pipe sizes, especially if it is
@@ -14259,7 +14277,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-166 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-171 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15013,6 +15031,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.maxaccept",
 				"tune.maxpollevents",
 				"tune.maxrewrite",
+				"tune.pattern.cache-size",
 				"tune.pipesize",
 				"tune.rcvbuf.client",
 				"tune.rcvbuf.server",
@@ -15171,7 +15190,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-166', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-171', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15183,4 +15202,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-166-gf95bc8e -->
+<!-- git:v1.6-dev1-171-gf3045d2 -->
