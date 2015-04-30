@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-171 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-174 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/04/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/04/30</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-171</strong></p>
+							<p><strong>version 1.6-dev1-174</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3325,6 +3325,15 @@ sent. This acts as a filter on the sending of email alerts.
 Also requires &quot;<a href="#email-alert%20from">email-alert from</a>&quot;, &quot;<a href="#email-alert%20mailers">email-alert mailers</a>&quot; and
 &quot;<a href="#email-alert%20to">email-alert to</a>&quot; to be set and if so sending email alerts is enabled
 for the proxy.
+
+Alerts are sent when :
+
+* An un-paused server is marked as down and &lt;level&gt; is alert or lower
+* A paused server is marked as down and &lt;level&gt; is notice or lower
+* A server is marked as up or enters the drain state and &lt;level&gt;
+  is notice or lower
+* &quot;<a href="#option%20log-health-checks">option log-health-checks</a>&quot; is enabled, &lt;level&gt; is info or lower,
+   and a health check status update occurs
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#email-alert%20from">email-alert from</a>&quot;, &quot;<a href="#email-alert%20mailers">email-alert mailers</a>&quot;, &quot;<a href="#email-alert%20myhostname">email-alert myhostname</a>&quot;, &quot;<a href="#email-alert%20to">email-alert to</a>&quot;, <a href="#3.6">section 3.6</a> about mailers.</div>
 <a class="anchor" name="email-alert"></a><a class="anchor" name="4-email-alert"></a><a class="anchor" name="4.2-email-alert"></a><a class="anchor" name="email-alert (Proxies)"></a><a class="anchor" name="email-alert (Alphabetically sorted keywords reference)"></a><a class="anchor" name="email-alert mailers"></a><a class="anchor" name="4-email-alert mailers"></a><a class="anchor" name="4.2-email-alert mailers"></a><a class="anchor" name="email-alert mailers (Proxies)"></a><a class="anchor" name="email-alert mailers (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="email-alert mailers"></a><a href="#4.2-email-alert%20mailers">email-alert mailers</a></b> <span style="color: #080">&lt;mailersect&gt;</span></div><pre class="text">Declare the mailers to be used when sending email alerts
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -14277,7 +14286,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-171 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-174 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15190,7 +15199,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-171', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-174', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15202,4 +15211,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-171-gf3045d2 -->
+<!-- git:v1.6-dev1-174-g1421e21 -->
