@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5.11-12 - Configuration Manual</title>
+		<title>HAProxy version 1.5.11-20 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/04/20</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/01</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5.11-12</strong></p>
+							<p><strong>version 1.5.11-20</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4281,7 +4281,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, HAProxy complies with RFC2616 in terms of message parsing. This
+<pre class="text">By default, HAProxy complies with RFC7230 in terms of message parsing. This
 means that invalid characters in header names are not permitted and cause an
 error to be returned to the client. This is the desired behaviour as such
 forbidden characters are essentially used to build attacks exploiting server
@@ -4294,7 +4294,9 @@ list of characters allowed to appear in a URI is well defined by RFC3986, and
 chars 0-31, 32 (space), 34 ('&quot;'), 60 ('&lt;'), 62 ('&gt;'), 92 ('\'), 94 ('^'), 96
 ('`'), 123 ('{'), 124 ('|'), 125 ('}'), 127 (delete) and anything above are
 not allowed at all. Haproxy always blocks a number of them (0..32, 127). The
-remaining ones are blocked by default unless this option is enabled.
+remaining ones are blocked by default unless this option is enabled. This
+option also relaxes the test on the HTTP version format, it allows multiple
+digits for both the major and the minor version.
 
 This option should never be enabled by default as it hides application bugs
 and open security breaches. It should only be deployed after a problem has
@@ -4317,7 +4319,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, HAProxy complies with RFC2616 in terms of message parsing. This
+<pre class="text">By default, HAProxy complies with RFC7230 in terms of message parsing. This
 means that invalid characters in header names are not permitted and cause an
 error to be returned to the client. This is the desired behaviour as such
 forbidden characters are essentially used to build attacks exploiting server
@@ -4325,7 +4327,9 @@ weaknesses, and bypass security filtering. Sometimes, a buggy browser or
 server will emit invalid header names for whatever reason (configuration,
 implementation) and the issue will not be immediately fixed. In such a case,
 it is possible to relax HAProxy's header name parser to accept any character
-even if that does not make sense, by specifying this option.
+even if that does not make sense, by specifying this option. This option also
+relaxes the test on the HTTP version format, it allows multiple digits for
+both the major and the minor version.
 
 This option should never be enabled by default as it hides application bugs
 and open security breaches. It should only be deployed after a problem has
@@ -12881,7 +12885,7 @@ S (Servers).
         INI     -&gt; initializing
         SOCKERR -&gt; socket error
         L4OK    -&gt; check passed on layer 4, no upper layers testing enabled
-        L4TMOUT -&gt; layer 1-4 timeout
+        L4TOUT  -&gt; layer 1-4 timeout
         L4CON   -&gt; layer 1-4 connection problem, for example
                    &quot;Connection refused&quot; (tcp rst) or &quot;No route to host&quot; (icmp)
         L6OK    -&gt; check passed on layer 6
@@ -13527,7 +13531,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5.11-12 &ndash; Configuration Manual<br>
+							HAProxy 1.5.11-20 &ndash; Configuration Manual<br>
 							<small>2015/02/01, willy tarreau</small>
 						</div>
 					</div>
@@ -14372,7 +14376,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.11-12', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.11-20', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14384,4 +14388,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5.11-12-gb34c00c -->
+<!-- git:v1.5.11-20-g5564555 -->
