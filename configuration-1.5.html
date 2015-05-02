@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5.11 - Configuration Manual</title>
+		<title>HAProxy version 1.5.12 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/02/01</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/02</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,11 +80,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5.11</strong></p>
+							<p><strong>version 1.5.12</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/02/01
+								2015/05/02
 							</p>
 						</div>
 
@@ -1740,6 +1740,10 @@ during a reload, it typically takes a fraction of a second even for large
 tables.
 </pre><a class="anchor" name="peers"></a><a class="anchor" name="3-peers"></a><a class="anchor" name="3.5-peers"></a><a class="anchor" name="peers (Global parameters)"></a><a class="anchor" name="peers (Peers)"></a><div class="keyword"><b><a class="anchor" name="peers"></a><a href="#3.5-peers">peers</a></b> <span style="color: #080">&lt;peersect&gt;</span></div><pre class="text">Creates a new peer list with name &lt;peersect&gt;. It is an independent section,
 which is referenced by one or more stick-tables.
+</pre><a class="anchor" name="disabled"></a><a class="anchor" name="3-disabled"></a><a class="anchor" name="3.5-disabled"></a><a class="anchor" name="disabled (Global parameters)"></a><a class="anchor" name="disabled (Peers)"></a><div class="keyword"><b><a class="anchor" name="disabled"></a><a href="#3.5-disabled">disabled</a></b></div><pre class="text">Disables a peers section. It disables both listening and any synchronization
+related to this section. This is provided to disable synchronization of stick
+tables without having to comment out all &quot;<a href="#peers">peers</a>&quot; references.
+</pre><a class="anchor" name="enable"></a><a class="anchor" name="3-enable"></a><a class="anchor" name="3.5-enable"></a><a class="anchor" name="enable (Global parameters)"></a><a class="anchor" name="enable (Peers)"></a><div class="keyword"><b><a class="anchor" name="enable"></a><a href="#3.5-enable">enable</a></b></div><pre class="text">This re-enables a disabled peers section which was previously disabled.
 </pre><a class="anchor" name="peer"></a><a class="anchor" name="3-peer"></a><a class="anchor" name="3.5-peer"></a><a class="anchor" name="peer (Global parameters)"></a><a class="anchor" name="peer (Peers)"></a><div class="keyword"><b><a class="anchor" name="peer"></a><a href="#3.5-peer">peer</a></b> <span style="color: #080">&lt;peername&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">Defines a peer inside a peers section.
 If &lt;peername&gt; is set to the local peer name (by default hostname, or forced
 using &quot;-L&quot; command line option), haproxy will listen for incoming remote peer
@@ -1928,12 +1932,13 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-option%20dontlognull"><span class="pull-right"><span>(*)</span></span>option dontlognull</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20forceclose"><span class="pull-right"><span>(*)</span></span>option forceclose</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20forwardfor">option forwardfor</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-option%20http-ignore-probes"><span class="pull-right"><span>(*)</span></span>option http-ignore-probes</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20http-keep-alive"><span class="pull-right"><span>(*)</span></span>option http-keep-alive</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20http-no-delay"><span class="pull-right"><span>(*)</span></span>option http-no-delay</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20http-pretend-keepalive"><span class="pull-right"><span>(*)</span></span>option http-pretend-keepalive</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20http-server-close"><span class="pull-right"><span>(*)</span></span>option http-server-close</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-option%20http-tunnel"><span class="pull-right"><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-option%20http-tunnel"><span class="pull-right"><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20http-use-proxy-header"><span class="pull-right"><span>(*)</span></span>option http-use-proxy-header</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20httpchk">option httpchk</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20httpclose"><span class="pull-right"><span>(*)</span></span>option httpclose</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
@@ -1953,8 +1958,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-option%20redis-check">option redis-check</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20smtpchk">option smtpchk</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20socket-stats"><span class="pull-right"><span>(*)</span></span>option socket-stats</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td None><a href="#4-option%20splice-auto"><span class="pull-right"><span>(*)</span></span>option splice-auto</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-option%20splice-auto"><span class="pull-right"><span>(*)</span></span>option splice-auto</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-request"><span class="pull-right"><span>(*)</span></span>option splice-request</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
@@ -1974,8 +1979,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-reqallow">reqallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqdel">reqdel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqdeny">reqdeny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-reqiallow">reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-reqiallow">reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqidel">reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqideny">reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqipass">reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
@@ -1995,8 +2000,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-rspirep">rspirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-rsprep">rsprep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-server">server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-source">source</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-source">source</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
@@ -2016,8 +2021,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-stick%20store-response">stick store-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stick-table">stick-table</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20connect">tcp-check connect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20send">tcp-check send</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20send-binary">tcp-check send-binary</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -2037,8 +2042,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-timeout%20server">timeout server</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20server-fin">timeout server-fin</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="./css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -3020,12 +3025,12 @@ No need to backslash spaces in the &lt;string&gt; arguments.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword is used to disable an instance, mainly in order to
+<pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword is used to disable an instance, mainly in order to
 liberate a listening port or to temporarily disable a service. The instance
 will still be created and its configuration will be checked, but it will be
 created in the &quot;stopped&quot; state and will appear as such in the statistics. It
 will not receive any traffic nor will it send any health-checks or logs. It
-is possible to disable many instances at once by adding the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+is possible to disable many instances at once by adding the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
 keyword in a &quot;defaults&quot; section.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#enabled">enabled</a>&quot;</div>
 <a class="anchor" name="dispatch"></a><a class="anchor" name="4-dispatch"></a><a class="anchor" name="4.2-dispatch"></a><a class="anchor" name="dispatch (Proxies)"></a><a class="anchor" name="dispatch (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="dispatch"></a><a href="#4.2-dispatch">dispatch</a></b> <span style="color: #080">&lt;address&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">Set a default server address
@@ -3057,8 +3062,8 @@ use it for more clarity, and to use the &quot;<a href="#server">server</a>&quot;
 <span class="label label-info">Arguments :</span> none
 </div>
 <pre class="text">The &quot;<a href="#enabled">enabled</a>&quot; keyword is used to explicitly enable an instance, when the
-defaults has been set to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;. This is very rarely used.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
+defaults has been set to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;. This is very rarely used.
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
 <a class="anchor" name="errorfile"></a><a class="anchor" name="4-errorfile"></a><a class="anchor" name="4.2-errorfile"></a><a class="anchor" name="errorfile (Proxies)"></a><a class="anchor" name="errorfile (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="errorfile"></a><a href="#4.2-errorfile">errorfile</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">Return a file contents instead of errors generated by HAProxy
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -4281,7 +4286,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, HAProxy complies with RFC2616 in terms of message parsing. This
+<pre class="text">By default, HAProxy complies with RFC7230 in terms of message parsing. This
 means that invalid characters in header names are not permitted and cause an
 error to be returned to the client. This is the desired behaviour as such
 forbidden characters are essentially used to build attacks exploiting server
@@ -4294,7 +4299,9 @@ list of characters allowed to appear in a URI is well defined by RFC3986, and
 chars 0-31, 32 (space), 34 ('&quot;'), 60 ('&lt;'), 62 ('&gt;'), 92 ('\'), 94 ('^'), 96
 ('`'), 123 ('{'), 124 ('|'), 125 ('}'), 127 (delete) and anything above are
 not allowed at all. Haproxy always blocks a number of them (0..32, 127). The
-remaining ones are blocked by default unless this option is enabled.
+remaining ones are blocked by default unless this option is enabled. This
+option also relaxes the test on the HTTP version format, it allows multiple
+digits for both the major and the minor version.
 
 This option should never be enabled by default as it hides application bugs
 and open security breaches. It should only be deployed after a problem has
@@ -4317,7 +4324,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, HAProxy complies with RFC2616 in terms of message parsing. This
+<pre class="text">By default, HAProxy complies with RFC7230 in terms of message parsing. This
 means that invalid characters in header names are not permitted and cause an
 error to be returned to the client. This is the desired behaviour as such
 forbidden characters are essentially used to build attacks exploiting server
@@ -4325,7 +4332,9 @@ weaknesses, and bypass security filtering. Sometimes, a buggy browser or
 server will emit invalid header names for whatever reason (configuration,
 implementation) and the issue will not be immediately fixed. In such a case,
 it is possible to relax HAProxy's header name parser to accept any character
-even if that does not make sense, by specifying this option.
+even if that does not make sense, by specifying this option. This option also
+relaxes the test on the HTTP version format, it allows multiple digits for
+both the major and the minor version.
 
 This option should never be enabled by default as it hides application bugs
 and open security breaches. It should only be deployed after a problem has
@@ -4491,7 +4500,9 @@ another load balancer as well as from monitoring systems. By default, even a
 simple port probe or scan will produce a log. If those connections pollute
 the logs too much, it is possible to enable option &quot;<a href="#option%20dontlognull">dontlognull</a>&quot; to indicate
 that a connection on which no data has been transferred will not be logged,
-which typically corresponds to those probes.
+which typically corresponds to those probes. Note that errors will still be
+returned to the client and accounted for in the stats. If this is not what is
+desired, option http-ignore-probes can be used instead.
 
 It is generally recommended not to use this option in uncontrolled
 environments (eg: internet), otherwise scans and other malicious activities
@@ -4499,7 +4510,7 @@ would not be logged.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot; and <a href="#8">section 8</a> about logging.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option forceclose"></a><a class="anchor" name="4-option forceclose"></a><a class="anchor" name="4.2-option forceclose"></a><a class="anchor" name="option forceclose (Proxies)"></a><a class="anchor" name="option forceclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option forceclose"></a><a href="#4.2-option%20forceclose">option forceclose</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option forceclose"></a><a class="anchor" name="4-no option forceclose"></a><a class="anchor" name="4.2-no option forceclose"></a><a class="anchor" name="no option forceclose (Proxies)"></a><a class="anchor" name="no option forceclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option forceclose"></a><a href="#4.2-no%20option%20forceclose">no option forceclose</a></b></div><pre class="text">Enable or disable active connection closing after response is transferred.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -4590,6 +4601,38 @@ backend www
     option forwardfor header X-Client
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;</div>
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-ignore-probes"></a><a class="anchor" name="4-option http-ignore-probes"></a><a class="anchor" name="4.2-option http-ignore-probes"></a><a class="anchor" name="option http-ignore-probes (Proxies)"></a><a class="anchor" name="option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-ignore-probes"></a><a href="#4.2-option%20http-ignore-probes">option http-ignore-probes</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-ignore-probes"></a><a class="anchor" name="4-no option http-ignore-probes"></a><a class="anchor" name="4.2-no option http-ignore-probes"></a><a class="anchor" name="no option http-ignore-probes (Proxies)"></a><a class="anchor" name="no option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-ignore-probes"></a><a href="#4.2-no%20option%20http-ignore-probes">no option http-ignore-probes</a></b></div><pre class="text">Enable or disable logging of null connections and request timeouts
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="./css/cross.png" alt="no" title="no" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span> none
+</div>
+<pre class="text">Recently some browsers started to implement a &quot;pre-connect&quot; feature
+consisting in speculatively connecting to some recently visited web sites
+just in case the user would like to visit them. This results in many
+connections being established to web sites, which end up in 408 Request
+Timeout if the timeout strikes first, or 400 Bad Request when the browser
+decides to close them first. These ones pollute the log and feed the error
+counters. There was already &quot;<a href="#option%20dontlognull">option dontlognull</a>&quot; but it's insufficient in
+this case. Instead, this option does the following things :
+   - prevent any 400/408 message from being sent to the client if nothing
+     was received over a connection before it was closed ;
+   - prevent any log from being emitted in this situation ;
+   - prevent any error counter from being incremented
+
+That way the empty connection is silently ignored. Note that it is better
+not to use this unless it is clear that it is needed, because it will hide
+real problems. The most common reason for not receiving a request and seeing
+a 408 is due to an MTU inconsistency between the client and an intermediary
+element such as a VPN, which blocks too large packets. These issues are
+generally seen with POST requests as well as GET with large cookies. The logs
+are often the only way to detect them.
+
+If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+in a specific instance by prepending the &quot;no&quot; keyword before it.
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#errorfile">errorfile</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-keep-alive"></a><a class="anchor" name="4-option http-keep-alive"></a><a class="anchor" name="4.2-option http-keep-alive"></a><a class="anchor" name="option http-keep-alive (Proxies)"></a><a class="anchor" name="option http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-keep-alive"></a><a href="#4.2-option%20http-keep-alive">option http-keep-alive</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-keep-alive"></a><a class="anchor" name="4-no option http-keep-alive"></a><a class="anchor" name="4.2-no option http-keep-alive"></a><a class="anchor" name="no option http-keep-alive (Proxies)"></a><a class="anchor" name="no option http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-keep-alive"></a><a href="#4.2-no%20option%20http-keep-alive">no option http-keep-alive</a></b></div><pre class="text">Enable or disable HTTP keep-alive from client to server
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8235,8 +8278,8 @@ timeout expires, an HTTP 408 response is sent to the client to inform it
 about the problem, and the connection is closed. The logs will report
 termination codes &quot;cR&quot;. Some recent browsers are having problems with this
 standard, well-documented behaviour, so it might be needed to hide the 408
-code using &quot;errorfile 408 /dev/null&quot;. See more details in the explanations of
-the &quot;cR&quot; termination code in <a href="#8.5">section 8.5</a>.
+code using &quot;<a href="#option%20http-ignore-probes">option http-ignore-probes</a>&quot; or &quot;errorfile 408 /dev/null&quot;. See
+more details in the explanations of the &quot;cR&quot; termination code in <a href="#8.5">section 8.5</a>.
 
 Note that this timeout only applies to the header part of the request, and
 not to any data. As soon as the empty line is received, this timeout is not
@@ -8253,7 +8296,7 @@ If this parameter is not set, the client timeout still applies between each
 chunk of the incoming request. It should be set in the frontend to take
 effect, unless the frontend is in TCP mode, in which case the HTTP backend's
 timeout will be used.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, and &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout queue"></a><a class="anchor" name="4-timeout queue"></a><a class="anchor" name="4.2-timeout queue"></a><a class="anchor" name="timeout queue (Proxies)"></a><a class="anchor" name="timeout queue (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout queue"></a><a href="#4.2-timeout%20queue">timeout queue</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum time to wait in the queue for a connection slot to be free
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9089,7 +9132,7 @@ files into one. This certificate will be sent if the server send a client
 certificate request.
 
 Supported in default-server: No
-</pre><a class="anchor" name="disabled"></a><a class="anchor" name="5-disabled"></a><a class="anchor" name="5.2-disabled"></a><a class="anchor" name="disabled (Bind and Server options)"></a><a class="anchor" name="disabled (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="disabled"></a><a href="#5.2-disabled">disabled</a></b></div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword starts the server in the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; state. That means
+</pre><a class="anchor" name="disabled"></a><a class="anchor" name="5-disabled"></a><a class="anchor" name="5.2-disabled"></a><a class="anchor" name="disabled (Bind and Server options)"></a><a class="anchor" name="disabled (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="disabled"></a><a href="#5.2-disabled">disabled</a></b></div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword starts the server in the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; state. That means
 that it is marked down in maintenance mode, and no connection other than the
 ones allowed by persist mode will reach it. It is very well suited to setup
 new servers, because normal traffic will never reach them, while it is still
@@ -12434,7 +12477,8 @@ easier finding and understanding.
           the request was typed by hand using a telnet client, and aborted
           too early. The HTTP status code is likely a 400 here. Sometimes this
           might also be caused by an IDS killing the connection between haproxy
-          and the client.
+          and the client. &quot;<a href="#option%20http-ignore-probes">option http-ignore-probes</a>&quot; can be used to ignore
+          connections without any data transfer.
 
      cR   The &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot; stroke before the client sent a full HTTP
           request. This is sometimes caused by too large TCP MSS values on the
@@ -12442,19 +12486,18 @@ easier finding and understanding.
           packets, or by clients sending requests by hand and not typing fast
           enough, or forgetting to enter the empty line at the end of the
           request. The HTTP status code is likely a 408 here. Note: recently,
-          some browsers such as Google Chrome started to break the deployed Web
-          infrastructure by aggressively implementing a new &quot;pre-connect&quot;
-          feature, consisting in sending connections to sites recently visited
-          without sending any request on them until the user starts to browse
-          the site. This mechanism causes massive disruption among resource-
-          limited servers, and causes a lot of 408 errors in HAProxy logs.
-          Worse, some people report that sometimes the browser displays the 408
-          error when the user expects to see the actual content (Mozilla fixed
-          this bug in 2004, while Chrome users continue to report it in 2014),
-          so in this case, using &quot;errorfile 408 /dev/null&quot; can be used as a
-          workaround. More information on the subject is available here :
-              https://bugzilla.mozilla.org/show_bug.cgi?id=248827
-              https://code.google.com/p/chromium/issues/detail?id=85229
+          some browsers started to implement a &quot;pre-connect&quot; feature consisting
+          in speculatively connecting to some recently visited web sites just
+          in case the user would like to visit them. This results in many
+          connections being established to web sites, which end up in 408
+          Request Timeout if the timeout strikes first, or 400 Bad Request when
+          the browser decides to close them first. These ones pollute the log
+          and feed the error counters. Some versions of some browsers have even
+          been reported to display the error code. It is possible to work
+          around the undesirable effects of this behaviour by adding &quot;option
+          http-ignore-probes&quot; in the frontend, resulting in connections with
+          zero data transfer to be totally ignored. This will definitely hide
+          the errors of people experiencing connectivity issues though.
 
      CT   The client aborted while its session was tarpitted. It is important to
           check if this happens on valid requests, in order to be sure that no
@@ -12881,7 +12924,7 @@ S (Servers).
         INI     -&gt; initializing
         SOCKERR -&gt; socket error
         L4OK    -&gt; check passed on layer 4, no upper layers testing enabled
-        L4TMOUT -&gt; layer 1-4 timeout
+        L4TOUT  -&gt; layer 1-4 timeout
         L4CON   -&gt; layer 1-4 connection problem, for example
                    &quot;Connection refused&quot; (tcp rst) or &quot;No route to host&quot; (icmp)
         L6OK    -&gt; check passed on layer 6
@@ -13527,8 +13570,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5.11 &ndash; Configuration Manual<br>
-							<small>2015/02/01, willy tarreau</small>
+							HAProxy 1.5.12 &ndash; Configuration Manual<br>
+							<small>2015/05/02, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -13646,6 +13689,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"disable frontend",
 				"disable health",
 				"disable server",
+				"disabled (Peers)",
 				"disabled (Alphabetically sorted keywords reference)",
 				"disabled (Server and default-server options)",
 				"dispatch",
@@ -13762,6 +13806,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"no option dontlog-normal",
 				"no option dontlognull",
 				"no option forceclose",
+				"no option http-ignore-probes",
 				"no option http-keep-alive",
 				"no option http-no-delay",
 				"no option http-pretend-keepalive",
@@ -13816,6 +13861,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"option dontlognull",
 				"option forceclose",
 				"option forwardfor",
+				"option http-ignore-probes",
 				"option http-keep-alive",
 				"option http-no-delay",
 				"option http-pretend-keepalive",
@@ -14372,7 +14418,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.11', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.12', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -14384,4 +14430,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.5.11 -->
+<!-- git:v1.5.12 -->
