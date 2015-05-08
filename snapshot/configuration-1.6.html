@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-209 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-210 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/05</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/08</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-209</strong></p>
+							<p><strong>version 1.6-dev1-210</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3761,6 +3761,7 @@ Example of a header received by the application server :
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;</div>
 <a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
               add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> |
+              capture <span style="color: #080">&lt;sample&gt;</span> len <span style="color: #080">&lt;length&gt;</span> |
               del-header <span style="color: #080">&lt;name&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
               replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
               replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
@@ -3979,6 +3980,17 @@ http-request set-query %[query,regsub(%3D,=,g)]
     more) values. This lookup is done by a linear search and can be expensive
     with large lists! It is the equivalent of the &quot;<a href="#set%20map">set map</a>&quot; command from the
     stats socket, but can be triggered by an HTTP request.
+
+  - capture &lt;sample&gt; len &lt;length&gt; :
+    captures sample expression &lt;sample&gt; from the request buffer, and converts
+    it to a string of at most &lt;len&gt; characters. The resulting string is
+    stored into the next request &quot;<a href="#capture">capture</a>&quot; slot, so it will possibly appear
+    next to some captured HTTP headers. It will then automatically appear in
+    the logs, and it will be possible to extract it using sample fetch rules
+    to feed it into headers or anything. The length should be limited given
+    that this size will be allocated for each capture during the whole
+    session life. Please check <a href="#7.3">section 7.3</a> (Fetching samples) and &quot;capture
+    request header&quot; for more information.
 
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
     enables tracking of sticky counters from current request. These rules
@@ -8245,7 +8257,7 @@ order. If no rule matches or if there is no rule, the default action is to
 accept the incoming connection. There is no specific limit to the number of
 rules which may be inserted.
 
-Five types of actions are supported :
+Four types of actions are supported :
   - accept :
       accepts the connection if the condition is true (when used with &quot;if&quot;)
       or false (when used with &quot;unless&quot;). The first such rule executed ends
@@ -8283,8 +8295,8 @@ Five types of actions are supported :
       logs, and it will be possible to extract it using sample fetch rules to
       feed it into headers or anything. The length should be limited given
       that this size will be allocated for each capture during the whole
-      session life. Since it applies to Please check <a href="#7.3">section 7.3</a> (Fetching
-      samples) and &quot;<a href="#capture%20request%20header">capture request header</a>&quot; for more information.
+      session life. Please check <a href="#7.3">section 7.3</a> (Fetching samples) and &quot;capture
+      request header&quot; for more information.
 
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
       enables tracking of sticky counters from current connection. These
@@ -14426,7 +14438,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-209 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-210 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15347,7 +15359,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-209', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-210', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15359,4 +15371,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-209-gf9873ba -->
+<!-- git:v1.6-dev1-210-ga9083d0 -->
