@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-224 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-227 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-224</strong></p>
+							<p><strong>version 1.6-dev1-227</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -244,7 +244,7 @@ Note to documentation contributors :
 					<div class="col-md-2 pagination-right noheight"><small>2.3.</small></div>
 					<div class="col-md-10 noheight">
 							<div class="tab">
-							<a href="#2.3">Time format</a>
+							<a href="#2.3">Environment variables</a>
 							</div>
 					</div>
 				</div>
@@ -255,7 +255,18 @@ Note to documentation contributors :
 					<div class="col-md-2 pagination-right noheight"><small>2.4.</small></div>
 					<div class="col-md-10 noheight">
 							<div class="tab">
-							<a href="#2.4">Examples</a>
+							<a href="#2.4">Time format</a>
+							</div>
+					</div>
+				</div>
+				
+			
+				
+				<div class="row">
+					<div class="col-md-2 pagination-right noheight"><small>2.5.</small></div>
+					<div class="col-md-10 noheight">
+							<div class="tab">
+							<a href="#2.5">Examples</a>
 							</div>
 					</div>
 				</div>
@@ -1156,7 +1167,11 @@ the interpretation of:
   '    single quote as a strong quoting delimiter
   #    hash as a comment start
 
-But interpretation of escaping and special characters are not prevented by weak
+Weak quoting permits the interpretation of variables, if you want to use a non
+-interpreted dollar within a double quoted string, you should escape it with a
+backslash (&quot;\$&quot;), it does not work outside weak quoting.
+
+Interpretation of escaping and special characters are not prevented by weak
 quoting.
 
 Strong quoting is achieved by using single quotes (''). Inside single quotes,
@@ -1182,7 +1197,25 @@ reqrep &quot;^([^ :]*)\ /static/(.*)&quot;     &quot;\1\ /\2&quot;
 </code></pre>
 </div></div>
 <a class="anchor" id="2.3" name="2.3"></a>
-<h2 id="chapter-2.3" data-target="2.3"><small><a class="small" href="#2.3">2.3.</a></small> Time format</h2>
+<h2 id="chapter-2.3" data-target="2.3"><small><a class="small" href="#2.3">2.3.</a></small> Environment variables</h2>
+<div><pre class="text">HAProxy's configuration supports environment variables. Those variables are
+interpreted only within double quotes. Variables are expanded during the
+configuration parsing. Variable names must be preceded by a dollar (&quot;$&quot;) and
+optionally enclosed with braces (&quot;{}&quot;) similarly to what is done in Bourne
+shell. Variable names can contain alphanumerical characters or the character
+underscore (&quot;_&quot;) but should not start with a digit.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>bind &quot;fd@${FD_APP1}&quot;
+
+log &quot;${LOCAL_SYSLOG}:514&quot; local0 notice   <span class="comment"># send to local server</span>
+
+user &quot;$HAPROXY_USER&quot;
+</code></pre>
+</div></div>
+<a class="anchor" id="2.4" name="2.4"></a>
+<h2 id="chapter-2.4" data-target="2.4"><small><a class="small" href="#2.4">2.4.</a></small> Time format</h2>
 <div><pre class="text">Some parameters involve values representing time, such as timeouts. These
 values are generally expressed in milliseconds (unless explicitly stated
 otherwise) but may be expressed in any other unit by suffixing the unit to the
@@ -1376,10 +1409,8 @@ configured with &quot;<a href="#log%20global">log global</a>&quot;.
         the chroot) and uid/gid (be sure the path is appropriately
         writeable).
 
-      Any part of the address string may reference any number of environment
-      variables by preceding their name with a dollar sign ('$') and
-      optionally enclosing them with braces ('{}'), similarly to what is done
-      in Bourne shell.
+      You may want to reference some environment variables in the address
+      parameter, see <a href="#2.3">section 2.3</a> about environment variables.
 
 &lt;length&gt; is an optional maximum line length. Log lines larger than this value
          will be truncated before being sent. The reason is that syslog
@@ -1908,9 +1939,8 @@ peers and to only rely on the &quot;-L&quot; command line argument to change the
 peer name. This makes it easier to maintain coherent configuration files
 across all peers.
 
-Any part of the address string may reference any number of environment
-variables by preceding their name with a dollar sign ('$') and optionally
-enclosing them with braces ('{}'), similarly to what is done in Bourne shell.
+You may want to reference some environment variables in the address
+parameter, see <a href="#2.3">section 2.3</a> about environment variables.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -2585,10 +2615,9 @@ extension with &quot;<a href="#url_param">url_param</a>&quot; must be considered
                 - 'fd@&lt;n&gt;' -&gt; use file descriptor &lt;n&gt; inherited from the
                   parent. The fd must be bound and may or may not already
                   be listening.
-              Any part of the address string may reference any number of
-              environment variables by preceding their name with a dollar
-              sign ('$') and optionally enclosing them with braces ('{}'),
-              similarly to what is done in Bourne shell.
+              You may want to reference some environment variables in the
+              address parameter, see <a href="#2.3">section 2.3</a> about environment
+              variables.
 
 &lt;port_range&gt;  is either a unique TCP port, or a port range for which the
               proxy will accept connections for the IP address specified
@@ -2647,7 +2676,7 @@ listen http_https_proxy_explicit
     bind unix@ssl-frontend.sock user root mode 600 accept-proxy
 
 listen external_bind_app1
-    bind fd@${FD_APP1}
+    bind &quot;fd@${FD_APP1}&quot;
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#option%20forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol documentation, and <a href="#5">section 5</a> about bind options.</div>
 <a class="anchor" name="bind-process"></a><a class="anchor" name="4-bind-process"></a><a class="anchor" name="4.2-bind-process"></a><a class="anchor" name="bind-process (Proxies)"></a><a class="anchor" name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind-process"></a><a href="#4.2-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.
@@ -4361,10 +4390,8 @@ The persistence is ignored when an &quot;if&quot; condition is met, or unless an
              inside the chroot) and uid/gid (be sure the path is
              appropriately writeable).
 
-           Any part of the address string may reference any number of
-           environment variables by preceding their name with a dollar
-           sign ('$') and optionally enclosing them with braces ('{}'),
-           similarly to what is done in Bourne shell.
+          You may want to reference some environment variables in the
+          address parameter, see <a href="#2.3">section 2.3</a> about environment variables.
 
 &lt;length&gt;   is an optional maximum line length. Log lines larger than this
            value will be truncated before being sent. The reason is that
@@ -4412,7 +4439,7 @@ Note : According to RFC3164, messages are truncated to 1024 bytes before
 <code>log global
 log 127.0.0.1:514 local0 notice         <span class="comment"># only send important events</span>
 log 127.0.0.1:514 local0 notice notice  <span class="comment"># same but limit output level</span>
-log ${LOCAL_SYSLOG}:514 local0 notice   <span class="comment"># send to local server</span>
+log &quot;${LOCAL_SYSLOG}:514&quot; local0 notice   <span class="comment"># send to local server</span>
 </code></pre>
 </div><a class="anchor" name="log-format"></a><a class="anchor" name="4-log-format"></a><a class="anchor" name="4.2-log-format"></a><a class="anchor" name="log-format (Proxies)"></a><a class="anchor" name="log-format (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log-format"></a><a href="#4.2-log-format">log-format</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Specifies the log format string to use for traffic logs
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -6902,10 +6929,9 @@ rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
                 - 'ipv6@'  -&gt; address is always IPv6
                 - 'unix@'  -&gt; address is a path to a local unix socket
                 - 'abns@'  -&gt; address is in abstract namespace (Linux only)
-          Any part of the address string may reference any number of
-          environment variables by preceding their name with a dollar
-          sign ('$') and optionally enclosing them with braces ('{}'),
-          similarly to what is done in Bourne shell.
+          You may want to reference some environment variables in the
+          address parameter, see <a href="#2.3">section 2.3</a> about environment
+          variables.
 
 &lt;port&gt;    is an optional port specification. If set, all connections will
           be sent to this port. If unset, the same port the client
@@ -6923,9 +6949,9 @@ rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
 <code>server first  10.1.1.1:1080 cookie first  check inter 1000
 server second 10.1.1.2:1080 cookie second check inter 1000
 server transp ipv4@
-server backup ${SRV_BACKUP}:1080 backup
-server www1_dc1 ${LAN_DC1}.101:80
-server www1_dc2 ${LAN_DC2}.101:80
+server backup &quot;${SRV_BACKUP}:1080&quot; backup
+server www1_dc1 &quot;${LAN_DC1}.101:80&quot;
+server www1_dc2 &quot;${LAN_DC2}.101:80&quot;
 </code></pre>
 </div><div class="page-header"><b>See also:</b> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about server options</div>
 <a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Set the source address for outgoing connections
@@ -6947,10 +6973,8 @@ server www1_dc2 ${LAN_DC2}.101:80
             - 'ipv6@' -&gt; address is always IPv6
             - 'unix@' -&gt; address is a path to a local unix socket
             - 'abns@' -&gt; address is in abstract namespace (Linux only)
-          Any part of the address string may reference any number of
-          environment variables by preceding their name with a dollar
-          sign ('$') and optionally enclosing them with braces ('{}'),
-          similarly to what is done in Bourne shell.
+          You may want to reference some environment variables in the address
+          parameter, see <a href="#2.3">section 2.3</a> about environment variables.
 
 &lt;port&gt;    is an optional port. It is normally not needed but may be useful
           in some very specific contexts. The default value of zero means
@@ -14452,7 +14476,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-224 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-227 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15374,7 +15398,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-224', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-227', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15386,4 +15410,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-224-g6296a11 -->
+<!-- git:v1.6-dev1-227-gb2f0745 -->
