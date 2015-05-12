@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-218 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-223 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-218</strong></p>
+							<p><strong>version 1.6-dev1-223</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -6027,36 +6027,48 @@ TCP checks currently support 4 modes of operations :
     the respective protocols.
     In this mode, many questions may be sent and many answers may be
     analysed.
+
+  A fifth mode can be used to insert comments in different steps of the
+  script.
+
+  For each tcp-check rule you create, you can add a &quot;comment&quot; directive,
+  followed by a string. This string will be reported in the log and stderr
+  in debug mode. It is useful to make user-friendly error reporting.
+  The &quot;comment&quot; is of course optional.
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
 <code><span class="comment"># perform a POP check (analyse only server's banner)</span>
 option tcp-check
-tcp-check expect string +OK\ POP3\ ready
+tcp-check expect string +OK\ POP3\ ready comment POP\ protocol
 
 <span class="comment"># perform an IMAP check (analyse only server's banner)</span>
 option tcp-check
-tcp-check expect string *\ OK\ IMAP4\ ready
+tcp-check expect string *\ OK\ IMAP4\ ready comment IMAP\ protocol
 
 <span class="comment"># look for the redis master server after ensuring it speaks well</span>
 <span class="comment"># redis protocol, then it exits properly.</span>
 <span class="comment"># (send a command then analyse the response 3 times)</span>
 option tcp-check
+tcp-check comment PING\ phase
 tcp-check send PING\r\n
-tcp-check expect +PONG
+tcp-check expect +PONGe
+tcp-check comment role\ check
 tcp-check send info\ replication\r\n
 tcp-check expect string role:master
+tcp-check comment QUIT\ phase
 tcp-check send QUIT\r\n
 tcp-check expect string +OK
 
 forge a HTTP request, then analyse the response
 (send many headers before analyzing)
 option tcp-check
+tcp-check comment forge\ and\ send\ HTTP\ request
 tcp-check send HEAD\ /\ HTTP/1.1\r\n
 tcp-check send Host:\ www.mydomain.com\r\n
 tcp-check send User-Agent:\ HAProxy\ tcpcheck\r\n
 tcp-check send \r\n
-tcp-check expect rstring HTTP/1\..\ (2..|3..)
+tcp-check expect rstring HTTP/1\..\ (2..|3..) comment check\ HTTP\ response
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot;, &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option tcp-smart-accept"></a><a class="anchor" name="4-option tcp-smart-accept"></a><a class="anchor" name="4.2-option tcp-smart-accept"></a><a class="anchor" name="option tcp-smart-accept (Proxies)"></a><a class="anchor" name="option tcp-smart-accept (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option tcp-smart-accept"></a><a href="#4.2-option%20tcp-smart-accept">option tcp-smart-accept</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option tcp-smart-accept"></a><a class="anchor" name="4-no option tcp-smart-accept"></a><a class="anchor" name="4.2-no option tcp-smart-accept"></a><a class="anchor" name="no option tcp-smart-accept (Proxies)"></a><a class="anchor" name="no option tcp-smart-accept (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option tcp-smart-accept"></a><a href="#4.2-no%20option%20tcp-smart-accept">no option tcp-smart-accept</a></b></div><pre class="text">Enable or disable the saving of one ACK packet during the accept sequence
@@ -14440,7 +14452,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-218 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-223 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15362,7 +15374,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-218', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-223', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15374,4 +15386,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-218-ge26bf05 -->
+<!-- git:v1.6-dev1-223-gd60a9e5 -->
