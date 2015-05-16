@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-233 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-236 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/13</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/16</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-233</strong></p>
+							<p><strong>version 1.6-dev1-236</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -14229,7 +14229,12 @@ DER encoded response from the OCSP server.
 echo &quot;set ssl ocsp-response $(base64 -w 10000 resp.der)&quot; | \
              socat stdio /var/run/haproxy.stat
 </code></pre>
-</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
+</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.2-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl tls-key"></a><a class="anchor" name="9-set ssl tls-key"></a><a class="anchor" name="9.2-set ssl tls-key"></a><a class="anchor" name="set ssl tls-key (Statistics and monitoring)"></a><a class="anchor" name="set ssl tls-key (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl tls-key"></a><a href="#9.2-set%20ssl%20tls-key">set ssl tls-key</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;tlskey&gt;</span></div><pre class="text">Set the next TLS key for the &lt;id&gt; listener to &lt;tlskey&gt;. This key becomes the
+ultimate key, while the penultimate one is used for encryption (others just
+decrypt). The oldest TLS key present is overwritten. &lt;id&gt; is either a numeric
+#&lt;id&gt; or &lt;file&gt; returned by &quot;<a href="#show%20tls-keys">show tls-keys</a>&quot;. &lt;tlskey&gt; is a base64 encoded 48
+bit TLS ticket key (ex. openssl rand -base64 48).
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
 an entry is inserted. See stick-table in <a href="#4.2">section 4.2</a> to find all possible
 values for &lt;data_type&gt;. The most likely use consists in dynamically entering
 entries for source IP addresses, with a flag in gpc0 to dynamically block an
@@ -14447,7 +14452,10 @@ service, in order to monitor them or even blacklist them in a firewall.
   | fgrep 'key=' | cut -d' ' -f2 | cut -d= -f2 &gt; abusers-ip.txt
   ( or | awk '/key/{ print a[split($2,a,&quot;=&quot;)]; }' )
 </code></pre>
-</div><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.2-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.2-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.2-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tls-keys"></a><a class="anchor" name="9-show tls-keys"></a><a class="anchor" name="9.2-show tls-keys"></a><a class="anchor" name="show tls-keys (Statistics and monitoring)"></a><a class="anchor" name="show tls-keys (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tls-keys"></a><a href="#9.2-show%20tls-keys">show tls-keys</a></b></div><pre class="text">Dump all loaded TLS ticket keys. The TLS ticket key reference ID and the
+file from which the keys have been loaded is shown. Both of those can be
+used to update the TLS keys using &quot;<a href="#set%20ssl%20tls-key">set ssl tls-key</a>&quot;.
+</pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.2-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.2-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.2-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
 be released. It will not be possible to enable the frontend anymore after
 this operation. This is intended to be used in environments where stopping a
 proxy is not even imaginable but a misconfigured proxy must be fixed. That
@@ -14476,7 +14484,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-233 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-236 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15039,6 +15047,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"set server",
 				"set ssl",
 				"set ssl ocsp-response",
+				"set ssl tls-key",
 				"set table",
 				"set timeout",
 				"set timeout cli",
@@ -15057,6 +15066,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"show sess",
 				"show stat",
 				"show table",
+				"show tls-keys",
 				"shutdown",
 				"shutdown frontend",
 				"shutdown session",
@@ -15398,7 +15408,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-233', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-236', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15410,4 +15420,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-233-g449f952 -->
+<!-- git:v1.6-dev1-236-gc6985f0 -->
