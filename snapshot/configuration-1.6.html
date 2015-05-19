@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-237 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-238 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/18</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/05/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-237</strong></p>
+							<p><strong>version 1.6-dev1-238</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -12276,15 +12276,16 @@ with option &quot;<a href="#option%20http_proxy">http_proxy</a>&quot;.
 not specified in the request, port 80 is assumed. With ACLs it can be used to
 restrict access to certain systems through a proxy, for example when combined
 with option &quot;<a href="#option%20http_proxy">http_proxy</a>&quot;.
-</pre><a class="anchor" name="urlp"></a><a class="anchor" name="7-urlp"></a><a class="anchor" name="7.3.6-urlp"></a><a class="anchor" name="urlp (Using ACLs and fetching samples)"></a><a class="anchor" name="urlp (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="urlp"></a><a href="#7.3.6-urlp">urlp</a></b>(<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;delim&gt;</span>]</span>) : string</div><a class="anchor" name="url_param"></a><a class="anchor" name="7-url_param"></a><a class="anchor" name="7.3.6-url_param"></a><a class="anchor" name="url_param (Using ACLs and fetching samples)"></a><a class="anchor" name="url_param (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url_param"></a><a href="#7.3.6-url_param">url_param</a></b>(<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;delim&gt;</span>]</span>) : string</div><pre class="text">This extracts the first occurrence of the parameter &lt;name&gt; in the query
+</pre><a class="anchor" name="urlp"></a><a class="anchor" name="7-urlp"></a><a class="anchor" name="7.3.6-urlp"></a><a class="anchor" name="urlp (Using ACLs and fetching samples)"></a><a class="anchor" name="urlp (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="urlp"></a><a href="#7.3.6-urlp">urlp</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;delim&gt;</span>]</span>]</span>) : string</div><a class="anchor" name="url_param"></a><a class="anchor" name="7-url_param"></a><a class="anchor" name="7.3.6-url_param"></a><a class="anchor" name="url_param (Using ACLs and fetching samples)"></a><a class="anchor" name="url_param (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url_param"></a><a href="#7.3.6-url_param">url_param</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;delim&gt;</span>]</span>]</span>) : string</div><pre class="text">This extracts the first occurrence of the parameter &lt;name&gt; in the query
 string, which begins after either '?' or &lt;delim&gt;, and which ends before '&amp;',
-';' or &lt;delim&gt;. The parameter name is case-sensitive. The result is a string
-corresponding to the value of the parameter &lt;name&gt; as presented in the
-request (no URL decoding is performed). This can be used for session
+';' or &lt;delim&gt;. The parameter name is case-sensitive. If no name is given,
+any parameter will match, and the first one will be returned. The result is
+a string corresponding to the value of the parameter &lt;name&gt; as presented in
+the request (no URL decoding is performed). This can be used for session
 stickiness based on a client ID, to extract an application cookie passed as a
 URL parameter, or in ACLs to apply some checks. Note that the ACL version of
-this fetch do not iterate over multiple parameters and stop at the first one
-as well.
+this fetch iterates over multiple parameters and will iteratively report all
+parameters values if no name is given
 
 ACL derivatives :
   urlp(&lt;name&gt;[,&lt;delim&gt;])     : exact string match
@@ -12303,9 +12304,10 @@ stick on urlp(PHPSESSIONID)
 <span class="comment"># match http://example.com/foo;JSESSIONID=some_id</span>
 stick on urlp(JSESSIONID,;)
 </code></pre>
-</div><a class="anchor" name="urlp_val"></a><a class="anchor" name="7-urlp_val"></a><a class="anchor" name="7.3.6-urlp_val"></a><a class="anchor" name="urlp_val (Using ACLs and fetching samples)"></a><a class="anchor" name="urlp_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="urlp_val"></a><a href="#7.3.6-urlp_val">urlp_val</a></b>(<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;delim&gt;</span>]</span>) : integer</div><pre class="text">See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
-and converts it to an integer value. This can be used for session stickiness
-based on a user ID for example, or with ACLs to match a page number or price.
+</div><pre class="text">urlp_val([&lt;name&gt;[,&lt;delim&gt;])] : integer
+  See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
+  and converts it to an integer value. This can be used for session stickiness
+  based on a user ID for example, or with ACLs to match a page number or price.
 </pre></div>
 <a class="anchor" id="7.4" name="7.4"></a>
 <h2 id="chapter-7.4" data-target="7.4"><small><a class="small" href="#7.4">7.4.</a></small> Pre-defined ACLs</h2>
@@ -14488,7 +14490,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-237 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-238 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15278,7 +15280,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"url_param",
 				"url_port",
 				"urlp",
-				"urlp_val",
 				"use-server",
 				"use_backend",
 				"user (Process management and security)",
@@ -15412,7 +15413,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-237', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-238', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15424,4 +15425,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-237-g26ea822 -->
+<!-- git:v1.6-dev1-238-g1ede1da -->
