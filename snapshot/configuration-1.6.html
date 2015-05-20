@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-239 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-244 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-239</strong></p>
+							<p><strong>version 1.6-dev1-244</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -11986,6 +11986,16 @@ persistent flag.
 requires that the request body has been buffered made available using
 &quot;<a href="#option%20http-buffer-request">option http-buffer-request</a>&quot;. In case of chunked-encoded body, currently only
 the first chunk is analyzed.
+</pre><a class="anchor" name="req.body_param"></a><a class="anchor" name="7-req.body_param"></a><a class="anchor" name="7.3.6-req.body_param"></a><a class="anchor" name="req.body_param (Using ACLs and fetching samples)"></a><a class="anchor" name="req.body_param (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.body_param"></a><a href="#7.3.6-req.body_param">req.body_param</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>) : string</span></div><pre class="text">This fetch assumes that the body of the POST request is url-encoded. The user
+can check if the &quot;content-type&quot; contains the value
+&quot;application/x-www-form-urlencoded&quot;. This extracts the first occurrence of the
+parameter &lt;name&gt; in the body, which ends before '&amp;'. The parameter name is
+case-sensitive. If no name is given, any parameter will match, and the first
+one will be returned. The result is a string corresponding to the value of the
+parameter &lt;name&gt; as presented in the request body (no URL decoding is
+performed). Note that the ACL version of this fetch iterates over multiple
+parameters and will iteratively report all parameters values if no name is
+given.
 </pre><a class="anchor" name="req.body_len"></a><a class="anchor" name="7-req.body_len"></a><a class="anchor" name="7.3.6-req.body_len"></a><a class="anchor" name="req.body_len (Using ACLs and fetching samples)"></a><a class="anchor" name="req.body_len (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.body_len"></a><a href="#7.3.6-req.body_len">req.body_len</a></b> : integer</div><pre class="text">This returns the length of the HTTP request's available body in bytes. It may
 be lower than the advertised length if the body is larger than the buffer. It
 requires that the request body has been buffered made available using
@@ -14490,7 +14500,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-239 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-244 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -14884,6 +14894,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"rep_ssl_hello_type",
 				"req.body",
 				"req.body_len",
+				"req.body_param",
 				"req.body_size",
 				"req.cook",
 				"req.cook_cnt",
@@ -15413,7 +15424,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-239', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-244', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15425,4 +15436,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-239-gb4e34da -->
+<!-- git:v1.6-dev1-244-g9826c77 -->
