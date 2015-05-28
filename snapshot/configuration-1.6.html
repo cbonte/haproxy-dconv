@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-264 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-270 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-264</strong></p>
+							<p><strong>version 1.6-dev1-270</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4144,7 +4144,7 @@ http-request del-map(map.lst) %[src]                     if delmap
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#stats%20http-request">stats http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
 <a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response"></a><a href="#4.2-http-response">http-response</a></b> <span style="color: #800">{ allow | deny | add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> |
-                capture <span style="color: #080">&lt;sample&gt;</span> id <span style="color: #080">&lt;id&gt;</span> |
+                capture <span style="color: #080">&lt;sample&gt;</span> id <span style="color: #080">&lt;id&gt;</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
                 set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
                 replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
                 replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
@@ -4318,6 +4318,13 @@ The first keyword is the rule's action. Currently supported actions include :
     This is useful to run captures in backends. The slot id can be declared by
     a previous directive &quot;http-response capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot;
     keyword.
+
+  - &quot;<a href="#redirect">redirect</a>&quot; : this performs an HTTP redirection based on a redirect rule.
+    This supports a format string similarly to &quot;http-request redirect&quot; rules,
+    with the exception that only the &quot;location&quot; type of redirect is possible
+    on the response. See the &quot;<a href="#redirect">redirect</a>&quot; keyword for the rule's syntax. When
+    a redirect rule is applied during a response, connections to the server
+    are closed so that no data can be forwarded from the server to the client.
 
 There is no limit to the number of http-response statements per instance.
 
@@ -14548,7 +14555,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-264 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-270 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15476,7 +15483,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-264', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-270', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15488,4 +15495,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-264-ge80fada -->
+<!-- git:v1.6-dev1-270-gbe1ccae -->
