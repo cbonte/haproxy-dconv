@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-313 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-317 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/11</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/12</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-313</strong></p>
+							<p><strong>version 1.6-dev1-317</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1345,6 +1345,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.ssl.force-private-cache">tune.ssl.force-private-cache</a>
    - <a href="#tune.ssl.maxrecord">tune.ssl.maxrecord</a>
    - <a href="#tune.ssl.default-dh-param">tune.ssl.default-dh-param</a>
+   - <a href="#tune.ssl.ssl-ctx-cache-size">tune.ssl.ssl-ctx-cache-size</a>
    - <a href="#tune.zlib.memlevel">tune.zlib.memlevel</a>
    - <a href="#tune.zlib.windowsize">tune.zlib.windowsize</a>
 
@@ -1892,6 +1893,10 @@ allowed. Higher values will increase the CPU load, and values greater than
 1024 bits are not supported by Java 7 and earlier clients. This value is not
 used if static Diffie-Hellman parameters are supplied either directly
 in the certificate file or by using the ssl-dh-param-file parameter.
+</pre><a class="anchor" name="tune.ssl.ssl-ctx-cache-size"></a><a class="anchor" name="3-tune.ssl.ssl-ctx-cache-size"></a><a class="anchor" name="3.2-tune.ssl.ssl-ctx-cache-size"></a><a class="anchor" name="tune.ssl.ssl-ctx-cache-size (Global parameters)"></a><a class="anchor" name="tune.ssl.ssl-ctx-cache-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.ssl-ctx-cache-size"></a><a href="#3.2-tune.ssl.ssl-ctx-cache-size">tune.ssl.ssl-ctx-cache-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the cache used to store generated certificates to &lt;number&gt;
+entries. This is a LRU cache. Because generating a SSL certificate
+dynamically is expensive, they are cached. The default cache size is set to
+1000 entries.
 </pre><a class="anchor" name="tune.zlib.memlevel"></a><a class="anchor" name="3-tune.zlib.memlevel"></a><a class="anchor" name="3.2-tune.zlib.memlevel"></a><a class="anchor" name="tune.zlib.memlevel (Global parameters)"></a><a class="anchor" name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.zlib.memlevel"></a><a href="#3.2-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
 defines how much memory should be allocated for the internal compression
 state. A value of 1 uses minimum memory but is slow and reduces compression
@@ -9329,6 +9334,15 @@ client's certificate.
 Sets a comma separated list of errorIDs to ignore during verify at depth &gt; 0.
 If set to 'all', all errors are ignored. SSL handshake is not aborted if an
 error is ignored.
+</pre><a class="anchor" name="ca-sign-file"></a><a class="anchor" name="5-ca-sign-file"></a><a class="anchor" name="5.1-ca-sign-file"></a><a class="anchor" name="ca-sign-file (Bind and Server options)"></a><a class="anchor" name="ca-sign-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ca-sign-file"></a><a href="#5.1-ca-sign-file">ca-sign-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+designates a PEM file containing both the CA certificate and the CA private
+key used to create and sign server's certificates. This is a mandatory
+setting when the dynamic generation of certificates is enabled. See
+'generate-certificates' for details.
+</pre><a class="anchor" name="ca-sign-passphrase"></a><a class="anchor" name="5-ca-sign-passphrase"></a><a class="anchor" name="5.1-ca-sign-passphrase"></a><a class="anchor" name="ca-sign-passphrase (Bind and Server options)"></a><a class="anchor" name="ca-sign-passphrase (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ca-sign-passphrase"></a><a href="#5.1-ca-sign-passphrase">ca-sign-passphrase</a></b> <span style="color: #080">&lt;passphrase&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It is
+the CA private key passphrase. This setting is optional and used only when
+the dynamic generation of certificates is enabled. See
+'generate-certificates' for details.
 </pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.1-ciphers"></a><a class="anchor" name="ciphers (Bind and Server options)"></a><a class="anchor" name="ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.1-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the string describing the list of cipher algorithms (&quot;cipher suite&quot;) that are
 negotiated during the SSL/TLS handshake. The format of the string is defined
@@ -9434,6 +9448,22 @@ this listener. This option is also available on global statement
 </pre><a class="anchor" name="force-tlsv12"></a><a class="anchor" name="5-force-tlsv12"></a><a class="anchor" name="5.1-force-tlsv12"></a><a class="anchor" name="force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="force-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv12"></a><a href="#5.1-force-tlsv12">force-tlsv12</a></b></div><pre class="text">This option enforces use of TLSv1.2 only on SSL connections instantiated from
 this listener. This option is also available on global statement
 &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+</pre><a class="anchor" name="generate-certificates"></a><a class="anchor" name="5-generate-certificates"></a><a class="anchor" name="5.1-generate-certificates"></a><a class="anchor" name="generate-certificates (Bind and Server options)"></a><a class="anchor" name="generate-certificates (Bind options)"></a><div class="keyword"><b><a class="anchor" name="generate-certificates"></a><a href="#5.1-generate-certificates">generate-certificates</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+enables the dynamic SSL certificates generation. A CA certificate and its
+private key are necessary (see 'ca-sign-file'). When HAProxy is configured as
+a transparent forward proxy, SSL requests generate errors because of a common
+name mismatch on the certificate presented to the client. With this option
+enabled, HAProxy will try to forge a certificate using the SNI hostname
+indicated by the client. This is done only if no certificate matches the SNI
+hostname (see 'crt-list'). If an error occurs, the default certificate is
+used, else the 'strict-sni' option is set.
+It can also be used when HAProxy is configured as a reverse proxy to ease the
+deployment of an architecture with many backends.
+
+Creating a SSL certificate is an expensive operation, so a LRU cache is used
+to store forged certificates (see 'tune.ssl.ssl-ctx-cache-size'). It
+increases the HAProxy's memroy footprint to reduce latency when the same
+certificate is used many times.
 </pre><a class="anchor" name="gid"></a><a class="anchor" name="5-gid"></a><a class="anchor" name="5.1-gid"></a><a class="anchor" name="gid (Bind and Server options)"></a><a class="anchor" name="gid (Bind options)"></a><div class="keyword"><b><a class="anchor" name="gid"></a><a href="#5.1-gid">gid</a></b> <span style="color: #080">&lt;gid&gt;</span></div><pre class="text">Sets the group of the UNIX sockets to the designated system gid. It can also
 be set by default in the global section's &quot;<a href="#unix-bind">unix-bind</a>&quot; statement. Note that
 some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
@@ -14615,7 +14645,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-313 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-317 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -14677,6 +14707,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ca-file (Bind options)",
 				"ca-file (Server and default-server options)",
 				"ca-ignore-err",
+				"ca-sign-file",
+				"ca-sign-passphrase",
 				"capture",
 				"capture cookie",
 				"capture request",
@@ -14793,6 +14825,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"force-tlsv11",
 				"force-tlsv12",
 				"fullconn",
+				"generate-certificates",
 				"get",
 				"get acl",
 				"get map",
@@ -15400,6 +15433,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.ssl.force-private-cache",
 				"tune.ssl.lifetime",
 				"tune.ssl.maxrecord",
+				"tune.ssl.ssl-ctx-cache-size",
 				"tune.zlib.memlevel",
 				"tune.zlib.windowsize",
 				"uid (Process management and security)",
@@ -15548,7 +15582,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-313', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-317', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15560,4 +15594,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-313-gacd6b1f -->
+<!-- git:v1.6-dev1-317-g3054880 -->
