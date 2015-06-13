@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-318 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-325 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-318</strong></p>
+							<p><strong>version 1.6-dev1-325</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -407,6 +407,43 @@ Note to documentation contributors :
 					<div class="col-md-10 noheight">
 							<div class="tab">
 							<a href="#5.2">Server and default-server options</a>
+							</div>
+					</div>
+				</div>
+				
+			
+				
+				<div class="row">
+					<div class="col-md-2 pagination-right noheight"><small>5.3.</small></div>
+					<div class="col-md-10 noheight">
+							<div class="tab">
+							<a href="#5.3">Server DNS resolution</a>
+							</div>
+					</div>
+				</div>
+				
+			
+				
+				<div class="row">
+					<div class="col-md-2 pagination-right noheight"><small>5.3.1.</small></div>
+					<div class="col-md-10 noheight">
+							<div class="tab">
+							<div class="tab">
+							<a href="#5.3.1">Global overview</a>
+							</div>
+							</div>
+					</div>
+				</div>
+				
+			
+				
+				<div class="row">
+					<div class="col-md-2 pagination-right noheight"><small>5.3.2.</small></div>
+					<div class="col-md-10 noheight">
+							<div class="tab">
+							<div class="tab">
+							<a href="#5.3.2">The resolvers section</a>
+							</div>
 							</div>
 					</div>
 				</div>
@@ -10059,6 +10096,24 @@ after &lt;count&gt; consecutive successful health checks. This value defaults to
 if unspecified. See also the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#inter">inter</a>&quot; and &quot;<a href="#fall">fall</a>&quot; parameters.
 
 Supported in default-server: Yes
+</pre><a class="anchor" name="resolve-prefer"></a><a class="anchor" name="5-resolve-prefer"></a><a class="anchor" name="5.2-resolve-prefer"></a><a class="anchor" name="resolve-prefer (Bind and Server options)"></a><a class="anchor" name="resolve-prefer (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-prefer"></a><a href="#5.2-resolve-prefer">resolve-prefer</a></b> <span style="color: #080">&lt;family&gt;</span></div><pre class="text">When DNS resolution is enabled for a server and multiple IP addresses from
+different families are returned, HAProxy will prefer using an IP address
+from the family mentioned in the &quot;<a href="#resolve-prefer">resolve-prefer</a>&quot; parameter.
+Available families: &quot;ipv4&quot; and &quot;ipv6&quot;
+
+Default value: ipv4
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
+</div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28Server%20DNS%20resolution%29">Server DNS resolution</a></li></ul></span>&quot; section to resolve current server's
+hostname.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>server s1 app1.domain.com:80 resolvers mydns
+</code></pre>
+</div><pre class="text">See also chapter 5.3
 </pre><a class="anchor" name="send-proxy"></a><a class="anchor" name="5-send-proxy"></a><a class="anchor" name="5.2-send-proxy"></a><a class="anchor" name="send-proxy (Bind and Server options)"></a><a class="anchor" name="send-proxy (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy"></a><a href="#5.2-send-proxy">send-proxy</a></b></div><pre class="text">The &quot;<a href="#send-proxy">send-proxy</a>&quot; parameter enforces use of the PROXY protocol over any
 connection established to this server. The PROXY protocol informs the other
 end about the layer 3/4 addresses of the incoming connection, so that it can
@@ -10184,6 +10239,90 @@ can both grow and shrink, for instance between 10 and 100 to leave enough
 room above and below for later adjustments.
 
 Supported in default-server: Yes
+</pre></div>
+<a class="anchor" id="5" name="5"></a>
+<div class="page-header"><h1 id="chapter-5" data-target="5"><small><a class="small" href="#5">5.</a></small> 3 Server IP address resolution using DNS</h1>
+</div><div><pre class="text">HAProxy allows using a host name to be resolved to find out what is the server
+IP address. By default, HAProxy resolves the name when parsing the
+configuration, at startup.
+This is not sufficient in some cases, such as in Amazon where a server's IP
+can change after a reboot or an ELB Virtual IP can change based on current
+workload.
+This chapter describes how HAProxy can be configured to process server's name
+resolution at run time.
+Whether run time server name resolution has been enable or not, HAProxy will
+carry on doing the first resolution when parsing the configuration.
+</pre></div>
+<a class="anchor" id="5.3" name="5.3"></a>
+<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> 1 Global overview</h2>
+<div><pre class="text">As we've seen in introduction, name resolution in HAProxy occurs at two
+different steps of the process life:
+
+  1. when starting up, HAProxy parses the server line definition and matches a
+     host name. It uses libc functions to get the host name resolved. This
+     resolution relies on /etc/resolv.conf file.
+
+  2. at run time, when HAProxy gets prepared to run a health check on a server,
+     it verifies if the current name resolution is still considered as valid.
+     If not, it processes a new resolution, in parallel of the health check.
+
+A few other events can trigger a name resolution at run time:
+  - when a server's health check ends up in a connection timeout: this may be
+    because the server has a new IP address. So we need to trigger a name
+    resolution to know this new IP.
+
+A few things important to notice:
+  - all the name servers are queried in the mean time. HAProxy will process the
+    first valid response.
+
+  - a resolution is considered as invalid (NX, timeout, refused), when all the
+    servers return an error.
+</pre></div>
+<a class="anchor" id="5.3" name="5.3"></a>
+<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> 2 The resolvers section</h2>
+<div><pre class="text">This section is dedicated to host information related to name resolution in
+HAProxy.
+There can be as many as resolvers section as needed. Each section can contain
+many name servers.
+</pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
+
+A resolvers section accept the following parameters:
+</pre><a class="anchor" name="nameserver"></a><a class="anchor" name="5-nameserver"></a><a class="anchor" name="5.3-nameserver"></a><a class="anchor" name="nameserver (Bind and Server options)"></a><a class="anchor" name="nameserver (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="nameserver"></a><a href="#5.3-nameserver">nameserver</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">DNS server description:
+  &lt;id&gt;   : label of the server, should be unique
+  &lt;ip&gt;   : IP address of the server
+  &lt;port&gt; : port where the DNS service actually runs
+</pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
+on last resolution &lt;status&gt;
+  &lt;status&gt; : last name resolution status. Only &quot;valid&quot; is accepted for now.
+  &lt;period&gt; : interval between two successive name resolution when the last
+             answer was in &lt;status&gt;. It follows the HAProxy time format.
+             &lt;period&gt; is in milliseconds by default.
+
+Default value is 10s for &quot;valid&quot;.
+
+Note: since the name resolution is triggered by the health checks, a new
+      resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
+      the healch check.
+</pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
+giving up.
+Default value: 3
+</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
+     &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
+               events available are:
+               - retry: time between two DNS queries, when no response have
+                        been received.
+                        Default value: 1s
+     &lt;time&gt;  : time related to the event. It follows the HAProxy time format.
+               &lt;time&gt; is expressed in milliseconds.
+
+Example of a resolvers section (with default values):
+
+   resolvers mydns
+     nameserver dns1 10.0.0.1:53
+     nameserver dns2 10.0.0.2:53
+     resolve_retries       3
+     timeout retry         1s
+     hold valid           10s
 </pre></div>
 <a class="anchor" id="6" name="6"></a>
 <div class="page-header"><h1 id="chapter-6" data-target="6"><small><a class="small" href="#6">6.</a></small> HTTP header manipulation</h1>
@@ -14362,6 +14501,7 @@ is passed in number of sessions per second.
 applies to all frontends and the change has an immediate effect. The value
 is passed in number of sessions per second sent to the SSL stack. It applies
 before the handshake in order to protect the stack against handshake abuses.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> addr <span style="color: #080">&lt;ip4 or ip6 address&gt;</span></div><pre class="text">Replace the current IP address of a server by the one provided.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent <span style="color: #008">[ up | down ]</span></div><pre class="text">Force a server's agent to a new state. This can be useful to immediately
 switch a server's state regardless of some slow agent checks for example.
 Note that the change is propagated to tracking servers if any.
@@ -14537,7 +14677,22 @@ line after the information output which marks the end of the first block.
 A similar empty line appears at the end of the second block (stats) so that
 the reader knows the output has not been truncated.
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.2-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.2-show%20table">show table</a></b></div><pre class="text">Dump general information on all known stick-tables. Their name is returned
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.2-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><a class="anchor" name="show stat resolvers"></a><a class="anchor" name="9-show stat resolvers"></a><a class="anchor" name="9.2-show stat resolvers"></a><a class="anchor" name="show stat resolvers (Statistics and monitoring)"></a><a class="anchor" name="show stat resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat resolvers"></a><a href="#9.2-show%20stat%20resolvers">show stat resolvers</a></b> <span style="color: #080">&lt;resolvers section id&gt;</span></div><pre class="text">Dump statistics for the given resolvers section.
+For each name server, the following counters are reported:
+  sent: number of DNS requests sent to this server
+  valid: number of DNS valid responses received from this server
+  update: number of DNS responses used to update the server's IP address
+  cname: number of CNAME responses
+  cname_error: CNAME errors encountered with this server
+  any_err: number of empty response (IE: server does not support ANY type)
+  nx: non existent domain response received from this server
+  timeout: how many time this server did not answer in time
+  refused: number of requests refused by this server
+  other: any other DNS errors
+  invalid: invalid DNS response (from a protocol point of view)
+  too_big: too big response
+  outdated: number of response arrived too late (after an other name server)
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.2-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.2-show%20table">show table</a></b></div><pre class="text">Dump general information on all known stick-tables. Their name is returned
 (the name of the proxy which holds them), their type (currently zero, always
 IP), their size in maximum possible number of entries, and the number of
 entries currently in use.
@@ -14645,7 +14800,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-318 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-325 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -14843,6 +14998,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"hdr_val",
 				"help",
 				"hex",
+				"hold",
 				"http-check",
 				"http-check disable-on-404",
 				"http-check expect",
@@ -14903,6 +15059,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"mss",
 				"mul",
 				"name",
+				"nameserver",
 				"nbproc (Process management and security)",
 				"nbproc (Fetching samples from internal states)",
 				"nbsrv",
@@ -15108,6 +15265,10 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"res.payload_lv",
 				"res.ssl_hello_type",
 				"res.ver",
+				"resolve-prefer",
+				"resolve_retries",
+				"resolvers (Server and default-server options)",
+				"resolvers (Server DNS resolution)",
 				"resp_ver",
 				"retries",
 				"rise",
@@ -15238,6 +15399,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"show pools",
 				"show sess",
 				"show stat",
+				"show stat resolvers",
 				"show table",
 				"show tls-keys",
 				"shutdown",
@@ -15582,7 +15744,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-318', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-325', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15594,4 +15756,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-318-g9dd44ba -->
+<!-- git:v1.6-dev1-325-g3863f97 -->
