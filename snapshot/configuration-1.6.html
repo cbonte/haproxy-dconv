@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-325 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-337 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/13</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-325</strong></p>
+							<p><strong>version 1.6-dev1-337</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1383,6 +1383,10 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.ssl.maxrecord">tune.ssl.maxrecord</a>
    - <a href="#tune.ssl.default-dh-param">tune.ssl.default-dh-param</a>
    - <a href="#tune.ssl.ssl-ctx-cache-size">tune.ssl.ssl-ctx-cache-size</a>
+   - <a href="#tune.vars.global-max-size">tune.vars.global-max-size</a>
+   - <a href="#tune.vars.reqres-max-size">tune.vars.reqres-max-size</a>
+   - <a href="#tune.vars.sess-max-size">tune.vars.sess-max-size</a>
+   - <a href="#tune.vars.txn-max-size">tune.vars.txn-max-size</a>
    - <a href="#tune.zlib.memlevel">tune.zlib.memlevel</a>
    - <a href="#tune.zlib.windowsize">tune.zlib.windowsize</a>
 
@@ -1849,7 +1853,7 @@ bufsize.
 </pre><a class="anchor" name="tune.pattern.cache-size"></a><a class="anchor" name="3-tune.pattern.cache-size"></a><a class="anchor" name="3.2-tune.pattern.cache-size"></a><a class="anchor" name="tune.pattern.cache-size (Global parameters)"></a><a class="anchor" name="tune.pattern.cache-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pattern.cache-size"></a><a href="#3.2-tune.pattern.cache-size">tune.pattern.cache-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the pattern lookup cache to &lt;number&gt; entries. This is an LRU
 cache which reminds previous lookups and their results. It is used by ACLs
 and maps on slow pattern lookups, namely the ones using the &quot;<a href="#sub">sub</a>&quot;, &quot;reg&quot;,
-&quot;dir&quot;, &quot;dom&quot;, &quot;end&quot;, &quot;bin&quot; match methods as well as the case-insensitive
+&quot;dir&quot;, &quot;dom&quot;, &quot;end&quot;, &quot;<a href="#bin">bin</a>&quot; match methods as well as the case-insensitive
 strings. It applies to pattern expressions which means that it will be able
 to memorize the result of a lookup among all the patterns specified on a
 configuration line (including all those loaded from files). It automatically
@@ -1934,6 +1938,16 @@ in the certificate file or by using the ssl-dh-param-file parameter.
 entries. This is a LRU cache. Because generating a SSL certificate
 dynamically is expensive, they are cached. The default cache size is set to
 1000 entries.
+</pre><a class="anchor" name="tune.vars.global-max-size"></a><a class="anchor" name="3-tune.vars.global-max-size"></a><a class="anchor" name="3.2-tune.vars.global-max-size"></a><a class="anchor" name="tune.vars.global-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.global-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.global-max-size"></a><a href="#3.2-tune.vars.global-max-size">tune.vars.global-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.reqres-max-size"></a><a class="anchor" name="3-tune.vars.reqres-max-size"></a><a class="anchor" name="3.2-tune.vars.reqres-max-size"></a><a class="anchor" name="tune.vars.reqres-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.reqres-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.reqres-max-size"></a><a href="#3.2-tune.vars.reqres-max-size">tune.vars.reqres-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.sess-max-size"></a><a class="anchor" name="3-tune.vars.sess-max-size"></a><a class="anchor" name="3.2-tune.vars.sess-max-size"></a><a class="anchor" name="tune.vars.sess-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.sess-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.sess-max-size"></a><a href="#3.2-tune.vars.sess-max-size">tune.vars.sess-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.txn-max-size"></a><a class="anchor" name="3-tune.vars.txn-max-size"></a><a class="anchor" name="3.2-tune.vars.txn-max-size"></a><a class="anchor" name="tune.vars.txn-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.txn-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.txn-max-size"></a><a href="#3.2-tune.vars.txn-max-size">tune.vars.txn-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><pre class="text">These four tunes helps to manage the allowed amount of memory used by the
+variables system. &quot;global&quot; limits the memory for all the systems. &quot;sess&quot; limit
+the memory by session, &quot;txn&quot; limits the memory by transaction and &quot;reqres&quot;
+limits the memory for each request or response processing. during the
+accounting, &quot;sess&quot; embbed &quot;txn&quot; and &quot;txn&quot; embed &quot;reqres&quot;.
+
+By example, we considers that &quot;<a href="#tune.vars.sess-max-size">tune.vars.sess-max-size</a>&quot; is fixed to 100,
+&quot;<a href="#tune.vars.txn-max-size">tune.vars.txn-max-size</a>&quot; is fixed to 100, &quot;<a href="#tune.vars.reqres-max-size">tune.vars.reqres-max-size</a>&quot; is
+also fixed to 100. If we create a variable &quot;txn.var&quot; that contains 100 bytes,
+we cannot create any more variable in the other contexts.
 </pre><a class="anchor" name="tune.zlib.memlevel"></a><a class="anchor" name="3-tune.zlib.memlevel"></a><a class="anchor" name="3.2-tune.zlib.memlevel"></a><a class="anchor" name="tune.zlib.memlevel (Global parameters)"></a><a class="anchor" name="tune.zlib.memlevel (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.zlib.memlevel"></a><a href="#3.2-tune.zlib.memlevel">tune.zlib.memlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the memLevel parameter in zlib initialization for each session. It
 defines how much memory should be allocated for the internal compression
 state. A value of 1 uses minimum memory but is slow and reduces compression
@@ -3898,6 +3912,7 @@ Example of a header received by the application server :
               del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
               del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
               set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
+              set-var(<span style="color: #080">&lt;var name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
               <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
               lua <span style="color: #080">&lt;function name&gt;</span>
              }</span>
@@ -4034,140 +4049,164 @@ http-request set-path /%[hdr(host)]%[path]
 <code><span class="comment"># replace &quot;%3D&quot; with &quot;=&quot; in the query string</span>
 http-request set-query %[query,regsub(%3D,=,g)]
 </code></pre>
-</div><pre class="text">  - &quot;set-uri&quot; rewrites the request URI with the result of the evaluation of
-    format string &lt;fmt&gt;. The scheme, authority, path and query string are all
-    replaced at once. This can be used to rewrite hosts in front of proxies,
-    or to perform complex modifications to the URI such as moving parts
-    between the path and the query string. See also &quot;set-path&quot; and
-    &quot;set-query&quot;.
+</div><pre class="text">- &quot;set-uri&quot; rewrites the request URI with the result of the evaluation of
+  format string &lt;fmt&gt;. The scheme, authority, path and query string are all
+  replaced at once. This can be used to rewrite hosts in front of proxies,
+  or to perform complex modifications to the URI such as moving parts
+  between the path and the query string. See also &quot;set-path&quot; and
+  &quot;set-query&quot;.
 
-  - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
-    It only has effect against the other requests being processed at the same
-    time. The default value is 0, unless altered by the &quot;<a href="#nice">nice</a>&quot; setting on the
-    &quot;<a href="#bind">bind</a>&quot; line. The accepted range is -1024..1024. The higher the value, the
-    nicest the request will be. Lower values will make the request more
-    important than other ones. This can be useful to improve the speed of
-    some requests, or lower the priority of non-important requests. Using
-    this setting without prior experimentation can cause some major slowdown.
+- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
+  It only has effect against the other requests being processed at the same
+  time. The default value is 0, unless altered by the &quot;<a href="#nice">nice</a>&quot; setting on the
+  &quot;<a href="#bind">bind</a>&quot; line. The accepted range is -1024..1024. The higher the value, the
+  nicest the request will be. Lower values will make the request more
+  important than other ones. This can be useful to improve the speed of
+  some requests, or lower the priority of non-important requests. Using
+  this setting without prior experimentation can cause some major slowdown.
 
-  - &quot;set-log-level&quot; is used to change the log level of the current request
-    when a certain condition is met. Valid levels are the 8 syslog levels
-    (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword) plus the special level &quot;silent&quot; which disables
-    logging for this request. This rule is not final so the last matching
-    rule wins. This rule can be useful to disable health checks coming from
-    another equipment.
+- &quot;set-log-level&quot; is used to change the log level of the current request
+  when a certain condition is met. Valid levels are the 8 syslog levels
+  (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword) plus the special level &quot;silent&quot; which disables
+  logging for this request. This rule is not final so the last matching
+  rule wins. This rule can be useful to disable health checks coming from
+  another equipment.
 
-  - &quot;set-tos&quot; is used to set the TOS or DSCP field value of packets sent to
-    the client to the value passed in &lt;tos&gt; on platforms which support this.
-    This value represents the whole 8 bits of the IP TOS field, and can be
-    expressed both in decimal or hexadecimal format (prefixed by &quot;0x&quot;). Note
-    that only the 6 higher bits are used in DSCP or TOS, and the two lower
-    bits are always 0. This can be used to adjust some routing behaviour on
-    border routers based on some information from the request. See RFC 2474,
-    2597, 3260 and 4594 for more information.
+- &quot;set-tos&quot; is used to set the TOS or DSCP field value of packets sent to
+  the client to the value passed in &lt;tos&gt; on platforms which support this.
+  This value represents the whole 8 bits of the IP TOS field, and can be
+  expressed both in decimal or hexadecimal format (prefixed by &quot;0x&quot;). Note
+  that only the 6 higher bits are used in DSCP or TOS, and the two lower
+  bits are always 0. This can be used to adjust some routing behaviour on
+  border routers based on some information from the request. See RFC 2474,
+  2597, 3260 and 4594 for more information.
 
-  - &quot;set-mark&quot; is used to set the Netfilter MARK on all packets sent to the
-    client to the value passed in &lt;mark&gt; on platforms which support it. This
-    value is an unsigned 32 bit value which can be matched by netfilter and
-    by the routing table. It can be expressed both in decimal or hexadecimal
-    format (prefixed by &quot;0x&quot;). This can be useful to force certain packets to
-    take a different route (for example a cheaper network path for bulk
-    downloads). This works on Linux kernels 2.6.32 and above and requires
-    admin privileges.
+- &quot;set-mark&quot; is used to set the Netfilter MARK on all packets sent to the
+  client to the value passed in &lt;mark&gt; on platforms which support it. This
+  value is an unsigned 32 bit value which can be matched by netfilter and
+  by the routing table. It can be expressed both in decimal or hexadecimal
+  format (prefixed by &quot;0x&quot;). This can be useful to force certain packets to
+  take a different route (for example a cheaper network path for bulk
+  downloads). This works on Linux kernels 2.6.32 and above and requires
+  admin privileges.
 
-  - &quot;add-acl&quot; is used to add a new entry into an ACL. The ACL must be loaded
-    from a file (even a dummy empty file). The file name of the ACL to be
-    updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
-    which follows log-format rules, to collect content of the new entry. It
-    performs a lookup in the ACL before insertion, to avoid duplicated (or
-    more) values. This lookup is done by a linear search and can be expensive
-    with large lists! It is the equivalent of the &quot;<a href="#add%20acl">add acl</a>&quot; command from the
-    stats socket, but can be triggered by an HTTP request.
+- &quot;add-acl&quot; is used to add a new entry into an ACL. The ACL must be loaded
+  from a file (even a dummy empty file). The file name of the ACL to be
+  updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
+  which follows log-format rules, to collect content of the new entry. It
+  performs a lookup in the ACL before insertion, to avoid duplicated (or
+  more) values. This lookup is done by a linear search and can be expensive
+  with large lists! It is the equivalent of the &quot;<a href="#add%20acl">add acl</a>&quot; command from the
+  stats socket, but can be triggered by an HTTP request.
 
-  - &quot;del-acl&quot; is used to delete an entry from an ACL. The ACL must be loaded
-    from a file (even a dummy empty file). The file name of the ACL to be
-    updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
-    which follows log-format rules, to collect content of the entry to delete.
-    It is the equivalent of the &quot;<a href="#del%20acl">del acl</a>&quot; command from the stats socket, but
-    can be triggered by an HTTP request.
+- &quot;del-acl&quot; is used to delete an entry from an ACL. The ACL must be loaded
+  from a file (even a dummy empty file). The file name of the ACL to be
+  updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
+  which follows log-format rules, to collect content of the entry to delete.
+  It is the equivalent of the &quot;<a href="#del%20acl">del acl</a>&quot; command from the stats socket, but
+  can be triggered by an HTTP request.
 
-  - &quot;del-map&quot; is used to delete an entry from a MAP. The MAP must be loaded
-    from a file (even a dummy empty file). The file name of the MAP to be
-    updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
-    which follows log-format rules, to collect content of the entry to delete.
-    It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;<a href="#del%20map">del map</a>&quot;
-    command from the stats socket, but can be triggered by an HTTP request.
+- &quot;del-map&quot; is used to delete an entry from a MAP. The MAP must be loaded
+  from a file (even a dummy empty file). The file name of the MAP to be
+  updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
+  which follows log-format rules, to collect content of the entry to delete.
+  It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;<a href="#del%20map">del map</a>&quot;
+  command from the stats socket, but can be triggered by an HTTP request.
 
-  - &quot;set-map&quot; is used to add a new entry into a MAP. The MAP must be loaded
-    from a file (even a dummy empty file). The file name of the MAP to be
-    updated is passed between parentheses. It takes 2 arguments: &lt;key fmt&gt;,
-    which follows log-format rules, used to collect MAP key, and &lt;value fmt&gt;,
-    which follows log-format rules, used to collect content for the new entry.
-    It performs a lookup in the MAP before insertion, to avoid duplicated (or
-    more) values. This lookup is done by a linear search and can be expensive
-    with large lists! It is the equivalent of the &quot;<a href="#set%20map">set map</a>&quot; command from the
-    stats socket, but can be triggered by an HTTP request.
+- &quot;set-map&quot; is used to add a new entry into a MAP. The MAP must be loaded
+  from a file (even a dummy empty file). The file name of the MAP to be
+  updated is passed between parentheses. It takes 2 arguments: &lt;key fmt&gt;,
+  which follows log-format rules, used to collect MAP key, and &lt;value fmt&gt;,
+  which follows log-format rules, used to collect content for the new entry.
+  It performs a lookup in the MAP before insertion, to avoid duplicated (or
+  more) values. This lookup is done by a linear search and can be expensive
+  with large lists! It is the equivalent of the &quot;<a href="#set%20map">set map</a>&quot; command from the
+  stats socket, but can be triggered by an HTTP request.
 
-  - capture &lt;sample&gt; [ len &lt;length&gt; | id &lt;id&gt; ] :
-    captures sample expression &lt;sample&gt; from the request buffer, and converts
-    it to a string of at most &lt;len&gt; characters. The resulting string is
-    stored into the next request &quot;<a href="#capture">capture</a>&quot; slot, so it will possibly appear
-    next to some captured HTTP headers. It will then automatically appear in
-    the logs, and it will be possible to extract it using sample fetch rules
-    to feed it into headers or anything. The length should be limited given
-    that this size will be allocated for each capture during the whole
-    session life. Please check <a href="#7.3">section 7.3</a> (Fetching samples) and &quot;capture
-    request header&quot; for more information.
+- capture &lt;sample&gt; [ len &lt;length&gt; | id &lt;id&gt; ] :
+  captures sample expression &lt;sample&gt; from the request buffer, and converts
+  it to a string of at most &lt;len&gt; characters. The resulting string is
+  stored into the next request &quot;<a href="#capture">capture</a>&quot; slot, so it will possibly appear
+  next to some captured HTTP headers. It will then automatically appear in
+  the logs, and it will be possible to extract it using sample fetch rules
+  to feed it into headers or anything. The length should be limited given
+  that this size will be allocated for each capture during the whole
+  session life. Please check <a href="#7.3">section 7.3</a> (Fetching samples) and &quot;capture
+  request header&quot; for more information.
 
-    If the keyword &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; is used instead of &quot;len&quot;, the action tries to store
-    the captured string in a previously declared capture slot. This is useful
-    to run captures in backends. The slot id can be declared by a previous
-    directive &quot;http-request capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot; keyword.
+  If the keyword &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; is used instead of &quot;len&quot;, the action tries to store
+  the captured string in a previously declared capture slot. This is useful
+  to run captures in backends. The slot id can be declared by a previous
+  directive &quot;http-request capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot; keyword.
 
-  - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
-    enables tracking of sticky counters from current request. These rules
-    do not stop evaluation and do not change default action. Three sets of
-    counters may be simultaneously tracked by the same connection. The first
-    &quot;track-sc0&quot; rule executed enables tracking of the counters of the
-    specified table as the first set. The first &quot;track-sc1&quot; rule executed
-    enables tracking of the counters of the specified table as the second
-    set. The first &quot;track-sc2&quot; rule executed enables tracking of the
-    counters of the specified table as the third set. It is a recommended
-    practice to use the first set of counters for the per-frontend counters
-    and the second set for the per-backend ones. But this is just a
-    guideline, all may be used everywhere.
+- { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
+  enables tracking of sticky counters from current request. These rules
+  do not stop evaluation and do not change default action. Three sets of
+  counters may be simultaneously tracked by the same connection. The first
+  &quot;track-sc0&quot; rule executed enables tracking of the counters of the
+  specified table as the first set. The first &quot;track-sc1&quot; rule executed
+  enables tracking of the counters of the specified table as the second
+  set. The first &quot;track-sc2&quot; rule executed enables tracking of the
+  counters of the specified table as the third set. It is a recommended
+  practice to use the first set of counters for the per-frontend counters
+  and the second set for the per-backend ones. But this is just a
+  guideline, all may be used everywhere.
 
-    These actions take one or two arguments :
-      &lt;key&gt;   is mandatory, and is a sample expression rule as described
-              in <a href="#7.3">section 7.3</a>. It describes what elements of the incoming
-              request or connection will be analysed, extracted, combined,
-              and used to select which table entry to update the counters.
+  These actions take one or two arguments :
+    &lt;key&gt;   is mandatory, and is a sample expression rule as described
+            in <a href="#7.3">section 7.3</a>. It describes what elements of the incoming
+            request or connection will be analysed, extracted, combined,
+            and used to select which table entry to update the counters.
 
-      &lt;table&gt; is an optional table to be used instead of the default one,
-              which is the stick-table declared in the current proxy. All
-              the counters for the matches and updates for the key will
-              then be performed in that table until the session ends.
+    &lt;table&gt; is an optional table to be used instead of the default one,
+            which is the stick-table declared in the current proxy. All
+            the counters for the matches and updates for the key will
+            then be performed in that table until the session ends.
 
-    Once a &quot;track-sc*&quot; rule is executed, the key is looked up in the table
-    and if it is not found, an entry is allocated for it. Then a pointer to
-    that entry is kept during all the session's life, and this entry's
-    counters are updated as often as possible, every time the session's
-    counters are updated, and also systematically when the session ends.
-    Counters are only updated for events that happen after the tracking has
-    been started. As an exception, connection counters and request counters
-    are systematically updated so that they reflect useful information.
+  Once a &quot;track-sc*&quot; rule is executed, the key is looked up in the table
+  and if it is not found, an entry is allocated for it. Then a pointer to
+  that entry is kept during all the session's life, and this entry's
+  counters are updated as often as possible, every time the session's
+  counters are updated, and also systematically when the session ends.
+  Counters are only updated for events that happen after the tracking has
+  been started. As an exception, connection counters and request counters
+  are systematically updated so that they reflect useful information.
 
-    If the entry tracks concurrent connection counters, one connection is
-    counted for as long as the entry is tracked, and the entry will not
-    expire during that time. Tracking counters also provides a performance
-    advantage over just checking the keys, because only one table lookup is
-    performed for all ACL checks that make use of it.
+  If the entry tracks concurrent connection counters, one connection is
+  counted for as long as the entry is tracked, and the entry will not
+  expire during that time. Tracking counters also provides a performance
+  advantage over just checking the keys, because only one table lookup is
+  performed for all ACL checks that make use of it.
 
-  - &quot;lua&quot; is used to run a Lua function if the action is executed. The single
-    parameter is the name of the function to run. The prototype of the
-    function is documented in the API documentation.
+- &quot;lua&quot; is used to run a Lua function if the action is executed. The single
+  parameter is the name of the function to run. The prototype of the
+  function is documented in the API documentation.
 
-There is no limit to the number of http-request statements per instance.
+- set-var(&lt;var-name&gt;) &lt;expr&gt; :
+  Is used to set the contents of a variable. The variable is declared
+  inline.
+
+    &lt;var-name&gt; The name of the variable starts by an indication about its
+               scope. The allowed scopes are:
+                 &quot;sess&quot; : the variable is shared with all the session,
+                 &quot;txn&quot;  : the variable is shared with all the transaction
+                          (request and response)
+                 &quot;req&quot;  : the variable is shared only during the request
+                          processing
+                 &quot;res&quot;  : the variable is shared only during the response
+                          processing.
+               This prefix is followed by a name. The separator is a '.'.
+               The name may only contain characters 'a-z', 'A-Z', '0-9',
+               and '_'.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request set-var(req.my_var) req.fhdr(user-agent),lower
+</code></pre>
+</div><pre class="text">There is no limit to the number of http-request statements per instance.
 
 It is important to know that http-request rules are processed very early in
 the HTTP processing, just after &quot;<a href="#block">block</a>&quot; rules and before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot;
@@ -4239,6 +4278,7 @@ http-request del-map(map.lst) %[src]                     if delmap
                 del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
+                set-var(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
                 lua <span style="color: #080">&lt;function name&gt;</span>
               }</span>
               <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 responses
@@ -4311,108 +4351,132 @@ The first keyword is the rule's action. Currently supported actions include :
 <pre class="prettyprint">
 <code>http-response replace-value Cache-control ^public$ private
 </code></pre>
-</div><pre class="text">    applied to:
+</div><pre class="text">  applied to:
 
-      Cache-Control: max-age=3600, public
+    Cache-Control: max-age=3600, public
 
-    outputs:
+  outputs:
 
-      Cache-Control: max-age=3600, private
+    Cache-Control: max-age=3600, private
 
-  - &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
-    It only has effect against the other requests being processed at the same
-    time. The default value is 0, unless altered by the &quot;<a href="#nice">nice</a>&quot; setting on the
-    &quot;<a href="#bind">bind</a>&quot; line. The accepted range is -1024..1024. The higher the value, the
-    nicest the request will be. Lower values will make the request more
-    important than other ones. This can be useful to improve the speed of
-    some requests, or lower the priority of non-important requests. Using
-    this setting without prior experimentation can cause some major slowdown.
+- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
+  It only has effect against the other requests being processed at the same
+  time. The default value is 0, unless altered by the &quot;<a href="#nice">nice</a>&quot; setting on the
+  &quot;<a href="#bind">bind</a>&quot; line. The accepted range is -1024..1024. The higher the value, the
+  nicest the request will be. Lower values will make the request more
+  important than other ones. This can be useful to improve the speed of
+  some requests, or lower the priority of non-important requests. Using
+  this setting without prior experimentation can cause some major slowdown.
 
-  - &quot;set-log-level&quot; is used to change the log level of the current request
-    when a certain condition is met. Valid levels are the 8 syslog levels
-    (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword) plus the special level &quot;silent&quot; which disables
-    logging for this request. This rule is not final so the last matching
-    rule wins. This rule can be useful to disable health checks coming from
-    another equipment.
+- &quot;set-log-level&quot; is used to change the log level of the current request
+  when a certain condition is met. Valid levels are the 8 syslog levels
+  (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword) plus the special level &quot;silent&quot; which disables
+  logging for this request. This rule is not final so the last matching
+  rule wins. This rule can be useful to disable health checks coming from
+  another equipment.
 
-  - &quot;set-tos&quot; is used to set the TOS or DSCP field value of packets sent to
-    the client to the value passed in &lt;tos&gt; on platforms which support this.
-    This value represents the whole 8 bits of the IP TOS field, and can be
-    expressed both in decimal or hexadecimal format (prefixed by &quot;0x&quot;). Note
-    that only the 6 higher bits are used in DSCP or TOS, and the two lower
-    bits are always 0. This can be used to adjust some routing behaviour on
-    border routers based on some information from the request. See RFC 2474,
-    2597, 3260 and 4594 for more information.
+- &quot;set-tos&quot; is used to set the TOS or DSCP field value of packets sent to
+  the client to the value passed in &lt;tos&gt; on platforms which support this.
+  This value represents the whole 8 bits of the IP TOS field, and can be
+  expressed both in decimal or hexadecimal format (prefixed by &quot;0x&quot;). Note
+  that only the 6 higher bits are used in DSCP or TOS, and the two lower
+  bits are always 0. This can be used to adjust some routing behaviour on
+  border routers based on some information from the request. See RFC 2474,
+  2597, 3260 and 4594 for more information.
 
-  - &quot;set-mark&quot; is used to set the Netfilter MARK on all packets sent to the
-    client to the value passed in &lt;mark&gt; on platforms which support it. This
-    value is an unsigned 32 bit value which can be matched by netfilter and
-    by the routing table. It can be expressed both in decimal or hexadecimal
-    format (prefixed by &quot;0x&quot;). This can be useful to force certain packets to
-    take a different route (for example a cheaper network path for bulk
-    downloads). This works on Linux kernels 2.6.32 and above and requires
-    admin privileges.
+- &quot;set-mark&quot; is used to set the Netfilter MARK on all packets sent to the
+  client to the value passed in &lt;mark&gt; on platforms which support it. This
+  value is an unsigned 32 bit value which can be matched by netfilter and
+  by the routing table. It can be expressed both in decimal or hexadecimal
+  format (prefixed by &quot;0x&quot;). This can be useful to force certain packets to
+  take a different route (for example a cheaper network path for bulk
+  downloads). This works on Linux kernels 2.6.32 and above and requires
+  admin privileges.
 
-  - &quot;add-acl&quot; is used to add a new entry into an ACL. The ACL must be loaded
-    from a file (even a dummy empty file). The file name of the ACL to be
-    updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
-    which follows log-format rules, to collect content of the new entry. It
-    performs a lookup in the ACL before insertion, to avoid duplicated (or
-    more) values. This lookup is done by a linear search and can be expensive
-    with large lists! It is the equivalent of the &quot;<a href="#add%20acl">add acl</a>&quot; command from the
-    stats socket, but can be triggered by an HTTP response.
+- &quot;add-acl&quot; is used to add a new entry into an ACL. The ACL must be loaded
+  from a file (even a dummy empty file). The file name of the ACL to be
+  updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
+  which follows log-format rules, to collect content of the new entry. It
+  performs a lookup in the ACL before insertion, to avoid duplicated (or
+  more) values. This lookup is done by a linear search and can be expensive
+  with large lists! It is the equivalent of the &quot;<a href="#add%20acl">add acl</a>&quot; command from the
+  stats socket, but can be triggered by an HTTP response.
 
-  - &quot;del-acl&quot; is used to delete an entry from an ACL. The ACL must be loaded
-    from a file (even a dummy empty file). The file name of the ACL to be
-    updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
-    which follows log-format rules, to collect content of the entry to delete.
-    It is the equivalent of the &quot;<a href="#del%20acl">del acl</a>&quot; command from the stats socket, but
-    can be triggered by an HTTP response.
+- &quot;del-acl&quot; is used to delete an entry from an ACL. The ACL must be loaded
+  from a file (even a dummy empty file). The file name of the ACL to be
+  updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
+  which follows log-format rules, to collect content of the entry to delete.
+  It is the equivalent of the &quot;<a href="#del%20acl">del acl</a>&quot; command from the stats socket, but
+  can be triggered by an HTTP response.
 
-  - &quot;del-map&quot; is used to delete an entry from a MAP. The MAP must be loaded
-    from a file (even a dummy empty file). The file name of the MAP to be
-    updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
-    which follows log-format rules, to collect content of the entry to delete.
-    It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;<a href="#del%20map">del map</a>&quot;
-    command from the stats socket, but can be triggered by an HTTP response.
+- &quot;del-map&quot; is used to delete an entry from a MAP. The MAP must be loaded
+  from a file (even a dummy empty file). The file name of the MAP to be
+  updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
+  which follows log-format rules, to collect content of the entry to delete.
+  It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;<a href="#del%20map">del map</a>&quot;
+  command from the stats socket, but can be triggered by an HTTP response.
 
-  - &quot;set-map&quot; is used to add a new entry into a MAP. The MAP must be loaded
-    from a file (even a dummy empty file). The file name of the MAP to be
-    updated is passed between parentheses. It takes 2 arguments: &lt;key fmt&gt;,
-    which follows log-format rules, used to collect MAP key, and &lt;value fmt&gt;,
-    which follows log-format rules, used to collect content for the new entry.
-    It performs a lookup in the MAP before insertion, to avoid duplicated (or
-    more) values. This lookup is done by a linear search and can be expensive
-    with large lists! It is the equivalent of the &quot;<a href="#set%20map">set map</a>&quot; command from the
-    stats socket, but can be triggered by an HTTP response.
+- &quot;set-map&quot; is used to add a new entry into a MAP. The MAP must be loaded
+  from a file (even a dummy empty file). The file name of the MAP to be
+  updated is passed between parentheses. It takes 2 arguments: &lt;key fmt&gt;,
+  which follows log-format rules, used to collect MAP key, and &lt;value fmt&gt;,
+  which follows log-format rules, used to collect content for the new entry.
+  It performs a lookup in the MAP before insertion, to avoid duplicated (or
+  more) values. This lookup is done by a linear search and can be expensive
+  with large lists! It is the equivalent of the &quot;<a href="#set%20map">set map</a>&quot; command from the
+  stats socket, but can be triggered by an HTTP response.
 
-  - &quot;lua&quot; is used to run a Lua function if the action is executed. The single
-    parameter is the name of the function to run. The prototype of the
-    function is documented in the API documentation.
+- &quot;lua&quot; is used to run a Lua function if the action is executed. The single
+  parameter is the name of the function to run. The prototype of the
+  function is documented in the API documentation.
 
-  - capture &lt;sample&gt; id &lt;id&gt; :
-    captures sample expression &lt;sample&gt; from the response buffer, and converts
-    it to a string. The resulting string is stored into the next request
-    &quot;<a href="#capture">capture</a>&quot; slot, so it will possibly appear next to some captured HTTP
-    headers. It will then automatically appear in the logs, and it will be
-    possible to extract it using sample fetch rules to feed it into headers or
-    anything. Please check <a href="#7.3">section 7.3</a> (Fetching samples) and &quot;capture
-    response header&quot; for more information.
+- capture &lt;sample&gt; id &lt;id&gt; :
+  captures sample expression &lt;sample&gt; from the response buffer, and converts
+  it to a string. The resulting string is stored into the next request
+  &quot;<a href="#capture">capture</a>&quot; slot, so it will possibly appear next to some captured HTTP
+  headers. It will then automatically appear in the logs, and it will be
+  possible to extract it using sample fetch rules to feed it into headers or
+  anything. Please check <a href="#7.3">section 7.3</a> (Fetching samples) and &quot;capture
+  response header&quot; for more information.
 
-    The keyword &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; is the id of the capture slot which is used for storing
-    the string. The capture slot must be defined in an associated frontend.
-    This is useful to run captures in backends. The slot id can be declared by
-    a previous directive &quot;http-response capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot;
-    keyword.
+  The keyword &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; is the id of the capture slot which is used for storing
+  the string. The capture slot must be defined in an associated frontend.
+  This is useful to run captures in backends. The slot id can be declared by
+  a previous directive &quot;http-response capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot;
+  keyword.
 
-  - &quot;<a href="#redirect">redirect</a>&quot; : this performs an HTTP redirection based on a redirect rule.
-    This supports a format string similarly to &quot;http-request redirect&quot; rules,
-    with the exception that only the &quot;location&quot; type of redirect is possible
-    on the response. See the &quot;<a href="#redirect">redirect</a>&quot; keyword for the rule's syntax. When
-    a redirect rule is applied during a response, connections to the server
-    are closed so that no data can be forwarded from the server to the client.
+- &quot;<a href="#redirect">redirect</a>&quot; : this performs an HTTP redirection based on a redirect rule.
+  This supports a format string similarly to &quot;http-request redirect&quot; rules,
+  with the exception that only the &quot;location&quot; type of redirect is possible
+  on the response. See the &quot;<a href="#redirect">redirect</a>&quot; keyword for the rule's syntax. When
+  a redirect rule is applied during a response, connections to the server
+  are closed so that no data can be forwarded from the server to the client.
 
-There is no limit to the number of http-response statements per instance.
+- set-var(&lt;var-name&gt;) expr:
+  Is used to set the contents of a variable. The variable is declared
+  inline.
+
+    &lt;var-name&gt; The name of the variable starts by an indication about its
+               scope. The allowed scopes are:
+                 &quot;sess&quot; : the variable is shared with all the session,
+                 &quot;txn&quot;  : the variable is shared with all the transaction
+                          (request and response)
+                 &quot;req&quot;  : the variable is shared only during the request
+                          processing
+                 &quot;res&quot;  : the variable is shared only during the response
+                          processing.
+               This prefix is followed by a name. The separator is a '.'.
+               The name may only contain characters 'a-z', 'A-Z', '0-9',
+               and '_'.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response set-var(sess.last_redir) res.hdr(location)
+</code></pre>
+</div><pre class="text">There is no limit to the number of http-response statements per instance.
 
 It is important to know that http-response rules are processed very early in
 the HTTP processing, before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot; rules. That way, headers
@@ -8577,6 +8641,8 @@ Four types of actions are supported :
   - reject : the request is rejected and the connection is closed
   - capture : the specified sample expression is captured
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
+  - lua &lt;function&gt;
+  - set-var(&lt;var-name&gt;) &lt;expr&gt;
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
@@ -8610,7 +8676,30 @@ The &quot;lua&quot; keyword is followed by a Lua function name. It is used to ru
 function if the action is executed. The single parameter is the name of the
 function to run. The prototype of the function is documented in the API
 documentation.
+
+The &quot;set-var&quot; is used to set the content of a variable. The variable is
+declared inline.
+
+  &lt;var-name&gt; The name of the variable starts by an indication about its scope.
+             The allowed scopes are:
+               &quot;sess&quot; : the variable is shared with all the session,
+               &quot;txn&quot;  : the variable is shared with all the transaction
+                        (request and response)
+               &quot;req&quot;  : the variable is shared only during the request
+                        processing
+               &quot;res&quot;  : the variable is shared only during the response
+                        processing.
+             This prefix is followed by a name. The separator is a '.'.
+             The name may only contain characters 'a-z', 'A-Z', '0-9' and '_'.
+
+  &lt;expr&gt;     Is a standard HAProxy expression formed by a sample-fetch
+             followed by some converters.
 </pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request content set-var(sess.my_var) src
+</code></pre>
+</div><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code><span class="comment"># Accept HTTP requests containing a Host header saying &quot;example.com&quot;</span>
@@ -8760,6 +8849,12 @@ Two types of actions are supported :
       or false (when used with &quot;unless&quot;). The first such rule executed ends
       the rules evaluation. Rejected session are immediately closed.
 
+  - lua &lt;function&gt;
+      Executes Lua.
+
+  - set-var(&lt;var-name&gt;) &lt;expr&gt;
+      Sets a variable.
+
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
 for changing the default action to a reject.
@@ -8775,7 +8870,29 @@ function if the action is executed. The single parameter is the name of the
 function to run. The prototype of the function is documented in the API
 documentation.
 
-See <a href="#7">section 7</a> about ACL usage.
+The &quot;set-var&quot; is used to set the content of a variable. The variable is
+declared inline.
+
+  &lt;var-name&gt; The name of the variable starts by an indication about its scope.
+             The allowed scopes are:
+               &quot;sess&quot; : the variable is shared with all the session,
+               &quot;txn&quot;  : the variable is shared with all the transaction
+                        (request and response)
+               &quot;req&quot;  : the variable is shared only during the request
+                        processing
+               &quot;res&quot;  : the variable is shared only during the response
+                        processing.
+             This prefix is followed by a name. The separator is a '.'.
+             The name may only contain characters 'a-z', 'A-Z', '0-9' and '_'.
+
+  &lt;expr&gt;     Is a standard HAProxy expression formed by a sample-fetch
+             followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request content set-var(sess.my_var) src
+</code></pre>
+</div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, &quot;<a href="#tcp-response%20inspect-delay">tcp-response inspect-delay</a>&quot;</div>
 <a class="anchor" name="tcp-response"></a><a class="anchor" name="4-tcp-response"></a><a class="anchor" name="4.2-tcp-response"></a><a class="anchor" name="tcp-response (Proxies)"></a><a class="anchor" name="tcp-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-response inspect-delay"></a><a class="anchor" name="4-tcp-response inspect-delay"></a><a class="anchor" name="4.2-tcp-response inspect-delay"></a><a class="anchor" name="tcp-response inspect-delay (Proxies)"></a><a class="anchor" name="tcp-response inspect-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-response inspect-delay"></a><a href="#4.2-tcp-response%20inspect-delay">tcp-response inspect-delay</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for a response during content inspection
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -10584,7 +10701,7 @@ be placed first. The pattern matching method must be one of the following :
               as headers, cookies, etc... even if they are empty and without
               comparing them to anything nor counting them.
 
-  - &quot;<a href="#bool">bool</a>&quot;  : check the value as a boolean. It can only be applied to fetches
+  - &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bool<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bool%20%28Converters%29">Converters</a></li><li><a href="#bool%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;  : check the value as a boolean. It can only be applied to fetches
               which return a boolean or integer value, and takes no pattern.
               Value zero or false does not match, all other values do match.
 
@@ -10594,13 +10711,13 @@ be placed first. The pattern matching method must be one of the following :
   - &quot;ip&quot;    : match the value as an IPv4 or IPv6 address. It is compatible
               with IP address samples only, so it is implied and never needed.
 
-  - &quot;bin&quot;   : match the contents against an hexadecimal string representing a
+  - &quot;<a href="#bin">bin</a>&quot;   : match the contents against an hexadecimal string representing a
               binary sequence. This may be used with binary or string samples.
 
   - &quot;len&quot;   : match the sample's length as an integer. This may be used with
               binary or string samples.
 
-  - &quot;str&quot;   : exact match : match the contents against a string. This may be
+  - &quot;<a href="#str">str</a>&quot;   : exact match : match the contents against a string. This may be
               used with binary or string samples.
 
   - &quot;<a href="#sub">sub</a>&quot;   : substring match : check that the contents contain at least one of
@@ -11001,6 +11118,9 @@ configuration language.
 </div><pre class="text">	bind *:8881
 	default_backend servers
 	http-request set-header X-DeviceAtlas-Data %[req.fhdr(User-Agent),da-csv(primaryHardwareType,osName,osVersion,browserName,browserVersion)]
+</pre><a class="anchor" name="debug"></a><a class="anchor" name="7-debug"></a><a class="anchor" name="7.3.1-debug"></a><a class="anchor" name="debug (Using ACLs and fetching samples)"></a><a class="anchor" name="debug (Converters)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#7.3.1-debug">debug</a></b></div><pre class="text">This converter is used as debug tool. It dumps on screen the content and the
+type of the input sample. The sample is returned as is on its output. This
+converter only exists when haproxy was built with debugging enabled.
 </pre><a class="anchor" name="div"></a><a class="anchor" name="7-div"></a><a class="anchor" name="7.3.1-div"></a><a class="anchor" name="div (Using ACLs and fetching samples)"></a><a class="anchor" name="div (Converters)"></a><div class="keyword"><b><a class="anchor" name="div"></a><a href="#7.3.1-div">div</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type unsigned integer by &lt;value&gt;, and returns the
 result as an unsigned integer. If &lt;value&gt; is null, the largest unsigned
 integer is returned (typically 2^32-1).
@@ -11125,8 +11245,8 @@ map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&g
   input value cannot be found in the &lt;map_file&gt;, the converter returns the
   &lt;default_value&gt;. If the &lt;default_value&gt; is not set, the converter fails and
   acts as if no input value could be fetched. If the &lt;match_type&gt; is not set, it
-  defaults to &quot;str&quot;. Likewise, if the &lt;output_type&gt; is not set, it defaults to
-  &quot;str&quot;. For convenience, the &quot;<a href="#map">map</a>&quot; keyword is an alias for &quot;map_str&quot; and maps a
+  defaults to &quot;<a href="#str">str</a>&quot;. Likewise, if the &lt;output_type&gt; is not set, it defaults to
+  &quot;<a href="#str">str</a>&quot;. For convenience, the &quot;<a href="#map">map</a>&quot; keyword is an alias for &quot;map_str&quot; and maps a
   string to another string.
 
   It is important to avoid overlapping between the keys : IP addresses and
@@ -11207,15 +11327,27 @@ is. If the slot doesn't exist, the capture fails silently.
 <a class="anchor" name="capture-res"></a><a class="anchor" name="7-capture-res"></a><a class="anchor" name="7.3.1-capture-res"></a><a class="anchor" name="capture-res (Using ACLs and fetching samples)"></a><a class="anchor" name="capture-res (Converters)"></a><div class="keyword"><b><a class="anchor" name="capture-res"></a><a href="#7.3.1-capture-res">capture-res</a></b>(<span style="color: #080">&lt;id&gt;</span>)</div><pre class="text">Capture the string entry in the response slot &lt;id&gt; and returns the entry as
 is. If the slot doesn't exist, the capture fails silently.
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#declare%20capture">declare capture</a>&quot;, &quot;http-request capture&quot;, &quot;http-response capture&quot;, &quot;req.hdr.capture&quot; and &quot;res.hdr.capture&quot; (sample fetches).</div>
-<a class="anchor" name="sdbm"></a><a class="anchor" name="7-sdbm"></a><a class="anchor" name="7.3.1-sdbm"></a><a class="anchor" name="sdbm (Using ACLs and fetching samples)"></a><a class="anchor" name="sdbm (Converters)"></a><div class="keyword"><b><a class="anchor" name="sdbm"></a><a href="#7.3.1-sdbm">sdbm</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the SDBM
-hash function. Optionally, it is possible to apply a full avalanche hash
-function to the output if the optional &lt;avalanche&gt; argument equals 1. This
-converter uses the same functions as used by the various hash-based load
-balancing algorithms, so it will provide exactly the same results. It is
-mostly intended for debugging, but can be used as a stick-table entry to
-collect rough statistics. It must not be used for security purposes as a
-32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the
-&quot;<a href="#hash-type">hash-type</a>&quot; directive.
+<a class="anchor" name="sdbm"></a><a class="anchor" name="7-sdbm"></a><a class="anchor" name="7.3.1-sdbm"></a><a class="anchor" name="sdbm (Using ACLs and fetching samples)"></a><a class="anchor" name="sdbm (Converters)"></a><div class="keyword"><b><a class="anchor" name="sdbm"></a><a href="#7.3.1-sdbm">sdbm</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">  Hashes a binary input sample into an unsigned 32-bit quantity using the SDBM
+  hash function. Optionally, it is possible to apply a full avalanche hash
+  function to the output if the optional &lt;avalanche&gt; argument equals 1. This
+  converter uses the same functions as used by the various hash-based load
+  balancing algorithms, so it will provide exactly the same results. It is
+  mostly intended for debugging, but can be used as a stick-table entry to
+  collect rough statistics. It must not be used for security purposes as a
+  32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the
+  &quot;<a href="#hash-type">hash-type</a>&quot; directive.
+
+set-var(&lt;var name&gt;)
+  Sets a variable with the input content and return the content on the output as
+  is. The variable keep the value and the associated input type. The name of the
+  variable starts by an indication about it scope. The scope allowed are:
+    &quot;sess&quot; : the variable is shared with all the session,
+    &quot;txn&quot;  : the variable is shared with all the transaction (request and
+             response),
+    &quot;req&quot;  : the variable is shared only during the request processing,
+    &quot;res&quot;  : the variable is shared only during the response processing.
+  This prefix is followed by a name. The separator is a '.'. The name may only
+  contain characters 'a-z', 'A-Z', '0-9' and '_'.
 </pre><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type unsigned integer, and returns
 the result as an unsigned integer. Note: in order to subtract the input from
 a constant, simply perform a &quot;neg,add(value)&quot;.
@@ -11399,7 +11531,11 @@ backend dynamic
     acl being_scanned be_sess_rate gt 100
     redirect location /denied.html if being_scanned
 </code></pre>
-</div><a class="anchor" name="connslots"></a><a class="anchor" name="7-connslots"></a><a class="anchor" name="7.3.2-connslots"></a><a class="anchor" name="connslots (Using ACLs and fetching samples)"></a><a class="anchor" name="connslots (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="connslots"></a><a href="#7.3.2-connslots">connslots</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of connection slots
+</div><a class="anchor" name="bin"></a><a class="anchor" name="7-bin"></a><a class="anchor" name="7.3.2-bin"></a><a class="anchor" name="bin (Using ACLs and fetching samples)"></a><a class="anchor" name="bin (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="bin"></a><a href="#7.3.2-bin">bin</a></b>(<span style="color: #080">&lt;hexa&gt;</span>) : bin</div><pre class="text">Returns a binary chain. The input is the hexadecimal representation
+of the string.
+</pre><a class="anchor" name="bool"></a><a class="anchor" name="7-bool"></a><a class="anchor" name="7.3.2-bool"></a><a class="anchor" name="bool (Using ACLs and fetching samples)"></a><a class="anchor" name="bool (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="bool"></a><a href="#7.3.2-bool">bool</a></b>(<span style="color: #080">&lt;bool&gt;</span>) : bool</div><pre class="text">Returns a boolean value. &lt;bool&gt; can be 'true', 'false', '1' or '0'.
+'false' and '0' are the same. 'true' and '1' are the same.
+</pre><a class="anchor" name="connslots"></a><a class="anchor" name="7-connslots"></a><a class="anchor" name="7.3.2-connslots"></a><a class="anchor" name="connslots (Using ACLs and fetching samples)"></a><a class="anchor" name="connslots (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="connslots"></a><a href="#7.3.2-connslots">connslots</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of connection slots
 still available in the backend, by totaling the maximum amount of
 connections on all servers and the maximum queue size. This is probably only
 used with ACLs.
@@ -11480,7 +11616,13 @@ frontend mail
     tcp-request content accept if ! too_fast
     tcp-request content accept if WAIT_END
 </code></pre>
-</div><a class="anchor" name="nbproc"></a><a class="anchor" name="7-nbproc"></a><a class="anchor" name="7.3.2-nbproc"></a><a class="anchor" name="nbproc (Using ACLs and fetching samples)"></a><a class="anchor" name="nbproc (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#7.3.2-nbproc">nbproc</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the number of processes that were
+</div><pre class="text">ipv4(&lt;ipv4&gt;) : ipv4
+  Returns an ipv4.
+
+ipv6(&lt;ipv6&gt;) : ipv6
+  Returns an ipv6.
+</pre><a class="anchor" name="meth"></a><a class="anchor" name="7-meth"></a><a class="anchor" name="7.3.2-meth"></a><a class="anchor" name="meth (Using ACLs and fetching samples)"></a><a class="anchor" name="meth (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="meth"></a><a href="#7.3.2-meth">meth</a></b>(<span style="color: #080">&lt;method&gt;</span>) : method</div><pre class="text">Returns a method.
+</pre><a class="anchor" name="nbproc"></a><a class="anchor" name="7-nbproc"></a><a class="anchor" name="7.3.2-nbproc"></a><a class="anchor" name="nbproc (Using ACLs and fetching samples)"></a><a class="anchor" name="nbproc (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#7.3.2-nbproc">nbproc</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the number of processes that were
 started (it equals the global &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; setting). This is useful for logging
 and debugging purposes.
 </pre><a class="anchor" name="nbsrv"></a><a class="anchor" name="7-nbsrv"></a><a class="anchor" name="7.3.2-nbsrv"></a><a class="anchor" name="nbsrv (Using ACLs and fetching samples)"></a><a class="anchor" name="nbsrv (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="nbsrv"></a><a href="#7.3.2-nbsrv">nbsrv</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of usable servers of
@@ -11505,6 +11647,7 @@ starting at zero. If the range is not specified, it defaults to 2^32, which
 gives numbers between 0 and 4294967295. It can be useful to pass some values
 needed to take some routing decisions for example, or just for debugging
 purposes. This random must not be used for security purposes.
+</pre><a class="anchor" name="sint"></a><a class="anchor" name="7-sint"></a><a class="anchor" name="7.3.2-sint"></a><a class="anchor" name="sint (Using ACLs and fetching samples)"></a><a class="anchor" name="sint (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="sint"></a><a href="#7.3.2-sint">sint</a></b>(<span style="color: #080">&lt;sint&gt;</span>) : signed integer</div><pre class="text">Returns a signed integer.
 </pre><a class="anchor" name="srv_conn"></a><a class="anchor" name="7-srv_conn"></a><a class="anchor" name="7.3.2-srv_conn"></a><a class="anchor" name="srv_conn (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_conn (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="srv_conn"></a><a href="#7.3.2-srv_conn">srv_conn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of currently established
 connections on the designated server, possibly including the connection being
 evaluated. If &lt;backend&gt; is omitted, then the server is looked up in the
@@ -11537,11 +11680,23 @@ use_backend be2 if srv1_full or srv2_full
 </div><a class="anchor" name="stopping"></a><a class="anchor" name="7-stopping"></a><a class="anchor" name="7.3.2-stopping"></a><a class="anchor" name="stopping (Using ACLs and fetching samples)"></a><a class="anchor" name="stopping (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="stopping"></a><a href="#7.3.2-stopping">stopping</a></b> : boolean</div><pre class="text">Returns TRUE if the process calling the function is currently stopping. This
 can be useful for logging, or for relaxing certain checks or helping close
 certain connections upon graceful shutdown.
+</pre><a class="anchor" name="str"></a><a class="anchor" name="7-str"></a><a class="anchor" name="7.3.2-str"></a><a class="anchor" name="str (Using ACLs and fetching samples)"></a><a class="anchor" name="str (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="str"></a><a href="#7.3.2-str">str</a></b>(<span style="color: #080">&lt;string&gt;</span>) : string</div><pre class="text">Returns a string.
 </pre><a class="anchor" name="table_avl"></a><a class="anchor" name="7-table_avl"></a><a class="anchor" name="7.3.2-table_avl"></a><a class="anchor" name="table_avl (Using ACLs and fetching samples)"></a><a class="anchor" name="table_avl (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="table_avl"></a><a href="#7.3.2-table_avl">table_avl</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total number of available entries in the current proxy's
 stick-table or in the designated stick-table. See also table_cnt.
 </pre><a class="anchor" name="table_cnt"></a><a class="anchor" name="7-table_cnt"></a><a class="anchor" name="7.3.2-table_cnt"></a><a class="anchor" name="table_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="table_cnt (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="table_cnt"></a><a href="#7.3.2-table_cnt">table_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total number of entries currently in use in the current proxy's
 stick-table or in the designated stick-table. See also src_conn_cnt and
 table_avl for other entry counting methods.
+</pre><a class="anchor" name="uint"></a><a class="anchor" name="7-uint"></a><a class="anchor" name="7.3.2-uint"></a><a class="anchor" name="uint (Using ACLs and fetching samples)"></a><a class="anchor" name="uint (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="uint"></a><a href="#7.3.2-uint">uint</a></b>(<span style="color: #080">&lt;uint&gt;</span>) : unsigned integer</div><pre class="text">Returns an unsigned integer.
+</pre><a class="anchor" name="var"></a><a class="anchor" name="7-var"></a><a class="anchor" name="7.3.2-var"></a><a class="anchor" name="var (Using ACLs and fetching samples)"></a><a class="anchor" name="var (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="var"></a><a href="#7.3.2-var">var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) : undefined</div><pre class="text">Returns a variable with the stored type. If the variable is not set, the
+sample fetch fails. The name of the variable starts by an indication about its
+scope. The scope allowed are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
 </pre></div>
 <a class="anchor" id="7.3.3" name="7.3.3"></a>
 <h3 id="chapter-7.3.3" data-target="7.3.3"><small><a class="small" href="#7.3.3">7.3.3.</a></small> Fetching samples at Layer 4</h3>
@@ -14427,8 +14582,8 @@ matching type. Each line is composed by space-delimited series of words.
 
 The first two words are:
 
-   &lt;match method&gt;:   The match method applied. It can be &quot;found&quot;, &quot;<a href="#bool">bool</a>&quot;,
-                     &quot;int&quot;, &quot;ip&quot;, &quot;bin&quot;, &quot;len&quot;, &quot;str&quot;, &quot;beg&quot;, &quot;<a href="#sub">sub</a>&quot;, &quot;dir&quot;,
+   &lt;match method&gt;:   The match method applied. It can be &quot;found&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bool<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bool%20%28Converters%29">Converters</a></li><li><a href="#bool%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;,
+                     &quot;int&quot;, &quot;ip&quot;, &quot;<a href="#bin">bin</a>&quot;, &quot;len&quot;, &quot;<a href="#str">str</a>&quot;, &quot;beg&quot;, &quot;<a href="#sub">sub</a>&quot;, &quot;dir&quot;,
                      &quot;dom&quot;, &quot;end&quot; or &quot;reg&quot;.
 
    &lt;match result&gt;:   The result. Can be &quot;match&quot; or &quot;no-match&quot;.
@@ -14800,7 +14955,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-325 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-337 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -14853,10 +15008,12 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"be_conn",
 				"be_id",
 				"be_sess_rate",
+				"bin",
 				"bind",
 				"bind-process",
 				"block",
-				"bool",
+				"bool (Converters)",
+				"bool (Fetching samples from internal states)",
 				"bytes",
 				"ca-base",
 				"ca-file (Bind options)",
@@ -14915,7 +15072,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"da-csv",
 				"daemon",
 				"date",
-				"debug",
+				"debug (Debugging)",
+				"debug (Converters)",
 				"declare",
 				"declare capture",
 				"default-server",
@@ -15048,6 +15206,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"maxsslconn",
 				"maxsslrate",
 				"maxzlibmem",
+				"meth",
 				"method",
 				"minconn",
 				"mod",
@@ -15407,6 +15566,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"shutdown session",
 				"shutdown sessions",
 				"shutdown sessions server",
+				"sint",
 				"slowstart",
 				"so_id",
 				"source (Alphabetically sorted keywords reference)",
@@ -15516,6 +15676,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"stick-table",
 				"stick-table type",
 				"stopping",
+				"str",
 				"strict-sni",
 				"sub",
 				"table_avl",
@@ -15596,10 +15757,15 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.ssl.lifetime",
 				"tune.ssl.maxrecord",
 				"tune.ssl.ssl-ctx-cache-size",
+				"tune.vars.global-max-size",
+				"tune.vars.reqres-max-size",
+				"tune.vars.sess-max-size",
+				"tune.vars.txn-max-size",
 				"tune.zlib.memlevel",
 				"tune.zlib.windowsize",
 				"uid (Process management and security)",
 				"uid (Bind options)",
+				"uint",
 				"ulimit-n",
 				"unique-id-format",
 				"unique-id-header",
@@ -15620,6 +15786,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"utime",
 				"v4v6",
 				"v6only",
+				"var",
 				"verify (Bind options)",
 				"verify (Server and default-server options)",
 				"verifyhost",
@@ -15744,7 +15911,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-325', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-337', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15756,4 +15923,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-325-g3863f97 -->
+<!-- git:v1.6-dev1-337-gcc10329 -->
