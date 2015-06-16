@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev1-337 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev1-340 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/14</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/16</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev1-337</strong></p>
+							<p><strong>version 1.6-dev1-340</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -2007,17 +2007,18 @@ userlist L2
 </pre></div>
 <a class="anchor" id="3.5" name="3.5"></a>
 <h2 id="chapter-3.5" data-target="3.5"><small><a class="small" href="#3.5">3.5.</a></small> Peers</h2>
-<div><pre class="text">It is possible to synchronize server entries in stick tables between several
-haproxy instances over TCP connections in a multi-master fashion. Each instance
-pushes its local updates and insertions to remote peers. Server IDs are used to
-identify servers remotely, so it is important that configurations look similar
-or at least that the same IDs are forced on each server on all participants.
-Interrupted exchanges are automatically detected and recovered from the last
-known point. In addition, during a soft restart, the old process connects to
-the new one using such a TCP connection to push all its entries before the new
-process tries to connect to other peers. That ensures very fast replication
-during a reload, it typically takes a fraction of a second even for large
-tables.
+<div><pre class="text">It is possible to propagate entries of any data-types in stick-tables between
+several haproxy instances over TCP connections in a multi-master fashion. Each
+instance pushes its local updates and insertions to remote peers. The pushed
+values overwrite remote ones without aggregation. Interrupted exchanges are
+automatically detected and recovered from the last known point.
+In addition, during a soft restart, the old process connects to the new one
+using such a TCP connection to push all its entries before the new process
+tries to connect to other peers. That ensures very fast replication during a
+reload, it typically takes a fraction of a second even for large tables.
+Note that Server IDs are used to identify servers remotely, so it is important
+that configurations look similar or at least that the same IDs are forced on
+each server on all participants.
 </pre><a class="anchor" name="peers"></a><a class="anchor" name="3-peers"></a><a class="anchor" name="3.5-peers"></a><a class="anchor" name="peers (Global parameters)"></a><a class="anchor" name="peers (Peers)"></a><div class="keyword"><b><a class="anchor" name="peers"></a><a href="#3.5-peers">peers</a></b> <span style="color: #080">&lt;peersect&gt;</span></div><pre class="text">Creates a new peer list with name &lt;peersect&gt;. It is an independent section,
 which is referenced by one or more stick-tables.
 </pre><a class="anchor" name="disabled"></a><a class="anchor" name="3-disabled"></a><a class="anchor" name="3.5-disabled"></a><a class="anchor" name="disabled (Global parameters)"></a><a class="anchor" name="disabled (Peers)"></a><div class="keyword"><b><a class="anchor" name="disabled"></a><a href="#3.5-disabled">disabled</a></b></div><pre class="text">Disables a peers section. It disables both listening and any synchronization
@@ -14955,7 +14956,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev1-337 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev1-340 &ndash; Configuration Manual<br>
 							<small>2015/03/11, willy tarreau</small>
 						</div>
 					</div>
@@ -15911,7 +15912,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-337', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev1-340', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15923,4 +15924,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev1-337-gcc10329 -->
+<!-- git:v1.6-dev1-340-g9490095 -->
