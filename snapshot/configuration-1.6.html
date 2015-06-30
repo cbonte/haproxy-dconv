@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev2-10 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev2-13 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/23</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/30</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev2-10</strong></p>
+							<p><strong>version 1.6-dev2-13</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1340,7 +1340,8 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#unix-bind">unix-bind</a>
    - 51degrees-data-file
    - 51degrees-property-name-list
-   - 51degrees-property-seperator
+   - 51degrees-property-separator
+   - 51degrees-cache-size
 
  * Performance tuning
    - <a href="#max-spread-checks">max-spread-checks</a>
@@ -1607,7 +1608,7 @@ traffic.
   The path of the 51Degrees data file to provide device detection services. The
   file should be unzipped and accessible by HAProxy with relevavnt permissions.
 
-  Please note that this options is only available when haproxy has been
+  Please note that this option is only available when haproxy has been
   compiled with USE_51DEGREES.
 
 51degrees-property-name-list [&lt;string&gt;]
@@ -1615,14 +1616,22 @@ traffic.
   of names is available on the 51Degrees website:
   https://51degrees.com/resources/property-dictionary
 
-  Please note that this options is only available when haproxy has been
+  Please note that this option is only available when haproxy has been
   compiled with USE_51DEGREES.
 
-51degrees-property-seperator &lt;char&gt;
+51degrees-property-separator &lt;char&gt;
   A char that will be appended to every property value in a response header
   containing 51Degrees results. If not set that will be set as ','.
 
-  Please note that this options is only available when haproxy has been
+  Please note that this option is only available when haproxy has been
+  compiled with USE_51DEGREES.
+
+51degrees-cache-size &lt;number&gt;
+  Sets the size of the 51Degrees converter cache to &lt;number&gt; entries. This
+  is an LRU cache which reminds previous device detections and their results.
+  By default, this cache is disabled.
+
+  Please note that this option is only available when haproxy has been
   compiled with USE_51DEGREES.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
@@ -14956,7 +14965,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev2-10 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev2-13 &ndash; Configuration Manual<br>
 							<small>2015/06/17, willy tarreau</small>
 						</div>
 					</div>
@@ -15912,7 +15921,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-13', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15924,4 +15933,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev2-10-ge44136f -->
+<!-- git:v1.6-dev2-13-gae6d39a -->
