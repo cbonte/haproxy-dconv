@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev2-15 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev2-18 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/07/02</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/07/03</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev2-15</strong></p>
+							<p><strong>version 1.6-dev2-18</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10233,7 +10233,7 @@ Default value: ipv4
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
-</div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28Server%20DNS%20resolution%29">Server DNS resolution</a></li></ul></span>&quot; section to resolve current server's
+</div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
@@ -10367,9 +10367,9 @@ room above and below for later adjustments.
 
 Supported in default-server: Yes
 </pre></div>
-<a class="anchor" id="5" name="5"></a>
-<div class="page-header"><h1 id="chapter-5" data-target="5"><small><a class="small" href="#5">5.</a></small> 3 Server IP address resolution using DNS</h1>
-</div><div><pre class="text">HAProxy allows using a host name to be resolved to find out what is the server
+<a class="anchor" id="5.3" name="5.3"></a>
+<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> Server IP address resolution using DNS</h2>
+<div><pre class="text">HAProxy allows using a host name to be resolved to find out what is the server
 IP address. By default, HAProxy resolves the name when parsing the
 configuration, at startup.
 This is not sufficient in some cases, such as in Amazon where a server's IP
@@ -10380,8 +10380,8 @@ resolution at run time.
 Whether run time server name resolution has been enable or not, HAProxy will
 carry on doing the first resolution when parsing the configuration.
 </pre></div>
-<a class="anchor" id="5.3" name="5.3"></a>
-<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> 1 Global overview</h2>
+<a class="anchor" id="5.3.1" name="5.3.1"></a>
+<h3 id="chapter-5.3.1" data-target="5.3.1"><small><a class="small" href="#5.3.1">5.3.1.</a></small> Global overview</h3>
 <div><pre class="text">As we've seen in introduction, name resolution in HAProxy occurs at two
 different steps of the process life:
 
@@ -10405,20 +10405,20 @@ A few things important to notice:
   - a resolution is considered as invalid (NX, timeout, refused), when all the
     servers return an error.
 </pre></div>
-<a class="anchor" id="5.3" name="5.3"></a>
-<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> 2 The resolvers section</h2>
+<a class="anchor" id="5.3.2" name="5.3.2"></a>
+<h3 id="chapter-5.3.2" data-target="5.3.2"><small><a class="small" href="#5.3.2">5.3.2.</a></small> The resolvers section</h3>
 <div><pre class="text">This section is dedicated to host information related to name resolution in
 HAProxy.
 There can be as many as resolvers section as needed. Each section can contain
 many name servers.
-</pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
+</pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
 
 A resolvers section accept the following parameters:
-</pre><a class="anchor" name="nameserver"></a><a class="anchor" name="5-nameserver"></a><a class="anchor" name="5.3-nameserver"></a><a class="anchor" name="nameserver (Bind and Server options)"></a><a class="anchor" name="nameserver (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="nameserver"></a><a href="#5.3-nameserver">nameserver</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">DNS server description:
+</pre><a class="anchor" name="nameserver"></a><a class="anchor" name="5-nameserver"></a><a class="anchor" name="5.3.2-nameserver"></a><a class="anchor" name="nameserver (Bind and Server options)"></a><a class="anchor" name="nameserver (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="nameserver"></a><a href="#5.3.2-nameserver">nameserver</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">DNS server description:
   &lt;id&gt;   : label of the server, should be unique
   &lt;ip&gt;   : IP address of the server
   &lt;port&gt; : port where the DNS service actually runs
-</pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
+</pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3.2-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3.2-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
 on last resolution &lt;status&gt;
   &lt;status&gt; : last name resolution status. Only &quot;valid&quot; is accepted for now.
   &lt;period&gt; : interval between two successive name resolution when the last
@@ -10430,10 +10430,10 @@ Default value is 10s for &quot;valid&quot;.
 Note: since the name resolution is triggered by the health checks, a new
       resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
       the healch check.
-</pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
+</pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3.2-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3.2-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
 giving up.
 Default value: 3
-</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
+</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
      &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
                events available are:
                - retry: time between two DNS queries, when no response have
@@ -14965,7 +14965,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev2-15 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev2-18 &ndash; Configuration Manual<br>
 							<small>2015/06/17, willy tarreau</small>
 						</div>
 					</div>
@@ -15437,7 +15437,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"resolve-prefer",
 				"resolve_retries",
 				"resolvers (Server and default-server options)",
-				"resolvers (Server DNS resolution)",
+				"resolvers (The resolvers section)",
 				"resp_ver",
 				"retries",
 				"rise",
@@ -15921,7 +15921,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-15', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-18', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15933,4 +15933,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev2-15-gb5714da -->
+<!-- git:v1.6-dev2-18-g46175dd -->
