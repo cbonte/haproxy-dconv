@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev2-26 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev2-27 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/07/07</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/07/09</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev2-26</strong></p>
+							<p><strong>version 1.6-dev2-27</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -12291,6 +12291,13 @@ used in ACL.
 
 ACL derivatives :
   req_rdp_cookie_cnt([&lt;name&gt;]) : integer match
+</pre><a class="anchor" name="req.ssl_ec_ext"></a><a class="anchor" name="7-req.ssl_ec_ext"></a><a class="anchor" name="7.3.5-req.ssl_ec_ext"></a><a class="anchor" name="req.ssl_ec_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_ec_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_ec_ext"></a><a href="#7.3.5-req.ssl_ec_ext">req.ssl_ec_ext</a></b> : boolean</div><pre class="text">Returns a boolean identifying if client sent the Supported Elliptic Curves
+Extension as defined in RFC4492, <a href="#5.1">section 5.1</a>. within the SSL ClientHello
+message. This can be used to present ECC compatible clients with EC certificate
+and to use RSA for all others, on the same IP address. Note that this only
+applies to raw contents found in the request buffer and not to contents
+deciphered via an SSL data layer, so this will not work with &quot;<a href="#bind">bind</a>&quot; lines
+having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
 </pre><a class="anchor" name="req.ssl_hello_type"></a><a class="anchor" name="7-req.ssl_hello_type"></a><a class="anchor" name="7.3.5-req.ssl_hello_type"></a><a class="anchor" name="req.ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_hello_type"></a><a href="#7.3.5-req.ssl_hello_type">req.ssl_hello_type</a></b> : integer</div><a class="anchor" name="req_ssl_hello_type"></a><a class="anchor" name="7-req_ssl_hello_type"></a><a class="anchor" name="7.3.5-req_ssl_hello_type"></a><a class="anchor" name="req_ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="req_ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req_ssl_hello_type"></a><a href="#7.3.5-req_ssl_hello_type">req_ssl_hello_type</a></b> : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value containing the type of the SSL hello message found
 in the request buffer if the buffer contains data that parse as a complete
 SSL (v3 or superior) client hello message. Note that this only applies to raw
@@ -14981,7 +14988,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev2-26 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev2-27 &ndash; Configuration Manual<br>
 							<small>2015/06/17, willy tarreau</small>
 						</div>
 					</div>
@@ -15410,6 +15417,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"req.proto_http",
 				"req.rdp_cookie",
 				"req.rdp_cookie_cnt",
+				"req.ssl_ec_ext",
 				"req.ssl_hello_type",
 				"req.ssl_sni",
 				"req.ssl_ver",
@@ -15937,7 +15945,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-26', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-27', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15949,4 +15957,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev2-26-gfc017fe -->
+<!-- git:v1.6-dev2-27-g5fc7d7e -->
