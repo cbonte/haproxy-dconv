@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev2-27 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev2-32 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/07/09</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/07/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev2-27</strong></p>
+							<p><strong>version 1.6-dev2-32</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10323,6 +10323,13 @@ trouble to running servers. It only applies when a server has been previously
 seen as failed.
 
 Supported in default-server: Yes
+</pre><a class="anchor" name="sni"></a><a class="anchor" name="5-sni"></a><a class="anchor" name="5.2-sni"></a><a class="anchor" name="sni (Bind and Server options)"></a><a class="anchor" name="sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="sni"></a><a href="#5.2-sni">sni</a></b> <span style="color: #080">&lt;expression&gt;</span></div><pre class="text">The &quot;<a href="#sni">sni</a>&quot; parameter evaluates the sample fetch expression, converts it to a
+string and uses the result as the host name sent in the SNI TLS extension to
+the server. A typical use case is to send the SNI received from the client in
+a bridged HTTPS scenario, using the &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot; sample fetch for the
+expression, though alternatives such as req.hdr(host) can also make sense.
+
+Supported in default-server: no
 </pre><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span> ...</div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter sets the source address which will be used when
 connecting to the server. It follows the exact same parameters and principle
 as the backend &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, except that it only applies to the server
@@ -14988,7 +14995,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev2-27 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev2-32 &ndash; Configuration Manual<br>
 							<small>2015/06/17, willy tarreau</small>
 						</div>
 					</div>
@@ -15602,6 +15609,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"shutdown sessions server",
 				"sint",
 				"slowstart",
+				"sni",
 				"so_id",
 				"source (Alphabetically sorted keywords reference)",
 				"source (Server and default-server options)",
@@ -15945,7 +15953,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-27', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2-32', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15957,4 +15965,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev2-27-g5fc7d7e -->
+<!-- git:v1.6-dev2-32-g732eac4 -->
