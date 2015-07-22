@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev2 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -69,7 +69,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/06/17</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-27</b> on <b>2015/07/22</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -80,11 +80,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev2</strong></p>
+							<p><strong>version 1.6-dev3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/06/17
+								2015/07/22
 							</p>
 						</div>
 
@@ -1340,7 +1340,8 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#unix-bind">unix-bind</a>
    - 51degrees-data-file
    - 51degrees-property-name-list
-   - 51degrees-property-seperator
+   - 51degrees-property-separator
+   - 51degrees-cache-size
 
  * Performance tuning
    - <a href="#max-spread-checks">max-spread-checks</a>
@@ -1607,7 +1608,7 @@ traffic.
   The path of the 51Degrees data file to provide device detection services. The
   file should be unzipped and accessible by HAProxy with relevavnt permissions.
 
-  Please note that this options is only available when haproxy has been
+  Please note that this option is only available when haproxy has been
   compiled with USE_51DEGREES.
 
 51degrees-property-name-list [&lt;string&gt;]
@@ -1615,14 +1616,22 @@ traffic.
   of names is available on the 51Degrees website:
   https://51degrees.com/resources/property-dictionary
 
-  Please note that this options is only available when haproxy has been
+  Please note that this option is only available when haproxy has been
   compiled with USE_51DEGREES.
 
-51degrees-property-seperator &lt;char&gt;
+51degrees-property-separator &lt;char&gt;
   A char that will be appended to every property value in a response header
   containing 51Degrees results. If not set that will be set as ','.
 
-  Please note that this options is only available when haproxy has been
+  Please note that this option is only available when haproxy has been
+  compiled with USE_51DEGREES.
+
+51degrees-cache-size &lt;number&gt;
+  Sets the size of the 51Degrees converter cache to &lt;number&gt; entries. This
+  is an LRU cache which reminds previous device detections and their results.
+  By default, this cache is disabled.
+
+  Please note that this option is only available when haproxy has been
   compiled with USE_51DEGREES.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
@@ -4207,7 +4216,23 @@ http-request set-query %[query,regsub(%3D,=,g)]
 <pre class="prettyprint">
 <code>http-request set-var(req.my_var) req.fhdr(user-agent),lower
 </code></pre>
-</div><pre class="text">There is no limit to the number of http-request statements per instance.
+</div><pre class="text">- set-src &lt;expr&gt; :
+  Is used to set the source IP address to the value of specified
+  expression. Useful when a proxy in front of HAProxy rewrites source IP,
+  but provides the correct IP in a HTTP header; or you want to mask
+  source IP for privacy.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request set-src hdr(x-forwarded-for)
+http-request set-src src,ipmask(24)
+</code></pre>
+</div><pre class="text">    When set-src is successful, the source port is set to 0.
+
+There is no limit to the number of http-request statements per instance.
 
 It is important to know that http-request rules are processed very early in
 the HTTP processing, just after &quot;<a href="#block">block</a>&quot; rules and before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot;
@@ -7267,6 +7292,8 @@ This option sets the default source for all servers in the backend. It may
 also be specified in a &quot;defaults&quot; section. Finer source address specification
 is possible at the server level using the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; server option. Refer to
 <a href="#5">section 5</a> for more information.
+
+In order to work, &quot;usesrc&quot; requires root privileges.
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
@@ -10224,7 +10251,7 @@ Default value: ipv4
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
-</div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28Server%20DNS%20resolution%29">Server DNS resolution</a></li></ul></span>&quot; section to resolve current server's
+</div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
@@ -10298,6 +10325,13 @@ trouble to running servers. It only applies when a server has been previously
 seen as failed.
 
 Supported in default-server: Yes
+</pre><a class="anchor" name="sni"></a><a class="anchor" name="5-sni"></a><a class="anchor" name="5.2-sni"></a><a class="anchor" name="sni (Bind and Server options)"></a><a class="anchor" name="sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="sni"></a><a href="#5.2-sni">sni</a></b> <span style="color: #080">&lt;expression&gt;</span></div><pre class="text">The &quot;<a href="#sni">sni</a>&quot; parameter evaluates the sample fetch expression, converts it to a
+string and uses the result as the host name sent in the SNI TLS extension to
+the server. A typical use case is to send the SNI received from the client in
+a bridged HTTPS scenario, using the &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot; sample fetch for the
+expression, though alternatives such as req.hdr(host) can also make sense.
+
+Supported in default-server: no
 </pre><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span> ...</div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter sets the source address which will be used when
 connecting to the server. It follows the exact same parameters and principle
 as the backend &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, except that it only applies to the server
@@ -10358,9 +10392,9 @@ room above and below for later adjustments.
 
 Supported in default-server: Yes
 </pre></div>
-<a class="anchor" id="5" name="5"></a>
-<div class="page-header"><h1 id="chapter-5" data-target="5"><small><a class="small" href="#5">5.</a></small> 3 Server IP address resolution using DNS</h1>
-</div><div><pre class="text">HAProxy allows using a host name to be resolved to find out what is the server
+<a class="anchor" id="5.3" name="5.3"></a>
+<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> Server IP address resolution using DNS</h2>
+<div><pre class="text">HAProxy allows using a host name to be resolved to find out what is the server
 IP address. By default, HAProxy resolves the name when parsing the
 configuration, at startup.
 This is not sufficient in some cases, such as in Amazon where a server's IP
@@ -10371,8 +10405,8 @@ resolution at run time.
 Whether run time server name resolution has been enable or not, HAProxy will
 carry on doing the first resolution when parsing the configuration.
 </pre></div>
-<a class="anchor" id="5.3" name="5.3"></a>
-<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> 1 Global overview</h2>
+<a class="anchor" id="5.3.1" name="5.3.1"></a>
+<h3 id="chapter-5.3.1" data-target="5.3.1"><small><a class="small" href="#5.3.1">5.3.1.</a></small> Global overview</h3>
 <div><pre class="text">As we've seen in introduction, name resolution in HAProxy occurs at two
 different steps of the process life:
 
@@ -10396,20 +10430,20 @@ A few things important to notice:
   - a resolution is considered as invalid (NX, timeout, refused), when all the
     servers return an error.
 </pre></div>
-<a class="anchor" id="5.3" name="5.3"></a>
-<h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> 2 The resolvers section</h2>
+<a class="anchor" id="5.3.2" name="5.3.2"></a>
+<h3 id="chapter-5.3.2" data-target="5.3.2"><small><a class="small" href="#5.3.2">5.3.2.</a></small> The resolvers section</h3>
 <div><pre class="text">This section is dedicated to host information related to name resolution in
 HAProxy.
 There can be as many as resolvers section as needed. Each section can contain
 many name servers.
-</pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
+</pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
 
 A resolvers section accept the following parameters:
-</pre><a class="anchor" name="nameserver"></a><a class="anchor" name="5-nameserver"></a><a class="anchor" name="5.3-nameserver"></a><a class="anchor" name="nameserver (Bind and Server options)"></a><a class="anchor" name="nameserver (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="nameserver"></a><a href="#5.3-nameserver">nameserver</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">DNS server description:
+</pre><a class="anchor" name="nameserver"></a><a class="anchor" name="5-nameserver"></a><a class="anchor" name="5.3.2-nameserver"></a><a class="anchor" name="nameserver (Bind and Server options)"></a><a class="anchor" name="nameserver (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="nameserver"></a><a href="#5.3.2-nameserver">nameserver</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">DNS server description:
   &lt;id&gt;   : label of the server, should be unique
   &lt;ip&gt;   : IP address of the server
   &lt;port&gt; : port where the DNS service actually runs
-</pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
+</pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3.2-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3.2-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
 on last resolution &lt;status&gt;
   &lt;status&gt; : last name resolution status. Only &quot;valid&quot; is accepted for now.
   &lt;period&gt; : interval between two successive name resolution when the last
@@ -10421,10 +10455,10 @@ Default value is 10s for &quot;valid&quot;.
 Note: since the name resolution is triggered by the health checks, a new
       resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
       the healch check.
-</pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
+</pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3.2-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3.2-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
 giving up.
 Default value: 3
-</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (Server DNS resolution)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
+</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
      &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
                events available are:
                - retry: time between two DNS queries, when no response have
@@ -10706,7 +10740,7 @@ be placed first. The pattern matching method must be one of the following :
               which return a boolean or integer value, and takes no pattern.
               Value zero or false does not match, all other values do match.
 
-  - &quot;int&quot;   : match the value as an integer. It can be used with integer and
+  - &quot;<a href="#int">int</a>&quot;   : match the value as an integer. It can be used with integer and
               boolean samples. Boolean false is integer 0, true is integer 1.
 
   - &quot;ip&quot;    : match the value as an IPv4 or IPv6 address. It is compatible
@@ -11078,22 +11112,40 @@ supported (and, or, xor, cpl) and some arithmetic operations are supported
 bool) which make it possible to report a match without having to write an ACL.
 
 The currently available list of transformation keywords include :
-</pre><a class="anchor" name="add"></a><a class="anchor" name="7-add"></a><a class="anchor" name="7.3.1-add"></a><a class="anchor" name="add (Using ACLs and fetching samples)"></a><a class="anchor" name="add (Converters)"></a><div class="keyword"><b><a class="anchor" name="add"></a><a href="#7.3.1-add">add</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Adds &lt;value&gt; to the input value of type unsigned integer, and returns the
-result as an unsigned integer.
-</pre><a class="anchor" name="and"></a><a class="anchor" name="7-and"></a><a class="anchor" name="7.3.1-and"></a><a class="anchor" name="and (Using ACLs and fetching samples)"></a><a class="anchor" name="and (Converters)"></a><div class="keyword"><b><a class="anchor" name="and"></a><a href="#7.3.1-and">and</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;AND&quot; between &lt;value&gt; and the input value of type unsigned
-integer, and returns the result as an unsigned integer.
+</pre><a class="anchor" name="add"></a><a class="anchor" name="7-add"></a><a class="anchor" name="7.3.1-add"></a><a class="anchor" name="add (Using ACLs and fetching samples)"></a><a class="anchor" name="add (Converters)"></a><div class="keyword"><b><a class="anchor" name="add"></a><a href="#7.3.1-add">add</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Adds &lt;value&gt; to the input value of type signed integer, and returns the
+result as a signed integer. &lt;value&gt; can be a numeric value or a variable
+name. The name of the variable starts by an indication about its scope. The
+allowed scopes are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
+</pre><a class="anchor" name="and"></a><a class="anchor" name="7-and"></a><a class="anchor" name="7.3.1-and"></a><a class="anchor" name="and (Using ACLs and fetching samples)"></a><a class="anchor" name="and (Converters)"></a><div class="keyword"><b><a class="anchor" name="and"></a><a href="#7.3.1-and">and</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;AND&quot; between &lt;value&gt; and the input value of type signed
+integer, and returns the result as an signed integer. &lt;value&gt; can be a
+numeric value or a variable name. The name of the variable starts by an
+indication about its scope. The allowed scopes are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
 </pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
 transfer binary content in a way that can be reliably transferred (eg:
 an SSL ID can be copied in a header).
-</pre><a class="anchor" name="bool"></a><a class="anchor" name="7-bool"></a><a class="anchor" name="7.3.1-bool"></a><a class="anchor" name="bool (Using ACLs and fetching samples)"></a><a class="anchor" name="bool (Converters)"></a><div class="keyword"><b><a class="anchor" name="bool"></a><a href="#7.3.1-bool">bool</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type unsigned integer is
+</pre><a class="anchor" name="bool"></a><a class="anchor" name="7-bool"></a><a class="anchor" name="7.3.1-bool"></a><a class="anchor" name="bool (Using ACLs and fetching samples)"></a><a class="anchor" name="bool (Converters)"></a><div class="keyword"><b><a class="anchor" name="bool"></a><a href="#7.3.1-bool">bool</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type signed integer is
 non-null, otherwise returns FALSE. Used in conjunction with and(), it can be
 used to report true/false for bit testing on input values (eg: verify the
 presence of a flag).
 </pre><a class="anchor" name="bytes"></a><a class="anchor" name="7-bytes"></a><a class="anchor" name="7.3.1-bytes"></a><a class="anchor" name="bytes (Using ACLs and fetching samples)"></a><a class="anchor" name="bytes (Converters)"></a><div class="keyword"><b><a class="anchor" name="bytes"></a><a href="#7.3.1-bytes">bytes</a></b>(<span style="color: #080">&lt;offset&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;length&gt;</span>]</span>)</div><pre class="text">Extracts some bytes from an input binary sample. The result is a binary
 sample starting at an offset (in bytes) of the original sample and
 optionnaly truncated at the given length.
-</pre><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type unsigned integer, applies a twos-complement
-(flips all bits) and returns the result as an unsigned integer.
+</pre><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type signed integer, applies a ones-complement
+(flips all bits) and returns the result as an signed integer.
 </pre><a class="anchor" name="crc32"></a><a class="anchor" name="7-crc32"></a><a class="anchor" name="7.3.1-crc32"></a><a class="anchor" name="crc32 (Using ACLs and fetching samples)"></a><a class="anchor" name="crc32 (Converters)"></a><div class="keyword"><b><a class="anchor" name="crc32"></a><a href="#7.3.1-crc32">crc32</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the CRC32
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -11122,9 +11174,18 @@ configuration language.
 </pre><a class="anchor" name="debug"></a><a class="anchor" name="7-debug"></a><a class="anchor" name="7.3.1-debug"></a><a class="anchor" name="debug (Using ACLs and fetching samples)"></a><a class="anchor" name="debug (Converters)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#7.3.1-debug">debug</a></b></div><pre class="text">This converter is used as debug tool. It dumps on screen the content and the
 type of the input sample. The sample is returned as is on its output. This
 converter only exists when haproxy was built with debugging enabled.
-</pre><a class="anchor" name="div"></a><a class="anchor" name="7-div"></a><a class="anchor" name="7.3.1-div"></a><a class="anchor" name="div (Using ACLs and fetching samples)"></a><a class="anchor" name="div (Converters)"></a><div class="keyword"><b><a class="anchor" name="div"></a><a href="#7.3.1-div">div</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type unsigned integer by &lt;value&gt;, and returns the
-result as an unsigned integer. If &lt;value&gt; is null, the largest unsigned
-integer is returned (typically 2^32-1).
+</pre><a class="anchor" name="div"></a><a class="anchor" name="7-div"></a><a class="anchor" name="7.3.1-div"></a><a class="anchor" name="div (Using ACLs and fetching samples)"></a><a class="anchor" name="div (Converters)"></a><div class="keyword"><b><a class="anchor" name="div"></a><a href="#7.3.1-div">div</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type signed integer by &lt;value&gt;, and returns the
+result as an signed integer. If &lt;value&gt; is null, the largest unsigned
+integer is returned (typically 2^63-1). &lt;value&gt; can be a numeric value or a
+variable name. The name of the variable starts by an indication about it
+scope. The scope allowed are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
 </pre><a class="anchor" name="djb2"></a><a class="anchor" name="7-djb2"></a><a class="anchor" name="7.3.1-djb2"></a><a class="anchor" name="djb2 (Using ACLs and fetching samples)"></a><a class="anchor" name="djb2 (Converters)"></a><div class="keyword"><b><a class="anchor" name="djb2"></a><a href="#7.3.1-djb2">djb2</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the DJB2
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -11134,7 +11195,7 @@ mostly intended for debugging, but can be used as a stick-table entry to
 collect rough statistics. It must not be used for security purposes as a
 32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the
 &quot;<a href="#hash-type">hash-type</a>&quot; directive.
-</pre><a class="anchor" name="even"></a><a class="anchor" name="7-even"></a><a class="anchor" name="7.3.1-even"></a><a class="anchor" name="even (Using ACLs and fetching samples)"></a><a class="anchor" name="even (Converters)"></a><div class="keyword"><b><a class="anchor" name="even"></a><a href="#7.3.1-even">even</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type unsigned integer is even
+</pre><a class="anchor" name="even"></a><a class="anchor" name="7-even"></a><a class="anchor" name="7.3.1-even"></a><a class="anchor" name="even (Using ACLs and fetching samples)"></a><a class="anchor" name="even (Converters)"></a><div class="keyword"><b><a class="anchor" name="even"></a><a href="#7.3.1-even">even</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type signed integer is even
 otherwise returns FALSE. It is functionally equivalent to &quot;not,and(1),bool&quot;.
 </pre><a class="anchor" name="field"></a><a class="anchor" name="7-field"></a><a class="anchor" name="7.3.1-field"></a><a class="anchor" name="field (Using ACLs and fetching samples)"></a><a class="anchor" name="field (Converters)"></a><div class="keyword"><b><a class="anchor" name="field"></a><a href="#7.3.1-field">field</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span>)</div><pre class="text">Extracts the substring at the given index considering given delimiters from
 an input string. Indexes start at 1 and delimiters are a string formatted
@@ -11284,23 +11345,50 @@ trailing spaces/tabs.
  |       `---------------------------- key
  `------------------------------------ leading spaces ignored
 </code></pre>
-</div><a class="anchor" name="mod"></a><a class="anchor" name="7-mod"></a><a class="anchor" name="7.3.1-mod"></a><a class="anchor" name="mod (Using ACLs and fetching samples)"></a><a class="anchor" name="mod (Converters)"></a><div class="keyword"><b><a class="anchor" name="mod"></a><a href="#7.3.1-mod">mod</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type unsigned integer by &lt;value&gt;, and returns the
-remainder as an unsigned integer. If &lt;value&gt; is null, then zero is returned.
-</pre><a class="anchor" name="mul"></a><a class="anchor" name="7-mul"></a><a class="anchor" name="7.3.1-mul"></a><a class="anchor" name="mul (Using ACLs and fetching samples)"></a><a class="anchor" name="mul (Converters)"></a><div class="keyword"><b><a class="anchor" name="mul"></a><a href="#7.3.1-mul">mul</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Multiplies the input value of type unsigned integer by &lt;value&gt;, and returns
-the product as an unsigned integer. In case of overflow, the higher bits are
-lost, leading to seemingly strange values.
-</pre><a class="anchor" name="neg"></a><a class="anchor" name="7-neg"></a><a class="anchor" name="7.3.1-neg"></a><a class="anchor" name="neg (Using ACLs and fetching samples)"></a><a class="anchor" name="neg (Converters)"></a><div class="keyword"><b><a class="anchor" name="neg"></a><a href="#7.3.1-neg">neg</a></b></div><pre class="text">Takes the input value of type unsigned integer, computes the opposite value,
-and returns the remainder as an unsigned integer. 0 is identity. This
-operator is provided for reversed subtracts : in order to subtract the input
-from a constant, simply perform a &quot;neg,add(value)&quot;.
-</pre><a class="anchor" name="not"></a><a class="anchor" name="7-not"></a><a class="anchor" name="7.3.1-not"></a><a class="anchor" name="not (Using ACLs and fetching samples)"></a><a class="anchor" name="not (Converters)"></a><div class="keyword"><b><a class="anchor" name="not"></a><a href="#7.3.1-not">not</a></b></div><pre class="text">Returns a boolean FALSE if the input value of type unsigned integer is
+</div><a class="anchor" name="mod"></a><a class="anchor" name="7-mod"></a><a class="anchor" name="7.3.1-mod"></a><a class="anchor" name="mod (Using ACLs and fetching samples)"></a><a class="anchor" name="mod (Converters)"></a><div class="keyword"><b><a class="anchor" name="mod"></a><a href="#7.3.1-mod">mod</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type signed integer by &lt;value&gt;, and returns the
+remainder as an signed integer. If &lt;value&gt; is null, then zero is returned.
+&lt;value&gt; can be a numeric value or a variable name. The name of the variable
+starts by an indication about its scope. The allowed scopes are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
+</pre><a class="anchor" name="mul"></a><a class="anchor" name="7-mul"></a><a class="anchor" name="7.3.1-mul"></a><a class="anchor" name="mul (Using ACLs and fetching samples)"></a><a class="anchor" name="mul (Converters)"></a><div class="keyword"><b><a class="anchor" name="mul"></a><a href="#7.3.1-mul">mul</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Multiplies the input value of type signed integer by &lt;value&gt;, and returns
+the product as an signed integer. In case of overflow, the largest possible
+value for the sign is returned so that the operation doesn't wrap around.
+&lt;value&gt; can be a numeric value or a variable name. The name of the variable
+starts by an indication about its scope. The allowed scopes are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
+</pre><a class="anchor" name="neg"></a><a class="anchor" name="7-neg"></a><a class="anchor" name="7.3.1-neg"></a><a class="anchor" name="neg (Using ACLs and fetching samples)"></a><a class="anchor" name="neg (Converters)"></a><div class="keyword"><b><a class="anchor" name="neg"></a><a href="#7.3.1-neg">neg</a></b></div><pre class="text">Takes the input value of type signed integer, computes the opposite value,
+and returns the remainder as an signed integer. 0 is identity. This operator
+is provided for reversed subtracts : in order to subtract the input from a
+constant, simply perform a &quot;neg,add(value)&quot;.
+</pre><a class="anchor" name="not"></a><a class="anchor" name="7-not"></a><a class="anchor" name="7.3.1-not"></a><a class="anchor" name="not (Using ACLs and fetching samples)"></a><a class="anchor" name="not (Converters)"></a><div class="keyword"><b><a class="anchor" name="not"></a><a href="#7.3.1-not">not</a></b></div><pre class="text">Returns a boolean FALSE if the input value of type signed integer is
 non-null, otherwise returns TRUE. Used in conjunction with and(), it can be
 used to report true/false for bit testing on input values (eg: verify the
 absence of a flag).
-</pre><a class="anchor" name="odd"></a><a class="anchor" name="7-odd"></a><a class="anchor" name="7.3.1-odd"></a><a class="anchor" name="odd (Using ACLs and fetching samples)"></a><a class="anchor" name="odd (Converters)"></a><div class="keyword"><b><a class="anchor" name="odd"></a><a href="#7.3.1-odd">odd</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type unsigned integer is odd
+</pre><a class="anchor" name="odd"></a><a class="anchor" name="7-odd"></a><a class="anchor" name="7.3.1-odd"></a><a class="anchor" name="odd (Using ACLs and fetching samples)"></a><a class="anchor" name="odd (Converters)"></a><div class="keyword"><b><a class="anchor" name="odd"></a><a href="#7.3.1-odd">odd</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type signed integer is odd
 otherwise returns FALSE. It is functionally equivalent to &quot;and(1),bool&quot;.
-</pre><a class="anchor" name="or"></a><a class="anchor" name="7-or"></a><a class="anchor" name="7.3.1-or"></a><a class="anchor" name="or (Using ACLs and fetching samples)"></a><a class="anchor" name="or (Converters)"></a><div class="keyword"><b><a class="anchor" name="or"></a><a href="#7.3.1-or">or</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;OR&quot; between &lt;value&gt; and the input value of type unsigned
-integer, and returns the result as an unsigned integer.
+</pre><a class="anchor" name="or"></a><a class="anchor" name="7-or"></a><a class="anchor" name="7.3.1-or"></a><a class="anchor" name="or (Using ACLs and fetching samples)"></a><a class="anchor" name="or (Converters)"></a><div class="keyword"><b><a class="anchor" name="or"></a><a href="#7.3.1-or">or</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;OR&quot; between &lt;value&gt; and the input value of type signed
+integer, and returns the result as an signed integer. &lt;value&gt; can be a
+numeric value or a variable name. The name of the variable starts by an
+indication about its scope. The allowed scopes are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
 </pre><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>]</span>)</div><pre class="text">Applies a regex-based substitution to the input string. It does the same
 operation as the well-known &quot;sed&quot; utility with &quot;s/&lt;regex&gt;/&lt;subst&gt;/&quot;. By
 default it will replace in the input string the first occurrence of the
@@ -11349,9 +11437,18 @@ set-var(&lt;var name&gt;)
     &quot;res&quot;  : the variable is shared only during the response processing.
   This prefix is followed by a name. The separator is a '.'. The name may only
   contain characters 'a-z', 'A-Z', '0-9' and '_'.
-</pre><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type unsigned integer, and returns
-the result as an unsigned integer. Note: in order to subtract the input from
-a constant, simply perform a &quot;neg,add(value)&quot;.
+</pre><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type signed integer, and returns
+the result as an signed integer. Note: in order to subtract the input from
+a constant, simply perform a &quot;neg,add(value)&quot;. &lt;value&gt; can be a numeric value
+or a variable name. The name of the variable starts by an indication about its
+scope. The allowed scopes are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
 </pre><a class="anchor" name="table_bytes_in_rate"></a><a class="anchor" name="7-table_bytes_in_rate"></a><a class="anchor" name="7.3.1-table_bytes_in_rate"></a><a class="anchor" name="table_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="table_bytes_in_rate (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_bytes_in_rate"></a><a href="#7.3.1-table_bytes_in_rate">table_bytes_in_rate</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
 the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the average client-to-server
@@ -11486,7 +11583,16 @@ collect rough statistics. It must not be used for security purposes as a
 32-bit hash is trivial to break. See also &quot;<a href="#crc32">crc32</a>&quot;, &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, and the
 &quot;<a href="#hash-type">hash-type</a>&quot; directive.
 </pre><a class="anchor" name="xor"></a><a class="anchor" name="7-xor"></a><a class="anchor" name="7.3.1-xor"></a><a class="anchor" name="xor (Using ACLs and fetching samples)"></a><a class="anchor" name="xor (Converters)"></a><div class="keyword"><b><a class="anchor" name="xor"></a><a href="#7.3.1-xor">xor</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;XOR&quot; (exclusive OR) between &lt;value&gt; and the input value
-of type unsigned integer, and returns the result as an unsigned integer.
+of type signed integer, and returns the result as an signed integer.
+&lt;value&gt; can be a numeric value or a variable name. The name of the variable
+starts by an indication about its scope. The allowed scopes are:
+  &quot;sess&quot; : the variable is shared with all the session,
+  &quot;txn&quot;  : the variable is shared with all the transaction (request and
+           response),
+  &quot;req&quot;  : the variable is shared only during the request processing,
+  &quot;res&quot;  : the variable is shared only during the response processing.
+This prefix is followed by a name. The separator is a '.'. The name may only
+contain characters 'a-z', 'A-Z', '0-9' and '_'.
 </pre></div>
 <a class="anchor" id="7.3.2" name="7.3.2"></a>
 <h3 id="chapter-7.3.2" data-target="7.3.2"><small><a class="small" href="#7.3.2">7.3.2.</a></small> Fetching samples from internal states</h3>
@@ -11617,7 +11723,9 @@ frontend mail
     tcp-request content accept if ! too_fast
     tcp-request content accept if WAIT_END
 </code></pre>
-</div><pre class="text">ipv4(&lt;ipv4&gt;) : ipv4
+</div><a class="anchor" name="int"></a><a class="anchor" name="7-int"></a><a class="anchor" name="7.3.2-int"></a><a class="anchor" name="int (Using ACLs and fetching samples)"></a><a class="anchor" name="int (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="int"></a><a href="#7.3.2-int">int</a></b>(<span style="color: #080">&lt;integer&gt;</span>) : signed integer</div><pre class="text">  Returns a signed integer.
+
+ipv4(&lt;ipv4&gt;) : ipv4
   Returns an ipv4.
 
 ipv6(&lt;ipv6&gt;) : ipv6
@@ -11648,7 +11756,6 @@ starting at zero. If the range is not specified, it defaults to 2^32, which
 gives numbers between 0 and 4294967295. It can be useful to pass some values
 needed to take some routing decisions for example, or just for debugging
 purposes. This random must not be used for security purposes.
-</pre><a class="anchor" name="sint"></a><a class="anchor" name="7-sint"></a><a class="anchor" name="7.3.2-sint"></a><a class="anchor" name="sint (Using ACLs and fetching samples)"></a><a class="anchor" name="sint (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="sint"></a><a href="#7.3.2-sint">sint</a></b>(<span style="color: #080">&lt;sint&gt;</span>) : signed integer</div><pre class="text">Returns a signed integer.
 </pre><a class="anchor" name="srv_conn"></a><a class="anchor" name="7-srv_conn"></a><a class="anchor" name="7.3.2-srv_conn"></a><a class="anchor" name="srv_conn (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_conn (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="srv_conn"></a><a href="#7.3.2-srv_conn">srv_conn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of currently established
 connections on the designated server, possibly including the connection being
 evaluated. If &lt;backend&gt; is omitted, then the server is looked up in the
@@ -11687,7 +11794,6 @@ stick-table or in the designated stick-table. See also table_cnt.
 </pre><a class="anchor" name="table_cnt"></a><a class="anchor" name="7-table_cnt"></a><a class="anchor" name="7.3.2-table_cnt"></a><a class="anchor" name="table_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="table_cnt (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="table_cnt"></a><a href="#7.3.2-table_cnt">table_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total number of entries currently in use in the current proxy's
 stick-table or in the designated stick-table. See also src_conn_cnt and
 table_avl for other entry counting methods.
-</pre><a class="anchor" name="uint"></a><a class="anchor" name="7-uint"></a><a class="anchor" name="7.3.2-uint"></a><a class="anchor" name="uint (Using ACLs and fetching samples)"></a><a class="anchor" name="uint (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="uint"></a><a href="#7.3.2-uint">uint</a></b>(<span style="color: #080">&lt;uint&gt;</span>) : unsigned integer</div><pre class="text">Returns an unsigned integer.
 </pre><a class="anchor" name="var"></a><a class="anchor" name="7-var"></a><a class="anchor" name="7.3.2-var"></a><a class="anchor" name="var (Using ACLs and fetching samples)"></a><a class="anchor" name="var (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="var"></a><a href="#7.3.2-var">var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) : undefined</div><pre class="text">Returns a variable with the stored type. If the variable is not set, the
 sample fetch fails. The name of the variable starts by an indication about its
 scope. The scope allowed are:
@@ -12266,6 +12372,13 @@ used in ACL.
 
 ACL derivatives :
   req_rdp_cookie_cnt([&lt;name&gt;]) : integer match
+</pre><a class="anchor" name="req.ssl_ec_ext"></a><a class="anchor" name="7-req.ssl_ec_ext"></a><a class="anchor" name="7.3.5-req.ssl_ec_ext"></a><a class="anchor" name="req.ssl_ec_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_ec_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_ec_ext"></a><a href="#7.3.5-req.ssl_ec_ext">req.ssl_ec_ext</a></b> : boolean</div><pre class="text">Returns a boolean identifying if client sent the Supported Elliptic Curves
+Extension as defined in RFC4492, <a href="#5.1">section 5.1</a>. within the SSL ClientHello
+message. This can be used to present ECC compatible clients with EC certificate
+and to use RSA for all others, on the same IP address. Note that this only
+applies to raw contents found in the request buffer and not to contents
+deciphered via an SSL data layer, so this will not work with &quot;<a href="#bind">bind</a>&quot; lines
+having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
 </pre><a class="anchor" name="req.ssl_hello_type"></a><a class="anchor" name="7-req.ssl_hello_type"></a><a class="anchor" name="7.3.5-req.ssl_hello_type"></a><a class="anchor" name="req.ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_hello_type"></a><a href="#7.3.5-req.ssl_hello_type">req.ssl_hello_type</a></b> : integer</div><a class="anchor" name="req_ssl_hello_type"></a><a class="anchor" name="7-req_ssl_hello_type"></a><a class="anchor" name="7.3.5-req_ssl_hello_type"></a><a class="anchor" name="req_ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="req_ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req_ssl_hello_type"></a><a href="#7.3.5-req_ssl_hello_type">req_ssl_hello_type</a></b> : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value containing the type of the SSL hello message found
 in the request buffer if the buffer contains data that parse as a complete
 SSL (v3 or superior) client hello message. Note that this only applies to raw
@@ -14584,7 +14697,7 @@ matching type. Each line is composed by space-delimited series of words.
 The first two words are:
 
    &lt;match method&gt;:   The match method applied. It can be &quot;found&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bool<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bool%20%28Converters%29">Converters</a></li><li><a href="#bool%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;,
-                     &quot;int&quot;, &quot;ip&quot;, &quot;<a href="#bin">bin</a>&quot;, &quot;len&quot;, &quot;<a href="#str">str</a>&quot;, &quot;beg&quot;, &quot;<a href="#sub">sub</a>&quot;, &quot;dir&quot;,
+                     &quot;<a href="#int">int</a>&quot;, &quot;ip&quot;, &quot;<a href="#bin">bin</a>&quot;, &quot;len&quot;, &quot;<a href="#str">str</a>&quot;, &quot;beg&quot;, &quot;<a href="#sub">sub</a>&quot;, &quot;dir&quot;,
                      &quot;dom&quot;, &quot;end&quot; or &quot;reg&quot;.
 
    &lt;match result&gt;:   The result. Can be &quot;match&quot; or &quot;no-match&quot;.
@@ -14956,8 +15069,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev2 &ndash; Configuration Manual<br>
-							<small>2015/06/17, willy tarreau</small>
+							HAProxy 1.6-dev3 &ndash; Configuration Manual<br>
+							<small>2015/07/22, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -15174,6 +15287,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"id (Server and default-server options)",
 				"ignore-persist",
 				"in_table",
+				"int",
 				"inter",
 				"interface",
 				"ipmask",
@@ -15385,6 +15499,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"req.proto_http",
 				"req.rdp_cookie",
 				"req.rdp_cookie_cnt",
+				"req.ssl_ec_ext",
 				"req.ssl_hello_type",
 				"req.ssl_sni",
 				"req.ssl_ver",
@@ -15428,7 +15543,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"resolve-prefer",
 				"resolve_retries",
 				"resolvers (Server and default-server options)",
-				"resolvers (Server DNS resolution)",
+				"resolvers (The resolvers section)",
 				"resp_ver",
 				"retries",
 				"rise",
@@ -15567,8 +15682,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"shutdown session",
 				"shutdown sessions",
 				"shutdown sessions server",
-				"sint",
 				"slowstart",
+				"sni",
 				"so_id",
 				"source (Alphabetically sorted keywords reference)",
 				"source (Server and default-server options)",
@@ -15766,7 +15881,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"tune.zlib.windowsize",
 				"uid (Process management and security)",
 				"uid (Bind options)",
-				"uint",
 				"ulimit-n",
 				"unique-id-format",
 				"unique-id-header",
@@ -15912,7 +16026,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15924,4 +16038,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev2 -->
+<!-- git:v1.6-dev3 -->
