@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev3-104 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev3-105 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev3-104</strong></p>
+							<p><strong>version 1.6-dev3-105</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -5939,8 +5939,8 @@ Most often, an incoming MySQL server needs to see the client's IP address for
 various purposes, including IP privilege matching and connection logging.
 When possible, it is often wise to masquerade the client's IP address when
 connecting to the server using the &quot;usesrc&quot; argument of the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword,
-which requires the cttproxy feature to be compiled in, and the MySQL server
-to route the client via the machine hosting haproxy.
+which requires the transparent proxy feature to be compiled in, and the MySQL
+server to route the client via the machine hosting haproxy.
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option nolinger"></a><a class="anchor" name="4-option nolinger"></a><a class="anchor" name="4.2-option nolinger"></a><a class="anchor" name="option nolinger (Proxies)"></a><a class="anchor" name="option nolinger (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option nolinger"></a><a href="#4.2-option%20nolinger">option nolinger</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option nolinger"></a><a class="anchor" name="4-no option nolinger"></a><a class="anchor" name="4.2-no option nolinger"></a><a class="anchor" name="no option nolinger (Proxies)"></a><a class="anchor" name="no option nolinger (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option nolinger"></a><a href="#4.2-no%20option%20nolinger">no option nolinger</a></b></div><pre class="text">Enable or disable immediate session resource cleaning after close
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -6172,7 +6172,7 @@ Most often, an incoming SMTP server needs to see the client's IP address for
 various purposes, including spam filtering, anti-spoofing and logging. When
 possible, it is often wise to masquerade the client's IP address when
 connecting to the server using the &quot;usesrc&quot; argument of the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword,
-which requires the cttproxy feature to be compiled in.
+which requires the transparent proxy feature to be compiled in.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -7365,13 +7365,6 @@ there are two methods :
     However, since the upstream and downstream ports are different, local IP
     connection tracking on the machine will not be upset by the reuse of the
     same session.
-
-Note that depending on the transparent proxy technology used, it may be
-required to force the source address. In fact, cttproxy version 2 requires an
-IP address in &lt;addr&gt; above, and does not support setting of &quot;0.0.0.0&quot; as the
-IP address because it creates NAT entries which much match the exact outgoing
-address. Tproxy version 4 and some other kernel patches which work in pure
-forwarding mode generally will not have this limitation.
 
 This option sets the default source for all servers in the backend. It may
 also be specified in a &quot;defaults&quot; section. Finer source address specification
@@ -15191,7 +15184,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev3-104 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev3-105 &ndash; Configuration Manual<br>
 							<small>2015/07/22, willy tarreau</small>
 						</div>
 					</div>
@@ -16156,7 +16149,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3-104', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3-105', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16168,4 +16161,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev3-104-ge0627bd -->
+<!-- git:v1.6-dev3-105-g29fbe51 -->
