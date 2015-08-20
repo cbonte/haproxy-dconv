@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev3-69 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev3-104 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev3-69</strong></p>
+							<p><strong>version 1.6-dev3-104</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3908,6 +3908,8 @@ Example of a header received by the application server :
               set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
               set-var(<span style="color: #080">&lt;var name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
               <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
+              sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
+              sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
               lua <span style="color: #080">&lt;function name&gt;</span>
              }</span>
              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 requests
@@ -4172,6 +4174,17 @@ http-request set-query %[query,regsub(%3D,=,g)]
   advantage over just checking the keys, because only one table lookup is
   performed for all ACL checks that make use of it.
 
+- sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
+  This action sets the GPT0 tag according to the sticky counter designated
+  by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+  an error occurs, this action silently fails and the actions evaluation
+  continues.
+
+- sc-inc-gpc0(&lt;sc-id&gt;):
+  This action increments the GPC0 counter according with the sticky counter
+  designated by &lt;sc-id&gt;. If an error occurs, this action silently fails and
+  the actions evaluation continues.
+
 - &quot;lua&quot; is used to run a Lua function if the action is executed. The single
   parameter is the name of the function to run. The prototype of the
   function is documented in the API documentation.
@@ -4289,6 +4302,8 @@ http-request del-map(map.lst) %[src]                     if delmap
                 del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
                 set-var(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
+                sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
+                sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
                 lua <span style="color: #080">&lt;function name&gt;</span>
               }</span>
               <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 responses
@@ -4486,7 +4501,18 @@ The first keyword is the rule's action. Currently supported actions include :
 <pre class="prettyprint">
 <code>http-response set-var(sess.last_redir) res.hdr(location)
 </code></pre>
-</div><pre class="text">There is no limit to the number of http-response statements per instance.
+</div><pre class="text">  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
+    This action sets the GPT0 tag according to the sticky counter designated
+    by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+    an error occurs, this action silently fails and the actions evaluation
+    continues.
+
+  - sc-inc-gpc0(&lt;sc-id&gt;):
+    This action increments the GPC0 counter according with the sticky counter
+    designated by &lt;sc-id&gt;. If an error occurs, this action silently fails and
+    the actions evaluation continues.
+
+There is no limit to the number of http-response statements per instance.
 
 It is important to know that http-response rules are processed very early in
 the HTTP processing, before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot; rules. That way, headers
@@ -8662,6 +8688,17 @@ Four types of actions are supported :
       advantage over just checking the keys, because only one table lookup is
       performed for all ACL checks that make use of it.
 
+  - sc-inc-gpc0(&lt;sc-id&gt;):
+      The &quot;sc-inc-gpc0&quot; increments the GPC0 counter according to the sticky
+      counter designated by &lt;sc-id&gt;. If an error occurs, this action silently
+      fails and the actions evaluation continues.
+
+  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;:
+      This action sets the GPT0 tag according to the sticky counter designated
+      by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+      an error occurs, this action silently fails and the actions evaluation
+      continues.
+
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
 &quot;track-sc*&quot; actions as well as for changing the default action to a reject.
@@ -8694,8 +8731,8 @@ tcp-request connection reject if { sc0_conn_rate gt 10 }
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
             actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc0&quot;, &quot;track-sc1&quot;,
-            &quot;track-sc2&quot;, &quot;<a href="#capture">capture</a>&quot; and &quot;lua&quot;. See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
-            above for their signification.
+            &quot;track-sc2&quot;, &quot;sc-inc-gpc0&quot;, &quot;sc-set-gpt0&quot;, &quot;<a href="#capture">capture</a>&quot; and &quot;lua&quot;.
+            See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; above for their signification.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -8723,11 +8760,13 @@ rule matches or if there is no rule, the default action is to accept the
 contents. There is no specific limit to the number of rules which may be
 inserted.
 
-Four types of actions are supported :
+Several types of actions are supported :
   - accept : the request is accepted
   - reject : the request is rejected and the connection is closed
   - capture : the specified sample expression is captured
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
+  - sc-inc-gpc0(&lt;sc-id&gt;)
+  - set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
   - lua &lt;function&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
 
@@ -8898,7 +8937,8 @@ since the contents will not be able to change anymore.
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
-            actions include : &quot;accept&quot;, &quot;close&quot;, &quot;reject&quot;, &quot;lua&quot;.
+            actions include : &quot;accept&quot;, &quot;close&quot;, &quot;reject&quot;, &quot;lua&quot;,
+            &quot;sc-inc-gpc0&quot; and &quot;sc-set-gpt0&quot;.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -8915,7 +8955,7 @@ rule matches or if there is no rule, the default action is to accept the
 contents. There is no specific limit to the number of rules which may be
 inserted.
 
-Two types of actions are supported :
+Several types of actions are supported :
   - accept :
       accepts the response if the condition is true (when used with &quot;if&quot;)
       or false (when used with &quot;unless&quot;). The first such rule executed ends
@@ -8941,6 +8981,17 @@ Two types of actions are supported :
 
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
       Sets a variable.
+
+  - sc-inc-gpc0(&lt;sc-id&gt;):
+      This action increments the GPC0 counter according to the sticky
+      counter designated by &lt;sc-id&gt;. If an error occurs, this action fails
+      silently and the actions evaluation continues.
+
+  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
+      This action sets the GPT0 tag according to the sticky counter designated
+      by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+      an error occurs, this action silently fails and the actions evaluation
+      continues.
 
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
@@ -11537,6 +11588,11 @@ the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the average incoming connection
 rate associated with the input sample in the designated table. See also the
 sc_conn_rate sample fetch keyword.
+</pre><a class="anchor" name="table_gpt0"></a><a class="anchor" name="7-table_gpt0"></a><a class="anchor" name="7.3.1-table_gpt0"></a><a class="anchor" name="table_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="table_gpt0 (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_gpt0"></a><a href="#7.3.1-table_gpt0">table_gpt0</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
+the specified table. If the key is not found in the table, boolean value zero
+is returned. Otherwise the converter returns the current value of the first
+general purpose tag associated with the input sample in the designated table.
+See also the sc_get_gpt0 sample fetch keyword.
 </pre><a class="anchor" name="table_gpc0"></a><a class="anchor" name="7-table_gpc0"></a><a class="anchor" name="7.3.1-table_gpc0"></a><a class="anchor" name="table_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="table_gpc0 (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_gpc0"></a><a href="#7.3.1-table_gpc0">table_gpc0</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
 the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the current value of the first
@@ -11932,6 +11988,8 @@ measured in amount of connections over the period configured in the table.
 See also src_conn_rate.
 </pre><a class="anchor" name="sc_get_gpc0"></a><a class="anchor" name="7-sc_get_gpc0"></a><a class="anchor" name="7.3.3-sc_get_gpc0"></a><a class="anchor" name="sc_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_get_gpc0"></a><a href="#7.3.3-sc_get_gpc0">sc_get_gpc0</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_get_gpc0"></a><a class="anchor" name="7-sc0_get_gpc0"></a><a class="anchor" name="7.3.3-sc0_get_gpc0"></a><a class="anchor" name="sc0_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_get_gpc0"></a><a href="#7.3.3-sc0_get_gpc0">sc0_get_gpc0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_get_gpc0"></a><a class="anchor" name="7-sc1_get_gpc0"></a><a class="anchor" name="7.3.3-sc1_get_gpc0"></a><a class="anchor" name="sc1_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_get_gpc0"></a><a href="#7.3.3-sc1_get_gpc0">sc1_get_gpc0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_get_gpc0"></a><a class="anchor" name="7-sc2_get_gpc0"></a><a class="anchor" name="7.3.3-sc2_get_gpc0"></a><a class="anchor" name="sc2_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_get_gpc0"></a><a href="#7.3.3-sc2_get_gpc0">sc2_get_gpc0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the value of the first General Purpose Counter associated to the
 currently tracked counters. See also src_get_gpc0 and sc/sc0/sc1/sc2_inc_gpc0.
+</pre><a class="anchor" name="sc_get_gpt0"></a><a class="anchor" name="7-sc_get_gpt0"></a><a class="anchor" name="7.3.3-sc_get_gpt0"></a><a class="anchor" name="sc_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_get_gpt0"></a><a href="#7.3.3-sc_get_gpt0">sc_get_gpt0</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_get_gpt0"></a><a class="anchor" name="7-sc0_get_gpt0"></a><a class="anchor" name="7.3.3-sc0_get_gpt0"></a><a class="anchor" name="sc0_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_get_gpt0"></a><a href="#7.3.3-sc0_get_gpt0">sc0_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_get_gpt0"></a><a class="anchor" name="7-sc1_get_gpt0"></a><a class="anchor" name="7.3.3-sc1_get_gpt0"></a><a class="anchor" name="sc1_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_get_gpt0"></a><a href="#7.3.3-sc1_get_gpt0">sc1_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_get_gpt0"></a><a class="anchor" name="7-sc2_get_gpt0"></a><a class="anchor" name="7.3.3-sc2_get_gpt0"></a><a class="anchor" name="sc2_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_get_gpt0"></a><a href="#7.3.3-sc2_get_gpt0">sc2_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the value of the first General Purpose Tag associated to the
+currently tracked counters. See also src_get_gpt0.
 </pre><a class="anchor" name="sc_gpc0_rate"></a><a class="anchor" name="7-sc_gpc0_rate"></a><a class="anchor" name="7.3.3-sc_gpc0_rate"></a><a class="anchor" name="sc_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_gpc0_rate"></a><a href="#7.3.3-sc_gpc0_rate">sc_gpc0_rate</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_gpc0_rate"></a><a class="anchor" name="7-sc0_gpc0_rate"></a><a class="anchor" name="7.3.3-sc0_gpc0_rate"></a><a class="anchor" name="sc0_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_gpc0_rate"></a><a href="#7.3.3-sc0_gpc0_rate">sc0_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_gpc0_rate"></a><a class="anchor" name="7-sc1_gpc0_rate"></a><a class="anchor" name="7.3.3-sc1_gpc0_rate"></a><a class="anchor" name="sc1_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_gpc0_rate"></a><a href="#7.3.3-sc1_gpc0_rate">sc1_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_gpc0_rate"></a><a class="anchor" name="7-sc2_gpc0_rate"></a><a class="anchor" name="7.3.3-sc2_gpc0_rate"></a><a class="anchor" name="sc2_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_gpc0_rate"></a><a href="#7.3.3-sc2_gpc0_rate">sc2_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the average increment rate of the first General Purpose Counter
 associated to the currently tracked counters. It reports the frequency
 which the gpc0 counter was incremented over the configured period. See also
@@ -12044,6 +12102,10 @@ the address is not found, zero is returned. See also sc/sc0/sc1/sc2_conn_rate.
 incoming connection's source address in the current proxy's stick-table or in
 the designated stick-table. If the address is not found, zero is returned.
 See also sc/sc0/sc1/sc2_get_gpc0 and src_inc_gpc0.
+</pre><a class="anchor" name="src_get_gpt0"></a><a class="anchor" name="7-src_get_gpt0"></a><a class="anchor" name="7.3.3-src_get_gpt0"></a><a class="anchor" name="src_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="src_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_get_gpt0"></a><a href="#7.3.3-src_get_gpt0">src_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the value of the first General Purpose Tag associated to the
+incoming connection's source address in the current proxy's stick-table or in
+the designated stick-table. If the address is not found, zero is returned.
+See also sc/sc0/sc1/sc2_get_gpt0.
 </pre><a class="anchor" name="src_gpc0_rate"></a><a class="anchor" name="7-src_gpc0_rate"></a><a class="anchor" name="7.3.3-src_gpc0_rate"></a><a class="anchor" name="src_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="src_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_gpc0_rate"></a><a href="#7.3.3-src_gpc0_rate">src_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the average increment rate of the first General Purpose Counter
 associated to the incoming connection's source address in the current proxy's
 stick-table or in the designated stick-table. It reports the frequency
@@ -15129,7 +15191,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev3-69 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev3-104 &ndash; Configuration Manual<br>
 							<small>2015/07/22, willy tarreau</small>
 						</div>
 					</div>
@@ -15623,6 +15685,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc0_conn_cur",
 				"sc0_conn_rate",
 				"sc0_get_gpc0",
+				"sc0_get_gpt0",
 				"sc0_gpc0_rate",
 				"sc0_http_err_cnt",
 				"sc0_http_err_rate",
@@ -15642,6 +15705,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc1_conn_cur",
 				"sc1_conn_rate",
 				"sc1_get_gpc0",
+				"sc1_get_gpt0",
 				"sc1_gpc0_rate",
 				"sc1_http_err_cnt",
 				"sc1_http_err_rate",
@@ -15661,6 +15725,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc2_conn_cur",
 				"sc2_conn_rate",
 				"sc2_get_gpc0",
+				"sc2_get_gpt0",
 				"sc2_gpc0_rate",
 				"sc2_http_err_cnt",
 				"sc2_http_err_rate",
@@ -15680,6 +15745,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc_conn_cur",
 				"sc_conn_rate",
 				"sc_get_gpc0",
+				"sc_get_gpt0",
 				"sc_gpc0_rate",
 				"sc_http_err_cnt",
 				"sc_http_err_rate",
@@ -15758,6 +15824,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"src_conn_cur",
 				"src_conn_rate",
 				"src_get_gpc0",
+				"src_get_gpt0",
 				"src_gpc0_rate",
 				"src_http_err_cnt",
 				"src_http_err_rate",
@@ -15866,6 +15933,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"table_conn_rate",
 				"table_gpc0",
 				"table_gpc0_rate",
+				"table_gpt0",
 				"table_http_err_cnt",
 				"table_http_err_rate",
 				"table_http_req_cnt",
@@ -16088,7 +16156,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3-69', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3-104', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16100,4 +16168,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev3-69-gcc79b00 -->
+<!-- git:v1.6-dev3-104-ge0627bd -->
