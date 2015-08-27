@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev3-117 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev3-119 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-27" rel="stylesheet" />
 	</head>
@@ -80,7 +80,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev3-117</strong></p>
+							<p><strong>version 1.6-dev3-119</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4296,6 +4296,7 @@ http-request del-map(map.lst) %[src]                     if delmap
                 set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
                 replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
                 replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
+                set-status <span style="color: #080">&lt;status&gt;</span> |
                 set-log-level <span style="color: #080">&lt;level&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> |
                 add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -4384,7 +4385,16 @@ The first keyword is the rule's action. Currently supported actions include :
 
     Cache-Control: max-age=3600, private
 
-- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
+- &quot;set-status&quot; replaces the response status code with &lt;status&gt; which must
+  be an integer between 100 and 999. Note that the reason is automatically
+  adapted to the new code.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># return &quot;431 Request Header Fields Too Large&quot;</span>
+http-response set-status 431
+</code></pre>
+</div><pre class="text">- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
   It only has effect against the other requests being processed at the same
   time. The default value is 0, unless altered by the &quot;<a href="#nice">nice</a>&quot; setting on the
   &quot;<a href="#bind">bind</a>&quot; line. The accepted range is -1024..1024. The higher the value, the
@@ -15184,7 +15194,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev3-117 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev3-119 &ndash; Configuration Manual<br>
 							<small>2015/07/22, willy tarreau</small>
 						</div>
 					</div>
@@ -16149,7 +16159,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3-117', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3-119', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-27', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16161,4 +16171,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev3-117-g3f4bc65 -->
+<!-- git:v1.6-dev3-119-g4bb375c -->
