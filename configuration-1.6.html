@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev3 -  Configuration Manual</title>
+		<title>HAProxy version 1.6-dev4 -  Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-32" rel="stylesheet" />
 	</head>
@@ -70,7 +70,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-32</b> on <b>2015/08/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-32</b> on <b>2015/08/30</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -81,11 +81,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2> Configuration Manual</h2>
-							<p><strong>version 1.6-dev3</strong></p>
+							<p><strong>version 1.6-dev4</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/07/22
+								2015/08/30
 							</p>
 						</div>
 
@@ -2075,7 +2075,7 @@ backend mybackend
 <div><pre class="text">It is possible to send email alerts when the state of servers changes.
 If configured email alerts are sent to each mailer that is configured
 in a mailers section. Email is sent to mailers using SMTP.
-</pre><a class="anchor" name="mailer"></a><a class="anchor" name="3-mailer"></a><a class="anchor" name="3.6-mailer"></a><a class="anchor" name="mailer (Global parameters)"></a><a class="anchor" name="mailer (Mailers)"></a><div class="keyword"><b><a class="anchor" name="mailer"></a><a href="#3.6-mailer">mailer</a></b> <span style="color: #080">&lt;mailersect&gt;</span></div><pre class="text">Creates a new mailer list with the name &lt;mailersect&gt;. It is an
+</pre><a class="anchor" name="mailers"></a><a class="anchor" name="3-mailers"></a><a class="anchor" name="3.6-mailers"></a><a class="anchor" name="mailers (Global parameters)"></a><a class="anchor" name="mailers (Mailers)"></a><div class="keyword"><b><a class="anchor" name="mailers"></a><a href="#3.6-mailers">mailers</a></b> <span style="color: #080">&lt;mailersect&gt;</span></div><pre class="text">Creates a new mailer list with the name &lt;mailersect&gt;. It is an
 independent section which is referenced by one or more proxies.
 </pre><a class="anchor" name="mailer"></a><a class="anchor" name="3-mailer"></a><a class="anchor" name="3.6-mailer"></a><a class="anchor" name="mailer (Global parameters)"></a><a class="anchor" name="mailer (Mailers)"></a><div class="keyword"><b><a class="anchor" name="mailer"></a><a href="#3.6-mailer">mailer</a></b> <span style="color: #080">&lt;mailername&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">Defines a mailer inside a mailers section.
 </pre><div class="separator">
@@ -2195,7 +2195,7 @@ specified in a previous &quot;defaults&quot; section.
  keyword                              defaults   frontend   listen    backend
 ------------------------------------+----------+----------+---------+---------
 acl                                       -          X         X         X
-appsession                                -          -         X         X
+appsession                                -          -         -         -
 backlog                                   X          X         X         -
 balance                                   X          -         X         X
 bind                                      -          X         X         -
@@ -2234,6 +2234,7 @@ http-check expect                         -          -         X         X
 http-check send-state                     X          -         X         X
 http-request                              -          X         X         X
 http-response                             -          X         X         X
+http-reuse                                X          -         X         X
 http-send-name-header                     -          -         X         X
 id                                        -          X         X         X
 ignore-persist                            -          X         X         X
@@ -2436,27 +2437,10 @@ mode       This option allows to change the URL parser mode.
              In this mode, the parser will look for the appsession in the
              query string.</pre>
 </div>
-<pre class="text">When an application cookie is defined in a backend, HAProxy will check when
-the server sets such a cookie, and will store its value in a table, and
-associate it with the server's identifier. Up to &lt;length&gt; characters from
-the value will be retained. On each connection, haproxy will look for this
-cookie both in the &quot;Cookie:&quot; headers, and as a URL parameter (depending on
-the mode used). If a known value is found, the client will be directed to the
-server associated with this value. Otherwise, the load balancing algorithm is
-applied. Cookies are automatically removed from memory when they have been
-unused for a duration longer than &lt;holdtime&gt;.
-
-The definition of an application cookie is limited to one per backend.
-
-Note : Consider not using this feature in multi-process mode (nbproc &gt; 1)
-       unless you know what you do : memory is not shared between the
-       processes, which can result in random behaviours.
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>appsession JSESSIONID len 52 timeout 3h
-</code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#stick">stick</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#ignore-persist">ignore-persist</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; and &quot;<a href="#bind-process">bind-process</a>&quot;.</div>
+<pre class="text">As of version 1.6, appsessions was removed. It is more flexible and more
+convenient to use stick-tables instead, and stick-tables support multi-master
+replication and data conservation across reloads, which appsessions did not.
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#stick">stick</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#ignore-persist">ignore-persist</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; and &quot;<a href="#bind-process">bind-process</a>&quot;.</div>
 <a class="anchor" name="backlog"></a><a class="anchor" name="4-backlog"></a><a class="anchor" name="4.2-backlog"></a><a class="anchor" name="backlog (Proxies)"></a><a class="anchor" name="backlog (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#4.2-backlog">backlog</a></b> <span style="color: #080">&lt;conns&gt;</span></div><pre class="text">Give hints to the system about the approximate listen backlog desired size
 May be used in sections :   defaults | frontend | listen | backend
                                yes   |    yes   |   yes  |   no
@@ -2689,7 +2673,7 @@ extension with &quot;<a href="#url_param">url_param</a>&quot; must be considered
     white space or control characters are found, indicating the end of what
     might be a URL parameter list. This is probably not a concern with SGML
     type message bodies.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#dispatch">dispatch</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, &quot;<a href="#appsession">appsession</a>&quot;, &quot;<a href="#option%20transparent">transparent</a>&quot;, &quot;<a href="#hash-type">hash-type</a>&quot; and &quot;<a href="#option%20http_proxy">http_proxy</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#dispatch">dispatch</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, &quot;<a href="#option%20transparent">transparent</a>&quot;, &quot;<a href="#hash-type">hash-type</a>&quot; and &quot;<a href="#option%20http_proxy">http_proxy</a>&quot;.</div>
 <a class="anchor" name="bind"></a><a class="anchor" name="4-bind"></a><a class="anchor" name="4.2-bind"></a><a class="anchor" name="bind (Proxies)"></a><a class="anchor" name="bind (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind"></a><a href="#4.2-bind">bind</a></b> <span style="color: #008">[<span style="color: #080">&lt;address&gt;</span>]</span>:<span style="color: #080">&lt;port_range&gt;</span> <span style="color: #008">[, ...]</span> <span style="color: #008">[param*]</span></div><a class="anchor" name="bind"></a><a class="anchor" name="4-bind"></a><a class="anchor" name="4.2-bind"></a><a class="anchor" name="bind (Proxies)"></a><a class="anchor" name="bind (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind"></a><a href="#4.2-bind">bind</a></b> /<span style="color: #080">&lt;path&gt;</span> <span style="color: #008">[, ...]</span> <span style="color: #008">[param*]</span></div><pre class="text">Define one or several listening addresses and/or ports in a frontend.
 May be used in sections :   defaults | frontend | listen | backend
                                 no   |    yes   |   yes  |   no
@@ -3275,7 +3259,7 @@ cookie SRV insert indirect nocache
 cookie SRV insert postonly indirect
 cookie SRV insert indirect nocache maxidle 30m maxlife 8h
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#appsession">appsession</a>&quot;, &quot;balance source&quot;, &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#server">server</a>&quot; and &quot;<a href="#ignore-persist">ignore-persist</a>&quot;.</div>
+</div><div class="page-header"><b>See also :</b> &quot;balance source&quot;, &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#server">server</a>&quot; and &quot;<a href="#ignore-persist">ignore-persist</a>&quot;.</div>
 <a class="anchor" name="declare"></a><a class="anchor" name="4-declare"></a><a class="anchor" name="4.2-declare"></a><a class="anchor" name="declare (Proxies)"></a><a class="anchor" name="declare (Alphabetically sorted keywords reference)"></a><a class="anchor" name="declare capture"></a><a class="anchor" name="4-declare capture"></a><a class="anchor" name="4.2-declare capture"></a><a class="anchor" name="declare capture (Proxies)"></a><a class="anchor" name="declare capture (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="declare capture"></a><a href="#4.2-declare%20capture">declare capture</a></b> <span style="color: #008">[ request | response ]</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Declares a capture slot.
 May be used in sections :   defaults | frontend | listen | backend
                                no    |    yes   |   yes  |   no
@@ -3856,6 +3840,8 @@ Example of a header received by the application server :
               set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
               set-var(<span style="color: #080">&lt;var name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
               <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
+              sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
+              sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
               lua <span style="color: #080">&lt;function name&gt;</span>
              }</span>
              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 requests
@@ -4120,6 +4106,17 @@ http-request set-query %[query,regsub(%3D,=,g)]
   advantage over just checking the keys, because only one table lookup is
   performed for all ACL checks that make use of it.
 
+- sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
+  This action sets the GPT0 tag according to the sticky counter designated
+  by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+  an error occurs, this action silently fails and the actions evaluation
+  continues.
+
+- sc-inc-gpc0(&lt;sc-id&gt;):
+  This action increments the GPC0 counter according with the sticky counter
+  designated by &lt;sc-id&gt;. If an error occurs, this action silently fails and
+  the actions evaluation continues.
+
 - &quot;lua&quot; is used to run a Lua function if the action is executed. The single
   parameter is the name of the function to run. The prototype of the
   function is documented in the API documentation.
@@ -4193,7 +4190,7 @@ http-request auth unless auth_ok
 <pre class="prettyprint">
 <code>http-request set-header X-Haproxy-Current-Date %T
 http-request set-header X-SSL                  %[ssl_fc]
-http-request set-header X-SSL-Session_ID       %[ssl_fc_session_id]
+http-request set-header X-SSL-Session_ID       %[ssl_fc_session_id,hex]
 http-request set-header X-SSL-Client-Verify    %[ssl_c_verify]
 http-request set-header X-SSL-Client-DN        %{+Q}[ssl_c_s_dn]
 http-request set-header X-SSL-Client-CN        %{+Q}[ssl_c_s_dn(cn)]
@@ -4231,12 +4228,15 @@ http-request del-map(map.lst) %[src]                     if delmap
                 set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
                 replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
                 replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
+                set-status <span style="color: #080">&lt;status&gt;</span> |
                 set-log-level <span style="color: #080">&lt;level&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> |
                 add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
                 set-var(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
+                sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
+                sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
                 lua <span style="color: #080">&lt;function name&gt;</span>
               }</span>
               <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 responses
@@ -4317,7 +4317,16 @@ The first keyword is the rule's action. Currently supported actions include :
 
     Cache-Control: max-age=3600, private
 
-- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
+- &quot;set-status&quot; replaces the response status code with &lt;status&gt; which must
+  be an integer between 100 and 999. Note that the reason is automatically
+  adapted to the new code.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># return &quot;431 Request Header Fields Too Large&quot;</span>
+http-response set-status 431
+</code></pre>
+</div><pre class="text">- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
   It only has effect against the other requests being processed at the same
   time. The default value is 0, unless altered by the &quot;<a href="#nice">nice</a>&quot; setting on the
   &quot;<a href="#bind">bind</a>&quot; line. The accepted range is -1024..1024. The higher the value, the
@@ -4434,7 +4443,18 @@ The first keyword is the rule's action. Currently supported actions include :
 <pre class="prettyprint">
 <code>http-response set-var(sess.last_redir) res.hdr(location)
 </code></pre>
-</div><pre class="text">There is no limit to the number of http-response statements per instance.
+</div><pre class="text">  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
+    This action sets the GPT0 tag according to the sticky counter designated
+    by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+    an error occurs, this action silently fails and the actions evaluation
+    continues.
+
+  - sc-inc-gpc0(&lt;sc-id&gt;):
+    This action increments the GPC0 counter according with the sticky counter
+    designated by &lt;sc-id&gt;. If an error occurs, this action silently fails and
+    the actions evaluation continues.
+
+There is no limit to the number of http-response statements per instance.
 
 It is important to know that http-response rules are processed very early in
 the HTTP processing, before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot; rules. That way, headers
@@ -4461,6 +4481,84 @@ http-response set-map(map.lst) %[src] %[res.hdr(X-Value)] if value
 http-response del-map(map.lst) %[src]                     if ! value
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#http-request">http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
+<a class="anchor" name="http-reuse"></a><a class="anchor" name="4-http-reuse"></a><a class="anchor" name="4.2-http-reuse"></a><a class="anchor" name="http-reuse (Proxies)"></a><a class="anchor" name="http-reuse (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-reuse"></a><a href="#4.2-http-reuse">http-reuse</a></b> <span style="color: #800">{ never | safe | aggressive | always }</span></div><pre class="text">Declare how idle HTTP connections may be shared between requests
+
+May be used in sections:   defaults | frontend | listen | backend
+                             yes    |    no    |   yes  |   yes
+
+By default, a connection established between haproxy and the backend server
+belongs to the session that initiated it. The downside is that between the
+response and the next request, the connection remains idle and is not used.
+In many cases for performance reasons it is desirable to make it possible to
+reuse these idle connections to serve other requests from different sessions.
+This directive allows to tune this behaviour.
+
+The argument indicates the desired connection reuse strategy :
+
+  - &quot;never&quot;  : idle connections are never shared between sessions. This is
+               the default choice. It may be enforced to cancel a different
+               strategy inherited from a defaults section or for
+               troubleshooting. For example, if an old bogus application
+               considers that multiple requests over the same connection come
+               from the same client and it is not possible to fix the
+               application, it may be desirable to disable connection sharing
+               in a single backend. An example of such an application could
+               be an old haproxy using cookie insertion in tunnel mode and
+               not checking any request past the first one.
+
+  - &quot;safe&quot;   : this is the recommended strategy. The first request of a
+               session is always sent over its own connection, and only
+               subsequent requests may be dispatched over other existing
+               connections. This ensures that in case the server closes the
+               connection when the request is being sent, the browser can
+               decide to silently retry it. Since it is exactly equivalent to
+               regular keep-alive, there should be no side effects.
+
+  - &quot;aggressive&quot; : this mode may be useful in webservices environments where
+               all servers are not necessarily known and where it would be
+               appreciable to deliver most first requests over existing
+               connections. In this case, first requests are only delivered
+               over existing connections that have been reused at least once,
+               proving that the server correctly supports connection reuse.
+               It should only be used when it's sure that the client can
+               retry a failed request once in a while and where the benefit
+               of aggressive connection reuse significantly outweights the
+               downsides of rare connection failures.
+
+  - &quot;always&quot; : this mode is only recommended when the path to the server is
+               known for never breaking existing connections quickly after
+               releasing them. It allows the first request of a session to be
+               sent to an existing connection. This can provide a significant
+               performance increase over the &quot;safe&quot; strategy when the backend
+               is a cache farm, since such components tend to show a
+               consistent behaviour and will benefit from the connection
+               sharing. It is recommended that the &quot;<a href="#option%20http-keep-alive">http-keep-alive</a>&quot; timeout
+               remains low in this mode so that no dead connections remain
+               usable. In most cases, this will lead to the same performance
+               gains as &quot;aggressive&quot; but with more risks. It should only be
+               used when it improves the situation over &quot;aggressive&quot;.
+
+When http connection sharing is enabled, a great care is taken to respect the
+connection properties and compatiblities. Specifically :
+  - connections made with &quot;usesrc&quot; followed by a client-dependant value
+    (&quot;client&quot;, &quot;clientip&quot;, &quot;<a href="#hdr_ip">hdr_ip</a>&quot;) are marked private and never shared ;
+
+  - connections sent to a server with a TLS SNI extension are marked private
+    and are never shared ;
+
+  - connections receiving a status code 401 or 407 expect some authentication
+    to be sent in return. Due to certain bogus authentication schemes (such
+    as NTLM) relying on the connection, these connections are marked private
+    and are never shared ;
+
+No connection pool is involved, once a session dies, the last idle connection
+it was attached to is deleted at the same time. This ensures that connections
+may not last after all sessions are closed.
+
+Note: connection reuse improves the accuracy of the &quot;server maxconn&quot; setting,
+because almost no new connection will be established while idle connections
+remain available. This is particularly true with the &quot;always&quot; strategy.
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, &quot;server maxconn&quot;</div>
 <a class="anchor" name="http-send-name-header"></a><a class="anchor" name="4-http-send-name-header"></a><a class="anchor" name="4.2-http-send-name-header"></a><a class="anchor" name="http-send-name-header (Proxies)"></a><a class="anchor" name="http-send-name-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-send-name-header"></a><a href="#4.2-http-send-name-header">http-send-name-header</a></b> <span style="color: #008">[<span style="color: #080">&lt;header&gt;</span>]</span></div><pre class="text">Add the server name to a request. Use the header string given by &lt;header&gt;
 
 May be used in sections:   defaults | frontend | listen | backend
@@ -4494,9 +4592,6 @@ conditions which, when met, will cause a request to ignore persistence.
 This is sometimes useful to load balance requests for static files, which
 often don't require persistence. This can also be used to fully disable
 persistence for a specific User-Agent (for example, some web crawler bots).
-
-Combined with &quot;<a href="#appsession">appsession</a>&quot;, it can also help reduce HAProxy memory usage, as
-the appsession table won't grow if persistence is ignored.
 
 The persistence is ignored when an &quot;if&quot; condition is met, or unless an
 &quot;unless&quot; condition is met.
@@ -5709,8 +5804,8 @@ Most often, an incoming MySQL server needs to see the client's IP address for
 various purposes, including IP privilege matching and connection logging.
 When possible, it is often wise to masquerade the client's IP address when
 connecting to the server using the &quot;usesrc&quot; argument of the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword,
-which requires the cttproxy feature to be compiled in, and the MySQL server
-to route the client via the machine hosting haproxy.
+which requires the transparent proxy feature to be compiled in, and the MySQL
+server to route the client via the machine hosting haproxy.
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option nolinger"></a><a class="anchor" name="4-option nolinger"></a><a class="anchor" name="4.2-option nolinger"></a><a class="anchor" name="option nolinger (Proxies)"></a><a class="anchor" name="option nolinger (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option nolinger"></a><a href="#4.2-option%20nolinger">option nolinger</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option nolinger"></a><a class="anchor" name="4-no option nolinger"></a><a class="anchor" name="4.2-no option nolinger"></a><a class="anchor" name="no option nolinger (Proxies)"></a><a class="anchor" name="no option nolinger (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option nolinger"></a><a href="#4.2-no%20option%20nolinger">no option nolinger</a></b></div><pre class="text">Enable or disable immediate session resource cleaning after close
 May be used in sections:    defaults | frontend | listen | backend
@@ -5926,7 +6021,7 @@ Most often, an incoming SMTP server needs to see the client's IP address for
 various purposes, including spam filtering, anti-spoofing and logging. When
 possible, it is often wise to masquerade the client's IP address when
 connecting to the server using the &quot;usesrc&quot; argument of the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword,
-which requires the cttproxy feature to be compiled in.
+which requires the transparent proxy feature to be compiled in.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -6129,7 +6224,7 @@ tcp-check expect string *\ OK\ IMAP4\ ready comment IMAP\ protocol
 option tcp-check
 tcp-check comment PING\ phase
 tcp-check send PING\r\n
-tcp-check expect +PONGe
+tcp-check expect string +PONG
 tcp-check comment role\ check
 tcp-check send info\ replication\r\n
 tcp-check expect string role:master
@@ -6449,7 +6544,7 @@ response. If no condition is specified, the redirect applies unconditionally.
           is desired. Only codes 301, 302, 303, 307 and 308 are supported,
           with 302 used by default if no code is specified. 301 means
           &quot;Moved permanently&quot;, and a browser may cache the Location. 302
-          means &quot;Moved permanently&quot; and means that the browser should not
+          means &quot;Moved temporarily&quot; and means that the browser should not
           cache the redirection. 303 is equivalent to 302 except that the
           browser will fetch the location with a GET method. 307 is just
           like 302 but makes it clear that the same method must be reused.
@@ -7057,13 +7152,6 @@ there are two methods :
     However, since the upstream and downstream ports are different, local IP
     connection tracking on the machine will not be upset by the reuse of the
     same session.
-
-Note that depending on the transparent proxy technology used, it may be
-required to force the source address. In fact, cttproxy version 2 requires an
-IP address in &lt;addr&gt; above, and does not support setting of &quot;0.0.0.0&quot; as the
-IP address because it creates NAT entries which much match the exact outgoing
-address. Tproxy version 4 and some other kernel patches which work in pure
-forwarding mode generally will not have this limitation.
 
 This option sets the default source for all servers in the backend. It may
 also be specified in a &quot;defaults&quot; section. Finer source address specification
@@ -8192,7 +8280,7 @@ tcp-check expect string *\ OK\ IMAP4\ ready
 <span class="comment"># look for the redis master server</span>
 option tcp-check
 tcp-check send PING\r\n
-tcp-check expect +PONG
+tcp-check expect string +PONG
 tcp-check send info\ replication\r\n
 tcp-check expect string role:master
 tcp-check send QUIT\r\n
@@ -8342,6 +8430,17 @@ Four types of actions are supported :
       advantage over just checking the keys, because only one table lookup is
       performed for all ACL checks that make use of it.
 
+  - sc-inc-gpc0(&lt;sc-id&gt;):
+      The &quot;sc-inc-gpc0&quot; increments the GPC0 counter according to the sticky
+      counter designated by &lt;sc-id&gt;. If an error occurs, this action silently
+      fails and the actions evaluation continues.
+
+  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;:
+      This action sets the GPT0 tag according to the sticky counter designated
+      by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+      an error occurs, this action silently fails and the actions evaluation
+      continues.
+
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
 &quot;track-sc*&quot; actions as well as for changing the default action to a reject.
@@ -8372,8 +8471,8 @@ May be used in sections :   defaults | frontend | listen | backend
 </pre><div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
             actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc0&quot;, &quot;track-sc1&quot;,
-            &quot;track-sc2&quot;, &quot;<a href="#capture">capture</a>&quot; and &quot;lua&quot;. See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
-            above for their signification.
+            &quot;track-sc2&quot;, &quot;sc-inc-gpc0&quot;, &quot;sc-set-gpt0&quot;, &quot;<a href="#capture">capture</a>&quot; and &quot;lua&quot;.
+            See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; above for their signification.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -8401,11 +8500,13 @@ rule matches or if there is no rule, the default action is to accept the
 contents. There is no specific limit to the number of rules which may be
 inserted.
 
-Four types of actions are supported :
+Several types of actions are supported :
   - accept : the request is accepted
   - reject : the request is rejected and the connection is closed
   - capture : the specified sample expression is captured
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
+  - sc-inc-gpc0(&lt;sc-id&gt;)
+  - set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
   - lua &lt;function&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
 
@@ -8572,7 +8673,8 @@ May be used in sections :   defaults | frontend | listen | backend
                                no    |    no    |   yes  |   yes
 </pre><div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
-            actions include : &quot;accept&quot;, &quot;close&quot;, &quot;reject&quot;, &quot;lua&quot;.
+            actions include : &quot;accept&quot;, &quot;close&quot;, &quot;reject&quot;, &quot;lua&quot;,
+            &quot;sc-inc-gpc0&quot; and &quot;sc-set-gpt0&quot;.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -8589,7 +8691,7 @@ rule matches or if there is no rule, the default action is to accept the
 contents. There is no specific limit to the number of rules which may be
 inserted.
 
-Two types of actions are supported :
+Several types of actions are supported :
   - accept :
       accepts the response if the condition is true (when used with &quot;if&quot;)
       or false (when used with &quot;unless&quot;). The first such rule executed ends
@@ -8615,6 +8717,17 @@ Two types of actions are supported :
 
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
       Sets a variable.
+
+  - sc-inc-gpc0(&lt;sc-id&gt;):
+      This action increments the GPC0 counter according to the sticky
+      counter designated by &lt;sc-id&gt;. If an error occurs, this action fails
+      silently and the actions evaluation continues.
+
+  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
+      This action sets the GPT0 tag according to the sticky counter designated
+      by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
+      an error occurs, this action silently fails and the actions evaluation
+      continues.
 
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
@@ -9953,7 +10066,9 @@ different families are returned, HAProxy will prefer using an IP address
 from the family mentioned in the &quot;<a href="#resolve-prefer">resolve-prefer</a>&quot; parameter.
 Available families: &quot;ipv4&quot; and &quot;ipv6&quot;
 
-Default value: ipv4
+Default value: ipv6
+
+Supported in default-server: Yes
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -11194,6 +11309,11 @@ the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the average incoming connection
 rate associated with the input sample in the designated table. See also the
 sc_conn_rate sample fetch keyword.
+</pre><a class="anchor" name="table_gpt0"></a><a class="anchor" name="7-table_gpt0"></a><a class="anchor" name="7.3.1-table_gpt0"></a><a class="anchor" name="table_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="table_gpt0 (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_gpt0"></a><a href="#7.3.1-table_gpt0">table_gpt0</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
+the specified table. If the key is not found in the table, boolean value zero
+is returned. Otherwise the converter returns the current value of the first
+general purpose tag associated with the input sample in the designated table.
+See also the sc_get_gpt0 sample fetch keyword.
 </pre><a class="anchor" name="table_gpc0"></a><a class="anchor" name="7-table_gpc0"></a><a class="anchor" name="7.3.1-table_gpc0"></a><a class="anchor" name="table_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="table_gpc0 (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_gpc0"></a><a href="#7.3.1-table_gpc0">table_gpc0</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
 the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the current value of the first
@@ -11589,6 +11709,8 @@ measured in amount of connections over the period configured in the table.
 See also src_conn_rate.
 </pre><a class="anchor" name="sc_get_gpc0"></a><a class="anchor" name="7-sc_get_gpc0"></a><a class="anchor" name="7.3.3-sc_get_gpc0"></a><a class="anchor" name="sc_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_get_gpc0"></a><a href="#7.3.3-sc_get_gpc0">sc_get_gpc0</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_get_gpc0"></a><a class="anchor" name="7-sc0_get_gpc0"></a><a class="anchor" name="7.3.3-sc0_get_gpc0"></a><a class="anchor" name="sc0_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_get_gpc0"></a><a href="#7.3.3-sc0_get_gpc0">sc0_get_gpc0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_get_gpc0"></a><a class="anchor" name="7-sc1_get_gpc0"></a><a class="anchor" name="7.3.3-sc1_get_gpc0"></a><a class="anchor" name="sc1_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_get_gpc0"></a><a href="#7.3.3-sc1_get_gpc0">sc1_get_gpc0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_get_gpc0"></a><a class="anchor" name="7-sc2_get_gpc0"></a><a class="anchor" name="7.3.3-sc2_get_gpc0"></a><a class="anchor" name="sc2_get_gpc0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_get_gpc0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_get_gpc0"></a><a href="#7.3.3-sc2_get_gpc0">sc2_get_gpc0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the value of the first General Purpose Counter associated to the
 currently tracked counters. See also src_get_gpc0 and sc/sc0/sc1/sc2_inc_gpc0.
+</pre><a class="anchor" name="sc_get_gpt0"></a><a class="anchor" name="7-sc_get_gpt0"></a><a class="anchor" name="7.3.3-sc_get_gpt0"></a><a class="anchor" name="sc_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_get_gpt0"></a><a href="#7.3.3-sc_get_gpt0">sc_get_gpt0</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_get_gpt0"></a><a class="anchor" name="7-sc0_get_gpt0"></a><a class="anchor" name="7.3.3-sc0_get_gpt0"></a><a class="anchor" name="sc0_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_get_gpt0"></a><a href="#7.3.3-sc0_get_gpt0">sc0_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_get_gpt0"></a><a class="anchor" name="7-sc1_get_gpt0"></a><a class="anchor" name="7.3.3-sc1_get_gpt0"></a><a class="anchor" name="sc1_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_get_gpt0"></a><a href="#7.3.3-sc1_get_gpt0">sc1_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_get_gpt0"></a><a class="anchor" name="7-sc2_get_gpt0"></a><a class="anchor" name="7.3.3-sc2_get_gpt0"></a><a class="anchor" name="sc2_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_get_gpt0"></a><a href="#7.3.3-sc2_get_gpt0">sc2_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the value of the first General Purpose Tag associated to the
+currently tracked counters. See also src_get_gpt0.
 </pre><a class="anchor" name="sc_gpc0_rate"></a><a class="anchor" name="7-sc_gpc0_rate"></a><a class="anchor" name="7.3.3-sc_gpc0_rate"></a><a class="anchor" name="sc_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_gpc0_rate"></a><a href="#7.3.3-sc_gpc0_rate">sc_gpc0_rate</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_gpc0_rate"></a><a class="anchor" name="7-sc0_gpc0_rate"></a><a class="anchor" name="7.3.3-sc0_gpc0_rate"></a><a class="anchor" name="sc0_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_gpc0_rate"></a><a href="#7.3.3-sc0_gpc0_rate">sc0_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_gpc0_rate"></a><a class="anchor" name="7-sc1_gpc0_rate"></a><a class="anchor" name="7.3.3-sc1_gpc0_rate"></a><a class="anchor" name="sc1_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_gpc0_rate"></a><a href="#7.3.3-sc1_gpc0_rate">sc1_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_gpc0_rate"></a><a class="anchor" name="7-sc2_gpc0_rate"></a><a class="anchor" name="7.3.3-sc2_gpc0_rate"></a><a class="anchor" name="sc2_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_gpc0_rate"></a><a href="#7.3.3-sc2_gpc0_rate">sc2_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the average increment rate of the first General Purpose Counter
 associated to the currently tracked counters. It reports the frequency
 which the gpc0 counter was incremented over the configured period. See also
@@ -11701,6 +11823,10 @@ the address is not found, zero is returned. See also sc/sc0/sc1/sc2_conn_rate.
 incoming connection's source address in the current proxy's stick-table or in
 the designated stick-table. If the address is not found, zero is returned.
 See also sc/sc0/sc1/sc2_get_gpc0 and src_inc_gpc0.
+</pre><a class="anchor" name="src_get_gpt0"></a><a class="anchor" name="7-src_get_gpt0"></a><a class="anchor" name="7.3.3-src_get_gpt0"></a><a class="anchor" name="src_get_gpt0 (Using ACLs and fetching samples)"></a><a class="anchor" name="src_get_gpt0 (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_get_gpt0"></a><a href="#7.3.3-src_get_gpt0">src_get_gpt0</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the value of the first General Purpose Tag associated to the
+incoming connection's source address in the current proxy's stick-table or in
+the designated stick-table. If the address is not found, zero is returned.
+See also sc/sc0/sc1/sc2_get_gpt0.
 </pre><a class="anchor" name="src_gpc0_rate"></a><a class="anchor" name="7-src_gpc0_rate"></a><a class="anchor" name="7.3.3-src_gpc0_rate"></a><a class="anchor" name="src_gpc0_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="src_gpc0_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_gpc0_rate"></a><a href="#7.3.3-src_gpc0_rate">src_gpc0_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the average increment rate of the first General Purpose Counter
 associated to the incoming connection's source address in the current proxy's
 stick-table or in the designated stick-table. It reports the frequency
@@ -12302,13 +12428,12 @@ used in ACLs, all matching names are iterated over until a value matches.
 header line from the request, or a &quot;Set-Cookie&quot; header from the response, and
 returns its value as a string. A typical use is to get multiple clients
 sharing a same profile use the same server. This can be similar to what
-&quot;<a href="#appsession">appsession</a>&quot; does with the &quot;request-learn&quot; statement, but with support for
+&quot;<a href="#appsession">appsession</a>&quot; did with the &quot;request-learn&quot; statement, but with support for
 multi-peer synchronization and state keeping across restarts. If no name is
 specified, the first cookie value is returned. This fetch should not be used
 anymore and should be replaced by req.cook() or res.cook() instead as it
 ambiguously uses the direction based on the context where it is used.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#appsession">appsession</a>&quot;.</div>
-<a class="anchor" name="hdr"></a><a class="anchor" name="7-hdr"></a><a class="anchor" name="7.3.6-hdr"></a><a class="anchor" name="hdr (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr"></a><a href="#7.3.6-hdr">hdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">This is equivalent to req.hdr() when used on requests, and to res.hdr() when
+</pre><a class="anchor" name="hdr"></a><a class="anchor" name="7-hdr"></a><a class="anchor" name="7.3.6-hdr"></a><a class="anchor" name="hdr (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr"></a><a href="#7.3.6-hdr">hdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">This is equivalent to req.hdr() when used on requests, and to res.hdr() when
 used on responses. Please refer to these respective fetches for more details.
 In case of doubt about the fetch direction, please use the explicit ones.
 Note that contrary to the hdr() sample fetch method, the hdr_* ACL keywords
@@ -12518,13 +12643,12 @@ ACL derivatives :
   resp_ver : exact string match
 </pre><a class="anchor" name="set-cookie"></a><a class="anchor" name="7-set-cookie"></a><a class="anchor" name="7.3.6-set-cookie"></a><a class="anchor" name="set-cookie (Using ACLs and fetching samples)"></a><a class="anchor" name="set-cookie (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="set-cookie"></a><a href="#7.3.6-set-cookie">set-cookie</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : string <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of the cookie name &lt;name&gt; on a &quot;Set-Cookie&quot;
 header line from the response and uses the corresponding value to match. This
-can be comparable to what &quot;<a href="#appsession">appsession</a>&quot; does with default options, but with
+can be comparable to what &quot;<a href="#appsession">appsession</a>&quot; did with default options, but with
 support for multi-peer synchronization and state keeping across restarts.
 
 This fetch function is deprecated and has been superseded by the &quot;<a href="#res.cook">res.cook</a>&quot;
 fetch. This keyword will disappear soon.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#appsession">appsession</a>&quot;</div>
-<a class="anchor" name="status"></a><a class="anchor" name="7-status"></a><a class="anchor" name="7.3.6-status"></a><a class="anchor" name="status (Using ACLs and fetching samples)"></a><a class="anchor" name="status (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="status"></a><a href="#7.3.6-status">status</a></b> : integer</div><pre class="text">Returns an integer containing the HTTP status code in the HTTP response, for
+</pre><a class="anchor" name="status"></a><a class="anchor" name="7-status"></a><a class="anchor" name="7.3.6-status"></a><a class="anchor" name="status (Using ACLs and fetching samples)"></a><a class="anchor" name="status (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="status"></a><a href="#7.3.6-status">status</a></b> : integer</div><pre class="text">Returns an integer containing the HTTP status code in the HTTP response, for
 example, 302. It is mostly used within ACLs and integer ranges, for example,
 to remove any Location header if the response is not a 3xx.
 </pre><a class="anchor" name="url"></a><a class="anchor" name="7-url"></a><a class="anchor" name="7.3.6-url"></a><a class="anchor" name="url (Using ACLs and fetching samples)"></a><a class="anchor" name="url (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url"></a><a href="#7.3.6-url">url</a></b> : string</div><pre class="text">This extracts the request's URL as presented in the request. A typical use is
@@ -13219,6 +13343,7 @@ Please refer to the table below for currently defined variables :
   |   | %H   | hostname                                      | string      |
   | H | %HM  | HTTP method (ex: POST)                        | string      |
   | H | %HP  | HTTP request URI without query string (path)  | string      |
+  | H | %HQ  | HTTP request URI query string (ex: ?bar=baz)  | string      |
   | H | %HU  | HTTP request URI (ex: /foo?bar=baz)           | string      |
   | H | %HV  | HTTP version (ex: HTTP/1.0)                   | string      |
   |   | %ID  | unique-id                                     | string      |
@@ -13250,7 +13375,7 @@ Please refer to the table below for currently defined variables :
   |   | %hrl | captured_request_headers CLF style            | string list |
   |   | %hs  | captured_response_headers default style       | string      |
   |   | %hsl | captured_response_headers CLF style           | string list |
-  |   | %ms  | accept date milliseconds                      | numeric     |
+  |   | %ms  | accept date milliseconds (left-padded with 0) | numeric     |
   |   | %pid | PID                                           | numeric     |
   | H | %r   | http_request                                  | string      |
   |   | %rc  | retries                                       | numeric     |
@@ -14789,8 +14914,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev3 &ndash;  Configuration Manual<br>
-							<small>2015/07/22, willy tarreau</small>
+							HAProxy 1.6-dev4 &ndash;  Configuration Manual<br>
+							<small>2015/08/30, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -14997,6 +15122,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"http-check send-state",
 				"http-request",
 				"http-response",
+				"http-reuse",
 				"http-send-name-header",
 				"http_auth",
 				"http_auth_group",
@@ -15025,6 +15151,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"ltime",
 				"lua-load",
 				"mailer",
+				"mailers",
 				"map",
 				"max-keep-alive-queue",
 				"max-spread-checks",
@@ -15281,6 +15408,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc0_conn_cur",
 				"sc0_conn_rate",
 				"sc0_get_gpc0",
+				"sc0_get_gpt0",
 				"sc0_gpc0_rate",
 				"sc0_http_err_cnt",
 				"sc0_http_err_rate",
@@ -15300,6 +15428,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc1_conn_cur",
 				"sc1_conn_rate",
 				"sc1_get_gpc0",
+				"sc1_get_gpt0",
 				"sc1_gpc0_rate",
 				"sc1_http_err_cnt",
 				"sc1_http_err_rate",
@@ -15319,6 +15448,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc2_conn_cur",
 				"sc2_conn_rate",
 				"sc2_get_gpc0",
+				"sc2_get_gpt0",
 				"sc2_gpc0_rate",
 				"sc2_http_err_cnt",
 				"sc2_http_err_rate",
@@ -15338,6 +15468,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"sc_conn_cur",
 				"sc_conn_rate",
 				"sc_get_gpc0",
+				"sc_get_gpt0",
 				"sc_gpc0_rate",
 				"sc_http_err_cnt",
 				"sc_http_err_rate",
@@ -15416,6 +15547,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"src_conn_cur",
 				"src_conn_rate",
 				"src_get_gpc0",
+				"src_get_gpt0",
 				"src_gpc0_rate",
 				"src_http_err_cnt",
 				"src_http_err_rate",
@@ -15524,6 +15656,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"table_conn_rate",
 				"table_gpc0",
 				"table_gpc0_rate",
+				"table_gpt0",
 				"table_http_err_cnt",
 				"table_http_err_rate",
 				"table_http_req_cnt",
@@ -15746,7 +15879,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev4', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-32', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15758,4 +15891,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev3 -->
+<!-- git:v1.6-dev4 -->
