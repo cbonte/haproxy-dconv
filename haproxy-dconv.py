@@ -206,7 +206,7 @@ def convert(infile, outfile, base=''):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
 
     if len(base) > 0 and base[:-1] != '/':
-	base += '/'
+        base += '/'
 
     hasSummary = False
 
@@ -287,7 +287,7 @@ def convert(infile, outfile, base=''):
             currentSection["content"] = currentSection["content"] + line + "\n"
             j += 1
             if currentSection["details"]["title"] == "Summary" and line != "":
-		hasSummary = True
+                hasSummary = True
                 # Learn chapters from the summary
                 details = getTitleDetails(line)
                 if details["chapter"]:
@@ -361,18 +361,47 @@ def convert(infile, outfile, base=''):
             if not title:
                 lines = pctxt.get_lines()
                 pctxt.context['headers'] = {
-                        'title':        lines[1].strip(),
-                        'subtitle':     lines[2].strip(),
-                        'version':      lines[4].strip(),
-                        'author':       lines[5].strip(),
-                        'date':         lines[6].strip()
+                    'title':    '',
+                    'subtitle': '',
+                    'version':  '',
+                    'author':   '',
+                    'date':     ''
                 }
-                if HAPROXY_GIT_VERSION:
-                    pctxt.context['headers']['version'] = 'version ' + HAPROXY_GIT_VERSION
+                if re.match("^-+$", pctxt.get_line().strip()):
+                    # Try to analyze the header of the file, assuming it follows
+                    # those rules :
+                    # - it begins with a "separator line" (several '-' chars)
+                    # - then the document title
+                    # - an optional subtitle
+                    # - a new separator line
+                    # - the version
+                    # - the author
+                    # - the date
+                    pctxt.next()
+                    pctxt.context['headers']['title'] = pctxt.get_line().strip()
+                    pctxt.next()
+                    while not re.match("^-+$", pctxt.get_line().strip()):
+                        pctxt.context['headers']['subtitle'] += " " + pctxt.get_line().strip()
+                        pctxt.next()
+                    if not pctxt.context['headers']['subtitle']:
+                        # No subtitle, try to guess one from the title if it
+                        # starts with the word "HAProxy"
+                        if pctxt.context['headers']['title'].startswith('HAProxy '):
+                            pctxt.context['headers']['subtitle'] = pctxt.context['headers']['title'][8:]
+                            pctxt.context['headers']['title'] = 'HAProxy'
+                    pctxt.next()
+                    pctxt.context['headers']['version'] = pctxt.get_line().strip()
+                    pctxt.next()
+                    pctxt.context['headers']['author'] = pctxt.get_line().strip()
+                    pctxt.next()
+                    pctxt.context['headers']['date'] = pctxt.get_line().strip()
+                    pctxt.next()
+                    if HAPROXY_GIT_VERSION:
+                        pctxt.context['headers']['version'] = 'version ' + HAPROXY_GIT_VERSION
 
-                # Skip header lines
-                pctxt.eat_lines()
-                pctxt.eat_empty_lines()
+                    # Skip header lines
+                    pctxt.eat_lines()
+                    pctxt.eat_empty_lines()
 
             documentAppend('<div>', False)
 
@@ -465,8 +494,8 @@ def convert(infile, outfile, base=''):
 
     template = pctxt.templates.get_template('template.html')
     try:
-	footerTemplate = pctxt.templates.get_template('footer.html')
-	footer = footerTemplate.render(
+        footerTemplate = pctxt.templates.get_template('footer.html')
+        footer = footerTemplate.render(
             pctxt = pctxt,
             headers = pctxt.context['headers'],
             document = document,
@@ -477,9 +506,9 @@ def convert(infile, outfile, base=''):
             keyword_conflicts = keyword_conflicts,
             version = VERSION,
             date = datetime.datetime.now().strftime("%Y/%m/%d"),
-	)
+        )
     except TopLevelLookupException:
-	footer = ""
+        footer = ""
 
     fd = open(outfile,'w')
 
