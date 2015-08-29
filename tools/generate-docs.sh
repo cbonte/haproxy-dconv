@@ -90,7 +90,7 @@ function _generate_file()
 
 	$GIT checkout $git_version
 
-	if [ -e $gitpath/doc/$infile ];
+	if [ -e $gitpath/doc/$infile ];
 	then
 
 		git_version_simple=${git_version%-g*}
