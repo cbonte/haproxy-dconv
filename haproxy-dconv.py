@@ -380,9 +380,11 @@ def convert(infile, outfile, base=''):
                     pctxt.next()
                     pctxt.context['headers']['title'] = pctxt.get_line().strip()
                     pctxt.next()
+                    subtitle = ""
                     while not re.match("^-+$", pctxt.get_line().strip()):
-                        pctxt.context['headers']['subtitle'] += " " + pctxt.get_line().strip()
+                        subtitle += " " + pctxt.get_line().strip()
                         pctxt.next()
+                    pctxt.context['headers']['subtitle'] += subtitle.strip()
                     if not pctxt.context['headers']['subtitle']:
                         # No subtitle, try to guess one from the title if it
                         # starts with the word "HAProxy"
