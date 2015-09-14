@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev4 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev5 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-34" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-34</b> on <b>2015/09/02</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-34</b> on <b>2015/09/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,11 +82,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev4</strong></p>
+							<p><strong>version 1.6-dev5</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/08/30
+								2015/09/14
 							</p>
 						</div>
 
@@ -10370,10 +10370,16 @@ Supported in default-server: Yes
 <div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
 </div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
+In order to be operational, DNS resolution requires that health check is
+enabled on the server. Actually, health checks triggers the DNS resolution.
+You must precise one 'resolvers' parameter on each server line where DNS
+resolution is required.
+
+Supported in default-server: No
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code>server s1 app1.domain.com:80 resolvers mydns
+<code>server s1 app1.domain.com:80 check resolvers mydns
 </code></pre>
 </div><pre class="text">See also chapter 5.3
 </pre><a class="anchor" name="send-proxy"></a><a class="anchor" name="5-send-proxy"></a><a class="anchor" name="5.2-send-proxy"></a><a class="anchor" name="send-proxy (Bind and Server options)"></a><a class="anchor" name="send-proxy (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy"></a><a href="#5.2-send-proxy">send-proxy</a></b></div><pre class="text">The &quot;<a href="#send-proxy">send-proxy</a>&quot; parameter enforces use of the PROXY protocol over any
@@ -10511,9 +10517,9 @@ Supported in default-server: Yes
 </pre></div>
 <a class="anchor" id="5.3" name="5.3"></a>
 <h2 id="chapter-5.3" data-target="5.3"><small><a class="small" href="#5.3">5.3.</a></small> Server IP address resolution using DNS</h2>
-<div><pre class="text">HAProxy allows using a host name to be resolved to find out what is the server
-IP address. By default, HAProxy resolves the name when parsing the
-configuration, at startup.
+<div><pre class="text">HAProxy allows using a host name on the server line to retrieve its IP address
+using name servers. By default, HAProxy resolves the name when parsing the
+configuration file, at startup and cache the result for the process' life.
 This is not sufficient in some cases, such as in Amazon where a server's IP
 can change after a reboot or an ELB Virtual IP can change based on current
 workload.
@@ -10521,6 +10527,9 @@ This chapter describes how HAProxy can be configured to process server's name
 resolution at run time.
 Whether run time server name resolution has been enable or not, HAProxy will
 carry on doing the first resolution when parsing the configuration.
+
+Bear in mind that DNS resolution is triggered by health checks. This makes
+health checks mandatory to allow DNS resolution.
 </pre></div>
 <a class="anchor" id="5.3.1" name="5.3.1"></a>
 <h3 id="chapter-5.3.1" data-target="5.3.1"><small><a class="small" href="#5.3.1">5.3.1.</a></small> Global overview</h3>
@@ -10553,6 +10562,46 @@ A few things important to notice:
 HAProxy.
 There can be as many as resolvers section as needed. Each section can contain
 many name servers.
+
+When multiple name servers are configured in a resolvers section, then HAProxy
+uses the first valid response. In case of invalid responses, only the last one
+is treated. Purpose is to give the chance to a slow server to deliver a valid
+answer after a fast faulty or outdated server.
+
+When each server returns a different error type, then only the last error is
+used by HAProxy to decide what type of behavior to apply.
+
+Two types of behavior can be applied:
+ 1. stop DNS resolution
+ 2. replay the DNS query with a new query type
+      In such case, the following types are applied in this exact order:
+        1. ANY query type
+        2. query type corresponding to family pointed by resolve-prefer
+           server's parameter
+        3. remaining family type
+
+HAProxy stops DNS resolution when the following errors occur:
+ - invalid DNS response packet
+ - wrong name in the query section of the response
+ - NX domain
+ - Query refused by server
+ - CNAME not pointing to an IP address
+
+HAProxy tries a new query type when the following errors occur:
+ - no Answer records in the response
+ - DNS response truncated
+ - Error in DNS response
+ - No expected DNS records found in the response
+ - name server timeout
+
+For example, with 2 name servers configured in a resolvers section:
+ - first response is valid and is applied directly, second response is ignored
+ - first response is invalid and second one is valid, then second response is
+   applied;
+ - first response is a NX domain and second one a truncated response, then
+   HAProxy replays the query with a new type;
+ - first response is truncated and second one is a NX Domain, then HAProxy
+   stops resolution.
 </pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
 
 A resolvers section accept the following parameters:
@@ -10575,6 +10624,10 @@ Note: since the name resolution is triggered by the health checks, a new
 </pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3.2-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3.2-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
 giving up.
 Default value: 3
+
+A retry occurs on name server timeout or when the full sequence of DNS query
+type failover is over and we need to start up from the default ANY query
+type.
 </pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
      &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
                events available are:
@@ -15196,8 +15249,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev4 &ndash; Configuration Manual<br>
-							<small>2015/08/30, willy tarreau</small>
+							HAProxy 1.6-dev5 &ndash; Configuration Manual<br>
+							<small>2015/09/14, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -16161,7 +16214,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-34', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16173,4 +16226,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev4 -->
+<!-- git:v1.6-dev5 -->
