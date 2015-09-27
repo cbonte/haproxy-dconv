@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev5-90 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev5-94 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-34" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev5-90</strong></p>
+							<p><strong>version 1.6-dev5-94</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -2790,7 +2790,12 @@ listen http_https_proxy_explicit
 listen external_bind_app1
     bind &quot;fd@${FD_APP1}&quot;
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#option%20forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol documentation, and <a href="#5">section 5</a> about bind options.</div>
+</div><pre class="text">Note: regarding Linux's abstract namespace sockets, HAProxy uses the whole
+      sun_path length is used for the address length. Some other programs
+      such as socat use the string length only by default. Pass the option
+      &quot;,unix-tightsocklen=0&quot; to any abstract socket definition in socat to
+      make it compatible with HAProxy's.
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#option%20forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol documentation, and <a href="#5">section 5</a> about bind options.</div>
 <a class="anchor" name="bind-process"></a><a class="anchor" name="4-bind-process"></a><a class="anchor" name="4.2-bind-process"></a><a class="anchor" name="bind-process (Proxies)"></a><a class="anchor" name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind-process"></a><a href="#4.2-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7379,7 +7384,12 @@ server backup &quot;${SRV_BACKUP}:1080&quot; backup
 server www1_dc1 &quot;${LAN_DC1}.101:80&quot;
 server www1_dc2 &quot;${LAN_DC2}.101:80&quot;
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about server options</div>
+</div><pre class="text">Note: regarding Linux's abstract namespace sockets, HAProxy uses the whole
+      sun_path length is used for the address length. Some other programs
+      such as socat use the string length only by default. Pass the option
+      &quot;,unix-tightsocklen=0&quot; to any abstract socket definition in socat to
+      make it compatible with HAProxy's.
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about server options</div>
 <a class="anchor" name="server-state-file-name"></a><a class="anchor" name="4-server-state-file-name"></a><a class="anchor" name="4.2-server-state-file-name"></a><a class="anchor" name="server-state-file-name (Proxies)"></a><a class="anchor" name="server-state-file-name (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-state-file-name"></a><a href="#4.2-server-state-file-name">server-state-file-name</a></b> <span style="color: #008">[<span style="color: #080">&lt;file&gt;</span>]</span></div><pre class="text">Set the server state file to read, load and apply to servers available in
 this backend. It only applies when the directive &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;
 is set to &quot;local&quot;. When &lt;file&gt; is not provided or if this directive is not
@@ -15406,7 +15416,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev5-90 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev5-94 &ndash; Configuration Manual<br>
 							<small>2015/09/14, willy tarreau</small>
 						</div>
 					</div>
@@ -16378,7 +16388,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5-90', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5-94', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-34', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16390,4 +16400,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev5-90-g528192d -->
+<!-- git:v1.6-dev5-94-gbb3c09a -->
