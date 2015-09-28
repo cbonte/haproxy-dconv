@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev5-105 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev5-121 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-34" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev5-105</strong></p>
+							<p><strong>version 1.6-dev5-121</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1435,6 +1435,9 @@ The path must be a valid JSON data file and accessible by Haproxy process.
 optional and set to 0 by default if not set.
 </pre><a class="anchor" name="deviceatlas-separator"></a><a class="anchor" name="3-deviceatlas-separator"></a><a class="anchor" name="3.1-deviceatlas-separator"></a><a class="anchor" name="deviceatlas-separator (Global parameters)"></a><a class="anchor" name="deviceatlas-separator (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="deviceatlas-separator"></a><a href="#3.1-deviceatlas-separator">deviceatlas-separator</a></b> <span style="color: #080">&lt;char&gt;</span></div><pre class="text">Sets the character separator for the API properties results. This directive
 is optional and set to | by default if not set.
+</pre><a class="anchor" name="devicatlas-properties-cookie"></a><a class="anchor" name="3-devicatlas-properties-cookie"></a><a class="anchor" name="3.1-devicatlas-properties-cookie"></a><a class="anchor" name="devicatlas-properties-cookie (Global parameters)"></a><a class="anchor" name="devicatlas-properties-cookie (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="devicatlas-properties-cookie"></a><a href="#3.1-devicatlas-properties-cookie">devicatlas-properties-cookie</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Sets the client cookie's name used for the detection if the DeviceAtlas Client-side
+component was used during the request. This directive is optional and set to
+DAPROPS by default if not set.
 </pre><a class="anchor" name="external-check"></a><a class="anchor" name="3-external-check"></a><a class="anchor" name="3.1-external-check"></a><a class="anchor" name="external-check (Global parameters)"></a><a class="anchor" name="external-check (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="external-check"></a><a href="#3.1-external-check">external-check</a></b></div><pre class="text">Allows the use of an external agent to perform health checks.
 This is disabled by default as a security precaution.
 See &quot;<a href="#option%20external-check">option external-check</a>&quot;.
@@ -11457,7 +11460,7 @@ found in Ethernet, Gzip, PNG, etc... It is slower than the other algorithms
 but may provide a better or at least less predictable distribution. It must
 not be used for security purposes as a 32-bit hash is trivial to break. See
 also &quot;<a href="#djb2">djb2</a>&quot;, &quot;<a href="#sdbm">sdbm</a>&quot;, &quot;<a href="#wt6">wt6</a>&quot; and the &quot;<a href="#hash-type">hash-type</a>&quot; directive.
-</pre><a class="anchor" name="da-csv"></a><a class="anchor" name="7-da-csv"></a><a class="anchor" name="7.3.1-da-csv"></a><a class="anchor" name="da-csv (Using ACLs and fetching samples)"></a><a class="anchor" name="da-csv (Converters)"></a><div class="keyword"><b><a class="anchor" name="da-csv"></a><a href="#7.3.1-da-csv">da-csv</a></b>(<span style="color: #080">&lt;prop&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;prop&gt;</span>*]</span>)</div><pre class="text">Asks the DeviceAtlas converter to identify the User Agent string passed on
+</pre><a class="anchor" name="da-csv-conv"></a><a class="anchor" name="7-da-csv-conv"></a><a class="anchor" name="7.3.1-da-csv-conv"></a><a class="anchor" name="da-csv-conv (Using ACLs and fetching samples)"></a><a class="anchor" name="da-csv-conv (Converters)"></a><div class="keyword"><b><a class="anchor" name="da-csv-conv"></a><a href="#7.3.1-da-csv-conv">da-csv-conv</a></b>(<span style="color: #080">&lt;prop&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;prop&gt;</span>*]</span>)</div><pre class="text">Asks the DeviceAtlas converter to identify the User Agent string passed on
 input, and to emit a string made of the concatenation of the properties
 enumerated in argument, delimited by the separator defined by the global
 keyword &quot;deviceatlas-property-separator&quot;, or by default the pipe character
@@ -15416,7 +15419,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev5-105 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev5-121 &ndash; Configuration Manual<br>
 							<small>2015/09/14, willy tarreau</small>
 						</div>
 					</div>
@@ -15530,7 +15533,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"crt-base",
 				"crt-ignore-err",
 				"crt-list",
-				"da-csv",
+				"da-csv-conv",
 				"daemon",
 				"date",
 				"debug (Debugging)",
@@ -15545,6 +15548,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"del map",
 				"description (Process management and security)",
 				"description (Alphabetically sorted keywords reference)",
+				"devicatlas-properties-cookie",
 				"deviceatlas-json-file",
 				"deviceatlas-log-level",
 				"deviceatlas-separator",
@@ -16388,7 +16392,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5-105', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5-121', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-34', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16400,4 +16404,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev5-105-ga30b5db -->
+<!-- git:v1.6-dev5-121-ge4b3127 -->
