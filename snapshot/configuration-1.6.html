@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev5-130 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev5-133 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-34" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev5-130</strong></p>
+							<p><strong>version 1.6-dev5-133</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3947,6 +3947,7 @@ Example of a header received by the application server :
               <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
               sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
               sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
+              silent-drop |
               lua <span style="color: #080">&lt;function name&gt;</span>
              }</span>
              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 requests
@@ -3978,7 +3979,8 @@ The first keyword is the rule's action. Currently supported actions include :
     efficient against very dumb robots, and will significantly reduce the
     load on firewalls compared to a &quot;deny&quot; rule. But when facing &quot;correctly&quot;
     developed robots, it can make things worse by forcing haproxy and the
-    front firewall to support insane number of concurrent connections.
+    front firewall to support insane number of concurrent connections. See
+    also the &quot;silent-drop&quot; action below.
 
   - &quot;auth&quot; : this stops the evaluation of the rules and immediately responds
     with an HTTP 401 or 407 error code to invite the user to present a valid
@@ -4266,6 +4268,23 @@ http-request set-src src,ipmask(24)
 </code></pre>
 </div><pre class="text">    When set-src is successful, the source port is set to 0.
 
+  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
+    client-facing connection suddenly disappear using a system-dependant way
+    that tries to prevent the client from being notified. The effect it then
+    that the client still sees an established connection while there's none
+    on HAProxy. The purpose is to achieve a comparable effect to &quot;tarpit&quot;
+    except that it doesn't use any local resource at all on the machine
+    running HAProxy. It can resist much higher loads than &quot;tarpit&quot;, and slow
+    down stronger attackers. It is important to undestand the impact of using
+    this mechanism. All stateful equipments placed between the client and
+    HAProxy (firewalls, proxies, load balancers) will also keep the
+    established connection for a long time and may suffer from this action.
+    On modern Linux systems running with enough privileges, the TCP_REPAIR
+    socket option is used to block the emission of a TCP reset. On other
+    systems, the socket's TTL is reduced to 1 so that the TCP reset doesn't
+    pass the first router, though it's still delivered to local networks. Do
+    not use it unless you fully understand how it works.
+
 There is no limit to the number of http-request statements per instance.
 
 It is important to know that http-request rules are processed very early in
@@ -4342,6 +4361,7 @@ http-request del-map(map.lst) %[src]                     if delmap
                 set-var(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
                 sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
                 sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
+                silent-drop |
                 lua <span style="color: #080">&lt;function name&gt;</span>
               }</span>
               <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 responses
@@ -4558,6 +4578,23 @@ http-response set-status 431
     This action increments the GPC0 counter according with the sticky counter
     designated by &lt;sc-id&gt;. If an error occurs, this action silently fails and
     the actions evaluation continues.
+
+  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
+    client-facing connection suddenly disappear using a system-dependant way
+    that tries to prevent the client from being notified. The effect it then
+    that the client still sees an established connection while there's none
+    on HAProxy. The purpose is to achieve a comparable effect to &quot;tarpit&quot;
+    except that it doesn't use any local resource at all on the machine
+    running HAProxy. It can resist much higher loads than &quot;tarpit&quot;, and slow
+    down stronger attackers. It is important to undestand the impact of using
+    this mechanism. All stateful equipments placed between the client and
+    HAProxy (firewalls, proxies, load balancers) will also keep the
+    established connection for a long time and may suffer from this action.
+    On modern Linux systems running with enough privileges, the TCP_REPAIR
+    socket option is used to block the emission of a TCP reset. On other
+    systems, the socket's TTL is reduced to 1 so that the TCP reset doesn't
+    pass the first router, though it's still delivered to local networks. Do
+    not use it unless you fully understand how it works.
 
 There is no limit to the number of http-response statements per instance.
 
@@ -8754,9 +8791,8 @@ tcp-check expect binary 2b504F4e47 <span class="comment"># +PONG</span>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
-            actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc0&quot;, &quot;track-sc1&quot;,
-            &quot;track-sc2&quot;, and &quot;expect-proxy&quot;. See below for more details.
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. See
+            below.
 
 &lt;condition&gt; is a standard layer4-only ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -8868,6 +8904,24 @@ Four types of actions are supported :
       an error occurs, this action silently fails and the actions evaluation
       continues.
 
+  - &quot;silent-drop&quot; :
+      This stops the evaluation of the rules and makes the client-facing
+      connection suddenly disappear using a system-dependant way that tries
+      to prevent the client from being notified. The effect it then that the
+      client still sees an established connection while there's none on
+      HAProxy. The purpose is to achieve a comparable effect to &quot;tarpit&quot;
+      except that it doesn't use any local resource at all on the machine
+      running HAProxy. It can resist much higher loads than &quot;tarpit&quot;, and
+      slow down stronger attackers. It is important to undestand the impact
+      of using this mechanism. All stateful equipments placed between the
+      client and HAProxy (firewalls, proxies, load balancers) will also keep
+      the established connection for a long time and may suffer from this
+      action.  On modern Linux systems running with enough privileges, the
+      TCP_REPAIR socket option is used to block the emission of a TCP
+      reset. On other systems, the socket's TTL is reduced to 1 so that the
+      TCP reset doesn't pass the first router, though it's still delivered to
+      local networks. Do not use it unless you fully understand how it works.
+
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
 &quot;track-sc*&quot; actions as well as for changing the default action to a reject.
@@ -8898,10 +8952,8 @@ tcp-request connection reject if { sc0_conn_rate gt 10 }
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
-            actions include : &quot;accept&quot;, &quot;reject&quot;, &quot;track-sc0&quot;, &quot;track-sc1&quot;,
-            &quot;track-sc2&quot;, &quot;sc-inc-gpc0&quot;, &quot;sc-set-gpt0&quot;, &quot;<a href="#capture">capture</a>&quot; and &quot;lua&quot;.
-            See &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; above for their signification.
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. See
+            below.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -8938,6 +8990,7 @@ Several types of actions are supported :
   - set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
   - lua &lt;function&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
+  - silent-drop
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
@@ -9105,9 +9158,8 @@ since the contents will not be able to change anymore.
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. Valid
-            actions include : &quot;accept&quot;, &quot;close&quot;, &quot;reject&quot;, &quot;lua&quot;,
-            &quot;sc-inc-gpc0&quot; and &quot;sc-set-gpt0&quot;.
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. See
+            below.
 
 &lt;condition&gt; is a standard layer 4-7 ACL-based condition (see <a href="#7">section 7</a>).</pre>
 </div>
@@ -9161,6 +9213,24 @@ Several types of actions are supported :
       by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
       an error occurs, this action silently fails and the actions evaluation
       continues.
+
+  - &quot;silent-drop&quot; :
+      This stops the evaluation of the rules and makes the client-facing
+      connection suddenly disappear using a system-dependant way that tries
+      to prevent the client from being notified. The effect it then that the
+      client still sees an established connection while there's none on
+      HAProxy. The purpose is to achieve a comparable effect to &quot;tarpit&quot;
+      except that it doesn't use any local resource at all on the machine
+      running HAProxy. It can resist much higher loads than &quot;tarpit&quot;, and
+      slow down stronger attackers. It is important to undestand the impact
+      of using this mechanism. All stateful equipments placed between the
+      client and HAProxy (firewalls, proxies, load balancers) will also keep
+      the established connection for a long time and may suffer from this
+      action.  On modern Linux systems running with enough privileges, the
+      TCP_REPAIR socket option is used to block the emission of a TCP
+      reset. On other systems, the socket's TTL is reduced to 1 so that the
+      TCP reset doesn't pass the first router, though it's still delivered to
+      local networks. Do not use it unless you fully understand how it works.
 
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
@@ -15450,7 +15520,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev5-130 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev5-133 &ndash; Configuration Manual<br>
 							<small>2015/09/14, willy tarreau</small>
 						</div>
 					</div>
@@ -16424,7 +16494,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5-130', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5-133', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-34', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16436,4 +16506,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev5-130-g45059e9 -->
+<!-- git:v1.6-dev5-133-ga8fc8a2 -->
