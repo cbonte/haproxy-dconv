@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev5-133 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev6-1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-34" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-34</b> on <b>2015/09/28</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-34</b> on <b>2015/09/29</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,11 +82,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev5-133</strong></p>
+							<p><strong>version 1.6-dev6-1</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/09/14
+								2015/09/28
 							</p>
 						</div>
 
@@ -1435,9 +1435,9 @@ The path must be a valid JSON data file and accessible by Haproxy process.
 optional and set to 0 by default if not set.
 </pre><a class="anchor" name="deviceatlas-separator"></a><a class="anchor" name="3-deviceatlas-separator"></a><a class="anchor" name="3.1-deviceatlas-separator"></a><a class="anchor" name="deviceatlas-separator (Global parameters)"></a><a class="anchor" name="deviceatlas-separator (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="deviceatlas-separator"></a><a href="#3.1-deviceatlas-separator">deviceatlas-separator</a></b> <span style="color: #080">&lt;char&gt;</span></div><pre class="text">Sets the character separator for the API properties results. This directive
 is optional and set to | by default if not set.
-</pre><a class="anchor" name="devicatlas-properties-cookie"></a><a class="anchor" name="3-devicatlas-properties-cookie"></a><a class="anchor" name="3.1-devicatlas-properties-cookie"></a><a class="anchor" name="devicatlas-properties-cookie (Global parameters)"></a><a class="anchor" name="devicatlas-properties-cookie (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="devicatlas-properties-cookie"></a><a href="#3.1-devicatlas-properties-cookie">devicatlas-properties-cookie</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Sets the client cookie's name used for the detection if the DeviceAtlas Client-side
-component was used during the request. This directive is optional and set to
-DAPROPS by default if not set.
+</pre><a class="anchor" name="devicatlas-properties-cookie"></a><a class="anchor" name="3-devicatlas-properties-cookie"></a><a class="anchor" name="3.1-devicatlas-properties-cookie"></a><a class="anchor" name="devicatlas-properties-cookie (Global parameters)"></a><a class="anchor" name="devicatlas-properties-cookie (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="devicatlas-properties-cookie"></a><a href="#3.1-devicatlas-properties-cookie">devicatlas-properties-cookie</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Sets the client cookie's name used for the detection if the DeviceAtlas
+Client-side component was used during the request. This directive is optional
+and set to DAPROPS by default if not set.
 </pre><a class="anchor" name="external-check"></a><a class="anchor" name="3-external-check"></a><a class="anchor" name="3.1-external-check"></a><a class="anchor" name="external-check (Global parameters)"></a><a class="anchor" name="external-check (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="external-check"></a><a href="#3.1-external-check">external-check</a></b></div><pre class="text">Allows the use of an external agent to perform health checks.
 This is disabled by default as a security precaution.
 See &quot;<a href="#option%20external-check">option external-check</a>&quot;.
@@ -1578,10 +1578,10 @@ the default DH parameters that are used during the SSL/TLS handshake when
 ephemeral Diffie-Hellman (DHE) key exchange is used, for all &quot;<a href="#bind">bind</a>&quot; lines
 which do not explicitely define theirs. It will be overridden by custom DH
 parameters found in a bind certificate file if any. If custom DH parameters
-are not specified either by using ssl-dh-param-file or by setting them directly
-in the certificate file, pre-generated DH parameters of the size specified
-by tune.ssl.default-dh-param will be used. Custom parameters are known to be
-more secure and therefore their use is recommended.
+are not specified either by using ssl-dh-param-file or by setting them
+directly in the certificate file, pre-generated DH parameters of the size
+specified by tune.ssl.default-dh-param will be used. Custom parameters are
+known to be more secure and therefore their use is recommended.
 Custom DH parameters may be generated by using the OpenSSL command
 &quot;openssl dhparam &lt;size&gt;&quot;, where size should be at least 2048, as 1024-bit DH
 parameters should not be considered secure anymore.
@@ -7496,8 +7496,8 @@ backend bk
             - 'ipv6@' -&gt; address is always IPv6
             - 'unix@' -&gt; address is a path to a local unix socket
             - 'abns@' -&gt; address is in abstract namespace (Linux only)
-          You may want to reference some environment variables in the address
-          parameter, see <a href="#2.3">section 2.3</a> about environment variables.
+          You may want to reference some environment variables in the
+          address parameter, see <a href="#2.3">section 2.3</a> about environment variables.
 
 &lt;port&gt;    is an optional port. It is normally not needed but may be useful
           in some very specific contexts. The default value of zero means
@@ -11571,11 +11571,11 @@ configuration language.
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>frontend www
+  bind *:8881
+  default_backend servers
+  http-request set-header X-DeviceAtlas-Data %[req.fhdr(User-Agent),da-csv(primaryHardwareType,osName,osVersion,browserName,browserVersion)]
 </code></pre>
-</div><pre class="text">	bind *:8881
-	default_backend servers
-	http-request set-header X-DeviceAtlas-Data %[req.fhdr(User-Agent),da-csv(primaryHardwareType,osName,osVersion,browserName,browserVersion)]
-</pre><a class="anchor" name="debug"></a><a class="anchor" name="7-debug"></a><a class="anchor" name="7.3.1-debug"></a><a class="anchor" name="debug (Using ACLs and fetching samples)"></a><a class="anchor" name="debug (Converters)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#7.3.1-debug">debug</a></b></div><pre class="text">This converter is used as debug tool. It dumps on screen the content and the
+</div><a class="anchor" name="debug"></a><a class="anchor" name="7-debug"></a><a class="anchor" name="7.3.1-debug"></a><a class="anchor" name="debug (Using ACLs and fetching samples)"></a><a class="anchor" name="debug (Converters)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#7.3.1-debug">debug</a></b></div><pre class="text">This converter is used as debug tool. It dumps on screen the content and the
 type of the input sample. The sample is returned as is on its output. This
 converter only exists when haproxy was built with debugging enabled.
 </pre><a class="anchor" name="div"></a><a class="anchor" name="7-div"></a><a class="anchor" name="7.3.1-div"></a><a class="anchor" name="div (Using ACLs and fetching samples)"></a><a class="anchor" name="div (Converters)"></a><div class="keyword"><b><a class="anchor" name="div"></a><a href="#7.3.1-div">div</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type signed integer by &lt;value&gt;, and returns the
@@ -12789,11 +12789,11 @@ ACL derivatives :
   req_rdp_cookie_cnt([&lt;name&gt;]) : integer match
 </pre><a class="anchor" name="req.ssl_ec_ext"></a><a class="anchor" name="7-req.ssl_ec_ext"></a><a class="anchor" name="7.3.5-req.ssl_ec_ext"></a><a class="anchor" name="req.ssl_ec_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_ec_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_ec_ext"></a><a href="#7.3.5-req.ssl_ec_ext">req.ssl_ec_ext</a></b> : boolean</div><pre class="text">Returns a boolean identifying if client sent the Supported Elliptic Curves
 Extension as defined in RFC4492, <a href="#5.1">section 5.1</a>. within the SSL ClientHello
-message. This can be used to present ECC compatible clients with EC certificate
-and to use RSA for all others, on the same IP address. Note that this only
-applies to raw contents found in the request buffer and not to contents
-deciphered via an SSL data layer, so this will not work with &quot;<a href="#bind">bind</a>&quot; lines
-having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
+message. This can be used to present ECC compatible clients with EC
+certificate and to use RSA for all others, on the same IP address. Note that
+this only applies to raw contents found in the request buffer and not to
+contents deciphered via an SSL data layer, so this will not work with &quot;<a href="#bind">bind</a>&quot;
+lines having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
 </pre><a class="anchor" name="req.ssl_hello_type"></a><a class="anchor" name="7-req.ssl_hello_type"></a><a class="anchor" name="7.3.5-req.ssl_hello_type"></a><a class="anchor" name="req.ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_hello_type"></a><a href="#7.3.5-req.ssl_hello_type">req.ssl_hello_type</a></b> : integer</div><a class="anchor" name="req_ssl_hello_type"></a><a class="anchor" name="7-req_ssl_hello_type"></a><a class="anchor" name="7.3.5-req_ssl_hello_type"></a><a class="anchor" name="req_ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="req_ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req_ssl_hello_type"></a><a href="#7.3.5-req_ssl_hello_type">req_ssl_hello_type</a></b> : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value containing the type of the SSL hello message found
 in the request buffer if the buffer contains data that parse as a complete
 SSL (v3 or superior) client hello message. Note that this only applies to raw
@@ -14877,10 +14877,10 @@ situations :
         stats socket ipv4@192.168.0.1:9999 level admin
         stats timeout 2m
 
-To access the socket, an external utility such as &quot;socat&quot; is required. Socat is a
-swiss-army knife to connect anything to anything. We use it to connect terminals
-to the socket, or a couple of stdin/stdout pipes to it for scripts. The two main
-syntaxes we'll use are the following :
+To access the socket, an external utility such as &quot;socat&quot; is required. Socat is
+a swiss-army knife to connect anything to anything. We use it to connect
+terminals to the socket, or a couple of stdin/stdout pipes to it for scripts.
+The two main syntaxes we'll use are the following :
 
     # socat /var/run/haproxy.sock stdio
     # socat /var/run/haproxy.sock readline
@@ -15520,8 +15520,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev5-133 &ndash; Configuration Manual<br>
-							<small>2015/09/14, willy tarreau</small>
+							HAProxy 1.6-dev6-1 &ndash; Configuration Manual<br>
+							<small>2015/09/28, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -16494,7 +16494,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev5-133', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev6-1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-34', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16506,4 +16506,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev5-133-ga8fc8a2 -->
+<!-- git:v1.6-dev6-1-g307ee1e -->
