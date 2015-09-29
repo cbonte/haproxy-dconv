@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev6-1 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev6-3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-34" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev6-1</strong></p>
+							<p><strong>version 1.6-dev6-3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -12825,13 +12825,15 @@ tcp-request content accept if { req_ssl_hello_type 1 }
 use_backend bk_allow if { req_ssl_sni -f allowed_sites }
 default_backend bk_sorry_page
 </code></pre>
-</div><a class="anchor" name="res.ssl_hello_type"></a><a class="anchor" name="7-res.ssl_hello_type"></a><a class="anchor" name="7.3.5-res.ssl_hello_type"></a><a class="anchor" name="res.ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="res.ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="res.ssl_hello_type"></a><a href="#7.3.5-res.ssl_hello_type">res.ssl_hello_type</a></b> : integer</div><a class="anchor" name="rep_ssl_hello_type"></a><a class="anchor" name="7-rep_ssl_hello_type"></a><a class="anchor" name="7.3.5-rep_ssl_hello_type"></a><a class="anchor" name="rep_ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="rep_ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="rep_ssl_hello_type"></a><a href="#7.3.5-rep_ssl_hello_type">rep_ssl_hello_type</a></b> : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value containing the type of the SSL hello message found
-in the response buffer if the buffer contains data that parses as a complete
-SSL (v3 or superior) hello message. Note that this only applies to raw
-contents found in the response buffer and not to contents deciphered via an
-SSL data layer, so this will not work with &quot;<a href="#server">server</a>&quot; lines having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-option. This is mostly used in ACL to detect presence of an SSL hello message
-that is supposed to contain an SSL session ID usable for stickiness.
+</div><a class="anchor" name="req.ssl_st_ext"></a><a class="anchor" name="7-req.ssl_st_ext"></a><a class="anchor" name="7.3.5-req.ssl_st_ext"></a><a class="anchor" name="req.ssl_st_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_st_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_st_ext"></a><a href="#7.3.5-req.ssl_st_ext">req.ssl_st_ext</a></b> : integer</div><pre class="text">Returns 0 if the client didn't send a SessionTicket TLS Extension (RFC5077)
+Returns 1 if the client sent SessionTicket TLS Extension
+Returns 2 if the client also sent non-zero length TLS SessionTicket
+Note that this only applies to raw contents found in the request buffer and
+not to contents deciphered via an SSL data layer, so this will not work with
+&quot;<a href="#bind">bind</a>&quot; lines having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option. This can for example be used to detect
+whether the client sent a SessionTicket or not and stick it accordingly, if
+no SessionTicket then stick on SessionID or don't stick as there's no server
+side state is there when SessionTickets are in use.
 </pre><a class="anchor" name="req.ssl_ver"></a><a class="anchor" name="7-req.ssl_ver"></a><a class="anchor" name="7.3.5-req.ssl_ver"></a><a class="anchor" name="req.ssl_ver (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_ver (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_ver"></a><a href="#7.3.5-req.ssl_ver">req.ssl_ver</a></b> : integer</div><a class="anchor" name="req_ssl_ver"></a><a class="anchor" name="7-req_ssl_ver"></a><a class="anchor" name="7.3.5-req_ssl_ver"></a><a class="anchor" name="req_ssl_ver (Using ACLs and fetching samples)"></a><a class="anchor" name="req_ssl_ver (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req_ssl_ver"></a><a href="#7.3.5-req_ssl_ver">req_ssl_ver</a></b> : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value containing the version of the SSL/TLS protocol of a
 stream present in the request buffer. Both SSLv2 hello messages and SSLv3
 messages are supported. TLSv1 is announced as SSL version 3.1. The value is
@@ -12865,7 +12867,14 @@ if prepended with a '+' or '-' sign.
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <div class="example-desc">please consult the example from the &quot;<a href="#stick%20store-response">stick store-response</a>&quot; keyword.</div><code></code></pre>
-</div><a class="anchor" name="wait_end"></a><a class="anchor" name="7-wait_end"></a><a class="anchor" name="7.3.5-wait_end"></a><a class="anchor" name="wait_end (Using ACLs and fetching samples)"></a><a class="anchor" name="wait_end (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="wait_end"></a><a href="#7.3.5-wait_end">wait_end</a></b> : boolean</div><pre class="text">This fetch either returns true when the inspection period is over, or does
+</div><a class="anchor" name="res.ssl_hello_type"></a><a class="anchor" name="7-res.ssl_hello_type"></a><a class="anchor" name="7.3.5-res.ssl_hello_type"></a><a class="anchor" name="res.ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="res.ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="res.ssl_hello_type"></a><a href="#7.3.5-res.ssl_hello_type">res.ssl_hello_type</a></b> : integer</div><a class="anchor" name="rep_ssl_hello_type"></a><a class="anchor" name="7-rep_ssl_hello_type"></a><a class="anchor" name="7.3.5-rep_ssl_hello_type"></a><a class="anchor" name="rep_ssl_hello_type (Using ACLs and fetching samples)"></a><a class="anchor" name="rep_ssl_hello_type (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="rep_ssl_hello_type"></a><a href="#7.3.5-rep_ssl_hello_type">rep_ssl_hello_type</a></b> : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value containing the type of the SSL hello message found
+in the response buffer if the buffer contains data that parses as a complete
+SSL (v3 or superior) hello message. Note that this only applies to raw
+contents found in the response buffer and not to contents deciphered via an
+SSL data layer, so this will not work with &quot;<a href="#server">server</a>&quot; lines having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+option. This is mostly used in ACL to detect presence of an SSL hello message
+that is supposed to contain an SSL session ID usable for stickiness.
+</pre><a class="anchor" name="wait_end"></a><a class="anchor" name="7-wait_end"></a><a class="anchor" name="7.3.5-wait_end"></a><a class="anchor" name="wait_end (Using ACLs and fetching samples)"></a><a class="anchor" name="wait_end (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="wait_end"></a><a href="#7.3.5-wait_end">wait_end</a></b> : boolean</div><pre class="text">This fetch either returns true when the inspection period is over, or does
 not fetch. It is only used in ACLs, in conjunction with content analysis to
 avoid returning a wrong verdict early.  It may also be used to delay some
 actions, such as a delayed reject for some special addresses. Since it either
@@ -15520,7 +15529,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev6-1 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev6-3 &ndash; Configuration Manual<br>
 							<small>2015/09/28, willy tarreau</small>
 						</div>
 					</div>
@@ -15958,6 +15967,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"req.ssl_ec_ext",
 				"req.ssl_hello_type",
 				"req.ssl_sni",
+				"req.ssl_st_ext",
 				"req.ssl_ver",
 				"req.ver",
 				"req_len",
@@ -16494,7 +16504,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev6-1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev6-3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-34', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16506,4 +16516,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev6-1-g307ee1e -->
+<!-- git:v1.6-dev6-3-g971f7b6 -->
