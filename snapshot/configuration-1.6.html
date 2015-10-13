@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6-dev7-21 - Configuration Manual</title>
+		<title>HAProxy version 1.6-dev7-40 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-35" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-35</b> on <b>2015/10/12</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-35</b> on <b>2015/10/13</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6-dev7-21</strong></p>
+							<p><strong>version 1.6-dev7-40</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -897,38 +897,6 @@ Note to documentation contributors :
 					</div>
 				</div>
 				
-			
-				
-					<br />
-				<div class="row">
-					<div class="col-md-2 pagination-right noheight"><b><small>9.</small></b></div>
-					<div class="col-md-10 noheight">
-							<a href="#9"><b>Statistics and monitoring</b></a>
-					</div>
-				</div>
-				
-			
-				
-				<div class="row">
-					<div class="col-md-2 pagination-right noheight"><small>9.1.</small></div>
-					<div class="col-md-10 noheight">
-							<div class="tab">
-							<a href="#9.1">CSV format</a>
-							</div>
-					</div>
-				</div>
-				
-			
-				
-				<div class="row">
-					<div class="col-md-2 pagination-right noheight"><small>9.2.</small></div>
-					<div class="col-md-10 noheight">
-							<div class="tab">
-							<a href="#9.2">Unix Socket commands</a>
-							</div>
-					</div>
-				</div>
-				
 	</div>
 </div>
 
@@ -1558,11 +1526,11 @@ file names which do not start with a '/'. See also &quot;<a href="#server-state-
 with a slash ('/'), it is considered absolute, otherwise it is considered
 relative to the directory specified using &quot;<a href="#server-state-base">server-state-base</a>&quot; (if set) or to
 the current directory. Before reloading HAProxy, it is possible to save the
-servers' current state using the stats command &quot;<a href="#show%20servers%20state">show servers state</a>&quot;. The
+servers' current state using the stats command &quot;show servers state&quot;. The
 output of this command must be written in the file pointed by &lt;file&gt;. When
 starting up, before handling traffic, HAProxy will read, load and apply state
 for each server found in the file and available in its current running
-configuration. See also &quot;<a href="#server-state-base">server-state-base</a>&quot; and &quot;<a href="#show%20servers%20state">show servers state</a>&quot;,
+configuration. See also &quot;<a href="#server-state-base">server-state-base</a>&quot; and &quot;show servers state&quot;,
 &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; and &quot;<a href="#server-state-file-name">server-state-file-name</a>&quot;
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
@@ -1766,7 +1734,7 @@ tune.maxaccept can improve fairness.
 When the maximum amount is reached, future sessions will not compress as long
 as RAM is unavailable. When sets to 0, there is no limit.
 The default value is 0. The value is available in bytes on the UNIX socket
-with &quot;<a href="#show%20info">show info</a>&quot; on the line &quot;MaxZlibMemUsage&quot;, the memory used by zlib is
+with &quot;show info&quot; on the line &quot;MaxZlibMemUsage&quot;, the memory used by zlib is
 &quot;ZlibMemUsage&quot; in bytes.
 </pre><a class="anchor" name="noepoll"></a><a class="anchor" name="3-noepoll"></a><a class="anchor" name="3.2-noepoll"></a><a class="anchor" name="noepoll (Global parameters)"></a><a class="anchor" name="noepoll (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="noepoll"></a><a href="#3.2-noepoll">noepoll</a></b></div><pre class="text">Disables the use of the &quot;epoll&quot; event polling system on Linux. It is
 equivalent to the command-line argument &quot;-de&quot;. The next polling system
@@ -4151,21 +4119,21 @@ http-request set-query %[query,regsub(%3D,=,g)]
   which follows log-format rules, to collect content of the new entry. It
   performs a lookup in the ACL before insertion, to avoid duplicated (or
   more) values. This lookup is done by a linear search and can be expensive
-  with large lists! It is the equivalent of the &quot;<a href="#add%20acl">add acl</a>&quot; command from the
+  with large lists! It is the equivalent of the &quot;add acl&quot; command from the
   stats socket, but can be triggered by an HTTP request.
 
 - &quot;del-acl&quot; is used to delete an entry from an ACL. The ACL must be loaded
   from a file (even a dummy empty file). The file name of the ACL to be
   updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
   which follows log-format rules, to collect content of the entry to delete.
-  It is the equivalent of the &quot;<a href="#del%20acl">del acl</a>&quot; command from the stats socket, but
+  It is the equivalent of the &quot;del acl&quot; command from the stats socket, but
   can be triggered by an HTTP request.
 
 - &quot;del-map&quot; is used to delete an entry from a MAP. The MAP must be loaded
   from a file (even a dummy empty file). The file name of the MAP to be
   updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
   which follows log-format rules, to collect content of the entry to delete.
-  It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;<a href="#del%20map">del map</a>&quot;
+  It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;del map&quot;
   command from the stats socket, but can be triggered by an HTTP request.
 
 - &quot;set-map&quot; is used to add a new entry into a MAP. The MAP must be loaded
@@ -4175,7 +4143,7 @@ http-request set-query %[query,regsub(%3D,=,g)]
   which follows log-format rules, used to collect content for the new entry.
   It performs a lookup in the MAP before insertion, to avoid duplicated (or
   more) values. This lookup is done by a linear search and can be expensive
-  with large lists! It is the equivalent of the &quot;<a href="#set%20map">set map</a>&quot; command from the
+  with large lists! It is the equivalent of the &quot;set map&quot; command from the
   stats socket, but can be triggered by an HTTP request.
 
 - capture &lt;sample&gt; [ len &lt;length&gt; | id &lt;id&gt; ] :
@@ -4506,21 +4474,21 @@ http-response set-status 431
   which follows log-format rules, to collect content of the new entry. It
   performs a lookup in the ACL before insertion, to avoid duplicated (or
   more) values. This lookup is done by a linear search and can be expensive
-  with large lists! It is the equivalent of the &quot;<a href="#add%20acl">add acl</a>&quot; command from the
+  with large lists! It is the equivalent of the &quot;add acl&quot; command from the
   stats socket, but can be triggered by an HTTP response.
 
 - &quot;del-acl&quot; is used to delete an entry from an ACL. The ACL must be loaded
   from a file (even a dummy empty file). The file name of the ACL to be
   updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
   which follows log-format rules, to collect content of the entry to delete.
-  It is the equivalent of the &quot;<a href="#del%20acl">del acl</a>&quot; command from the stats socket, but
+  It is the equivalent of the &quot;del acl&quot; command from the stats socket, but
   can be triggered by an HTTP response.
 
 - &quot;del-map&quot; is used to delete an entry from a MAP. The MAP must be loaded
   from a file (even a dummy empty file). The file name of the MAP to be
   updated is passed between parentheses. It takes one argument: &lt;key fmt&gt;,
   which follows log-format rules, to collect content of the entry to delete.
-  It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;<a href="#del%20map">del map</a>&quot;
+  It takes one argument: &quot;file name&quot; It is the equivalent of the &quot;del map&quot;
   command from the stats socket, but can be triggered by an HTTP response.
 
 - &quot;set-map&quot; is used to add a new entry into a MAP. The MAP must be loaded
@@ -4530,7 +4498,7 @@ http-response set-status 431
   which follows log-format rules, used to collect content for the new entry.
   It performs a lookup in the MAP before insertion, to avoid duplicated (or
   more) values. This lookup is done by a linear search and can be expensive
-  with large lists! It is the equivalent of the &quot;<a href="#set%20map">set map</a>&quot; command from the
+  with large lists! It is the equivalent of the &quot;set map&quot; command from the
   stats socket, but can be triggered by an HTTP response.
 
 - capture &lt;sample&gt; id &lt;id&gt; :
@@ -4764,11 +4732,11 @@ traffic, the new process can apply old states to servers exactly has if no
 reload occured. The purpose of the &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; directive is
 to tell haproxy which file to use. For now, only 2 arguments to either prevent
 loading state or load states from a file containing all backends and servers.
-The state file can be generated by running the command &quot;<a href="#show%20servers%20state">show servers state</a>&quot;
+The state file can be generated by running the command &quot;show servers state&quot;
 over the stats socket and redirect output.
 
 The format of the file is versionned and is very specific. To understand it,
-please read the documentation of the &quot;<a href="#show%20servers%20state">show servers state</a>&quot; command (chapter
+please read the documentation of the &quot;show servers state&quot; command (chapter
 9.2).
 </pre><div class="separator">
 <span class="label label-info">Arguments:</span><pre class="prettyprint arguments">global     load the content of the file pointed by the global directive
@@ -4805,7 +4773,7 @@ Minimal configuration:
 
 Then one can run :
 
-  socat /tmp/socket - &lt;&lt;&lt; &quot;<a href="#show%20servers%20state">show servers state</a>&quot; &gt; /tmp/server_state
+  socat /tmp/socket - &lt;&lt;&lt; &quot;show servers state&quot; &gt; /tmp/server_state
 
 Content of the file /tmp/server_state would be like this:
 
@@ -4839,7 +4807,7 @@ Content of the file /etc/haproxy/states/bk would be like this:
   # &lt;field names skipped for the doc example&gt;
   1 bk 1 s1 127.0.0.1 2 0 11 11 4 6 3 4 6 0 0
   1 bk 2 s2 127.0.0.1 2 0 12 12 4 6 3 4 6 0 0
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#server-state-file">server-state-file</a>&quot;, &quot;<a href="#server-state-file-name">server-state-file-name</a>&quot;, and &quot;<a href="#show%20servers%20state">show servers state</a>&quot;</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#server-state-file">server-state-file</a>&quot;, &quot;<a href="#server-state-file-name">server-state-file-name</a>&quot;, and &quot;show servers state&quot;</div>
 <a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><a class="anchor" name="log global"></a><a class="anchor" name="4-log global"></a><a class="anchor" name="4.2-log global"></a><a class="anchor" name="log global (Proxies)"></a><a class="anchor" name="log global (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log global"></a><a href="#4.2-log%20global">log global</a></b></div><a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#4.2-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no log"></a><a class="anchor" name="4-no log"></a><a class="anchor" name="4.2-no log"></a><a class="anchor" name="no log (Proxies)"></a><a class="anchor" name="no log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no log"></a><a href="#4.2-no%20log">no log</a></b></div><pre class="text">Enable per-instance logging of events and traffic.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -5241,13 +5209,13 @@ been confirmed.
 
 When this option is enabled, erroneous header names will still be accepted in
 requests, but the complete request will be captured in order to permit later
-analysis using the &quot;<a href="#show%20errors">show errors</a>&quot; request on the UNIX stats socket. Similarly,
+analysis using the &quot;show errors&quot; request on the UNIX stats socket. Similarly,
 requests containing invalid chars in the URI part will be logged. Doing this
 also helps confirming that the issue has been solved.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20accept-invalid-http-response">option accept-invalid-http-response</a>&quot; and &quot;<a href="#show%20errors">show errors</a>&quot; on the stats socket.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20accept-invalid-http-response">option accept-invalid-http-response</a>&quot; and &quot;show errors&quot; on the stats socket.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option accept-invalid-http-response"></a><a class="anchor" name="4-option accept-invalid-http-response"></a><a class="anchor" name="4.2-option accept-invalid-http-response"></a><a class="anchor" name="option accept-invalid-http-response (Proxies)"></a><a class="anchor" name="option accept-invalid-http-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option accept-invalid-http-response"></a><a href="#4.2-option%20accept-invalid-http-response">option accept-invalid-http-response</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option accept-invalid-http-response"></a><a class="anchor" name="4-no option accept-invalid-http-response"></a><a class="anchor" name="4.2-no option accept-invalid-http-response"></a><a class="anchor" name="no option accept-invalid-http-response (Proxies)"></a><a class="anchor" name="no option accept-invalid-http-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option accept-invalid-http-response"></a><a href="#4.2-no%20option%20accept-invalid-http-response">no option accept-invalid-http-response</a></b></div><pre class="text">Enable or disable relaxing of HTTP response parsing
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -5274,12 +5242,12 @@ been confirmed.
 
 When this option is enabled, erroneous header names will still be accepted in
 responses, but the complete response will be captured in order to permit
-later analysis using the &quot;<a href="#show%20errors">show errors</a>&quot; request on the UNIX stats socket.
+later analysis using the &quot;show errors&quot; request on the UNIX stats socket.
 Doing this also helps confirming that the issue has been solved.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20accept-invalid-http-request">option accept-invalid-http-request</a>&quot; and &quot;<a href="#show%20errors">show errors</a>&quot; on the stats socket.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20accept-invalid-http-request">option accept-invalid-http-request</a>&quot; and &quot;show errors&quot; on the stats socket.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option allbackups"></a><a class="anchor" name="4-option allbackups"></a><a class="anchor" name="4.2-option allbackups"></a><a class="anchor" name="option allbackups (Proxies)"></a><a class="anchor" name="option allbackups (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option allbackups"></a><a href="#4.2-option%20allbackups">option allbackups</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option allbackups"></a><a class="anchor" name="4-no option allbackups"></a><a class="anchor" name="4.2-no option allbackups"></a><a class="anchor" name="no option allbackups (Proxies)"></a><a class="anchor" name="no option allbackups (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option allbackups"></a><a href="#4.2-no%20option%20allbackups">no option allbackups</a></b></div><pre class="text">Use either all backup servers at a time or only the first one
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7487,7 +7455,7 @@ global directive &quot;server-state-file-base&quot;.
 backend bk
    load-server-state-from-file
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;server-state-file-base&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;<a href="#show%20servers%20state">show servers state</a>&quot;</div>
+</div><div class="page-header"><b>See also:</b> &quot;server-state-file-base&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
 <a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Set the source address for outgoing connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10048,6 +10016,10 @@ indicate by how much to reduce the incoming connection's advertised MSS for
 outgoing segments. This parameter is only compatible with TCP v4/v6 sockets.
 </pre><a class="anchor" name="name"></a><a class="anchor" name="5-name"></a><a class="anchor" name="5.1-name"></a><a class="anchor" name="name (Bind and Server options)"></a><a class="anchor" name="name (Bind options)"></a><div class="keyword"><b><a class="anchor" name="name"></a><a href="#5.1-name">name</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Sets an optional name for these sockets, which will be reported on the stats
 page.
+</pre><a class="anchor" name="namespace"></a><a class="anchor" name="5-namespace"></a><a class="anchor" name="5.1-namespace"></a><a class="anchor" name="namespace (Bind and Server options)"></a><a class="anchor" name="namespace (Bind options)"></a><div class="keyword"><b><a class="anchor" name="namespace"></a><a href="#5.1-namespace">namespace</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">On Linux, it is possible to specify which network namespace a socket will
+belong to. This directive makes it possible to explicitly bind a listener to
+a namespace different from the default one. Please refer to your operating
+system's documentation to find more details about network namespaces.
 </pre><a class="anchor" name="nice"></a><a class="anchor" name="5-nice"></a><a class="anchor" name="5.1-nice"></a><a class="anchor" name="nice (Bind and Server options)"></a><a class="anchor" name="nice (Bind options)"></a><div class="keyword"><b><a class="anchor" name="nice"></a><a href="#5.1-nice">nice</a></b> <span style="color: #080">&lt;nice&gt;</span></div><pre class="text">Sets the 'niceness' of connections initiated from the socket. Value must be
 in the range -1024..1024 inclusive, and defaults to zero. Positive values
 means that such connections are more friendly to others and easily offer
@@ -10457,6 +10429,10 @@ overloading the server during exceptional loads. See also the &quot;<span class=
 and &quot;<a href="#maxqueue">maxqueue</a>&quot; parameters, as well as the &quot;<a href="#fullconn">fullconn</a>&quot; backend keyword.
 
 Supported in default-server: Yes
+</pre><a class="anchor" name="namespace"></a><a class="anchor" name="5-namespace"></a><a class="anchor" name="5.2-namespace"></a><a class="anchor" name="namespace (Bind and Server options)"></a><a class="anchor" name="namespace (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="namespace"></a><a href="#5.2-namespace">namespace</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">On Linux, it is possible to specify which network namespace a socket will
+belong to. This directive makes it possible to explicitly bind a server to
+a namespace different from the default one. Please refer to your operating
+system's documentation to find more details about network namespaces.
 </pre><a class="anchor" name="no-ssl-reuse"></a><a class="anchor" name="5-no-ssl-reuse"></a><a class="anchor" name="5.2-no-ssl-reuse"></a><a class="anchor" name="no-ssl-reuse (Bind and Server options)"></a><a class="anchor" name="no-ssl-reuse (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-ssl-reuse"></a><a href="#5.2-no-ssl-reuse">no-ssl-reuse</a></b></div><pre class="text">This option disables SSL session reuse when SSL is used to communicate with
 the server. It will force the server to perform a full handshake for every
 new connection. It's probably only useful for benchmarking, troubleshooting,
@@ -10709,6 +10685,19 @@ checks are automatically sent in SSL too unless there is a &quot;<a href="#port"
 See the &quot;<a href="#check-ssl">check-ssl</a>&quot; option to force SSL health checks.
 
 Supported in default-server: No
+</pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.2-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.2-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all outgoing connections to this server. This
+option is available on Linux since version 2.6.37. It allows haproxy to
+configure a timeout for sockets which contain data not receiving an
+acknoledgement for the configured delay. This is especially useful on
+long-lived connections experiencing long idle periods such as remote
+terminals or database connection pools, where the client and server timeouts
+must remain high to allow a long period of idle, but where it is important to
+detect that the server has disappeared in order to release all resources
+associated with its connection (and the client's session). One typical use
+case is also to force dead server connections to die when health checks are
+too slow or during a soft reload since health checks are then disabled. The
+argument is a delay expressed in milliseconds by default. This only works for
+regular TCP connections, and is ignored for other protocols.
 </pre><a class="anchor" name="track"></a><a class="anchor" name="5-track"></a><a class="anchor" name="5.2-track"></a><a class="anchor" name="track (Bind and Server options)"></a><a class="anchor" name="track (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="track"></a><a href="#5.2-track">track</a></b> <span style="color: #008">[<span style="color: #080">&lt;proxy&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span></div><pre class="text">This option enables ability to set the current state of the server by tracking
 another one. It is possible to track a server which itself tracks another
 server, provided that at the end of the chain, a server has health checks
@@ -11955,7 +11944,7 @@ is returned. Otherwise the converter returns the current amount of concurrent
 connections tracking the same key as the input sample in the designated
 table. It differs from table_conn_cur in that it does not rely on any stored
 information but on the table's reference count (the &quot;use&quot; value which is
-returned by &quot;<a href="#show%20table">show table</a>&quot; on the CLI). This may sometimes be more suited for
+returned by &quot;show table&quot; on the CLI). This may sometimes be more suited for
 layer7 tracking. It can be used to tell a server how many concurrent
 connections there are from a given address for example. See also the
 sc_trackers sample fetch keyword.
@@ -12333,7 +12322,7 @@ to set some values in a header passed to the server.
 tracked counters. This number is automatically incremented when tracking
 begins and decremented when tracking stops. It differs from sc0_conn_cur in
 that it does not rely on any stored information but on the table's reference
-count (the &quot;use&quot; value which is returned by &quot;<a href="#show%20table">show table</a>&quot; on the CLI). This
+count (the &quot;use&quot; value which is returned by &quot;show table&quot; on the CLI). This
 may sometimes be more suited for layer7 tracking. It can be used to tell a
 server how many concurrent connections there are from a given address for
 example.
@@ -14724,811 +14713,13 @@ reading. Their sole purpose is to explain how to decipher them.
        connections on this server, 202 connections on this proxy, and 205 on
        the global process. It is possible that the server refused the
        connection because of too many already established.
-</pre></div>
-<a class="anchor" id="9" name="9"></a>
-<div class="page-header"><h1 id="chapter-9" data-target="9"><small><a class="small" href="#9">9.</a></small> Statistics and monitoring</h1>
-</div><div><pre class="text">It is possible to query HAProxy about its status. The most commonly used
-mechanism is the HTTP statistics page. This page also exposes an alternative
-CSV output format for monitoring tools. The same format is provided on the
-Unix socket.
-</pre></div>
-<a class="anchor" id="9.1" name="9.1"></a>
-<h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> CSV format</h2>
-<div><pre class="text">The statistics may be consulted either from the unix socket or from the HTTP
-page. Both means provide a CSV format whose fields follow. The first line
-begins with a sharp ('#') and has one word per comma-delimited field which
-represents the title of the column. All other lines starting at the second one
-use a classical CSV format using a comma as the delimiter, and the double quote
-('&quot;') as an optional text delimiter, but only if the enclosed text is ambiguous
-(if it contains a quote or a comma). The double-quote character ('&quot;') in the
-text is doubled ('&quot;&quot;'), which is the format that most tools recognize. Please
-do not insert any column before these ones in order not to break tools which
-use hard-coded column positions.
-
-In brackets after each field name are the types which may have a value for
-that field. The types are L (Listeners), F (Frontends), B (Backends), and
-S (Servers).
-
-  0. pxname [LFBS]: proxy name
-  1. svname [LFBS]: service name (FRONTEND for frontend, BACKEND for backend,
-     any name for server/listener)
-  2. qcur [..BS]: current queued requests. For the backend this reports the
-     number queued without a server assigned.
-  3. qmax [..BS]: max value of qcur
-  4. scur [LFBS]: current sessions
-  5. smax [LFBS]: max sessions
-  6. slim [LFBS]: configured session limit
-  7. stot [LFBS]: cumulative number of connections
-  8. bin [LFBS]: bytes in
-  9. bout [LFBS]: bytes out
- 10. dreq [LFB.]: requests denied because of security concerns.
-     - For tcp this is because of a matched tcp-request content rule.
-     - For http this is because of a matched http-request or tarpit rule.
- 11. dresp [LFBS]: responses denied because of security concerns.
-     - For http this is because of a matched http-request rule, or
-       &quot;<a href="#option%20checkcache">option checkcache</a>&quot;.
- 12. ereq [LF..]: request errors. Some of the possible causes are:
-     - early termination from the client, before the request has been sent.
-     - read error from the client
-     - client timeout
-     - client closed connection
-     - various bad requests from the client.
-     - request was tarpitted.
- 13. econ [..BS]: number of requests that encountered an error trying to
-     connect to a backend server. The backend stat is the sum of the stat
-     for all servers of that backend, plus any connection errors not
-     associated with a particular server (such as the backend having no
-     active servers).
- 14. eresp [..BS]: response errors. srv_abrt will be counted here also.
-     Some other errors are:
-     - write error on the client socket (won't be counted for the server stat)
-     - failure applying filters to the response.
- 15. wretr [..BS]: number of times a connection to a server was retried.
- 16. wredis [..BS]: number of times a request was redispatched to another
-     server. The server value counts the number of times that server was
-     switched away from.
- 17. status [LFBS]: status (UP/DOWN/NOLB/MAINT/MAINT(via)...)
- 18. weight [..BS]: total weight (backend), server weight (server)
- 19. act [..BS]: number of active servers (backend), server is active (server)
- 20. bck [..BS]: number of backup servers (backend), server is backup (server)
- 21. chkfail [...S]: number of failed checks. (Only counts checks failed when
-     the server is up.)
- 22. chkdown [..BS]: number of UP-&gt;DOWN transitions. The backend counter counts
-     transitions to the whole backend being down, rather than the sum of the
-     counters for each server.
- 23. lastchg [..BS]: number of seconds since the last UP&lt;-&gt;DOWN transition
- 24. downtime [..BS]: total downtime (in seconds). The value for the backend
-     is the downtime for the whole backend, not the sum of the server downtime.
- 25. qlimit [...S]: configured maxqueue for the server, or nothing in the
-     value is 0 (default, meaning no limit)
- 26. pid [LFBS]: process id (0 for first instance, 1 for second, ...)
- 27. iid [LFBS]: unique proxy id
- 28. sid [L..S]: server id (unique inside a proxy)
- 29. throttle [...S]: current throttle percentage for the server, when
-     slowstart is active, or no value if not in slowstart.
- 30. lbtot [..BS]: total number of times a server was selected, either for new
-     sessions, or when re-dispatching. The server counter is the number
-     of times that server was selected.
- 31. tracked [...S]: id of proxy/server if tracking is enabled.
- 32. type [LFBS]: (0=frontend, 1=backend, 2=server, 3=socket/listener)
- 33. rate [.FBS]: number of sessions per second over last elapsed second
- 34. rate_lim [.F..]: configured limit on new sessions per second
- 35. rate_max [.FBS]: max number of new sessions per second
- 36. check_status [...S]: status of last health check, one of:
-        UNK     -&gt; unknown
-        INI     -&gt; initializing
-        SOCKERR -&gt; socket error
-        L4OK    -&gt; check passed on layer 4, no upper layers testing enabled
-        L4TOUT  -&gt; layer 1-4 timeout
-        L4CON   -&gt; layer 1-4 connection problem, for example
-                   &quot;Connection refused&quot; (tcp rst) or &quot;No route to host&quot; (icmp)
-        L6OK    -&gt; check passed on layer 6
-        L6TOUT  -&gt; layer 6 (SSL) timeout
-        L6RSP   -&gt; layer 6 invalid response - protocol error
-        L7OK    -&gt; check passed on layer 7
-        L7OKC   -&gt; check conditionally passed on layer 7, for example 404 with
-                   disable-on-404
-        L7TOUT  -&gt; layer 7 (HTTP/SMTP) timeout
-        L7RSP   -&gt; layer 7 invalid response - protocol error
-        L7STS   -&gt; layer 7 response error, for example HTTP 5xx
- 37. check_code [...S]: layer5-7 code, if available
- 38. check_duration [...S]: time in ms took to finish last health check
- 39. hrsp_1xx [.FBS]: http responses with 1xx code
- 40. hrsp_2xx [.FBS]: http responses with 2xx code
- 41. hrsp_3xx [.FBS]: http responses with 3xx code
- 42. hrsp_4xx [.FBS]: http responses with 4xx code
- 43. hrsp_5xx [.FBS]: http responses with 5xx code
- 44. hrsp_other [.FBS]: http responses with other codes (protocol error)
- 45. hanafail [...S]: failed health checks details
- 46. req_rate [.F..]: HTTP requests per second over last elapsed second
- 47. req_rate_max [.F..]: max number of HTTP requests per second observed
- 48. req_tot [.F..]: total number of HTTP requests received
- 49. cli_abrt [..BS]: number of data transfers aborted by the client
- 50. srv_abrt [..BS]: number of data transfers aborted by the server
-     (inc. in eresp)
- 51. comp_in [.FB.]: number of HTTP response bytes fed to the compressor
- 52. comp_out [.FB.]: number of HTTP response bytes emitted by the compressor
- 53. comp_byp [.FB.]: number of bytes that bypassed the HTTP compressor
-     (CPU/BW limit)
- 54. comp_rsp [.FB.]: number of HTTP responses that were compressed
- 55. lastsess [..BS]: number of seconds since last session assigned to
-     server/backend
- 56. last_chk [...S]: last health check contents or textual error
- 57. last_agt [...S]: last agent check contents or textual error
- 58. qtime [..BS]: the average queue time in ms over the 1024 last requests
- 59. ctime [..BS]: the average connect time in ms over the 1024 last requests
- 60. rtime [..BS]: the average response time in ms over the 1024 last requests
-     (0 for TCP)
- 61. ttime [..BS]: the average total session time in ms over the 1024 last
-     requests
-</pre></div>
-<a class="anchor" id="9.2" name="9.2"></a>
-<h2 id="chapter-9.2" data-target="9.2"><small><a class="small" href="#9.2">9.2.</a></small> Unix Socket commands</h2>
-<div><pre class="text">The stats socket is not enabled by default. In order to enable it, it is
-necessary to add one line in the global section of the haproxy configuration.
-A second line is recommended to set a larger timeout, always appreciated when
-issuing commands by hand :
-
-    global
-        stats socket /var/run/haproxy.sock mode 600 level admin
-        stats timeout 2m
-
-It is also possible to add multiple instances of the stats socket by repeating
-the line, and make them listen to a TCP port instead of a UNIX socket. This is
-never done by default because this is dangerous, but can be handy in some
-situations :
-
-    global
-        stats socket /var/run/haproxy.sock mode 600 level admin
-        stats socket ipv4@192.168.0.1:9999 level admin
-        stats timeout 2m
-
-To access the socket, an external utility such as &quot;socat&quot; is required. Socat is
-a swiss-army knife to connect anything to anything. We use it to connect
-terminals to the socket, or a couple of stdin/stdout pipes to it for scripts.
-The two main syntaxes we'll use are the following :
-
-    # socat /var/run/haproxy.sock stdio
-    # socat /var/run/haproxy.sock readline
-
-The first one is used with scripts. It is possible to send the output of a
-script to haproxy, and pass haproxy's output to another script. That's useful
-for retrieving counters or attack traces for example.
-
-The second one is only useful for issuing commands by hand. It has the benefit
-that the terminal is handled by the readline library which supports line
-editing and history, which is very convenient when issuing repeated commands
-(eg: watch a counter).
-
-The socket supports two operation modes :
-  - interactive
-  - non-interactive
-
-The non-interactive mode is the default when socat connects to the socket. In
-this mode, a single line may be sent. It is processed as a whole, responses are
-sent back, and the connection closes after the end of the response. This is the
-mode that scripts and monitoring tools use. It is possible to send multiple
-commands in this mode, they need to be delimited by a semi-colon (';'). For
-example :
-
-    # echo &quot;show info;show stat;show table&quot; | socat /var/run/haproxy stdio
-
-The interactive mode displays a prompt ('&gt;') and waits for commands to be
-entered on the line, then processes them, and displays the prompt again to wait
-for a new command. This mode is entered via the &quot;<a href="#prompt">prompt</a>&quot; command which must be
-sent on the first line in non-interactive mode. The mode is a flip switch, if
-&quot;<a href="#prompt">prompt</a>&quot; is sent in interactive mode, it is disabled and the connection closes
-after processing the last command of the same line.
-
-For this reason, when debugging by hand, it's quite common to start with the
-&quot;<a href="#prompt">prompt</a>&quot; command :
-
-   # socat /var/run/haproxy readline
-   prompt
-   &gt; show info
-   ...
-   &gt;
-
-Since multiple commands may be issued at once, haproxy uses the empty line as a
-delimiter to mark an end of output for each command, and takes care of ensuring
-that no command can emit an empty line on output. A script can thus easily
-parse the output even when multiple commands were pipelined on a single line.
-
-It is important to understand that when multiple haproxy processes are started
-on the same sockets, any process may pick up the request and will output its
-own stats.
-
-The list of commands currently supported on the stats socket is provided below.
-If an unknown command is sent, haproxy displays the usage message which reminds
-all supported commands. Some commands support a more complex syntax, generally
-it will explain what part of the command is invalid when this happens.
-</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.2-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add acl"></a><a class="anchor" name="9-add acl"></a><a class="anchor" name="9.2-add acl"></a><a class="anchor" name="add acl (Statistics and monitoring)"></a><a class="anchor" name="add acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add acl"></a><a href="#9.2-add%20acl">add acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;pattern&gt;</span></div><pre class="text">Add an entry into the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by
-&quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. This
-command cannot be used if the reference &lt;acl&gt; is a file also used with a map.
-In this case, you must use the command &quot;<a href="#add%20map">add map</a>&quot; in place of &quot;<a href="#add%20acl">add acl</a>&quot;.
-</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.2-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.2-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.2-add%20map">add map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Add an entry into the map &lt;map&gt; to associate the value &lt;value&gt; to the key
-&lt;key&gt;. This command does not verify if the entry already exists. It is
-mainly used to fill a map after a clear operation. Note that if the reference
-&lt;map&gt; is a file and is shared with a map, this map will contain also a new
-pattern entry.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.2-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters"></a><a href="#9.2-clear%20counters">clear counters</a></b></div><pre class="text">Clear the max values of the statistics counters in each proxy (frontend &amp;
-backend) and in each server. The cumulated counters are not affected. This
-can be used to get clean counters after an incident, without having to
-restart nor to clear traffic counters. This command is restricted and can
-only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.2-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><a class="anchor" name="clear counters all"></a><a class="anchor" name="9-clear counters all"></a><a class="anchor" name="9.2-clear counters all"></a><a class="anchor" name="clear counters all (Statistics and monitoring)"></a><a class="anchor" name="clear counters all (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters all"></a><a href="#9.2-clear%20counters%20all">clear counters all</a></b></div><pre class="text">Clear all statistics counters in each proxy (frontend &amp; backend) and in each
-server. This has the same effect as restarting. This command is restricted
-and can only be issued on sockets configured for level &quot;admin&quot;.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear acl"></a><a class="anchor" name="9-clear acl"></a><a class="anchor" name="9.2-clear acl"></a><a class="anchor" name="clear acl (Statistics and monitoring)"></a><a class="anchor" name="clear acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear acl"></a><a href="#9.2-clear%20acl">clear acl</a></b> <span style="color: #080">&lt;acl&gt;</span></div><pre class="text">Remove all entries from the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt;
-returned by &quot;<a href="#show%20acl">show acl</a>&quot;. Note that if the reference &lt;acl&gt; is a file and is
-shared with a map, this map will be also cleared.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear map"></a><a class="anchor" name="9-clear map"></a><a class="anchor" name="9.2-clear map"></a><a class="anchor" name="clear map (Statistics and monitoring)"></a><a class="anchor" name="clear map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear map"></a><a href="#9.2-clear%20map">clear map</a></b> <span style="color: #080">&lt;map&gt;</span></div><pre class="text">Remove all entries from the map &lt;map&gt;. &lt;map&gt; is the #&lt;id&gt; or the &lt;file&gt;
-returned by &quot;<a href="#show%20map">show map</a>&quot;. Note that if the reference &lt;map&gt; is a file and is
-shared with a acl, this acl will be also cleared.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.2-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear table"></a><a class="anchor" name="9-clear table"></a><a class="anchor" name="9.2-clear table"></a><a class="anchor" name="clear table (Statistics and monitoring)"></a><a class="anchor" name="clear table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear table"></a><a href="#9.2-clear%20table">clear table</a></b> <span style="color: #080">&lt;table&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div><pre class="text">Remove entries from the stick-table &lt;table&gt;.
-
-This is typically used to unblock some users complaining they have been
-abusively denied access to a service, but this can also be used to clear some
-stickiness entries matching a server that is going to be replaced (see &quot;show
-table&quot; below for details).  Note that sometimes, removal of an entry will be
-refused because it is currently tracked by a session. Retrying a few seconds
-later after the session ends is usual enough.
-
-In the case where no options arguments are given all entries will be removed.
-
-When the &quot;data.&quot; form is used entries matching a filter applied using the
-stored data (see &quot;<a href="#stick-table">stick-table</a>&quot; in <a href="#4.2">section 4.2</a>) are removed.  A stored data
-type must be specified in &lt;type&gt;, and this data type must be stored in the
-table otherwise an error is reported. The data is compared according to
-&lt;operator&gt; with the 64-bit integer &lt;value&gt;.  Operators are the same as with
-the ACLs :
-
-  - eq : match entries whose data is equal to this value
-  - ne : match entries whose data is not equal to this value
-  - le : match entries whose data is less than or equal to this value
-  - ge : match entries whose data is greater than or equal to this value
-  - lt : match entries whose data is less than this value
-  - gt : match entries whose data is greater than this value
-
-When the key form is used the entry &lt;key&gt; is removed.  The key must be of the
-same type as the table, which currently is limited to IPv4, IPv6, integer and
-string.
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>    $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
-&gt;&gt;&gt; 0x80e6a4c: key=127.0.0.1 use=0 exp=3594729 gpc0=0 conn_rate(30000)=1 \
-      bytes_out_rate(60000)=187
-&gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
-      bytes_out_rate(60000)=191
-
-    $ echo &quot;clear table http_proxy key 127.0.0.1&quot; | socat stdio /tmp/sock1
-
-    $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
-&gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
-      bytes_out_rate(60000)=191
-    $ echo &quot;clear table http_proxy data.gpc0 eq 1&quot; | socat stdio /tmp/sock1
-    $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
-</code></pre>
-</div><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.2-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del acl"></a><a class="anchor" name="9-del acl"></a><a class="anchor" name="9.2-del acl"></a><a class="anchor" name="del acl (Statistics and monitoring)"></a><a class="anchor" name="del acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del acl"></a><a href="#9.2-del%20acl">del acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;key&gt;</span>|#<span style="color: #080">&lt;ref&gt;</span>]</span></div><pre class="text">Delete all the acl entries from the acl &lt;acl&gt; corresponding to the key &lt;key&gt;.
-&lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20acl">show acl</a>&quot;. If the &lt;ref&gt; is used,
-this command delete only the listed reference. The reference can be found with
-listing the content of the acl. Note that if the reference &lt;acl&gt; is a file and
-is shared with a map, the entry will be also deleted in the map.
-</pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.2-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del map"></a><a class="anchor" name="9-del map"></a><a class="anchor" name="9.2-del map"></a><a class="anchor" name="del map (Statistics and monitoring)"></a><a class="anchor" name="del map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del map"></a><a href="#9.2-del%20map">del map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;key&gt;</span>|#<span style="color: #080">&lt;ref&gt;</span>]</span></div><pre class="text">Delete all the map entries from the map &lt;map&gt; corresponding to the key &lt;key&gt;.
-&lt;map&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot;. If the &lt;ref&gt; is used,
-this command delete only the listed reference. The reference can be found with
-listing the content of the map. Note that if the reference &lt;map&gt; is a file and
-is shared with a acl, the entry will be also deleted in the map.
-</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable agent"></a><a class="anchor" name="9-disable agent"></a><a class="anchor" name="9.2-disable agent"></a><a class="anchor" name="disable agent (Statistics and monitoring)"></a><a class="anchor" name="disable agent (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable agent"></a><a href="#9.2-disable%20agent">disable agent</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the auxiliary agent check as temporarily stopped.
-
-In the case where an agent check is being run as a auxiliary check, due
-to the agent-check parameter of a server directive, new checks are only
-initialised when the agent is in the enabled. Thus, disable agent will
-prevent any new agent checks from begin initiated until the agent
-re-enabled using enable agent.
-
-When an agent is disabled the processing of an auxiliary agent check that
-was initiated while the agent was set as enabled is as follows: All
-results that would alter the weight, specifically &quot;drain&quot; or a weight
-returned by the agent, are ignored. The processing of agent check is
-otherwise unchanged.
-
-The motivation for this feature is to allow the weight changing effects
-of the agent checks to be paused to allow the weight of a server to be
-configured using set weight without being overridden by the agent.
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable frontend"></a><a class="anchor" name="9-disable frontend"></a><a class="anchor" name="9.2-disable frontend"></a><a class="anchor" name="disable frontend (Statistics and monitoring)"></a><a class="anchor" name="disable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable frontend"></a><a href="#9.2-disable%20frontend">disable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Mark the frontend as temporarily stopped. This corresponds to the mode which
-is used during a soft restart : the frontend releases the port but can be
-enabled again if needed. This should be used with care as some non-Linux OSes
-are unable to enable it back. This is intended to be used in environments
-where stopping a proxy is not even imaginable but a misconfigured proxy must
-be fixed. That way it's possible to release the port and bind it into another
-process to restore operations. The frontend will appear with status &quot;STOP&quot;
-on the stats page.
-
-The frontend may be specified either by its name or by its numeric ID,
-prefixed with a sharp ('#').
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable health"></a><a class="anchor" name="9-disable health"></a><a class="anchor" name="9.2-disable health"></a><a class="anchor" name="disable health (Statistics and monitoring)"></a><a class="anchor" name="disable health (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable health"></a><a href="#9.2-disable%20health">disable health</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the primary health check as temporarily stopped. This will disable
-sending of health checks, and the last health check result will be ignored.
-The server will be in unchecked state and considered UP unless an auxiliary
-agent check forces it down.
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.2-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable server"></a><a class="anchor" name="9-disable server"></a><a class="anchor" name="9.2-disable server"></a><a class="anchor" name="disable server (Statistics and monitoring)"></a><a class="anchor" name="disable server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable server"></a><a href="#9.2-disable%20server">disable server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the server DOWN for maintenance. In this mode, no more checks will be
-performed on the server until it leaves maintenance.
-If the server is tracked by other servers, those servers will be set to DOWN
-during the maintenance.
-
-In the statistics page, a server DOWN for maintenance will appear with a
-&quot;MAINT&quot; status, its tracking servers with the &quot;MAINT(via)&quot; one.
-
-Both the backend and the server may be specified either by their name or by
-their numeric ID, prefixed with a sharp ('#').
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable agent"></a><a class="anchor" name="9-enable agent"></a><a class="anchor" name="9.2-enable agent"></a><a class="anchor" name="enable agent (Statistics and monitoring)"></a><a class="anchor" name="enable agent (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable agent"></a><a href="#9.2-enable%20agent">enable agent</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Resume auxiliary agent check that was temporarily stopped.
-
-See &quot;<a href="#disable%20agent">disable agent</a>&quot; for details of the effect of temporarily starting
-and stopping an auxiliary agent.
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable frontend"></a><a class="anchor" name="9-enable frontend"></a><a class="anchor" name="9.2-enable frontend"></a><a class="anchor" name="enable frontend (Statistics and monitoring)"></a><a class="anchor" name="enable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable frontend"></a><a href="#9.2-enable%20frontend">enable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Resume a frontend which was temporarily stopped. It is possible that some of
-the listening ports won't be able to bind anymore (eg: if another process
-took them since the 'disable frontend' operation). If this happens, an error
-is displayed. Some operating systems might not be able to resume a frontend
-which was disabled.
-
-The frontend may be specified either by its name or by its numeric ID,
-prefixed with a sharp ('#').
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable health"></a><a class="anchor" name="9-enable health"></a><a class="anchor" name="9.2-enable health"></a><a class="anchor" name="enable health (Statistics and monitoring)"></a><a class="anchor" name="enable health (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable health"></a><a href="#9.2-enable%20health">enable health</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Resume a primary health check that was temporarily stopped. This will enable
-sending of health checks again. Please see &quot;<a href="#disable%20health">disable health</a>&quot; for details.
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.2-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable server"></a><a class="anchor" name="9-enable server"></a><a class="anchor" name="9.2-enable server"></a><a class="anchor" name="enable server (Statistics and monitoring)"></a><a class="anchor" name="enable server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable server"></a><a href="#9.2-enable%20server">enable server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">If the server was previously marked as DOWN for maintenance, this marks the
-server UP and checks are re-enabled.
-
-Both the backend and the server may be specified either by their name or by
-their numeric ID, prefixed with a sharp ('#').
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.2-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get map"></a><a class="anchor" name="9-get map"></a><a class="anchor" name="9.2-get map"></a><a class="anchor" name="get map (Statistics and monitoring)"></a><a class="anchor" name="get map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get map"></a><a href="#9.2-get%20map">get map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.2-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get acl"></a><a class="anchor" name="9-get acl"></a><a class="anchor" name="9.2-get acl"></a><a class="anchor" name="get acl (Statistics and monitoring)"></a><a class="anchor" name="get acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get acl"></a><a href="#9.2-get%20acl">get acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Lookup the value &lt;value&gt; in the map &lt;map&gt; or in the ACL &lt;acl&gt;. &lt;map&gt; or &lt;acl&gt;
-are the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot; or &quot;<a href="#show%20acl">show acl</a>&quot;. This command
-returns all the matching patterns associated with this map. This is useful for
-debugging maps and ACLs. The output format is composed by one line par
-matching type. Each line is composed by space-delimited series of words.
-
-The first two words are:
-
-   &lt;match method&gt;:   The match method applied. It can be &quot;found&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bool<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bool%20%28Converters%29">Converters</a></li><li><a href="#bool%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;,
-                     &quot;<a href="#int">int</a>&quot;, &quot;ip&quot;, &quot;<a href="#bin">bin</a>&quot;, &quot;len&quot;, &quot;<a href="#str">str</a>&quot;, &quot;beg&quot;, &quot;<a href="#sub">sub</a>&quot;, &quot;dir&quot;,
-                     &quot;dom&quot;, &quot;end&quot; or &quot;reg&quot;.
-
-   &lt;match result&gt;:   The result. Can be &quot;match&quot; or &quot;no-match&quot;.
-
-The following words are returned only if the pattern matches an entry.
-
-   &lt;index type&gt;:     &quot;tree&quot; or &quot;list&quot;. The internal lookup algorithm.
-
-   &lt;case&gt;:           &quot;case-insensitive&quot; or &quot;case-sensitive&quot;. The
-                     interpretation of the case.
-
-   &lt;entry matched&gt;:  match=&quot;&lt;entry&gt;&quot;. Return the matched pattern. It is
-                     useful with regular expressions.
-
-The two last word are used to show the returned value and its type. With the
-&quot;<a href="#acl">acl</a>&quot; case, the pattern doesn't exist.
-
-   return=nothing:        No return because there are no &quot;<a href="#map">map</a>&quot;.
-   return=&quot;&lt;value&gt;&quot;:      The value returned in the string format.
-   return=cannot-display: The value cannot be converted as string.
-
-   type=&quot;&lt;type&gt;&quot;:         The type of the returned sample.
-</pre><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.2-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get weight"></a><a class="anchor" name="9-get weight"></a><a class="anchor" name="9.2-get weight"></a><a class="anchor" name="get weight (Statistics and monitoring)"></a><a class="anchor" name="get weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get weight"></a><a href="#9.2-get%20weight">get weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Report the current weight and the initial weight of server &lt;server&gt; in
-backend &lt;backend&gt; or an error if either doesn't exist. The initial weight is
-the one that appears in the configuration file. Both are normally equal
-unless the current weight has been changed. Both the backend and the server
-may be specified either by their name or by their numeric ID, prefixed with a
-sharp ('#').
-</pre><a class="anchor" name="help"></a><a class="anchor" name="9-help"></a><a class="anchor" name="9.2-help"></a><a class="anchor" name="help (Statistics and monitoring)"></a><a class="anchor" name="help (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="help"></a><a href="#9.2-help">help</a></b></div><pre class="text">Print the list of known keywords and their basic usage. The same help screen
-is also displayed for unknown commands.
-</pre><a class="anchor" name="prompt"></a><a class="anchor" name="9-prompt"></a><a class="anchor" name="9.2-prompt"></a><a class="anchor" name="prompt (Statistics and monitoring)"></a><a class="anchor" name="prompt (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="prompt"></a><a href="#9.2-prompt">prompt</a></b></div><pre class="text">Toggle the prompt at the beginning of the line and enter or leave interactive
-mode. In interactive mode, the connection is not closed after a command
-completes. Instead, the prompt will appear again, indicating the user that
-the interpreter is waiting for a new command. The prompt consists in a right
-angle bracket followed by a space &quot;&gt; &quot;. This mode is particularly convenient
-when one wants to periodically check information such as stats or errors.
-It is also a good idea to enter interactive mode before issuing a &quot;<a href="#help">help</a>&quot;
-command.
-</pre><a class="anchor" name="quit"></a><a class="anchor" name="9-quit"></a><a class="anchor" name="9.2-quit"></a><a class="anchor" name="quit (Statistics and monitoring)"></a><a class="anchor" name="quit (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="quit"></a><a href="#9.2-quit">quit</a></b></div><pre class="text">Close the connection when in interactive mode.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set map"></a><a class="anchor" name="9-set map"></a><a class="anchor" name="9.2-set map"></a><a class="anchor" name="set map (Statistics and monitoring)"></a><a class="anchor" name="set map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set map"></a><a href="#9.2-set%20map">set map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;key&gt;</span>|#<span style="color: #080">&lt;ref&gt;</span>]</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Modify the value corresponding to each key &lt;key&gt; in a map &lt;map&gt;. &lt;map&gt; is the
-#&lt;id&gt; or &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot;. If the &lt;ref&gt; is used in place of
-&lt;key&gt;, only the entry pointed by &lt;ref&gt; is changed. The new value is &lt;value&gt;.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.2-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn frontend"></a><a class="anchor" name="9-set maxconn frontend"></a><a class="anchor" name="9.2-set maxconn frontend"></a><a class="anchor" name="set maxconn frontend (Statistics and monitoring)"></a><a class="anchor" name="set maxconn frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn frontend"></a><a href="#9.2-set%20maxconn%20frontend">set maxconn frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Dynamically change the specified frontend's maxconn setting. Any positive
-value is allowed including zero, but setting values larger than the global
-maxconn does not make much sense. If the limit is increased and connections
-were pending, they will immediately be accepted. If it is lowered to a value
-below the current number of connections, new connections acceptation will be
-delayed until the threshold is reached. The frontend might be specified by
-either its name or its numeric ID prefixed with a sharp ('#').
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.2-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn global"></a><a class="anchor" name="9-set maxconn global"></a><a class="anchor" name="9.2-set maxconn global"></a><a class="anchor" name="set maxconn global (Statistics and monitoring)"></a><a class="anchor" name="set maxconn global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn global"></a><a href="#9.2-set%20maxconn%20global">set maxconn global</a></b> <span style="color: #080">&lt;maxconn&gt;</span></div><pre class="text">Dynamically change the global maxconn setting within the range defined by the
-initial global maxconn setting. If it is increased and connections were
-pending, they will immediately be accepted. If it is lowered to a value below
-the current number of connections, new connections acceptation will be
-delayed until the threshold is reached. A value of zero restores the initial
-setting.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections"></a><a class="anchor" name="9-set rate-limit connections"></a><a class="anchor" name="9.2-set rate-limit connections"></a><a class="anchor" name="set rate-limit connections (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections global"></a><a class="anchor" name="9-set rate-limit connections global"></a><a class="anchor" name="9.2-set rate-limit connections global"></a><a class="anchor" name="set rate-limit connections global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit connections global"></a><a href="#9.2-set%20rate-limit%20connections%20global">set rate-limit connections global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide connection rate limit, which is set by the global
-'maxconnrate' setting. A value of zero disables the limitation. This limit
-applies to all frontends and the change has an immediate effect. The value
-is passed in number of connections per second.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression"></a><a class="anchor" name="9-set rate-limit http-compression"></a><a class="anchor" name="9.2-set rate-limit http-compression"></a><a class="anchor" name="set rate-limit http-compression (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression global"></a><a class="anchor" name="9-set rate-limit http-compression global"></a><a class="anchor" name="9.2-set rate-limit http-compression global"></a><a class="anchor" name="set rate-limit http-compression global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit http-compression global"></a><a href="#9.2-set%20rate-limit%20http-compression%20global">set rate-limit http-compression global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the maximum input compression rate, which is set by the global
-'maxcomprate' setting. A value of zero disables the limitation. The value is
-passed in number of kilobytes per second. The value is available in the &quot;show
-info&quot; on the line &quot;CompressBpsRateLim&quot; in bytes.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit sessions"></a><a class="anchor" name="9-set rate-limit sessions"></a><a class="anchor" name="9.2-set rate-limit sessions"></a><a class="anchor" name="set rate-limit sessions (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit sessions (Unix Socket commands)"></a><a class="anchor" name="set rate-limit sessions global"></a><a class="anchor" name="9-set rate-limit sessions global"></a><a class="anchor" name="9.2-set rate-limit sessions global"></a><a class="anchor" name="set rate-limit sessions global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit sessions global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit sessions global"></a><a href="#9.2-set%20rate-limit%20sessions%20global">set rate-limit sessions global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide session rate limit, which is set by the global
-'maxsessrate' setting. A value of zero disables the limitation. This limit
-applies to all frontends and the change has an immediate effect. The value
-is passed in number of sessions per second.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.2-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit ssl-sessions"></a><a class="anchor" name="9-set rate-limit ssl-sessions"></a><a class="anchor" name="9.2-set rate-limit ssl-sessions"></a><a class="anchor" name="set rate-limit ssl-sessions (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit ssl-sessions (Unix Socket commands)"></a><a class="anchor" name="set rate-limit ssl-sessions global"></a><a class="anchor" name="9-set rate-limit ssl-sessions global"></a><a class="anchor" name="9.2-set rate-limit ssl-sessions global"></a><a class="anchor" name="set rate-limit ssl-sessions global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit ssl-sessions global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit ssl-sessions global"></a><a href="#9.2-set%20rate-limit%20ssl-sessions%20global">set rate-limit ssl-sessions global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide SSL session rate limit, which is set by the global
-'maxsslrate' setting. A value of zero disables the limitation. This limit
-applies to all frontends and the change has an immediate effect. The value
-is passed in number of sessions per second sent to the SSL stack. It applies
-before the handshake in order to protect the stack against handshake abuses.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> addr <span style="color: #080">&lt;ip4 or ip6 address&gt;</span></div><pre class="text">Replace the current IP address of a server by the one provided.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent <span style="color: #008">[ up | down ]</span></div><pre class="text">Force a server's agent to a new state. This can be useful to immediately
-switch a server's state regardless of some slow agent checks for example.
-Note that the change is propagated to tracking servers if any.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> health <span style="color: #008">[ up | stopping | down ]</span></div><pre class="text">Force a server's health to a new state. This can be useful to immediately
-switch a server's state regardless of some slow health checks for example.
-Note that the change is propagated to tracking servers if any.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> state <span style="color: #008">[ ready | drain | maint ]</span></div><pre class="text">Force a server's administrative state to a new state. This can be useful to
-disable load balancing and/or any traffic to a server. Setting the state to
-&quot;ready&quot; puts the server in normal mode, and the command is the equivalent of
-the &quot;<a href="#enable%20server">enable server</a>&quot; command. Setting the state to &quot;maint&quot; disables any traffic
-to the server as well as any health checks. This is the equivalent of the
-&quot;<a href="#disable%20server">disable server</a>&quot; command. Setting the mode to &quot;drain&quot; only removes the server
-from load balancing but still allows it to be checked and to accept new
-persistent connections. Changes are propagated to tracking servers if any.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.2-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.2-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> weight <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. This is the exact
-equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command below.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.2-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.2-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.2-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-on &quot;<a href="#bind">bind</a>&quot; lines). Same controls are performed as during the initial loading of
-the response. The &lt;response&gt; must be passed as a base64 encoded string of the
-DER encoded response from the OCSP server.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>openssl ocsp -issuer issuer.pem -cert server.pem \
-             -host ocsp.issuer.com:80 -respout resp.der
-echo &quot;set ssl ocsp-response $(base64 -w 10000 resp.der)&quot; | \
-             socat stdio /var/run/haproxy.stat
-</code></pre>
-</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.2-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl tls-key"></a><a class="anchor" name="9-set ssl tls-key"></a><a class="anchor" name="9.2-set ssl tls-key"></a><a class="anchor" name="set ssl tls-key (Statistics and monitoring)"></a><a class="anchor" name="set ssl tls-key (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl tls-key"></a><a href="#9.2-set%20ssl%20tls-key">set ssl tls-key</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;tlskey&gt;</span></div><pre class="text">Set the next TLS key for the &lt;id&gt; listener to &lt;tlskey&gt;. This key becomes the
-ultimate key, while the penultimate one is used for encryption (others just
-decrypt). The oldest TLS key present is overwritten. &lt;id&gt; is either a numeric
-#&lt;id&gt; or &lt;file&gt; returned by &quot;<a href="#show%20tls-keys">show tls-keys</a>&quot;. &lt;tlskey&gt; is a base64 encoded 48
-bit TLS ticket key (ex. openssl rand -base64 48).
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set table"></a><a class="anchor" name="9-set table"></a><a class="anchor" name="9.2-set table"></a><a class="anchor" name="set table (Statistics and monitoring)"></a><a class="anchor" name="set table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set table"></a><a href="#9.2-set%20table">set table</a></b> <span style="color: #080">&lt;table&gt;</span> key <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;data_type&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>*</div><pre class="text">Create or update a stick-table entry in the table. If the key is not present,
-an entry is inserted. See stick-table in <a href="#4.2">section 4.2</a> to find all possible
-values for &lt;data_type&gt;. The most likely use consists in dynamically entering
-entries for source IP addresses, with a flag in gpc0 to dynamically block an
-IP address or affect its quality of service. It is possible to pass multiple
-data_types in a single call.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set timeout"></a><a class="anchor" name="9-set timeout"></a><a class="anchor" name="9.2-set timeout"></a><a class="anchor" name="set timeout (Statistics and monitoring)"></a><a class="anchor" name="set timeout (Unix Socket commands)"></a><a class="anchor" name="set timeout cli"></a><a class="anchor" name="9-set timeout cli"></a><a class="anchor" name="9.2-set timeout cli"></a><a class="anchor" name="set timeout cli (Statistics and monitoring)"></a><a class="anchor" name="set timeout cli (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set timeout cli"></a><a href="#9.2-set%20timeout%20cli">set timeout cli</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Change the CLI interface timeout for current connection. This can be useful
-during long debugging sessions where the user needs to constantly inspect
-some indicators without being disconnected. The delay is passed in seconds.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.2-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set weight"></a><a class="anchor" name="9-set weight"></a><a class="anchor" name="9.2-set weight"></a><a class="anchor" name="set weight (Statistics and monitoring)"></a><a class="anchor" name="set weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set weight"></a><a href="#9.2-set%20weight">set weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. If the value ends
-with the '%' sign, then the new weight will be relative to the initially
-configured weight.  Absolute weights are permitted between 0 and 256.
-Relative weights must be positive with the resulting absolute weight is
-capped at 256.  Servers which are part of a farm running a static
-load-balancing algorithm have stricter limitations because the weight
-cannot change once set. Thus for these servers, the only accepted values
-are 0 and 100% (or 0 and the initial weight). Changes take effect
-immediately, though certain LB algorithms require a certain amount of
-requests to consider changes. A typical usage of this command is to
-disable a server during an update by setting its weight to zero, then to
-enable it again after the update by setting it back to 100%. This command
-is restricted and can only be issued on sockets configured for level
-&quot;admin&quot;. Both the backend and the server may be specified either by their
-name or by their numeric ID, prefixed with a sharp ('#').
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show errors"></a><a class="anchor" name="9-show errors"></a><a class="anchor" name="9.2-show errors"></a><a class="anchor" name="show errors (Statistics and monitoring)"></a><a class="anchor" name="show errors (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show errors"></a><a href="#9.2-show%20errors">show errors</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span>]</span></div><pre class="text">Dump last known request and response errors collected by frontends and
-backends. If &lt;iid&gt; is specified, the limit the dump to errors concerning
-either frontend or backend whose ID is &lt;iid&gt;. This command is restricted
-and can only be issued on sockets configured for levels &quot;operator&quot; or
-&quot;admin&quot;.
-
-The errors which may be collected are the last request and response errors
-caused by protocol violations, often due to invalid characters in header
-names. The report precisely indicates what exact character violated the
-protocol. Other important information such as the exact date the error was
-detected, frontend and backend names, the server name (when known), the
-internal session ID and the source address which has initiated the session
-are reported too.
-
-All characters are returned, and non-printable characters are encoded. The
-most common ones (\t = 9, \n = 10, \r = 13 and \e = 27) are encoded as one
-letter following a backslash. The backslash itself is encoded as '\\' to
-avoid confusion. Other non-printable characters are encoded '\xNN' where
-NN is the two-digits hexadecimal representation of the character's ASCII
-code.
-
-Lines are prefixed with the position of their first character, starting at 0
-for the beginning of the buffer. At most one input line is printed per line,
-and large lines will be broken into multiple consecutive output lines so that
-the output never goes beyond 79 characters wide. It is easy to detect if a
-line was broken, because it will not end with '\n' and the next line's offset
-will be followed by a '+' sign, indicating it is a continuation of previous
-line.
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>    $ echo &quot;<a href="#show%20errors">show errors</a>&quot; | socat stdio /tmp/sock1
-&gt;&gt;&gt; [04/Mar/2009:15:46:56.081] backend http-in (<span class="comment">#2) : invalid response</span>
-      src 127.0.0.1, session <span class="comment">#54, frontend fe-eth0 (#1), server s2 (#1)</span>
-      response length 213 bytes, error at position 23:
-
-      00000  HTTP/1.0 200 OK\r\n
-      00017  header/bizarre:blah\r\n
-      00038  Location: blah\r\n
-      00054  Long-line: this is a very long line which should b
-      00104+ e broken into multiple lines on the output buffer,
-      00154+  otherwise it would be too large to print in a ter
-      00204+ minal\r\n
-      00211  \r\n
-
-In the example above, we see that the backend &quot;http-in&quot; which has internal
-ID 2 has blocked an invalid response from its server s2 which has internal
-ID 1. The request was on session 54 initiated by source 127.0.0.1 and
-received by frontend fe-eth0 whose ID is 1. The total response length was
-213 bytes when the error was detected, and the error was at byte 23. This
-is the slash ('/') in header name &quot;header/bizarre&quot;, which is not a valid
-HTTP character for a header name.
-</code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show backend"></a><a class="anchor" name="9-show backend"></a><a class="anchor" name="9.2-show backend"></a><a class="anchor" name="show backend (Statistics and monitoring)"></a><a class="anchor" name="show backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show backend"></a><a href="#9.2-show%20backend">show backend</a></b></div><pre class="text">Dump the list of backends available in the running process
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.2-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.2-show%20info">show info</a></b></div><pre class="text">Dump info about haproxy status on current process.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show map"></a><a class="anchor" name="9-show map"></a><a class="anchor" name="9.2-show map"></a><a class="anchor" name="show map (Statistics and monitoring)"></a><a class="anchor" name="show map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show map"></a><a href="#9.2-show%20map">show map</a></b> <span style="color: #008">[<span style="color: #080">&lt;map&gt;</span>]</span></div><pre class="text">Dump info about map converters. Without argument, the list of all available
-maps is returned. If a &lt;map&gt; is specified, its contents are dumped. &lt;map&gt; is
-the #&lt;id&gt; or &lt;file&gt;. The first column is a unique identifier. It can be used
-as reference for the operation &quot;<a href="#del%20map">del map</a>&quot; and &quot;<a href="#set%20map">set map</a>&quot;. The second column is
-the pattern and the third column is the sample if available. The data returned
-are not directly a list of available maps, but are the list of all patterns
-composing any map. Many of these patterns can be shared with ACL.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show acl"></a><a class="anchor" name="9-show acl"></a><a class="anchor" name="9.2-show acl"></a><a class="anchor" name="show acl (Statistics and monitoring)"></a><a class="anchor" name="show acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show acl"></a><a href="#9.2-show%20acl">show acl</a></b> <span style="color: #008">[<span style="color: #080">&lt;acl&gt;</span>]</span></div><pre class="text">Dump info about acl converters. Without argument, the list of all available
-acls is returned. If a &lt;acl&gt; is specified, its contents are dumped. &lt;acl&gt; if
-the #&lt;id&gt; or &lt;file&gt;. The dump format is the same than the map even for the
-sample value. The data returned are not a list of available ACL, but are the
-list of all patterns composing any ACL. Many of these patterns can be shared
-with maps.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show pools"></a><a class="anchor" name="9-show pools"></a><a class="anchor" name="9.2-show pools"></a><a class="anchor" name="show pools (Statistics and monitoring)"></a><a class="anchor" name="show pools (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show pools"></a><a href="#9.2-show%20pools">show pools</a></b></div><pre class="text">Dump the status of internal memory pools. This is useful to track memory
-usage when suspecting a memory leak for example. It does exactly the same
-as the SIGQUIT when running in foreground except that it does not flush
-the pools.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show servers"></a><a class="anchor" name="9-show servers"></a><a class="anchor" name="9.2-show servers"></a><a class="anchor" name="show servers (Statistics and monitoring)"></a><a class="anchor" name="show servers (Unix Socket commands)"></a><a class="anchor" name="show servers state"></a><a class="anchor" name="9-show servers state"></a><a class="anchor" name="9.2-show servers state"></a><a class="anchor" name="show servers state (Statistics and monitoring)"></a><a class="anchor" name="show servers state (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show servers state"></a><a href="#9.2-show%20servers%20state">show servers state</a></b> <span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span></div><pre class="text">Dump the state of the servers found in the running configuration. A backend
-name or identifier may be provided to limit the output to this backend only.
-
-The dump has the following format:
- - first line contains the format version (1 in this specification);
- - second line contains the column headers, prefixed by a sharp ('#');
- - third line and next ones contain data;
- - each line starting by a sharp ('#') is considered as a comment.
-
-Since multiple versions of the ouptput may co-exist, below is the list of
-fields and their order per file format version :
- 1:
-   be_id:                       Backend unique id.
-   be_name:                     Backend label.
-   srv_id:                      Server unique id (in the backend).
-   srv_name:                    Server label.
-   srv_addr:                    Server IP address.
-   srv_op_state:                Server operational state (UP/DOWN/...).
-                                In source code: SRV_ST_*.
-   srv_admin_state:             Server administrative state (MAINT/DRAIN/...).
-                                In source code: SRV_ADMF_*.
-   srv_uweight:                 User visible server's weight.
-   srv_iweight:                 Server's initial weight.
-   srv_time_since_last_change:  Time since last operational change.
-   srv_check_status:            Last health check status.
-   srv_check_result:            Last check result (FAILED/PASSED/...).
-                                In source code: CHK_RES_*.
-   srv_check_health:            Checks rise / fall current counter.
-   srv_check_state:             State of the check (ENABLED/PAUSED/...).
-                                In source code: CHK_ST_*.
-   srv_agent_state:             State of the agent check (ENABLED/PAUSED/...).
-                                In source code: CHK_ST_*.
-   bk_f_forced_id:              Flag to know if the backend ID is forced by
-                                configuration.
-   srv_f_forced_id:             Flag to know if the server's ID is forced by
-                                configuration.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
-be huge. This command is restricted and can only be issued on sockets
-configured for levels &quot;operator&quot; or &quot;admin&quot;.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.2-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.2-show%20sess">show sess</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Display a lot of internal information about the specified session identifier.
-This identifier is the first field at the beginning of the lines in the dumps
-of &quot;<a href="#show%20sess">show sess</a>&quot; (it corresponds to the session pointer). Those information are
-useless to most users but may be used by haproxy developers to troubleshoot a
-complex bug. The output format is intentionally not documented so that it can
-freely evolve depending on demands. You may find a description of all fields
-returned in src/dumpstats.c
-
-The special id &quot;all&quot; dumps the states of all sessions, which must be avoided
-as much as possible as it is highly CPU intensive and can take a lot of time.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.2-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.2-show%20stat">show stat</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span></div><pre class="text">Dump statistics in the CSV format. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is
-possible to dump only selected items :
-  - &lt;iid&gt; is a proxy ID, -1 to dump everything
-  - &lt;type&gt; selects the type of dumpable objects : 1 for frontends, 2 for
-     backends, 4 for servers, -1 for everything. These values can be ORed,
-     for example:
-        1 + 2     = 3   -&gt; frontend + backend.
-        1 + 2 + 4 = 7   -&gt; frontend + backend + server.
-  - &lt;sid&gt; is a server ID, -1 to dump everything from the selected proxy.
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>    $ echo &quot;show info;show stat&quot; | socat stdio unix-connect:/tmp/sock1
-&gt;&gt;&gt; Name: HAProxy
-    Version: 1.4-dev2-49
-    Release_date: 2009/09/23
-    Nbproc: 1
-    Process_num: 1
-    (...)
-
-    <span class="comment"># pxname,svname,qcur,qmax,scur,smax,slim,stot,bin,bout,dreq,  (...)</span>
-    stats,FRONTEND,,,0,0,1000,0,0,0,0,0,0,,,,,OPEN,,,,,,,,,1,1,0, (...)
-    stats,BACKEND,0,0,0,0,1000,0,0,0,0,0,,0,0,0,0,UP,0,0,0,,0,250,(...)
-    (...)
-    www1,BACKEND,0,0,0,0,1000,0,0,0,0,0,,0,0,0,0,UP,1,1,0,,0,250, (...)
-
-    $
-
-Here, two commands have been issued at once. That way it's easy to find
-which process the stats apply to in multi-process mode. Notice the empty
-line after the information output which marks the end of the first block.
-A similar empty line appears at the end of the second block (stats) so that
-the reader knows the output has not been truncated.
-</code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.2-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><a class="anchor" name="show stat resolvers"></a><a class="anchor" name="9-show stat resolvers"></a><a class="anchor" name="9.2-show stat resolvers"></a><a class="anchor" name="show stat resolvers (Statistics and monitoring)"></a><a class="anchor" name="show stat resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat resolvers"></a><a href="#9.2-show%20stat%20resolvers">show stat resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
-if no section is supplied.
-
-For each name server, the following counters are reported:
-  sent: number of DNS requests sent to this server
-  valid: number of DNS valid responses received from this server
-  update: number of DNS responses used to update the server's IP address
-  cname: number of CNAME responses
-  cname_error: CNAME errors encountered with this server
-  any_err: number of empty response (IE: server does not support ANY type)
-  nx: non existent domain response received from this server
-  timeout: how many time this server did not answer in time
-  refused: number of requests refused by this server
-  other: any other DNS errors
-  invalid: invalid DNS response (from a protocol point of view)
-  too_big: too big response
-  outdated: number of response arrived too late (after an other name server)
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.2-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.2-show%20table">show table</a></b></div><pre class="text">Dump general information on all known stick-tables. Their name is returned
-(the name of the proxy which holds them), their type (currently zero, always
-IP), their size in maximum possible number of entries, and the number of
-entries currently in use.
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>    $ echo &quot;<a href="#show%20table">show table</a>&quot; | socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: front_pub, type: ip, size:204800, used:171454</span>
-&gt;&gt;&gt; <span class="comment"># table: back_rdp, type: ip, size:204800, used:0</span>
-</code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.2-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.2-show%20table">show table</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div><pre class="text">Dump contents of stick-table &lt;name&gt;. In this mode, a first line of generic
-information about the table is reported as with &quot;<a href="#show%20table">show table</a>&quot;, then all
-entries are dumped. Since this can be quite heavy, it is possible to specify
-a filter in order to specify what entries to display.
-
-When the &quot;data.&quot; form is used the filter applies to the stored data (see
-&quot;<a href="#stick-table">stick-table</a>&quot; in <a href="#4.2">section 4.2</a>).  A stored data type must be specified
-in &lt;type&gt;, and this data type must be stored in the table otherwise an
-error is reported. The data is compared according to &lt;operator&gt; with the
-64-bit integer &lt;value&gt;.  Operators are the same as with the ACLs :
-
-  - eq : match entries whose data is equal to this value
-  - ne : match entries whose data is not equal to this value
-  - le : match entries whose data is less than or equal to this value
-  - ge : match entries whose data is greater than or equal to this value
-  - lt : match entries whose data is less than this value
-  - gt : match entries whose data is greater than this value
-
-
-When the key form is used the entry &lt;key&gt; is shown.  The key must be of the
-same type as the table, which currently is limited to IPv4, IPv6, integer,
-and string.
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>    $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
-&gt;&gt;&gt; 0x80e6a4c: key=127.0.0.1 use=0 exp=3594729 gpc0=0 conn_rate(30000)=1  \
-      bytes_out_rate(60000)=187
-&gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
-      bytes_out_rate(60000)=191
-
-    $ echo &quot;show table http_proxy data.gpc0 gt 0&quot; | socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
-&gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
-      bytes_out_rate(60000)=191
-
-    $ echo &quot;show table http_proxy data.conn_rate gt 5&quot; | \
-        socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
-&gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
-      bytes_out_rate(60000)=191
-
-    $ echo &quot;show table http_proxy key 127.0.0.2&quot; | \
-        socat stdio /tmp/sock1
-&gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:2</span>
-&gt;&gt;&gt; 0x80e6a80: key=127.0.0.2 use=0 exp=3594740 gpc0=1 conn_rate(30000)=10 \
-      bytes_out_rate(60000)=191
-</code></pre>
-</div><pre class="text">When the data criterion applies to a dynamic value dependent on time such as
-a bytes rate, the value is dynamically computed during the evaluation of the
-entry in order to decide whether it has to be dumped or not. This means that
-such a filter could match for some time then not match anymore because as
-time goes, the average event rate drops.
-
-It is possible to use this to extract lists of IP addresses abusing the
-service, in order to monitor them or even blacklist them in a firewall.
-</pre><div class="separator">
-<span class="label label-success">Example :</span>
-<pre class="prettyprint">
-<code>$ echo &quot;show table http_proxy data.gpc0 gt 0&quot; \
-  | socat stdio /tmp/sock1 \
-  | fgrep 'key=' | cut -d' ' -f2 | cut -d= -f2 &gt; abusers-ip.txt
-  ( or | awk '/key/{ print a[split($2,a,&quot;=&quot;)]; }' )
-</code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.2-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tls-keys"></a><a class="anchor" name="9-show tls-keys"></a><a class="anchor" name="9.2-show tls-keys"></a><a class="anchor" name="show tls-keys (Statistics and monitoring)"></a><a class="anchor" name="show tls-keys (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tls-keys"></a><a href="#9.2-show%20tls-keys">show tls-keys</a></b></div><pre class="text">Dump all loaded TLS ticket keys. The TLS ticket key reference ID and the
-file from which the keys have been loaded is shown. Both of those can be
-used to update the TLS keys using &quot;<a href="#set%20ssl%20tls-key">set ssl tls-key</a>&quot;.
-</pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.2-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.2-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.2-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
-be released. It will not be possible to enable the frontend anymore after
-this operation. This is intended to be used in environments where stopping a
-proxy is not even imaginable but a misconfigured proxy must be fixed. That
-way it's possible to release the port and bind it into another process to
-restore operations. The frontend will not appear at all on the stats page
-once it is terminated.
-
-The frontend may be specified either by its name or by its numeric ID,
-prefixed with a sharp ('#').
-
-This command is restricted and can only be issued on sockets configured for
-level &quot;admin&quot;.
-</pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.2-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown session"></a><a class="anchor" name="9-shutdown session"></a><a class="anchor" name="9.2-shutdown session"></a><a class="anchor" name="shutdown session (Statistics and monitoring)"></a><a class="anchor" name="shutdown session (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown session"></a><a href="#9.2-shutdown%20session">shutdown session</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Immediately terminate the session matching the specified session identifier.
-This identifier is the first field at the beginning of the lines in the dumps
-of &quot;<a href="#show%20sess">show sess</a>&quot; (it corresponds to the session pointer). This can be used to
-terminate a long-running session without waiting for a timeout or when an
-endless transfer is ongoing. Such terminated sessions are reported with a 'K'
-flag in the logs.
-</pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.2-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown sessions"></a><a class="anchor" name="9-shutdown sessions"></a><a class="anchor" name="9.2-shutdown sessions"></a><a class="anchor" name="shutdown sessions (Statistics and monitoring)"></a><a class="anchor" name="shutdown sessions (Unix Socket commands)"></a><a class="anchor" name="shutdown sessions server"></a><a class="anchor" name="9-shutdown sessions server"></a><a class="anchor" name="9.2-shutdown sessions server"></a><a class="anchor" name="shutdown sessions server (Statistics and monitoring)"></a><a class="anchor" name="shutdown sessions server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown sessions server"></a><a href="#9.2-shutdown%20sessions%20server">shutdown sessions server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Immediately terminate all the sessions attached to the specified server. This
-can be used to terminate long-running sessions after a server is put into
-maintenance mode, for instance. Such terminated sessions are reported with a
-'K' flag in the logs.
 </pre>
 </div>
 
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6-dev7-21 &ndash; Configuration Manual<br>
+							HAProxy 1.6-dev7-40 &ndash; Configuration Manual<br>
 							<small>2015/10/06, willy tarreau</small>
 						</div>
 					</div>
@@ -15557,8 +14748,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"accept-proxy",
 				"acl",
 				"add",
-				"add acl",
-				"add map",
 				"addr",
 				"agent-check",
 				"agent-inter",
@@ -15613,12 +14802,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"check-ssl",
 				"chroot",
 				"ciphers",
-				"clear",
-				"clear acl",
-				"clear counters",
-				"clear counters all",
-				"clear map",
-				"clear table",
 				"clitimeout",
 				"compression",
 				"compression algo",
@@ -15652,20 +14835,12 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"default-server",
 				"default_backend",
 				"defer-accept",
-				"del",
-				"del acl",
-				"del map",
 				"description (Process management and security)",
 				"description (Alphabetically sorted keywords reference)",
 				"devicatlas-properties-cookie",
 				"deviceatlas-json-file",
 				"deviceatlas-log-level",
 				"deviceatlas-separator",
-				"disable",
-				"disable agent",
-				"disable frontend",
-				"disable health",
-				"disable server",
 				"disabled (Peers)",
 				"disabled (Alphabetically sorted keywords reference)",
 				"disabled (Server and default-server options)",
@@ -15684,10 +14859,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"email-alert myhostname",
 				"email-alert to",
 				"enable",
-				"enable agent",
-				"enable frontend",
-				"enable health",
-				"enable server",
 				"enabled",
 				"env",
 				"error-limit",
@@ -15713,10 +14884,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"force-tlsv12",
 				"fullconn",
 				"generate-certificates",
-				"get",
-				"get acl",
-				"get map",
-				"get weight",
 				"gid (Process management and security)",
 				"gid (Bind options)",
 				"grace",
@@ -15728,7 +14895,6 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"hdr_cnt",
 				"hdr_ip",
 				"hdr_val",
-				"help",
 				"hex",
 				"hold",
 				"http-check",
@@ -15798,6 +14964,7 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"mul",
 				"name",
 				"nameserver",
+				"namespace",
 				"nbproc (Process management and security)",
 				"nbproc (Fetching samples from internal states)",
 				"nbsrv",
@@ -15924,11 +15091,9 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"port",
 				"proc",
 				"process",
-				"prompt",
 				"query",
 				"queue",
 				"quiet",
-				"quit",
 				"rand",
 				"rate-limit",
 				"rate-limit sessions",
@@ -16111,52 +15276,11 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 				"server-state-base",
 				"server-state-file",
 				"server-state-file-name",
-				"set",
-				"set map",
-				"set maxconn",
-				"set maxconn frontend",
-				"set maxconn global",
-				"set rate-limit",
-				"set rate-limit connections",
-				"set rate-limit connections global",
-				"set rate-limit http-compression",
-				"set rate-limit http-compression global",
-				"set rate-limit sessions",
-				"set rate-limit sessions global",
-				"set rate-limit ssl-sessions",
-				"set rate-limit ssl-sessions global",
-				"set server",
-				"set ssl",
-				"set ssl ocsp-response",
-				"set ssl tls-key",
-				"set table",
-				"set timeout",
-				"set timeout cli",
-				"set weight",
 				"set-cookie",
 				"shdr",
 				"shdr_cnt",
 				"shdr_ip",
 				"shdr_val",
-				"show",
-				"show acl",
-				"show backend",
-				"show errors",
-				"show info",
-				"show map",
-				"show pools",
-				"show servers",
-				"show servers state",
-				"show sess",
-				"show stat",
-				"show stat resolvers",
-				"show table",
-				"show tls-keys",
-				"shutdown",
-				"shutdown frontend",
-				"shutdown session",
-				"shutdown sessions",
-				"shutdown sessions server",
 				"slowstart",
 				"sni",
 				"so_id",
@@ -16505,7 +15629,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev7-21', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6-dev7-40', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-35', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16517,4 +15641,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6-dev7-21-g5a54921 -->
+<!-- git:v1.6-dev7-40-g7e0c971 -->
