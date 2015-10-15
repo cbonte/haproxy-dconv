@@ -170,8 +170,14 @@ function push()
 
 init
 fetch_haproxy_dconv
-generate_docs http://git.1wt.eu/git/haproxy-1.4.git/ $WORK_DIR/haproxy/1.4 $WORK_DIR/haproxy-dconv/gh-pages configuration.txt configuration-1.4.html
-generate_docs http://git.1wt.eu/git/haproxy-1.5.git/ $WORK_DIR/haproxy/1.5 $WORK_DIR/haproxy-dconv/gh-pages configuration.txt configuration-1.5.html
-generate_docs http://git.1wt.eu/git/haproxy.git/ $WORK_DIR/haproxy/1.6 $WORK_DIR/haproxy-dconv/gh-pages configuration.txt configuration-1.6.html
-generate_docs http://git.1wt.eu/git/haproxy.git/ $WORK_DIR/haproxy/1.6 $WORK_DIR/haproxy-dconv/gh-pages intro.txt intro-1.6.html
+
+generate_docs http://git.haproxy.org/git/haproxy-1.4.git/ $WORK_DIR/haproxy/1.4 $WORK_DIR/haproxy-dconv/gh-pages configuration.txt configuration-1.4.html
+generate_docs http://git.haproxy.org/git/haproxy-1.5.git/ $WORK_DIR/haproxy/1.5 $WORK_DIR/haproxy-dconv/gh-pages configuration.txt configuration-1.5.html
+
+generate_docs http://git.haproxy.org/git/haproxy-1.6.git/ $WORK_DIR/haproxy/1.6 $WORK_DIR/haproxy-dconv/gh-pages configuration.txt configuration-1.6.html
+generate_docs http://git.haproxy.org/git/haproxy-1.6.git/ $WORK_DIR/haproxy/1.6 $WORK_DIR/haproxy-dconv/gh-pages intro.txt intro-1.6.html
+
+generate_docs http://git.haproxy.org/git/haproxy.git/ $WORK_DIR/haproxy/1.7 $WORK_DIR/haproxy-dconv/gh-pages configuration.txt configuration-1.7.html
+generate_docs http://git.haproxy.org/git/haproxy.git/ $WORK_DIR/haproxy/1.7 $WORK_DIR/haproxy-dconv/gh-pages intro.txt intro-1.7.html
+
 push $WORK_DIR/haproxy-dconv/gh-pages
