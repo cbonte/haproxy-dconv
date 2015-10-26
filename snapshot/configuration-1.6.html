@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>HAProxy version 1.6.1-1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.3.1-35" rel="stylesheet" />
+		<link href="../css/page.css?0.3.1-37" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-35</b> on <b>2015/10/22</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-37</b> on <b>2015/10/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -1320,10 +1320,10 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#ssl-dh-param-file">ssl-dh-param-file</a>
    - <a href="#ssl-server-verify">ssl-server-verify</a>
    - <a href="#unix-bind">unix-bind</a>
-   - 51degrees-data-file
-   - 51degrees-property-name-list
-   - 51degrees-property-separator
-   - 51degrees-cache-size
+   - <a href="#51degrees-data-file">51degrees-data-file</a>
+   - <a href="#51degrees-property-name-list">51degrees-property-name-list</a>
+   - <a href="#51degrees-property-separator">51degrees-property-separator</a>
+   - <a href="#51degrees-cache-size">51degrees-cache-size</a>
 
  * Performance tuning
    - <a href="#max-spread-checks">max-spread-checks</a>
@@ -1612,41 +1612,33 @@ This statement is useful in HA configurations where two or more processes or
 servers share the same IP address. By setting a different node-name on all
 nodes, it becomes easy to immediately spot what server is handling the
 traffic.
-</pre><a class="anchor" name="description"></a><a class="anchor" name="3-description"></a><a class="anchor" name="3.1-description"></a><a class="anchor" name="description (Global parameters)"></a><a class="anchor" name="description (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="description"></a><a href="#3.1-description">description</a></b> <span style="color: #080">&lt;text&gt;</span></div><pre class="text">  Add a text that describes the instance.
+</pre><a class="anchor" name="description"></a><a class="anchor" name="3-description"></a><a class="anchor" name="3.1-description"></a><a class="anchor" name="description (Global parameters)"></a><a class="anchor" name="description (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="description"></a><a href="#3.1-description">description</a></b> <span style="color: #080">&lt;text&gt;</span></div><pre class="text">Add a text that describes the instance.
 
-  Please note that it is required to escape certain characters (# for example)
-  and this text is inserted into a html page so you should avoid using
-  &quot;&lt;&quot; and &quot;&gt;&quot; characters.
+Please note that it is required to escape certain characters (# for example)
+and this text is inserted into a html page so you should avoid using
+&quot;&lt;&quot; and &quot;&gt;&quot; characters.
+</pre><a class="anchor" name="51degrees-data-file"></a><a class="anchor" name="3-51degrees-data-file"></a><a class="anchor" name="3.1-51degrees-data-file"></a><a class="anchor" name="51degrees-data-file (Global parameters)"></a><a class="anchor" name="51degrees-data-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="51degrees-data-file"></a><a href="#3.1-51degrees-data-file">51degrees-data-file</a></b> <span style="color: #080">&lt;file path&gt;</span></div><pre class="text">The path of the 51Degrees data file to provide device detection services. The
+file should be unzipped and accessible by HAProxy with relevavnt permissions.
 
-51degrees-data-file &lt;file path&gt;
-  The path of the 51Degrees data file to provide device detection services. The
-  file should be unzipped and accessible by HAProxy with relevavnt permissions.
+Please note that this option is only available when haproxy has been
+compiled with USE_51DEGREES.
+</pre><a class="anchor" name="51degrees-property-name-list"></a><a class="anchor" name="3-51degrees-property-name-list"></a><a class="anchor" name="3.1-51degrees-property-name-list"></a><a class="anchor" name="51degrees-property-name-list (Global parameters)"></a><a class="anchor" name="51degrees-property-name-list (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="51degrees-property-name-list"></a><a href="#3.1-51degrees-property-name-list">51degrees-property-name-list</a></b> <span style="color: #008">[<span style="color: #080">&lt;string&gt;</span>]</span></div><pre class="text">A list of 51Degrees property names to be load from the dataset. A full list
+of names is available on the 51Degrees website:
+https://51degrees.com/resources/property-dictionary
 
-  Please note that this option is only available when haproxy has been
-  compiled with USE_51DEGREES.
+Please note that this option is only available when haproxy has been
+compiled with USE_51DEGREES.
+</pre><a class="anchor" name="51degrees-property-separator"></a><a class="anchor" name="3-51degrees-property-separator"></a><a class="anchor" name="3.1-51degrees-property-separator"></a><a class="anchor" name="51degrees-property-separator (Global parameters)"></a><a class="anchor" name="51degrees-property-separator (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="51degrees-property-separator"></a><a href="#3.1-51degrees-property-separator">51degrees-property-separator</a></b> <span style="color: #080">&lt;char&gt;</span></div><pre class="text">A char that will be appended to every property value in a response header
+containing 51Degrees results. If not set that will be set as ','.
 
-51degrees-property-name-list [&lt;string&gt;]
-  A list of 51Degrees property names to be load from the dataset. A full list
-  of names is available on the 51Degrees website:
-  https://51degrees.com/resources/property-dictionary
+Please note that this option is only available when haproxy has been
+compiled with USE_51DEGREES.
+</pre><a class="anchor" name="51degrees-cache-size"></a><a class="anchor" name="3-51degrees-cache-size"></a><a class="anchor" name="3.1-51degrees-cache-size"></a><a class="anchor" name="51degrees-cache-size (Global parameters)"></a><a class="anchor" name="51degrees-cache-size (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="51degrees-cache-size"></a><a href="#3.1-51degrees-cache-size">51degrees-cache-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the 51Degrees converter cache to &lt;number&gt; entries. This
+is an LRU cache which reminds previous device detections and their results.
+By default, this cache is disabled.
 
-  Please note that this option is only available when haproxy has been
-  compiled with USE_51DEGREES.
-
-51degrees-property-separator &lt;char&gt;
-  A char that will be appended to every property value in a response header
-  containing 51Degrees results. If not set that will be set as ','.
-
-  Please note that this option is only available when haproxy has been
-  compiled with USE_51DEGREES.
-
-51degrees-cache-size &lt;number&gt;
-  Sets the size of the 51Degrees converter cache to &lt;number&gt; entries. This
-  is an LRU cache which reminds previous device detections and their results.
-  By default, this cache is disabled.
-
-  Please note that this option is only available when haproxy has been
-  compiled with USE_51DEGREES.
+Please note that this option is only available when haproxy has been
+compiled with USE_51DEGREES.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
 <h2 id="chapter-3.2" data-target="3.2"><small><a class="small" href="#3.2">3.2.</a></small> Performance tuning</h2>
@@ -14746,6 +14738,10 @@ reading. Their sole purpose is to explain how to decipher them.
 			/* Keyword search */
 			var searchFocus = false
 			var keywords = [
+				"51degrees-cache-size",
+				"51degrees-data-file",
+				"51degrees-property-name-list",
+				"51degrees-property-separator",
 				"accept-proxy",
 				"acl",
 				"add",
