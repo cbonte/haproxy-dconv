@@ -15,11 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
-TODO : ability to split chapters into several files
-TODO : manage keyword locality (server/proxy/global ; ex : maxconn)
-TODO : Remove global variables where possible
-'''
 import os
 import subprocess
 import sys
