@@ -6,7 +6,7 @@ class Parser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (
-            '([a-z][a-z0-9\-\+_\.]*[a-z0-9\-\+_)])', # keyword
+            '([a-z0-9\-\+_\.]*[a-z0-9\-\+_)])', # keyword
             '( [a-z0-9\-_]+)*',                  # subkeywords
             '(\([^ ]*\))?',   # arg (ex: (<backend>), (<frontend>/<backend>), (<offset1>,<length>[,<offset2>]) ...
         ))
