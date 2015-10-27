@@ -290,7 +290,7 @@ def convert(infile, outfile, base=''):
         i += 1
     sections.append(currentSection)
 
-    chapterIndexes = sorted(chapters.keys())
+    chapterIndexes = sorted(chapters.keys(), key=lambda chapter: map(int, chapter.split('.')))
 
     document = ""
 

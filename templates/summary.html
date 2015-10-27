@@ -2,9 +2,9 @@
 <div class="page-header">
 	<h1 id="chapter-summary" data-target="summary">Summary</h1>
 </div>
-<div class="row">
-	<div class="col-md-6">
-		<% previousLevel = None %>
+<table>
+	<tbody>
+		<% previousChapter = None %>
 		% for k in chapterIndexes:
 			<% chapter = chapters[k] %>
 			% if chapter['title']:
@@ -12,21 +12,14 @@
 					if chapter['level'] == 1:
 						otag = "<b>"
 						etag = "</b>"
+						if previousChapter:
+							otag = "<br>" + otag
 					else:
 						otag = etag = ""
 				%>
-				% if chapter['chapter'] == '7':
-					## Quick and dirty hack to split the summary in 2 columns
-					## TODO : implement a generic way split the summary
-					</div><div class="col-md-6">
-					<% previousLevel = None %>
-				% endif
-				% if otag and previousLevel:
-					<br />
-				% endif
-				<div class="row">
-					<div class="col-md-2 pagination-right noheight">${otag}<small>${chapter['chapter']}.</small>${etag}</div>
-					<div class="col-md-10 noheight">
+				<tr>
+					<td>${otag}<small>${chapter['chapter']}.</small>${etag}</td>
+					<td>
 						% for tab in range(1, chapter['level']):
 							<div class="tab">
 						% endfor
@@ -34,10 +27,10 @@
 						% for tab in range(1, chapter['level']):
 							</div>
 						% endfor
-					</div>
-				</div>
-				<% previousLevel = chapter['level'] %>
+					<td>
+				</tr>
+				<% previousChapter = chapter %>
 			% endif
 		% endfor
-	</div>
-</div>
+	</tbody>
+</table>
