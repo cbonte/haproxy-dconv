@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev0-35 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev0-38 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/11/08</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/11/09</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev0-35</strong></p>
+							<p><strong>version 1.7-dev0-38</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -5509,7 +5509,7 @@ complete in case of chunked encoding. It can have undesired side effects with
 some applications abusing HTTP by expecting unbufferred transmissions between
 the frontend and the backend, so this should definitely not be used by
 default.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-no-delay">option http-no-delay</a>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-no-delay">option http-no-delay</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-ignore-probes"></a><a class="anchor" name="4-option http-ignore-probes"></a><a class="anchor" name="4.2-option http-ignore-probes"></a><a class="anchor" name="option http-ignore-probes (Proxies)"></a><a class="anchor" name="option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-ignore-probes"></a><a href="#4.2-option%20http-ignore-probes">option http-ignore-probes</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-ignore-probes"></a><a class="anchor" name="4-no option http-ignore-probes"></a><a class="anchor" name="4.2-no option http-ignore-probes"></a><a class="anchor" name="no option http-ignore-probes (Proxies)"></a><a class="anchor" name="no option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-ignore-probes"></a><a href="#4.2-no%20option%20http-ignore-probes">no option http-ignore-probes</a></b></div><pre class="text">Enable or disable logging of null connections and request timeouts
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9417,9 +9417,11 @@ standard, well-documented behaviour, so it might be needed to hide the 408
 code using &quot;<a href="#option%20http-ignore-probes">option http-ignore-probes</a>&quot; or &quot;errorfile 408 /dev/null&quot;. See
 more details in the explanations of the &quot;cR&quot; termination code in <a href="#8.5">section 8.5</a>.
 
-Note that this timeout only applies to the header part of the request, and
-not to any data. As soon as the empty line is received, this timeout is not
-used anymore. It is used again on keep-alive connections to wait for a second
+By default, this timeout only applies to the header part of the request,
+and not to any data. As soon as the empty line is received, this timeout is
+not used anymore. When combined with &quot;<a href="#option%20http-buffer-request">option http-buffer-request</a>&quot;, this
+timeout also applies to the body of the request..
+It is used again on keep-alive connections to wait for a second
 request if &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot; is not set.
 
 Generally it is enough to set it to a few seconds, as most clients send the
@@ -9432,7 +9434,7 @@ If this parameter is not set, the client timeout still applies between each
 chunk of the incoming request. It should be set in the frontend to take
 effect, unless the frontend is in TCP mode, in which case the HTTP backend's
 timeout will be used.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, and &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, and &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#option%20http-buffer-request">option http-buffer-request</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout queue"></a><a class="anchor" name="4-timeout queue"></a><a class="anchor" name="4.2-timeout queue"></a><a class="anchor" name="timeout queue (Proxies)"></a><a class="anchor" name="timeout queue (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout queue"></a><a href="#4.2-timeout%20queue">timeout queue</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum time to wait in the queue for a connection slot to be free
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -14713,7 +14715,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev0-35 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev0-38 &ndash; Configuration Manual<br>
 							<small>2015/10/13, willy tarreau</small>
 						</div>
 					</div>
@@ -15628,7 +15630,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev0-35', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev0-38', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15640,4 +15642,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev0-35-g54ffb91 -->
+<!-- git:v1.7-dev0-38-geccdf43 -->
