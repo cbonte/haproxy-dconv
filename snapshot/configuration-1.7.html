@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev0-59 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev0-60 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/12/07</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/12/08</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev0-59</strong></p>
+							<p><strong>version 1.7-dev0-60</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4260,8 +4260,13 @@ There is no limit to the number of http-request statements per instance.
 
 It is important to know that http-request rules are processed very early in
 the HTTP processing, just after &quot;<a href="#block">block</a>&quot; rules and before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot;
-rules. That way, headers added by &quot;add-header&quot;/&quot;set-header&quot; are visible by
-almost all further ACL rules.
+or &quot;<a href="#reqadd">reqadd</a>&quot; rules. That way, headers added by &quot;add-header&quot;/&quot;set-header&quot; are
+visible by almost all further ACL rules.
+
+Using &quot;<a href="#reqadd">reqadd</a>&quot;/&quot;<a href="#reqdel">reqdel</a>&quot;/&quot;<a href="#reqrep">reqrep</a>&quot; to manipulate request headers is discouraged
+in newer versions (&gt;= 1.5). But if you need to use regular expression to
+delete headers, you can still use &quot;<a href="#reqdel">reqdel</a>&quot;. Also please use
+&quot;http-request deny/allow/tarpit&quot; instead of &quot;<a href="#reqdeny">reqdeny</a>&quot;/&quot;<a href="#reqpass">reqpass</a>&quot;/&quot;<a href="#reqtarpit">reqtarpit</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -4567,9 +4572,14 @@ http-response set-status 431
 There is no limit to the number of http-response statements per instance.
 
 It is important to know that http-response rules are processed very early in
-the HTTP processing, before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot; rules. That way, headers
-added by &quot;add-header&quot;/&quot;set-header&quot; are visible by almost all further ACL
+the HTTP processing, before &quot;<a href="#rspdel">rspdel</a>&quot; or &quot;<a href="#rsprep">rsprep</a>&quot; or &quot;<a href="#rspadd">rspadd</a>&quot; rules. That way,
+headers added by &quot;add-header&quot;/&quot;set-header&quot; are visible by almost all further ACL
 rules.
+
+Using &quot;<a href="#rspadd">rspadd</a>&quot;/&quot;<a href="#rspdel">rspdel</a>&quot;/&quot;<a href="#rsprep">rsprep</a>&quot; to manipulate request headers is discouraged
+in newer versions (&gt;= 1.5). But if you need to use regular expression to
+delete headers, you can still use &quot;<a href="#rspdel">rspdel</a>&quot;. Also please use
+&quot;http-response deny&quot; instead of &quot;<a href="#rspdeny">rspdeny</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -7005,7 +7015,7 @@ responses.
 <div class="example-desc">Add &quot;X-Proto: SSL&quot; to requests coming via port 81</div><code>acl is-ssl  dst_port       81
 reqadd      X-Proto:\ SSL  if is-ssl
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqallow"></a><a class="anchor" name="4-reqallow"></a><a class="anchor" name="4.2-reqallow"></a><a class="anchor" name="reqallow (Proxies)"></a><a class="anchor" name="reqallow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqallow"></a><a href="#4.2-reqallow">reqallow</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqiallow"></a><a class="anchor" name="4-reqiallow"></a><a class="anchor" name="4.2-reqiallow"></a><a class="anchor" name="reqiallow (Proxies)"></a><a class="anchor" name="reqiallow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqiallow"></a><a href="#4.2-reqiallow">reqiallow</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> (ignore case)</div><pre class="text">Definitely allow an HTTP request if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7038,7 +7048,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqiallow ^Host:\ www\.
 reqideny  ^Host:\ .*\.local
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqdel"></a><a class="anchor" name="4-reqdel"></a><a class="anchor" name="4.2-reqdel"></a><a class="anchor" name="reqdel (Proxies)"></a><a class="anchor" name="reqdel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqdel"></a><a href="#4.2-reqdel">reqdel</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqidel"></a><a class="anchor" name="4-reqidel"></a><a class="anchor" name="4.2-reqidel"></a><a class="anchor" name="reqidel (Proxies)"></a><a class="anchor" name="reqidel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqidel"></a><a href="#4.2-reqidel">reqidel</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Delete all headers matching a regular expression in an HTTP request
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7070,7 +7080,7 @@ responses. Keep in mind that header names are not case-sensitive.
 reqidel ^X-Forwarded-For:.*
 reqidel ^Cookie:.*SERVER=
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqdeny"></a><a class="anchor" name="4-reqdeny"></a><a class="anchor" name="4.2-reqdeny"></a><a class="anchor" name="reqdeny (Proxies)"></a><a class="anchor" name="reqdeny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqdeny"></a><a href="#4.2-reqdeny">reqdeny</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqideny"></a><a class="anchor" name="4-reqideny"></a><a class="anchor" name="4.2-reqideny"></a><a class="anchor" name="reqideny (Proxies)"></a><a class="anchor" name="reqideny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqideny"></a><a href="#4.2-reqideny">reqideny</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Deny an HTTP request if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7107,7 +7117,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqpass"></a><a class="anchor" name="4-reqpass"></a><a class="anchor" name="4.2-reqpass"></a><a class="anchor" name="reqpass (Proxies)"></a><a class="anchor" name="reqpass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqpass"></a><a href="#4.2-reqpass">reqpass</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqipass"></a><a class="anchor" name="4-reqipass"></a><a class="anchor" name="4.2-reqipass"></a><a class="anchor" name="reqipass (Proxies)"></a><a class="anchor" name="reqipass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqipass"></a><a href="#4.2-reqipass">reqipass</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Ignore any HTTP request line matching a regular expression in next rules
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7140,7 +7150,7 @@ reqipass  ^Host:\ www.private\.local
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqrep"></a><a class="anchor" name="4-reqrep"></a><a class="anchor" name="4.2-reqrep"></a><a class="anchor" name="reqrep (Proxies)"></a><a class="anchor" name="reqrep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqrep"></a><a href="#4.2-reqrep">reqrep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqirep"></a><a class="anchor" name="4-reqirep"></a><a class="anchor" name="4.2-reqirep"></a><a class="anchor" name="reqirep (Proxies)"></a><a class="anchor" name="reqirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqirep"></a><a href="#4.2-reqirep">reqirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>   (ignore case)</div><pre class="text">Replace a regular expression with a string in an HTTP request line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7180,7 +7190,7 @@ reqrep ^([^\ :]*)\ /static/(.*)     \1\ /\2
 <span class="comment"># replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.</span>
 reqirep ^Host:\ www.mydomain.com   Host:\ www
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqtarpit"></a><a class="anchor" name="4-reqtarpit"></a><a class="anchor" name="4.2-reqtarpit"></a><a class="anchor" name="reqtarpit (Proxies)"></a><a class="anchor" name="reqtarpit (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqtarpit"></a><a href="#4.2-reqtarpit">reqtarpit</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqitarpit"></a><a class="anchor" name="4-reqitarpit"></a><a class="anchor" name="4.2-reqitarpit"></a><a class="anchor" name="reqitarpit (Proxies)"></a><a class="anchor" name="reqitarpit (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqitarpit"></a><a href="#4.2-reqitarpit">reqitarpit</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Tarpit an HTTP request containing a line matching a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7223,7 +7233,7 @@ reqitarpit ^User-Agent:
 acl badguys src 10.1.0.3 172.16.13.20/28
 reqitarpit . if badguys
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="retries"></a><a class="anchor" name="4-retries"></a><a class="anchor" name="4.2-retries"></a><a class="anchor" name="retries (Proxies)"></a><a class="anchor" name="retries (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="retries"></a><a href="#4.2-retries">retries</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Set the number of retries to perform on a server after a connection failure
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7264,7 +7274,7 @@ the last header of an HTTP response.
 Header transformations only apply to traffic which passes through HAProxy,
 and not to traffic generated by HAProxy, such as health-checks or error
 responses.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#rspdel">rspdel</a>&quot; &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rspdel"></a><a class="anchor" name="4-rspdel"></a><a class="anchor" name="4.2-rspdel"></a><a class="anchor" name="rspdel (Proxies)"></a><a class="anchor" name="rspdel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspdel"></a><a href="#4.2-rspdel">rspdel</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspidel"></a><a class="anchor" name="4-rspidel"></a><a class="anchor" name="4.2-rspidel"></a><a class="anchor" name="rspidel (Proxies)"></a><a class="anchor" name="rspidel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspidel"></a><a href="#4.2-rspidel">rspidel</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Delete all headers matching a regular expression in an HTTP response
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7296,7 +7306,7 @@ responses. Keep in mind that header names are not case-sensitive.
 <code><span class="comment"># remove the Server header from responses</span>
 rspidel ^Server:.*
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rspdeny"></a><a class="anchor" name="4-rspdeny"></a><a class="anchor" name="4.2-rspdeny"></a><a class="anchor" name="rspdeny (Proxies)"></a><a class="anchor" name="rspdeny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspdeny"></a><a href="#4.2-rspdeny">rspdeny</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspideny"></a><a class="anchor" name="4-rspideny"></a><a class="anchor" name="4.2-rspideny"></a><a class="anchor" name="rspideny (Proxies)"></a><a class="anchor" name="rspideny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspideny"></a><a href="#4.2-rspideny">rspideny</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Block an HTTP response if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7332,7 +7342,7 @@ Rspdeny should be avoided in new designs.
 <code><span class="comment"># Ensure that no content type matching ms-word will leak</span>
 rspideny  ^Content-type:\.*/ms-word
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rsprep"></a><a class="anchor" name="4-rsprep"></a><a class="anchor" name="4.2-rsprep"></a><a class="anchor" name="rsprep (Proxies)"></a><a class="anchor" name="rsprep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rsprep"></a><a href="#4.2-rsprep">rsprep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspirep"></a><a class="anchor" name="4-rspirep"></a><a class="anchor" name="4.2-rspirep"></a><a class="anchor" name="rspirep (Proxies)"></a><a class="anchor" name="rspirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspirep"></a><a href="#4.2-rspirep">rspirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Replace a regular expression with a string in an HTTP response line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7371,7 +7381,7 @@ are not case-sensitive.
 <code><span class="comment"># replace &quot;Location: 127.0.0.1:8080&quot; with &quot;Location: www.mydomain.com&quot;</span>
 rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="server"></a><a class="anchor" name="4-server"></a><a class="anchor" name="4.2-server"></a><a class="anchor" name="server (Proxies)"></a><a class="anchor" name="server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server"></a><a href="#4.2-server">server</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;address&gt;</span><span style="color: #008">[:<span style="color: #008">[port]</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Declare a server in a backend
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -14715,7 +14725,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev0-59 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev0-60 &ndash; Configuration Manual<br>
 							<small>2015/10/13, willy tarreau</small>
 						</div>
 					</div>
@@ -15630,7 +15640,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev0-59', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev0-60', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15642,4 +15652,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev0-59-g858b103 -->
+<!-- git:v1.7-dev0-60-geb5a363 -->
