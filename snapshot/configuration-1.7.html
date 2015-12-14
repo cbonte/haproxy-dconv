@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev0-67 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev0-68 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev0-67</strong></p>
+							<p><strong>version 1.7-dev0-68</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1356,6 +1356,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.pipesize">tune.pipesize</a>
    - <a href="#tune.rcvbuf.client">tune.rcvbuf.client</a>
    - <a href="#tune.rcvbuf.server">tune.rcvbuf.server</a>
+   - <a href="#tune.recv_enough">tune.recv_enough</a>
    - <a href="#tune.sndbuf.client">tune.sndbuf.client</a>
    - <a href="#tune.sndbuf.server">tune.sndbuf.server</a>
    - <a href="#tune.ssl.cachesize">tune.ssl.cachesize</a>
@@ -1890,6 +1891,11 @@ the kernel autotune this value depending on the amount of available memory.
 However it can sometimes help to set it to very low values (eg: 4096) in
 order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
+</pre><a class="anchor" name="tune.recv_enough"></a><a class="anchor" name="3-tune.recv_enough"></a><a class="anchor" name="3.2-tune.recv_enough"></a><a class="anchor" name="tune.recv_enough (Global parameters)"></a><a class="anchor" name="tune.recv_enough (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.recv_enough"></a><a href="#3.2-tune.recv_enough">tune.recv_enough</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Haproxy uses some hints to detect that a short read indicates the end of the
+socket buffers. One of them is that a read returns more than &lt;recv_enough&gt;
+bytes, which defaults to 10136 (7 segments of 1448 each). This default value
+may be changed by this setting to better deal with workloads involving lots
+of short messages such as telnet or SSH sessions.
 </pre><a class="anchor" name="tune.sndbuf.client"></a><a class="anchor" name="3-tune.sndbuf.client"></a><a class="anchor" name="3.2-tune.sndbuf.client"></a><a class="anchor" name="tune.sndbuf.client (Global parameters)"></a><a class="anchor" name="tune.sndbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.client"></a><a href="#3.2-tune.sndbuf.client">tune.sndbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.sndbuf.server"></a><a class="anchor" name="3-tune.sndbuf.server"></a><a class="anchor" name="3.2-tune.sndbuf.server"></a><a class="anchor" name="tune.sndbuf.server (Global parameters)"></a><a class="anchor" name="tune.sndbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.server"></a><a href="#3.2-tune.sndbuf.server">tune.sndbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket send buffer size on the client or the server side to
 the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
@@ -14725,7 +14731,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev0-67 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev0-68 &ndash; Configuration Manual<br>
 							<small>2015/10/13, willy tarreau</small>
 						</div>
 					</div>
@@ -15478,6 +15484,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"tune.pipesize",
 				"tune.rcvbuf.client",
 				"tune.rcvbuf.server",
+				"tune.recv_enough",
 				"tune.sndbuf.client",
 				"tune.sndbuf.server",
 				"tune.ssl.cachesize",
@@ -15640,7 +15647,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev0-67', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev0-68', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15652,4 +15659,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev0-67-g30da7ad -->
+<!-- git:v1.7-dev0-68-gb22fc30 -->
