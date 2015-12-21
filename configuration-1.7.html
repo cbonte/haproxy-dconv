@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev0 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/10/27</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/12/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,11 +82,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev0</strong></p>
+							<p><strong>version 1.7-dev1</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/10/13
+								2015/12/20
 							</p>
 						</div>
 
@@ -1290,7 +1290,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#deviceatlas-json-file">deviceatlas-json-file</a>
    - <a href="#deviceatlas-log-level">deviceatlas-log-level</a>
    - <a href="#deviceatlas-separator">deviceatlas-separator</a>
-   - deviceatlas-properties-cookie
+   - <a href="#deviceatlas-properties-cookie">deviceatlas-properties-cookie</a>
    - <a href="#external-check">external-check</a>
    - <a href="#gid">gid</a>
    - <a href="#group">group</a>
@@ -1356,6 +1356,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.pipesize">tune.pipesize</a>
    - <a href="#tune.rcvbuf.client">tune.rcvbuf.client</a>
    - <a href="#tune.rcvbuf.server">tune.rcvbuf.server</a>
+   - <a href="#tune.recv_enough">tune.recv_enough</a>
    - <a href="#tune.sndbuf.client">tune.sndbuf.client</a>
    - <a href="#tune.sndbuf.server">tune.sndbuf.server</a>
    - <a href="#tune.ssl.cachesize">tune.ssl.cachesize</a>
@@ -1411,7 +1412,7 @@ The path must be a valid JSON data file and accessible by Haproxy process.
 optional and set to 0 by default if not set.
 </pre><a class="anchor" name="deviceatlas-separator"></a><a class="anchor" name="3-deviceatlas-separator"></a><a class="anchor" name="3.1-deviceatlas-separator"></a><a class="anchor" name="deviceatlas-separator (Global parameters)"></a><a class="anchor" name="deviceatlas-separator (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="deviceatlas-separator"></a><a href="#3.1-deviceatlas-separator">deviceatlas-separator</a></b> <span style="color: #080">&lt;char&gt;</span></div><pre class="text">Sets the character separator for the API properties results. This directive
 is optional and set to | by default if not set.
-</pre><a class="anchor" name="devicatlas-properties-cookie"></a><a class="anchor" name="3-devicatlas-properties-cookie"></a><a class="anchor" name="3.1-devicatlas-properties-cookie"></a><a class="anchor" name="devicatlas-properties-cookie (Global parameters)"></a><a class="anchor" name="devicatlas-properties-cookie (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="devicatlas-properties-cookie"></a><a href="#3.1-devicatlas-properties-cookie">devicatlas-properties-cookie</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Sets the client cookie's name used for the detection if the DeviceAtlas
+</pre><a class="anchor" name="deviceatlas-properties-cookie"></a><a class="anchor" name="3-deviceatlas-properties-cookie"></a><a class="anchor" name="3.1-deviceatlas-properties-cookie"></a><a class="anchor" name="deviceatlas-properties-cookie (Global parameters)"></a><a class="anchor" name="deviceatlas-properties-cookie (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="deviceatlas-properties-cookie"></a><a href="#3.1-deviceatlas-properties-cookie">deviceatlas-properties-cookie</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Sets the client cookie's name used for the detection if the DeviceAtlas
 Client-side component was used during the request. This directive is optional
 and set to DAPROPS by default if not set.
 </pre><a class="anchor" name="external-check"></a><a class="anchor" name="3-external-check"></a><a class="anchor" name="3.1-external-check"></a><a class="anchor" name="external-check (Global parameters)"></a><a class="anchor" name="external-check (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="external-check"></a><a href="#3.1-external-check">external-check</a></b></div><pre class="text">Allows the use of an external agent to perform health checks.
@@ -1567,7 +1568,8 @@ forced using cmdline option '-dV'.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
 Connections to this socket will return various statistics outputs and even
 allow some commands to be issued to change some runtime settings. Please
-consult <a href="#9.2">section 9.2</a> &quot;Unix Socket commands&quot; for more details.
+consult <a href="#9.2">section 9.2</a> &quot;Unix Socket commands&quot; of Management Guide for more
+details.
 
 All parameters supported by &quot;<a href="#bind">bind</a>&quot; lines are supported, for instance to
 restrict access to some users or their access rights. Please consult
@@ -1889,6 +1891,11 @@ the kernel autotune this value depending on the amount of available memory.
 However it can sometimes help to set it to very low values (eg: 4096) in
 order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
+</pre><a class="anchor" name="tune.recv_enough"></a><a class="anchor" name="3-tune.recv_enough"></a><a class="anchor" name="3.2-tune.recv_enough"></a><a class="anchor" name="tune.recv_enough (Global parameters)"></a><a class="anchor" name="tune.recv_enough (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.recv_enough"></a><a href="#3.2-tune.recv_enough">tune.recv_enough</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Haproxy uses some hints to detect that a short read indicates the end of the
+socket buffers. One of them is that a read returns more than &lt;recv_enough&gt;
+bytes, which defaults to 10136 (7 segments of 1448 each). This default value
+may be changed by this setting to better deal with workloads involving lots
+of short messages such as telnet or SSH sessions.
 </pre><a class="anchor" name="tune.sndbuf.client"></a><a class="anchor" name="3-tune.sndbuf.client"></a><a class="anchor" name="3.2-tune.sndbuf.client"></a><a class="anchor" name="tune.sndbuf.client (Global parameters)"></a><a class="anchor" name="tune.sndbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.client"></a><a href="#3.2-tune.sndbuf.client">tune.sndbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.sndbuf.server"></a><a class="anchor" name="3-tune.sndbuf.server"></a><a class="anchor" name="3.2-tune.sndbuf.server"></a><a class="anchor" name="tune.sndbuf.server (Global parameters)"></a><a class="anchor" name="tune.sndbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.server"></a><a href="#3.2-tune.sndbuf.server">tune.sndbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket send buffer size on the client or the server side to
 the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
@@ -2945,7 +2952,7 @@ in a &quot;defaults&quot; section.
 <pre class="prettyprint">
 <code>capture request header Host len 15
 capture request header X-Forwarded-For len 15
-capture request header Referrer len 15
+capture request header Referer len 15
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#capture%20response%20header">capture response header</a>&quot; as well as <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="capture"></a><a class="anchor" name="4-capture"></a><a class="anchor" name="4.2-capture"></a><a class="anchor" name="capture (Proxies)"></a><a class="anchor" name="capture (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture response"></a><a class="anchor" name="4-capture response"></a><a class="anchor" name="4.2-capture response"></a><a class="anchor" name="capture response (Proxies)"></a><a class="anchor" name="capture response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture response header"></a><a class="anchor" name="4-capture response header"></a><a class="anchor" name="4.2-capture response header"></a><a class="anchor" name="capture response header (Proxies)"></a><a class="anchor" name="capture response header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="capture response header"></a><a href="#4.2-capture%20response%20header">capture response header</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log the last occurrence of the specified response header.
@@ -3307,7 +3314,7 @@ cookie SRV insert indirect nocache maxidle 30m maxlife 8h
 reserved slot can be used in the backends. The &quot;request&quot; keyword allocates a
 capture slot for use in the request, and &quot;response&quot; allocates a capture slot
 for use in the response.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#capture-req">capture-req</a>&quot;, &quot;<a href="#capture-res">capture-res</a>&quot; (sample converters), &quot;http-request capture&quot; and &quot;http-response capture&quot;.</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#capture-req">capture-req</a>&quot;, &quot;<a href="#capture-res">capture-res</a>&quot; (sample converters), &quot;<a href="#capture.req.hdr">capture.req.hdr</a>&quot;, &quot;<a href="#capture.res.hdr">capture.res.hdr</a>&quot; (sample fetches), &quot;http-request capture&quot; and &quot;http-response capture&quot;.</div>
 <a class="anchor" name="default-server"></a><a class="anchor" name="4-default-server"></a><a class="anchor" name="4.2-default-server"></a><a class="anchor" name="default-server (Proxies)"></a><a class="anchor" name="default-server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="default-server"></a><a href="#4.2-default-server">default-server</a></b> <span style="color: #008">[param*]</span></div><pre class="text">Change default options for a server in a backend
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -4145,6 +4152,8 @@ http-request set-query %[query,regsub(%3D,=,g)]
   the captured string in a previously declared capture slot. This is useful
   to run captures in backends. The slot id can be declared by a previous
   directive &quot;http-request capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot; keyword.
+  If the slot &lt;id&gt; doesn't exist, then HAProxy fails parsing the
+  configuration to prevent unexpected behavior at run time.
 
 - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
   enables tracking of sticky counters from current request. These rules
@@ -4257,8 +4266,13 @@ There is no limit to the number of http-request statements per instance.
 
 It is important to know that http-request rules are processed very early in
 the HTTP processing, just after &quot;<a href="#block">block</a>&quot; rules and before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot;
-rules. That way, headers added by &quot;add-header&quot;/&quot;set-header&quot; are visible by
-almost all further ACL rules.
+or &quot;<a href="#reqadd">reqadd</a>&quot; rules. That way, headers added by &quot;add-header&quot;/&quot;set-header&quot; are
+visible by almost all further ACL rules.
+
+Using &quot;<a href="#reqadd">reqadd</a>&quot;/&quot;<a href="#reqdel">reqdel</a>&quot;/&quot;<a href="#reqrep">reqrep</a>&quot; to manipulate request headers is discouraged
+in newer versions (&gt;= 1.5). But if you need to use regular expression to
+delete headers, you can still use &quot;<a href="#reqdel">reqdel</a>&quot;. Also please use
+&quot;http-request deny/allow/tarpit&quot; instead of &quot;<a href="#reqdeny">reqdeny</a>&quot;/&quot;<a href="#reqpass">reqpass</a>&quot;/&quot;<a href="#reqtarpit">reqtarpit</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -4499,6 +4513,8 @@ http-response set-status 431
   This is useful to run captures in backends. The slot id can be declared by
   a previous directive &quot;http-response capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot;
   keyword.
+  If the slot &lt;id&gt; doesn't exist, then HAProxy fails parsing the
+  configuration to prevent unexpected behavior at run time.
 
 - &quot;<a href="#redirect">redirect</a>&quot; : this performs an HTTP redirection based on a redirect rule.
   This supports a format string similarly to &quot;http-request redirect&quot; rules,
@@ -4562,9 +4578,14 @@ http-response set-status 431
 There is no limit to the number of http-response statements per instance.
 
 It is important to know that http-response rules are processed very early in
-the HTTP processing, before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot; rules. That way, headers
-added by &quot;add-header&quot;/&quot;set-header&quot; are visible by almost all further ACL
+the HTTP processing, before &quot;<a href="#rspdel">rspdel</a>&quot; or &quot;<a href="#rsprep">rsprep</a>&quot; or &quot;<a href="#rspadd">rspadd</a>&quot; rules. That way,
+headers added by &quot;add-header&quot;/&quot;set-header&quot; are visible by almost all further ACL
 rules.
+
+Using &quot;<a href="#rspadd">rspadd</a>&quot;/&quot;<a href="#rspdel">rspdel</a>&quot;/&quot;<a href="#rsprep">rsprep</a>&quot; to manipulate request headers is discouraged
+in newer versions (&gt;= 1.5). But if you need to use regular expression to
+delete headers, you can still use &quot;<a href="#rspdel">rspdel</a>&quot;. Also please use
+&quot;http-response deny&quot; instead of &quot;<a href="#rspdeny">rspdeny</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -4721,7 +4742,7 @@ over the stats socket and redirect output.
 
 The format of the file is versionned and is very specific. To understand it,
 please read the documentation of the &quot;show servers state&quot; command (chapter
-9.2).
+9.2 of Management Guide).
 </pre><div class="separator">
 <span class="label label-info">Arguments:</span><pre class="prettyprint arguments">global     load the content of the file pointed by the global directive
            named &quot;<a href="#server-state-file">server-state-file</a>&quot;.
@@ -5504,7 +5525,7 @@ complete in case of chunked encoding. It can have undesired side effects with
 some applications abusing HTTP by expecting unbufferred transmissions between
 the frontend and the backend, so this should definitely not be used by
 default.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-no-delay">option http-no-delay</a>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-no-delay">option http-no-delay</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-ignore-probes"></a><a class="anchor" name="4-option http-ignore-probes"></a><a class="anchor" name="4.2-option http-ignore-probes"></a><a class="anchor" name="option http-ignore-probes (Proxies)"></a><a class="anchor" name="option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-ignore-probes"></a><a href="#4.2-option%20http-ignore-probes">option http-ignore-probes</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-ignore-probes"></a><a class="anchor" name="4-no option http-ignore-probes"></a><a class="anchor" name="4.2-no option http-ignore-probes"></a><a class="anchor" name="no option http-ignore-probes (Proxies)"></a><a class="anchor" name="no option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-ignore-probes"></a><a href="#4.2-no%20option%20http-ignore-probes">no option http-ignore-probes</a></b></div><pre class="text">Enable or disable logging of null connections and request timeouts
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7000,7 +7021,7 @@ responses.
 <div class="example-desc">Add &quot;X-Proto: SSL&quot; to requests coming via port 81</div><code>acl is-ssl  dst_port       81
 reqadd      X-Proto:\ SSL  if is-ssl
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqallow"></a><a class="anchor" name="4-reqallow"></a><a class="anchor" name="4.2-reqallow"></a><a class="anchor" name="reqallow (Proxies)"></a><a class="anchor" name="reqallow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqallow"></a><a href="#4.2-reqallow">reqallow</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqiallow"></a><a class="anchor" name="4-reqiallow"></a><a class="anchor" name="4.2-reqiallow"></a><a class="anchor" name="reqiallow (Proxies)"></a><a class="anchor" name="reqiallow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqiallow"></a><a href="#4.2-reqiallow">reqiallow</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> (ignore case)</div><pre class="text">Definitely allow an HTTP request if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7033,7 +7054,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqiallow ^Host:\ www\.
 reqideny  ^Host:\ .*\.local
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqdel"></a><a class="anchor" name="4-reqdel"></a><a class="anchor" name="4.2-reqdel"></a><a class="anchor" name="reqdel (Proxies)"></a><a class="anchor" name="reqdel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqdel"></a><a href="#4.2-reqdel">reqdel</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqidel"></a><a class="anchor" name="4-reqidel"></a><a class="anchor" name="4.2-reqidel"></a><a class="anchor" name="reqidel (Proxies)"></a><a class="anchor" name="reqidel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqidel"></a><a href="#4.2-reqidel">reqidel</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Delete all headers matching a regular expression in an HTTP request
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7065,7 +7086,7 @@ responses. Keep in mind that header names are not case-sensitive.
 reqidel ^X-Forwarded-For:.*
 reqidel ^Cookie:.*SERVER=
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqdeny"></a><a class="anchor" name="4-reqdeny"></a><a class="anchor" name="4.2-reqdeny"></a><a class="anchor" name="reqdeny (Proxies)"></a><a class="anchor" name="reqdeny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqdeny"></a><a href="#4.2-reqdeny">reqdeny</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqideny"></a><a class="anchor" name="4-reqideny"></a><a class="anchor" name="4.2-reqideny"></a><a class="anchor" name="reqideny (Proxies)"></a><a class="anchor" name="reqideny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqideny"></a><a href="#4.2-reqideny">reqideny</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Deny an HTTP request if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7102,7 +7123,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqpass"></a><a class="anchor" name="4-reqpass"></a><a class="anchor" name="4.2-reqpass"></a><a class="anchor" name="reqpass (Proxies)"></a><a class="anchor" name="reqpass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqpass"></a><a href="#4.2-reqpass">reqpass</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqipass"></a><a class="anchor" name="4-reqipass"></a><a class="anchor" name="4.2-reqipass"></a><a class="anchor" name="reqipass (Proxies)"></a><a class="anchor" name="reqipass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqipass"></a><a href="#4.2-reqipass">reqipass</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Ignore any HTTP request line matching a regular expression in next rules
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7135,7 +7156,7 @@ reqipass  ^Host:\ www.private\.local
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqrep"></a><a class="anchor" name="4-reqrep"></a><a class="anchor" name="4.2-reqrep"></a><a class="anchor" name="reqrep (Proxies)"></a><a class="anchor" name="reqrep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqrep"></a><a href="#4.2-reqrep">reqrep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqirep"></a><a class="anchor" name="4-reqirep"></a><a class="anchor" name="4.2-reqirep"></a><a class="anchor" name="reqirep (Proxies)"></a><a class="anchor" name="reqirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqirep"></a><a href="#4.2-reqirep">reqirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>   (ignore case)</div><pre class="text">Replace a regular expression with a string in an HTTP request line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7175,7 +7196,7 @@ reqrep ^([^\ :]*)\ /static/(.*)     \1\ /\2
 <span class="comment"># replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.</span>
 reqirep ^Host:\ www.mydomain.com   Host:\ www
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqtarpit"></a><a class="anchor" name="4-reqtarpit"></a><a class="anchor" name="4.2-reqtarpit"></a><a class="anchor" name="reqtarpit (Proxies)"></a><a class="anchor" name="reqtarpit (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqtarpit"></a><a href="#4.2-reqtarpit">reqtarpit</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqitarpit"></a><a class="anchor" name="4-reqitarpit"></a><a class="anchor" name="4.2-reqitarpit"></a><a class="anchor" name="reqitarpit (Proxies)"></a><a class="anchor" name="reqitarpit (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqitarpit"></a><a href="#4.2-reqitarpit">reqitarpit</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Tarpit an HTTP request containing a line matching a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7218,7 +7239,7 @@ reqitarpit ^User-Agent:
 acl badguys src 10.1.0.3 172.16.13.20/28
 reqitarpit . if badguys
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="retries"></a><a class="anchor" name="4-retries"></a><a class="anchor" name="4.2-retries"></a><a class="anchor" name="retries (Proxies)"></a><a class="anchor" name="retries (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="retries"></a><a href="#4.2-retries">retries</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Set the number of retries to perform on a server after a connection failure
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7259,7 +7280,7 @@ the last header of an HTTP response.
 Header transformations only apply to traffic which passes through HAProxy,
 and not to traffic generated by HAProxy, such as health-checks or error
 responses.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#rspdel">rspdel</a>&quot; &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rspdel"></a><a class="anchor" name="4-rspdel"></a><a class="anchor" name="4.2-rspdel"></a><a class="anchor" name="rspdel (Proxies)"></a><a class="anchor" name="rspdel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspdel"></a><a href="#4.2-rspdel">rspdel</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspidel"></a><a class="anchor" name="4-rspidel"></a><a class="anchor" name="4.2-rspidel"></a><a class="anchor" name="rspidel (Proxies)"></a><a class="anchor" name="rspidel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspidel"></a><a href="#4.2-rspidel">rspidel</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Delete all headers matching a regular expression in an HTTP response
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7291,7 +7312,7 @@ responses. Keep in mind that header names are not case-sensitive.
 <code><span class="comment"># remove the Server header from responses</span>
 rspidel ^Server:.*
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rspdeny"></a><a class="anchor" name="4-rspdeny"></a><a class="anchor" name="4.2-rspdeny"></a><a class="anchor" name="rspdeny (Proxies)"></a><a class="anchor" name="rspdeny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspdeny"></a><a href="#4.2-rspdeny">rspdeny</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspideny"></a><a class="anchor" name="4-rspideny"></a><a class="anchor" name="4.2-rspideny"></a><a class="anchor" name="rspideny (Proxies)"></a><a class="anchor" name="rspideny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspideny"></a><a href="#4.2-rspideny">rspideny</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Block an HTTP response if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7327,7 +7348,7 @@ Rspdeny should be avoided in new designs.
 <code><span class="comment"># Ensure that no content type matching ms-word will leak</span>
 rspideny  ^Content-type:\.*/ms-word
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rsprep"></a><a class="anchor" name="4-rsprep"></a><a class="anchor" name="4.2-rsprep"></a><a class="anchor" name="rsprep (Proxies)"></a><a class="anchor" name="rsprep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rsprep"></a><a href="#4.2-rsprep">rsprep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspirep"></a><a class="anchor" name="4-rspirep"></a><a class="anchor" name="4.2-rspirep"></a><a class="anchor" name="rspirep (Proxies)"></a><a class="anchor" name="rspirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspirep"></a><a href="#4.2-rspirep">rspirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Replace a regular expression with a string in an HTTP response line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7366,7 +7387,7 @@ are not case-sensitive.
 <code><span class="comment"># replace &quot;Location: 127.0.0.1:8080&quot; with &quot;Location: www.mydomain.com&quot;</span>
 rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="server"></a><a class="anchor" name="4-server"></a><a class="anchor" name="4.2-server"></a><a class="anchor" name="server (Proxies)"></a><a class="anchor" name="server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server"></a><a href="#4.2-server">server</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;address&gt;</span><span style="color: #008">[:<span style="color: #008">[port]</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Declare a server in a backend
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9412,9 +9433,11 @@ standard, well-documented behaviour, so it might be needed to hide the 408
 code using &quot;<a href="#option%20http-ignore-probes">option http-ignore-probes</a>&quot; or &quot;errorfile 408 /dev/null&quot;. See
 more details in the explanations of the &quot;cR&quot; termination code in <a href="#8.5">section 8.5</a>.
 
-Note that this timeout only applies to the header part of the request, and
-not to any data. As soon as the empty line is received, this timeout is not
-used anymore. It is used again on keep-alive connections to wait for a second
+By default, this timeout only applies to the header part of the request,
+and not to any data. As soon as the empty line is received, this timeout is
+not used anymore. When combined with &quot;<a href="#option%20http-buffer-request">option http-buffer-request</a>&quot;, this
+timeout also applies to the body of the request..
+It is used again on keep-alive connections to wait for a second
 request if &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot; is not set.
 
 Generally it is enough to set it to a few seconds, as most clients send the
@@ -9427,7 +9450,7 @@ If this parameter is not set, the client timeout still applies between each
 chunk of the incoming request. It should be set in the frontend to take
 effect, unless the frontend is in TCP mode, in which case the HTTP backend's
 timeout will be used.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, and &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-alive</a>&quot;, and &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#option%20http-buffer-request">option http-buffer-request</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout queue"></a><a class="anchor" name="4-timeout queue"></a><a class="anchor" name="4.2-timeout queue"></a><a class="anchor" name="timeout queue (Proxies)"></a><a class="anchor" name="timeout queue (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout queue"></a><a href="#4.2-timeout%20queue">timeout queue</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum time to wait in the queue for a connection slot to be free
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9886,6 +9909,52 @@ path suffixed by &quot;.sctl&quot;. If such file is found, support for Certifica
 Transparency (RFC6962) TLS extension is enabled. The file must contain a
 valid Signed Certificate Timestamp List, as described in RFC. File is parsed
 to check basic syntax, but no signatures are verified.
+
+There are cases where it is desirable support multiple key types (RSA/ECDSA)
+in the cipher suites offered to the clients. This allows clients that support
+EC certificates to be able to use EC ciphers, while simultaneously supporting
+older, RSA only clients.
+
+In order to provide this functionality, multiple PEM files, each with a
+different key type, are required. To associate these PEM files into a
+&quot;cert bundle&quot; that is recognized by haproxy, they must be named in the
+following way: All PEM files that are to be bundled must have the same base
+name, with a suffix indicating the key type. Currently, three suffixes are
+supported: rsa, dsa and ecdsa. For example, if www.example.com has two PEM
+files, an RSA file and an ECDSA file, they must be named: &quot;example.pem.rsa&quot;
+and &quot;example.pem.ecdsa&quot;. The first part of the filename is arbitrary; only the
+suffix matters. To load this bundle into haproxy, specify the base name only:
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>bind :8443 ssl crt example.pem
+</code></pre>
+</div><pre class="text">Note that the suffix is not given to haproxy, this tells haproxy to look for
+a cert bundle.
+
+Haproxy will load all PEM files in the bundle at the same time to try to
+support multiple key types. PEM files are combined based on Common Name
+(CN) and Subject Alternative Name (SAN) to support SNI lookups. This means
+that even if you give haproxy a cert bundle, if there are no shared CN/SAN
+entries in the certificates in that bundle, haproxy will not be able to
+provide multi-cert support.
+
+Assuming bundle in the example above contained the following:
+</pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>Filename</th><th>CN</th><th>SAN</th></tr></thead>
+<tr><td None>example.pem.rsa<br />-------------------+-----------------+--+----------------<br />example.pem.ecdsa</td><td None>www.example.com<br />www.example.com</td><td None>rsa.example.com<br />ecdsa.example.com</td></tr>
+</table><pre class="text">Users connecting with an SNI of &quot;www.example.com&quot; will be able
+to use both RSA and ECDSA cipher suites. Users connecting with an SNI of
+&quot;rsa.example.com&quot; will only be able to use RSA cipher suites, and users
+connecting with &quot;ecdsa.example.com&quot; will only be able to use ECDSA cipher
+suites.
+
+If a directory name is given as the &lt;cert&gt; argument, haproxy will
+automatically search and load bundled files in that directory.
+
+OSCP files (.ocsp) and issuer files (.issuer) are supported with multi-cert
+bundling. Each certificate can have its own .ocsp and .issuer file. At this
+time, sctl is not supported in multi-certificate bundling.
 </pre><a class="anchor" name="crt-ignore-err"></a><a class="anchor" name="5-crt-ignore-err"></a><a class="anchor" name="5.1-crt-ignore-err"></a><a class="anchor" name="crt-ignore-err (Bind and Server options)"></a><a class="anchor" name="crt-ignore-err (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-ignore-err"></a><a href="#5.1-crt-ignore-err">crt-ignore-err</a></b> <span style="color: #080">&lt;errors&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. Sets a
 comma separated list of errorIDs to ignore during verify at depth == 0.  If
 set to 'all', all errors are ignored. SSL handshake is not aborted if an error
@@ -9904,6 +9973,10 @@ specified, the CN and alt subjects are used. This directive may be specified
 multiple times. See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information. The default
 certificate is still needed to meet OpenSSL expectations. If it is not used,
 the 'strict-sni' option may be used.
+
+Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is support with crt-list, as long as only the
+base name is given in the crt-list. Due to the nature of bundling, all SNI
+filters given to a multi-cert bundle entry are ignored.
 </pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5.1-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
 or at worst after the first retransmit. This should be used only on protocols
@@ -10221,6 +10294,11 @@ Requires the &quot;<a href="#agent-port">agent-port</a>&quot; parameter to be se
 parameter.
 
 Supported in default-server: No
+</pre><a class="anchor" name="agent-send"></a><a class="anchor" name="5-agent-send"></a><a class="anchor" name="5.2-agent-send"></a><a class="anchor" name="agent-send (Bind and Server options)"></a><a class="anchor" name="agent-send (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-send"></a><a href="#5.2-agent-send">agent-send</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">If this option is specified, haproxy will send the given string (verbatim)
+to the agent server upon connection. You could, for example, encode
+the backend name into this string, which would enable your agent to send
+different responses based on the backend. Make sure to include a '\n' if
+you want to terminate your request with a newline.
 </pre><a class="anchor" name="agent-inter"></a><a class="anchor" name="5-agent-inter"></a><a class="anchor" name="5.2-agent-inter"></a><a class="anchor" name="agent-inter (Bind and Server options)"></a><a class="anchor" name="agent-inter (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-inter"></a><a href="#5.2-agent-inter">agent-inter</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">The &quot;<a href="#agent-inter">agent-inter</a>&quot; parameter sets the interval between two agent checks
 to &lt;delay&gt; milliseconds. If left unspecified, the delay defaults to 2000 ms.
 
@@ -11786,10 +11864,10 @@ http-request set-header x-path %[hdr(x-path),regsub(/+,/,g)]
 </code></pre>
 </div><a class="anchor" name="capture-req"></a><a class="anchor" name="7-capture-req"></a><a class="anchor" name="7.3.1-capture-req"></a><a class="anchor" name="capture-req (Using ACLs and fetching samples)"></a><a class="anchor" name="capture-req (Converters)"></a><div class="keyword"><b><a class="anchor" name="capture-req"></a><a href="#7.3.1-capture-req">capture-req</a></b>(<span style="color: #080">&lt;id&gt;</span>)</div><pre class="text">Capture the string entry in the request slot &lt;id&gt; and returns the entry as
 is. If the slot doesn't exist, the capture fails silently.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#declare%20capture">declare capture</a>&quot;, &quot;http-request capture&quot;, &quot;http-response capture&quot;, &quot;req.hdr.capture&quot; and &quot;res.hdr.capture&quot; (sample fetches).</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#declare%20capture">declare capture</a>&quot;, &quot;http-request capture&quot;, &quot;http-response capture&quot;, &quot;<a href="#capture.req.hdr">capture.req.hdr</a>&quot; and &quot;<a href="#capture.res.hdr">capture.res.hdr</a>&quot; (sample fetches).</div>
 <a class="anchor" name="capture-res"></a><a class="anchor" name="7-capture-res"></a><a class="anchor" name="7.3.1-capture-res"></a><a class="anchor" name="capture-res (Using ACLs and fetching samples)"></a><a class="anchor" name="capture-res (Converters)"></a><div class="keyword"><b><a class="anchor" name="capture-res"></a><a href="#7.3.1-capture-res">capture-res</a></b>(<span style="color: #080">&lt;id&gt;</span>)</div><pre class="text">Capture the string entry in the response slot &lt;id&gt; and returns the entry as
 is. If the slot doesn't exist, the capture fails silently.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#declare%20capture">declare capture</a>&quot;, &quot;http-request capture&quot;, &quot;http-response capture&quot;, &quot;req.hdr.capture&quot; and &quot;res.hdr.capture&quot; (sample fetches).</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#declare%20capture">declare capture</a>&quot;, &quot;http-request capture&quot;, &quot;http-response capture&quot;, &quot;<a href="#capture.req.hdr">capture.req.hdr</a>&quot; and &quot;<a href="#capture.res.hdr">capture.res.hdr</a>&quot; (sample fetches).</div>
 <a class="anchor" name="sdbm"></a><a class="anchor" name="7-sdbm"></a><a class="anchor" name="7.3.1-sdbm"></a><a class="anchor" name="sdbm (Using ACLs and fetching samples)"></a><a class="anchor" name="sdbm (Converters)"></a><div class="keyword"><b><a class="anchor" name="sdbm"></a><a href="#7.3.1-sdbm">sdbm</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">  Hashes a binary input sample into an unsigned 32-bit quantity using the SDBM
   hash function. Optionally, it is possible to apply a full avalanche hash
   function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -14703,8 +14781,8 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev0 &ndash; Configuration Manual<br>
-							<small>2015/10/13, willy tarreau</small>
+							HAProxy 1.7-dev1 &ndash; Configuration Manual<br>
+							<small>2015/12/20, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -14740,6 +14818,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"agent-check",
 				"agent-inter",
 				"agent-port",
+				"agent-send",
 				"alpn",
 				"always_false",
 				"always_true",
@@ -14825,9 +14904,9 @@ reading. Their sole purpose is to explain how to decipher them.
 				"defer-accept",
 				"description (Process management and security)",
 				"description (Alphabetically sorted keywords reference)",
-				"devicatlas-properties-cookie",
 				"deviceatlas-json-file",
 				"deviceatlas-log-level",
+				"deviceatlas-properties-cookie",
 				"deviceatlas-separator",
 				"disabled (Peers)",
 				"disabled (Alphabetically sorted keywords reference)",
@@ -15455,6 +15534,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"tune.pipesize",
 				"tune.rcvbuf.client",
 				"tune.rcvbuf.server",
+				"tune.recv_enough",
 				"tune.sndbuf.client",
 				"tune.sndbuf.server",
 				"tune.ssl.cachesize",
@@ -15617,7 +15697,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15629,4 +15709,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev0 -->
+<!-- git:v1.7-dev1 -->
