@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev1-10 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev1-12 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/12/28</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/01/06</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev1-10</strong></p>
+							<p><strong>version 1.7-dev1-12</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -9910,10 +9910,10 @@ Transparency (RFC6962) TLS extension is enabled. The file must contain a
 valid Signed Certificate Timestamp List, as described in RFC. File is parsed
 to check basic syntax, but no signatures are verified.
 
-There are cases where it is desirable support multiple key types (RSA/ECDSA)
-in the cipher suites offered to the clients. This allows clients that support
-EC certificates to be able to use EC ciphers, while simultaneously supporting
-older, RSA only clients.
+There are cases where it is desirable to support multiple key types, e.g. RSA
+and ECDSA in the cipher suites offered to the clients. This allows clients
+that support EC certificates to be able to use EC ciphers, while
+simultaneously supporting older, RSA only clients.
 
 In order to provide this functionality, multiple PEM files, each with a
 different key type, are required. To associate these PEM files into a
@@ -9929,7 +9929,7 @@ suffix matters. To load this bundle into haproxy, specify the base name only:
 <pre class="prettyprint">
 <code>bind :8443 ssl crt example.pem
 </code></pre>
-</div><pre class="text">Note that the suffix is not given to haproxy, this tells haproxy to look for
+</div><pre class="text">Note that the suffix is not given to haproxy; this tells haproxy to look for
 a cert bundle.
 
 Haproxy will load all PEM files in the bundle at the same time to try to
@@ -9942,7 +9942,8 @@ provide multi-cert support.
 Assuming bundle in the example above contained the following:
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>Filename</th><th>CN</th><th>SAN</th></tr></thead>
-<tr><td None>example.pem.rsa<br />-------------------+-----------------+--+----------------<br />example.pem.ecdsa</td><td None>www.example.com<br />www.example.com</td><td None>rsa.example.com<br />ecdsa.example.com</td></tr>
+<tr><td None>example.pem.rsa</td><td None>www.example.com</td><td None>rsa.example.com</td></tr>
+<tr><td None>example.pem.ecdsa</td><td None>www.example.com</td><td None>ecdsa.example.com</td></tr>
 </table><pre class="text">Users connecting with an SNI of &quot;www.example.com&quot; will be able
 to use both RSA and ECDSA cipher suites. Users connecting with an SNI of
 &quot;rsa.example.com&quot; will only be able to use RSA cipher suites, and users
@@ -9974,8 +9975,8 @@ multiple times. See the &quot;<span class="dropdown"><a class="dropdown-toggle" 
 certificate is still needed to meet OpenSSL expectations. If it is not used,
 the 'strict-sni' option may be used.
 
-Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is support with crt-list, as long as only the
-base name is given in the crt-list. Due to the nature of bundling, all SNI
+Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is supported with crt-list, as long as only
+the base name is given in the crt-list. Due to the nature of bundling, all SNI
 filters given to a multi-cert bundle entry are ignored.
 </pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5.1-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
@@ -14781,7 +14782,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev1-10 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev1-12 &ndash; Configuration Manual<br>
 							<small>2015/12/20, willy tarreau</small>
 						</div>
 					</div>
@@ -15697,7 +15698,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-12', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15709,4 +15710,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev1-10-ga94e5a5 -->
+<!-- git:v1.7-dev1-12-g6c25e9e -->
