@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev1-65 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev1-66 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/02/09</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/02/11</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev1-65</strong></p>
+							<p><strong>version 1.7-dev1-66</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -11774,10 +11774,14 @@ map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&g
 <tr><td None>str</td><td None>dir</td><td None>map_dir</td><td None>map_dir_int</td><td None>map_dir_ip</td></tr>
 <tr><td None>str</td><td None>dom</td><td None>map_dom</td><td None>map_dom_int</td><td None>map_dom_ip</td></tr>
 <tr><td None>str</td><td None>end</td><td None>map_end</td><td None>map_end_int</td><td None>map_end_ip</td></tr>
-<tr><td None>str</td><td None>reg</td><td None>map_reg</td><td None>map_reg_int</td><td None>map_reg_ip</td></tr>
+<tr><td None>str<br /></td><td None>reg          +-----------------+ map_reg_int<br /></td><td None>map_reg<br />map_reg_ip<br />map_regm</td><td None></td><td None></td></tr>
 <tr><td None>int</td><td None>int</td><td None>map_int</td><td None>map_int_int</td><td None>map_int_ip</td></tr>
 <tr><td None>ip</td><td None>ip</td><td None>map_ip</td><td None>map_ip_int</td><td None>map_ip_ip</td></tr>
-</table><pre class="text">The file contains one key + value per line. Lines which start with '#' are
+</table><pre class="text">The special map called &quot;map_regm&quot; expect matching zone in the regular
+expression and modify the output replacing back reference (like &quot;\1&quot;) by
+the corresponding match text.
+
+The file contains one key + value per line. Lines which start with '#' are
 ignored, just like empty lines. Leading tabs and spaces are stripped. The key
 is then the first &quot;<a href="#word">word</a>&quot; (series of non-space/tabs characters), and the value
 is what follows this series of space/tab till the end of the line excluding
@@ -14778,7 +14782,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev1-65 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev1-66 &ndash; Configuration Manual<br>
 							<small>2015/12/20, willy tarreau</small>
 						</div>
 					</div>
@@ -15694,7 +15698,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-65', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-66', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15706,4 +15710,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev1-65-g443ea1a -->
+<!-- git:v1.7-dev1-66-g8feaa66 -->
