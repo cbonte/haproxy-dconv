@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev1-75 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev1-78 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev1-75</strong></p>
+							<p><strong>version 1.7-dev1-78</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -6854,7 +6854,7 @@ no delay is needed at all to detect the threshold.
     mode tcp
     bind :25
     rate-limit sessions 10
-    server 127.0.0.1:1025
+    server smtp1 127.0.0.1:1025
 </code></pre>
 </div><pre class="text">Note : when the maximum rate is reached, the frontend's status is not changed
        but its sockets appear as &quot;WAITING&quot; in the statistics if the
@@ -13921,7 +13921,7 @@ prefixing them with a '+' or '-' sign.
 
 Special variable &quot;%o&quot; may be used to propagate its flags to all other
 variables on the same format string. This is particularly handy with quoted
-string formats (&quot;Q&quot;).
+(&quot;Q&quot;) and escaped (&quot;E&quot;) string formats.
 
 If a variable is named between square brackets ('[' .. ']') then it is used
 as a sample expression rule (see <a href="#7.3">section 7.3</a>). This it useful to add some
@@ -13932,14 +13932,23 @@ Note: spaces must be escaped. A space character is considered as a separator.
 In order to emit a verbatim '%', it must be preceded by another '%' resulting
 in '%%'. HAProxy will automatically merge consecutive separators.
 
+Note: when using the RFC5424 syslog message format, the characters '&quot;',
+'\' and ']' inside PARAM-VALUE should be escaped with '\' as prefix (see
+https://tools.ietf.org/html/rfc5424#section-6.3.3 for more details). In
+such cases, the use of the flag &quot;E&quot; should be considered.
+
 Flags are :
   * Q: quote a string
   * X: hexadecimal representation (IPs, Ports, %Ts, %rt, %pid)
+  * E: escape characters '&quot;', '\' and ']' in a string with '\' as prefix
+       (intended purpose is for the RFC5424 structured-data log formats)
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>log-format %T\ %t\ Some\ Text
 log-format %{+Q}o\ %t\ %s\ %{-Q}r
+
+log-format-sd %{+Q,+E}o\ [exampleSDID@1234\ header=%[capture.req.hdr(0)]]
 </code></pre>
 </div><pre class="text">At the moment, the default HTTP format is defined this way :
 
@@ -14782,7 +14791,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev1-75 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev1-78 &ndash; Configuration Manual<br>
 							<small>2015/12/20, willy tarreau</small>
 						</div>
 					</div>
@@ -15698,7 +15707,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-75', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-78', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15710,4 +15719,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev1-75-g1de1659 -->
+<!-- git:v1.7-dev1-78-g7282d8e -->
