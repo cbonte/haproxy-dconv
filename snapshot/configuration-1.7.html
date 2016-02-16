@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev1-81 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev1-83 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev1-81</strong></p>
+							<p><strong>version 1.7-dev1-83</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -1301,9 +1301,12 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#nbproc">nbproc</a>
    - <a href="#node">node</a>
    - <a href="#pidfile">pidfile</a>
+   - <a href="#presetenv">presetenv</a>
+   - <a href="#resetenv">resetenv</a>
    - <a href="#uid">uid</a>
    - <a href="#ulimit-n">ulimit-n</a>
    - <a href="#user">user</a>
+   - <a href="#setenv">setenv</a>
    - <a href="#stats">stats</a>
    - <a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>
    - <a href="#ssl-default-bind-options">ssl-default-bind-options</a>
@@ -1312,6 +1315,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#ssl-dh-param-file">ssl-dh-param-file</a>
    - <a href="#ssl-server-verify">ssl-server-verify</a>
    - <a href="#unix-bind">unix-bind</a>
+   - <a href="#unsetenv">unsetenv</a>
    - <a href="#51degrees-data-file">51degrees-data-file</a>
    - <a href="#51degrees-property-name-list">51degrees-property-name-list</a>
    - <a href="#51degrees-property-separator">51degrees-property-separator</a>
@@ -1503,6 +1507,18 @@ IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">d
 </pre><a class="anchor" name="pidfile"></a><a class="anchor" name="3-pidfile"></a><a class="anchor" name="3.1-pidfile"></a><a class="anchor" name="pidfile (Global parameters)"></a><a class="anchor" name="pidfile (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="pidfile"></a><a href="#3.1-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes pids of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
 starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.
+</pre><a class="anchor" name="presetenv"></a><a class="anchor" name="3-presetenv"></a><a class="anchor" name="3.1-presetenv"></a><a class="anchor" name="presetenv (Global parameters)"></a><a class="anchor" name="presetenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="presetenv"></a><a href="#3.1-presetenv">presetenv</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Sets environment variable &lt;name&gt; to value &lt;value&gt;. If the variable exists, it
+is NOT overwritten. The changes immediately take effect so that the next line
+in the configuration file sees the new value. See also &quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#resetenv">resetenv</a>&quot;,
+and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
+</pre><a class="anchor" name="resetenv"></a><a class="anchor" name="3-resetenv"></a><a class="anchor" name="3.1-resetenv"></a><a class="anchor" name="resetenv (Global parameters)"></a><a class="anchor" name="resetenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="resetenv"></a><a href="#3.1-resetenv">resetenv</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span> ...]</span></div><pre class="text">Removes all environment variables except the ones specified in argument. It
+allows to use a clean controlled environment before setting new values with
+setenv or unsetenv. Please note that some internal functions may make use of
+some environment variables, such as time manipulation functions, but also
+OpenSSL or even external checks. This must be used with extreme care and only
+after complete validation. The changes immediately take effect so that the
+next line in the configuration file sees the new environment. See also
+&quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#presetenv">presetenv</a>&quot;, and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats bind-process"></a><a class="anchor" name="3-stats bind-process"></a><a class="anchor" name="3.1-stats bind-process"></a><a class="anchor" name="stats bind-process (Global parameters)"></a><a class="anchor" name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats bind-process"></a><a href="#3.1-stats%20bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
 stats socket is bound to all processes, causing a warning to be emitted when
 nbproc is greater than 1 because there is no way to select the target process
@@ -1525,6 +1541,10 @@ starting up, before handling traffic, HAProxy will read, load and apply state
 for each server found in the file and available in its current running
 configuration. See also &quot;<a href="#server-state-base">server-state-base</a>&quot; and &quot;show servers state&quot;,
 &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; and &quot;<a href="#server-state-file-name">server-state-file-name</a>&quot;
+</pre><a class="anchor" name="setenv"></a><a class="anchor" name="3-setenv"></a><a class="anchor" name="3.1-setenv"></a><a class="anchor" name="setenv (Global parameters)"></a><a class="anchor" name="setenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="setenv"></a><a href="#3.1-setenv">setenv</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Sets environment variable &lt;name&gt; to value &lt;value&gt;. If the variable exists, it
+is overwritten. The changes immediately take effect so that the next line in
+the configuration file sees the new value. See also &quot;<a href="#presetenv">presetenv</a>&quot;, &quot;<a href="#resetenv">resetenv</a>&quot;,
+and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
 that are negotiated during the SSL/TLS handshake for all &quot;<a href="#bind">bind</a>&quot; lines which
@@ -1597,6 +1617,13 @@ itself, so they are absolute. The &lt;mode&gt;, &lt;user&gt;, &lt;uid&gt;, &lt;g
 all have the same meaning as their homonyms used by the &quot;<a href="#bind">bind</a>&quot; statement. If
 both are specified, the &quot;<a href="#bind">bind</a>&quot; statement has priority, meaning that the
 &quot;<a href="#unix-bind">unix-bind</a>&quot; settings may be seen as process-wide default settings.
+</pre><a class="anchor" name="unsetenv"></a><a class="anchor" name="3-unsetenv"></a><a class="anchor" name="3.1-unsetenv"></a><a class="anchor" name="unsetenv (Global parameters)"></a><a class="anchor" name="unsetenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="unsetenv"></a><a href="#3.1-unsetenv">unsetenv</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span> ...]</span></div><pre class="text">Removes environment variables specified in arguments. This can be useful to
+hide some sensitive information that are occasionally inherited from the
+user's environment during some operations. Variables which did not exist are
+silently ignored so that after the operation, it is certain that none of
+these variables remain. The changes immediately take effect so that the next
+line in the configuration file will not see these variables. See also
+&quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#presetenv">presetenv</a>&quot;, and &quot;<a href="#resetenv">resetenv</a>&quot;.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="3-user"></a><a class="anchor" name="3.1-user"></a><a class="anchor" name="user (Global parameters)"></a><a class="anchor" name="user (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#3.1-user">user</a></b> <span style="color: #080">&lt;user name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the UID of user name &lt;user name&gt; from /etc/passwd.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="node"></a><a class="anchor" name="3-node"></a><a class="anchor" name="3.1-node"></a><a class="anchor" name="node (Global parameters)"></a><a class="anchor" name="node (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="node"></a><a href="#3.1-node">node</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Only letters, digits, hyphen and underscore are allowed, like in DNS names.
@@ -14791,7 +14818,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev1-81 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev1-83 &ndash; Configuration Manual<br>
 							<small>2015/12/20, willy tarreau</small>
 						</div>
 					</div>
@@ -15166,6 +15193,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"persist rdp-cookie",
 				"pidfile",
 				"port",
+				"presetenv",
 				"proc",
 				"process",
 				"query",
@@ -15247,6 +15275,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"res.payload_lv",
 				"res.ssl_hello_type",
 				"res.ver",
+				"resetenv",
 				"resolve-prefer",
 				"resolve_retries",
 				"resolvers (Server and default-server options)",
@@ -15354,6 +15383,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"server-state-file",
 				"server-state-file-name",
 				"set-cookie",
+				"setenv",
 				"shdr",
 				"shdr_cnt",
 				"shdr_ip",
@@ -15565,6 +15595,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"unique-id-format",
 				"unique-id-header",
 				"unix-bind",
+				"unsetenv",
 				"upper",
 				"url",
 				"url_dec",
@@ -15707,7 +15738,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-81', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-83', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15719,4 +15750,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev1-81-g06c8099 -->
+<!-- git:v1.7-dev1-83-g1d54972 -->
