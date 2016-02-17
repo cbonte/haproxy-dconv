@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.3-28 - Configuration Manual</title>
+		<title>HAProxy version 1.6.3-44 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/01/25</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/02/17</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.3-28</strong></p>
+							<p><strong>version 1.6.3-44</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3152,11 +3152,11 @@ rewrite   This keyword indicates that the cookie will be provided by the
           of complex combinations of &quot;Set-cookie&quot; and &quot;Cache-control&quot;
           headers is left to the application. The application can then
           decide whether or not it is appropriate to emit a persistence
-          cookie. Since all responses should be monitored, this mode only
-          works in HTTP close mode. Unless the application behaviour is
-          very complex and/or broken, it is advised not to start with this
-          mode for new deployments. This keyword is incompatible with
-          &quot;insert&quot; and &quot;prefix&quot;.
+          cookie. Since all responses should be monitored, this mode
+          doesn't work in HTTP tunnel mode. Unless the application
+          behaviour is very complex and/or broken, it is advised not to
+          start with this mode for new deployments. This keyword is
+          incompatible with &quot;insert&quot; and &quot;prefix&quot;.
 
 insert    This keyword indicates that the persistence cookie will have to
           be inserted by haproxy in server responses if the client did not
@@ -3182,7 +3182,7 @@ prefix    This keyword indicates that instead of relying on a dedicated
           and a delimiter. The prefix will be removed from all client
           requests so that the server still finds the cookie it emitted.
           Since all requests and responses are subject to being modified,
-          this mode requires the HTTP close mode. The &quot;prefix&quot; keyword is
+          this mode doesn't work with tunnel mode. The &quot;prefix&quot; keyword is
           not compatible with &quot;rewrite&quot; and &quot;insert&quot;. Note: it is highly
           recommended not to use &quot;indirect&quot; with &quot;prefix&quot;, otherwise server
           cookie updates would not be sent to clients.
@@ -5769,11 +5769,9 @@ haproxy understands and what the client and the proxy agree on.
 
 By setting this option in a frontend, haproxy can automatically switch to use
 that non-standard header if it sees proxied requests. A proxied request is
-defined here as one where the URI begins with neither a '/' nor a '*'. The
-choice of header only affects requests passing through proxies making use of
-one of the &quot;<a href="#option%20httpclose">httpclose</a>&quot;, &quot;<a href="#option%20forceclose">forceclose</a>&quot; and &quot;<a href="#option%20http-server-close">http-server-close</a>&quot; options. Note
-that this option can only be specified in a frontend and will affect the
-request along its whole life.
+defined here as one where the URI begins with neither a '/' nor a '*'. This
+is incompatible with the HTTP tunnel mode. Note that this option can only be
+specified in a frontend and will affect the request along its whole life.
 
 Also, when this option is set, a request which requires authentication will
 automatically switch to use proxy authentication headers if it is itself a
@@ -5909,10 +5907,8 @@ the IP address and port found in the URL after the &quot;http://&quot; scheme.
 
 No host address resolution is performed, so this only works when pure IP
 addresses are passed. Since this option's usage perimeter is rather limited,
-it will probably be used only by experts who know they need exactly it. Last,
-if the clients are susceptible of sending keep-alive requests, it will be
-needed to add &quot;<a href="#option%20httpclose">option httpclose</a>&quot; to ensure that all requests will correctly
-be analyzed.
+it will probably be used only by experts who know they need exactly it. This
+is incompatible with the HTTP tunnel mode.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
@@ -6852,7 +6848,7 @@ no delay is needed at all to detect the threshold.
     mode tcp
     bind :25
     rate-limit sessions 10
-    server 127.0.0.1:1025
+    server smtp1 127.0.0.1:1025
 </code></pre>
 </div><pre class="text">Note : when the maximum rate is reached, the frontend's status is not changed
        but its sockets appear as &quot;WAITING&quot; in the statistics if the
@@ -14120,7 +14116,7 @@ Most common cases :
     spent accepting these connections will inevitably slightly delay processing
     of other connections, and it can happen that request times in the order of
     a few tens of milliseconds are measured after a few thousands of new
-    connections have been accepted at once. Setting &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;
+    connections have been accepted at once. Using one of the keep-alive modes
     may display larger request times since &quot;Tq&quot; also measures the time spent
     waiting for additional requests.
 
@@ -14720,7 +14716,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.3-28 &ndash; Configuration Manual<br>
+							HAProxy 1.6.3-44 &ndash; Configuration Manual<br>
 							<small>2015/12/21, willy tarreau</small>
 						</div>
 					</div>
@@ -15634,7 +15630,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.3-28', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.3-44', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15646,4 +15642,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6.3-28-gc45963d -->
+<!-- git:v1.6.3-44-g09b5331 -->
