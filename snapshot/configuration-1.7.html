@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev1-88 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev1-91 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev1-88</strong></p>
+							<p><strong>version 1.7-dev1-91</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10661,6 +10661,18 @@ Supported in default-server: Yes
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
+</div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and Server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This options prioritize th choice of an ip address matching a network. This is
+useful with clouds to prefer a local ip. In some cases, a cloud high
+avalailibility service can be announced with many ip addresses on many
+differents datacenters. The latency between datacenter is not negligible, so
+this patch permitsto prefers a local datacenter. If none address matchs the
+configured network, another address is selected.
+
+Supported in default-server: Yes
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-net 10.0.0.0/8</div><code></code></pre>
 </div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
 In order to be operational, DNS resolution requires that health check is
@@ -14818,7 +14830,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev1-88 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev1-91 &ndash; Configuration Manual<br>
 							<small>2015/12/20, willy tarreau</small>
 						</div>
 					</div>
@@ -15276,6 +15288,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"res.ssl_hello_type",
 				"res.ver",
 				"resetenv",
+				"resolve-net",
 				"resolve-prefer",
 				"resolve_retries",
 				"resolvers (Server and default-server options)",
@@ -15738,7 +15751,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-88', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1-91', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15750,4 +15763,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev1-88-ge726b14 -->
+<!-- git:v1.7-dev1-91-gac88cfe -->
