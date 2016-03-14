@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev1 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/12/21</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/03/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,11 +82,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev1</strong></p>
+							<p><strong>version 1.7-dev2</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/12/20
+								2016/03/13
 							</p>
 						</div>
 
@@ -1301,9 +1301,12 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#nbproc">nbproc</a>
    - <a href="#node">node</a>
    - <a href="#pidfile">pidfile</a>
+   - <a href="#presetenv">presetenv</a>
+   - <a href="#resetenv">resetenv</a>
    - <a href="#uid">uid</a>
    - <a href="#ulimit-n">ulimit-n</a>
    - <a href="#user">user</a>
+   - <a href="#setenv">setenv</a>
    - <a href="#stats">stats</a>
    - <a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>
    - <a href="#ssl-default-bind-options">ssl-default-bind-options</a>
@@ -1312,6 +1315,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#ssl-dh-param-file">ssl-dh-param-file</a>
    - <a href="#ssl-server-verify">ssl-server-verify</a>
    - <a href="#unix-bind">unix-bind</a>
+   - <a href="#unsetenv">unsetenv</a>
    - <a href="#51degrees-data-file">51degrees-data-file</a>
    - <a href="#51degrees-property-name-list">51degrees-property-name-list</a>
    - <a href="#51degrees-property-separator">51degrees-property-separator</a>
@@ -1503,6 +1507,18 @@ IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">d
 </pre><a class="anchor" name="pidfile"></a><a class="anchor" name="3-pidfile"></a><a class="anchor" name="3.1-pidfile"></a><a class="anchor" name="pidfile (Global parameters)"></a><a class="anchor" name="pidfile (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="pidfile"></a><a href="#3.1-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes pids of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
 starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.
+</pre><a class="anchor" name="presetenv"></a><a class="anchor" name="3-presetenv"></a><a class="anchor" name="3.1-presetenv"></a><a class="anchor" name="presetenv (Global parameters)"></a><a class="anchor" name="presetenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="presetenv"></a><a href="#3.1-presetenv">presetenv</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Sets environment variable &lt;name&gt; to value &lt;value&gt;. If the variable exists, it
+is NOT overwritten. The changes immediately take effect so that the next line
+in the configuration file sees the new value. See also &quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#resetenv">resetenv</a>&quot;,
+and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
+</pre><a class="anchor" name="resetenv"></a><a class="anchor" name="3-resetenv"></a><a class="anchor" name="3.1-resetenv"></a><a class="anchor" name="resetenv (Global parameters)"></a><a class="anchor" name="resetenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="resetenv"></a><a href="#3.1-resetenv">resetenv</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span> ...]</span></div><pre class="text">Removes all environment variables except the ones specified in argument. It
+allows to use a clean controlled environment before setting new values with
+setenv or unsetenv. Please note that some internal functions may make use of
+some environment variables, such as time manipulation functions, but also
+OpenSSL or even external checks. This must be used with extreme care and only
+after complete validation. The changes immediately take effect so that the
+next line in the configuration file sees the new environment. See also
+&quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#presetenv">presetenv</a>&quot;, and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats bind-process"></a><a class="anchor" name="3-stats bind-process"></a><a class="anchor" name="3.1-stats bind-process"></a><a class="anchor" name="stats bind-process (Global parameters)"></a><a class="anchor" name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats bind-process"></a><a href="#3.1-stats%20bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
 stats socket is bound to all processes, causing a warning to be emitted when
 nbproc is greater than 1 because there is no way to select the target process
@@ -1525,6 +1541,10 @@ starting up, before handling traffic, HAProxy will read, load and apply state
 for each server found in the file and available in its current running
 configuration. See also &quot;<a href="#server-state-base">server-state-base</a>&quot; and &quot;show servers state&quot;,
 &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; and &quot;<a href="#server-state-file-name">server-state-file-name</a>&quot;
+</pre><a class="anchor" name="setenv"></a><a class="anchor" name="3-setenv"></a><a class="anchor" name="3.1-setenv"></a><a class="anchor" name="setenv (Global parameters)"></a><a class="anchor" name="setenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="setenv"></a><a href="#3.1-setenv">setenv</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Sets environment variable &lt;name&gt; to value &lt;value&gt;. If the variable exists, it
+is overwritten. The changes immediately take effect so that the next line in
+the configuration file sees the new value. See also &quot;<a href="#presetenv">presetenv</a>&quot;, &quot;<a href="#resetenv">resetenv</a>&quot;,
+and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
 that are negotiated during the SSL/TLS handshake for all &quot;<a href="#bind">bind</a>&quot; lines which
@@ -1597,6 +1617,13 @@ itself, so they are absolute. The &lt;mode&gt;, &lt;user&gt;, &lt;uid&gt;, &lt;g
 all have the same meaning as their homonyms used by the &quot;<a href="#bind">bind</a>&quot; statement. If
 both are specified, the &quot;<a href="#bind">bind</a>&quot; statement has priority, meaning that the
 &quot;<a href="#unix-bind">unix-bind</a>&quot; settings may be seen as process-wide default settings.
+</pre><a class="anchor" name="unsetenv"></a><a class="anchor" name="3-unsetenv"></a><a class="anchor" name="3.1-unsetenv"></a><a class="anchor" name="unsetenv (Global parameters)"></a><a class="anchor" name="unsetenv (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="unsetenv"></a><a href="#3.1-unsetenv">unsetenv</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span> ...]</span></div><pre class="text">Removes environment variables specified in arguments. This can be useful to
+hide some sensitive information that are occasionally inherited from the
+user's environment during some operations. Variables which did not exist are
+silently ignored so that after the operation, it is certain that none of
+these variables remain. The changes immediately take effect so that the next
+line in the configuration file will not see these variables. See also
+&quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#presetenv">presetenv</a>&quot;, and &quot;<a href="#resetenv">resetenv</a>&quot;.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="3-user"></a><a class="anchor" name="3.1-user"></a><a class="anchor" name="user (Global parameters)"></a><a class="anchor" name="user (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#3.1-user">user</a></b> <span style="color: #080">&lt;user name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the UID of user name &lt;user name&gt; from /etc/passwd.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="node"></a><a class="anchor" name="3-node"></a><a class="anchor" name="3.1-node"></a><a class="anchor" name="node (Global parameters)"></a><a class="anchor" name="node (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="node"></a><a href="#3.1-node">node</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Only letters, digits, hyphen and underscore are allowed, like in DNS names.
@@ -2101,6 +2128,17 @@ backend mybackend
 
     server srv1 192.168.0.30:80
     server srv2 192.168.0.31:80
+</code></pre>
+</div><a class="anchor" name="timeout"></a><a class="anchor" name="3-timeout"></a><a class="anchor" name="3.6-timeout"></a><a class="anchor" name="timeout (Global parameters)"></a><a class="anchor" name="timeout (Mailers)"></a><a class="anchor" name="timeout mail"></a><a class="anchor" name="3-timeout mail"></a><a class="anchor" name="3.6-timeout mail"></a><a class="anchor" name="timeout mail (Global parameters)"></a><a class="anchor" name="timeout mail (Mailers)"></a><div class="keyword"><b><a class="anchor" name="timeout mail"></a><a href="#3.6-timeout%20mail">timeout mail</a></b> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">Defines the time available for a mail/connection to be made and send to
+the mail-server. If not defined the default value is 10 seconds. To allow
+for at least two SYN-ACK packets to be send during initial TCP handshake it
+is advised to keep this value above 4 seconds.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>mailers mymailers
+    timeout mail 20s
+    mailer smtp1 192.168.0.1:587
 </code></pre>
 </div></div>
 <a class="anchor" id="4" name="4"></a>
@@ -3040,14 +3078,14 @@ offload  makes haproxy work as a compression offloader only (see notes).</pre>
                data.
 
   gzip         applies gzip compression. This setting is only available when
-               support for zlib was built in.
+               support for zlib or libslz was built in.
 
   deflate      same as &quot;gzip&quot;, but with deflate algorithm and zlib format.
                Note that this algorithm has ambiguous support on many
                browsers and no support at all from recent ones. It is
                strongly recommended not to use it for anything else than
                experimentation. This setting is only available when support
-               for zlib was built in.
+               for zlib or libslz was built in.
 
   raw-deflate  same as &quot;deflate&quot; without the zlib wrapper, and used as an
                alternative when the browser wants &quot;deflate&quot;. All major
@@ -3056,7 +3094,7 @@ offload  makes haproxy work as a compression offloader only (see notes).</pre>
                and some versions of Safari. Do not use it in conjunction
                with &quot;deflate&quot;, use either one or the other since both react
                to the same Accept-Encoding token. This setting is only
-               available when support for zlib was built in.
+               available when support for zlib or libslz was built in.
 
 Compression will be activated depending on the Accept-Encoding request
 header. With identity, it does not take care of that header.
@@ -3158,11 +3196,11 @@ rewrite   This keyword indicates that the cookie will be provided by the
           of complex combinations of &quot;Set-cookie&quot; and &quot;Cache-control&quot;
           headers is left to the application. The application can then
           decide whether or not it is appropriate to emit a persistence
-          cookie. Since all responses should be monitored, this mode only
-          works in HTTP close mode. Unless the application behaviour is
-          very complex and/or broken, it is advised not to start with this
-          mode for new deployments. This keyword is incompatible with
-          &quot;insert&quot; and &quot;prefix&quot;.
+          cookie. Since all responses should be monitored, this mode
+          doesn't work in HTTP tunnel mode. Unless the application
+          behaviour is very complex and/or broken, it is advised not to
+          start with this mode for new deployments. This keyword is
+          incompatible with &quot;insert&quot; and &quot;prefix&quot;.
 
 insert    This keyword indicates that the persistence cookie will have to
           be inserted by haproxy in server responses if the client did not
@@ -3188,7 +3226,7 @@ prefix    This keyword indicates that instead of relying on a dedicated
           and a delimiter. The prefix will be removed from all client
           requests so that the server still finds the cookie it emitted.
           Since all requests and responses are subject to being modified,
-          this mode requires the HTTP close mode. The &quot;prefix&quot; keyword is
+          this mode doesn't work with tunnel mode. The &quot;prefix&quot; keyword is
           not compatible with &quot;rewrite&quot; and &quot;insert&quot;. Note: it is highly
           recommended not to use &quot;indirect&quot; with &quot;prefix&quot;, otherwise server
           cookie updates would not be sent to clients.
@@ -3455,7 +3493,7 @@ simple method for developing those files consists in associating them to the
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code>errorfile 400 /etc/haproxy/errorfiles/400badreq.http
-errorfile 408 /dev/null  <span class="comment"># workaround Chrome pre-connect bug</span>
+errorfile 408 /dev/null  <span class="comment"># work around Chrome pre-connect bug</span>
 errorfile 403 /etc/haproxy/errorfiles/403forbid.http
 errorfile 503 /etc/haproxy/errorfiles/503sorry.http
 </code></pre>
@@ -3484,7 +3522,7 @@ Note that both keyword return the HTTP 302 status code, which tells the
 client to fetch the designated URL using the same HTTP method. This can be
 quite problematic in case of non-GET methods such as POST, because the URL
 sent to the client might not be allowed for something other than GET. To
-workaround this problem, please use &quot;<a href="#errorloc303">errorloc303</a>&quot; which send the HTTP 303
+work around this problem, please use &quot;<a href="#errorloc303">errorloc303</a>&quot; which send the HTTP 303
 status code, indicating to the client that the URL must be fetched with a GET
 request.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#errorfile">errorfile</a>&quot;, &quot;<a href="#errorloc303">errorloc303</a>&quot;</div>
@@ -3571,7 +3609,7 @@ mailers.
 <tr><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="./css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;emailaddr&gt; is the to email address to use when sending email alerts</pre>
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;hostname&gt; is the hostname to use when communicating with mailers</pre>
 </div>
 <pre class="text">By default the systems hostname is used.
 
@@ -5775,11 +5813,9 @@ haproxy understands and what the client and the proxy agree on.
 
 By setting this option in a frontend, haproxy can automatically switch to use
 that non-standard header if it sees proxied requests. A proxied request is
-defined here as one where the URI begins with neither a '/' nor a '*'. The
-choice of header only affects requests passing through proxies making use of
-one of the &quot;<a href="#option%20httpclose">httpclose</a>&quot;, &quot;<a href="#option%20forceclose">forceclose</a>&quot; and &quot;<a href="#option%20http-server-close">http-server-close</a>&quot; options. Note
-that this option can only be specified in a frontend and will affect the
-request along its whole life.
+defined here as one where the URI begins with neither a '/' nor a '*'. This
+is incompatible with the HTTP tunnel mode. Note that this option can only be
+specified in a frontend and will affect the request along its whole life.
 
 Also, when this option is set, a request which requires authentication will
 automatically switch to use proxy authentication headers if it is itself a
@@ -5915,10 +5951,8 @@ the IP address and port found in the URL after the &quot;http://&quot; scheme.
 
 No host address resolution is performed, so this only works when pure IP
 addresses are passed. Since this option's usage perimeter is rather limited,
-it will probably be used only by experts who know they need exactly it. Last,
-if the clients are susceptible of sending keep-alive requests, it will be
-needed to add &quot;<a href="#option%20httpclose">option httpclose</a>&quot; to ensure that all requests will correctly
-be analyzed.
+it will probably be used only by experts who know they need exactly it. This
+is incompatible with the HTTP tunnel mode.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
@@ -6858,7 +6892,7 @@ no delay is needed at all to detect the threshold.
     mode tcp
     bind :25
     rate-limit sessions 10
-    server 127.0.0.1:1025
+    server smtp1 127.0.0.1:1025
 </code></pre>
 </div><pre class="text">Note : when the maximum rate is reached, the frontend's status is not changed
        but its sockets appear as &quot;WAITING&quot; in the statistics if the
@@ -9910,10 +9944,10 @@ Transparency (RFC6962) TLS extension is enabled. The file must contain a
 valid Signed Certificate Timestamp List, as described in RFC. File is parsed
 to check basic syntax, but no signatures are verified.
 
-There are cases where it is desirable support multiple key types (RSA/ECDSA)
-in the cipher suites offered to the clients. This allows clients that support
-EC certificates to be able to use EC ciphers, while simultaneously supporting
-older, RSA only clients.
+There are cases where it is desirable to support multiple key types, e.g. RSA
+and ECDSA in the cipher suites offered to the clients. This allows clients
+that support EC certificates to be able to use EC ciphers, while
+simultaneously supporting older, RSA only clients.
 
 In order to provide this functionality, multiple PEM files, each with a
 different key type, are required. To associate these PEM files into a
@@ -9929,7 +9963,7 @@ suffix matters. To load this bundle into haproxy, specify the base name only:
 <pre class="prettyprint">
 <code>bind :8443 ssl crt example.pem
 </code></pre>
-</div><pre class="text">Note that the suffix is not given to haproxy, this tells haproxy to look for
+</div><pre class="text">Note that the suffix is not given to haproxy; this tells haproxy to look for
 a cert bundle.
 
 Haproxy will load all PEM files in the bundle at the same time to try to
@@ -9942,7 +9976,8 @@ provide multi-cert support.
 Assuming bundle in the example above contained the following:
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>Filename</th><th>CN</th><th>SAN</th></tr></thead>
-<tr><td None>example.pem.rsa<br />-------------------+-----------------+--+----------------<br />example.pem.ecdsa</td><td None>www.example.com<br />www.example.com</td><td None>rsa.example.com<br />ecdsa.example.com</td></tr>
+<tr><td None>example.pem.rsa</td><td None>www.example.com</td><td None>rsa.example.com</td></tr>
+<tr><td None>example.pem.ecdsa</td><td None>www.example.com</td><td None>ecdsa.example.com</td></tr>
 </table><pre class="text">Users connecting with an SNI of &quot;www.example.com&quot; will be able
 to use both RSA and ECDSA cipher suites. Users connecting with an SNI of
 &quot;rsa.example.com&quot; will only be able to use RSA cipher suites, and users
@@ -9974,8 +10009,8 @@ multiple times. See the &quot;<span class="dropdown"><a class="dropdown-toggle" 
 certificate is still needed to meet OpenSSL expectations. If it is not used,
 the 'strict-sni' option may be used.
 
-Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is support with crt-list, as long as only the
-base name is given in the crt-list. Due to the nature of bundling, all SNI
+Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is supported with crt-list, as long as only
+the base name is given in the crt-list. Due to the nature of bundling, all SNI
 filters given to a multi-cert bundle entry are ignored.
 </pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5.1-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
@@ -10288,7 +10323,7 @@ is tested by the regular health check which is enabled by the &quot;<a href="#ch
 parameter. Warning though, it is not a good idea to stop an agent after it
 reports &quot;down&quot;, since only an agent reporting &quot;up&quot; will be able to turn the
 server up again. Note that the CLI on the Unix stats socket is also able to
-force an agent's result in order to workaround a bogus agent if needed.
+force an agent's result in order to work around a bogus agent if needed.
 
 Requires the &quot;<a href="#agent-port">agent-port</a>&quot; parameter to be set. See also the &quot;<a href="#agent-inter">agent-inter</a>&quot;
 parameter.
@@ -10637,6 +10672,18 @@ Supported in default-server: Yes
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
+</div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and Server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This options prioritize th choice of an ip address matching a network. This is
+useful with clouds to prefer a local ip. In some cases, a cloud high
+avalailibility service can be announced with many ip addresses on many
+differents datacenters. The latency between datacenter is not negligible, so
+this patch permitsto prefers a local datacenter. If none address matchs the
+configured network, another address is selected.
+
+Supported in default-server: Yes
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-net 10.0.0.0/8</div><code></code></pre>
 </div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
 In order to be operational, DNS resolution requires that health check is
@@ -11777,10 +11824,14 @@ map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&g
 <tr><td None>str</td><td None>dir</td><td None>map_dir</td><td None>map_dir_int</td><td None>map_dir_ip</td></tr>
 <tr><td None>str</td><td None>dom</td><td None>map_dom</td><td None>map_dom_int</td><td None>map_dom_ip</td></tr>
 <tr><td None>str</td><td None>end</td><td None>map_end</td><td None>map_end_int</td><td None>map_end_ip</td></tr>
-<tr><td None>str</td><td None>reg</td><td None>map_reg</td><td None>map_reg_int</td><td None>map_reg_ip</td></tr>
+<tr><td None>str<br /></td><td None>reg          +-----------------+ map_reg_int<br /></td><td None>map_reg<br />map_reg_ip<br />map_regm</td><td None></td><td None></td></tr>
 <tr><td None>int</td><td None>int</td><td None>map_int</td><td None>map_int_int</td><td None>map_int_ip</td></tr>
 <tr><td None>ip</td><td None>ip</td><td None>map_ip</td><td None>map_ip_int</td><td None>map_ip_ip</td></tr>
-</table><pre class="text">The file contains one key + value per line. Lines which start with '#' are
+</table><pre class="text">The special map called &quot;map_regm&quot; expect matching zone in the regular
+expression and modify the output replacing back reference (like &quot;\1&quot;) by
+the corresponding match text.
+
+The file contains one key + value per line. Lines which start with '#' are
 ignored, just like empty lines. Leading tabs and spaces are stripped. The key
 is then the first &quot;<a href="#word">word</a>&quot; (series of non-space/tabs characters), and the value
 is what follows this series of space/tab till the end of the line excluding
@@ -13920,7 +13971,7 @@ prefixing them with a '+' or '-' sign.
 
 Special variable &quot;%o&quot; may be used to propagate its flags to all other
 variables on the same format string. This is particularly handy with quoted
-string formats (&quot;Q&quot;).
+(&quot;Q&quot;) and escaped (&quot;E&quot;) string formats.
 
 If a variable is named between square brackets ('[' .. ']') then it is used
 as a sample expression rule (see <a href="#7.3">section 7.3</a>). This it useful to add some
@@ -13931,14 +13982,23 @@ Note: spaces must be escaped. A space character is considered as a separator.
 In order to emit a verbatim '%', it must be preceded by another '%' resulting
 in '%%'. HAProxy will automatically merge consecutive separators.
 
+Note: when using the RFC5424 syslog message format, the characters '&quot;',
+'\' and ']' inside PARAM-VALUE should be escaped with '\' as prefix (see
+https://tools.ietf.org/html/rfc5424#section-6.3.3 for more details). In
+such cases, the use of the flag &quot;E&quot; should be considered.
+
 Flags are :
   * Q: quote a string
   * X: hexadecimal representation (IPs, Ports, %Ts, %rt, %pid)
+  * E: escape characters '&quot;', '\' and ']' in a string with '\' as prefix
+       (intended purpose is for the RFC5424 structured-data log formats)
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>log-format %T\ %t\ Some\ Text
 log-format %{+Q}o\ %t\ %s\ %{-Q}r
+
+log-format-sd %{+Q,+E}o\ [exampleSDID@1234\ header=%[capture.req.hdr(0)]]
 </code></pre>
 </div><pre class="text">At the moment, the default HTTP format is defined this way :
 
@@ -14181,7 +14241,7 @@ Most common cases :
     spent accepting these connections will inevitably slightly delay processing
     of other connections, and it can happen that request times in the order of
     a few tens of milliseconds are measured after a few thousands of new
-    connections have been accepted at once. Setting &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;
+    connections have been accepted at once. Using one of the keep-alive modes
     may display larger request times since &quot;Tq&quot; also measures the time spent
     waiting for additional requests.
 
@@ -14781,8 +14841,8 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev1 &ndash; Configuration Manual<br>
-							<small>2015/12/20, willy tarreau</small>
+							HAProxy 1.7-dev2 &ndash; Configuration Manual<br>
+							<small>2016/03/13, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -15156,6 +15216,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"persist rdp-cookie",
 				"pidfile",
 				"port",
+				"presetenv",
 				"proc",
 				"process",
 				"query",
@@ -15237,6 +15298,8 @@ reading. Their sole purpose is to explain how to decipher them.
 				"res.payload_lv",
 				"res.ssl_hello_type",
 				"res.ver",
+				"resetenv",
+				"resolve-net",
 				"resolve-prefer",
 				"resolve_retries",
 				"resolvers (Server and default-server options)",
@@ -15344,6 +15407,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"server-state-file",
 				"server-state-file-name",
 				"set-cookie",
+				"setenv",
 				"shdr",
 				"shdr_cnt",
 				"shdr_ip",
@@ -15505,6 +15569,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"timeout contimeout",
 				"timeout http-keep-alive",
 				"timeout http-request",
+				"timeout mail",
 				"timeout queue",
 				"timeout server",
 				"timeout server-fin",
@@ -15555,6 +15620,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"unique-id-format",
 				"unique-id-header",
 				"unix-bind",
+				"unsetenv",
 				"upper",
 				"url",
 				"url_dec",
@@ -15697,7 +15763,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15709,4 +15775,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev1 -->
+<!-- git:v1.7-dev2 -->
