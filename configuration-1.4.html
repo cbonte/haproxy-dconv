@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.4.26 - Configuration Manual</title>
+		<title>HAProxy version 1.4.27 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2015/10/27</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/03/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,11 +82,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.4.26</strong></p>
+							<p><strong>version 1.4.27</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2015/02/01
+								2016/03/13
 							</p>
 						</div>
 
@@ -2091,7 +2091,7 @@ possible to specify a capture in a &quot;defaults&quot; section.
 <pre class="prettyprint">
 <code>capture request header Host len 15
 capture request header X-Forwarded-For len 15
-capture request header Referrer len 15
+capture request header Referer len 15
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#capture%20response%20header">capture response header</a>&quot; as well as <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="capture"></a><a class="anchor" name="4-capture"></a><a class="anchor" name="4.2-capture"></a><a class="anchor" name="capture (Proxies)"></a><a class="anchor" name="capture (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture response"></a><a class="anchor" name="4-capture response"></a><a class="anchor" name="4.2-capture response"></a><a class="anchor" name="capture response (Proxies)"></a><a class="anchor" name="capture response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture response header"></a><a class="anchor" name="4-capture response header"></a><a class="anchor" name="4.2-capture response header"></a><a class="anchor" name="capture response header (Proxies)"></a><a class="anchor" name="capture response header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="capture response header"></a><a href="#4.2-capture%20response%20header">capture response header</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log the first occurrence of the specified response header.
@@ -3157,7 +3157,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, HAProxy complies with RFC2616 in terms of message parsing. This
+<pre class="text">By default, HAProxy complies with RFC7230 in terms of message parsing. This
 means that invalid characters in header names are not permitted and cause an
 error to be returned to the client. This is the desired behaviour as such
 forbidden characters are essentially used to build attacks exploiting server
@@ -3165,7 +3165,9 @@ weaknesses, and bypass security filtering. Sometimes, a buggy browser or
 server will emit invalid header names for whatever reason (configuration,
 implementation) and the issue will not be immediately fixed. In such a case,
 it is possible to relax HAProxy's header name parser to accept any character
-even if that does not make sense, by specifying this option.
+even if that does not make sense, by specifying this option. This option also
+relaxes the test on the HTTP version format, it allows multiple digits for
+both the major and the minor version.
 
 This option should never be enabled by default as it hides application bugs
 and open security breaches. It should only be deployed after a problem has
@@ -3187,7 +3189,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, HAProxy complies with RFC2616 in terms of message parsing. This
+<pre class="text">By default, HAProxy complies with RFC7230 in terms of message parsing. This
 means that invalid characters in header names are not permitted and cause an
 error to be returned to the client. This is the desired behaviour as such
 forbidden characters are essentially used to build attacks exploiting server
@@ -3195,7 +3197,9 @@ weaknesses, and bypass security filtering. Sometimes, a buggy browser or
 server will emit invalid header names for whatever reason (configuration,
 implementation) and the issue will not be immediately fixed. In such a case,
 it is possible to relax HAProxy's header name parser to accept any character
-even if that does not make sense, by specifying this option.
+even if that does not make sense, by specifying this option. This option also
+relaxes the test on the HTTP version format, it allows multiple digits for
+both the major and the minor version.
 
 This option should never be enabled by default as it hides application bugs
 and open security breaches. It should only be deployed after a problem has
@@ -4428,7 +4432,7 @@ no delay is needed at all to detect the threshold.
     mode tcp
     bind :25
     rate-limit sessions 10
-    server 127.0.0.1:1025
+    server smtp1 127.0.0.1:1025
 </code></pre>
 </div><pre class="text">Note : when the maximum rate is reached, the frontend's status appears as
        &quot;FULL&quot; in the statistics, exactly as when it is saturated.
@@ -4465,7 +4469,7 @@ response. If no condition is specified, the redirect applies unconditionally.
           is desired. Only codes 301, 302, 303, 307 and 308 are supported,
           with 302 used by default if no code is specified. 301 means
           &quot;Moved permanently&quot;, and a browser may cache the Location. 302
-          means &quot;Moved permanently&quot; and means that the browser should not
+          means &quot;Moved temporarily&quot; and means that the browser should not
           cache the redirection. 303 is equivalent to 302 except that the
           browser will fetch the location with a GET method. 307 is just
           like 302 but makes it clear that the same method must be reused.
@@ -5080,6 +5084,8 @@ This option sets the default source for all servers in the backend. It may
 also be specified in a &quot;defaults&quot; section. Finer source address specification
 is possible at the server level using the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; server option. Refer to
 <a href="#5">section 5</a> for more information.
+
+In order to work, &quot;usesrc&quot; requires root privileges.
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
@@ -8451,7 +8457,7 @@ page. Both means provide a CSV format whose fields follow.
         INI     -&gt; initializing
         SOCKERR -&gt; socket error
         L4OK    -&gt; check passed on layer 4, no upper layers testing enabled
-        L4TMOUT -&gt; layer 1-4 timeout
+        L4TOUT  -&gt; layer 1-4 timeout
         L4CON   -&gt; layer 1-4 connection problem, for example
                    &quot;Connection refused&quot; (tcp rst) or &quot;No route to host&quot; (icmp)
         L6OK    -&gt; check passed on layer 6
@@ -8659,8 +8665,8 @@ the reader knows the output has not been truncated.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.4.26 &ndash; Configuration Manual<br>
-							<small>2015/02/01, willy tarreau</small>
+							HAProxy 1.4.27 &ndash; Configuration Manual<br>
+							<small>2016/03/13, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -9138,7 +9144,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.4.26', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.4.27', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -9150,4 +9156,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.4.26 -->
+<!-- git:v1.4.27 -->
