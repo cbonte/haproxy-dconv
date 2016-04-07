@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev2-55 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev2-57 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/04/06</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/04/07</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev2-55</strong></p>
+							<p><strong>version 1.7-dev2-57</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -13337,6 +13337,12 @@ fetch. This keyword will disappear soon.
 </pre><a class="anchor" name="status"></a><a class="anchor" name="7-status"></a><a class="anchor" name="7.3.6-status"></a><a class="anchor" name="status (Using ACLs and fetching samples)"></a><a class="anchor" name="status (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="status"></a><a href="#7.3.6-status">status</a></b> : integer</div><pre class="text">Returns an integer containing the HTTP status code in the HTTP response, for
 example, 302. It is mostly used within ACLs and integer ranges, for example,
 to remove any Location header if the response is not a 3xx.
+</pre><a class="anchor" name="unique-id"></a><a class="anchor" name="7-unique-id"></a><a class="anchor" name="7.3.6-unique-id"></a><a class="anchor" name="unique-id (Using ACLs and fetching samples)"></a><a class="anchor" name="unique-id (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="unique-id"></a><a href="#7.3.6-unique-id">unique-id</a></b> : string</div><pre class="text">Returns the unique-id attached to the request. The directive
+&quot;<a href="#unique-id-format">unique-id-format</a>&quot; must be set. If it is not set, the unique-id sample fetch
+fails. Note that the unique-id is usually used with HTTP requests, however this
+sample fetch can be used with other protocols. Obviously, if it is used with
+other protocols than HTTP, the unique-id-format directive must not contain
+HTTP parts. See: unique-id-format and unique-id-header
 </pre><a class="anchor" name="url"></a><a class="anchor" name="7-url"></a><a class="anchor" name="7.3.6-url"></a><a class="anchor" name="url (Using ACLs and fetching samples)"></a><a class="anchor" name="url (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url"></a><a href="#7.3.6-url">url</a></b> : string</div><pre class="text">This extracts the request's URL as presented in the request. A typical use is
 with prefetch-capable caches, and with portals which need to aggregate
 multiple information from databases and keep them in caches. With ACLs, using
@@ -14848,7 +14854,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev2-55 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev2-57 &ndash; Configuration Manual<br>
 							<small>2016/03/13, willy tarreau</small>
 						</div>
 					</div>
@@ -15624,6 +15630,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"uid (Process management and security)",
 				"uid (Bind options)",
 				"ulimit-n",
+				"unique-id",
 				"unique-id-format",
 				"unique-id-header",
 				"unix-bind",
@@ -15770,7 +15777,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev2-55', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev2-57', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15782,4 +15789,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev2-55-gbb137a8 -->
+<!-- git:v1.7-dev2-57-g0e00dca -->
