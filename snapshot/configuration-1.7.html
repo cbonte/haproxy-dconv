@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev2-79 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev2-82 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/04/21</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/04/25</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev2-79</strong></p>
+							<p><strong>version 1.7-dev2-82</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -10363,6 +10363,12 @@ in any order, optionally terminated by '\r' and/or '\n', each consisting of :
   weight is reported on the stats page as &quot;DRAIN&quot; since it has the same
   effect on the server (it's removed from the LB farm).
 
+- The string &quot;maxconn:&quot; followed by an integer (no space between). Values in
+  this format will set the maxconn of a server. The maximum number of
+  connections advertised needs to be multipled by the number of load balancers
+  and different backends that use this health check to get the total number
+  of connections the server might receive. Example: maxconn:30
+
 - The word &quot;ready&quot;. This will turn the server's administrative state to the
   READY mode, thus cancelling any DRAIN or MAINT state
 
@@ -14977,7 +14983,7 @@ filters evaluation order.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev2-79 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev2-82 &ndash; Configuration Manual<br>
 							<small>2016/03/13, willy tarreau</small>
 						</div>
 					</div>
@@ -15905,7 +15911,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev2-79', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev2-82', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15917,4 +15923,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev2-79-g169c470 -->
+<!-- git:v1.7-dev2-82-g5c3ed34 -->
