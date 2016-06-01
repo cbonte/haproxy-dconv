@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev3-25 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev3-29 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev3-25</strong></p>
+							<p><strong>version 1.7-dev3-29</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4351,9 +4351,52 @@ http-request set-query %[query,regsub(%3D,=,g)]
 <code>http-request set-src hdr(x-forwarded-for)
 http-request set-src src,ipmask(24)
 </code></pre>
-</div><pre class="text">    When set-src is successful, the source port is set to 0.
+</div><pre class="text">  When set-src is successful, the source port is set to 0.
 
-  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
+- set-src-port &lt;expr&gt; :
+  Is used to set the source port address to the value of specified
+  expression.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request set-src-port hdr(x-port)
+http-request set-src-port int(4000)
+</code></pre>
+</div><pre class="text">  Be careful to use &quot;set-src-port&quot; after &quot;set-src&quot;, because &quot;set-src&quot; sets
+  the source port to 0.
+
+- set-dst &lt;expr&gt; :
+  Is used to set the destination IP address to the value of specified
+  expression. Useful when a proxy in front of HAProxy rewrites destination
+  IP, but provides the correct IP in a HTTP header; or you want to mask
+  the IP for privacy. If you want to connect to the new address/port, use
+  '0.0.0.0:0' as a server address in the backend.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request set-dst hdr(x-dst)
+http-request set-dst dst,ipmask(24)
+</code></pre>
+</div><pre class="text">- set-dst-port &lt;expr&gt; :
+  Is used to set the destination port address to the value of specified
+  expression. If you want to connect to the new address/port, use
+  '0.0.0.0:0' as a server address in the backend.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request set-dst-port hdr(x-port)
+http-request set-dst-port int(4000)
+</code></pre>
+</div><pre class="text">  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
     client-facing connection suddenly disappear using a system-dependant way
     that tries to prevent the client from being notified. The effect it then
     that the client still sees an established connection while there's none
@@ -8994,7 +9037,64 @@ Four types of actions are supported :
       an error occurs, this action silently fails and the actions evaluation
       continues.
 
-  - &quot;silent-drop&quot; :
+  - set-src &lt;expr&gt; :
+    Is used to set the source IP address to the value of specified
+    expression. Useful if you want to mask source IP for privacy.
+    If you want to provide an IP from a HTTP header use &quot;http-request
+    set-src&quot;
+
+       &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+                 followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request connection set-src src,ipmask(24)
+</code></pre>
+</div><pre class="text">  When set-src is successful, the source port is set to 0.
+
+- set-src-port &lt;expr&gt; :
+  Is used to set the source port address to the value of specified
+  expression.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request connection set-src-port int(4000)
+</code></pre>
+</div><pre class="text">  Be careful to use &quot;set-src-port&quot; after &quot;set-src&quot;, because &quot;set-src&quot; sets
+  the source port to 0.
+
+- set-dst &lt;expr&gt; :
+  Is used to set the destination IP address to the value of specified
+  expression. Useful if you want to mask IP for privacy in log.
+  If you want to provide an IP from a HTTP header use &quot;http-request
+  set-dst&quot;. If you want to connect to the new address/port, use
+  '0.0.0.0:0' as a server address in the backend.
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request connection set-dst dst,ipmask(24)
+tcp-request connection set-dst ipv4(10.0.0.1)
+</code></pre>
+</div><pre class="text">- set-dst-port &lt;expr&gt; :
+  Is used to set the destination port address to the value of specified
+  expression. If you want to connect to the new address/port, use
+  '0.0.0.0:0' as a server address in the backend.
+
+
+     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
+               followed by some converters.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request connection set-dst-port int(4000)
+</code></pre>
+</div><pre class="text">  - &quot;silent-drop&quot; :
       This stops the evaluation of the rules and makes the client-facing
       connection suddenly disappear using a system-dependant way that tries
       to prevent the client from being notified. The effect it then that the
@@ -14982,7 +15082,7 @@ filters evaluation order.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev3-25 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev3-29 &ndash; Configuration Manual<br>
 							<small>2016/05/10, willy tarreau</small>
 						</div>
 					</div>
@@ -15911,7 +16011,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3-25', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3-29', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15923,4 +16023,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev3-25-gbb93346 -->
+<!-- git:v1.7-dev3-29-g13e9b0c -->
