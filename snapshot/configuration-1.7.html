@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev3-47 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev3-50 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/06/20</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/06/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev3-47</strong></p>
+							<p><strong>version 1.7-dev3-50</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -8972,6 +8972,15 @@ Four types of actions are supported :
       of load balancers are passed through by traffic coming from public
       hosts.
 
+  - expect-netscaler-cip layer4 :
+      configures the client-facing connection to receive a NetScaler Client
+      IP insertion protocol header before any byte is read from the socket.
+      This is equivalent to having the &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; keyword on the
+      &quot;<a href="#bind">bind</a>&quot; line, except that using the TCP rule allows the PROXY protocol
+      to be accepted only for certain IP address ranges using an ACL. This
+      is convenient when multiple layers of load balancers are passed
+      through by traffic coming from public hosts.
+
   - capture &lt;sample&gt; len &lt;length&gt; :
       This only applies to &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rules. It captures sample
       expression &lt;sample&gt; from the request buffer, and converts it to a
@@ -10017,6 +10026,18 @@ while other ones expect a value after them. In this case, the value must be
 provided immediately after the setting name.
 
 The currently supported settings are the following ones.
+</pre><a class="anchor" name="accept-netscaler-cip"></a><a class="anchor" name="5-accept-netscaler-cip"></a><a class="anchor" name="5.1-accept-netscaler-cip"></a><a class="anchor" name="accept-netscaler-cip (Bind and Server options)"></a><a class="anchor" name="accept-netscaler-cip (Bind options)"></a><div class="keyword"><b><a class="anchor" name="accept-netscaler-cip"></a><a href="#5.1-accept-netscaler-cip">accept-netscaler-cip</a></b> <span style="color: #080">&lt;magic number&gt;</span></div><pre class="text">Enforces the use of the NetScaler Client IP insertion protocol over any
+connection accepted by any of the TCP sockets declared on the same line. The
+NetScaler Client IP insertion protocol dictates the layer 3/4 addresses of
+the incoming connection to be used everywhere an address is used, with the
+only exception of &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rules which will only see the
+real connection address. Logs will reflect the addresses indicated in the
+protocol, unless it is violated, in which case the real  address will still
+be used. This keyword combined with support from external components can be
+used as an efficient and reliable alternative to the X-Forwarded-For
+mechanism which is not always reliable and not even always usable. See also
+&quot;tcp-request connection expect-netscaler-cip&quot; for a finer-grained setting of
+which client is allowed to use the protocol.
 </pre><a class="anchor" name="accept-proxy"></a><a class="anchor" name="5-accept-proxy"></a><a class="anchor" name="5.1-accept-proxy"></a><a class="anchor" name="accept-proxy (Bind and Server options)"></a><a class="anchor" name="accept-proxy (Bind options)"></a><div class="keyword"><b><a class="anchor" name="accept-proxy"></a><a href="#5.1-accept-proxy">accept-proxy</a></b></div><pre class="text">Enforces the use of the PROXY protocol over any connection accepted by any of
 the sockets declared on the same line. Versions 1 and 2 of the PROXY protocol
 are supported and correctly detected. The PROXY protocol dictates the layer
@@ -10885,16 +10906,18 @@ Supported in default-server: No
 connection established to this server. The PROXY protocol informs the other
 end about the layer 3/4 addresses of the incoming connection, so that it can
 know the client's address or the public address it accessed to, whatever the
-upper layer protocol. For connections accepted by an &quot;<a href="#accept-proxy">accept-proxy</a>&quot; listener,
-the advertised address will be used. Only TCPv4 and TCPv6 address families
-are supported. Other families such as Unix sockets, will report an UNKNOWN
-family. Servers using this option can fully be chained to another instance of
-haproxy listening with an &quot;<a href="#accept-proxy">accept-proxy</a>&quot; setting. This setting must not be
-used if the server isn't aware of the protocol. When health checks are sent
-to the server, the PROXY protocol is automatically used when this option is
-set, unless there is an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive, in which case an
-explicit &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; directive would also be needed to use the PROXY
-protocol. See also the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot; keyword.
+upper layer protocol. For connections accepted by an &quot;<a href="#accept-proxy">accept-proxy</a>&quot; or
+&quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; listener, the advertised address will be used. Only
+TCPv4 and TCPv6 address families are supported. Other families such as
+Unix sockets, will report an UNKNOWN family. Servers using this option can
+fully be chained to another instance of haproxy listening with an
+&quot;<a href="#accept-proxy">accept-proxy</a>&quot; setting. This setting must not be used if the server isn't
+aware of the protocol. When health checks are sent to the server, the PROXY
+protocol is automatically used when this option is set, unless there is an
+explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive, in which case an explicit
+&quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; directive would also be needed to use the PROXY protocol.
+See also the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; and &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot;
+keyword.
 
 Supported in default-server: No
 </pre><a class="anchor" name="send-proxy-v2"></a><a class="anchor" name="5-send-proxy-v2"></a><a class="anchor" name="5.2-send-proxy-v2"></a><a class="anchor" name="send-proxy-v2 (Bind and Server options)"></a><a class="anchor" name="send-proxy-v2 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy-v2"></a><a href="#5.2-send-proxy-v2">send-proxy-v2</a></b></div><pre class="text">The &quot;<a href="#send-proxy-v2">send-proxy-v2</a>&quot; parameter enforces use of the PROXY protocol version 2
@@ -12639,9 +12662,10 @@ same socket to the same server.
 IP and works on both IPv4 and IPv6 tables. On IPv6 tables, IPv4 addresses are
 mapped to their IPv6 equivalent, according to RFC 4291. Note that it is the
 TCP-level source address which is used, and not the address of a client
-behind a proxy. However if the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; bind directive is used, it can
-be the address of a client behind another PROXY-protocol compatible component
-for all rule sets except &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.
+behind a proxy. However if the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; or &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; bind
+directive is used, it can be the address of a client behind another
+PROXY-protocol compatible component for all rule sets except
+&quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -13797,8 +13821,9 @@ Detailed fields description :
     connection to haproxy. If the connection was accepted on a UNIX socket
     instead, the IP address would be replaced with the word &quot;unix&quot;. Note that
     when the connection is accepted on a socket configured with &quot;<a href="#accept-proxy">accept-proxy</a>&quot;
-    and the PROXY protocol is correctly used, then the logs will reflect the
-    forwarded connection's information.
+    and the PROXY protocol is correctly used, or with a &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot;
+    and the NetScaler Client IP insetion protocol is correctly used, then the
+    logs will reflect the forwarded connection's information.
 
   - &quot;client_port&quot; is the TCP port of the client which initiated the connection.
     If the connection was accepted on a UNIX socket instead, the port would be
@@ -13976,8 +14001,9 @@ Detailed fields description :
     connection to haproxy. If the connection was accepted on a UNIX socket
     instead, the IP address would be replaced with the word &quot;unix&quot;. Note that
     when the connection is accepted on a socket configured with &quot;<a href="#accept-proxy">accept-proxy</a>&quot;
-    and the PROXY protocol is correctly used, then the logs will reflect the
-    forwarded connection's information.
+    and the PROXY protocol is correctly used, or with a &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot;
+    and the NetScaler Client IP insetion protocol is correctly used, then the
+    logs will reflect the forwarded connection's information.
 
   - &quot;client_port&quot; is the TCP port of the client which initiated the connection.
     If the connection was accepted on a UNIX socket instead, the port would be
@@ -15090,7 +15116,7 @@ filters evaluation order.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev3-47 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev3-50 &ndash; Configuration Manual<br>
 							<small>2016/05/10, willy tarreau</small>
 						</div>
 					</div>
@@ -15120,6 +15146,7 @@ filters evaluation order.
 				"51degrees-data-file",
 				"51degrees-property-name-list",
 				"51degrees-property-separator",
+				"accept-netscaler-cip",
 				"accept-proxy",
 				"acl",
 				"add",
@@ -16021,7 +16048,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3-47', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3-50', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -16033,4 +16060,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.7-dev3-47-g5e0e6e4 -->
+<!-- git:v1.7-dev3-50-g9075968 -->
