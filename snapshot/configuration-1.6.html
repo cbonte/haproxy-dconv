@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.5-14 - Configuration Manual</title>
+		<title>HAProxy version 1.6.5-28 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/06/08</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/06/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,7 +82,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.5-14</strong></p>
+							<p><strong>version 1.6.5-28</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -13295,6 +13295,14 @@ stick on urlp(JSESSIONID,;)
   See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
   and converts it to an integer value. This can be used for session stickiness
   based on a user ID for example, or with ACLs to match a page number or price.
+</pre><a class="anchor" name="url32"></a><a class="anchor" name="7-url32"></a><a class="anchor" name="7.3.6-url32"></a><a class="anchor" name="url32 (Using ACLs and fetching samples)"></a><a class="anchor" name="url32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32"></a><a href="#7.3.6-url32">url32</a></b> : integer</div><pre class="text">This returns a 32-bit hash of the value obtained by concatenating the first
+Host header and the whole URL including parameters (not only the path part of
+the request, as in the &quot;<a href="#base32">base32</a>&quot; fetch above). This is useful to track per-URL
+activity. A shorter hash is stored, saving a lot of memory. The output type
+is an unsigned integer.
+</pre><a class="anchor" name="url32+src"></a><a class="anchor" name="7-url32+src"></a><a class="anchor" name="7.3.6-url32+src"></a><a class="anchor" name="url32+src (Using ACLs and fetching samples)"></a><a class="anchor" name="url32+src (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32+src"></a><a href="#7.3.6-url32%2Bsrc">url32+src</a></b> : binary</div><pre class="text">This returns the concatenation of the &quot;<a href="#url32">url32</a>&quot; fetch and the &quot;<a href="#src">src</a>&quot; fetch. The
+resulting type is of type binary, with a size of 8 or 20 bytes depending on
+the source address family. This can be used to track per-IP, per-URL counters.
 </pre></div>
 <a class="anchor" id="7.4" name="7.4"></a>
 <h2 id="chapter-7.4" data-target="7.4"><small><a class="small" href="#7.4">7.4.</a></small> Pre-defined ACLs</h2>
@@ -14737,7 +14745,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.5-14 &ndash; Configuration Manual<br>
+							HAProxy 1.6.5-28 &ndash; Configuration Manual<br>
 							<small>2016/05/10, willy tarreau</small>
 						</div>
 					</div>
@@ -15512,6 +15520,8 @@ reading. Their sole purpose is to explain how to decipher them.
 				"unix-bind",
 				"upper",
 				"url",
+				"url32",
+				"url32+src",
 				"url_dec",
 				"url_ip",
 				"url_param",
@@ -15652,7 +15662,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.5-14', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.5-28', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15664,4 +15674,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6.5-14-gf5cb61d -->
+<!-- git:v1.6.5-28-g7509829 -->
