@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.5 - Configuration Manual</title>
+		<title>HAProxy version 1.6.6 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="./css/page.css?0.3.1-39" rel="stylesheet" />
 	</head>
@@ -71,7 +71,7 @@
 					The feature is automatically disabled when the search field is focused.
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/05/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-39</b> on <b>2016/06/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -82,11 +82,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.5</strong></p>
+							<p><strong>version 1.6.6</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="./img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/05/10
+								2016/06/26
 							</p>
 						</div>
 
@@ -3911,7 +3911,8 @@ Example of a header received by the application server :
   &gt;&gt;&gt;  X-Haproxy-Server-State: UP 2/3; name=bck/srv2; node=lb1; weight=1/2; \
          scur=13/22; qcur=0
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;</div>
-<a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
+<a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
+              deny <span style="color: #008">[deny_status <span style="color: #080">&lt;status&gt;</span>]</span> |
               add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> |
               capture <span style="color: #080">&lt;sample&gt;</span> <span style="color: #008">[ len <span style="color: #080">&lt;length&gt;</span> | id <span style="color: #080">&lt;id&gt;</span> ]</span> |
               del-header <span style="color: #080">&lt;name&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
@@ -3945,8 +3946,10 @@ The first keyword is the rule's action. Currently supported actions include :
     pass the check. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated.
 
   - &quot;deny&quot; : this stops the evaluation of the rules and immediately rejects
-    the request and emits an HTTP 403 error. No further &quot;<a href="#http-request">http-request</a>&quot; rules
-    are evaluated.
+    the request and emits an HTTP 403 error, or optionally the status code
+    specified as an argument to &quot;deny_status&quot;. The list of permitted status
+    codes is limited to those that can be overridden by the &quot;<a href="#errorfile">errorfile</a>&quot;
+    directive. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated.
 
   - &quot;tarpit&quot; : this stops the evaluation of the rules and immediately blocks
     the request without responding for a delay specified by &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;
@@ -12647,15 +12650,13 @@ Note: on SSL session resumption with Session ID or TLS ticket, client
 certificate is not present in the current connection but may be retrieved
 from the cache or the ticket. So prefer &quot;<a href="#ssl_c_used">ssl_c_used</a>&quot; if you want to check if
 current SSL session uses a client certificate.
-</pre><a class="anchor" name="ssl_fc_has_sni"></a><a class="anchor" name="7-ssl_fc_has_sni"></a><a class="anchor" name="7.3.4-ssl_fc_has_sni"></a><a class="anchor" name="ssl_fc_has_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_sni"></a><a href="#7.3.4-ssl_fc_has_sni">ssl_fc_has_sni</a></b> : boolean</div><pre class="text">  This checks for the presence of a Server Name Indication TLS extension (SNI)
-  in an incoming connection was made over an SSL/TLS transport layer. Returns
-  true when the incoming connection presents a TLS SNI field. This requires
-  that the SSL library is build with support for TLS extensions enabled (check
-  haproxy -vv).
-
-ssl_fc_is_resumed: boolean
-  Returns true if the SSL/TLS session has been resumed through the use of
-  SSL session cache or TLS tickets.
+</pre><a class="anchor" name="ssl_fc_has_sni"></a><a class="anchor" name="7-ssl_fc_has_sni"></a><a class="anchor" name="7.3.4-ssl_fc_has_sni"></a><a class="anchor" name="ssl_fc_has_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_sni"></a><a href="#7.3.4-ssl_fc_has_sni">ssl_fc_has_sni</a></b> : boolean</div><pre class="text">This checks for the presence of a Server Name Indication TLS extension (SNI)
+in an incoming connection was made over an SSL/TLS transport layer. Returns
+true when the incoming connection presents a TLS SNI field. This requires
+that the SSL library is build with support for TLS extensions enabled (check
+haproxy -vv).
+</pre><a class="anchor" name="ssl_fc_is_resumed"></a><a class="anchor" name="7-ssl_fc_is_resumed"></a><a class="anchor" name="7.3.4-ssl_fc_is_resumed"></a><a class="anchor" name="ssl_fc_is_resumed (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_is_resumed (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_is_resumed"></a><a href="#7.3.4-ssl_fc_is_resumed">ssl_fc_is_resumed</a></b> : boolean</div><pre class="text">Returns true if the SSL/TLS session has been resumed through the use of
+SSL session cache or TLS tickets.
 </pre><a class="anchor" name="ssl_fc_npn"></a><a class="anchor" name="7-ssl_fc_npn"></a><a class="anchor" name="7.3.4-ssl_fc_npn"></a><a class="anchor" name="ssl_fc_npn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_npn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_npn"></a><a href="#7.3.4-ssl_fc_npn">ssl_fc_npn</a></b> : string</div><pre class="text">This extracts the Next Protocol Negotiation field from an incoming connection
 made via a TLS transport layer and locally deciphered by haproxy. The result
 is a string containing the protocol name advertised by the client. The SSL
@@ -13297,6 +13298,14 @@ stick on urlp(JSESSIONID,;)
   See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
   and converts it to an integer value. This can be used for session stickiness
   based on a user ID for example, or with ACLs to match a page number or price.
+</pre><a class="anchor" name="url32"></a><a class="anchor" name="7-url32"></a><a class="anchor" name="7.3.6-url32"></a><a class="anchor" name="url32 (Using ACLs and fetching samples)"></a><a class="anchor" name="url32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32"></a><a href="#7.3.6-url32">url32</a></b> : integer</div><pre class="text">This returns a 32-bit hash of the value obtained by concatenating the first
+Host header and the whole URL including parameters (not only the path part of
+the request, as in the &quot;<a href="#base32">base32</a>&quot; fetch above). This is useful to track per-URL
+activity. A shorter hash is stored, saving a lot of memory. The output type
+is an unsigned integer.
+</pre><a class="anchor" name="url32+src"></a><a class="anchor" name="7-url32+src"></a><a class="anchor" name="7.3.6-url32+src"></a><a class="anchor" name="url32+src (Using ACLs and fetching samples)"></a><a class="anchor" name="url32+src (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32+src"></a><a href="#7.3.6-url32%2Bsrc">url32+src</a></b> : binary</div><pre class="text">This returns the concatenation of the &quot;<a href="#url32">url32</a>&quot; fetch and the &quot;<a href="#src">src</a>&quot; fetch. The
+resulting type is of type binary, with a size of 8 or 20 bytes depending on
+the source address family. This can be used to track per-IP, per-URL counters.
 </pre></div>
 <a class="anchor" id="7.4" name="7.4"></a>
 <h2 id="chapter-7.4" data-target="7.4"><small><a class="small" href="#7.4">7.4.</a></small> Pre-defined ACLs</h2>
@@ -14739,8 +14748,8 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.5 &ndash; Configuration Manual<br>
-							<small>2016/05/10, willy tarreau</small>
+							HAProxy 1.6.6 &ndash; Configuration Manual<br>
+							<small>2016/06/26, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -15383,6 +15392,7 @@ reading. Their sole purpose is to explain how to decipher them.
 				"ssl_fc_cipher",
 				"ssl_fc_has_crt",
 				"ssl_fc_has_sni",
+				"ssl_fc_is_resumed",
 				"ssl_fc_npn",
 				"ssl_fc_protocol",
 				"ssl_fc_session_id",
@@ -15513,6 +15523,8 @@ reading. Their sole purpose is to explain how to decipher them.
 				"unix-bind",
 				"upper",
 				"url",
+				"url32",
+				"url32+src",
 				"url_dec",
 				"url_ip",
 				"url_param",
@@ -15653,7 +15665,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.5', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.6', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-39', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
@@ -15665,4 +15677,4 @@ piwikTracker.enableLinkTracking();
 	</body>
 </html>
 
-<!-- git:v1.6.5 -->
+<!-- git:v1.6.6 -->
