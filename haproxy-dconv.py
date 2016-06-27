@@ -41,22 +41,23 @@ HAPROXY_GIT_VERSION = False
 def main():
     global VERSION, HAPROXY_GIT_VERSION
 
-    usage="Usage: %prog --infile <infile> --outfile <outfile>"
+    usage="Usage: %prog [options] file..."
 
     optparser = OptionParser(description='Generate HTML Document from HAProxy configuation.txt',
                           version=VERSION,
                           usage=usage)
-    optparser.add_option('--infile', '-i', help='Input file mostly the configuration.txt')
-    optparser.add_option('--outfile','-o', help='Output file')
+    optparser.add_option('--git-directory','-g', help='Optional git directory for input files, to determine haproxy details')
+    optparser.add_option('--output-directory','-o', default='.', help='Destination directory to store files, instead of the current working directory')
     optparser.add_option('--base','-b', default = '', help='Base directory for relative links')
-    (option, args) = optparser.parse_args()
+    (option, files) = optparser.parse_args()
 
-    if not (option.infile  and option.outfile) or len(args) > 0:
+    if not files:
         optparser.print_help()
         exit(1)
 
-    option.infile = os.path.abspath(option.infile)
-    option.outfile = os.path.abspath(option.outfile)
+    option.output_directory = os.path.abspath(option.output_directory)
+    if option.git_directory:
+        option.git_directory = os.path.abspath(option.git_directory)
 
     os.chdir(os.path.dirname(__file__))
 
@@ -64,9 +65,9 @@ def main():
     if not VERSION:
         sys.exit(1)
 
-    HAPROXY_GIT_VERSION = get_haproxy_git_version(os.path.dirname(option.infile))
+    HAPROXY_GIT_VERSION = get_haproxy_git_version(option.git_directory)
 
-    convert(option.infile, option.outfile, option.base)
+    convert_all(files, option.output_directory, option.base)
 
 
 # Temporarily determine the version from git to follow which commit generated
@@ -93,6 +94,9 @@ def get_git_version():
     return version
 
 def get_haproxy_git_version(path):
+    if not path:
+        return False
+
     try:
         p = subprocess.Popen(["git", "describe", "--tags", "--match", "v*"], cwd=path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except EnvironmentError:
@@ -197,6 +201,15 @@ def init_parsers(pctxt):
     ]
 
 # The parser itself
+
+def convert_all(infiles, outdir, base=''):
+    for infile in infiles:
+        outfile = os.path.join(
+            outdir,
+            os.path.basename(infile).replace(".txt", ".html")
+        )
+        convert(infile, outfile, base)
+
 def convert(infile, outfile, base=''):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
 
