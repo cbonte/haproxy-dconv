@@ -204,10 +204,12 @@ def init_parsers(pctxt):
 
 def convert_all(infiles, outdir, base=''):
     converted = []
+    menu = []
     for infile in infiles:
+        basefile = os.path.basename(infile).replace(".txt", ".html")
         outfile = os.path.join(
             outdir,
-            os.path.basename(infile).replace(".txt", ".html")
+            basefile,
         )
         pctxt = PContext(
             TemplateLookup(
@@ -216,10 +218,15 @@ def convert_all(infiles, outdir, base=''):
                 ]
             )
         )
-        converted.append((outfile, convert(pctxt, infile, outfile, base)))
+        data = convert(pctxt, infile, outfile, base)
+        converted.append((outfile, data))
+
+        menu.append((basefile, data['pctxt'].context['headers']['subtitle']))
 
     for item in converted:
         outfile, data = item
+        data['menu'] = menu
+
         print >> sys.stderr, "Exporting to %s..." % outfile
         template = pctxt.templates.get_template('template.html')
         with open(outfile,'w') as fd:
