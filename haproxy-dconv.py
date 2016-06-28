@@ -203,14 +203,30 @@ def init_parsers(pctxt):
 # The parser itself
 
 def convert_all(infiles, outdir, base=''):
+    converted = []
     for infile in infiles:
         outfile = os.path.join(
             outdir,
             os.path.basename(infile).replace(".txt", ".html")
         )
-        convert(infile, outfile, base)
+        pctxt = PContext(
+            TemplateLookup(
+                directories=[
+                    'templates'
+                ]
+            )
+        )
+        converted.append((outfile, convert(pctxt, infile, outfile, base)))
 
-def convert(infile, outfile, base=''):
+    for item in converted:
+        outfile, data = item
+        print >> sys.stderr, "Exporting to %s..." % outfile
+        template = pctxt.templates.get_template('template.html')
+        with open(outfile,'w') as fd:
+            print >> fd, template.render(**data)
+
+
+def convert(pctxt, infile, outfile, base=''):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
 
     if len(base) > 0 and base[:-1] != '/':
@@ -225,14 +241,6 @@ def convert(infile, outfile, base=''):
         line = line.rstrip()
         data.append(line)
     fd.close()
-
-    pctxt = PContext(
-        TemplateLookup(
-            directories=[
-                'templates'
-            ]
-        )
-    )
 
     parsers = init_parsers(pctxt)
 
@@ -500,9 +508,6 @@ def convert(infile, outfile, base=''):
             offset += 1
         keywords.remove(keyword)
 
-    print >> sys.stderr, "Exporting to %s..." % outfile
-
-    template = pctxt.templates.get_template('template.html')
     try:
         footerTemplate = pctxt.templates.get_template('footer.html')
         footer = footerTemplate.render(
@@ -520,23 +525,20 @@ def convert(infile, outfile, base=''):
     except TopLevelLookupException:
         footer = ""
 
-    fd = open(outfile,'w')
-
-    print >> fd, template.render(
-            pctxt = pctxt,
-            headers = pctxt.context['headers'],
-            base = base,
-            document = document,
-            chapters = chapters,
-            chapterIndexes = chapterIndexes,
-            keywords = keywords,
-            keywordsCount = keywordsCount,
-            keyword_conflicts = keyword_conflicts,
-            version = VERSION,
-            date = datetime.datetime.now().strftime("%Y/%m/%d"),
-            footer = footer
-    )
-    fd.close()
+    return {
+            'pctxt': pctxt,
+            'headers': pctxt.context['headers'],
+            'base': base,
+            'document': document,
+            'chapters': chapters,
+            'chapterIndexes': chapterIndexes,
+            'keywords': keywords,
+            'keywordsCount': keywordsCount,
+            'keyword_conflicts': keyword_conflicts,
+            'version': VERSION,
+            'date': datetime.datetime.now().strftime("%Y/%m/%d"),
+            'footer': footer
+    }
 
 if __name__ == '__main__':
     main()
