@@ -2,9 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.6 - Management Guide</title>
-		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.3.1-43" rel="stylesheet" />
+		<title>HAProxy version 1.6.6-3 - Management Guide</title>
+		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
+		<link href="../css/page.css?0.3.1-51" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -15,7 +16,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="../index.html">HAProxy</a>
+				<a class="navbar-brand" href="#">HAProxy Documentation</a>
 			</div>
 			<!-- /.navbar-header -->
 
@@ -27,7 +28,7 @@
 						<li class="active"><a href="management.html">Management Guide</a></li>
 				</ul>
 				<ul class="nav navbar-nav">
-					<li><a href="http://www.haproxy.org/">HAProxy home page</a></li>
+					<li><a href="http://www.haproxy.org/">HAProxy Home Page</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -36,49 +37,13 @@
 		<div id="wrapper">
 
 			<div id="sidebar">
-				<form onsubmit="search(this.keyword.value); return false" role="form">
-					<div id="searchKeyword" class="form-group">
-						<input type="text" class="form-control typeahead" id="keyword" name="keyword" placeholder="Search..." autocomplete="off">
-					</div>
-				</form>
-				<p>
-					Keyboard navigation&nbsp;: <span id="keyboardNavStatus"></span>
-				</p>
-				<p>
-					When enabled, you can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
-					The feature is automatically disabled when the search field is focused.
-				</p>
-				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-43</b> on <b>2016/06/30</b></small>
-				</p>
-			</div>
-			<!-- /.sidebar -->
-
-			<div id="page-wrapper">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="text-center">
-							<h1>HAProxy</h1>
-							<h2>Management Guide</h2>
-							<p><strong>version 1.6.6</strong></p>
-							<p>
-								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
-								<br>
-								
-							</p>
-						</div>
-
-						<div><pre class="text">Note to documentation contributors :
-    This document is formatted with 80 columns per line, with even number of
-    spaces for indentation and without tabs. Please follow these rules strictly
-    so that it remains easily printable everywhere. If you add sections, please
-    update the summary below for easier searching.
-</pre></div>
-<a class="anchor" id="summary" name="summary"></a>
-<div class="page-header">
-	<h1 id="chapter-summary" data-target="summary">Summary</h1>
-</div>
-<table>
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#tab-summary" aria-controls="tab-summary" role="tab" data-toggle="tab">Summary</a></li>
+					<li role="presentation"><a href="#tab-keywords" aria-controls="tab-keywords" role="tab" data-toggle="tab">Keywords</a></li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="tab-summary">
+						<table class="summary">
 	<tbody>
 		
 			
@@ -222,6 +187,366 @@
 				
 	</tbody>
 </table>
+
+					</div>
+					<div role="tabpanel" class="tab-pane" id="tab-keywords">
+						
+							
+								<h4>A</h4>
+								
+							<a class="list-group-item" href="#add">add</a>
+							
+							<a class="list-group-item" href="#add acl">add acl</a>
+							
+							<a class="list-group-item" href="#add map">add map</a>
+							
+								<h4>C</h4>
+								
+							<a class="list-group-item" href="#clear">clear</a>
+							
+							<a class="list-group-item" href="#clear acl">clear acl</a>
+							
+							<a class="list-group-item" href="#clear counters">clear counters</a>
+							
+							<a class="list-group-item" href="#clear counters all">clear counters all</a>
+							
+							<a class="list-group-item" href="#clear map">clear map</a>
+							
+							<a class="list-group-item" href="#clear table">clear table</a>
+							
+								<h4>D</h4>
+								
+							<a class="list-group-item" href="#del">del</a>
+							
+							<a class="list-group-item" href="#del acl">del acl</a>
+							
+							<a class="list-group-item" href="#del map">del map</a>
+							
+							<a class="list-group-item" href="#disable">disable</a>
+							
+							<a class="list-group-item" href="#disable agent">disable agent</a>
+							
+							<a class="list-group-item" href="#disable frontend">disable frontend</a>
+							
+							<a class="list-group-item" href="#disable health">disable health</a>
+							
+							<a class="list-group-item" href="#disable server">disable server</a>
+							
+								<h4>E</h4>
+								
+							<a class="list-group-item" href="#enable">enable</a>
+							
+							<a class="list-group-item" href="#enable agent">enable agent</a>
+							
+							<a class="list-group-item" href="#enable frontend">enable frontend</a>
+							
+							<a class="list-group-item" href="#enable health">enable health</a>
+							
+							<a class="list-group-item" href="#enable server">enable server</a>
+							
+								<h4>G</h4>
+								
+							<a class="list-group-item" href="#get">get</a>
+							
+							<a class="list-group-item" href="#get acl">get acl</a>
+							
+							<a class="list-group-item" href="#get map">get map</a>
+							
+							<a class="list-group-item" href="#get weight">get weight</a>
+							
+								<h4>H</h4>
+								
+							<a class="list-group-item" href="#help">help</a>
+							
+								<h4>I</h4>
+								
+							<a class="list-group-item" href="#interrupts">interrupts</a>
+							
+							<a class="list-group-item" href="#interrupts are">interrupts are</a>
+							
+							<a class="list-group-item" href="#interrupts are assigned">interrupts are assigned</a>
+							
+							<a class="list-group-item" href="#interrupts are assigned under">interrupts are assigned under</a>
+							
+								<h4>P</h4>
+								
+							<a class="list-group-item" href="#prompt">prompt</a>
+							
+								<h4>Q</h4>
+								
+							<a class="list-group-item" href="#quit">quit</a>
+							
+								<h4>S</h4>
+								
+							<a class="list-group-item" href="#set">set</a>
+							
+							<a class="list-group-item" href="#set map">set map</a>
+							
+							<a class="list-group-item" href="#set maxconn">set maxconn</a>
+							
+							<a class="list-group-item" href="#set maxconn frontend">set maxconn frontend</a>
+							
+							<a class="list-group-item" href="#set maxconn global">set maxconn global</a>
+							
+							<a class="list-group-item" href="#set rate-limit">set rate-limit</a>
+							
+							<a class="list-group-item" href="#set rate-limit connections">set rate-limit connections</a>
+							
+							<a class="list-group-item" href="#set rate-limit connections global">set rate-limit connections global</a>
+							
+							<a class="list-group-item" href="#set rate-limit http-compression">set rate-limit http-compression</a>
+							
+							<a class="list-group-item" href="#set rate-limit http-compression global">set rate-limit http-compression global</a>
+							
+							<a class="list-group-item" href="#set rate-limit sessions">set rate-limit sessions</a>
+							
+							<a class="list-group-item" href="#set rate-limit sessions global">set rate-limit sessions global</a>
+							
+							<a class="list-group-item" href="#set rate-limit ssl-sessions">set rate-limit ssl-sessions</a>
+							
+							<a class="list-group-item" href="#set rate-limit ssl-sessions global">set rate-limit ssl-sessions global</a>
+							
+							<a class="list-group-item" href="#set server">set server</a>
+							
+							<a class="list-group-item" href="#set ssl">set ssl</a>
+							
+							<a class="list-group-item" href="#set ssl ocsp-response">set ssl ocsp-response</a>
+							
+							<a class="list-group-item" href="#set ssl tls-key">set ssl tls-key</a>
+							
+							<a class="list-group-item" href="#set table">set table</a>
+							
+							<a class="list-group-item" href="#set timeout">set timeout</a>
+							
+							<a class="list-group-item" href="#set timeout cli">set timeout cli</a>
+							
+							<a class="list-group-item" href="#set weight">set weight</a>
+							
+							<a class="list-group-item" href="#show">show</a>
+							
+							<a class="list-group-item" href="#show acl">show acl</a>
+							
+							<a class="list-group-item" href="#show backend">show backend</a>
+							
+							<a class="list-group-item" href="#show errors">show errors</a>
+							
+							<a class="list-group-item" href="#show info">show info</a>
+							
+							<a class="list-group-item" href="#show map">show map</a>
+							
+							<a class="list-group-item" href="#show pools">show pools</a>
+							
+							<a class="list-group-item" href="#show servers">show servers</a>
+							
+							<a class="list-group-item" href="#show servers state">show servers state</a>
+							
+							<a class="list-group-item" href="#show sess">show sess</a>
+							
+							<a class="list-group-item" href="#show stat">show stat</a>
+							
+							<a class="list-group-item" href="#show stat resolvers">show stat resolvers</a>
+							
+							<a class="list-group-item" href="#show table">show table</a>
+							
+							<a class="list-group-item" href="#show tls-keys">show tls-keys</a>
+							
+							<a class="list-group-item" href="#shutdown">shutdown</a>
+							
+							<a class="list-group-item" href="#shutdown frontend">shutdown frontend</a>
+							
+							<a class="list-group-item" href="#shutdown session">shutdown session</a>
+							
+							<a class="list-group-item" href="#shutdown sessions">shutdown sessions</a>
+							
+							<a class="list-group-item" href="#shutdown sessions server">shutdown sessions server</a>
+							
+								<h4>W</h4>
+								
+							<a class="list-group-item" href="#where">where</a>
+					</div>
+				</div>
+
+				<p>
+					Keyboard navigation&nbsp;: <span id="keyboardNavStatus"></span>
+				</p>
+				<p>
+					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
+				</p>
+				<p class="text-right">
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-51</b> on <b>2016/07/03</b></small>
+				</p>
+			</div>
+			<!-- /.sidebar -->
+
+			<div id="page-wrapper">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="text-center">
+							<h1>HAProxy</h1>
+							<h2>Management Guide</h2>
+							<p><strong>version 1.6.6-3</strong></p>
+							<p>
+								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
+								<br>
+								
+							</p>
+						</div>
+
+						<div><pre class="text">Note to documentation contributors :
+    This document is formatted with 80 columns per line, with even number of
+    spaces for indentation and without tabs. Please follow these rules strictly
+    so that it remains easily printable everywhere. If you add sections, please
+    update the summary below for easier searching.
+</pre></div>
+<a class="anchor" id="summary" name="summary"></a>
+<div class="page-header">
+	<h1 id="chapter-summary" data-target="summary">Summary</h1>
+</div>
+<table class="summary">
+	<tbody>
+		
+			
+				
+				<tr>
+					<td><b><small>1.</small></b></td>
+					<td>
+							<a href="#1"><b>Prerequisites</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>2.</small></b></td>
+					<td>
+							<a href="#2"><br><b>Quick reminder about HAProxy's architecture</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>3.</small></b></td>
+					<td>
+							<a href="#3"><br><b>Starting HAProxy</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>4.</small></b></td>
+					<td>
+							<a href="#4"><br><b>Stopping and restarting HAProxy</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>5.</small></b></td>
+					<td>
+							<a href="#5"><br><b>File-descriptor limitations</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>6.</small></b></td>
+					<td>
+							<a href="#6"><br><b>Memory management</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>7.</small></b></td>
+					<td>
+							<a href="#7"><br><b>CPU usage</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>8.</small></b></td>
+					<td>
+							<a href="#8"><br><b>Logging</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>9.</small></b></td>
+					<td>
+							<a href="#9"><br><b>Statistics and monitoring</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><small>9.1.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.1">CSV format</a>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><small>9.2.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.2">Unix Socket commands</a>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>10.</small></b></td>
+					<td>
+							<a href="#10"><br><b>Tricks for easier configuration management</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>11.</small></b></td>
+					<td>
+							<a href="#11"><br><b>Well-known traps to avoid</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>12.</small></b></td>
+					<td>
+							<a href="#12"><br><b>Debugging and performance issues</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>13.</small></b></td>
+					<td>
+							<a href="#13"><br><b>Security considerations</b></a>
+					<td>
+				</tr>
+				
+	</tbody>
+</table>
+
 
 <a class="anchor" id="1" name="1"></a>
 <div class="page-header"><h1 id="chapter-1" data-target="1"><small><a class="small" href="#1">1.</a></small> Prerequisites</h1>
@@ -2157,148 +2482,22 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.6 &ndash; Management Guide<br>
+							HAProxy 1.6.6-3 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
 				<!-- /.row -->
-				<div style="position: fixed; z-index: 1000; bottom: 0; left: 0; right: 0; padding: 10px">
-					<ul class="pager" style="margin: 0">
-						<li class="previous"><a id="previous" href="#"></a></li>
-						<li class="next"><a id="next" href="#"></a></li>
-					</ul>
-				</div>
 			</div>
 			<!-- /#page-wrapper -->
 
 		</div>
 		<!-- /#wrapper -->
 
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<script>
-			/* Keyword search */
-			var searchFocus = false
-			var keywords = [
-				"add",
-				"add acl",
-				"add map",
-				"clear",
-				"clear acl",
-				"clear counters",
-				"clear counters all",
-				"clear map",
-				"clear table",
-				"del",
-				"del acl",
-				"del map",
-				"disable",
-				"disable agent",
-				"disable frontend",
-				"disable health",
-				"disable server",
-				"enable",
-				"enable agent",
-				"enable frontend",
-				"enable health",
-				"enable server",
-				"get",
-				"get acl",
-				"get map",
-				"get weight",
-				"help",
-				"interrupts",
-				"interrupts are",
-				"interrupts are assigned",
-				"interrupts are assigned under",
-				"prompt",
-				"quit",
-				"set",
-				"set map",
-				"set maxconn",
-				"set maxconn frontend",
-				"set maxconn global",
-				"set rate-limit",
-				"set rate-limit connections",
-				"set rate-limit connections global",
-				"set rate-limit http-compression",
-				"set rate-limit http-compression global",
-				"set rate-limit sessions",
-				"set rate-limit sessions global",
-				"set rate-limit ssl-sessions",
-				"set rate-limit ssl-sessions global",
-				"set server",
-				"set ssl",
-				"set ssl ocsp-response",
-				"set ssl tls-key",
-				"set table",
-				"set timeout",
-				"set timeout cli",
-				"set weight",
-				"show",
-				"show acl",
-				"show backend",
-				"show errors",
-				"show info",
-				"show map",
-				"show pools",
-				"show servers",
-				"show servers state",
-				"show sess",
-				"show stat",
-				"show stat resolvers",
-				"show table",
-				"show tls-keys",
-				"shutdown",
-				"shutdown frontend",
-				"shutdown session",
-				"shutdown sessions",
-				"shutdown sessions server",
-				"where"
-			]
-
-			function updateKeyboardNavStatus() {
-				var status = searchFocus ? '<span class="label label-disabled">Disabled</span>' : '<span class="label label-success">Enabled</span>'
-				$('#keyboardNavStatus').html(status)
-			}
-
-			function search(keyword) {
-				if (keyword && !!~$.inArray(keyword, keywords)) {
-					window.location.hash = keyword
-				}
-			}
-			// constructs the suggestion engine
-			var kwbh = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				local: $.map(keywords, function(keyword) { return { value: keyword }; })
-			});
-			kwbh.initialize()
-
-			$('#searchKeyword .typeahead').typeahead({
-				hint: true,
-				highlight: true,
-				minLength: 1,
-				autoselect: true
-			},
-			{
-				name: 'keywords',
-				displayKey: 'value',
-				limit: keywords.length,
-				source: kwbh.ttAdapter()
-			}).focus(function() {
-				searchFocus = true
-				updateKeyboardNavStatus()
-			}).blur(function() {
-				searchFocus = false
-				updateKeyboardNavStatus()
-			}).bind('typeahead:selected', function ($e, datum) {
-				search(datum.value)
-			})
-
 			/* EXPERIMENTAL - Previous/Next navigation */
 			var headings = $(":header")
 			var previousTarget = false
@@ -2328,18 +2527,7 @@ A safe configuration will have :
 				})
 
 				previousTarget = previous ? previous.attr('data-target') : 'top'
-				$previous.html(
-					previous && previousTarget ?
-						'<span class="glyphicon glyphicon-arrow-left"></span> ' + previous.text() :
-						'<span class="glyphicon glyphicon-arrow-up"></span> Top'
-				).attr('href', '#' + previousTarget)
-
 				nextTarget = next ? next.attr('data-target') : 'bottom'
-				$next.html(
-					next && nextTarget ?
-						next.text() + ' <span class="glyphicon glyphicon-arrow-right"></span>' :
-						'Bottom <span class="glyphicon glyphicon-arrow-down"></span>'
-				).attr('href', '#' + nextTarget)
 			}
 
 			$(window).scroll(function () {
@@ -2347,25 +2535,24 @@ A safe configuration will have :
 			});
 			$(document).ready(function() {
 				refreshNavigation()
-				updateKeyboardNavStatus()
 			});
 
 			/* EXPERIMENTAL - Enable keyboard navigation */
 			$(document).keydown(function(e){
-				if (searchFocus) return
+				if (!(e.altKey || e.ctrlKey || e.shiftKey || e.metaKey)) {
+					switch(e.which) {
+						case 37: // left
+						window.location.hash = previousTarget ? previousTarget : 'top'
+						break
 
-				switch(e.which) {
-					case 37: // left
-					window.location.hash = previousTarget ? previousTarget : 'top'
-					break
+						case 39: // right
+						window.location.hash = nextTarget ? nextTarget : 'bottom'
+						break
 
-					case 39: // right
-					window.location.hash = nextTarget ? nextTarget : 'bottom'
-					break
-
-					default: return // exit this handler for other keys
+						default: return // exit this handler for other keys
+					}
+					e.preventDefault()
 				}
-				e.preventDefault()
 			})
 		</script>
 		<!-- Piwik -->
@@ -2375,8 +2562,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.6', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-43', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.6-3', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-51', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
