@@ -2,35 +2,4 @@
 <div class="page-header">
 	<h1 id="chapter-summary" data-target="summary">Summary</h1>
 </div>
-<table>
-	<tbody>
-		<% previousChapter = None %>
-		% for k in chapterIndexes:
-			<% chapter = chapters[k] %>
-			% if chapter['title']:
-				<%
-					if chapter['level'] == 1:
-						otag = "<b>"
-						etag = "</b>"
-						if previousChapter:
-							otag = "<br>" + otag
-					else:
-						otag = etag = ""
-				%>
-				<tr>
-					<td>${otag}<small>${chapter['chapter']}.</small>${etag}</td>
-					<td>
-						% for tab in range(1, chapter['level']):
-							<div class="tab">
-						% endfor
-							<a href="#${chapter['chapter']}">${otag}${chapter['title']}${etag}</a>
-						% for tab in range(1, chapter['level']):
-							</div>
-						% endfor
-					<td>
-				</tr>
-				<% previousChapter = chapter %>
-			% endif
-		% endfor
-	</tbody>
-</table>
+<%include file="_summary.html"/>
