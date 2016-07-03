@@ -37,8 +37,27 @@
 		<div id="wrapper">
 
 			<div id="sidebar">
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#tab-summary" aria-controls="tab-summary" role="tab" data-toggle="tab">Summary</a></li>
+					<li role="presentation"><a href="#tab-keywords" aria-controls="tab-keywords" role="tab" data-toggle="tab">Keywords</a></li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="tab-summary">
+						<%include file="_summary.html"/>
 					</div>
-				</form>
+					<div role="tabpanel" class="tab-pane" id="tab-keywords">
+						<% previous_letter = None %>
+						% for keyword in keywords:
+							<% letter = keyword[0].upper() %>
+							%if letter != previous_letter:
+								<h4>${letter}</h4>
+								<% previous_letter = letter %>
+							%endif
+							<a class="list-group-item" href="#${keyword}">${keyword}</a>
+						% endfor
+					</div>
+				</div>
+
 				<p>
 					Keyboard navigation&nbsp;: <span id="keyboardNavStatus"></span>
 				</p>
