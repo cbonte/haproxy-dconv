@@ -37,17 +37,13 @@
 		<div id="wrapper">
 
 			<div id="sidebar">
-				<form onsubmit="search(this.keyword.value); return false" role="form">
-					<div id="searchKeyword" class="form-group">
-						<input type="text" class="form-control typeahead" id="keyword" name="keyword" placeholder="Search..." autocomplete="off">
 					</div>
 				</form>
 				<p>
 					Keyboard navigation&nbsp;: <span id="keyboardNavStatus"></span>
 				</p>
 				<p>
-					When enabled, you can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
-					The feature is automatically disabled when the search field is focused.
+					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
 					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b></small>
@@ -94,53 +90,7 @@
 
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 		<script>
-			/* Keyword search */
-			var searchFocus = false
-			var keywords = [
-				"${'",\n\t\t\t\t"'.join(keywords)}"
-			]
-
-			function updateKeyboardNavStatus() {
-				var status = searchFocus ? '<span class="label label-disabled">Disabled</span>' : '<span class="label label-success">Enabled</span>'
-				$('#keyboardNavStatus').html(status)
-			}
-
-			function search(keyword) {
-				if (keyword && !!~$.inArray(keyword, keywords)) {
-					window.location.hash = keyword
-				}
-			}
-			// constructs the suggestion engine
-			var kwbh = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				local: $.map(keywords, function(keyword) { return { value: keyword }; })
-			});
-			kwbh.initialize()
-
-			$('#searchKeyword .typeahead').typeahead({
-				hint: true,
-				highlight: true,
-				minLength: 1,
-				autoselect: true
-			},
-			{
-				name: 'keywords',
-				displayKey: 'value',
-				limit: keywords.length,
-				source: kwbh.ttAdapter()
-			}).focus(function() {
-				searchFocus = true
-				updateKeyboardNavStatus()
-			}).blur(function() {
-				searchFocus = false
-				updateKeyboardNavStatus()
-			}).bind('typeahead:selected', function ($e, datum) {
-				search(datum.value)
-			})
-
 			/* EXPERIMENTAL - Previous/Next navigation */
 			var headings = $(":header")
 			var previousTarget = false
@@ -189,12 +139,10 @@
 			});
 			$(document).ready(function() {
 				refreshNavigation()
-				updateKeyboardNavStatus()
 			});
 
 			/* EXPERIMENTAL - Enable keyboard navigation */
 			$(document).keydown(function(e){
-				if (searchFocus) return
 
 				switch(e.which) {
 					case 37: // left
