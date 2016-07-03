@@ -143,19 +143,20 @@
 
 			/* EXPERIMENTAL - Enable keyboard navigation */
 			$(document).keydown(function(e){
+				if (!(e.altKey || e.ctrlKey || e.shiftKey || e.metaKey)) {
+					switch(e.which) {
+						case 37: // left
+						window.location.hash = previousTarget ? previousTarget : 'top'
+						break
 
-				switch(e.which) {
-					case 37: // left
-					window.location.hash = previousTarget ? previousTarget : 'top'
-					break
+						case 39: // right
+						window.location.hash = nextTarget ? nextTarget : 'bottom'
+						break
 
-					case 39: // right
-					window.location.hash = nextTarget ? nextTarget : 'bottom'
-					break
-
-					default: return // exit this handler for other keys
+						default: return // exit this handler for other keys
+					}
+					e.preventDefault()
 				}
-				e.preventDefault()
 			})
 		</script>
 		${footer}
