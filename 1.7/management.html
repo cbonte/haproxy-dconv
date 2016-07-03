@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev3-69 - Management Guide</title>
+		<title>HAProxy version 1.7-dev3 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-55" rel="stylesheet" />
@@ -399,7 +399,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.7-dev3-69</strong></p>
+							<p><strong>version 1.7-dev3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								<br>
@@ -655,30 +655,26 @@ enforce some settings without touching the configuration files. The current
 list of options is :
 
   -- &lt;cfgfile&gt;* : all the arguments following &quot;--&quot; are paths to configuration
-    file/directory to be loaded and processed in the declaration order. It is
-    mostly useful when relying on the shell to load many files that are
-    numerically ordered. See also &quot;-f&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is
-    that one &quot;-f&quot; must be placed before each file name, while a single &quot;--&quot; is
-    needed before all file names. Both options can be used together, the
-    command line ordering still applies. When more than one file is specified,
-    each file must start on a section boundary, so the first keyword of each
-    file must be one of &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;,
-    &quot;backend&quot;, and so on. A file cannot contain just a server list for example.
+    file to be loaded and processed in the declaration order. It is mostly
+    useful when relying on the shell to load many files that are numerically
+    ordered. See also &quot;-f&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is that one
+    &quot;-f&quot; must be placed before each file name, while a single &quot;--&quot; is needed
+    before all file names. Both options can be used together, the command line
+    ordering still applies. When more than one file is specified, each file
+    must start on a section boundary, so the first keyword of each file must be
+    one of &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;, &quot;backend&quot;, and
+    so on. A file cannot contain just a server list for example.
 
-  -f &lt;cfgfile|cfgdir&gt; : adds &lt;cfgfile&gt; to the list of configuration files to be
-    loaded. If &lt;cfgdir&gt; is a directory, all the files (and only files) it
-    containes are added in lexical order (using LC_COLLATE=C) to the list of
-    configuration files to be loaded ; only files with &quot;.cfg&quot; extension are
-    added, only non hidden files (not prefixed with &quot;.&quot;) are added.
-    Configuration files are loaded and processed in their declaration order.
-    This option may be specified multiple times to load multiple files. See
-    also &quot;--&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is that one &quot;-f&quot; must be
-    placed before each file name, while a single &quot;--&quot; is needed before all file
-    names. Both options can be used together, the command line ordering still
-    applies. When more than one file is specified, each file must start on a
-    section boundary, so the first keyword of each file must be one of
-    &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;, &quot;backend&quot;, and so on.
-    A file cannot contain just a server list for example.
+  -f &lt;cfgfile&gt; : adds &lt;cfgfile&gt; to the list of configuration files to be
+    loaded. Configuration files are loaded and processed in their declaration
+    order. This option may be specified multiple times to load multiple files.
+    See also &quot;--&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is that one &quot;-f&quot; must
+    be placed before each file name, while a single &quot;--&quot; is needed before all
+    file names. Both options can be used together, the command line ordering
+    still applies. When more than one file is specified, each file must start
+    on a section boundary, so the first keyword of each file must be one of
+    &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;, &quot;backend&quot;, and so
+    on. A file cannot contain just a server list for example.
 
   -C &lt;dir&gt; : changes to directory &lt;dir&gt; before loading configuration
     files. This is useful when using relative paths. Warning when using
@@ -2528,11 +2524,9 @@ service, in order to monitor them or even blacklist them in a firewall.
   | fgrep 'key=' | cut -d' ' -f2 | cut -d= -f2 &gt; abusers-ip.txt
   ( or | awk '/key/{ print a[split($2,a,&quot;=&quot;)]; }' )
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tls-keys"></a><a class="anchor" name="9-show tls-keys"></a><a class="anchor" name="9.3-show tls-keys"></a><a class="anchor" name="show tls-keys (Statistics and monitoring)"></a><a class="anchor" name="show tls-keys (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tls-keys"></a><a href="#9.3-show%20tls-keys">show tls-keys</a></b> <span style="color: #008">[id|*]</span></div><pre class="text">Dump all loaded TLS ticket keys references. The TLS ticket key reference ID
-and the file from which the keys have been loaded is shown. Both of those
-can be used to update the TLS keys using &quot;<a href="#set%20ssl%20tls-key">set ssl tls-key</a>&quot;. If an ID is
-specified as parameter, it will dump the tickets, using * it will dump every
-keys from every references.
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tls-keys"></a><a class="anchor" name="9-show tls-keys"></a><a class="anchor" name="9.3-show tls-keys"></a><a class="anchor" name="show tls-keys (Statistics and monitoring)"></a><a class="anchor" name="show tls-keys (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tls-keys"></a><a href="#9.3-show%20tls-keys">show tls-keys</a></b></div><pre class="text">Dump all loaded TLS ticket keys. The TLS ticket key reference ID and the
+file from which the keys have been loaded is shown. Both of those can be
+used to update the TLS keys using &quot;<a href="#set%20ssl%20tls-key">set ssl tls-key</a>&quot;.
 </pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.3-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.3-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
 be released. It will not be possible to enable the frontend anymore after
 this operation. This is intended to be used in environments where stopping a
@@ -2884,7 +2878,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev3-69 &ndash; Management Guide<br>
+							HAProxy 1.7-dev3 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -2964,7 +2958,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3-69', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-55', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

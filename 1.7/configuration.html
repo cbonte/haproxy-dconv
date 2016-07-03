@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev3-69 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-55" rel="stylesheet" />
@@ -871,8 +871,6 @@
 							
 								<h4>A</h4>
 								
-							<a class="list-group-item" href="#accept-netscaler-cip">accept-netscaler-cip</a>
-							
 							<a class="list-group-item" href="#accept-proxy">accept-proxy</a>
 							
 							<a class="list-group-item" href="#acl">acl</a>
@@ -2155,8 +2153,6 @@
 							
 							<a class="list-group-item" href="#ssl_fc_has_sni">ssl_fc_has_sni</a>
 							
-							<a class="list-group-item" href="#ssl_fc_is_resumed">ssl_fc_is_resumed</a>
-							
 							<a class="list-group-item" href="#ssl_fc_npn">ssl_fc_npn</a>
 							
 							<a class="list-group-item" href="#ssl_fc_protocol">ssl_fc_protocol</a>
@@ -2429,10 +2425,6 @@
 							
 							<a class="list-group-item" href="#url">url</a>
 							
-							<a class="list-group-item" href="#url32">url32</a>
-							
-							<a class="list-group-item" href="#url32+src">url32+src</a>
-							
 							<a class="list-group-item" href="#url_dec">url_dec</a>
 							
 							<a class="list-group-item" href="#url_ip">url_ip</a>
@@ -2505,7 +2497,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev3-69</strong></p>
+							<p><strong>version 1.7-dev3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -6443,8 +6435,7 @@ Example of a header received by the application server :
   &gt;&gt;&gt;  X-Haproxy-Server-State: UP 2/3; name=bck/srv2; node=lb1; weight=1/2; \
          scur=13/22; qcur=0
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;</div>
-<a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
-              deny <span style="color: #008">[deny_status <span style="color: #080">&lt;status&gt;</span>]</span> |
+<a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | deny | tarpit | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
               add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> |
               capture <span style="color: #080">&lt;sample&gt;</span> <span style="color: #008">[ len <span style="color: #080">&lt;length&gt;</span> | id <span style="color: #080">&lt;id&gt;</span> ]</span> |
               del-header <span style="color: #080">&lt;name&gt;</span> | set-nice <span style="color: #080">&lt;nice&gt;</span> | set-log-level <span style="color: #080">&lt;level&gt;</span> |
@@ -6478,10 +6469,8 @@ The first keyword is the rule's action. Currently supported actions include :
     pass the check. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated.
 
   - &quot;deny&quot; : this stops the evaluation of the rules and immediately rejects
-    the request and emits an HTTP 403 error, or optionally the status code
-    specified as an argument to &quot;deny_status&quot;. The list of permitted status
-    codes is limited to those that can be overridden by the &quot;<a href="#errorfile">errorfile</a>&quot;
-    directive. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated.
+    the request and emits an HTTP 403 error. No further &quot;<a href="#http-request">http-request</a>&quot; rules
+    are evaluated.
 
   - &quot;tarpit&quot; : this stops the evaluation of the rules and immediately blocks
     the request without responding for a delay specified by &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;
@@ -6778,52 +6767,9 @@ http-request set-query %[query,regsub(%3D,=,g)]
 <code>http-request set-src hdr(x-forwarded-for)
 http-request set-src src,ipmask(24)
 </code></pre>
-</div><pre class="text">  When set-src is successful, the source port is set to 0.
+</div><pre class="text">    When set-src is successful, the source port is set to 0.
 
-- set-src-port &lt;expr&gt; :
-  Is used to set the source port address to the value of specified
-  expression.
-
-     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
-               followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>http-request set-src-port hdr(x-port)
-http-request set-src-port int(4000)
-</code></pre>
-</div><pre class="text">  Be careful to use &quot;set-src-port&quot; after &quot;set-src&quot;, because &quot;set-src&quot; sets
-  the source port to 0.
-
-- set-dst &lt;expr&gt; :
-  Is used to set the destination IP address to the value of specified
-  expression. Useful when a proxy in front of HAProxy rewrites destination
-  IP, but provides the correct IP in a HTTP header; or you want to mask
-  the IP for privacy. If you want to connect to the new address/port, use
-  '0.0.0.0:0' as a server address in the backend.
-
-     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
-               followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>http-request set-dst hdr(x-dst)
-http-request set-dst dst,ipmask(24)
-</code></pre>
-</div><pre class="text">- set-dst-port &lt;expr&gt; :
-  Is used to set the destination port address to the value of specified
-  expression. If you want to connect to the new address/port, use
-  '0.0.0.0:0' as a server address in the backend.
-
-     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
-               followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>http-request set-dst-port hdr(x-port)
-http-request set-dst-port int(4000)
-</code></pre>
-</div><pre class="text">  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
+  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
     client-facing connection suddenly disappear using a system-dependant way
     that tries to prevent the client from being notified. The effect it then
     that the client still sees an established connection while there's none
@@ -11399,15 +11345,6 @@ Four types of actions are supported :
       of load balancers are passed through by traffic coming from public
       hosts.
 
-  - expect-netscaler-cip layer4 :
-      configures the client-facing connection to receive a NetScaler Client
-      IP insertion protocol header before any byte is read from the socket.
-      This is equivalent to having the &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; keyword on the
-      &quot;<a href="#bind">bind</a>&quot; line, except that using the TCP rule allows the PROXY protocol
-      to be accepted only for certain IP address ranges using an ACL. This
-      is convenient when multiple layers of load balancers are passed
-      through by traffic coming from public hosts.
-
   - capture &lt;sample&gt; len &lt;length&gt; :
       This only applies to &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rules. It captures sample
       expression &lt;sample&gt; from the request buffer, and converts it to a
@@ -11473,64 +11410,7 @@ Four types of actions are supported :
       an error occurs, this action silently fails and the actions evaluation
       continues.
 
-  - set-src &lt;expr&gt; :
-    Is used to set the source IP address to the value of specified
-    expression. Useful if you want to mask source IP for privacy.
-    If you want to provide an IP from a HTTP header use &quot;http-request
-    set-src&quot;
-
-       &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
-                 followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request connection set-src src,ipmask(24)
-</code></pre>
-</div><pre class="text">  When set-src is successful, the source port is set to 0.
-
-- set-src-port &lt;expr&gt; :
-  Is used to set the source port address to the value of specified
-  expression.
-
-     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
-               followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request connection set-src-port int(4000)
-</code></pre>
-</div><pre class="text">  Be careful to use &quot;set-src-port&quot; after &quot;set-src&quot;, because &quot;set-src&quot; sets
-  the source port to 0.
-
-- set-dst &lt;expr&gt; :
-  Is used to set the destination IP address to the value of specified
-  expression. Useful if you want to mask IP for privacy in log.
-  If you want to provide an IP from a HTTP header use &quot;http-request
-  set-dst&quot;. If you want to connect to the new address/port, use
-  '0.0.0.0:0' as a server address in the backend.
-
-     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
-               followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request connection set-dst dst,ipmask(24)
-tcp-request connection set-dst ipv4(10.0.0.1)
-</code></pre>
-</div><pre class="text">- set-dst-port &lt;expr&gt; :
-  Is used to set the destination port address to the value of specified
-  expression. If you want to connect to the new address/port, use
-  '0.0.0.0:0' as a server address in the backend.
-
-
-     &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
-               followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request connection set-dst-port int(4000)
-</code></pre>
-</div><pre class="text">  - &quot;silent-drop&quot; :
+  - &quot;silent-drop&quot; :
       This stops the evaluation of the rules and makes the client-facing
       connection suddenly disappear using a system-dependant way that tries
       to prevent the client from being notified. The effect it then that the
@@ -12453,18 +12333,6 @@ while other ones expect a value after them. In this case, the value must be
 provided immediately after the setting name.
 
 The currently supported settings are the following ones.
-</pre><a class="anchor" name="accept-netscaler-cip"></a><a class="anchor" name="5-accept-netscaler-cip"></a><a class="anchor" name="5.1-accept-netscaler-cip"></a><a class="anchor" name="accept-netscaler-cip (Bind and Server options)"></a><a class="anchor" name="accept-netscaler-cip (Bind options)"></a><div class="keyword"><b><a class="anchor" name="accept-netscaler-cip"></a><a href="#5.1-accept-netscaler-cip">accept-netscaler-cip</a></b> <span style="color: #080">&lt;magic number&gt;</span></div><pre class="text">Enforces the use of the NetScaler Client IP insertion protocol over any
-connection accepted by any of the TCP sockets declared on the same line. The
-NetScaler Client IP insertion protocol dictates the layer 3/4 addresses of
-the incoming connection to be used everywhere an address is used, with the
-only exception of &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rules which will only see the
-real connection address. Logs will reflect the addresses indicated in the
-protocol, unless it is violated, in which case the real  address will still
-be used. This keyword combined with support from external components can be
-used as an efficient and reliable alternative to the X-Forwarded-For
-mechanism which is not always reliable and not even always usable. See also
-&quot;tcp-request connection expect-netscaler-cip&quot; for a finer-grained setting of
-which client is allowed to use the protocol.
 </pre><a class="anchor" name="accept-proxy"></a><a class="anchor" name="5-accept-proxy"></a><a class="anchor" name="5.1-accept-proxy"></a><a class="anchor" name="accept-proxy (Bind and Server options)"></a><a class="anchor" name="accept-proxy (Bind options)"></a><div class="keyword"><b><a class="anchor" name="accept-proxy"></a><a href="#5.1-accept-proxy">accept-proxy</a></b></div><pre class="text">Enforces the use of the PROXY protocol over any connection accepted by any of
 the sockets declared on the same line. Versions 1 and 2 of the PROXY protocol
 are supported and correctly detected. The PROXY protocol dictates the layer
@@ -12634,8 +12502,8 @@ certificate is still needed to meet OpenSSL expectations. If it is not used,
 the 'strict-sni' option may be used.
 
 Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is supported with crt-list, as long as only
-the base name is given in the crt-list. SNI filter will do the same work on
-all bundled certificates.
+the base name is given in the crt-list. Due to the nature of bundling, all SNI
+filters given to a multi-cert bundle entry are ignored.
 </pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5.1-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
 or at worst after the first retransmit. This should be used only on protocols
@@ -13333,18 +13201,16 @@ Supported in default-server: No
 connection established to this server. The PROXY protocol informs the other
 end about the layer 3/4 addresses of the incoming connection, so that it can
 know the client's address or the public address it accessed to, whatever the
-upper layer protocol. For connections accepted by an &quot;<a href="#accept-proxy">accept-proxy</a>&quot; or
-&quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; listener, the advertised address will be used. Only
-TCPv4 and TCPv6 address families are supported. Other families such as
-Unix sockets, will report an UNKNOWN family. Servers using this option can
-fully be chained to another instance of haproxy listening with an
-&quot;<a href="#accept-proxy">accept-proxy</a>&quot; setting. This setting must not be used if the server isn't
-aware of the protocol. When health checks are sent to the server, the PROXY
-protocol is automatically used when this option is set, unless there is an
-explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive, in which case an explicit
-&quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; directive would also be needed to use the PROXY protocol.
-See also the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; and &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot;
-keyword.
+upper layer protocol. For connections accepted by an &quot;<a href="#accept-proxy">accept-proxy</a>&quot; listener,
+the advertised address will be used. Only TCPv4 and TCPv6 address families
+are supported. Other families such as Unix sockets, will report an UNKNOWN
+family. Servers using this option can fully be chained to another instance of
+haproxy listening with an &quot;<a href="#accept-proxy">accept-proxy</a>&quot; setting. This setting must not be
+used if the server isn't aware of the protocol. When health checks are sent
+to the server, the PROXY protocol is automatically used when this option is
+set, unless there is an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive, in which case an
+explicit &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; directive would also be needed to use the PROXY
+protocol. See also the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; option of the &quot;<a href="#bind">bind</a>&quot; keyword.
 
 Supported in default-server: No
 </pre><a class="anchor" name="send-proxy-v2"></a><a class="anchor" name="5-send-proxy-v2"></a><a class="anchor" name="5.2-send-proxy-v2"></a><a class="anchor" name="send-proxy-v2 (Bind and Server options)"></a><a class="anchor" name="send-proxy-v2 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy-v2"></a><a href="#5.2-send-proxy-v2">send-proxy-v2</a></b></div><pre class="text">The &quot;<a href="#send-proxy-v2">send-proxy-v2</a>&quot; parameter enforces use of the PROXY protocol version 2
@@ -15089,10 +14955,9 @@ same socket to the same server.
 IP and works on both IPv4 and IPv6 tables. On IPv6 tables, IPv4 addresses are
 mapped to their IPv6 equivalent, according to RFC 4291. Note that it is the
 TCP-level source address which is used, and not the address of a client
-behind a proxy. However if the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; or &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; bind
-directive is used, it can be the address of a client behind another
-PROXY-protocol compatible component for all rule sets except
-&quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.
+behind a proxy. However if the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; bind directive is used, it can
+be the address of a client behind another PROXY-protocol compatible component
+for all rule sets except &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -15384,13 +15249,15 @@ Note: on SSL session resumption with Session ID or TLS ticket, client
 certificate is not present in the current connection but may be retrieved
 from the cache or the ticket. So prefer &quot;<a href="#ssl_c_used">ssl_c_used</a>&quot; if you want to check if
 current SSL session uses a client certificate.
-</pre><a class="anchor" name="ssl_fc_has_sni"></a><a class="anchor" name="7-ssl_fc_has_sni"></a><a class="anchor" name="7.3.4-ssl_fc_has_sni"></a><a class="anchor" name="ssl_fc_has_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_sni"></a><a href="#7.3.4-ssl_fc_has_sni">ssl_fc_has_sni</a></b> : boolean</div><pre class="text">This checks for the presence of a Server Name Indication TLS extension (SNI)
-in an incoming connection was made over an SSL/TLS transport layer. Returns
-true when the incoming connection presents a TLS SNI field. This requires
-that the SSL library is build with support for TLS extensions enabled (check
-haproxy -vv).
-</pre><a class="anchor" name="ssl_fc_is_resumed"></a><a class="anchor" name="7-ssl_fc_is_resumed"></a><a class="anchor" name="7.3.4-ssl_fc_is_resumed"></a><a class="anchor" name="ssl_fc_is_resumed (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_is_resumed (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_is_resumed"></a><a href="#7.3.4-ssl_fc_is_resumed">ssl_fc_is_resumed</a></b> : boolean</div><pre class="text">Returns true if the SSL/TLS session has been resumed through the use of
-SSL session cache or TLS tickets.
+</pre><a class="anchor" name="ssl_fc_has_sni"></a><a class="anchor" name="7-ssl_fc_has_sni"></a><a class="anchor" name="7.3.4-ssl_fc_has_sni"></a><a class="anchor" name="ssl_fc_has_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_sni"></a><a href="#7.3.4-ssl_fc_has_sni">ssl_fc_has_sni</a></b> : boolean</div><pre class="text">  This checks for the presence of a Server Name Indication TLS extension (SNI)
+  in an incoming connection was made over an SSL/TLS transport layer. Returns
+  true when the incoming connection presents a TLS SNI field. This requires
+  that the SSL library is build with support for TLS extensions enabled (check
+  haproxy -vv).
+
+ssl_fc_is_resumed: boolean
+  Returns true if the SSL/TLS session has been resumed through the use of
+  SSL session cache or TLS tickets.
 </pre><a class="anchor" name="ssl_fc_npn"></a><a class="anchor" name="7-ssl_fc_npn"></a><a class="anchor" name="7.3.4-ssl_fc_npn"></a><a class="anchor" name="ssl_fc_npn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_npn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_npn"></a><a href="#7.3.4-ssl_fc_npn">ssl_fc_npn</a></b> : string</div><pre class="text">This extracts the Next Protocol Negotiation field from an incoming connection
 made via a TLS transport layer and locally deciphered by haproxy. The result
 is a string containing the protocol name advertised by the client. The SSL
@@ -16038,14 +15905,6 @@ stick on urlp(JSESSIONID,;)
   See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
   and converts it to an integer value. This can be used for session stickiness
   based on a user ID for example, or with ACLs to match a page number or price.
-</pre><a class="anchor" name="url32"></a><a class="anchor" name="7-url32"></a><a class="anchor" name="7.3.6-url32"></a><a class="anchor" name="url32 (Using ACLs and fetching samples)"></a><a class="anchor" name="url32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32"></a><a href="#7.3.6-url32">url32</a></b> : integer</div><pre class="text">This returns a 32-bit hash of the value obtained by concatenating the first
-Host header and the whole URL including parameters (not only the path part of
-the request, as in the &quot;<a href="#base32">base32</a>&quot; fetch above). This is useful to track per-URL
-activity. A shorter hash is stored, saving a lot of memory. The output type
-is an unsigned integer.
-</pre><a class="anchor" name="url32+src"></a><a class="anchor" name="7-url32+src"></a><a class="anchor" name="7.3.6-url32+src"></a><a class="anchor" name="url32+src (Using ACLs and fetching samples)"></a><a class="anchor" name="url32+src (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32+src"></a><a href="#7.3.6-url32%2Bsrc">url32+src</a></b> : binary</div><pre class="text">This returns the concatenation of the &quot;<a href="#url32">url32</a>&quot; fetch and the &quot;<a href="#src">src</a>&quot; fetch. The
-resulting type is of type binary, with a size of 8 or 20 bytes depending on
-the source address family. This can be used to track per-IP, per-URL counters.
 </pre></div>
 <a class="anchor" id="7.4" name="7.4"></a>
 <h2 id="chapter-7.4" data-target="7.4"><small><a class="small" href="#7.4">7.4.</a></small> Pre-defined ACLs</h2>
@@ -16248,9 +16107,8 @@ Detailed fields description :
     connection to haproxy. If the connection was accepted on a UNIX socket
     instead, the IP address would be replaced with the word &quot;unix&quot;. Note that
     when the connection is accepted on a socket configured with &quot;<a href="#accept-proxy">accept-proxy</a>&quot;
-    and the PROXY protocol is correctly used, or with a &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot;
-    and the NetScaler Client IP insetion protocol is correctly used, then the
-    logs will reflect the forwarded connection's information.
+    and the PROXY protocol is correctly used, then the logs will reflect the
+    forwarded connection's information.
 
   - &quot;client_port&quot; is the TCP port of the client which initiated the connection.
     If the connection was accepted on a UNIX socket instead, the port would be
@@ -16428,9 +16286,8 @@ Detailed fields description :
     connection to haproxy. If the connection was accepted on a UNIX socket
     instead, the IP address would be replaced with the word &quot;unix&quot;. Note that
     when the connection is accepted on a socket configured with &quot;<a href="#accept-proxy">accept-proxy</a>&quot;
-    and the PROXY protocol is correctly used, or with a &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot;
-    and the NetScaler Client IP insetion protocol is correctly used, then the
-    logs will reflect the forwarded connection's information.
+    and the PROXY protocol is correctly used, then the logs will reflect the
+    forwarded connection's information.
 
   - &quot;client_port&quot; is the TCP port of the client which initiated the connection.
     If the connection was accepted on a UNIX socket instead, the port would be
@@ -16696,7 +16553,6 @@ Please refer to the table below for currently defined variables :
   |   | %ST  | status_code                                   | numeric     |
   |   | %T   | gmt_date_time                                 | date        |
   |   | %Tc  | Tc                                            | numeric     |
-  |   | %Td  | Td = Tt - (Tq + Tw + Tc + Tr)                 | numeric     |
   |   | %Tl  | local_date_time                               | date        |
   | H | %Tq  | Tq                                            | numeric     |
   | H | %Tr  | Tr                                            | numeric     |
@@ -17543,7 +17399,7 @@ filters evaluation order.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev3-69 &ndash; Configuration Manual<br>
+							HAProxy 1.7-dev3 &ndash; Configuration Manual<br>
 							<small>2016/05/10, willy tarreau</small>
 						</div>
 					</div>
@@ -17623,7 +17479,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3-69', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-55', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
