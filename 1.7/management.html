@@ -5,7 +5,7 @@
 		<title>HAProxy version 1.7-dev3 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.3.1-57" rel="stylesheet" />
+		<link href="../css/page.css?0.3.1-58" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -201,9 +201,11 @@
 
 					</div>
 					<div role="tabpanel" class="tab-pane" id="tab-keywords">
+						<label for="filter">Filter</label>
+						<input class="form-control" type="text" name="filter" id="filter" onkeyup="filterKeywords(this.value)" placeholder="Enter keyword to search...">
 						
 							
-								<h4>A</h4>
+								<div class="letter" id="letter-A"><h4>A</h4>
 								
 							<a class="list-group-item" href="#add">add</a>
 							
@@ -211,7 +213,8 @@
 							
 							<a class="list-group-item" href="#add map">add map</a>
 							
-								<h4>C</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-C"><h4>C</h4>
 								
 							<a class="list-group-item" href="#clear">clear</a>
 							
@@ -225,7 +228,8 @@
 							
 							<a class="list-group-item" href="#clear table">clear table</a>
 							
-								<h4>D</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-D"><h4>D</h4>
 								
 							<a class="list-group-item" href="#del">del</a>
 							
@@ -243,7 +247,8 @@
 							
 							<a class="list-group-item" href="#disable server">disable server</a>
 							
-								<h4>E</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-E"><h4>E</h4>
 								
 							<a class="list-group-item" href="#enable">enable</a>
 							
@@ -255,7 +260,8 @@
 							
 							<a class="list-group-item" href="#enable server">enable server</a>
 							
-								<h4>G</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-G"><h4>G</h4>
 								
 							<a class="list-group-item" href="#get">get</a>
 							
@@ -265,11 +271,13 @@
 							
 							<a class="list-group-item" href="#get weight">get weight</a>
 							
-								<h4>H</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-H"><h4>H</h4>
 								
 							<a class="list-group-item" href="#help">help</a>
 							
-								<h4>I</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-I"><h4>I</h4>
 								
 							<a class="list-group-item" href="#interrupts">interrupts</a>
 							
@@ -279,15 +287,18 @@
 							
 							<a class="list-group-item" href="#interrupts are assigned under">interrupts are assigned under</a>
 							
-								<h4>P</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-P"><h4>P</h4>
 								
 							<a class="list-group-item" href="#prompt">prompt</a>
 							
-								<h4>Q</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-Q"><h4>Q</h4>
 								
 							<a class="list-group-item" href="#quit">quit</a>
 							
-								<h4>S</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-S"><h4>S</h4>
 								
 							<a class="list-group-item" href="#set">set</a>
 							
@@ -375,9 +386,11 @@
 							
 							<a class="list-group-item" href="#shutdown sessions server">shutdown sessions server</a>
 							
-								<h4>W</h4>
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-W"><h4>W</h4>
 								
 							<a class="list-group-item" href="#where">where</a>
+						</div><!-- /letter -->
 					</div>
 				</div>
 
@@ -388,7 +401,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-57</b> on <b>2016/07/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-58</b> on <b>2016/07/04</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2894,6 +2907,30 @@ A safe configuration will have :
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<script>
+			function filterKeywords(text) {
+				$('.letter').each(function(idx1, letter) {
+					$letter = $(letter)
+					found = false
+					$letter.find('.list-group-item').each(function(idx2, keyword) {
+						$keyword = $(keyword)
+						if ($keyword.text().indexOf(text) != -1) {
+							$keyword.show();
+							found = true
+						}
+						else {
+							$keyword.hide();
+						}
+					})
+					if (found) {
+						$letter.show()
+					}
+					else {
+						$letter.hide()
+					}
+				})
+			}
+		</script>
+		<script>
 			/* EXPERIMENTAL - Previous/Next navigation */
 			var headings = $(":header")
 			var previousTarget = false
@@ -2959,7 +2996,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
 piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-57', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-58', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
