@@ -49,15 +49,21 @@
 					</div>
 					% if keywords:
 					<div role="tabpanel" class="tab-pane" id="tab-keywords">
+						<label for="filter">Filter</label>
+						<input class="form-control" type="text" name="filter" id="filter" onkeyup="filterKeywords(this.value)" placeholder="Enter keyword to search...">
 						<% previous_letter = None %>
 						% for keyword in keywords:
 							<% letter = keyword[0].upper() %>
 							%if letter != previous_letter:
-								<h4>${letter}</h4>
+                                                                % if previous_letter:
+                                                                </div> <!-- /letter -->
+                                                                % endif
+								<div class="letter" id="letter-${letter}"><h4>${letter}</h4>
 								<% previous_letter = letter %>
 							%endif
 							<a class="list-group-item" href="#${keyword}">${keyword}</a>
 						% endfor
+						</div><!-- /letter -->
 					</div>
 					% endif
 				</div>
@@ -107,6 +113,30 @@
 
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script>
+			function filterKeywords(text) {
+				$('.letter').each(function(idx1, letter) {
+					$letter = $(letter)
+					found = false
+					$letter.find('.list-group-item').each(function(idx2, keyword) {
+						$keyword = $(keyword)
+						if ($keyword.text().indexOf(text) != -1) {
+							$keyword.show();
+							found = true
+						}
+						else {
+							$keyword.hide();
+						}
+					})
+					if (found) {
+						$letter.show()
+					}
+					else {
+						$letter.hide()
+					}
+				})
+			}
+		</script>
 		<script>
 			/* EXPERIMENTAL - Previous/Next navigation */
 			var headings = $(":header")
