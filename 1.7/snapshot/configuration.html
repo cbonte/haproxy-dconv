@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev3-69 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev4 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../../css/page.css?0.3.1-58" rel="stylesheet" />
+		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -1097,6 +1097,8 @@
 							
 							<a class="list-group-item" href="#dst_conn">dst_conn</a>
 							
+							<a class="list-group-item" href="#dst_is_local">dst_is_local</a>
+							
 							<a class="list-group-item" href="#dst_port">dst_port</a>
 							
                                                                 </div> <!-- /letter -->
@@ -1146,6 +1148,22 @@
 							<a class="list-group-item" href="#fall">fall</a>
 							
 							<a class="list-group-item" href="#fastinter">fastinter</a>
+							
+							<a class="list-group-item" href="#fc_fackets">fc_fackets</a>
+							
+							<a class="list-group-item" href="#fc_lost">fc_lost</a>
+							
+							<a class="list-group-item" href="#fc_reordering">fc_reordering</a>
+							
+							<a class="list-group-item" href="#fc_retrans">fc_retrans</a>
+							
+							<a class="list-group-item" href="#fc_rtt">fc_rtt</a>
+							
+							<a class="list-group-item" href="#fc_rttvar">fc_rttvar</a>
+							
+							<a class="list-group-item" href="#fc_sacked">fc_sacked</a>
+							
+							<a class="list-group-item" href="#fc_unacked">fc_unacked</a>
 							
 							<a class="list-group-item" href="#fe_conn">fe_conn</a>
 							
@@ -2061,6 +2079,8 @@
 							
 							<a class="list-group-item" href="#src_inc_gpc0">src_inc_gpc0</a>
 							
+							<a class="list-group-item" href="#src_is_local">src_is_local</a>
+							
 							<a class="list-group-item" href="#src_kbytes_in">src_kbytes_in</a>
 							
 							<a class="list-group-item" href="#src_kbytes_out">src_kbytes_out</a>
@@ -2520,7 +2540,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-58</b> on <b>2016/07/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/08/15</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2531,11 +2551,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev3-69</strong></p>
+							<p><strong>version 1.7-dev4</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/05/10
+								2016/08/14
 							</p>
 						</div>
 
@@ -6945,6 +6965,7 @@ http-request del-map(map.lst) %[src]                     if delmap
                 del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
                 set-var(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
+                <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
                 sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
                 sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
                 silent-drop |
@@ -7151,7 +7172,15 @@ http-response set-status 431
 <pre class="prettyprint">
 <code>http-response set-var(sess.last_redir) res.hdr(location)
 </code></pre>
-</div><pre class="text">  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
+</div><pre class="text">  - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
+    enables tracking of sticky counters from current response. Please refer to
+    &quot;http-request track-sc&quot; for a complete description. The only difference
+    from &quot;http-request track-sc&quot; is the &lt;key&gt; sample expression can only make
+    use of samples in response (eg. res.*, status etc.) and samples below
+    Layer 6 (eg. ssl related samples, see <a href="#7.3.4">section 7.3.4</a>). If the sample is
+    not supported, haproxy will fail and warn while parsing the config.
+
+  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
     This action sets the GPT0 tag according to the sticky counter designated
     by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
     an error occurs, this action silently fails and the actions evaluation
@@ -7364,23 +7393,21 @@ none       don't load any stat for this backend</pre>
 
   - server's weight is applied from previous running process unless it has
     has changed between previous and new configuration files.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Minimal configuration</div><code>global
+ stats socket /tmp/socket
+ server-state-file /tmp/server_state
 
-Example 1:
+defaults
+ load-server-state-from-file global
 
-Minimal configuration:
-
-  global
-   stats socket /tmp/socket
-   server-state-file /tmp/server_state
-
-  defaults
-   load-server-state-from-file global
-
-  backend bk
-   server s1 127.0.0.1:22 check weight 11
-   server s2 127.0.0.1:22 check weight 12
-
-Then one can run :
+backend bk
+ server s1 127.0.0.1:22 check weight 11
+ server s2 127.0.0.1:22 check weight 12
+</code></pre>
+</div><pre class="text">Then one can run :
 
   socat /tmp/socket - &lt;&lt;&lt; &quot;show servers state&quot; &gt; /tmp/server_state
 
@@ -7390,23 +7417,21 @@ Content of the file /tmp/server_state would be like this:
   # &lt;field names skipped for the doc example&gt;
   1 bk 1 s1 127.0.0.1 2 0 11 11 4 6 3 4 6 0 0
   1 bk 2 s2 127.0.0.1 2 0 12 12 4 6 3 4 6 0 0
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Minimal configuration</div><code>global
+ stats socket /tmp/socket
+ server-state-base /etc/haproxy/states
 
-Example 2:
+defaults
+ load-server-state-from-file local
 
-Minimal configuration:
-
-  global
-   stats socket /tmp/socket
-   server-state-base /etc/haproxy/states
-
-  defaults
-   load-server-state-from-file local
-
-  backend bk
-   server s1 127.0.0.1:22 check weight 11
-   server s2 127.0.0.1:22 check weight 12
-
-Then one can run :
+backend bk
+ server s1 127.0.0.1:22 check weight 11
+ server s2 127.0.0.1:22 check weight 12
+</code></pre>
+</div><pre class="text">Then one can run :
 
   socat /tmp/socket - &lt;&lt;&lt; &quot;show servers state bk&quot; &gt; /etc/haproxy/states/bk
 
@@ -8097,7 +8122,7 @@ both are defined. In the case of the &quot;if-none&quot; argument, if at least o
 the frontend or the backend does not specify it, it wants the addition to be
 mandatory, so it wins.
 </pre><div class="separator">
-<span class="label label-success">Examples :</span>
+<span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># Public HTTP address also used by stunnel on the same machine</span>
 frontend www
@@ -13328,7 +13353,8 @@ Supported in default-server: Yes
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
+<code>server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6
+</code></pre>
 </div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and Server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This options prioritize th choice of an ip address matching a network. This is
 useful with clouds to prefer a local ip. In some cases, a cloud high
 avalailibility service can be announced with many ip addresses on many
@@ -13340,7 +13366,8 @@ Supported in default-server: Yes
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-net 10.0.0.0/8</div><code></code></pre>
+<code>server s1 app1.domain.com:80 resolvers mydns resolve-net 10.0.0.0/8
+</code></pre>
 </div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
 In order to be operational, DNS resolution requires that health check is
@@ -13354,7 +13381,7 @@ Supported in default-server: No
 <pre class="prettyprint">
 <code>server s1 app1.domain.com:80 check resolvers mydns
 </code></pre>
-</div><pre class="text">See also chapter 5.3
+</div><pre class="text">See also <a href="#5.3">section 5.3</a>
 </pre><a class="anchor" name="send-proxy"></a><a class="anchor" name="5-send-proxy"></a><a class="anchor" name="5.2-send-proxy"></a><a class="anchor" name="send-proxy (Bind and Server options)"></a><a class="anchor" name="send-proxy (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy"></a><a href="#5.2-send-proxy">send-proxy</a></b></div><pre class="text">The &quot;<a href="#send-proxy">send-proxy</a>&quot; parameter enforces use of the PROXY protocol over any
 connection established to this server. The PROXY protocol informs the other
 end about the layer 3/4 addresses of the incoming connection, so that it can
@@ -13616,24 +13643,25 @@ Default value: 3
 A retry occurs on name server timeout or when the full sequence of DNS query
 type failover is over and we need to start up from the default ANY query
 type.
-</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
-     &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
-               events available are:
-               - retry: time between two DNS queries, when no response have
-                        been received.
-                        Default value: 1s
-     &lt;time&gt;  : time related to the event. It follows the HAProxy time format.
-               &lt;time&gt; is expressed in milliseconds.
-
-Example of a resolvers section (with default values):
-
-   resolvers mydns
-     nameserver dns1 10.0.0.1:53
-     nameserver dns2 10.0.0.2:53
-     resolve_retries       3
-     timeout retry         1s
-     hold valid           10s
-</pre></div>
+</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">Defines timeouts related to name resolution
+   &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
+             events available are:
+             - retry: time between two DNS queries, when no response have
+                      been received.
+                      Default value: 1s
+   &lt;time&gt;  : time related to the event. It follows the HAProxy time format.
+             &lt;time&gt; is expressed in milliseconds.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>resolvers mydns
+  nameserver dns1 10.0.0.1:53
+  nameserver dns2 10.0.0.2:53
+  resolve_retries       3
+  timeout retry         1s
+  hold valid           10s
+</code></pre>
+</div></div>
 <a class="anchor" id="6" name="6"></a>
 <div class="page-header"><h1 id="chapter-6" data-target="6"><small><a class="small" href="#6">6.</a></small> HTTP header manipulation</h1>
 </div><div><pre class="text">In HTTP mode, it is possible to rewrite, add or delete some of the request and
@@ -14391,7 +14419,7 @@ table entries and as such use the same server. The mask can be passed in
 dotted form (eg: 255.255.255.0) or in CIDR form (eg: 24).
 </pre><a class="anchor" name="json"></a><a class="anchor" name="7-json"></a><a class="anchor" name="7.3.1-json"></a><a class="anchor" name="json (Using ACLs and fetching samples)"></a><a class="anchor" name="json (Converters)"></a><div class="keyword"><b><a class="anchor" name="json"></a><a href="#7.3.1-json">json</a></b>(<span style="color: #008">[<span style="color: #080">&lt;input-code&gt;</span>]</span>)</div><pre class="text">Escapes the input string and produces an ASCII ouput string ready to use as a
 JSON string. The converter tries to decode the input string according to the
-&lt;input-code&gt; parameter. It can be &quot;ascii&quot;, &quot;utf8&quot;, &quot;utf8s&quot;, &quot;utf8&quot;&quot; or
+&lt;input-code&gt; parameter. It can be &quot;ascii&quot;, &quot;utf8&quot;, &quot;utf8s&quot;, &quot;utf8p&quot; or
 &quot;utf8ps&quot;. The &quot;ascii&quot; decoder never fails. The &quot;utf8&quot; decoder detects 3 types
 of errors:
  - bad UTF-8 sequence (lone continuation byte, bad number of continuation
@@ -14418,9 +14446,9 @@ logging to servers which consume JSON-formated traffic logs.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code>capture request header user-agent len 150
-capture request header Host len 15
-log-format {&quot;ip&quot;:&quot;%[src]&quot;,&quot;user-agent&quot;:&quot;%[capture.req.hdr(1),json(&quot;utf8s&quot;)]&quot;}
+<code>capture request header Host len 15
+capture request header user-agent len 150
+log-format '{&quot;ip&quot;:&quot;%[src]&quot;,&quot;user-agent&quot;:&quot;%[capture.req.hdr(1),json(utf8s)]&quot;}'
 </code></pre>
 </div><pre class="text">Input request from client 127.0.0.1:
    GET / HTTP/1.0
@@ -15010,12 +15038,56 @@ page before hard-blocking, or to use a specific backend to drain new requests
 when the socket is considered saturated. This offers the ability to assign
 different limits to different listening ports or addresses. See also the
 &quot;<a href="#fe_conn">fe_conn</a>&quot; and &quot;<a href="#be_conn">be_conn</a>&quot; fetches.
+</pre><a class="anchor" name="dst_is_local"></a><a class="anchor" name="7-dst_is_local"></a><a class="anchor" name="7.3.3-dst_is_local"></a><a class="anchor" name="dst_is_local (Using ACLs and fetching samples)"></a><a class="anchor" name="dst_is_local (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="dst_is_local"></a><a href="#7.3.3-dst_is_local">dst_is_local</a></b> : boolean</div><pre class="text">Returns true if the destination address of the incoming connection is local
+to the system, or false if the address doesn't exist on the system, meaning
+that it was intercepted in transparent mode. It can be useful to apply
+certain rules by default to forwarded traffic and other rules to the traffic
+targetting the real address of the machine. For example the stats page could
+be delivered only on this address, or SSH access could be locally redirected.
+Please note that the check involves a few system calls, so it's better to do
+it only once per connection.
 </pre><a class="anchor" name="dst_port"></a><a class="anchor" name="7-dst_port"></a><a class="anchor" name="7.3.3-dst_port"></a><a class="anchor" name="dst_port (Using ACLs and fetching samples)"></a><a class="anchor" name="dst_port (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="dst_port"></a><a href="#7.3.3-dst_port">dst_port</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the destination TCP port of the
 connection on the client side, which is the port the client connected to.
 This might be used when running in transparent mode, when assigning dynamic
 ports to some clients for a whole application session, to stick all users to
 a same server, or to pass the destination port information to a server using
 an HTTP header.
+</pre><a class="anchor" name="fc_rtt"></a><a class="anchor" name="7-fc_rtt"></a><a class="anchor" name="7.3.3-fc_rtt"></a><a class="anchor" name="fc_rtt (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rtt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rtt"></a><a href="#7.3.3-fc_rtt">fc_rtt</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the Round Trip Time (RTT) measured by the kernel for the client
+connection. &lt;unit&gt; is facultative, by default the unit is milliseconds. &lt;unit&gt;
+can be set to &quot;ms&quot; for milliseconds or &quot;us&quot; for microseconds. If the server
+connection is not established, if the connection is not TCP or if the
+operating system does not support TCP_INFO, for example Linux kernels before
+2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_rttvar"></a><a class="anchor" name="7-fc_rttvar"></a><a class="anchor" name="7.3.3-fc_rttvar"></a><a class="anchor" name="fc_rttvar (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rttvar (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rttvar"></a><a href="#7.3.3-fc_rttvar">fc_rttvar</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the Round Trip Time (RTT) variance measured by the kernel for the
+client connection. &lt;unit&gt; is facultative, by default the unit is milliseconds.
+&lt;unit&gt; can be set to &quot;ms&quot; for milliseconds or &quot;us&quot; for microseconds. If the
+server connection is not established, if the connection is not TCP or if the
+operating system does not support TCP_INFO, for example Linux kernels before
+2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_unacked"></a><a class="anchor" name="7-fc_unacked"></a><a class="anchor" name="7.3.3-fc_unacked"></a><a class="anchor" name="fc_unacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_unacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_unacked"></a><a href="#7.3.3-fc_unacked">fc_unacked</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the unacked counter measured by the kernel for the client connection.
+If the server connection is not established, if the connection is not TCP or
+if the operating system does not support TCP_INFO, for example Linux kernels
+before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_sacked"></a><a class="anchor" name="7-fc_sacked"></a><a class="anchor" name="7.3.3-fc_sacked"></a><a class="anchor" name="fc_sacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_sacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_sacked"></a><a href="#7.3.3-fc_sacked">fc_sacked</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the sacked counter measured by the kernel for the client connection.
+If the server connection is not established, if the connection is not TCP or
+if the operating system does not support TCP_INFO, for example Linux kernels
+before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_retrans"></a><a class="anchor" name="7-fc_retrans"></a><a class="anchor" name="7.3.3-fc_retrans"></a><a class="anchor" name="fc_retrans (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_retrans (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_retrans"></a><a href="#7.3.3-fc_retrans">fc_retrans</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the retransmits counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_fackets"></a><a class="anchor" name="7-fc_fackets"></a><a class="anchor" name="7.3.3-fc_fackets"></a><a class="anchor" name="fc_fackets (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_fackets (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_fackets"></a><a href="#7.3.3-fc_fackets">fc_fackets</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the fack counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_lost"></a><a class="anchor" name="7-fc_lost"></a><a class="anchor" name="7.3.3-fc_lost"></a><a class="anchor" name="fc_lost (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_lost (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_lost"></a><a href="#7.3.3-fc_lost">fc_lost</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the lost counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_reordering"></a><a class="anchor" name="7-fc_reordering"></a><a class="anchor" name="7.3.3-fc_reordering"></a><a class="anchor" name="fc_reordering (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_reordering (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_reordering"></a><a href="#7.3.3-fc_reordering">fc_reordering</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the reordering counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend's id. It can be used in
 backends to check from which backend it was called, or to stick all users
 coming via a same frontend to the same server.
@@ -15203,6 +15275,13 @@ connection when a first ACL was verified :
       acl abuse src_http_req_rate gt 10
       acl kill  src_inc_gpc0 gt 0
       tcp-request connection reject if abuse kill
+</pre><a class="anchor" name="src_is_local"></a><a class="anchor" name="7-src_is_local"></a><a class="anchor" name="7.3.3-src_is_local"></a><a class="anchor" name="src_is_local (Using ACLs and fetching samples)"></a><a class="anchor" name="src_is_local (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_is_local"></a><a href="#7.3.3-src_is_local">src_is_local</a></b> : boolean</div><pre class="text">Returns true if the source address of the incoming connection is local to the
+system, or false if the address doesn't exist on the system, meaning that it
+comes from a remote machine. Note that UNIX addresses are considered local.
+It can be useful to apply certain access restrictions based on where the
+client comes from (eg: require auth or https for remote machines). Please
+note that the check involves a few system calls, so it's better to do it only
+once per connection.
 </pre><a class="anchor" name="src_kbytes_in"></a><a class="anchor" name="7-src_kbytes_in"></a><a class="anchor" name="7.3.3-src_kbytes_in"></a><a class="anchor" name="src_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="src_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_kbytes_in"></a><a href="#7.3.3-src_kbytes_in">src_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of data received from the incoming connection's
 source address in the current proxy's stick-table or in the designated
 stick-table, measured in kilobytes. If the address is not found, zero is
@@ -16448,7 +16527,6 @@ with a star ('*') after the field name below.
      15   '{' captured_response_headers* '}'                                {}
      16   '&quot;' http_request '&quot;'                      &quot;GET /index.html HTTP/1.1&quot;
 
-
 Detailed fields description :
   - &quot;client_ip&quot; is the IP address of the client which initiated the TCP
     connection to haproxy. If the connection was accepted on a UNIX socket
@@ -17570,8 +17648,8 @@ filters evaluation order.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev3-69 &ndash; Configuration Manual<br>
-							<small>2016/05/10, willy tarreau</small>
+							HAProxy 1.7-dev4 &ndash; Configuration Manual<br>
+							<small>2016/08/14, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -17674,8 +17752,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3-69', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-58', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev4', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}

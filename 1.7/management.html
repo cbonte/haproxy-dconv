@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev3 - Management Guide</title>
+		<title>HAProxy version 1.7-dev4 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.3.1-58" rel="stylesheet" />
+		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -401,7 +401,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-58</b> on <b>2016/07/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/08/15</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -412,7 +412,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.7-dev3</strong></p>
+							<p><strong>version 1.7-dev4</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								<br>
@@ -668,26 +668,30 @@ enforce some settings without touching the configuration files. The current
 list of options is :
 
   -- &lt;cfgfile&gt;* : all the arguments following &quot;--&quot; are paths to configuration
-    file to be loaded and processed in the declaration order. It is mostly
-    useful when relying on the shell to load many files that are numerically
-    ordered. See also &quot;-f&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is that one
-    &quot;-f&quot; must be placed before each file name, while a single &quot;--&quot; is needed
-    before all file names. Both options can be used together, the command line
-    ordering still applies. When more than one file is specified, each file
-    must start on a section boundary, so the first keyword of each file must be
-    one of &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;, &quot;backend&quot;, and
-    so on. A file cannot contain just a server list for example.
+    file/directory to be loaded and processed in the declaration order. It is
+    mostly useful when relying on the shell to load many files that are
+    numerically ordered. See also &quot;-f&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is
+    that one &quot;-f&quot; must be placed before each file name, while a single &quot;--&quot; is
+    needed before all file names. Both options can be used together, the
+    command line ordering still applies. When more than one file is specified,
+    each file must start on a section boundary, so the first keyword of each
+    file must be one of &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;,
+    &quot;backend&quot;, and so on. A file cannot contain just a server list for example.
 
-  -f &lt;cfgfile&gt; : adds &lt;cfgfile&gt; to the list of configuration files to be
-    loaded. Configuration files are loaded and processed in their declaration
-    order. This option may be specified multiple times to load multiple files.
-    See also &quot;--&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is that one &quot;-f&quot; must
-    be placed before each file name, while a single &quot;--&quot; is needed before all
-    file names. Both options can be used together, the command line ordering
-    still applies. When more than one file is specified, each file must start
-    on a section boundary, so the first keyword of each file must be one of
-    &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;, &quot;backend&quot;, and so
-    on. A file cannot contain just a server list for example.
+  -f &lt;cfgfile|cfgdir&gt; : adds &lt;cfgfile&gt; to the list of configuration files to be
+    loaded. If &lt;cfgdir&gt; is a directory, all the files (and only files) it
+    contains are added in lexical order (using LC_COLLATE=C) to the list of
+    configuration files to be loaded ; only files with &quot;.cfg&quot; extension are
+    added, only non hidden files (not prefixed with &quot;.&quot;) are added.
+    Configuration files are loaded and processed in their declaration order.
+    This option may be specified multiple times to load multiple files. See
+    also &quot;--&quot;. The difference between &quot;--&quot; and &quot;-f&quot; is that one &quot;-f&quot; must be
+    placed before each file name, while a single &quot;--&quot; is needed before all file
+    names. Both options can be used together, the command line ordering still
+    applies. When more than one file is specified, each file must start on a
+    section boundary, so the first keyword of each file must be one of
+    &quot;global&quot;, &quot;defaults&quot;, &quot;peers&quot;, &quot;listen&quot;, &quot;frontend&quot;, &quot;backend&quot;, and so on.
+    A file cannot contain just a server list for example.
 
   -C &lt;dir&gt; : changes to directory &lt;dir&gt; before loading configuration
     files. This is useful when using relative paths. Warning when using
@@ -726,7 +730,7 @@ list of options is :
     getaddrinfo() exist on various systems and cause anomalies that are
     difficult to troubleshoot.
 
-  -dM[&lt;byte&gt;] : forces memory poisonning, which means that each and every
+  -dM[&lt;byte&gt;] : forces memory poisoning, which means that each and every
     memory region allocated with malloc() or pool_alloc2() will be filled with
     &lt;byte&gt; before being passed to the caller. When &lt;byte&gt; is not specified, it
     defaults to 0x50 ('P'). While this slightly slows down operations, it is
@@ -809,7 +813,7 @@ list of options is :
   -vv : display the version, build options, libraries versions and usable
     pollers. This output is systematically requested when filing a bug report.
 
-A safe way to start HAProxy from an init file consists in forcing the deamon
+A safe way to start HAProxy from an init file consists in forcing the daemon
 mode, storing existing pids to a pid file and using this pid file to notify
 older processes to finish before leaving :
 
@@ -898,7 +902,7 @@ The relevant information that many non-developer users can verify here are :
   - build options : they are relevant to people who build their packages
     themselves, they can explain why things are not behaving as expected. For
     example the development version above was built for Linux 2.6.28 or later,
-    targetting a generic CPU (no CPU-specific optimizations), and lacks any
+    targeting a generic CPU (no CPU-specific optimizations), and lacks any
     code optimization (-O0) so it will perform poorly in terms of performance.
 
   - libraries versions : zlib version is reported as found in the library
@@ -912,7 +916,7 @@ The relevant information that many non-developer users can verify here are :
     missed. PCRE provides very fast regular expressions and is highly
     recommended. Certain of its extensions such as JIT are not present in all
     versions and still young so some people prefer not to build with them,
-    which is why the biuld status is reported as well. Regarding the Lua
+    which is why the build status is reported as well. Regarding the Lua
     scripting language, HAProxy expects version 5.3 which is very young since
     it was released a little time before HAProxy 1.6. It is important to check
     on the Lua web site if some fixes are proposed for this branch.
@@ -965,7 +969,7 @@ for example a port is shared with another daemon), then the new process sends a
 SIGTTIN signal to the old processes to instruct them to resume operations just
 as if nothing happened. The old processes will then restart listening to the
 ports and continue to accept connections. Not that this mechanism is system
-dependant and some operating systems may not support it in multi-process mode.
+dependent and some operating systems may not support it in multi-process mode.
 
 If the new process manages to bind correctly to all ports, then it sends either
 the SIGTERM (hard stop in case of &quot;-st&quot;) or the SIGUSR1 (graceful stop in case
@@ -991,7 +995,7 @@ where this happens are :
     this almost forever. Linux has been supporting this in version 2.0 and
     dropped it around 2.2, but some patches were floating around by then. It
     was reintroduced in kernel 3.9, so if you are observing a connection
-    failure rate above the one mentionned above, please ensure that your kernel
+    failure rate above the one mentioned above, please ensure that your kernel
     is 3.9 or newer, or that relevant patches were backported to your kernel
     (less likely).
 
@@ -1006,7 +1010,7 @@ where this happens are :
     this RST. A second case concerns the ACK from the client on a local socket
     that was in SYN_RECV state just before the close. This ACK will lead to an
     RST packet while the haproxy process is still not aware of it. This one is
-    harder to get rid of, though the firewall filtering rules mentionned above
+    harder to get rid of, though the firewall filtering rules mentioned above
     will work well if applied one second or so before restarting the process.
 
 For the vast majority of users, such drops will never ever happen since they
@@ -1036,7 +1040,7 @@ explains why even today a lot of configurations are seen with this setting
 present. Unfortunately it was often miscalculated resulting in connection
 failures when approaching maxconn instead of throttling incoming connection
 while waiting for the needed resources. For this reason it is important to
-remove any vestigal &quot;ulimit-n&quot; setting that can remain from very old versions.
+remove any vestigial &quot;ulimit-n&quot; setting that can remain from very old versions.
 
 Raising the number of file descriptors to accept even moderate loads is
 mandatory but comes with some OS-specific adjustments. First, the select()
@@ -1046,7 +1050,7 @@ restrictive SELinux policies forbidding the use of select() with more than
 1024 file descriptors, HAProxy now refuses to start in this case in order to
 avoid any issue at run time. On all supported operating systems, poll() is
 available and will not suffer from this limitation. It is automatically picked
-so there is nothing ot do to get a working configuration. But poll's becomes
+so there is nothing to do to get a working configuration. But poll's becomes
 very slow when the number of file descriptors increases. While HAProxy does its
 best to limit this performance impact (eg: via the use of the internal file
 descriptor cache and batched processing), a good rule of thumb is that using
@@ -1376,12 +1380,12 @@ are accepted), backends also need to be able to send logs in order to report a
 server state change consecutive to a health check. Please consult HAProxy's
 configuration manual for more information regarding all possible log settings.
 
-It is convenient to chose a facility that is not used by other deamons. HAProxy
+It is convenient to chose a facility that is not used by other daemons. HAProxy
 examples often suggest &quot;local0&quot; for traffic logs and &quot;local1&quot; for admin logs
 because they're never seen in field. A single facility would be enough as well.
 Having separate logs is convenient for log analysis, but it's also important to
 remember that logs may sometimes convey confidential information, and as such
-they must not be mixed with other logs that may accidently be handed out to
+they must not be mixed with other logs that may accidentally be handed out to
 unauthorized people.
 
 For in-field troubleshooting without impacting the server's capacity too much,
@@ -1589,7 +1593,7 @@ origin) indicates where the value was extracted from. Possible characters are :
       to group some values together because it is unique among its class. All
       internal identifiers are keys. Some names can be listed as keys if they
       are unique (eg: a frontend name is unique). In general keys come from the
-      configuration, eventhough some of them may automatically be assigned. For
+      configuration, even though some of them may automatically be assigned. For
       most purposes keys may be considered as equivalent to configuration.
 
   C   The value comes from the configuration. Certain configuration values make
@@ -1799,7 +1803,7 @@ mainly used to fill a map after a clear operation. Note that if the reference
 &lt;map&gt; is a file and is shared with a map, this map will contain also a new
 pattern entry.
 </pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.3-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters"></a><a href="#9.3-clear%20counters">clear counters</a></b></div><pre class="text">Clear the max values of the statistics counters in each proxy (frontend &amp;
-backend) and in each server. The cumulated counters are not affected. This
+backend) and in each server. The accumulated counters are not affected. This
 can be used to get clean counters after an incident, without having to
 restart nor to clear traffic counters. This command is restricted and can
 only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.
@@ -1874,7 +1878,7 @@ is shared with a acl, the entry will be also deleted in the map.
 
 In the case where an agent check is being run as a auxiliary check, due
 to the agent-check parameter of a server directive, new checks are only
-initialised when the agent is in the enabled. Thus, disable agent will
+initialized when the agent is in the enabled. Thus, disable agent will
 prevent any new agent checks from begin initiated until the agent
 re-enabled using enable agent.
 
@@ -2167,7 +2171,7 @@ report information found in fields they don't know. Each field is dumped on
 its own line. By default, the format contains only two columns delimited by a
 colon (':'). The left one is the field name and the right one is the value.
 It is very important to note that in typed output format, the dump for a
-single object is contigous so that there is no need for a consumer to store
+single object is contiguous so that there is no need for a consumer to store
 everything at once.
 
 When using the typed output format, each line is made of 4 columns delimited
@@ -2271,7 +2275,7 @@ The dump has the following format:
  - third line and next ones contain data;
  - each line starting by a sharp ('#') is considered as a comment.
 
-Since multiple versions of the ouptput may co-exist, below is the list of
+Since multiple versions of the output may co-exist, below is the list of
 fields and their order per file format version :
  1:
    be_id:                       Backend unique id.
@@ -2353,7 +2357,7 @@ tools because it provides numeric positions and indicates the type of each
 output field. Each value stands on its own line with process number, element
 number, nature, origin and scope. This same format is available via the HTTP
 stats by passing &quot;;typed&quot; after the URI. It is very important to note that in
-typed output format, the dump for a single object is contigous so that there
+typed output format, the dump for a single object is contiguous so that there
 is no need for a consumer to store everything at once.
 
 When using the typed output format, each line is made of 4 columns delimited
@@ -2537,9 +2541,11 @@ service, in order to monitor them or even blacklist them in a firewall.
   | fgrep 'key=' | cut -d' ' -f2 | cut -d= -f2 &gt; abusers-ip.txt
   ( or | awk '/key/{ print a[split($2,a,&quot;=&quot;)]; }' )
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tls-keys"></a><a class="anchor" name="9-show tls-keys"></a><a class="anchor" name="9.3-show tls-keys"></a><a class="anchor" name="show tls-keys (Statistics and monitoring)"></a><a class="anchor" name="show tls-keys (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tls-keys"></a><a href="#9.3-show%20tls-keys">show tls-keys</a></b></div><pre class="text">Dump all loaded TLS ticket keys. The TLS ticket key reference ID and the
-file from which the keys have been loaded is shown. Both of those can be
-used to update the TLS keys using &quot;<a href="#set%20ssl%20tls-key">set ssl tls-key</a>&quot;.
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tls-keys"></a><a class="anchor" name="9-show tls-keys"></a><a class="anchor" name="9.3-show tls-keys"></a><a class="anchor" name="show tls-keys (Statistics and monitoring)"></a><a class="anchor" name="show tls-keys (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tls-keys"></a><a href="#9.3-show%20tls-keys">show tls-keys</a></b> <span style="color: #008">[id|*]</span></div><pre class="text">Dump all loaded TLS ticket keys references. The TLS ticket key reference ID
+and the file from which the keys have been loaded is shown. Both of those
+can be used to update the TLS keys using &quot;<a href="#set%20ssl%20tls-key">set ssl tls-key</a>&quot;. If an ID is
+specified as parameter, it will dump the tickets, using * it will dump every
+keys from every references.
 </pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.3-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.3-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
 be released. It will not be possible to enable the frontend anymore after
 this operation. This is intended to be used in environments where stopping a
@@ -2646,7 +2652,7 @@ the effect to a certain extent but this also comes with increased CPU usage and
 processing time. Logs will also report a certain number of retries. For this
 reason, port ranges should be avoided in multi-process configurations.
 
-Since HAProxy uses SO_REUSEPORT and supports having multiple independant
+Since HAProxy uses SO_REUSEPORT and supports having multiple independent
 processes bound to the same IP:port, during troubleshooting it can happen that
 an old process was not stopped before a new one was started. This provides
 absurd test results which tend to indicate that any change to the configuration
@@ -2759,13 +2765,13 @@ issues regarding CPU or memory usage. Example :
 
 When an issue seems to randomly appear on a new version of HAProxy (eg: every
 second request is aborted, occasional crash, etc), it is worth trying to enable
-memory poisonning so that each call to malloc() is immediately followed by the
+memory poisoning so that each call to malloc() is immediately followed by the
 filling of the memory area with a configurable byte. By default this byte is
 0x50 (ASCII for 'P'), but any other byte can be used, including zero (which
 will have the same effect as a calloc() and which may make issues disappear).
-Memory poisonning is enabled on the command line using the &quot;-dM&quot; option. It
+Memory poisoning is enabled on the command line using the &quot;-dM&quot; option. It
 slightly hurts performance and is not recommended for use in production. If
-an issue happens all the time with it or never happens when poisoonning uses
+an issue happens all the time with it or never happens when poisoning uses
 byte zero, it clearly means you've found a bug and you definitely need to
 report it. Otherwise if there's no clear change, the problem it is not related.
 
@@ -2808,7 +2814,7 @@ response messages. In this case you will have to enable &quot;option http-no-del
 to disable Nagle in order to work around their design, keeping in mind that any
 other proxy in the chain may similarly be impacted. If tcpdump reports that data
 leave immediately but the other end doesn't see them quickly, it can mean there
-is a congestionned WAN link, a congestionned LAN with flow control enabled and
+is a congested WAN link, a congested LAN with flow control enabled and
 preventing the data from leaving, or more commonly that HAProxy is in fact
 running in a virtual machine and that for whatever reason the hypervisor has
 decided that the data didn't need to be sent immediately. In virtualized
@@ -2832,7 +2838,7 @@ processed by the network driver. Rx-Drp indicates that some received packets
 were lost in the network stack because the application doesn't process them
 fast enough. This can happen during some attacks as well. Tx-Drp means that
 the output queues were full and packets had to be dropped. When using TCP it
-should be very rare, but will possibly indicte a saturated outgoing link.
+should be very rare, but will possibly indicate a saturated outgoing link.
 </pre></div>
 <a class="anchor" id="13" name="13"></a>
 <div class="page-header"><h1 id="chapter-13" data-target="13"><small><a class="small" href="#13">13.</a></small> Security considerations</h1>
@@ -2842,7 +2848,7 @@ non-root user without any permissions inside this jail so that if any future
 vulnerability were to be discovered, its compromise would not affect the rest
 of the system.
 
-In order to perfom a chroot, it first needs to be started as a root user. It is
+In order to perform a chroot, it first needs to be started as a root user. It is
 pointless to build hand-made chroots to start the process there, these ones are
 painful to build, are never properly maintained and always contain way more
 bugs than the main file-system. And in case of compromise, the intruder can use
@@ -2861,7 +2867,7 @@ HAProxy will need to be started as root in order to :
 HAProxy may require to be run as root in order to :
   - bind to an interface for outgoing connections
   - bind to privileged source ports for outgoing connections
-  - transparently bind to a foreing address for outgoing connections
+  - transparently bind to a foreign address for outgoing connections
 
 Most users will never need the &quot;run as root&quot; case. But the &quot;start as root&quot;
 covers most usages.
@@ -2891,7 +2897,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev3 &ndash; Management Guide<br>
+							HAProxy 1.7-dev4 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -2995,8 +3001,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev3', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-58', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev4', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}

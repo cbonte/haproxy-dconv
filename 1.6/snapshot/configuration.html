@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.6-3 - Configuration Manual</title>
+		<title>HAProxy version 1.6.8 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../../css/page.css?0.3.1-58" rel="stylesheet" />
+		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -2459,7 +2459,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-58</b> on <b>2016/07/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/08/15</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2470,11 +2470,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.6-3</strong></p>
+							<p><strong>version 1.6.8</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/06/26
+								2016/08/14
 							</p>
 						</div>
 
@@ -7152,23 +7152,21 @@ none       don't load any stat for this backend</pre>
 
   - server's weight is applied from previous running process unless it has
     has changed between previous and new configuration files.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Minimal configuration</div><code>global
+ stats socket /tmp/socket
+ server-state-file /tmp/server_state
 
-Example 1:
+defaults
+ load-server-state-from-file global
 
-Minimal configuration:
-
-  global
-   stats socket /tmp/socket
-   server-state-file /tmp/server_state
-
-  defaults
-   load-server-state-from-file global
-
-  backend bk
-   server s1 127.0.0.1:22 check weight 11
-   server s2 127.0.0.1:22 check weight 12
-
-Then one can run :
+backend bk
+ server s1 127.0.0.1:22 check weight 11
+ server s2 127.0.0.1:22 check weight 12
+</code></pre>
+</div><pre class="text">Then one can run :
 
   socat /tmp/socket - &lt;&lt;&lt; &quot;show servers state&quot; &gt; /tmp/server_state
 
@@ -7178,23 +7176,21 @@ Content of the file /tmp/server_state would be like this:
   # &lt;field names skipped for the doc example&gt;
   1 bk 1 s1 127.0.0.1 2 0 11 11 4 6 3 4 6 0 0
   1 bk 2 s2 127.0.0.1 2 0 12 12 4 6 3 4 6 0 0
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Minimal configuration</div><code>global
+ stats socket /tmp/socket
+ server-state-base /etc/haproxy/states
 
-Example 2:
+defaults
+ load-server-state-from-file local
 
-Minimal configuration:
-
-  global
-   stats socket /tmp/socket
-   server-state-base /etc/haproxy/states
-
-  defaults
-   load-server-state-from-file local
-
-  backend bk
-   server s1 127.0.0.1:22 check weight 11
-   server s2 127.0.0.1:22 check weight 12
-
-Then one can run :
+backend bk
+ server s1 127.0.0.1:22 check weight 11
+ server s2 127.0.0.1:22 check weight 12
+</code></pre>
+</div><pre class="text">Then one can run :
 
   socat /tmp/socket - &lt;&lt;&lt; &quot;show servers state bk&quot; &gt; /etc/haproxy/states/bk
 
@@ -7885,7 +7881,7 @@ both are defined. In the case of the &quot;if-none&quot; argument, if at least o
 the frontend or the backend does not specify it, it wants the addition to be
 mandatory, so it wins.
 </pre><div class="separator">
-<span class="label label-success">Examples :</span>
+<span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># Public HTTP address also used by stunnel on the same machine</span>
 frontend www
@@ -12976,7 +12972,8 @@ Supported in default-server: Yes
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6</div><code></code></pre>
+<code>server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6
+</code></pre>
 </div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
 In order to be operational, DNS resolution requires that health check is
@@ -12990,7 +12987,7 @@ Supported in default-server: No
 <pre class="prettyprint">
 <code>server s1 app1.domain.com:80 check resolvers mydns
 </code></pre>
-</div><pre class="text">See also chapter 5.3
+</div><pre class="text">See also <a href="#5.3">section 5.3</a>
 </pre><a class="anchor" name="send-proxy"></a><a class="anchor" name="5-send-proxy"></a><a class="anchor" name="5.2-send-proxy"></a><a class="anchor" name="send-proxy (Bind and Server options)"></a><a class="anchor" name="send-proxy (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy"></a><a href="#5.2-send-proxy">send-proxy</a></b></div><pre class="text">The &quot;<a href="#send-proxy">send-proxy</a>&quot; parameter enforces use of the PROXY protocol over any
 connection established to this server. The PROXY protocol informs the other
 end about the layer 3/4 addresses of the incoming connection, so that it can
@@ -13250,24 +13247,25 @@ Default value: 3
 A retry occurs on name server timeout or when the full sequence of DNS query
 type failover is over and we need to start up from the default ANY query
 type.
-</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
-     &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
-               events available are:
-               - retry: time between two DNS queries, when no response have
-                        been received.
-                        Default value: 1s
-     &lt;time&gt;  : time related to the event. It follows the HAProxy time format.
-               &lt;time&gt; is expressed in milliseconds.
-
-Example of a resolvers section (with default values):
-
-   resolvers mydns
-     nameserver dns1 10.0.0.1:53
-     nameserver dns2 10.0.0.2:53
-     resolve_retries       3
-     timeout retry         1s
-     hold valid           10s
-</pre></div>
+</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">Defines timeouts related to name resolution
+   &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
+             events available are:
+             - retry: time between two DNS queries, when no response have
+                      been received.
+                      Default value: 1s
+   &lt;time&gt;  : time related to the event. It follows the HAProxy time format.
+             &lt;time&gt; is expressed in milliseconds.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>resolvers mydns
+  nameserver dns1 10.0.0.1:53
+  nameserver dns2 10.0.0.2:53
+  resolve_retries       3
+  timeout retry         1s
+  hold valid           10s
+</code></pre>
+</div></div>
 <a class="anchor" id="6" name="6"></a>
 <div class="page-header"><h1 id="chapter-6" data-target="6"><small><a class="small" href="#6">6.</a></small> HTTP header manipulation</h1>
 </div><div><pre class="text">In HTTP mode, it is possible to rewrite, add or delete some of the request and
@@ -16068,7 +16066,6 @@ with a star ('*') after the field name below.
      15   '{' captured_response_headers* '}'                                {}
      16   '&quot;' http_request '&quot;'                      &quot;GET /index.html HTTP/1.1&quot;
 
-
 Detailed fields description :
   - &quot;client_ip&quot; is the IP address of the client which initiated the TCP
     connection to haproxy. If the connection was accepted on a UNIX socket
@@ -17137,8 +17134,8 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.6-3 &ndash; Configuration Manual<br>
-							<small>2016/06/26, willy tarreau</small>
+							HAProxy 1.6.8 &ndash; Configuration Manual<br>
+							<small>2016/08/14, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -17241,8 +17238,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.6-3', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-58', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.8', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
