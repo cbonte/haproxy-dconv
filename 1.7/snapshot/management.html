@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev4-10 - Management Guide</title>
+		<title>HAProxy version 1.7-dev5-2 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -401,7 +401,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/08/30</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/10/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -412,7 +412,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.7-dev4-10</strong></p>
+							<p><strong>version 1.7-dev5-2</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								<br>
@@ -1564,6 +1564,8 @@ S (Servers).
  78: conn_rate_max [.F..]: highest known conn_rate
  79: conn_tot [.F..]: cumulative number of connections
  80: intercepted [.FB.]: cum. number of intercepted requests (monitor, stats)
+ 81: dcon [LF..]: requests denied by &quot;tcp-request connection&quot; rules
+ 82: dses [LF..]: requests denied by &quot;tcp-request session&quot; rules
 </pre></div>
 <a class="anchor" id="9" name="9"></a>
 <div class="page-header"><h1 id="chapter-9" data-target="9"><small><a class="small" href="#9">9.</a></small> 2) Typed output format</h1>
@@ -2047,13 +2049,17 @@ is passed in number of sessions per second.
 applies to all frontends and the change has an immediate effect. The value
 is passed in number of sessions per second sent to the SSL stack. It applies
 before the handshake in order to protect the stack against handshake abuses.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> addr <span style="color: #080">&lt;ip4 or ip6 address&gt;</span></div><pre class="text">Replace the current IP address of a server by the one provided.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> addr <span style="color: #080">&lt;ip4 or ip6 address&gt;</span> <span style="color: #008">[port <span style="color: #080">&lt;port&gt;</span>]</span></div><pre class="text">Replace the current IP address of a server by the one provided.
+Optionnaly, the port can be changed using the 'port' parameter.
+Note that changing the port also support switching from/to port mapping
+(notation with +X or -Y), only if a port is configured for the health check.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent <span style="color: #008">[ up | down ]</span></div><pre class="text">Force a server's agent to a new state. This can be useful to immediately
 switch a server's state regardless of some slow agent checks for example.
 Note that the change is propagated to tracking servers if any.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> health <span style="color: #008">[ up | stopping | down ]</span></div><pre class="text">Force a server's health to a new state. This can be useful to immediately
 switch a server's state regardless of some slow health checks for example.
 Note that the change is propagated to tracking servers if any.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> check-port <span style="color: #080">&lt;port&gt;</span></div><pre class="text">Change the port used for health checking to &lt;port&gt;
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> state <span style="color: #008">[ ready | drain | maint ]</span></div><pre class="text">Force a server's administrative state to a new state. This can be useful to
 disable load balancing and/or any traffic to a server. Setting the state to
 &quot;ready&quot; puts the server in normal mode, and the command is the equivalent of
@@ -2900,7 +2906,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev4-10 &ndash; Management Guide<br>
+							HAProxy 1.7-dev5-2 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3004,7 +3010,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev4-10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev5-2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

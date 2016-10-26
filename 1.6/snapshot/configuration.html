@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.9 - Configuration Manual</title>
+		<title>HAProxy version 1.6.9-23 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -1116,6 +1116,8 @@
 							
 							<a class="list-group-item" href="#fe_id">fe_id</a>
 							
+							<a class="list-group-item" href="#fe_req_rate">fe_req_rate</a>
+							
 							<a class="list-group-item" href="#fe_sess_rate">fe_sess_rate</a>
 							
 							<a class="list-group-item" href="#field">field</a>
@@ -1428,6 +1430,8 @@
 							<a class="list-group-item" href="#non-stick">non-stick</a>
 							
 							<a class="list-group-item" href="#nopoll">nopoll</a>
+							
+							<a class="list-group-item" href="#noreuseport">noreuseport</a>
 							
 							<a class="list-group-item" href="#nosplice">nosplice</a>
 							
@@ -2459,7 +2463,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/08/30</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/10/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2470,7 +2474,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.9</strong></p>
+							<p><strong>version 1.6.9-23</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -3722,6 +3726,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#nopoll">nopoll</a>
    - <a href="#nosplice">nosplice</a>
    - <a href="#nogetaddrinfo">nogetaddrinfo</a>
+   - <a href="#noreuseport">noreuseport</a>
    - <a href="#spread-checks">spread-checks</a>
    - <a href="#server-state-base">server-state-base</a>
    - <a href="#server-state-file">server-state-file</a>
@@ -4130,6 +4135,8 @@ case of doubt. See also &quot;<a href="#option%20splice-auto">option splice-auto
 &quot;<a href="#option%20splice-response">option splice-response</a>&quot;.
 </pre><a class="anchor" name="nogetaddrinfo"></a><a class="anchor" name="3-nogetaddrinfo"></a><a class="anchor" name="3.2-nogetaddrinfo"></a><a class="anchor" name="nogetaddrinfo (Global parameters)"></a><a class="anchor" name="nogetaddrinfo (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="nogetaddrinfo"></a><a href="#3.2-nogetaddrinfo">nogetaddrinfo</a></b></div><pre class="text">Disables the use of getaddrinfo(3) for name resolving. It is equivalent to
 the command line argument &quot;-dG&quot;. Deprecated gethostbyname(3) will be used.
+</pre><a class="anchor" name="noreuseport"></a><a class="anchor" name="3-noreuseport"></a><a class="anchor" name="3.2-noreuseport"></a><a class="anchor" name="noreuseport (Global parameters)"></a><a class="anchor" name="noreuseport (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="noreuseport"></a><a href="#3.2-noreuseport">noreuseport</a></b></div><pre class="text">Disables the use of SO_REUSEPORT - see socket(7). It is equivalent to the
+command line argument &quot;-dR&quot;.
 </pre><a class="anchor" name="spread-checks"></a><a class="anchor" name="3-spread-checks"></a><a class="anchor" name="3.2-spread-checks"></a><a class="anchor" name="spread-checks (Global parameters)"></a><a class="anchor" name="spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="spread-checks"></a><a href="#3.2-spread-checks">spread-checks</a></b> <span style="color: #080">&lt;0..50, in percent&gt;</span></div><pre class="text">Sometimes it is desirable to avoid sending agent and health checks to
 servers at exact intervals, for instance when many logical servers are
 located on the same physical server. With the help of this parameter, it
@@ -14504,6 +14511,9 @@ use a specific backend to drain new requests when the farm is considered
 full.  This is mostly used with ACLs but can also be used to pass some
 statistics to servers in HTTP headers. See also the &quot;<a href="#dst_conn">dst_conn</a>&quot;, &quot;<a href="#be_conn">be_conn</a>&quot;,
 &quot;<a href="#fe_sess_rate">fe_sess_rate</a>&quot; fetches.
+</pre><a class="anchor" name="fe_req_rate"></a><a class="anchor" name="7-fe_req_rate"></a><a class="anchor" name="7.3.2-fe_req_rate"></a><a class="anchor" name="fe_req_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_req_rate (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="fe_req_rate"></a><a href="#7.3.2-fe_req_rate">fe_req_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;frontend&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of HTTP requests per
+second sent to a frontend. This number can differ from &quot;<a href="#fe_sess_rate">fe_sess_rate</a>&quot; in
+situations where client-side keep-alive is enabled.
 </pre><a class="anchor" name="fe_sess_rate"></a><a class="anchor" name="7-fe_sess_rate"></a><a class="anchor" name="7.3.2-fe_sess_rate"></a><a class="anchor" name="fe_sess_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_sess_rate (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="fe_sess_rate"></a><a href="#7.3.2-fe_sess_rate">fe_sess_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;frontend&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value corresponding to the sessions creation rate on the
 frontend, in number of new sessions per second. This is used with ACLs to
 limit the incoming session rate to an acceptable range in order to prevent
@@ -17134,7 +17144,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.9 &ndash; Configuration Manual<br>
+							HAProxy 1.6.9-23 &ndash; Configuration Manual<br>
 							<small>2016/08/30, willy tarreau</small>
 						</div>
 					</div>
@@ -17238,7 +17248,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.9', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.9-23', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

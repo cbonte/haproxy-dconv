@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev4 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev5 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -917,6 +917,8 @@
 							
 							<a class="list-group-item" href="#balance url_param">balance url_param</a>
 							
+							<a class="list-group-item" href="#balance-factor">balance-factor</a>
+							
 							<a class="list-group-item" href="#base">base</a>
 							
 							<a class="list-group-item" href="#base32">base32</a>
@@ -1168,6 +1170,8 @@
 							<a class="list-group-item" href="#fe_conn">fe_conn</a>
 							
 							<a class="list-group-item" href="#fe_id">fe_id</a>
+							
+							<a class="list-group-item" href="#fe_req_rate">fe_req_rate</a>
 							
 							<a class="list-group-item" href="#fe_sess_rate">fe_sess_rate</a>
 							
@@ -1491,6 +1495,8 @@
 							<a class="list-group-item" href="#non-stick">non-stick</a>
 							
 							<a class="list-group-item" href="#nopoll">nopoll</a>
+							
+							<a class="list-group-item" href="#noreuseport">noreuseport</a>
 							
 							<a class="list-group-item" href="#nosplice">nosplice</a>
 							
@@ -2330,6 +2336,8 @@
 							
 							<a class="list-group-item" href="#tcp-request inspect-delay">tcp-request inspect-delay</a>
 							
+							<a class="list-group-item" href="#tcp-request session">tcp-request session</a>
+							
 							<a class="list-group-item" href="#tcp-response">tcp-response</a>
 							
 							<a class="list-group-item" href="#tcp-response content">tcp-response content</a>
@@ -2540,7 +2548,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/08/30</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/10/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2551,11 +2559,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev4</strong></p>
+							<p><strong>version 1.7-dev5</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/08/14
+								2016/10/25
 							</p>
 						</div>
 
@@ -3838,6 +3846,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#nopoll">nopoll</a>
    - <a href="#nosplice">nosplice</a>
    - <a href="#nogetaddrinfo">nogetaddrinfo</a>
+   - <a href="#noreuseport">noreuseport</a>
    - <a href="#spread-checks">spread-checks</a>
    - <a href="#server-state-base">server-state-base</a>
    - <a href="#server-state-file">server-state-file</a>
@@ -4270,6 +4279,8 @@ case of doubt. See also &quot;<a href="#option%20splice-auto">option splice-auto
 &quot;<a href="#option%20splice-response">option splice-response</a>&quot;.
 </pre><a class="anchor" name="nogetaddrinfo"></a><a class="anchor" name="3-nogetaddrinfo"></a><a class="anchor" name="3.2-nogetaddrinfo"></a><a class="anchor" name="nogetaddrinfo (Global parameters)"></a><a class="anchor" name="nogetaddrinfo (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="nogetaddrinfo"></a><a href="#3.2-nogetaddrinfo">nogetaddrinfo</a></b></div><pre class="text">Disables the use of getaddrinfo(3) for name resolving. It is equivalent to
 the command line argument &quot;-dG&quot;. Deprecated gethostbyname(3) will be used.
+</pre><a class="anchor" name="noreuseport"></a><a class="anchor" name="3-noreuseport"></a><a class="anchor" name="3.2-noreuseport"></a><a class="anchor" name="noreuseport (Global parameters)"></a><a class="anchor" name="noreuseport (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="noreuseport"></a><a href="#3.2-noreuseport">noreuseport</a></b></div><pre class="text">Disables the use of SO_REUSEPORT - see socket(7). It is equivalent to the
+command line argument &quot;-dR&quot;.
 </pre><a class="anchor" name="spread-checks"></a><a class="anchor" name="3-spread-checks"></a><a class="anchor" name="3.2-spread-checks"></a><a class="anchor" name="spread-checks (Global parameters)"></a><a class="anchor" name="spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="spread-checks"></a><a href="#3.2-spread-checks">spread-checks</a></b> <span style="color: #080">&lt;0..50, in percent&gt;</span></div><pre class="text">Sometimes it is desirable to avoid sending agent and health checks to
 servers at exact intervals, for instance when many logical servers are
 located on the same physical server. With the help of this parameter, it
@@ -4912,6 +4923,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td None><a href="#4-tcp-request%20inspect-delay">tcp-request inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-tcp-request%20session">tcp-request session</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-tcp-response%20content">tcp-response content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-response%20inspect-delay">tcp-response inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20check">timeout check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -4930,8 +4942,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td None><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use_backend">use_backend</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use-server">use-server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 </table></div>
@@ -5238,6 +5250,31 @@ extension with &quot;<a href="#url_param">url_param</a>&quot; must be considered
     might be a URL parameter list. This is probably not a concern with SGML
     type message bodies.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#dispatch">dispatch</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, &quot;<a href="#option%20transparent">transparent</a>&quot;, &quot;<a href="#hash-type">hash-type</a>&quot; and &quot;<a href="#option%20http_proxy">http_proxy</a>&quot;.</div>
+<a class="anchor" name="balance-factor"></a><a class="anchor" name="4-balance-factor"></a><a class="anchor" name="4.2-balance-factor"></a><a class="anchor" name="balance-factor (Proxies)"></a><a class="anchor" name="balance-factor (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="balance-factor"></a><a href="#4.2-balance-factor">balance-factor</a></b> <span style="color: #080">&lt;factor&gt;</span></div><pre class="text">Specify the balancing factor for bounded-load consistent hashing
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;factor&gt; is the control for the maximum number of concurrent requests to
+         send to a server, expressed as a percentage of the average number</pre>
+</div>
+<pre class="text">	     of concurrent requests across all of the active servers.
+
+  Specifying a &quot;<a href="#balance-factor">balance-factor</a>&quot; for a server with &quot;hash-type consistent&quot;
+  enables an algorithm that prevents any one server from getting too many
+  requests at once, even if some hash buckets receive many more requests than
+  others. Setting &lt;factor&gt; to 0 (the default) disables the feature. Otherwise,
+  &lt;factor&gt; is a percentage greater than 100. For example, if &lt;factor&gt; is 150,
+  then no server will be allowed to have a load more than 1.5 times the average.
+  If server weights are used, they will be respected.
+
+  If the first-choice server is disqualified, the algorithm will choose another
+  server based on the request hash, until a server with additional capacity is
+  found. A higher &lt;factor&gt; allows more imbalance between the servers, while a
+  lower &lt;factor&gt; means that more servers will be checked on average, affecting
+  performance. Reasonable values are from 125 to 200.
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot; and &quot;<a href="#hash-type">hash-type</a>&quot;.</div>
 <a class="anchor" name="bind"></a><a class="anchor" name="4-bind"></a><a class="anchor" name="4.2-bind"></a><a class="anchor" name="bind (Proxies)"></a><a class="anchor" name="bind (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind"></a><a href="#4.2-bind">bind</a></b> <span style="color: #008">[<span style="color: #080">&lt;address&gt;</span>]</span>:<span style="color: #080">&lt;port_range&gt;</span> <span style="color: #008">[, ...]</span> <span style="color: #008">[param*]</span></div><a class="anchor" name="bind"></a><a class="anchor" name="4-bind"></a><a class="anchor" name="4.2-bind"></a><a class="anchor" name="bind (Proxies)"></a><a class="anchor" name="bind (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind"></a><a href="#4.2-bind">bind</a></b> /<span style="color: #080">&lt;path&gt;</span> <span style="color: #008">[, ...]</span> <span style="color: #008">[param*]</span></div><pre class="text">Define one or several listening addresses and/or ports in a frontend.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -6332,7 +6369,7 @@ simplify it.
 <pre class="text">The default hash type is &quot;map-based&quot; and is recommended for most usages. The
 default function is &quot;<a href="#sdbm">sdbm</a>&quot;, the selection of a function should be based on
 the range of the values being hashed.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#server">server</a>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#balance-factor">balance-factor</a>&quot;, &quot;<a href="#server">server</a>&quot;</div>
 <a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check disable-on-404"></a><a class="anchor" name="4-http-check disable-on-404"></a><a class="anchor" name="4.2-http-check disable-on-404"></a><a class="anchor" name="http-check disable-on-404 (Proxies)"></a><a class="anchor" name="http-check disable-on-404 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check disable-on-404"></a><a href="#4.2-http-check%20disable-on-404">http-check disable-on-404</a></b></div><pre class="text">Enable a maintenance mode upon HTTP/404 response to health-checks
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -6824,7 +6861,8 @@ http-request set-query %[query,regsub(%3D,=,g)]
 <code>http-request set-src hdr(x-forwarded-for)
 http-request set-src src,ipmask(24)
 </code></pre>
-</div><pre class="text">  When set-src is successful, the source port is set to 0.
+</div><pre class="text">  When possible, set-src preserves the original source port as long as the
+  address family allows it, otherwise the source port is set to 0.
 
 - set-src-port &lt;expr&gt; :
   Is used to set the source port address to the value of specified
@@ -6838,8 +6876,9 @@ http-request set-src src,ipmask(24)
 <code>http-request set-src-port hdr(x-port)
 http-request set-src-port int(4000)
 </code></pre>
-</div><pre class="text">  Be careful to use &quot;set-src-port&quot; after &quot;set-src&quot;, because &quot;set-src&quot; sets
-  the source port to 0.
+</div><pre class="text">  When possible, set-src-port preserves the original source address as long
+  as the address family supports a port, otherwise it forces the source
+  address to IPv4 &quot;0.0.0.0&quot; before rewriting the port.
 
 - set-dst &lt;expr&gt; :
   Is used to set the destination IP address to the value of specified
@@ -6856,7 +6895,10 @@ http-request set-src-port int(4000)
 <code>http-request set-dst hdr(x-dst)
 http-request set-dst dst,ipmask(24)
 </code></pre>
-</div><pre class="text">- set-dst-port &lt;expr&gt; :
+</div><pre class="text">  When possible, set-dst preserves the original destination port as long as
+  the address family allows it, otherwise the destination port is set to 0.
+
+- set-dst-port &lt;expr&gt; :
   Is used to set the destination port address to the value of specified
   expression. If you want to connect to the new address/port, use
   '0.0.0.0:0' as a server address in the backend.
@@ -6869,7 +6911,11 @@ http-request set-dst dst,ipmask(24)
 <code>http-request set-dst-port hdr(x-port)
 http-request set-dst-port int(4000)
 </code></pre>
-</div><pre class="text">  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
+</div><pre class="text">    When possible, set-dst-port preserves the original destination address as
+    long as the address family supports a port, otherwise it forces the
+    destination address to IPv4 &quot;0.0.0.0&quot; before rewriting the port.
+
+  - &quot;silent-drop&quot; : this stops the evaluation of the rules and makes the
     client-facing connection suddenly disappear using a system-dependant way
     that tries to prevent the client from being notified. The effect it then
     that the client still sees an established connection while there's none
@@ -11439,7 +11485,7 @@ Four types of actions are supported :
       conditions, the simple action of logging each event would make the
       system collapse and would considerably lower the filtering capacity. If
       logging is absolutely desired, then &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rules should
-      be used instead.
+      be used instead, as &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot; rules will not log either.
 
   - expect-proxy layer4 :
       configures the client-facing connection to receive a PROXY protocol
@@ -11537,7 +11583,8 @@ Four types of actions are supported :
 <pre class="prettyprint">
 <code>tcp-request connection set-src src,ipmask(24)
 </code></pre>
-</div><pre class="text">  When set-src is successful, the source port is set to 0.
+</div><pre class="text">  When possible, set-src preserves the original source port as long as the
+  address family allows it, otherwise the source port is set to 0.
 
 - set-src-port &lt;expr&gt; :
   Is used to set the source port address to the value of specified
@@ -11550,8 +11597,9 @@ Four types of actions are supported :
 <pre class="prettyprint">
 <code>tcp-request connection set-src-port int(4000)
 </code></pre>
-</div><pre class="text">  Be careful to use &quot;set-src-port&quot; after &quot;set-src&quot;, because &quot;set-src&quot; sets
-  the source port to 0.
+</div><pre class="text">  When possible, set-src-port preserves the original source address as long
+  as the address family supports a port, otherwise it forces the source
+  address to IPv4 &quot;0.0.0.0&quot; before rewriting the port.
 
 - set-dst &lt;expr&gt; :
   Is used to set the destination IP address to the value of specified
@@ -11568,7 +11616,10 @@ Four types of actions are supported :
 <code>tcp-request connection set-dst dst,ipmask(24)
 tcp-request connection set-dst ipv4(10.0.0.1)
 </code></pre>
-</div><pre class="text">- set-dst-port &lt;expr&gt; :
+</div><pre class="text">  When possible, set-dst preserves the original destination port as long as
+  the address family allows it, otherwise the destination port is set to 0.
+
+- set-dst-port &lt;expr&gt; :
   Is used to set the destination port address to the value of specified
   expression. If you want to connect to the new address/port, use
   '0.0.0.0:0' as a server address in the backend.
@@ -11581,7 +11632,11 @@ tcp-request connection set-dst ipv4(10.0.0.1)
 <pre class="prettyprint">
 <code>tcp-request connection set-dst-port int(4000)
 </code></pre>
-</div><pre class="text">  - &quot;silent-drop&quot; :
+</div><pre class="text">    When possible, set-dst-port preserves the original destination address as
+    long as the address family supports a port, otherwise it forces the
+    destination address to IPv4 &quot;0.0.0.0&quot; before rewriting the port.
+
+  - &quot;silent-drop&quot; :
       This stops the evaluation of the rules and makes the client-facing
       connection suddenly disappear using a system-dependant way that tries
       to prevent the client from being notified. The effect it then that the
@@ -11622,7 +11677,7 @@ tcp-request connection reject if { sc0_conn_rate gt 10 }
 <div class="example-desc">Enable the PROXY protocol for traffic coming from all known proxies.</div><code>tcp-request connection expect-proxy layer4 if { src -f proxies.lst }
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot;, &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;</div>
 <a class="anchor" name="tcp-request"></a><a class="anchor" name="4-tcp-request"></a><a class="anchor" name="4.2-tcp-request"></a><a class="anchor" name="tcp-request (Proxies)"></a><a class="anchor" name="tcp-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-request content"></a><a class="anchor" name="4-tcp-request content"></a><a class="anchor" name="4.2-tcp-request content"></a><a class="anchor" name="tcp-request content (Proxies)"></a><a class="anchor" name="tcp-request content (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-request content"></a><a href="#4.2-tcp-request%20content">tcp-request content</a></b> <span style="color: #080">&lt;action&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Perform an action on a new session depending on a layer 4-7 condition
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -11697,7 +11752,8 @@ wait until the inspect delay expires when the data to be tracked is not yet
 available.
 
 The &quot;set-var&quot; is used to set the content of a variable. The variable is
-declared inline.
+declared inline. For &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot; rules, only session-level
+variables can be used, without any layer7 contents.
 
   &lt;var-name&gt; The name of the variable starts with an indication about
              its scope. The scopes allowed are:
@@ -11779,7 +11835,7 @@ backend http_dynamic
     tcp-request content reject if click_too_fast mark_as_abuser
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;, &quot;<a href="#tcp-request%20inspect-delay">tcp-request inspect-delay</a>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;, &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot;, and &quot;<a href="#tcp-request%20inspect-delay">tcp-request inspect-delay</a>&quot;</div>
 <a class="anchor" name="tcp-request"></a><a class="anchor" name="4-tcp-request"></a><a class="anchor" name="4.2-tcp-request"></a><a class="anchor" name="tcp-request (Proxies)"></a><a class="anchor" name="tcp-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-request inspect-delay"></a><a class="anchor" name="4-tcp-request inspect-delay"></a><a class="anchor" name="4.2-tcp-request inspect-delay"></a><a class="anchor" name="tcp-request inspect-delay (Proxies)"></a><a class="anchor" name="tcp-request inspect-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-request inspect-delay"></a><a href="#4.2-tcp-request%20inspect-delay">tcp-request inspect-delay</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for data during content inspection
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -11936,6 +11992,81 @@ declared inline.
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, &quot;<a href="#tcp-response%20inspect-delay">tcp-response inspect-delay</a>&quot;</div>
+<a class="anchor" name="tcp-request"></a><a class="anchor" name="4-tcp-request"></a><a class="anchor" name="4.2-tcp-request"></a><a class="anchor" name="tcp-request (Proxies)"></a><a class="anchor" name="tcp-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-request session"></a><a class="anchor" name="4-tcp-request session"></a><a class="anchor" name="4.2-tcp-request session"></a><a class="anchor" name="tcp-request session (Proxies)"></a><a class="anchor" name="tcp-request session (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-request session"></a><a href="#4.2-tcp-request%20session">tcp-request session</a></b> <span style="color: #080">&lt;action&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Perform an action on a validated session depending on a layer 5 condition
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;action&gt;    defines the action to perform if the condition applies. See
+            below.
+
+&lt;condition&gt; is a standard layer5-only ACL-based condition (see <a href="#7">section 7</a>).</pre>
+</div>
+<pre class="text">Once a session is validated, (ie. after all handshakes have been completed),
+it is possible to evaluate some conditions to decide whether this session
+must be accepted or dropped or have its counters tracked. Those conditions
+cannot make use of any data contents because no buffers are allocated yet and
+the processing cannot wait at this stage. The main use case it to copy some
+early information into variables (since variables are accessible in the
+session), or to keep track of some information collected after the handshake,
+such as SSL-level elements (SNI, ciphers, client cert's CN) or information
+from the PROXY protocol header (eg: track a source forwarded this way). The
+extracted information can thus be copied to a variable or tracked using
+&quot;track-sc&quot; rules. Of course it is also possible to decide to accept/reject as
+with other rulesets. Most operations performed here could also be performed
+in &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rules, except that in HTTP these rules are evaluated
+for each new request, and that might not always be acceptable. For example a
+rule might increment a counter on each evaluation. It would also be possible
+that a country is resolved by geolocation from the source IP address,
+assigned to a session-wide variable, then the source address rewritten from
+an HTTP header for all requests. If some contents need to be inspected in
+order to take the decision, the &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; statements must be used
+instead.
+
+The &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot; rules are evaluated in their exact declaration
+order. If no rule matches or if there is no rule, the default action is to
+accept the incoming session. There is no specific limit to the number of
+rules which may be inserted.
+
+Several types of actions are supported :
+  - accept : the request is accepted
+  - reject : the request is rejected and the connection is closed
+  - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
+  - sc-inc-gpc0(&lt;sc-id&gt;)
+  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
+  - set-var(&lt;var-name&gt;) &lt;expr&gt;
+  - silent-drop
+
+These actions have the same meaning as their respective counter-parts in
+&quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; and &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, so please refer to these
+sections for a complete description.
+
+Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
+the action, it is simply performed unconditionally. That can be useful for
+&quot;track-sc*&quot; actions as well as for changing the default action to a reject.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Track the original source address by default, or the one advertised in the PROXY protocol header for connection coming from the local proxies. The first connection-level rule enables receipt of the PROXY protocol for these ones, the second rule tracks whatever address we decide to keep after optional decoding.</div><code>tcp-request connection expect-proxy layer4 if { src -f proxies.lst }
+tcp-request session track-sc0 src
+</code></pre>
+</div><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Accept all sessions from white-listed hosts, reject too fast sessions without counting them, and track accepted sessions. This results in session rate being capped from abusive sources.</div><code>tcp-request session accept if { src -f /etc/haproxy/whitelist.lst }
+tcp-request session reject if { src_sess_rate gt 10 }
+tcp-request session track-sc0 src
+</code></pre>
+</div><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">Accept all sessions from white-listed hosts, count all other sessions and reject too fast ones. This results in abusive ones being blocked as long as they don't slow down.</div><code>tcp-request session accept if { src -f /etc/haproxy/whitelist.lst }
+tcp-request session track-sc0 src
+tcp-request session reject if { sc0_sess_rate gt 10 }
+</code></pre>
+</div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;, &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;</div>
 <a class="anchor" name="tcp-response"></a><a class="anchor" name="4-tcp-response"></a><a class="anchor" name="4.2-tcp-response"></a><a class="anchor" name="tcp-response (Proxies)"></a><a class="anchor" name="tcp-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-response inspect-delay"></a><a class="anchor" name="4-tcp-response inspect-delay"></a><a class="anchor" name="4.2-tcp-response inspect-delay"></a><a class="anchor" name="tcp-response inspect-delay (Proxies)"></a><a class="anchor" name="tcp-response inspect-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-response inspect-delay"></a><a href="#4.2-tcp-response%20inspect-delay">tcp-response inspect-delay</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for a response during content inspection
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13470,6 +13601,9 @@ several servers. Doing so makes it possible to bypass the maximum of 64k
 total concurrent connections. The limit will then reach 64k connections per
 server.
 
+Since Linux 4.2/libc 2.23 IP_BIND_ADDRESS_NO_PORT is set for connections
+specifying the source address without port(s).
+
 Supported in default-server: No
 </pre><a class="anchor" name="ssl"></a><a class="anchor" name="5-ssl"></a><a class="anchor" name="5.2-ssl"></a><a class="anchor" name="ssl (Bind and Server options)"></a><a class="anchor" name="ssl (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ssl"></a><a href="#5.2-ssl">ssl</a></b></div><pre class="text">This option enables SSL ciphering on outgoing connections to the server. It
 is critical to verify server certificates using &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; when using SSL to
@@ -14904,6 +15038,9 @@ use a specific backend to drain new requests when the farm is considered
 full.  This is mostly used with ACLs but can also be used to pass some
 statistics to servers in HTTP headers. See also the &quot;<a href="#dst_conn">dst_conn</a>&quot;, &quot;<a href="#be_conn">be_conn</a>&quot;,
 &quot;<a href="#fe_sess_rate">fe_sess_rate</a>&quot; fetches.
+</pre><a class="anchor" name="fe_req_rate"></a><a class="anchor" name="7-fe_req_rate"></a><a class="anchor" name="7.3.2-fe_req_rate"></a><a class="anchor" name="fe_req_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_req_rate (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="fe_req_rate"></a><a href="#7.3.2-fe_req_rate">fe_req_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;frontend&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of HTTP requests per
+second sent to a frontend. This number can differ from &quot;<a href="#fe_sess_rate">fe_sess_rate</a>&quot; in
+situations where client-side keep-alive is enabled.
 </pre><a class="anchor" name="fe_sess_rate"></a><a class="anchor" name="7-fe_sess_rate"></a><a class="anchor" name="7.3.2-fe_sess_rate"></a><a class="anchor" name="fe_sess_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_sess_rate (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="fe_sess_rate"></a><a href="#7.3.2-fe_sess_rate">fe_sess_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;frontend&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value corresponding to the sessions creation rate on the
 frontend, in number of new sessions per second. This is used with ACLs to
 limit the incoming session rate to an acceptable range in order to prevent
@@ -16512,10 +16649,10 @@ with a star ('*') after the field name below.
 </div><pre class="text">  Field   Format                                Extract from the example above
       1   process_name '[' pid ']:'                            haproxy[14389]:
       2   client_ip ':' client_port                             10.0.1.2:33317
-      3   '[' accept_date ']'                       [06/Feb/2009:12:14:14.655]
+      3   '[' request_date ']'                      [06/Feb/2009:12:14:14.655]
       4   frontend_name                                                http-in
       5   backend_name '/' server_name                             static/srv1
-      6   Tq '/' Tw '/' Tc '/' Tr '/' Tt*                       10/0/30/69/109
+      6   TR '/' Tw '/' Tc '/' Tr '/' Ta*                       10/0/30/69/109
       7   status_code                                                      200
       8   bytes_read*                                                     2750
       9   captured_request_cookie                                            -
@@ -16541,11 +16678,8 @@ Detailed fields description :
     replaced with the ID of the accepting socket, which is also reported in the
     stats interface.
 
-  - &quot;accept_date&quot; is the exact date when the TCP connection was received by
-    haproxy (which might be very slightly different from the date observed on
-    the network if there was some queuing in the system's backlog). This is
-    usually the same date which may appear in any upstream firewall's log. This
-    does not depend on the fact that the client has sent the request or not.
+  - &quot;request_date&quot; is the exact date when the first byte of the HTTP request
+    was received by haproxy (log field %tr).
 
   - &quot;frontend_name&quot; is the name of the frontend (or listener) which received
     and processed the connection.
@@ -16561,12 +16695,13 @@ Detailed fields description :
     server, &quot;&lt;NOSRV&gt;&quot; is indicated instead of a server name. If the request was
     intercepted by the stats subsystem, &quot;&lt;STATS&gt;&quot; is indicated instead.
 
-  - &quot;Tq&quot; is the total time in milliseconds spent waiting for the client to send
-    a full HTTP request, not counting data. It can be &quot;-1&quot; if the connection
-    was aborted before a complete request could be received. It should always
-    be very small because a request generally fits in one single packet. Large
-    times here generally indicate network trouble between the client and
-    haproxy. See &quot;Timers&quot; below for more details.
+  - &quot;TR&quot; is the total time in milliseconds spent waiting for a full HTTP
+    request from the client (not counting body) after the first byte was
+    received. It can be &quot;-1&quot; if the connection was aborted before a complete
+    request could be received or the a bad request was received. It should
+    always be very small because a request generally fits in one single packet.
+    Large times here generally indicate network issues between the client and
+    haproxy or requests being typed by hand. See &quot;Timers&quot; below for more details.
 
   - &quot;Tw&quot; is the total time in milliseconds spent waiting in the various queues.
     It can be &quot;-1&quot; if the connection was aborted before reaching the queue.
@@ -16585,12 +16720,14 @@ Detailed fields description :
     &quot;GET&quot; requests generally indicate an overloaded server. See &quot;Timers&quot; below
     for more details.
 
-  - &quot;Tt&quot; is the total time in milliseconds elapsed between the accept and the
-    last close. It covers all possible processing. There is one exception, if
-    &quot;<a href="#option%20logasap">option logasap</a>&quot; was specified, then the time counting stops at the moment
-    the log is emitted. In this case, a '+' sign is prepended before the value,
-    indicating that the final one will be larger. See &quot;Timers&quot; below for more
-    details.
+  - &quot;Ta&quot; is the time the request remained active in haproxy, which is the total
+    time in milliseconds elapsed between the first byte of the request was
+    received and the last byte of response was sent. It covers all possible
+    processing except the handshake (see Th) and idle time (see Ti). There is
+    one exception, if &quot;<a href="#option%20logasap">option logasap</a>&quot; was specified, then the time counting
+    stops at the moment the log is emitted. In this case, a '+' sign is
+    prepended before the value, indicating that the final one will be larger.
+    See &quot;Timers&quot; below for more details.
 
   - &quot;status_code&quot; is the HTTP status code returned to the client. This status
     is generally set by the server, but it might also be set by haproxy when
@@ -16766,19 +16903,19 @@ log-format-sd %{+Q,+E}o\ [exampleSDID@1234\ header=%[capture.req.hdr(0)]]
 </code></pre>
 </div><pre class="text">At the moment, the default HTTP format is defined this way :
 
-    log-format %ci:%cp\ [%t]\ %ft\ %b/%s\ %Tq/%Tw/%Tc/%Tr/%Tt\ %ST\ %B\ %CC\ \
-               %CS\ %tsc\ %ac/%fc/%bc/%sc/%rc\ %sq/%bq\ %hr\ %hs\ %{+Q}r
+    log-format &quot;%ci:%cp [%tr] %ft %b/%s %TR/%Tw/%Tc/%Tr/%Ta %ST %B %CC \
+                %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r&quot;
 
 the default CLF format is defined this way :
 
-    log-format %{+Q}o\ %{-Q}ci\ -\ -\ [%T]\ %r\ %ST\ %B\ \&quot;\&quot;\ \&quot;\&quot;\ %cp\ \
-               %ms\ %ft\ %b\ %s\ \%Tq\ %Tw\ %Tc\ %Tr\ %Tt\ %tsc\ %ac\ %fc\ \
-               %bc\ %sc\ %rc\ %sq\ %bq\ %CC\ %CS\ \%hrl\ %hsl
+    log-format &quot;%{+Q}o %{-Q}ci - - [%trg] %r %ST %B \&quot;\&quot; \&quot;\&quot; %cp \
+                %ms %ft %b %s %TR %Tw %Tc %Tr %Ta %tsc %ac %fc \
+                %bc %sc %rc %sq %bq %CC %CS %hrl %hsl&quot;
 
 and the default TCP format is defined this way :
 
-    log-format %ci:%cp\ [%t]\ %ft\ %b/%s\ %Tw/%Tc/%Tt\ %B\ %ts\ \
-               %ac/%fc/%bc/%sc/%rc\ %sq/%bq
+    log-format &quot;%ci:%cp [%t] %ft %b/%s %Tw/%Tc/%Tt %B %ts \
+                %ac/%fc/%bc/%sc/%rc %sq/%bq&quot;
 
 Please refer to the table below for currently defined variables :
 
@@ -16799,11 +16936,15 @@ Please refer to the table below for currently defined variables :
   |   | %ID  | unique-id                                     | string      |
   |   | %ST  | status_code                                   | numeric     |
   |   | %T   | gmt_date_time                                 | date        |
+  |   | %Ta  | Active time of the request (from TR to end)   | numeric     |
   |   | %Tc  | Tc                                            | numeric     |
   |   | %Td  | Td = Tt - (Tq + Tw + Tc + Tr)                 | numeric     |
   |   | %Tl  | local_date_time                               | date        |
-  | H | %Tq  | Tq                                            | numeric     |
-  | H | %Tr  | Tr                                            | numeric     |
+  |   | %Th  | connection handshake time (SSL, PROXY proto)  | numeric     |
+  | H | %Ti  | idle time before the HTTP request             | numeric     |
+  | H | %Tq  | Th + Ti + TR                                  | numeric     |
+  | H | %TR  | time to receive the full request from 1st byte| numeric     |
+  | H | %Tr  | Tr (response time)                            | numeric     |
   |   | %Ts  | timestamp                                     | numeric     |
   |   | %Tt  | Tt                                            | numeric     |
   |   | %Tw  | Tw                                            | numeric     |
@@ -16839,6 +16980,9 @@ Please refer to the table below for currently defined variables :
   | S | %sslc| ssl_ciphers (ex: AES-SHA)                     | string      |
   | S | %sslv| ssl_version (ex: TLSv1)                       | string      |
   |   | %t   | date_time      (with millisecond resolution)  | date        |
+  | H | %tr  | date_time of HTTP request                     | date        |
+  | H | %trg | gmt_date_time of start of HTTP request        | date        |
+  | H | %trl | locla_date_time of start of HTTP request      | date        |
   |   | %ts  | termination_state                             | string      |
   | H | %tsc | termination_state with cookie status          | string      |
   +---+------+-----------------------------------------------+-------------+
@@ -16944,13 +17088,41 @@ alternative.
 reported in milliseconds (ms). These timers should be used in conjunction with
 the session termination flags. In TCP mode with &quot;<a href="#option%20tcplog">option tcplog</a>&quot; set on the
 frontend, 3 control points are reported under the form &quot;Tw/Tc/Tt&quot;, and in HTTP
-mode, 5 control points are reported under the form &quot;Tq/Tw/Tc/Tr/Tt&quot; :
+mode, 5 control points are reported under the form &quot;TR/Tw/Tc/Tr/Ta&quot;. In
+addition, three other measures are provided, &quot;Th&quot;, &quot;Ti&quot;, and &quot;Tq&quot;.
 
-  - Tq: total time to get the client request (HTTP mode only). It's the time
-    elapsed between the moment the client connection was accepted and the
-    moment the proxy received the last HTTP header. The value &quot;-1&quot; indicates
-    that the end of headers (empty line) has never been seen. This happens when
-    the client closes prematurely or times out.
+  - Th: total time to accept tcp connection and execute handshakes for low level
+    protocols. Currently, these protocoles are proxy-protocol and SSL. This may
+    only happen once during the whole connection's lifetime. A large time here
+    may indicate that the client only pre-established the connection without
+    speaking, that it is experiencing network issues preventing it from
+    completing a handshake in a reasonable time (eg: MTU issues), or that an
+    SSL handshake was very expensive to compute.
+
+  - Ti: is the idle time before the HTTP request (HTTP mode only). This timer
+    counts between the end of the handshakes and the first byte of the HTTP
+    request. When dealing with a second request in keep-alive mode, it starts
+    to count after the end of the transmission the previous response. Some
+    browsers pre-establish connections to a server in order to reduce the
+    latency of a future request, and keep them pending until they need it. This
+    delay will be reported as the idle time. A value of -1 indicates that
+    nothing was received on the connection.
+
+  - TR: total time to get the client request (HTTP mode only). It's the time
+    elapsed between the first bytes received and the moment the proxy received
+    the empty line marking the end of the HTTP headers. The value &quot;-1&quot;
+    indicates that the end of headers has never been seen. This happens when
+    the client closes prematurely or times out. This time is usually very short
+    since most requests fit in a single packet. A large time may indicate a
+    request typed by hand during a test.
+
+  - Tq: total time to get the client request from the accept date or since the
+    emission of the last byte of the previous response (HTTP mode only). It's
+    exactly equalt to Th + Ti + TR unless any of them is -1, in which case it
+    returns -1 as well. This timer used to be very useful before the arrival of
+    HTTP keep-alive and browsers' pre-connect feature. It's recommended to drop
+    it in favor of TR nowadays, as the idle time adds a lot of noise to the
+    reports.
 
   - Tw: total time spent in the queues waiting for a connection slot. It
     accounts for backend queue as well as the server queues, and depends on the
@@ -16976,38 +17148,50 @@ mode, 5 control points are reported under the form &quot;Tq/Tw/Tc/Tr/Tt&quot; :
     header (empty line) was never seen, most likely because the server timeout
     stroke before the server managed to process the request.
 
+  - Ta: total active time for the HTTP request, between the moment the proxy
+    received the first byte of the request header and the emission of the last
+    byte of the response body. The exception is when the &quot;<a href="#option%20logasap">logasap</a>&quot; option is
+    specified. In this case, it only equals (TR+Tw+Tc+Tr), and is prefixed with
+    a '+' sign. From this field, we can deduce &quot;Td&quot;, the data transmission time,
+    by subtracting other timers when valid :
+
+        Td = Ta - (TR + Tw + Tc + Tr)
+
+    Timers with &quot;-1&quot; values have to be excluded from this equation. Note that
+    &quot;Ta&quot; can never be negative.
+
   - Tt: total session duration time, between the moment the proxy accepted it
     and the moment both ends were closed. The exception is when the &quot;<a href="#option%20logasap">logasap</a>&quot;
-    option is specified. In this case, it only equals (Tq+Tw+Tc+Tr), and is
-    prefixed with a '+' sign. From this field, we can deduce &quot;Td&quot;, the data
+    option is specified. In this case, it only equals (Th+Ti+TR+Tw+Tc+Tr), and
+    is prefixed with a '+' sign. From this field, we can deduce &quot;Td&quot;, the data
     transmission time, by subtracting other timers when valid :
 
-        Td = Tt - (Tq + Tw + Tc + Tr)
+        Td = Tt - (Th + Ti + TR + Tw + Tc + Tr)
 
     Timers with &quot;-1&quot; values have to be excluded from this equation. In TCP
-    mode, &quot;Tq&quot; and &quot;Tr&quot; have to be excluded too. Note that &quot;Tt&quot; can never be
-    negative.
+    mode, &quot;Ti&quot;, &quot;Tq&quot; and &quot;Tr&quot; have to be excluded too. Note that &quot;Tt&quot; can never
+    be negative and that for HTTP, Tt is simply equal to (Th+Ti+Ta).
 
 These timers provide precious indications on trouble causes. Since the TCP
 protocol defines retransmit delays of 3, 6, 12... seconds, we know for sure
 that timers close to multiples of 3s are nearly always related to lost packets
-due to network problems (wires, negotiation, congestion). Moreover, if &quot;Tt&quot; is
-close to a timeout value specified in the configuration, it often means that a
-session has been aborted on timeout.
+due to network problems (wires, negotiation, congestion). Moreover, if &quot;Ta&quot; or
+&quot;Tt&quot; is close to a timeout value specified in the configuration, it often means
+that a session has been aborted on timeout.
 
 Most common cases :
 
-  - If &quot;Tq&quot; is close to 3000, a packet has probably been lost between the
-    client and the proxy. This is very rare on local networks but might happen
-    when clients are on far remote networks and send large requests. It may
-    happen that values larger than usual appear here without any network cause.
-    Sometimes, during an attack or just after a resource starvation has ended,
-    haproxy may accept thousands of connections in a few milliseconds. The time
-    spent accepting these connections will inevitably slightly delay processing
-    of other connections, and it can happen that request times in the order of
-    a few tens of milliseconds are measured after a few thousands of new
-    connections have been accepted at once. Using one of the keep-alive modes
-    may display larger request times since &quot;Tq&quot; also measures the time spent
+  - If &quot;Th&quot; or &quot;Ti&quot; are close to 3000, a packet has probably been lost between
+    the client and the proxy. This is very rare on local networks but might
+    happen when clients are on far remote networks and send large requests. It
+    may happen that values larger than usual appear here without any network
+    cause. Sometimes, during an attack or just after a resource starvation has
+    ended, haproxy may accept thousands of connections in a few milliseconds.
+    The time spent accepting these connections will inevitably slightly delay
+    processing of other connections, and it can happen that request times in the
+    order of a few tens of milliseconds are measured after a few thousands of
+    new connections have been accepted at once. Using one of the keep-alive
+    modes may display larger idle times since &quot;Ti&quot; measures the time spent
     waiting for additional requests.
 
   - If &quot;Tc&quot; is close to 3000, a packet has probably been lost between the
@@ -17019,42 +17203,41 @@ Most common cases :
     to be the average majored by 3000, there are probably some packets lost
     between the proxy and the server.
 
-  - If &quot;Tt&quot; is large even for small byte counts, it generally is because
-    neither the client nor the server decides to close the connection, for
-    instance because both have agreed on a keep-alive connection mode. In order
-    to solve this issue, it will be needed to specify &quot;<a href="#option%20httpclose">option httpclose</a>&quot; on
-    either the frontend or the backend. If the problem persists, it means that
-    the server ignores the &quot;close&quot; connection mode and expects the client to
-    close. Then it will be required to use &quot;<a href="#option%20forceclose">option forceclose</a>&quot;. Having the
-    smallest possible 'Tt' is important when connection regulation is used with
-    the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#maxconn%20%28Performance%20tuning%29">Performance tuning</a></li><li><a href="#maxconn%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#maxconn%20%28Bind%20options%29">Bind options</a></li><li><a href="#maxconn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option on the servers, since no new connection will be sent
-    to the server until another one is released.
+  - If &quot;Ta&quot; is large even for small byte counts, it generally is because
+    neither the client nor the server decides to close the connection while
+    haproxy is running in tunnel mode and both have agreed on a keep-alive
+    connection mode. In order to solve this issue, it will be needed to specify
+    one of the HTTP options to manipulate keep-alive or close options on either
+    the frontend or the backend. Having the smallest possible 'Ta' or 'Tt' is
+    important when connection regulation is used with the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#maxconn%20%28Performance%20tuning%29">Performance tuning</a></li><li><a href="#maxconn%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#maxconn%20%28Bind%20options%29">Bind options</a></li><li><a href="#maxconn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option on
+    the servers, since no new connection will be sent to the server until
+    another one is released.
 
 Other noticeable HTTP log cases ('xx' means any value to be ignored) :
 
-  Tq/Tw/Tc/Tr/+Tt  The &quot;<a href="#option%20logasap">option logasap</a>&quot; is present on the frontend and the log
+  TR/Tw/Tc/Tr/+Ta  The &quot;<a href="#option%20logasap">option logasap</a>&quot; is present on the frontend and the log
                    was emitted before the data phase. All the timers are valid
-                   except &quot;Tt&quot; which is shorter than reality.
+                   except &quot;Ta&quot; which is shorter than reality.
 
-  -1/xx/xx/xx/Tt   The client was not able to send a complete request in time
+  -1/xx/xx/xx/Ta   The client was not able to send a complete request in time
                    or it aborted too early. Check the session termination flags
                    then &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot; and &quot;<a href="#timeout%20client">timeout client</a>&quot; settings.
 
-  Tq/-1/xx/xx/Tt   It was not possible to process the request, maybe because
+  TR/-1/xx/xx/Ta   It was not possible to process the request, maybe because
                    servers were out of order, because the request was invalid
                    or forbidden by ACL rules. Check the session termination
                    flags.
 
-  Tq/Tw/-1/xx/Tt   The connection could not establish on the server. Either it
-                   actively refused it or it timed out after Tt-(Tq+Tw) ms.
+  TR/Tw/-1/xx/Ta   The connection could not establish on the server. Either it
+                   actively refused it or it timed out after Ta-(TR+Tw) ms.
                    Check the session termination flags, then check the
                    &quot;<a href="#timeout%20connect">timeout connect</a>&quot; setting. Note that the tarpit action might
                    return similar-looking patterns, with &quot;Tw&quot; equal to the time
                    the client connection was maintained open.
 
-  Tq/Tw/Tc/-1/Tt   The server has accepted the connection but did not return
+  TR/Tw/Tc/-1/Ta   The server has accepted the connection but did not return
                    a complete response in time, or it closed its connection
-                   unexpectedly after Tt-(Tq+Tw+Tc) ms. Check the session
+                   unexpectedly after Ta-(TR+Tw+Tc) ms. Check the session
                    termination flags, then check the &quot;<a href="#timeout%20server">timeout server</a>&quot; setting.
 </pre></div>
 <a class="anchor" id="8.5" name="8.5"></a>
@@ -17648,8 +17831,8 @@ filters evaluation order.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev4 &ndash; Configuration Manual<br>
-							<small>2016/08/14, willy tarreau</small>
+							HAProxy 1.7-dev5 &ndash; Configuration Manual<br>
+							<small>2016/10/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -17752,7 +17935,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev5', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
