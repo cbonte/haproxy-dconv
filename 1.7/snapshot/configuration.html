@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev5-2 - Configuration Manual</title>
+		<title>HAProxy version 1.7-dev6-1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -852,6 +852,17 @@
 					<td>
 				</tr>
 				
+			
+				
+				<tr>
+					<td><small>9.3.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.3">Stream Processing Offload Engine (SPOE)</a>
+							</div>
+					<td>
+				</tr>
+				
 	</tbody>
 </table>
 
@@ -1181,7 +1192,11 @@
 							
 							<a class="list-group-item" href="#filter (HTTP compression)">filter (HTTP compression)</a>
 							
+							<a class="list-group-item" href="#filter (Stream Processing Offload Engine (SPOE))">filter (Stream Processing Offload Engine (SPOE))</a>
+							
 							<a class="list-group-item" href="#filter compression">filter compression</a>
+							
+							<a class="list-group-item" href="#filter spoe">filter spoe</a>
 							
 							<a class="list-group-item" href="#filter trace">filter trace</a>
 							
@@ -1271,6 +1286,8 @@
 							<a class="list-group-item" href="#ignore-persist">ignore-persist</a>
 							
 							<a class="list-group-item" href="#in_table">in_table</a>
+							
+							<a class="list-group-item" href="#init-addr">init-addr</a>
 							
 							<a class="list-group-item" href="#int">int</a>
 							
@@ -1602,6 +1619,8 @@
 							<a class="list-group-item" href="#option splice-request">option splice-request</a>
 							
 							<a class="list-group-item" href="#option splice-response">option splice-response</a>
+							
+							<a class="list-group-item" href="#option spop-check">option spop-check</a>
 							
 							<a class="list-group-item" href="#option srvtcpka">option srvtcpka</a>
 							
@@ -2348,7 +2367,11 @@
 							
 							<a class="list-group-item" href="#tfo">tfo</a>
 							
-							<a class="list-group-item" href="#timeout">timeout</a>
+							<a class="list-group-item" href="#timeout (Mailers)">timeout (Mailers)</a>
+							
+							<a class="list-group-item" href="#timeout (Alphabetically sorted keywords reference)">timeout (Alphabetically sorted keywords reference)</a>
+							
+							<a class="list-group-item" href="#timeout (The resolvers section)">timeout (The resolvers section)</a>
 							
 							<a class="list-group-item" href="#timeout check">timeout check</a>
 							
@@ -2446,6 +2469,8 @@
 							
 							<a class="list-group-item" href="#tune.vars.global-max-size">tune.vars.global-max-size</a>
 							
+							<a class="list-group-item" href="#tune.vars.proc-max-size">tune.vars.proc-max-size</a>
+							
 							<a class="list-group-item" href="#tune.vars.reqres-max-size">tune.vars.reqres-max-size</a>
 							
 							<a class="list-group-item" href="#tune.vars.sess-max-size">tune.vars.sess-max-size</a>
@@ -2533,6 +2558,20 @@
 							
 							<a class="list-group-item" href="#wt6">wt6</a>
 							
+							<a class="list-group-item" href="#wurfl-cache-size">wurfl-cache-size</a>
+							
+							<a class="list-group-item" href="#wurfl-data-file">wurfl-data-file</a>
+							
+							<a class="list-group-item" href="#wurfl-engine-mode">wurfl-engine-mode</a>
+							
+							<a class="list-group-item" href="#wurfl-information-list">wurfl-information-list</a>
+							
+							<a class="list-group-item" href="#wurfl-information-list-separator">wurfl-information-list-separator</a>
+							
+							<a class="list-group-item" href="#wurfl-patch-file">wurfl-patch-file</a>
+							
+							<a class="list-group-item" href="#wurfl-useragent-priority">wurfl-useragent-priority</a>
+							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-X"><h4>X</h4>
 								
@@ -2548,7 +2587,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/10/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/11/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2559,11 +2598,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7-dev5-2</strong></p>
+							<p><strong>version 1.7-dev6-1</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/10/25
+								2016/11/09
 							</p>
 						</div>
 
@@ -3397,6 +3436,17 @@ Note to documentation contributors :
 					<td>
 				</tr>
 				
+			
+				
+				<tr>
+					<td><small>9.3.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.3">Stream Processing Offload Engine (SPOE)</a>
+							</div>
+					<td>
+				</tr>
+				
 	</tbody>
 </table>
 
@@ -3829,6 +3879,12 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#51degrees-property-name-list">51degrees-property-name-list</a>
    - <a href="#51degrees-property-separator">51degrees-property-separator</a>
    - <a href="#51degrees-cache-size">51degrees-cache-size</a>
+   - <a href="#wurfl-data-file">wurfl-data-file</a>
+   - <a href="#wurfl-information-list">wurfl-information-list</a>
+   - <a href="#wurfl-information-list-separator">wurfl-information-list-separator</a>
+   - <a href="#wurfl-engine-mode">wurfl-engine-mode</a>
+   - <a href="#wurfl-cache-size">wurfl-cache-size</a>
+   - <a href="#wurfl-useragent-priority">wurfl-useragent-priority</a>
 
  * Performance tuning
    - <a href="#max-spread-checks">max-spread-checks</a>
@@ -3880,6 +3936,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.ssl.default-dh-param">tune.ssl.default-dh-param</a>
    - <a href="#tune.ssl.ssl-ctx-cache-size">tune.ssl.ssl-ctx-cache-size</a>
    - <a href="#tune.vars.global-max-size">tune.vars.global-max-size</a>
+   - <a href="#tune.vars.proc-max-size">tune.vars.proc-max-size</a>
    - <a href="#tune.vars.reqres-max-size">tune.vars.reqres-max-size</a>
    - <a href="#tune.vars.sess-max-size">tune.vars.sess-max-size</a>
    - <a href="#tune.vars.txn-max-size">tune.vars.txn-max-size</a>
@@ -4169,6 +4226,81 @@ By default, this cache is disabled.
 
 Please note that this option is only available when haproxy has been
 compiled with USE_51DEGREES.
+</pre><a class="anchor" name="wurfl-data-file"></a><a class="anchor" name="3-wurfl-data-file"></a><a class="anchor" name="3.1-wurfl-data-file"></a><a class="anchor" name="wurfl-data-file (Global parameters)"></a><a class="anchor" name="wurfl-data-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-data-file"></a><a href="#3.1-wurfl-data-file">wurfl-data-file</a></b> <span style="color: #080">&lt;file path&gt;</span></div><pre class="text">The path of the WURFL data file to provide device detection services. The
+file should be accessible by HAProxy with relevant permissions.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-information-list"></a><a class="anchor" name="3-wurfl-information-list"></a><a class="anchor" name="3.1-wurfl-information-list"></a><a class="anchor" name="wurfl-information-list (Global parameters)"></a><a class="anchor" name="wurfl-information-list (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-information-list"></a><a href="#3.1-wurfl-information-list">wurfl-information-list</a></b> <span style="color: #008">[<span style="color: #080">&lt;capability&gt;</span>]</span>*</div><pre class="text">A space-delimited list of WURFL capabilities, virtual capabilities, property
+names we plan to use in injected headers. A full list of capability and
+virtual capability names is available on the Scientiamobile website :
+
+    https://www.scientiamobile.com/wurflCapability
+
+Valid WURFL properties are:
+- wurfl_id                    Contains the device ID of the matched device.
+
+- wurfl_root_id               Contains the device root ID of the matched
+                              device.
+
+- wurfl_isdevroot             Tells if the matched device is a root device.
+                              Possible values are &quot;TRUE&quot; or &quot;FALSE&quot;.
+
+- wurfl_useragent             The original useragent coming with this
+                              particular web request.
+
+- wurfl_api_version           Contains a string representing the currently
+                              used Libwurfl API version.
+
+- wurfl_engine_target         Contains a string representing the currently
+                              set WURFL Engine Target. Possible values are
+                              &quot;HIGH_ACCURACY&quot;, &quot;HIGH_PERFORMANCE&quot;, &quot;INVALID&quot;.
+
+- wurfl_info                  A string containing information on the parsed
+                              wurfl.xml and its full path.
+
+- wurfl_last_load_time        Contains the UNIX timestamp of the last time
+                              WURFL has been loaded successfully.
+
+- wurfl_normalized_useragent  The normalized useragent.
+
+- wurfl_useragent_priority    The user agent priority used by WURFL.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-information-list-separator"></a><a class="anchor" name="3-wurfl-information-list-separator"></a><a class="anchor" name="3.1-wurfl-information-list-separator"></a><a class="anchor" name="wurfl-information-list-separator (Global parameters)"></a><a class="anchor" name="wurfl-information-list-separator (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-information-list-separator"></a><a href="#3.1-wurfl-information-list-separator">wurfl-information-list-separator</a></b> <span style="color: #080">&lt;char&gt;</span></div><pre class="text">A char that will be used to separate values in a response header containing
+WURFL results. If not set that a comma (',') will be used by default.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-patch-file"></a><a class="anchor" name="3-wurfl-patch-file"></a><a class="anchor" name="3.1-wurfl-patch-file"></a><a class="anchor" name="wurfl-patch-file (Global parameters)"></a><a class="anchor" name="wurfl-patch-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-patch-file"></a><a href="#3.1-wurfl-patch-file">wurfl-patch-file</a></b> <span style="color: #008">[<span style="color: #080">&lt;file path&gt;</span>]</span></div><pre class="text">A list of WURFL patch file paths. Note that patches are loaded during startup
+thus before the chroot.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-engine-mode"></a><a class="anchor" name="3-wurfl-engine-mode"></a><a class="anchor" name="3.1-wurfl-engine-mode"></a><a class="anchor" name="wurfl-engine-mode (Global parameters)"></a><a class="anchor" name="wurfl-engine-mode (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-engine-mode"></a><a href="#3.1-wurfl-engine-mode">wurfl-engine-mode</a></b> <span style="color: #800">{ accuracy | performance }</span></div><pre class="text">Sets the WURFL engine target. You can choose between 'accuracy' or
+'performance' targets. In performance mode, desktop web browser detection is
+done programmatically without referencing the WURFL data.  As a result, most
+desktop web browsers are returned as generic_web_browser WURFL ID for
+performance.  If either performance or accuracy are not defined, performance
+mode is enabled by default.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-cache-size"></a><a class="anchor" name="3-wurfl-cache-size"></a><a class="anchor" name="3.1-wurfl-cache-size"></a><a class="anchor" name="wurfl-cache-size (Global parameters)"></a><a class="anchor" name="wurfl-cache-size (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-cache-size"></a><a href="#3.1-wurfl-cache-size">wurfl-cache-size</a></b> <span style="color: #080">&lt;U&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;D&gt;</span>]</span></div><pre class="text">Sets the WURFL caching strategy. Here &lt;U&gt; is the Useragent cache size, and
+&lt;D&gt; is the internal device cache size. There are three possibilities here :
+- &quot;0&quot;     : no cache is used.
+- &lt;U&gt;     : the Single LRU cache is used, the size is expressed in elements.
+- &lt;U&gt;,&lt;D&gt; : the Double LRU cache is used, both sizes are in elements. This is
+            the highest performing option.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-useragent-priority"></a><a class="anchor" name="3-wurfl-useragent-priority"></a><a class="anchor" name="3.1-wurfl-useragent-priority"></a><a class="anchor" name="wurfl-useragent-priority (Global parameters)"></a><a class="anchor" name="wurfl-useragent-priority (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-useragent-priority"></a><a href="#3.1-wurfl-useragent-priority">wurfl-useragent-priority</a></b> <span style="color: #800">{ plain | sideloaded_browser }</span></div><pre class="text">Tells WURFL if it should prioritize use of the plain user agent ('plain')
+over the default sideloaded browser user agent ('sideloaded_browser').
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
 <h2 id="chapter-3.2" data-target="3.2"><small><a class="small" href="#3.2">3.2.</a></small> Performance tuning</h2>
@@ -4493,14 +4625,14 @@ in the certificate file or by using the ssl-dh-param-file parameter.
 entries. This is a LRU cache. Because generating a SSL certificate
 dynamically is expensive, they are cached. The default cache size is set to
 1000 entries.
-</pre><a class="anchor" name="tune.vars.global-max-size"></a><a class="anchor" name="3-tune.vars.global-max-size"></a><a class="anchor" name="3.2-tune.vars.global-max-size"></a><a class="anchor" name="tune.vars.global-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.global-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.global-max-size"></a><a href="#3.2-tune.vars.global-max-size">tune.vars.global-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.reqres-max-size"></a><a class="anchor" name="3-tune.vars.reqres-max-size"></a><a class="anchor" name="3.2-tune.vars.reqres-max-size"></a><a class="anchor" name="tune.vars.reqres-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.reqres-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.reqres-max-size"></a><a href="#3.2-tune.vars.reqres-max-size">tune.vars.reqres-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.sess-max-size"></a><a class="anchor" name="3-tune.vars.sess-max-size"></a><a class="anchor" name="3.2-tune.vars.sess-max-size"></a><a class="anchor" name="tune.vars.sess-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.sess-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.sess-max-size"></a><a href="#3.2-tune.vars.sess-max-size">tune.vars.sess-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.txn-max-size"></a><a class="anchor" name="3-tune.vars.txn-max-size"></a><a class="anchor" name="3.2-tune.vars.txn-max-size"></a><a class="anchor" name="tune.vars.txn-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.txn-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.txn-max-size"></a><a href="#3.2-tune.vars.txn-max-size">tune.vars.txn-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><pre class="text">These four tunes help to manage the maximum amount of memory used by the
-variables system. &quot;global&quot; limits the overall amount of memory available
-for all scopes. &quot;sess&quot; limits the memory for the session scope, &quot;txn&quot; for
-the transaction scope, and &quot;reqres&quot; limits the memory for each request or
-response processing.
-Memory accounting is hierarchical, meaning more coarse grained limits
-include the finer grained ones: &quot;sess&quot; includes &quot;txn&quot;, and &quot;txn&quot; includes
-&quot;reqres&quot;.
+</pre><a class="anchor" name="tune.vars.global-max-size"></a><a class="anchor" name="3-tune.vars.global-max-size"></a><a class="anchor" name="3.2-tune.vars.global-max-size"></a><a class="anchor" name="tune.vars.global-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.global-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.global-max-size"></a><a href="#3.2-tune.vars.global-max-size">tune.vars.global-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.proc-max-size"></a><a class="anchor" name="3-tune.vars.proc-max-size"></a><a class="anchor" name="3.2-tune.vars.proc-max-size"></a><a class="anchor" name="tune.vars.proc-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.proc-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.proc-max-size"></a><a href="#3.2-tune.vars.proc-max-size">tune.vars.proc-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.reqres-max-size"></a><a class="anchor" name="3-tune.vars.reqres-max-size"></a><a class="anchor" name="3.2-tune.vars.reqres-max-size"></a><a class="anchor" name="tune.vars.reqres-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.reqres-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.reqres-max-size"></a><a href="#3.2-tune.vars.reqres-max-size">tune.vars.reqres-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.sess-max-size"></a><a class="anchor" name="3-tune.vars.sess-max-size"></a><a class="anchor" name="3.2-tune.vars.sess-max-size"></a><a class="anchor" name="tune.vars.sess-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.sess-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.sess-max-size"></a><a href="#3.2-tune.vars.sess-max-size">tune.vars.sess-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><a class="anchor" name="tune.vars.txn-max-size"></a><a class="anchor" name="3-tune.vars.txn-max-size"></a><a class="anchor" name="3.2-tune.vars.txn-max-size"></a><a class="anchor" name="tune.vars.txn-max-size (Global parameters)"></a><a class="anchor" name="tune.vars.txn-max-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.vars.txn-max-size"></a><a href="#3.2-tune.vars.txn-max-size">tune.vars.txn-max-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><pre class="text">These five tunes help to manage the maximum amount of memory used by the
+variables system. &quot;global&quot; limits the overall amount of memory available for
+all scopes. &quot;<a href="#proc">proc</a>&quot; limits the memory for the process scope, &quot;sess&quot; limits the
+memory for the session scope, &quot;txn&quot; for the transaction scope, and &quot;reqres&quot;
+limits the memory for each request or response processing.
+Memory accounting is hierarchical, meaning more coarse grained limits include
+the finer grained ones: &quot;<a href="#proc">proc</a>&quot; includes &quot;sess&quot;, &quot;sess&quot; includes &quot;txn&quot;, and
+&quot;txn&quot; includes &quot;reqres&quot;.
 
 For example, when &quot;<a href="#tune.vars.sess-max-size">tune.vars.sess-max-size</a>&quot; is limited to 100,
 &quot;<a href="#tune.vars.txn-max-size">tune.vars.txn-max-size</a>&quot; and &quot;<a href="#tune.vars.reqres-max-size">tune.vars.reqres-max-size</a>&quot; cannot exceed
@@ -4855,10 +4987,11 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-option%20splice-auto"><span class="pull-right"><span>(*)</span></span>option splice-auto</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-request"><span class="pull-right"><span>(*)</span></span>option splice-request</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-option%20spop-check">option spop-check</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-option%20tcp-check">option tcp-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-option%20tcp-check">option tcp-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20tcp-smart-accept"><span class="pull-right"><span>(*)</span></span>option tcp-smart-accept</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-option%20tcp-smart-connect"><span class="pull-right"><span>(*)</span></span>option tcp-smart-connect</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-option%20tcpka">option tcpka</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -4878,8 +5011,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-reqiallow">reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqidel">reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqideny">reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-reqipass">reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-reqipass">reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqirep">reqirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqitarpit">reqitarpit</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-reqpass">reqpass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -4899,8 +5032,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20hide-version">stats hide-version</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20http-request">stats http-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20realm">stats realm</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -4920,8 +5053,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-tcp-check%20send">tcp-check send</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20send-binary">tcp-check send-binary</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td None><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20inspect-delay">tcp-request inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20session">tcp-request session</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-tcp-response%20content">tcp-response content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -4941,8 +5074,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use_backend">use_backend</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use-server">use-server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6540,6 +6673,7 @@ Example of a header received by the application server :
               del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
               set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
               set-var(<span style="color: #080">&lt;var name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
+              unset-var(<span style="color: #080">&lt;var name&gt;</span>) |
               <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
               sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
               sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
@@ -6829,6 +6963,7 @@ http-request set-query %[query,regsub(%3D,=,g)]
 
     &lt;var-name&gt; The name of the variable starts with an indication about
                its scope. The scopes allowed are:
+                 &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
                  &quot;sess&quot; : the variable is shared with the whole session
                  &quot;txn&quot;  : the variable is shared with the transaction
                           (request and response)
@@ -6846,6 +6981,13 @@ http-request set-query %[query,regsub(%3D,=,g)]
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>http-request set-var(req.my_var) req.fhdr(user-agent),lower
+</code></pre>
+</div><pre class="text">- unset-var(&lt;var-name&gt;) :
+  Is used to unset a variable. See above for details about &lt;var-name&gt;.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request unset-var(req.my_var)
 </code></pre>
 </div><pre class="text">- set-src &lt;expr&gt; :
   Is used to set the source IP address to the value of specified
@@ -7011,6 +7153,7 @@ http-request del-map(map.lst) %[src]                     if delmap
                 del-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 set-map(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #080">&lt;value fmt&gt;</span> |
                 set-var(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> |
+                unset-var(<span style="color: #080">&lt;var-name&gt;</span>) |
                 <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
                 sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
                 sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
@@ -7200,6 +7343,7 @@ http-response set-status 431
 
     &lt;var-name&gt; The name of the variable starts with an indication about
                its scope. The scopes allowed are:
+                 &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
                  &quot;sess&quot; : the variable is shared with the whole session
                  &quot;txn&quot;  : the variable is shared with the transaction
                           (request and response)
@@ -7208,8 +7352,8 @@ http-response set-status 431
                  &quot;res&quot;  : the variable is shared only during response
                           processing
                This prefix is followed by a name. The separator is a '.'.
-               The name may only contain characters 'a-z', 'A-Z', '0-9'
-               and '_'.
+               The name may only contain characters 'a-z', 'A-Z', '0-9',
+               '.' and '_'.
 
      &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
                followed by some converters.
@@ -7217,6 +7361,13 @@ http-response set-status 431
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>http-response set-var(sess.last_redir) res.hdr(location)
+</code></pre>
+</div><pre class="text">- unset-var(&lt;var-name&gt;) :
+  Is used to unset a variable. See above for details about &lt;var-name&gt;.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response unset-var(sess.last_redir)
 </code></pre>
 </div><pre class="text">  - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
     enables tracking of sticky counters from current response. Please refer to
@@ -7433,9 +7584,11 @@ local      load the content of the file pointed by the directive
 none       don't load any stat for this backend</pre>
 </div>
 <pre class="text">Notes:
-  - server's IP address is not updated unless DNS resolution is enabled on
-    the server. It means that if a server IP address has been changed using
-    the stat socket, this information won't be re-applied after reloading.
+  - server's IP address is preserved across reloads by default, but the
+    order can be changed thanks to the server's &quot;<a href="#init-addr">init-addr</a>&quot; setting. This
+    means that an IP address change performed on the CLI at run time will
+    be preserved, and that any change to the local resolver (eg: /etc/hosts)
+    will possibly not have any effect if the state file is in use.
 
   - server's weight is applied from previous running process unless it has
     has changed between previous and new configuration files.
@@ -8043,9 +8196,11 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 only when a session finishes. It works quite well when serving small
 objects, but with big ones (for example large images or archives) or
 with A/V streaming, a graph generated from haproxy counters looks like
-a hedgehog. With this option enabled counters get incremented continuously,
-during a whole session. Recounting touches a hotpath directly so
-it is not enabled by default, as it has small performance impact (~0.5%).
+a hedgehog. With this option enabled counters get incremented frequently
+along the session, typically every 5 seconds, which is often enough to
+produce clean graphs. Recounting touches a hotpath directly so it is not
+not enabled by default, as it can cause a lot of wakeups for very large
+session counts and cause a small performance drop.
 </pre><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option dontlog-normal"></a><a class="anchor" name="4-option dontlog-normal"></a><a class="anchor" name="4.2-option dontlog-normal"></a><a class="anchor" name="option dontlog-normal (Proxies)"></a><a class="anchor" name="option dontlog-normal (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option dontlog-normal"></a><a href="#4.2-option%20dontlog-normal">option dontlog-normal</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option dontlog-normal"></a><a class="anchor" name="4-no option dontlog-normal"></a><a class="anchor" name="4.2-no option dontlog-normal"></a><a class="anchor" name="no option dontlog-normal (Proxies)"></a><a class="anchor" name="no option dontlog-normal (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option dontlog-normal"></a><a href="#4.2-no%20option%20dontlog-normal">no option dontlog-normal</a></b></div><pre class="text">Enable or disable logging of normal, successful connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9118,6 +9273,24 @@ Important note: see &quot;<a href="#option%20splice-auto">option splice-auto</a>
 </div><pre class="text">If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20splice-auto">option splice-auto</a>&quot;, &quot;<a href="#option%20splice-request">option splice-request</a>&quot;, and global options &quot;<a href="#nosplice">nosplice</a>&quot; and &quot;<a href="#maxpipes">maxpipes</a>&quot;</div>
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option spop-check"></a><a class="anchor" name="4-option spop-check"></a><a class="anchor" name="4.2-option spop-check"></a><a class="anchor" name="option spop-check (Proxies)"></a><a class="anchor" name="option spop-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option spop-check"></a><a href="#4.2-option%20spop-check">option spop-check</a></b></div><pre class="text">Use SPOP health checks for server testing
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span> none
+</div>
+<pre class="text">It is possible to test that the server correctly talks SPOP protocol instead
+of just testing that it accepts the TCP connection. When this option is set,
+a HELLO handshake is performed between HAProxy and the server, and the
+response is analyzed to check no error is reported.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>option spop-check
+</code></pre>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option srvtcpka"></a><a class="anchor" name="4-option srvtcpka"></a><a class="anchor" name="4.2-option srvtcpka"></a><a class="anchor" name="option srvtcpka (Proxies)"></a><a class="anchor" name="option srvtcpka (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option srvtcpka"></a><a href="#4.2-option%20srvtcpka">option srvtcpka</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option srvtcpka"></a><a class="anchor" name="4-no option srvtcpka"></a><a class="anchor" name="4.2-no option srvtcpka"></a><a class="anchor" name="no option srvtcpka (Proxies)"></a><a class="anchor" name="no option srvtcpka (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option srvtcpka"></a><a href="#4.2-no%20option%20srvtcpka">no option srvtcpka</a></b></div><pre class="text">Enable or disable the sending of TCP keepalive packets on the server side
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10089,7 +10262,8 @@ rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
                 - 'abns@'  -&gt; address is in abstract namespace (Linux only)
           You may want to reference some environment variables in the
           address parameter, see <a href="#2.3">section 2.3</a> about environment
-          variables.
+          variables. The &quot;<a href="#init-addr">init-addr</a>&quot; setting can be used to modify the way
+          IP addresses should be resolved upon startup.
 
 &lt;port&gt;    is an optional port specification. If set, all connections will
           be sent to this port. If unset, the same port the client
@@ -11721,6 +11895,7 @@ Several types of actions are supported :
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
+  - unset-var(&lt;var-name&gt;)
   - silent-drop
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
@@ -11757,6 +11932,7 @@ variables can be used, without any layer7 contents.
 
   &lt;var-name&gt; The name of the variable starts with an indication about
              its scope. The scopes allowed are:
+               &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
                &quot;sess&quot; : the variable is shared with the whole session
                &quot;txn&quot;  : the variable is shared with the transaction
                         (request and response)
@@ -11765,15 +11941,19 @@ variables can be used, without any layer7 contents.
                &quot;res&quot;  : the variable is shared only during response
                         processing
              This prefix is followed by a name. The separator is a '.'.
-             The name may only contain characters 'a-z', 'A-Z', '0-9'
-             and '_'.
+             The name may only contain characters 'a-z', 'A-Z', '0-9',
+             '.' and '_'.
 
   &lt;expr&gt;     Is a standard HAProxy expression formed by a sample-fetch
              followed by some converters.
+
+The &quot;unset-var&quot; is used to unset a variable. See above for details about
+&lt;var-name&gt;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>tcp-request content set-var(sess.my_var) src
+tcp-request content unset-var(sess.my_var2)
 </code></pre>
 </div><div class="separator">
 <span class="label label-success">Example:</span>
@@ -11928,6 +12108,9 @@ Several types of actions are supported :
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
       Sets a variable.
 
+  - unset-var(&lt;var-name&gt;)
+      Unsets a variable.
+
   - sc-inc-gpc0(&lt;sc-id&gt;):
       This action increments the GPC0 counter according to the sticky
       counter designated by &lt;sc-id&gt;. If an error occurs, this action fails
@@ -11972,6 +12155,7 @@ declared inline.
 
   &lt;var-name&gt; The name of the variable starts with an indication about
              its scope. The scopes allowed are:
+               &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
                &quot;sess&quot; : the variable is shared with the whole session
                &quot;txn&quot;  : the variable is shared with the transaction
                         (request and response)
@@ -11980,8 +12164,8 @@ declared inline.
                &quot;res&quot;  : the variable is shared only during response
                         processing
              This prefix is followed by a name. The separator is a '.'.
-             The name may only contain characters 'a-z', 'A-Z', '0-9'
-             and '_'.
+             The name may only contain characters 'a-z', 'A-Z', '0-9',
+             '.' and '_'.
 
   &lt;expr&gt;     Is a standard HAProxy expression formed by a sample-fetch
              followed by some converters.
@@ -11989,6 +12173,13 @@ declared inline.
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>tcp-request content set-var(sess.my_var) src
+</code></pre>
+</div><pre class="text">The &quot;unset-var&quot; is used to unset a variable. See above for details about
+&lt;var-name&gt;.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request content unset-var(sess.my_var)
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, &quot;<a href="#tcp-response%20inspect-delay">tcp-response inspect-delay</a>&quot;</div>
@@ -12036,6 +12227,7 @@ Several types of actions are supported :
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
+  - unset-var(&lt;var-name&gt;)
   - silent-drop
 
 These actions have the same meaning as their respective counter-parts in
@@ -13290,6 +13482,34 @@ the proxy. An unused ID will automatically be assigned if unset. The first
 assigned value will be 1. This ID is currently only returned in statistics.
 
 Supported in default-server: No
+</pre><a class="anchor" name="init-addr"></a><a class="anchor" name="5-init-addr"></a><a class="anchor" name="5.2-init-addr"></a><a class="anchor" name="init-addr (Bind and Server options)"></a><a class="anchor" name="init-addr (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="init-addr"></a><a href="#5.2-init-addr">init-addr</a></b> <span style="color: #800">{last | libc | none | <span style="color: #080">&lt;ip&gt;</span>}</span>,<span style="color: #008">[...]</span>*</div><pre class="text">Indicate in what order the server's address should be resolved upon startup
+if it uses an FQDN. Attempts are made to resolve the address by applying in
+turn each of the methods mentionned in the comma-delimited list. The first
+method which succeeds is used. If the end of the list is reached without
+finding a working method, an error is thrown. Method &quot;last&quot; suggests to pick
+the address which appears in the state file (see &quot;<a href="#server-state-file">server-state-file</a>&quot;). Method
+&quot;libc&quot; uses the libc's internal resolver (gethostbyname() or getaddrinfo()
+depending on the operating system and build options). Method &quot;none&quot;
+specifically indicates that the server should start without any valid IP
+address in a down state. It can be useful to ignore some DNS issues upon
+startup, waiting for the situation to get fixed later. Finally, an IP address
+(IPv4 or IPv6) may be provided. It can be the currently known address of the
+server (eg: filled by a configuration generator), or the address of a dummy
+server used to catch old sessions and present them with a decent error
+message for example. When the &quot;first&quot; load balancing algorithm is used, this
+IP address could point to a fake server used to trigger the creation of new
+instances on the fly. This option defaults to &quot;last,libc&quot; indicating that the
+previous address found in the state file (if any) is used first, otherwise
+the libc's resolver is used. This ensures continued compatibility with the
+historic behaviour.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>defaults
+    <span class="comment"># never fail on address resolution</span>
+    default-server init-addr last,libc,none
+</code></pre>
+</div><pre class="text">Supported in default-server: Yes
 </pre><a class="anchor" name="inter"></a><a class="anchor" name="5-inter"></a><a class="anchor" name="5.2-inter"></a><a class="anchor" name="inter (Bind and Server options)"></a><a class="anchor" name="inter (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="inter"></a><a href="#5.2-inter">inter</a></b> <span style="color: #080">&lt;delay&gt;</span></div><a class="anchor" name="fastinter"></a><a class="anchor" name="5-fastinter"></a><a class="anchor" name="5.2-fastinter"></a><a class="anchor" name="fastinter (Bind and Server options)"></a><a class="anchor" name="fastinter (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="fastinter"></a><a href="#5.2-fastinter">fastinter</a></b> <span style="color: #080">&lt;delay&gt;</span></div><a class="anchor" name="downinter"></a><a class="anchor" name="5-downinter"></a><a class="anchor" name="5.2-downinter"></a><a class="anchor" name="downinter (Bind and Server options)"></a><a class="anchor" name="downinter (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="downinter"></a><a href="#5.2-downinter">downinter</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">The &quot;<a href="#inter">inter</a>&quot; parameter sets the interval between two consecutive health checks
 to &lt;delay&gt; milliseconds. If left unspecified, the delay defaults to 2000 ms.
 It is also possible to use &quot;<a href="#fastinter">fastinter</a>&quot; and &quot;<a href="#downinter">downinter</a>&quot; to optimize delays
@@ -13760,12 +13980,13 @@ A resolvers section accept the following parameters:
   &lt;port&gt; : port where the DNS service actually runs
 </pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3.2-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3.2-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
 on last resolution &lt;status&gt;
-  &lt;status&gt; : last name resolution status. Only &quot;valid&quot; is accepted for now.
+  &lt;status&gt; : last name resolution status. Acceptable values are &quot;nx&quot;,
+             &quot;other&quot;, &quot;refused&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">timeout<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#timeout%20%28Mailers%29">Mailers</a></li><li><a href="#timeout%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#timeout%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot;, &quot;valid&quot;.
   &lt;period&gt; : interval between two successive name resolution when the last
              answer was in &lt;status&gt;. It follows the HAProxy time format.
              &lt;period&gt; is in milliseconds by default.
 
-Default value is 10s for &quot;valid&quot;.
+Default value is 10s for &quot;valid&quot; and 30s for others.
 
 Note: since the name resolution is triggered by the health checks, a new
       resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
@@ -13793,6 +14014,10 @@ type.
   nameserver dns2 10.0.0.2:53
   resolve_retries       3
   timeout retry         1s
+  hold other           30s
+  hold refused         30s
+  hold nx              30s
+  hold timeout         30s
   hold valid           10s
 </code></pre>
 </div></div>
@@ -14451,22 +14676,24 @@ The currently available list of transformation keywords include :
 result as a signed integer. &lt;value&gt; can be a numeric value or a variable
 name. The name of the variable starts with an indication about its scope. The
 scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and response)
   &quot;req&quot;  : the variable is shared only during request processing
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'.  The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="and"></a><a class="anchor" name="7-and"></a><a class="anchor" name="7.3.1-and"></a><a class="anchor" name="and (Using ACLs and fetching samples)"></a><a class="anchor" name="and (Converters)"></a><div class="keyword"><b><a class="anchor" name="and"></a><a href="#7.3.1-and">and</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;AND&quot; between &lt;value&gt; and the input value of type signed
 integer, and returns the result as an signed integer. &lt;value&gt; can be a
 numeric value or a variable name. The name of the variable starts with an
 indication about its scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and response)
   &quot;req&quot;  : the variable is shared only during request processing
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'.  The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
 transfer binary content in a way that can be reliably transferred (eg:
 an SSL ID can be copied in a header).
@@ -14512,12 +14739,13 @@ result as an signed integer. If &lt;value&gt; is null, the largest unsigned
 integer is returned (typically 2^63-1). &lt;value&gt; can be a numeric value or a
 variable name. The name of the variable starts with an indication about its
 scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and response)
   &quot;req&quot;  : the variable is shared only during request processing
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'.  The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="djb2"></a><a class="anchor" name="7-djb2"></a><a class="anchor" name="7.3.1-djb2"></a><a class="anchor" name="djb2 (Using ACLs and fetching samples)"></a><a class="anchor" name="djb2 (Converters)"></a><div class="keyword"><b><a class="anchor" name="djb2"></a><a href="#7.3.1-djb2">djb2</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the DJB2
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
@@ -14685,23 +14913,25 @@ trailing spaces/tabs.
 remainder as an signed integer. If &lt;value&gt; is null, then zero is returned.
 &lt;value&gt; can be a numeric value or a variable name. The name of the variable
 starts with an indication about its scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and response)
   &quot;req&quot;  : the variable is shared only during request processing
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'.  The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="mul"></a><a class="anchor" name="7-mul"></a><a class="anchor" name="7.3.1-mul"></a><a class="anchor" name="mul (Using ACLs and fetching samples)"></a><a class="anchor" name="mul (Converters)"></a><div class="keyword"><b><a class="anchor" name="mul"></a><a href="#7.3.1-mul">mul</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Multiplies the input value of type signed integer by &lt;value&gt;, and returns
 the product as an signed integer. In case of overflow, the largest possible
 value for the sign is returned so that the operation doesn't wrap around.
 &lt;value&gt; can be a numeric value or a variable name. The name of the variable
 starts with an indication about its scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and response)
   &quot;req&quot;  : the variable is shared only during request processing
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'.  The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="neg"></a><a class="anchor" name="7-neg"></a><a class="anchor" name="7.3.1-neg"></a><a class="anchor" name="neg (Using ACLs and fetching samples)"></a><a class="anchor" name="neg (Converters)"></a><div class="keyword"><b><a class="anchor" name="neg"></a><a href="#7.3.1-neg">neg</a></b></div><pre class="text">Takes the input value of type signed integer, computes the opposite value,
 and returns the remainder as an signed integer. 0 is identity. This operator
 is provided for reversed subtracts : in order to subtract the input from a
@@ -14716,12 +14946,13 @@ otherwise returns FALSE. It is functionally equivalent to &quot;and(1),bool&quot
 integer, and returns the result as an signed integer. &lt;value&gt; can be a
 numeric value or a variable name. The name of the variable starts with an
 indication about its scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and response)
   &quot;req&quot;  : the variable is shared only during request processing
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'.  The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>]</span>)</div><pre class="text">Applies a regex-based substitution to the input string. It does the same
 operation as the well-known &quot;sed&quot; utility with &quot;s/&lt;regex&gt;/&lt;subst&gt;/&quot;. By
 default it will replace in the input string the first occurrence of the
@@ -14764,25 +14995,27 @@ set-var(&lt;var name&gt;)
   Sets a variable with the input content and returns the content on the output as
   is. The variable keeps the value and the associated input type. The name of the
   variable starts with an indication about its scope. The scopes allowed are:
+    &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
     &quot;sess&quot; : the variable is shared with the whole session
     &quot;txn&quot;  : the variable is shared with the transaction (request and
              response),
     &quot;req&quot;  : the variable is shared only during request processing,
     &quot;res&quot;  : the variable is shared only during response processing.
   This prefix is followed by a name. The separator is a '.'. The name may only
-  contain characters 'a-z', 'A-Z', '0-9' and '_'.
+  contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type signed integer, and returns
 the result as an signed integer. Note: in order to subtract the input from
 a constant, simply perform a &quot;neg,add(value)&quot;. &lt;value&gt; can be a numeric value
 or a variable name. The name of the variable starts with an indication about
 its scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and
            response),
   &quot;req&quot;  : the variable is shared only during request processing,
   &quot;res&quot;  : the variable is shared only during response processing.
 This prefix is followed by a name. The separator is a '.'. The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="table_bytes_in_rate"></a><a class="anchor" name="7-table_bytes_in_rate"></a><a class="anchor" name="7.3.1-table_bytes_in_rate"></a><a class="anchor" name="table_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="table_bytes_in_rate (Converters)"></a><div class="keyword"><b><a class="anchor" name="table_bytes_in_rate"></a><a href="#7.3.1-table_bytes_in_rate">table_bytes_in_rate</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">Uses the string representation of the input sample to perform a look up in
 the specified table. If the key is not found in the table, integer value zero
 is returned. Otherwise the converter returns the average client-to-server
@@ -14895,8 +15128,20 @@ sc_trackers sample fetch keyword.
 </pre><a class="anchor" name="upper"></a><a class="anchor" name="7-upper"></a><a class="anchor" name="7.3.1-upper"></a><a class="anchor" name="upper (Using ACLs and fetching samples)"></a><a class="anchor" name="upper (Converters)"></a><div class="keyword"><b><a class="anchor" name="upper"></a><a href="#7.3.1-upper">upper</a></b></div><pre class="text">Convert a string sample to upper case. This can only be placed after a string
 sample fetch function or after a transformation keyword returning a string
 type. The result is of type string.
-</pre><a class="anchor" name="url_dec"></a><a class="anchor" name="7-url_dec"></a><a class="anchor" name="7.3.1-url_dec"></a><a class="anchor" name="url_dec (Using ACLs and fetching samples)"></a><a class="anchor" name="url_dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="url_dec"></a><a href="#7.3.1-url_dec">url_dec</a></b></div><pre class="text">Takes an url-encoded string provided as input and returns the decoded
-version as output. The input and the output are of type string.
+</pre><a class="anchor" name="url_dec"></a><a class="anchor" name="7-url_dec"></a><a class="anchor" name="7.3.1-url_dec"></a><a class="anchor" name="url_dec (Using ACLs and fetching samples)"></a><a class="anchor" name="url_dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="url_dec"></a><a href="#7.3.1-url_dec">url_dec</a></b></div><pre class="text">  Takes an url-encoded string provided as input and returns the decoded
+  version as output. The input and the output are of type string.
+
+unset-var(&lt;var name&gt;)
+  Unsets a variable if the input content is defined. The name of the variable
+  starts with an indication about its scope. The scopes allowed are:
+    &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
+    &quot;sess&quot; : the variable is shared with the whole session
+    &quot;txn&quot;  : the variable is shared with the transaction (request and
+             response),
+    &quot;req&quot;  : the variable is shared only during request processing,
+    &quot;res&quot;  : the variable is shared only during response processing.
+  This prefix is followed by a name. The separator is a '.'. The name may only
+  contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="utime"></a><a class="anchor" name="7-utime"></a><a class="anchor" name="7.3.1-utime"></a><a class="anchor" name="utime (Using ACLs and fetching samples)"></a><a class="anchor" name="utime (Converters)"></a><div class="keyword"><b><a class="anchor" name="utime"></a><a href="#7.3.1-utime">utime</a></b>(<span style="color: #080">&lt;format&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;offset&gt;</span>]</span>)</div><pre class="text">Converts an integer supposed to contain a date since epoch to a string
 representing this date in UTC time using a format defined by the &lt;format&gt;
 string using strftime(3). The purpose is to allow any date format to be used
@@ -14925,13 +15170,14 @@ collect rough statistics. It must not be used for security purposes as a
 of type signed integer, and returns the result as an signed integer.
 &lt;value&gt; can be a numeric value or a variable name. The name of the variable
 starts with an indication about its scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and
            response),
   &quot;req&quot;  : the variable is shared only during request processing,
   &quot;res&quot;  : the variable is shared only during response processing.
 This prefix is followed by a name. The separator is a '.'. The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre></div>
 <a class="anchor" id="7.3.2" name="7.3.2"></a>
 <h3 id="chapter-7.3.2" data-target="7.3.2"><small><a class="small" href="#7.3.2">7.3.2.</a></small> Fetching samples from internal states</h3>
@@ -15139,13 +15385,14 @@ table_avl for other entry counting methods.
 </pre><a class="anchor" name="var"></a><a class="anchor" name="7-var"></a><a class="anchor" name="7.3.2-var"></a><a class="anchor" name="var (Using ACLs and fetching samples)"></a><a class="anchor" name="var (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="var"></a><a href="#7.3.2-var">var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) : undefined</div><pre class="text">Returns a variable with the stored type. If the variable is not set, the
 sample fetch fails. The name of the variable starts with an indication
 about its scope. The scopes allowed are:
+  &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
   &quot;sess&quot; : the variable is shared with the whole session
   &quot;txn&quot;  : the variable is shared with the transaction (request and
            response),
   &quot;req&quot;  : the variable is shared only during request processing,
   &quot;res&quot;  : the variable is shared only during response processing.
 This prefix is followed by a name. The separator is a '.'. The name may only
-contain characters 'a-z', 'A-Z', '0-9' and '_'.
+contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre></div>
 <a class="anchor" id="7.3.3" name="7.3.3"></a>
 <h3 id="chapter-7.3.3" data-target="7.3.3"><small><a class="small" href="#7.3.3">7.3.3.</a></small> Fetching samples at Layer 4</h3>
@@ -17789,7 +18036,7 @@ reading. Their sole purpose is to explain how to decipher them.
 </div><div><pre class="text">Here are listed officially supported filters with the list of parameters they
 accept. Depending on compile options, some of these filters might be
 unavailable. The list of available filters is reported in haproxy -vv.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">filter<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#filter%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#filter%20%28Trace%29">Trace</a></li><li><a href="#filter%20%28HTTP%20compression%29">HTTP compression</a></li></ul></span>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">filter<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#filter%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#filter%20%28Trace%29">Trace</a></li><li><a href="#filter%20%28HTTP%20compression%29">HTTP compression</a></li><li><a href="#filter%20%28Stream%20Processing%20Offload%20Engine%20%28SPOE%29%29">Stream Processing Offload Engine (SPOE)</a></li></ul></span>&quot;</div>
 </div>
 <a class="anchor" id="9.1" name="9.1"></a>
 <h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> Trace</h2>
@@ -17825,14 +18072,41 @@ use a filter line to enable the HTTP compression when two or more filters are
 used for the same listener/frontend/backend. This is important to know the
 filters evaluation order.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#compression">compression</a>&quot;</div>
+</div>
+<a class="anchor" id="9.3" name="9.3"></a>
+<h2 id="chapter-9.3" data-target="9.3"><small><a class="small" href="#9.3">9.3.</a></small> Stream Processing Offload Engine (SPOE)</h2>
+<div><a class="anchor" name="filter"></a><a class="anchor" name="9-filter"></a><a class="anchor" name="9.3-filter"></a><a class="anchor" name="filter (Supported filters)"></a><a class="anchor" name="filter (Stream Processing Offload Engine (SPOE))"></a><a class="anchor" name="filter spoe"></a><a class="anchor" name="9-filter spoe"></a><a class="anchor" name="9.3-filter spoe"></a><a class="anchor" name="filter spoe (Supported filters)"></a><a class="anchor" name="filter spoe (Stream Processing Offload Engine (SPOE))"></a><div class="keyword"><b><a class="anchor" name="filter spoe"></a><a href="#9.3-filter%20spoe">filter spoe</a></b> <span style="color: #008">[engine <span style="color: #080">&lt;name&gt;</span>]</span> config <span style="color: #080">&lt;file&gt;</span></div><div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;name&gt;      is the engine name that will be used to find the right scope in
+            the configuration file. If not provided, all the file will be
+            parsed.
 
+&lt;file&gt;      is the path of the engine configuration file. This file can
+            contain configuration of several engines. In this case, each
+            part must be placed in its own scope.</pre>
+</div>
+<pre class="text">The Stream Processing Offload Engine (SPOE) is a filter communicating with
+external components. It allows the offload of some specifics processing on the
+streams in tierce applications. These external components and information
+exchanged with them are configured in dedicated files, for the main part. It
+also requires dedicated backends, defined in HAProxy configuration.
+
+SPOE communicates with external components using an in-house binary protocol,
+the Stream Processing Offload Protocol (SPOP).
+
+For all information about the SPOE configuation and the SPOP specification, see
+&quot;doc/SPOE.txt&quot;.
+
+Important note:
+    The SPOE filter is highly experimental for now and was not heavily
+    tested. It is really not production ready. So use it carefully.
+</pre>
 </div>
 
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev5-2 &ndash; Configuration Manual<br>
-							<small>2016/10/25, willy tarreau</small>
+							HAProxy 1.7-dev6-1 &ndash; Configuration Manual<br>
+							<small>2016/11/09, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -17935,7 +18209,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev5-2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev6-1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
