@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7-dev6-30 - Management Guide</title>
+		<title>HAProxy version 1.7.0 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -401,7 +401,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/11/20</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/11/25</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -412,7 +412,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.7-dev6-30</strong></p>
+							<p><strong>version 1.7.0</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								<br>
@@ -2127,11 +2127,14 @@ Variables are dumped in the same format as they are stored or returned by the
 certain configuration files making heavy use of environment variables to
 ensure that they contain the expected values. This command is restricted and
 can only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show errors"></a><a class="anchor" name="9-show errors"></a><a class="anchor" name="9.3-show errors"></a><a class="anchor" name="show errors (Statistics and monitoring)"></a><a class="anchor" name="show errors (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show errors"></a><a href="#9.3-show%20errors">show errors</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span>]</span></div><pre class="text">Dump last known request and response errors collected by frontends and
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show errors"></a><a class="anchor" name="9-show errors"></a><a class="anchor" name="9.3-show errors"></a><a class="anchor" name="show errors (Statistics and monitoring)"></a><a class="anchor" name="show errors (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show errors"></a><a href="#9.3-show%20errors">show errors</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span>|<span style="color: #080">&lt;proxy&gt;</span>]</span> <span style="color: #008">[request|response]</span></div><pre class="text">Dump last known request and response errors collected by frontends and
 backends. If &lt;iid&gt; is specified, the limit the dump to errors concerning
-either frontend or backend whose ID is &lt;iid&gt;. This command is restricted
-and can only be issued on sockets configured for levels &quot;operator&quot; or
-&quot;admin&quot;.
+either frontend or backend whose ID is &lt;iid&gt;. Proxy ID &quot;-1&quot; will cause
+all instances to be dumped. If a proxy name is specified instead, its ID
+will be used as the filter. If &quot;request&quot; or &quot;response&quot; is added after the
+proxy name or ID, only request or response errors will be dumped. This
+command is restricted and can only be issued on sockets configured for
+levels &quot;operator&quot; or &quot;admin&quot;.
 
 The errors which may be collected are the last request and response errors
 caused by protocol violations, often due to invalid characters in header
@@ -2158,7 +2161,7 @@ line.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
-<code>    $ echo &quot;<a href="#show%20errors">show errors</a>&quot; | socat stdio /tmp/sock1
+<code>    $ echo &quot;show errors -1 response&quot; | socat stdio /tmp/sock1
 &gt;&gt;&gt; [04/Mar/2009:15:46:56.081] backend http-in (<span class="comment">#2) : invalid response</span>
       src 127.0.0.1, session <span class="comment">#54, frontend fe-eth0 (#1), server s2 (#1)</span>
       response length 213 bytes, error at position 23:
@@ -2242,8 +2245,9 @@ PoolFailed: 0
 11.PoolFailed.1:MCP:u32:0
 (...)
 </code></pre>
-</div><pre class="text">In the typed format, the presence of the process ID at the end of the line
-makes it very easy to visually aggregate outputs from multiple processes.
+</div><pre class="text">In the typed format, the presence of the process ID at the end of the
+first column makes it very easy to visually aggregate outputs from
+multiple processes.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -2385,11 +2389,13 @@ returned in src/dumpstats.c
 
 The special id &quot;all&quot; dumps the states of all sessions, which must be avoided
 as much as possible as it is highly CPU intensive and can take a lot of time.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.3-show%20stat">show stat</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span> <span style="color: #008">[typed]</span></div><pre class="text">Dump statistics using the CSV format, or using the extended typed output
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.3-show%20stat">show stat</a></b> <span style="color: #008">[<span style="color: #800">{<span style="color: #080">&lt;iid&gt;</span>|<span style="color: #080">&lt;proxy&gt;</span>}</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span> <span style="color: #008">[typed]</span></div><pre class="text">Dump statistics using the CSV format, or using the extended typed output
 format described in the section above if &quot;typed&quot; is passed after the other
 arguments. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is possible to dump only
 selected items :
-  - &lt;iid&gt; is a proxy ID, -1 to dump everything
+  - &lt;iid&gt; is a proxy ID, -1 to dump everything. Alternatively, a proxy name
+    &lt;proxy&gt; may be specified. In this case, this proxy's ID will be used as
+    the ID selector.
   - &lt;type&gt; selects the type of dumpable objects : 1 for frontends, 2 for
      backends, 4 for servers, -1 for everything. These values can be ORed,
      for example:
@@ -2496,9 +2502,10 @@ Here's an example of typed output format :
       B.3.0.55.lastsess.1:MMP:s32:-1
       (...)
 
-In the typed format, the presence of the process ID at the end of the line
-makes it very easy to visually aggregate outputs from multiple processes, as
-show in the example below where each line appears for each process :
+In the typed format, the presence of the process ID at the end of the
+first column makes it very easy to visually aggregate outputs from
+multiple processes, as show in the example below where each line appears
+for each process :
 
       $ ( echo show stat typed | socat /var/run/haproxy.sock1 - ; \
           echo show stat typed | socat /var/run/haproxy.sock2 - ) | \
@@ -2967,7 +2974,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7-dev6-30 &ndash; Management Guide<br>
+							HAProxy 1.7.0 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3071,7 +3078,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7-dev6-30', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
