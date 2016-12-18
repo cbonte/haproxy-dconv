@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7.0 - Configuration Manual</title>
+		<title>HAProxy version 1.7.1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -874,6 +874,10 @@
 							
 								<div class="letter" id="letter-5"><h4>5</h4>
 								
+							<a class="list-group-item" href="#51d.all">51d.all</a>
+							
+							<a class="list-group-item" href="#51d.single">51d.single</a>
+							
 							<a class="list-group-item" href="#51degrees-cache-size">51degrees-cache-size</a>
 							
 							<a class="list-group-item" href="#51degrees-data-file">51degrees-data-file</a>
@@ -939,6 +943,8 @@
 							<a class="list-group-item" href="#be_conn">be_conn</a>
 							
 							<a class="list-group-item" href="#be_id">be_id</a>
+							
+							<a class="list-group-item" href="#be_name">be_name</a>
 							
 							<a class="list-group-item" href="#be_sess_rate">be_sess_rate</a>
 							
@@ -1179,6 +1185,8 @@
 							<a class="list-group-item" href="#fe_conn">fe_conn</a>
 							
 							<a class="list-group-item" href="#fe_id">fe_id</a>
+							
+							<a class="list-group-item" href="#fe_name">fe_name</a>
 							
 							<a class="list-group-item" href="#fe_req_rate">fe_req_rate</a>
 							
@@ -2587,7 +2595,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/11/25</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/12/18</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2598,11 +2606,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7.0</strong></p>
+							<p><strong>version 1.7.1</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/11/25
+								2016/12/13
 							</p>
 						</div>
 
@@ -4209,7 +4217,7 @@ file should be unzipped and accessible by HAProxy with relevavnt permissions.
 
 Please note that this option is only available when haproxy has been
 compiled with USE_51DEGREES.
-</pre><a class="anchor" name="51degrees-property-name-list"></a><a class="anchor" name="3-51degrees-property-name-list"></a><a class="anchor" name="3.1-51degrees-property-name-list"></a><a class="anchor" name="51degrees-property-name-list (Global parameters)"></a><a class="anchor" name="51degrees-property-name-list (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="51degrees-property-name-list"></a><a href="#3.1-51degrees-property-name-list">51degrees-property-name-list</a></b> <span style="color: #008">[<span style="color: #080">&lt;string&gt;</span>]</span></div><pre class="text">A list of 51Degrees property names to be load from the dataset. A full list
+</pre><a class="anchor" name="51degrees-property-name-list"></a><a class="anchor" name="3-51degrees-property-name-list"></a><a class="anchor" name="3.1-51degrees-property-name-list"></a><a class="anchor" name="51degrees-property-name-list (Global parameters)"></a><a class="anchor" name="51degrees-property-name-list (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="51degrees-property-name-list"></a><a href="#3.1-51degrees-property-name-list">51degrees-property-name-list</a></b> <span style="color: #008">[<span style="color: #080">&lt;string&gt;</span> ...]</span></div><pre class="text">A list of 51Degrees property names to be load from the dataset. A full list
 of names is available on the 51Degrees website:
 https://51degrees.com/resources/property-dictionary
 
@@ -4485,7 +4493,7 @@ which seems to correctly detect end user pauses (eg: read a page before
 clicking). There should be not reason for changing this value. Please check
 tune.ssl.maxrecord below.
 </pre><a class="anchor" name="tune.lua.forced-yield"></a><a class="anchor" name="3-tune.lua.forced-yield"></a><a class="anchor" name="3.2-tune.lua.forced-yield"></a><a class="anchor" name="tune.lua.forced-yield (Global parameters)"></a><a class="anchor" name="tune.lua.forced-yield (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.lua.forced-yield"></a><a href="#3.2-tune.lua.forced-yield">tune.lua.forced-yield</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This directive forces the Lua engine to execute a yield each &lt;number&gt; of
-instructions executed. This permits interruptng a long script and allows the
+instructions executed. This permits interrupting a long script and allows the
 HAProxy scheduler to process other tasks like accepting connections or
 forwarding traffic. The default value is 10000 instructions. If HAProxy often
 executes some Lua code but more reactivity is required, this value can be
@@ -6316,10 +6324,10 @@ is used.
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;name&gt;     is the name of the filter. Officially supported filters are
            referenced in <a href="#9">section 9</a>.
 
-&lt;param*&gt;   is a list of parameters accpeted by the filter &lt;name&gt;. The
+&lt;param*&gt;   is a list of parameters accepted by the filter &lt;name&gt;. The
            parsing of these parameters are the responsibility of the
-           filter. Please refer to the documention of the corresponding
-           filter (<a href="#9">section 9</a>) from all details on the supported parameters.</pre>
+           filter. Please refer to the documentation of the corresponding
+           filter (<a href="#9">section 9</a>) for all details on the supported parameters.</pre>
 </div>
 <pre class="text">Multiple occurrences of the filter line can be used for the same proxy. The
 same filter can be referenced many times if needed.
@@ -8352,7 +8360,7 @@ decision based on the request body's contents. This option placed in a
 frontend or backend forces the HTTP processing to wait until either the whole
 body is received, or the request buffer is full, or the first chunk is
 complete in case of chunked encoding. It can have undesired side effects with
-some applications abusing HTTP by expecting unbufferred transmissions between
+some applications abusing HTTP by expecting unbuffered transmissions between
 the frontend and the backend, so this should definitely not be used by
 default.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-no-delay">option http-no-delay</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;</div>
@@ -13179,10 +13187,10 @@ to deciphered contents.
 SSL/TLS negotiation is allow only if the client provided an SNI which match
 a certificate. The default certificate is not used.
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information.
-</pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.1-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.1-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all incoming connections instanciated from this
+</pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.1-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.1-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all incoming connections instantiated from this
 listening socket. This option is available on Linux since version 2.6.37. It
 allows haproxy to configure a timeout for sockets which contain data not
-receiving an acknoledgement for the configured delay. This is especially
+receiving an acknowledgement for the configured delay. This is especially
 useful on long-lived connections experiencing long idle periods such as
 remote terminals or database connection pools, where the client and server
 timeouts must remain high to allow a long period of idle, but where it is
@@ -13708,7 +13716,7 @@ Supported in default-server: Yes
 </code></pre>
 </div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and Server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This options prioritize th choice of an ip address matching a network. This is
 useful with clouds to prefer a local ip. In some cases, a cloud high
-avalailibility service can be announced with many ip addresses on many
+availability service can be announced with many ip addresses on many
 differents datacenters. The latency between datacenter is not negligible, so
 this patch permitsto prefers a local datacenter. If none address matchs the
 configured network, another address is selected.
@@ -13837,7 +13845,7 @@ Supported in default-server: No
 </pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.2-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.2-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all outgoing connections to this server. This
 option is available on Linux since version 2.6.37. It allows haproxy to
 configure a timeout for sockets which contain data not receiving an
-acknoledgement for the configured delay. This is especially useful on
+acknowledgement for the configured delay. This is especially useful on
 long-lived connections experiencing long idle periods such as remote
 terminals or database connection pools, where the client and server timeouts
 must remain high to allow a long period of idle, but where it is important to
@@ -14672,7 +14680,24 @@ supported (and, or, xor, cpl) and some arithmetic operations are supported
 bool) which make it possible to report a match without having to write an ACL.
 
 The currently available list of transformation keywords include :
-</pre><a class="anchor" name="add"></a><a class="anchor" name="7-add"></a><a class="anchor" name="7.3.1-add"></a><a class="anchor" name="add (Using ACLs and fetching samples)"></a><a class="anchor" name="add (Converters)"></a><div class="keyword"><b><a class="anchor" name="add"></a><a href="#7.3.1-add">add</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Adds &lt;value&gt; to the input value of type signed integer, and returns the
+</pre><a class="anchor" name="51d.single"></a><a class="anchor" name="7-51d.single"></a><a class="anchor" name="7.3.1-51d.single"></a><a class="anchor" name="51d.single (Using ACLs and fetching samples)"></a><a class="anchor" name="51d.single (Converters)"></a><div class="keyword"><b><a class="anchor" name="51d.single"></a><a href="#7.3.1-51d.single">51d.single</a></b>(<span style="color: #080">&lt;prop&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;prop&gt;</span>*]</span>)</div><pre class="text">Returns values for the properties requested as a string, where values are
+separated by the delimiter specified with &quot;<a href="#51degrees-property-separator">51degrees-property-separator</a>&quot;.
+The device is identified using the User-Agent header passed to the
+converter. The function can be passed up to five property names, and if a
+property name can't be found, the value &quot;NoData&quot; is returned.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># Here the header &quot;X-51D-DeviceTypeMobileTablet&quot; is added to the request</span>
+<span class="comment"># containg values for the three properties requested by using the</span>
+<span class="comment"># User-Agent passed to the converter.</span>
+frontend http-in
+  bind *:8081
+  default_backend servers
+  http-request set-header X-51D-DeviceTypeMobileTablet \
+    %[req.fhdr(User-Agent),51d.single(DeviceType,IsMobile,IsTablet)]
+</code></pre>
+</div><a class="anchor" name="add"></a><a class="anchor" name="7-add"></a><a class="anchor" name="7.3.1-add"></a><a class="anchor" name="add (Using ACLs and fetching samples)"></a><a class="anchor" name="add (Converters)"></a><div class="keyword"><b><a class="anchor" name="add"></a><a href="#7.3.1-add">add</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Adds &lt;value&gt; to the input value of type signed integer, and returns the
 result as a signed integer. &lt;value&gt; can be a numeric value or a variable
 name. The name of the variable starts with an indication about its scope. The
 scopes allowed are:
@@ -14703,7 +14728,7 @@ used to report true/false for bit testing on input values (eg: verify the
 presence of a flag).
 </pre><a class="anchor" name="bytes"></a><a class="anchor" name="7-bytes"></a><a class="anchor" name="7.3.1-bytes"></a><a class="anchor" name="bytes (Using ACLs and fetching samples)"></a><a class="anchor" name="bytes (Converters)"></a><div class="keyword"><b><a class="anchor" name="bytes"></a><a href="#7.3.1-bytes">bytes</a></b>(<span style="color: #080">&lt;offset&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;length&gt;</span>]</span>)</div><pre class="text">Extracts some bytes from an input binary sample. The result is a binary
 sample starting at an offset (in bytes) of the original sample and
-optionnaly truncated at the given length.
+optionally truncated at the given length.
 </pre><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type signed integer, applies a ones-complement
 (flips all bits) and returns the result as an signed integer.
 </pre><a class="anchor" name="crc32"></a><a class="anchor" name="7-crc32"></a><a class="anchor" name="7.3.1-crc32"></a><a class="anchor" name="crc32 (Using ACLs and fetching samples)"></a><a class="anchor" name="crc32 (Converters)"></a><div class="keyword"><b><a class="anchor" name="crc32"></a><a href="#7.3.1-crc32">crc32</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the CRC32
@@ -14875,7 +14900,7 @@ map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&g
   strings are stored in trees, so the first of the finest match will be used.
   Other keys are stored in lists, so the first matching occurrence will be used.
 
-  The following array contains the list of all map functions avalaible sorted by
+  The following array contains the list of all map functions available sorted by
   input type, match type and output type.
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>input type</th><th>match method</th><th>output type str</th><th>output type int</th><th>output type ip</th></tr></thead>
@@ -14885,7 +14910,8 @@ map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&g
 <tr><td None>str</td><td None>dir</td><td None>map_dir</td><td None>map_dir_int</td><td None>map_dir_ip</td></tr>
 <tr><td None>str</td><td None>dom</td><td None>map_dom</td><td None>map_dom_int</td><td None>map_dom_ip</td></tr>
 <tr><td None>str</td><td None>end</td><td None>map_end</td><td None>map_end_int</td><td None>map_end_ip</td></tr>
-<tr><td None>str<br /></td><td None>reg          +-----------------+ map_reg_int<br /></td><td None>map_reg<br />map_reg_ip<br />map_regm</td><td None></td><td None></td></tr>
+<tr><td None>str</td><td None>reg</td><td None>map_reg</td><td None>map_reg_int</td><td None>map_reg_ip</td></tr>
+<tr><td None>str</td><td None>reg</td><td None>map_regm</td><td None>map_reg_int</td><td None>map_reg_ip</td></tr>
 <tr><td None>int</td><td None>int</td><td None>map_int</td><td None>map_int_int</td><td None>map_int_ip</td></tr>
 <tr><td None>ip</td><td None>ip</td><td None>map_ip</td><td None>map_ip_int</td><td None>map_ip_ip</td></tr>
 </table><pre class="text">The special map called &quot;map_regm&quot; expect matching zone in the regular
@@ -15409,6 +15435,8 @@ the &quot;sc*&quot; form, in which case the currently tracked key will be looked
 this alternate table instead of the table currently being tracked.
 </pre><a class="anchor" name="be_id"></a><a class="anchor" name="7-be_id"></a><a class="anchor" name="7.3.3-be_id"></a><a class="anchor" name="be_id (Using ACLs and fetching samples)"></a><a class="anchor" name="be_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="be_id"></a><a href="#7.3.3-be_id">be_id</a></b> : integer</div><pre class="text">Returns an integer containing the current backend's id. It can be used in
 frontends with responses to check which backend processed the request.
+</pre><a class="anchor" name="be_name"></a><a class="anchor" name="7-be_name"></a><a class="anchor" name="7.3.3-be_name"></a><a class="anchor" name="be_name (Using ACLs and fetching samples)"></a><a class="anchor" name="be_name (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="be_name"></a><a href="#7.3.3-be_name">be_name</a></b> : string</div><pre class="text">Returns a string containing the current backend's name. It can be used in
+frontends with responses to check which backend processed the request.
 </pre><a class="anchor" name="dst"></a><a class="anchor" name="7-dst"></a><a class="anchor" name="7.3.3-dst"></a><a class="anchor" name="dst (Using ACLs and fetching samples)"></a><a class="anchor" name="dst (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="dst"></a><a href="#7.3.3-dst">dst</a></b> : ip</div><pre class="text">This is the destination IPv4 address of the connection on the client side,
 which is the address the client connected to. It can be useful when running
 in transparent mode. It is of type IP and works on both IPv4 and IPv6 tables.
@@ -15474,6 +15502,9 @@ not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend's id. It can be used in
 backends to check from which backend it was called, or to stick all users
+coming via a same frontend to the same server.
+</pre><a class="anchor" name="fe_name"></a><a class="anchor" name="7-fe_name"></a><a class="anchor" name="7.3.3-fe_name"></a><a class="anchor" name="fe_name (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_name (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_name"></a><a href="#7.3.3-fe_name">fe_name</a></b> : string</div><pre class="text">Returns a string containing the current frontend's name. It can be used in
+backends to check from which frontend it was called, or to stick all users
 coming via a same frontend to the same server.
 </pre><a class="anchor" name="sc_bytes_in_rate"></a><a class="anchor" name="7-sc_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc_bytes_in_rate"></a><a class="anchor" name="sc_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_bytes_in_rate"></a><a href="#7.3.3-sc_bytes_in_rate">sc_bytes_in_rate</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_bytes_in_rate"></a><a class="anchor" name="7-sc0_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc0_bytes_in_rate"></a><a class="anchor" name="sc0_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_bytes_in_rate"></a><a href="#7.3.3-sc0_bytes_in_rate">sc0_bytes_in_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_bytes_in_rate"></a><a class="anchor" name="7-sc1_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc1_bytes_in_rate"></a><a class="anchor" name="sc1_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_bytes_in_rate"></a><a href="#7.3.3-sc1_bytes_in_rate">sc1_bytes_in_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_bytes_in_rate"></a><a class="anchor" name="7-sc2_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc2_bytes_in_rate"></a><a class="anchor" name="sc2_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_bytes_in_rate"></a><a href="#7.3.3-sc2_bytes_in_rate">sc2_bytes_in_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the average client-to-server bytes rate from the currently tracked
 counters, measured in amount of bytes over the period configured in the
@@ -15723,7 +15754,24 @@ closest to the session once all the connection handshakes are finished, but
 when no content is yet made available. The fetch methods described here are
 usable as low as the &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot; rule sets unless they require some
 future information. Those generally include the results of SSL negotiations.
-</pre><a class="anchor" name="ssl_bc"></a><a class="anchor" name="7-ssl_bc"></a><a class="anchor" name="7.3.4-ssl_bc"></a><a class="anchor" name="ssl_bc (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc"></a><a href="#7.3.4-ssl_bc">ssl_bc</a></b> : boolean</div><pre class="text">Returns true when the back connection was made via an SSL/TLS transport
+</pre><a class="anchor" name="51d.all"></a><a class="anchor" name="7-51d.all"></a><a class="anchor" name="7.3.4-51d.all"></a><a class="anchor" name="51d.all (Using ACLs and fetching samples)"></a><a class="anchor" name="51d.all (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="51d.all"></a><a href="#7.3.4-51d.all">51d.all</a></b>(<span style="color: #080">&lt;prop&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;prop&gt;</span>*]</span>) : string</div><pre class="text">Returns values for the properties requested as a string, where values are
+separated by the delimiter specified with &quot;<a href="#51degrees-property-separator">51degrees-property-separator</a>&quot;.
+The device is identified using all the important HTTP headers from the
+request. The function can be passed up to five property names, and if a
+property name can't be found, the value &quot;NoData&quot; is returned.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># Here the header &quot;X-51D-DeviceTypeMobileTablet&quot; is added to the request</span>
+<span class="comment"># containing the three properties requested using all relevant headers from</span>
+<span class="comment"># the request.</span>
+frontend http-in
+  bind *:8081
+  default_backend servers
+  http-request set-header X-51D-DeviceTypeMobileTablet \
+    %[51d.all(DeviceType,IsMobile,IsTablet)]
+</code></pre>
+</div><a class="anchor" name="ssl_bc"></a><a class="anchor" name="7-ssl_bc"></a><a class="anchor" name="7.3.4-ssl_bc"></a><a class="anchor" name="ssl_bc (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc"></a><a href="#7.3.4-ssl_bc">ssl_bc</a></b> : boolean</div><pre class="text">Returns true when the back connection was made via an SSL/TLS transport
 layer and is locally deciphered. This means the outgoing connection was made
 other a server with the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
 </pre><a class="anchor" name="ssl_bc_alg_keysize"></a><a class="anchor" name="7-ssl_bc_alg_keysize"></a><a class="anchor" name="7.3.4-ssl_bc_alg_keysize"></a><a class="anchor" name="ssl_bc_alg_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_alg_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_alg_keysize"></a><a href="#7.3.4-ssl_bc_alg_keysize">ssl_bc_alg_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size supported in bits when the outgoing
@@ -16363,7 +16411,7 @@ ACL derivatives :
 question mark. If no question mark is present, this fetch returns nothing. If
 a question mark is present but nothing follows, it returns an empty string.
 This means it's possible to easily know whether a query string is present
-using the &quot;found&quot; matching method. This fetch is the completemnt of &quot;<a href="#path">path</a>&quot;
+using the &quot;found&quot; matching method. This fetch is the complement of &quot;<a href="#path">path</a>&quot;
 which stops before the question mark.
 </pre><a class="anchor" name="req.hdr_names"></a><a class="anchor" name="7-req.hdr_names"></a><a class="anchor" name="7.3.6-req.hdr_names"></a><a class="anchor" name="req.hdr_names (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_names (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_names"></a><a href="#7.3.6-req.hdr_names">req.hdr_names</a></b>(<span style="color: #008">[<span style="color: #080">&lt;delim&gt;</span>]</span>) : string</div><pre class="text">This builds a string made from the concatenation of all header names as they
 appear in the request when the rule is evaluated. The default delimiter is
@@ -18040,7 +18088,7 @@ unavailable. The list of available filters is reported in haproxy -vv.
 </div>
 <a class="anchor" id="9.1" name="9.1"></a>
 <h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> Trace</h2>
-<div><a class="anchor" name="filter"></a><a class="anchor" name="9-filter"></a><a class="anchor" name="9.1-filter"></a><a class="anchor" name="filter (Supported filters)"></a><a class="anchor" name="filter (Trace)"></a><a class="anchor" name="filter trace"></a><a class="anchor" name="9-filter trace"></a><a class="anchor" name="9.1-filter trace"></a><a class="anchor" name="filter trace (Supported filters)"></a><a class="anchor" name="filter trace (Trace)"></a><div class="keyword"><b><a class="anchor" name="filter trace"></a><a href="#9.1-filter%20trace">filter trace</a></b> <span style="color: #008">[name <span style="color: #080">&lt;name&gt;</span>]</span> <span style="color: #008">[random-parsing]</span> <span style="color: #008">[random-forwarding]</span></div><div class="separator">
+<div><a class="anchor" name="filter"></a><a class="anchor" name="9-filter"></a><a class="anchor" name="9.1-filter"></a><a class="anchor" name="filter (Supported filters)"></a><a class="anchor" name="filter (Trace)"></a><a class="anchor" name="filter trace"></a><a class="anchor" name="9-filter trace"></a><a class="anchor" name="9.1-filter trace"></a><a class="anchor" name="filter trace (Supported filters)"></a><a class="anchor" name="filter trace (Trace)"></a><div class="keyword"><b><a class="anchor" name="filter trace"></a><a href="#9.1-filter%20trace">filter trace</a></b> <span style="color: #008">[name <span style="color: #080">&lt;name&gt;</span>]</span> <span style="color: #008">[random-parsing]</span> <span style="color: #008">[random-forwarding]</span> <span style="color: #008">[hexdump]</span></div><div class="separator">
 <span class="label label-info">Arguments:</span><pre class="prettyprint arguments">&lt;name&gt;               is an arbitrary name that will be reported in
                      messages. If no name is provided, &quot;TRACE&quot; is used.
 
@@ -18052,7 +18100,9 @@ unavailable. The list of available filters is reported in haproxy -vv.
 &lt;random-forwarding&gt;  enables the random forwading of parsed data. By
                      default, this filter forwards all previously parsed
                      data. With this parameter, it only forwards a random
-                     amount of the parsed data.</pre>
+                     amount of the parsed data.
+
+&lt;hexump&gt;             dumps all forwarded data to the server and the client.</pre>
 </div>
 <pre class="text">This filter can be used as a base to develop new filters. It defines all
 callbacks and print a message on the standard error stream (stderr) with useful
@@ -18093,7 +18143,7 @@ also requires dedicated backends, defined in HAProxy configuration.
 SPOE communicates with external components using an in-house binary protocol,
 the Stream Processing Offload Protocol (SPOP).
 
-For all information about the SPOE configuation and the SPOP specification, see
+For all information about the SPOE configuration and the SPOP specification, see
 &quot;doc/SPOE.txt&quot;.
 
 Important note:
@@ -18105,8 +18155,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7.0 &ndash; Configuration Manual<br>
-							<small>2016/11/25, willy tarreau</small>
+							HAProxy 1.7.1 &ndash; Configuration Manual<br>
+							<small>2016/12/13, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18209,7 +18259,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
