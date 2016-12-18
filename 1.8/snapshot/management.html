@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev0 - Management Guide</title>
+		<title>HAProxy version 1.8-dev0-66 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -352,6 +352,10 @@
 							
 							<a class="list-group-item" href="#show backend">show backend</a>
 							
+							<a class="list-group-item" href="#show cli">show cli</a>
+							
+							<a class="list-group-item" href="#show cli sockets">show cli sockets</a>
+							
 							<a class="list-group-item" href="#show env">show env</a>
 							
 							<a class="list-group-item" href="#show errors">show errors</a>
@@ -401,7 +405,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/11/25</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/12/18</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -412,7 +416,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.8-dev0</strong></p>
+							<p><strong>version 1.8-dev0-66</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								<br>
@@ -1525,7 +1529,7 @@ S (Servers).
  45. hanafail [...S]: failed health checks details
  46. req_rate [.F..]: HTTP requests per second over last elapsed second
  47. req_rate_max [.F..]: max number of HTTP requests per second observed
- 48. req_tot [.F..]: total number of HTTP requests received
+ 48. req_tot [.FB.]: total number of HTTP requests received
  49. cli_abrt [..BS]: number of data transfers aborted by the client
  50. srv_abrt [..BS]: number of data transfers aborted by the server
      (inc. in eresp)
@@ -1774,8 +1778,8 @@ example :
 
     # echo &quot;show info;show stat;show table&quot; | socat /var/run/haproxy stdio
 
-If a command needs to use a semi-colon (eg: in a value), it must be preceeded
-by a backslash ('\').
+If a command needs to use a semi-colon or a backslash (eg: in a value), it
+must be preceeded by a backslash ('\').
 
 The interactive mode displays a prompt ('&gt;') and waits for commands to be
 entered on the line, then processes them, and displays the prompt again to wait
@@ -2119,7 +2123,23 @@ enable it again after the update by setting it back to 100%. This command
 is restricted and can only be issued on sockets configured for level
 &quot;admin&quot;. Both the backend and the server may be specified either by their
 name or by their numeric ID, prefixed with a sharp ('#').
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show env"></a><a class="anchor" name="9-show env"></a><a class="anchor" name="9.3-show env"></a><a class="anchor" name="show env (Statistics and monitoring)"></a><a class="anchor" name="show env (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show env"></a><a href="#9.3-show%20env">show env</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Dump one or all environment variables known by the process. Without any
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cli"></a><a class="anchor" name="9-show cli"></a><a class="anchor" name="9.3-show cli"></a><a class="anchor" name="show cli (Statistics and monitoring)"></a><a class="anchor" name="show cli (Unix Socket commands)"></a><a class="anchor" name="show cli sockets"></a><a class="anchor" name="9-show cli sockets"></a><a class="anchor" name="9.3-show cli sockets"></a><a class="anchor" name="show cli sockets (Statistics and monitoring)"></a><a class="anchor" name="show cli sockets (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cli sockets"></a><a href="#9.3-show%20cli%20sockets">show cli sockets</a></b></div><pre class="text">List CLI sockets. The output format is composed of 3 fields separated by
+spaces. The first field is the socket address, it can be a unix socket, a
+ipv4 address:port couple or a ipv6 one. Socket of other types won't be dump.
+The second field describe the level of the socket: 'admin', 'user' or
+'operator'. The last field list the processes on which the socket is bound,
+separated by commas, it can be numbers or 'all'.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>$ echo 'show cli sockets' | socat stdio /tmp/sock1
+<span class="comment"># socket lvl processes</span>
+/tmp/sock1 admin all
+127.0.0.1:9999 user 2,3,4
+127.0.0.2:9969 user 2
+[::1]:9999 operator 2
+</code></pre>
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show env"></a><a class="anchor" name="9-show env"></a><a class="anchor" name="9.3-show env"></a><a class="anchor" name="show env (Statistics and monitoring)"></a><a class="anchor" name="show env (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show env"></a><a href="#9.3-show%20env">show env</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Dump one or all environment variables known by the process. Without any
 argument, all variables are dumped. With an argument, only the specified
 variable is dumped if it exists. Otherwise &quot;Variable not found&quot; is emitted.
 Variables are dumped in the same format as they are stored or returned by the
@@ -2974,7 +2994,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev0 &ndash; Management Guide<br>
+							HAProxy 1.8-dev0-66 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3078,7 +3098,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev0-66', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
