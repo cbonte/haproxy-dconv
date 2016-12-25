@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.5.18 - Configuration Manual</title>
+		<title>HAProxy version 1.5.19 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -2221,6 +2221,10 @@
 							
 							<a class="list-group-item" href="#url">url</a>
 							
+							<a class="list-group-item" href="#url32">url32</a>
+							
+							<a class="list-group-item" href="#url32+src">url32+src</a>
+							
 							<a class="list-group-item" href="#url_ip">url_ip</a>
 							
 							<a class="list-group-item" href="#url_param">url_param</a>
@@ -2273,7 +2277,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/11/20</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/12/25</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2284,11 +2288,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.5.18</strong></p>
+							<p><strong>version 1.5.19</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/05/10
+								2016/12/25
 							</p>
 						</div>
 
@@ -6790,7 +6794,7 @@ both are defined. In the case of the &quot;if-none&quot; argument, if at least o
 the frontend or the backend does not specify it, it wants the addition to be
 mandatory, so it wins.
 </pre><div class="separator">
-<span class="label label-success">Examples :</span>
+<span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># Public HTTP address also used by stunnel on the same machine</span>
 frontend www
@@ -12649,7 +12653,7 @@ ports to some clients for a whole application session, to stick all users to
 a same server, or to pass the destination port information to a server using
 an HTTP header.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend's id. It can be used in
-backends to check from which backend it was called, or to stick all users
+backends to check from which frontend it was called, or to stick all users
 coming via a same frontend to the same server.
 </pre><a class="anchor" name="sc_bytes_in_rate"></a><a class="anchor" name="7-sc_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc_bytes_in_rate"></a><a class="anchor" name="sc_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_bytes_in_rate"></a><a href="#7.3.3-sc_bytes_in_rate">sc_bytes_in_rate</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_bytes_in_rate"></a><a class="anchor" name="7-sc0_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc0_bytes_in_rate"></a><a class="anchor" name="sc0_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_bytes_in_rate"></a><a href="#7.3.3-sc0_bytes_in_rate">sc0_bytes_in_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_bytes_in_rate"></a><a class="anchor" name="7-sc1_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc1_bytes_in_rate"></a><a class="anchor" name="sc1_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_bytes_in_rate"></a><a href="#7.3.3-sc1_bytes_in_rate">sc1_bytes_in_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_bytes_in_rate"></a><a class="anchor" name="7-sc2_bytes_in_rate"></a><a class="anchor" name="7.3.3-sc2_bytes_in_rate"></a><a class="anchor" name="sc2_bytes_in_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_bytes_in_rate (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_bytes_in_rate"></a><a href="#7.3.3-sc2_bytes_in_rate">sc2_bytes_in_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the average client-to-server bytes rate from the currently tracked
 counters, measured in amount of bytes over the period configured in the
@@ -13626,6 +13630,14 @@ stick on urlp(JSESSIONID,;)
 </div><a class="anchor" name="urlp_val"></a><a class="anchor" name="7-urlp_val"></a><a class="anchor" name="7.3.6-urlp_val"></a><a class="anchor" name="urlp_val (Using ACLs and fetching samples)"></a><a class="anchor" name="urlp_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="urlp_val"></a><a href="#7.3.6-urlp_val">urlp_val</a></b>(<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;delim&gt;</span>]</span>) : integer</div><pre class="text">See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
 and converts it to an integer value. This can be used for session stickiness
 based on a user ID for example, or with ACLs to match a page number or price.
+</pre><a class="anchor" name="url32"></a><a class="anchor" name="7-url32"></a><a class="anchor" name="7.3.6-url32"></a><a class="anchor" name="url32 (Using ACLs and fetching samples)"></a><a class="anchor" name="url32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32"></a><a href="#7.3.6-url32">url32</a></b> : integer</div><pre class="text">This returns a 32-bit hash of the value obtained by concatenating the first
+Host header and the whole URL including parameters (not only the path part of
+the request, as in the &quot;<a href="#base32">base32</a>&quot; fetch above). This is useful to track per-URL
+activity. A shorter hash is stored, saving a lot of memory. The output type
+is an unsigned integer.
+</pre><a class="anchor" name="url32+src"></a><a class="anchor" name="7-url32+src"></a><a class="anchor" name="7.3.6-url32+src"></a><a class="anchor" name="url32+src (Using ACLs and fetching samples)"></a><a class="anchor" name="url32+src (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32+src"></a><a href="#7.3.6-url32%2Bsrc">url32+src</a></b> : binary</div><pre class="text">This returns the concatenation of the &quot;<a href="#url32">url32</a>&quot; fetch and the &quot;<a href="#src">src</a>&quot; fetch. The
+resulting type is of type binary, with a size of 8 or 20 bytes depending on
+the source address family. This can be used to track per-IP, per-URL counters.
 </pre></div>
 <a class="anchor" id="7.4" name="7.4"></a>
 <h2 id="chapter-7.4" data-target="7.4"><small><a class="small" href="#7.4">7.4.</a></small> Pre-defined ACLs</h2>
@@ -15243,6 +15255,9 @@ example :
 
     # echo &quot;show info;show stat;show table&quot; | socat /var/run/haproxy stdio
 
+If a command needs to use a semi-colon (eg: in a value), it must be preceeded
+by a backslash ('\').
+
 The interactive mode displays a prompt ('&gt;') and waits for commands to be
 entered on the line, then processes them, and displays the prompt again to wait
 for a new command. This mode is entered via the &quot;<a href="#prompt">prompt</a>&quot; command which must be
@@ -15795,8 +15810,8 @@ maintenance mode, for instance. Such terminated sessions are reported with a
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.5.18 &ndash; Configuration Manual<br>
-							<small>2016/05/10, willy tarreau</small>
+							HAProxy 1.5.19 &ndash; Configuration Manual<br>
+							<small>2016/12/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -15899,7 +15914,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.18', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.5.19', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
