@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev0-66 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev0-129 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -2595,7 +2595,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/12/18</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/12/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2606,7 +2606,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev0-66</strong></p>
+							<p><strong>version 1.8-dev0-129</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -15501,7 +15501,7 @@ connection. If the server connection is not established, if the connection is
 not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend's id. It can be used in
-backends to check from which backend it was called, or to stick all users
+backends to check from which frontend it was called, or to stick all users
 coming via a same frontend to the same server.
 </pre><a class="anchor" name="fe_name"></a><a class="anchor" name="7-fe_name"></a><a class="anchor" name="7.3.3-fe_name"></a><a class="anchor" name="fe_name (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_name (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_name"></a><a href="#7.3.3-fe_name">fe_name</a></b> : string</div><pre class="text">Returns a string containing the current frontend's name. It can be used in
 backends to check from which frontend it was called, or to stick all users
@@ -17386,6 +17386,26 @@ frontend, 3 control points are reported under the form &quot;Tw/Tc/Tt&quot;, and
 mode, 5 control points are reported under the form &quot;TR/Tw/Tc/Tr/Ta&quot;. In
 addition, three other measures are provided, &quot;Th&quot;, &quot;Ti&quot;, and &quot;Tq&quot;.
 
+Timings events in HTTP mode:
+
+                 first request               2nd request
+      |&lt;--------------------------------&gt;|&lt;-------------- ...
+      t         tr                       t    tr ...
+   ---|----|----|----|----|----|----|----|----|--
+      : Th   Ti   TR   Tw   Tc   Tr   Td : Ti   ...
+      :&lt;---- Tq ----&gt;:                   :
+      :&lt;-------------- Tt --------------&gt;:
+                :&lt;--------- Ta ---------&gt;:
+
+Timings events in TCP mode:
+
+           TCP session
+      |&lt;-----------------&gt;|
+      t                   t
+   ---|----|----|----|----|---
+      | Th   Tw   Tc   Td |
+      |&lt;------ Tt -------&gt;|
+
   - Th: total time to accept tcp connection and execute handshakes for low level
     protocols. Currently, these protocoles are proxy-protocol and SSL. This may
     only happen once during the whole connection's lifetime. A large time here
@@ -18155,7 +18175,7 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev0-66 &ndash; Configuration Manual<br>
+							HAProxy 1.8-dev0-129 &ndash; Configuration Manual<br>
 							<small>2016/11/25, willy tarreau</small>
 						</div>
 					</div>
@@ -18259,7 +18279,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev0-66', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev0-129', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
