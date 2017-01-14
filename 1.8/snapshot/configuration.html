@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev0-129 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev0-161 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -1013,7 +1013,9 @@
 							
 							<a class="list-group-item" href="#chroot">chroot</a>
 							
-							<a class="list-group-item" href="#ciphers">ciphers</a>
+							<a class="list-group-item" href="#ciphers (Bind options)">ciphers (Bind options)</a>
+							
+							<a class="list-group-item" href="#ciphers (Server and default-server options)">ciphers (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#clitimeout">clitimeout</a>
 							
@@ -1060,6 +1062,8 @@
 							<a class="list-group-item" href="#crt-ignore-err">crt-ignore-err</a>
 							
 							<a class="list-group-item" href="#crt-list">crt-list</a>
+							
+							<a class="list-group-item" href="#curves">curves</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-D"><h4>D</h4>
@@ -1169,6 +1173,8 @@
 							<a class="list-group-item" href="#fc_fackets">fc_fackets</a>
 							
 							<a class="list-group-item" href="#fc_lost">fc_lost</a>
+							
+							<a class="list-group-item" href="#fc_rcvd_proxy">fc_rcvd_proxy</a>
 							
 							<a class="list-group-item" href="#fc_reordering">fc_reordering</a>
 							
@@ -2584,6 +2590,10 @@
 								<div class="letter" id="letter-X"><h4>X</h4>
 								
 							<a class="list-group-item" href="#xor">xor</a>
+							
+							<a class="list-group-item" href="#xxh32">xxh32</a>
+							
+							<a class="list-group-item" href="#xxh64">xxh64</a>
 						</div><!-- /letter -->
 					</div>
 				</div>
@@ -2595,7 +2605,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/12/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/01/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2606,7 +2616,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev0-129</strong></p>
+							<p><strong>version 1.8-dev0-161</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4900,7 +4910,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-balance">balance</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-bind">bind</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-bind-process">bind-process</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-block">block</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-block"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>block</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-capture%20cookie">capture cookie</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-capture%20request%20header">capture request header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-capture%20response%20header">capture response header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -5552,7 +5562,7 @@ listen management
     bind-process 1-4
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; in global section, and &quot;<a href="#process">process</a>&quot; in <a href="#5.1">section 5.1</a>.</div>
-<a class="anchor" name="block"></a><a class="anchor" name="4-block"></a><a class="anchor" name="4.2-block"></a><a class="anchor" name="block (Proxies)"></a><a class="anchor" name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="block"></a><a href="#4.2-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Block a layer 7 request if/unless a condition is matched
+<a class="anchor" name="block"></a><a class="anchor" name="4-block"></a><a class="anchor" name="4.2-block"></a><a class="anchor" name="block (Proxies)"></a><a class="anchor" name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="block"></a><a href="#4.2-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Block a layer 7 request if/unless a condition is matched
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -5563,6 +5573,9 @@ is blocked. The condition has to reference ACLs (see <a href="#7">section 7</a>)
 typically used to deny access to certain sensitive resources if some
 conditions are met or not met. There is no fixed limit to the number of
 &quot;<a href="#block">block</a>&quot; statements per instance.
+
+This form is deprecated, do not use it in any new configuration, use the new
+&quot;http-request deny&quot; instead.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -7154,7 +7167,7 @@ http-request del-map(map.lst) %[src]                     if delmap
                 set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
                 replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
                 replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
-                set-status <span style="color: #080">&lt;status&gt;</span> |
+                set-status <span style="color: #080">&lt;status&gt;</span> <span style="color: #008">[reason <span style="color: #080">&lt;str&gt;</span>]</span> |
                 set-log-level <span style="color: #080">&lt;level&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> |
                 add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -7246,13 +7259,16 @@ The first keyword is the rule's action. Currently supported actions include :
     Cache-Control: max-age=3600, private
 
 - &quot;set-status&quot; replaces the response status code with &lt;status&gt; which must
-  be an integer between 100 and 999. Note that the reason is automatically
-  adapted to the new code.
+  be an integer between 100 and 999. Optionally, a custom reason text can be
+  provided defined by &lt;str&gt;, or the default reason for the specified code
+  will be used as a fallback.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code><span class="comment"># return &quot;431 Request Header Fields Too Large&quot;</span>
 http-response set-status 431
+<span class="comment"># return &quot;503 Slow Down&quot;, custom reason</span>
+http-response set-status 503 reason &quot;Slow Down&quot;.
 </code></pre>
 </div><pre class="text">- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
   It only has effect against the other requests being processed at the same
@@ -12867,7 +12883,16 @@ extensions enabled (check with haproxy -vv). The ALPN extension replaces the
 initial NPN extension.
 </pre><a class="anchor" name="backlog"></a><a class="anchor" name="5-backlog"></a><a class="anchor" name="5.1-backlog"></a><a class="anchor" name="backlog (Bind and Server options)"></a><a class="anchor" name="backlog (Bind options)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#5.1-backlog">backlog</a></b> <span style="color: #080">&lt;backlog&gt;</span></div><pre class="text">Sets the socket's backlog to this value. If unspecified, the frontend's
 backlog is used instead, which generally defaults to the maxconn value.
-</pre><a class="anchor" name="ecdhe"></a><a class="anchor" name="5-ecdhe"></a><a class="anchor" name="5.1-ecdhe"></a><a class="anchor" name="ecdhe (Bind and Server options)"></a><a class="anchor" name="ecdhe (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ecdhe"></a><a href="#5.1-ecdhe">ecdhe</a></b> <span style="color: #080">&lt;named curve&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
+</pre><a class="anchor" name="curves"></a><a class="anchor" name="5-curves"></a><a class="anchor" name="5.1-curves"></a><a class="anchor" name="curves (Bind and Server options)"></a><a class="anchor" name="curves (Bind options)"></a><div class="keyword"><b><a class="anchor" name="curves"></a><a href="#5.1-curves">curves</a></b> <span style="color: #080">&lt;curves&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
+the string describing the list of elliptic curves algorithms (&quot;curve suite&quot;)
+that are negotiated during the SSL/TLS handshake with ECDHE. The format of the
+string is a colon-delimited list of curve name.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<div class="example-desc">&quot;X25519:P-256&quot; (without quote)</div><code>When &quot;<a href="#curves">curves</a>&quot; is set, &quot;<a href="#ecdhe">ecdhe</a>&quot; parameter is ignored.
+</code></pre>
+</div><a class="anchor" name="ecdhe"></a><a class="anchor" name="5-ecdhe"></a><a class="anchor" name="5.1-ecdhe"></a><a class="anchor" name="ecdhe (Bind and Server options)"></a><a class="anchor" name="ecdhe (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ecdhe"></a><a href="#5.1-ecdhe">ecdhe</a></b> <span style="color: #080">&lt;named curve&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the named curve (RFC 4492) used to generate ECDH ephemeral keys. By default,
 used named curve is prime256v1.
 </pre><a class="anchor" name="ca-file"></a><a class="anchor" name="5-ca-file"></a><a class="anchor" name="5.1-ca-file"></a><a class="anchor" name="ca-file (Bind and Server options)"></a><a class="anchor" name="ca-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ca-file"></a><a href="#5.1-ca-file">ca-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
@@ -13001,10 +13026,14 @@ comma separated list of errorIDs to ignore during verify at depth == 0.  If
 set to 'all', all errors are ignored. SSL handshake is not aborted if an error
 is ignored.
 </pre><a class="anchor" name="crt-list"></a><a class="anchor" name="5-crt-list"></a><a class="anchor" name="5.1-crt-list"></a><a class="anchor" name="crt-list (Bind and Server options)"></a><a class="anchor" name="crt-list (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crt-list"></a><a href="#5.1-crt-list">crt-list</a></b> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
-designates a list of PEM file with an optional list of SNI filter per
-certificate, with the following format for each line :
+designates a list of PEM file with an optional ssl configuration and a SNI
+filter per certificate, with the following format for each line :
 
-      &lt;crtfile&gt; [[!]&lt;snifilter&gt; ...]
+      &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
+
+sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;ca_file&quot;, &quot;crl_file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;,
+&quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration and ssl options (see &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;).
+It override the configuration set in bind line for the certificate.
 
 Wildcards are supported in the SNI filter. Negative filter are also supported,
 only useful in combination with a wildcard filter to exclude a particular SNI.
@@ -13018,6 +13047,12 @@ the 'strict-sni' option may be used.
 Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is supported with crt-list, as long as only
 the base name is given in the crt-list. SNI filter will do the same work on
 all bundled certificates.
+
+crt-list file example:
+      cert1.pem
+      cert2.pem [npn h2,http/1.1]
+      certW.pem                   *.domain.tld !secure.domain.tld
+      certS.pem [ecdhe secp521r1 ciphers ECDHE-ECDSA-AES256-GCM-SHA384] secure.domain.tld
 </pre><a class="anchor" name="defer-accept"></a><a class="anchor" name="5-defer-accept"></a><a class="anchor" name="5.1-defer-accept"></a><a class="anchor" name="defer-accept (Bind and Server options)"></a><a class="anchor" name="defer-accept (Bind options)"></a><div class="keyword"><b><a class="anchor" name="defer-accept"></a><a href="#5.1-defer-accept">defer-accept</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
 states that a connection will only be accepted once some data arrive on it,
 or at worst after the first retransmit. This should be used only on protocols
@@ -15204,6 +15239,20 @@ starts with an indication about its scope. The scopes allowed are:
   &quot;res&quot;  : the variable is shared only during response processing.
 This prefix is followed by a name. The separator is a '.'. The name may only
 contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
+</pre><a class="anchor" name="xxh32"></a><a class="anchor" name="7-xxh32"></a><a class="anchor" name="7.3.1-xxh32"></a><a class="anchor" name="xxh32 (Using ACLs and fetching samples)"></a><a class="anchor" name="xxh32 (Converters)"></a><div class="keyword"><b><a class="anchor" name="xxh32"></a><a href="#7.3.1-xxh32">xxh32</a></b>(<span style="color: #008">[<span style="color: #080">&lt;seed&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the 32-bit
+variant of the XXHash hash function. This hash supports a seed which defaults
+to zero but a different value maybe passed as the &lt;seed&gt; argument. This hash
+is known to be very good and very fast so it can be used to hash URLs and/or
+URL parameters for use as stick-table keys to collect statistics with a low
+collision rate, though care must be taken as the algorithm is not considered
+as cryptographically secure.
+</pre><a class="anchor" name="xxh64"></a><a class="anchor" name="7-xxh64"></a><a class="anchor" name="7.3.1-xxh64"></a><a class="anchor" name="xxh64 (Using ACLs and fetching samples)"></a><a class="anchor" name="xxh64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="xxh64"></a><a href="#7.3.1-xxh64">xxh64</a></b>(<span style="color: #008">[<span style="color: #080">&lt;seed&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into a signed 64-bit quantity using the 64-bit
+variant of the XXHash hash function. This hash supports a seed which defaults
+to zero but a different value maybe passed as the &lt;seed&gt; argument. This hash
+is known to be very good and very fast so it can be used to hash URLs and/or
+URL parameters for use as stick-table keys to collect statistics with a low
+collision rate, though care must be taken as the algorithm is not considered
+as cryptographically secure.
 </pre></div>
 <a class="anchor" id="7.3.2" name="7.3.2"></a>
 <h3 id="chapter-7.3.2" data-target="7.3.2"><small><a class="small" href="#7.3.2">7.3.2.</a></small> Fetching samples from internal states</h3>
@@ -15464,6 +15513,8 @@ This might be used when running in transparent mode, when assigning dynamic
 ports to some clients for a whole application session, to stick all users to
 a same server, or to pass the destination port information to a server using
 an HTTP header.
+</pre><a class="anchor" name="fc_rcvd_proxy"></a><a class="anchor" name="7-fc_rcvd_proxy"></a><a class="anchor" name="7.3.3-fc_rcvd_proxy"></a><a class="anchor" name="fc_rcvd_proxy (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rcvd_proxy (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rcvd_proxy"></a><a href="#7.3.3-fc_rcvd_proxy">fc_rcvd_proxy</a></b> : boolean</div><pre class="text">Returns true if the client initiated the connection with a PROXY protocol
+header.
 </pre><a class="anchor" name="fc_rtt"></a><a class="anchor" name="7-fc_rtt"></a><a class="anchor" name="7.3.3-fc_rtt"></a><a class="anchor" name="fc_rtt (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rtt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rtt"></a><a href="#7.3.3-fc_rtt">fc_rtt</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the Round Trip Time (RTT) measured by the kernel for the client
 connection. &lt;unit&gt; is facultative, by default the unit is milliseconds. &lt;unit&gt;
 can be set to &quot;ms&quot; for milliseconds or &quot;us&quot; for microseconds. If the server
@@ -18175,7 +18226,7 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev0-129 &ndash; Configuration Manual<br>
+							HAProxy 1.8-dev0-161 &ndash; Configuration Manual<br>
 							<small>2016/11/25, willy tarreau</small>
 						</div>
 					</div>
@@ -18279,7 +18330,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev0-129', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev0-161', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
