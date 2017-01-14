@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7.1 - Configuration Manual</title>
+		<title>HAProxy version 1.7.2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -1169,6 +1169,8 @@
 							<a class="list-group-item" href="#fc_fackets">fc_fackets</a>
 							
 							<a class="list-group-item" href="#fc_lost">fc_lost</a>
+							
+							<a class="list-group-item" href="#fc_rcvd_proxy">fc_rcvd_proxy</a>
 							
 							<a class="list-group-item" href="#fc_reordering">fc_reordering</a>
 							
@@ -2595,7 +2597,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2016/12/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/01/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2606,11 +2608,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7.1</strong></p>
+							<p><strong>version 1.7.2</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/12/13
+								2017/01/13
 							</p>
 						</div>
 
@@ -4900,7 +4902,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-balance">balance</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-bind">bind</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-bind-process">bind-process</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-block">block</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-block"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>block</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-capture%20cookie">capture cookie</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-capture%20request%20header">capture request header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-capture%20response%20header">capture response header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -5552,7 +5554,7 @@ listen management
     bind-process 1-4
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; in global section, and &quot;<a href="#process">process</a>&quot; in <a href="#5.1">section 5.1</a>.</div>
-<a class="anchor" name="block"></a><a class="anchor" name="4-block"></a><a class="anchor" name="4.2-block"></a><a class="anchor" name="block (Proxies)"></a><a class="anchor" name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="block"></a><a href="#4.2-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span></div><pre class="text">Block a layer 7 request if/unless a condition is matched
+<a class="anchor" name="block"></a><a class="anchor" name="4-block"></a><a class="anchor" name="4.2-block"></a><a class="anchor" name="block (Proxies)"></a><a class="anchor" name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="block"></a><a href="#4.2-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Block a layer 7 request if/unless a condition is matched
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -5563,6 +5565,9 @@ is blocked. The condition has to reference ACLs (see <a href="#7">section 7</a>)
 typically used to deny access to certain sensitive resources if some
 conditions are met or not met. There is no fixed limit to the number of
 &quot;<a href="#block">block</a>&quot; statements per instance.
+
+This form is deprecated, do not use it in any new configuration, use the new
+&quot;http-request deny&quot; instead.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -7154,7 +7159,7 @@ http-request del-map(map.lst) %[src]                     if delmap
                 set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | del-header <span style="color: #080">&lt;name&gt;</span> |
                 replace-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
                 replace-value <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span> |
-                set-status <span style="color: #080">&lt;status&gt;</span> |
+                set-status <span style="color: #080">&lt;status&gt;</span> <span style="color: #008">[reason <span style="color: #080">&lt;str&gt;</span>]</span> |
                 set-log-level <span style="color: #080">&lt;level&gt;</span> | set-mark <span style="color: #080">&lt;mark&gt;</span> | set-tos <span style="color: #080">&lt;tos&gt;</span> |
                 add-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
                 del-acl(<span style="color: #080">&lt;file name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> |
@@ -7246,13 +7251,16 @@ The first keyword is the rule's action. Currently supported actions include :
     Cache-Control: max-age=3600, private
 
 - &quot;set-status&quot; replaces the response status code with &lt;status&gt; which must
-  be an integer between 100 and 999. Note that the reason is automatically
-  adapted to the new code.
+  be an integer between 100 and 999. Optionally, a custom reason text can be
+  provided defined by &lt;str&gt;, or the default reason for the specified code
+  will be used as a fallback.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code><span class="comment"># return &quot;431 Request Header Fields Too Large&quot;</span>
 http-response set-status 431
+<span class="comment"># return &quot;503 Slow Down&quot;, custom reason</span>
+http-response set-status 503 reason &quot;Slow Down&quot;.
 </code></pre>
 </div><pre class="text">- &quot;set-nice&quot; sets the &quot;<a href="#nice">nice</a>&quot; factor of the current request being processed.
   It only has effect against the other requests being processed at the same
@@ -15464,6 +15472,8 @@ This might be used when running in transparent mode, when assigning dynamic
 ports to some clients for a whole application session, to stick all users to
 a same server, or to pass the destination port information to a server using
 an HTTP header.
+</pre><a class="anchor" name="fc_rcvd_proxy"></a><a class="anchor" name="7-fc_rcvd_proxy"></a><a class="anchor" name="7.3.3-fc_rcvd_proxy"></a><a class="anchor" name="fc_rcvd_proxy (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rcvd_proxy (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rcvd_proxy"></a><a href="#7.3.3-fc_rcvd_proxy">fc_rcvd_proxy</a></b> : boolean</div><pre class="text">Returns true if the client initiated the connection with a PROXY protocol
+header.
 </pre><a class="anchor" name="fc_rtt"></a><a class="anchor" name="7-fc_rtt"></a><a class="anchor" name="7.3.3-fc_rtt"></a><a class="anchor" name="fc_rtt (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rtt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rtt"></a><a href="#7.3.3-fc_rtt">fc_rtt</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the Round Trip Time (RTT) measured by the kernel for the client
 connection. &lt;unit&gt; is facultative, by default the unit is milliseconds. &lt;unit&gt;
 can be set to &quot;ms&quot; for milliseconds or &quot;us&quot; for microseconds. If the server
@@ -15501,7 +15511,7 @@ connection. If the server connection is not established, if the connection is
 not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend's id. It can be used in
-backends to check from which backend it was called, or to stick all users
+backends to check from which frontend it was called, or to stick all users
 coming via a same frontend to the same server.
 </pre><a class="anchor" name="fe_name"></a><a class="anchor" name="7-fe_name"></a><a class="anchor" name="7.3.3-fe_name"></a><a class="anchor" name="fe_name (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_name (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_name"></a><a href="#7.3.3-fe_name">fe_name</a></b> : string</div><pre class="text">Returns a string containing the current frontend's name. It can be used in
 backends to check from which frontend it was called, or to stick all users
@@ -17386,6 +17396,26 @@ frontend, 3 control points are reported under the form &quot;Tw/Tc/Tt&quot;, and
 mode, 5 control points are reported under the form &quot;TR/Tw/Tc/Tr/Ta&quot;. In
 addition, three other measures are provided, &quot;Th&quot;, &quot;Ti&quot;, and &quot;Tq&quot;.
 
+Timings events in HTTP mode:
+
+                 first request               2nd request
+      |&lt;--------------------------------&gt;|&lt;-------------- ...
+      t         tr                       t    tr ...
+   ---|----|----|----|----|----|----|----|----|--
+      : Th   Ti   TR   Tw   Tc   Tr   Td : Ti   ...
+      :&lt;---- Tq ----&gt;:                   :
+      :&lt;-------------- Tt --------------&gt;:
+                :&lt;--------- Ta ---------&gt;:
+
+Timings events in TCP mode:
+
+           TCP session
+      |&lt;-----------------&gt;|
+      t                   t
+   ---|----|----|----|----|---
+      | Th   Tw   Tc   Td |
+      |&lt;------ Tt -------&gt;|
+
   - Th: total time to accept tcp connection and execute handshakes for low level
     protocols. Currently, these protocoles are proxy-protocol and SSL. This may
     only happen once during the whole connection's lifetime. A large time here
@@ -18155,8 +18185,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7.1 &ndash; Configuration Manual<br>
-							<small>2016/12/13, willy tarreau</small>
+							HAProxy 1.7.2 &ndash; Configuration Manual<br>
+							<small>2017/01/13, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18259,7 +18289,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
