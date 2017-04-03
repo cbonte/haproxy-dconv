@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7.4 - Configuration Manual</title>
+		<title>HAProxy version 1.7.5 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -2530,6 +2530,8 @@
 							
 							<a class="list-group-item" href="#urlp">urlp</a>
 							
+							<a class="list-group-item" href="#urlp_val">urlp_val</a>
+							
 							<a class="list-group-item" href="#use-server">use-server</a>
 							
 							<a class="list-group-item" href="#use_backend">use_backend</a>
@@ -2599,7 +2601,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/03/28</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/04/03</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2610,11 +2612,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7.4</strong></p>
+							<p><strong>version 1.7.5</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/03/27
+								2017/04/03
 							</p>
 						</div>
 
@@ -7769,6 +7771,9 @@ resulting from traffic passing through the frontend using this line. If the
 directive is used in a defaults section, all subsequent frontends will use
 the same log format. Please see <a href="#8.2.4">section 8.2.4</a> which covers the log format
 string in depth.
+
+&quot;<a href="#log-format">log-format</a>&quot; directive overrides previous &quot;<a href="#option%20tcplog">option tcplog</a>&quot;, &quot;<a href="#log-format">log-format</a>&quot; and
+&quot;<a href="#option%20httplog">option httplog</a>&quot; directives.
 </pre><a class="anchor" name="log-format-sd"></a><a class="anchor" name="4-log-format-sd"></a><a class="anchor" name="4.2-log-format-sd"></a><a class="anchor" name="log-format-sd (Proxies)"></a><a class="anchor" name="log-format-sd (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log-format-sd"></a><a href="#4.2-log-format-sd">log-format-sd</a></b> <span style="color: #080">&lt;string&gt;</span></div><pre class="text">Specifies the RFC5424 structured-data log format string
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8760,6 +8765,8 @@ This option may be set either in the frontend or the backend.
 
 Specifying only &quot;<a href="#option%20httplog">option httplog</a>&quot; will automatically clear the 'clf' mode
 if it was set by default.
+
+&quot;<a href="#option%20httplog">option httplog</a>&quot; overrides any previous &quot;<a href="#log-format">log-format</a>&quot; directive.
 </pre><div class="page-header"><b>See also :</b> <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http_proxy"></a><a class="anchor" name="4-option http_proxy"></a><a class="anchor" name="4.2-option http_proxy"></a><a class="anchor" name="option http_proxy (Proxies)"></a><a class="anchor" name="option http_proxy (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http_proxy"></a><a href="#4.2-option%20http_proxy">option http_proxy</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http_proxy"></a><a class="anchor" name="4-no option http_proxy"></a><a class="anchor" name="4.2-no option http_proxy"></a><a class="anchor" name="no option http_proxy (Proxies)"></a><a class="anchor" name="no option http_proxy (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http_proxy"></a><a href="#4.2-no%20option%20http_proxy">no option http_proxy</a></b></div><pre class="text">Enable or disable plain HTTP proxy mode
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -9572,6 +9579,8 @@ find which of the client or server disconnects or times out. For normal HTTP
 proxies, it's better to use &quot;<a href="#option%20httplog">option httplog</a>&quot; which is even more complete.
 
 This option may be set either in the frontend or the backend.
+
+&quot;<a href="#option%20tcplog">option tcplog</a>&quot; overrides any previous &quot;<a href="#log-format">log-format</a>&quot; directive.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httplog">option httplog</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option transparent"></a><a class="anchor" name="4-option transparent"></a><a class="anchor" name="4.2-option transparent"></a><a class="anchor" name="option transparent (Proxies)"></a><a class="anchor" name="option transparent (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option transparent"></a><a href="#4.2-option%20transparent">option transparent</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option transparent"></a><a class="anchor" name="4-no option transparent"></a><a class="anchor" name="4.2-no option transparent"></a><a class="anchor" name="no option transparent (Proxies)"></a><a class="anchor" name="no option transparent (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option transparent"></a><a href="#4.2-no%20option%20transparent">no option transparent</a></b></div><pre class="text">Enable client-side transparent proxying
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -15545,15 +15554,18 @@ counters, and returns its previous value. Before the first invocation, the
 stored value is zero, so first invocation will always return zero. This is
 typically used as a second ACL in an expression in order to mark a connection
 when a first ACL was verified :
-
-      # block if 5 consecutive requests continue to come faster than 10 sess
-      # per second, and reset the counter as soon as the traffic slows down.
-      acl abuse sc0_http_req_rate gt 10
-      acl kill  sc0_inc_gpc0 gt 5
-      acl save  sc0_clr_gpc0 ge 0
-      tcp-request connection accept if !abuse save
-      tcp-request connection reject if abuse kill
-</pre><a class="anchor" name="sc_conn_cnt"></a><a class="anchor" name="7-sc_conn_cnt"></a><a class="anchor" name="7.3.3-sc_conn_cnt"></a><a class="anchor" name="sc_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_conn_cnt"></a><a href="#7.3.3-sc_conn_cnt">sc_conn_cnt</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_conn_cnt"></a><a class="anchor" name="7-sc0_conn_cnt"></a><a class="anchor" name="7.3.3-sc0_conn_cnt"></a><a class="anchor" name="sc0_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_conn_cnt"></a><a href="#7.3.3-sc0_conn_cnt">sc0_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_conn_cnt"></a><a class="anchor" name="7-sc1_conn_cnt"></a><a class="anchor" name="7.3.3-sc1_conn_cnt"></a><a class="anchor" name="sc1_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_cnt"></a><a href="#7.3.3-sc1_conn_cnt">sc1_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_conn_cnt"></a><a class="anchor" name="7-sc2_conn_cnt"></a><a class="anchor" name="7.3.3-sc2_conn_cnt"></a><a class="anchor" name="sc2_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_cnt"></a><a href="#7.3.3-sc2_conn_cnt">sc2_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the cumulated number of incoming connections from currently tracked
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># block if 5 consecutive requests continue to come faster than 10 sess</span>
+<span class="comment"># per second, and reset the counter as soon as the traffic slows down.</span>
+acl abuse sc0_http_req_rate gt 10
+acl kill  sc0_inc_gpc0 gt 5
+acl save  sc0_clr_gpc0 ge 0
+tcp-request connection accept if !abuse save
+tcp-request connection reject if abuse kill
+</code></pre>
+</div><a class="anchor" name="sc_conn_cnt"></a><a class="anchor" name="7-sc_conn_cnt"></a><a class="anchor" name="7.3.3-sc_conn_cnt"></a><a class="anchor" name="sc_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_conn_cnt"></a><a href="#7.3.3-sc_conn_cnt">sc_conn_cnt</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_conn_cnt"></a><a class="anchor" name="7-sc0_conn_cnt"></a><a class="anchor" name="7.3.3-sc0_conn_cnt"></a><a class="anchor" name="sc0_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_conn_cnt"></a><a href="#7.3.3-sc0_conn_cnt">sc0_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_conn_cnt"></a><a class="anchor" name="7-sc1_conn_cnt"></a><a class="anchor" name="7.3.3-sc1_conn_cnt"></a><a class="anchor" name="sc1_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_cnt"></a><a href="#7.3.3-sc1_conn_cnt">sc1_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_conn_cnt"></a><a class="anchor" name="7-sc2_conn_cnt"></a><a class="anchor" name="7.3.3-sc2_conn_cnt"></a><a class="anchor" name="sc2_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_cnt"></a><a href="#7.3.3-sc2_conn_cnt">sc2_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the cumulated number of incoming connections from currently tracked
 counters. See also src_conn_cnt.
 </pre><a class="anchor" name="sc_conn_cur"></a><a class="anchor" name="7-sc_conn_cur"></a><a class="anchor" name="7.3.3-sc_conn_cur"></a><a class="anchor" name="sc_conn_cur (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_conn_cur (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_conn_cur"></a><a href="#7.3.3-sc_conn_cur">sc_conn_cur</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_conn_cur"></a><a class="anchor" name="7-sc0_conn_cur"></a><a class="anchor" name="7.3.3-sc0_conn_cur"></a><a class="anchor" name="sc0_conn_cur (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_conn_cur (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_conn_cur"></a><a href="#7.3.3-sc0_conn_cur">sc0_conn_cur</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_conn_cur"></a><a class="anchor" name="7-sc1_conn_cur"></a><a class="anchor" name="7.3.3-sc1_conn_cur"></a><a class="anchor" name="sc1_conn_cur (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_conn_cur (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_conn_cur"></a><a href="#7.3.3-sc1_conn_cur">sc1_conn_cur</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_conn_cur"></a><a class="anchor" name="7-sc2_conn_cur"></a><a class="anchor" name="7.3.3-sc2_conn_cur"></a><a class="anchor" name="sc2_conn_cur (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_conn_cur (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_conn_cur"></a><a href="#7.3.3-sc2_conn_cur">sc2_conn_cur</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the current amount of concurrent connections tracking the same
 tracked counters. This number is automatically incremented when tracking
@@ -15590,11 +15602,14 @@ tracked counters, and returns its new value. Before the first invocation,
 the stored value is zero, so first invocation will increase it to 1 and will
 return 1. This is typically used as a second ACL in an expression in order
 to mark a connection when a first ACL was verified :
-
-      acl abuse sc0_http_req_rate gt 10
-      acl kill  sc0_inc_gpc0 gt 0
-      tcp-request connection reject if abuse kill
-</pre><a class="anchor" name="sc_kbytes_in"></a><a class="anchor" name="7-sc_kbytes_in"></a><a class="anchor" name="7.3.3-sc_kbytes_in"></a><a class="anchor" name="sc_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_kbytes_in"></a><a href="#7.3.3-sc_kbytes_in">sc_kbytes_in</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_kbytes_in"></a><a class="anchor" name="7-sc0_kbytes_in"></a><a class="anchor" name="7.3.3-sc0_kbytes_in"></a><a class="anchor" name="sc0_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_kbytes_in"></a><a href="#7.3.3-sc0_kbytes_in">sc0_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_kbytes_in"></a><a class="anchor" name="7-sc1_kbytes_in"></a><a class="anchor" name="7.3.3-sc1_kbytes_in"></a><a class="anchor" name="sc1_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_in"></a><a href="#7.3.3-sc1_kbytes_in">sc1_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_kbytes_in"></a><a class="anchor" name="7-sc2_kbytes_in"></a><a class="anchor" name="7.3.3-sc2_kbytes_in"></a><a class="anchor" name="sc2_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_in"></a><a href="#7.3.3-sc2_kbytes_in">sc2_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of client-to-server data from the currently tracked
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>acl abuse sc0_http_req_rate gt 10
+acl kill  sc0_inc_gpc0 gt 0
+tcp-request connection reject if abuse kill
+</code></pre>
+</div><a class="anchor" name="sc_kbytes_in"></a><a class="anchor" name="7-sc_kbytes_in"></a><a class="anchor" name="7.3.3-sc_kbytes_in"></a><a class="anchor" name="sc_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_kbytes_in"></a><a href="#7.3.3-sc_kbytes_in">sc_kbytes_in</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_kbytes_in"></a><a class="anchor" name="7-sc0_kbytes_in"></a><a class="anchor" name="7.3.3-sc0_kbytes_in"></a><a class="anchor" name="sc0_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_kbytes_in"></a><a href="#7.3.3-sc0_kbytes_in">sc0_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_kbytes_in"></a><a class="anchor" name="7-sc1_kbytes_in"></a><a class="anchor" name="7.3.3-sc1_kbytes_in"></a><a class="anchor" name="sc1_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_in"></a><a href="#7.3.3-sc1_kbytes_in">sc1_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_kbytes_in"></a><a class="anchor" name="7-sc2_kbytes_in"></a><a class="anchor" name="7.3.3-sc2_kbytes_in"></a><a class="anchor" name="sc2_kbytes_in (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_kbytes_in (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_in"></a><a href="#7.3.3-sc2_kbytes_in">sc2_kbytes_in</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of client-to-server data from the currently tracked
 counters, measured in kilobytes. The test is currently performed on 32-bit
 integers, which limits values to 4 terabytes. See also src_kbytes_in.
 </pre><a class="anchor" name="sc_kbytes_out"></a><a class="anchor" name="7-sc_kbytes_out"></a><a class="anchor" name="7.3.3-sc_kbytes_out"></a><a class="anchor" name="sc_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc_kbytes_out"></a><a href="#7.3.3-sc_kbytes_out">sc_kbytes_out</a></b>(<span style="color: #080">&lt;ctr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc0_kbytes_out"></a><a class="anchor" name="7-sc0_kbytes_out"></a><a class="anchor" name="7.3.3-sc0_kbytes_out"></a><a class="anchor" name="sc0_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc0_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc0_kbytes_out"></a><a href="#7.3.3-sc0_kbytes_out">sc0_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc1_kbytes_out"></a><a class="anchor" name="7-sc1_kbytes_out"></a><a class="anchor" name="7.3.3-sc1_kbytes_out"></a><a class="anchor" name="sc1_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc1_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc1_kbytes_out"></a><a href="#7.3.3-sc1_kbytes_out">sc1_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><a class="anchor" name="sc2_kbytes_out"></a><a class="anchor" name="7-sc2_kbytes_out"></a><a class="anchor" name="7.3.3-sc2_kbytes_out"></a><a class="anchor" name="sc2_kbytes_out (Using ACLs and fetching samples)"></a><a class="anchor" name="sc2_kbytes_out (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="sc2_kbytes_out"></a><a href="#7.3.3-sc2_kbytes_out">sc2_kbytes_out</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total amount of server-to-client data from the currently tracked
@@ -15654,15 +15669,18 @@ designated stick-table, and returns its previous value. If the address is not
 found, an entry is created and 0 is returned. This is typically used as a
 second ACL in an expression in order to mark a connection when a first ACL
 was verified :
-
-      # block if 5 consecutive requests continue to come faster than 10 sess
-      # per second, and reset the counter as soon as the traffic slows down.
-      acl abuse src_http_req_rate gt 10
-      acl kill  src_inc_gpc0 gt 5
-      acl save  src_clr_gpc0 ge 0
-      tcp-request connection accept if !abuse save
-      tcp-request connection reject if abuse kill
-</pre><a class="anchor" name="src_conn_cnt"></a><a class="anchor" name="7-src_conn_cnt"></a><a class="anchor" name="7.3.3-src_conn_cnt"></a><a class="anchor" name="src_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="src_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_conn_cnt"></a><a href="#7.3.3-src_conn_cnt">src_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the cumulated number of connections initiated from the current
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># block if 5 consecutive requests continue to come faster than 10 sess</span>
+<span class="comment"># per second, and reset the counter as soon as the traffic slows down.</span>
+acl abuse src_http_req_rate gt 10
+acl kill  src_inc_gpc0 gt 5
+acl save  src_clr_gpc0 ge 0
+tcp-request connection accept if !abuse save
+tcp-request connection reject if abuse kill
+</code></pre>
+</div><a class="anchor" name="src_conn_cnt"></a><a class="anchor" name="7-src_conn_cnt"></a><a class="anchor" name="7.3.3-src_conn_cnt"></a><a class="anchor" name="src_conn_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="src_conn_cnt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_conn_cnt"></a><a href="#7.3.3-src_conn_cnt">src_conn_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the cumulated number of connections initiated from the current
 incoming connection's source address in the current proxy's stick-table or in
 the designated stick-table. If the address is not found, zero is returned.
 See also sc/sc0/sc1/sc2_conn_cnt.
@@ -15714,11 +15732,14 @@ designated stick-table, and returns its new value. If the address is not
 found, an entry is created and 1 is returned. See also sc0/sc2/sc2_inc_gpc0.
 This is typically used as a second ACL in an expression in order to mark a
 connection when a first ACL was verified :
-
-      acl abuse src_http_req_rate gt 10
-      acl kill  src_inc_gpc0 gt 0
-      tcp-request connection reject if abuse kill
-</pre><a class="anchor" name="src_is_local"></a><a class="anchor" name="7-src_is_local"></a><a class="anchor" name="7.3.3-src_is_local"></a><a class="anchor" name="src_is_local (Using ACLs and fetching samples)"></a><a class="anchor" name="src_is_local (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_is_local"></a><a href="#7.3.3-src_is_local">src_is_local</a></b> : boolean</div><pre class="text">Returns true if the source address of the incoming connection is local to the
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>acl abuse src_http_req_rate gt 10
+acl kill  src_inc_gpc0 gt 0
+tcp-request connection reject if abuse kill
+</code></pre>
+</div><a class="anchor" name="src_is_local"></a><a class="anchor" name="7-src_is_local"></a><a class="anchor" name="7.3.3-src_is_local"></a><a class="anchor" name="src_is_local (Using ACLs and fetching samples)"></a><a class="anchor" name="src_is_local (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="src_is_local"></a><a href="#7.3.3-src_is_local">src_is_local</a></b> : boolean</div><pre class="text">Returns true if the source address of the incoming connection is local to the
 system, or false if the address doesn't exist on the system, meaning that it
 comes from a remote machine. Note that UNIX addresses are considered local.
 It can be useful to apply certain access restrictions based on where the
@@ -15866,9 +15887,12 @@ the incoming connection was made over an SSL/TLS transport layer. This can be
 used to stick a client to a server, or to pass this information to a server.
 Note that the output is binary, so if you want to pass that signature to the
 server, you need to encode it in hex or base64, such as in the example below:
-
-   http-request set-header X-SSL-Client-SHA1 %[ssl_c_sha1,hex]
-</pre><a class="anchor" name="ssl_c_sig_alg"></a><a class="anchor" name="7-ssl_c_sig_alg"></a><a class="anchor" name="7.3.4-ssl_c_sig_alg"></a><a class="anchor" name="ssl_c_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sig_alg"></a><a href="#7.3.4-ssl_c_sig_alg">ssl_c_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request set-header X-SSL-Client-SHA1 %[ssl_c_sha1,hex]
+</code></pre>
+</div><a class="anchor" name="ssl_c_sig_alg"></a><a class="anchor" name="7-ssl_c_sig_alg"></a><a class="anchor" name="7.3.4-ssl_c_sig_alg"></a><a class="anchor" name="ssl_c_sig_alg (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_sig_alg (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_sig_alg"></a><a href="#7.3.4-ssl_c_sig_alg">ssl_c_sig_alg</a></b> : string</div><pre class="text">Returns the name of the algorithm used to sign the certificate presented by
 the client when the incoming connection was made over an SSL/TLS transport
 layer.
 </pre><a class="anchor" name="ssl_c_used"></a><a class="anchor" name="7-ssl_c_used"></a><a class="anchor" name="7.3.4-ssl_c_used"></a><a class="anchor" name="ssl_c_used (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_used (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_used"></a><a href="#7.3.4-ssl_c_used">ssl_c_used</a></b> : boolean</div><pre class="text">Returns true if current SSL session uses a client certificate even if current
@@ -16599,10 +16623,9 @@ stick on urlp(PHPSESSIONID)
 <span class="comment"># match http://example.com/foo;JSESSIONID=some_id</span>
 stick on urlp(JSESSIONID,;)
 </code></pre>
-</div><pre class="text">urlp_val([&lt;name&gt;[,&lt;delim&gt;])] : integer
-  See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
-  and converts it to an integer value. This can be used for session stickiness
-  based on a user ID for example, or with ACLs to match a page number or price.
+</div><a class="anchor" name="urlp_val"></a><a class="anchor" name="7-urlp_val"></a><a class="anchor" name="7.3.6-urlp_val"></a><a class="anchor" name="urlp_val (Using ACLs and fetching samples)"></a><a class="anchor" name="urlp_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="urlp_val"></a><a href="#7.3.6-urlp_val">urlp_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;delim&gt;</span>]</span>]</span>) : integer</div><pre class="text">See &quot;<a href="#urlp">urlp</a>&quot; above. This one extracts the URL parameter &lt;name&gt; in the request
+and converts it to an integer value. This can be used for session stickiness
+based on a user ID for example, or with ACLs to match a page number or price.
 </pre><a class="anchor" name="url32"></a><a class="anchor" name="7-url32"></a><a class="anchor" name="7.3.6-url32"></a><a class="anchor" name="url32 (Using ACLs and fetching samples)"></a><a class="anchor" name="url32 (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="url32"></a><a href="#7.3.6-url32">url32</a></b> : integer</div><pre class="text">This returns a 32-bit hash of the value obtained by concatenating the first
 Host header and the whole URL including parameters (not only the path part of
 the request, as in the &quot;<a href="#base32">base32</a>&quot; fetch above). This is useful to track per-URL
@@ -18203,8 +18226,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7.4 &ndash; Configuration Manual<br>
-							<small>2017/03/27, willy tarreau</small>
+							HAProxy 1.7.5 &ndash; Configuration Manual<br>
+							<small>2017/04/03, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18307,7 +18330,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.5', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
