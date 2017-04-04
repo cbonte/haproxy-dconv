@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.11-44 - Configuration Manual</title>
+		<title>HAProxy version 1.6.12 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -2465,7 +2465,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/04/03</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/04/04</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2476,11 +2476,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.11-44</strong></p>
+							<p><strong>version 1.6.12</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2016/12/25
+								2017/04/04
 							</p>
 						</div>
 
@@ -4211,7 +4211,7 @@ which seems to correctly detect end user pauses (eg: read a page before
 clicking). There should be not reason for changing this value. Please check
 tune.ssl.maxrecord below.
 </pre><a class="anchor" name="tune.lua.forced-yield"></a><a class="anchor" name="3-tune.lua.forced-yield"></a><a class="anchor" name="3.2-tune.lua.forced-yield"></a><a class="anchor" name="tune.lua.forced-yield (Global parameters)"></a><a class="anchor" name="tune.lua.forced-yield (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.lua.forced-yield"></a><a href="#3.2-tune.lua.forced-yield">tune.lua.forced-yield</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This directive forces the Lua engine to execute a yield each &lt;number&gt; of
-instructions executed. This permits interruptng a long script and allows the
+instructions executed. This permits interrupting a long script and allows the
 HAProxy scheduler to process other tasks like accepting connections or
 forwarding traffic. The default value is 10000 instructions. If HAProxy often
 executes some Lua code but more reactivity is required, this value can be
@@ -7925,7 +7925,7 @@ decision based on the request body's contents. This option placed in a
 frontend or backend forces the HTTP processing to wait until either the whole
 body is received, or the request buffer is full, or the first chunk is
 complete in case of chunked encoding. It can have undesired side effects with
-some applications abusing HTTP by expecting unbufferred transmissions between
+some applications abusing HTTP by expecting unbuffered transmissions between
 the frontend and the backend, so this should definitely not be used by
 default.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-no-delay">option http-no-delay</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;</div>
@@ -12505,10 +12505,10 @@ to deciphered contents.
 SSL/TLS negotiation is allow only if the client provided an SNI which match
 a certificate. The default certificate is not used.
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information.
-</pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.1-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.1-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all incoming connections instanciated from this
+</pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.1-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.1-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all incoming connections instantiated from this
 listening socket. This option is available on Linux since version 2.6.37. It
 allows haproxy to configure a timeout for sockets which contain data not
-receiving an acknoledgement for the configured delay. This is especially
+receiving an acknowledgement for the configured delay. This is especially
 useful on long-lived connections experiencing long idle periods such as
 remote terminals or database connection pools, where the client and server
 timeouts must remain high to allow a long period of idle, but where it is
@@ -13106,7 +13106,7 @@ Supported in default-server: No
 </pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.2-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and Server options)"></a><a class="anchor" name="tcp-ut (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.2-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all outgoing connections to this server. This
 option is available on Linux since version 2.6.37. It allows haproxy to
 configure a timeout for sockets which contain data not receiving an
-acknoledgement for the configured delay. This is especially useful on
+acknowledgement for the configured delay. This is especially useful on
 long-lived connections experiencing long idle periods such as remote
 terminals or database connection pools, where the client and server timeouts
 must remain high to allow a long period of idle, but where it is important to
@@ -13965,7 +13965,7 @@ used to report true/false for bit testing on input values (eg: verify the
 presence of a flag).
 </pre><a class="anchor" name="bytes"></a><a class="anchor" name="7-bytes"></a><a class="anchor" name="7.3.1-bytes"></a><a class="anchor" name="bytes (Using ACLs and fetching samples)"></a><a class="anchor" name="bytes (Converters)"></a><div class="keyword"><b><a class="anchor" name="bytes"></a><a href="#7.3.1-bytes">bytes</a></b>(<span style="color: #080">&lt;offset&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;length&gt;</span>]</span>)</div><pre class="text">Extracts some bytes from an input binary sample. The result is a binary
 sample starting at an offset (in bytes) of the original sample and
-optionnaly truncated at the given length.
+optionally truncated at the given length.
 </pre><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type signed integer, applies a ones-complement
 (flips all bits) and returns the result as an signed integer.
 </pre><a class="anchor" name="crc32"></a><a class="anchor" name="7-crc32"></a><a class="anchor" name="7.3.1-crc32"></a><a class="anchor" name="crc32 (Using ACLs and fetching samples)"></a><a class="anchor" name="crc32 (Converters)"></a><div class="keyword"><b><a class="anchor" name="crc32"></a><a href="#7.3.1-crc32">crc32</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the CRC32
@@ -14136,7 +14136,7 @@ map_&lt;match_type&gt;_&lt;output_type&gt;(&lt;map_file&gt;[,&lt;default_value&g
   strings are stored in trees, so the first of the finest match will be used.
   Other keys are stored in lists, so the first matching occurrence will be used.
 
-  The following array contains the list of all map functions avalaible sorted by
+  The following array contains the list of all map functions available sorted by
   input type, match type and output type.
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>input type</th><th>match method</th><th>output type str</th><th>output type int</th><th>output type ip</th></tr></thead>
@@ -15564,7 +15564,7 @@ ACL derivatives :
 question mark. If no question mark is present, this fetch returns nothing. If
 a question mark is present but nothing follows, it returns an empty string.
 This means it's possible to easily know whether a query string is present
-using the &quot;found&quot; matching method. This fetch is the completemnt of &quot;<a href="#path">path</a>&quot;
+using the &quot;found&quot; matching method. This fetch is the complement of &quot;<a href="#path">path</a>&quot;
 which stops before the question mark.
 </pre><a class="anchor" name="req.hdr_names"></a><a class="anchor" name="7-req.hdr_names"></a><a class="anchor" name="7.3.6-req.hdr_names"></a><a class="anchor" name="req.hdr_names (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_names (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_names"></a><a href="#7.3.6-req.hdr_names">req.hdr_names</a></b>(<span style="color: #008">[<span style="color: #080">&lt;delim&gt;</span>]</span>) : string</div><pre class="text">This builds a string made from the concatenation of all header names as they
 appear in the request when the rule is evaluated. The default delimiter is
@@ -17188,8 +17188,8 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.11-44 &ndash; Configuration Manual<br>
-							<small>2016/12/25, willy tarreau</small>
+							HAProxy 1.6.12 &ndash; Configuration Manual<br>
+							<small>2017/04/04, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -17292,7 +17292,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.11-44', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.12', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
