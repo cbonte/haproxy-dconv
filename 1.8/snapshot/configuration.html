@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev1 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev1-3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -2685,7 +2685,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/04/03</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/04/04</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2696,7 +2696,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev1</strong></p>
+							<p><strong>version 1.8-dev1-3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -5682,7 +5682,9 @@ This form is deprecated, do not use it in any new configuration, use the new
 <code>acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
 acl invalid_src  src_port     0:1023
 acl local_dst    hdr(host) -i localhost
-block if invalid_src || local_dst
+<span class="comment"># block is deprecated. Use http-request deny instead:</span>
+<span class="comment">#block if invalid_src || local_dst</span>
+http-request deny if invalid_src || local_dst
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
 </pre><a class="anchor" name="capture"></a><a class="anchor" name="4-capture"></a><a class="anchor" name="4.2-capture"></a><a class="anchor" name="capture (Proxies)"></a><a class="anchor" name="capture (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture cookie"></a><a class="anchor" name="4-capture cookie"></a><a class="anchor" name="4.2-capture cookie"></a><a class="anchor" name="capture cookie (Proxies)"></a><a class="anchor" name="capture cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="capture cookie"></a><a href="#4.2-capture%20cookie">capture cookie</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log a cookie in the request and in the response.
@@ -6749,7 +6751,7 @@ http-check expect ! string SQL\ Error
 http-check expect ! rstatus ^5
 
 <span class="comment"># check that we have a correct hexadecimal tag before /html</span>
-http-check expect rstring &lt;!--tag:[0-9a-f]*&lt;/html&gt;
+http-check expect rstring &lt;!--tag:[0-9a-f]*--&gt;&lt;/html&gt;
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;</div>
 <a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check send-state"></a><a class="anchor" name="4-http-check send-state"></a><a class="anchor" name="4.2-http-check send-state"></a><a class="anchor" name="http-check send-state (Proxies)"></a><a class="anchor" name="http-check send-state (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check send-state"></a><a href="#4.2-http-check%20send-state">http-check send-state</a></b></div><pre class="text">Enable emission of a state header with HTTP health checks
@@ -7702,7 +7704,14 @@ persistence for a specific User-Agent (for example, some web crawler bots).
 
 The persistence is ignored when an &quot;if&quot; condition is met, or unless an
 &quot;unless&quot; condition is met.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#force-persist">force-persist</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, and <a href="#7">section 7</a> about ACL usage.</div>
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>acl url_static  path_beg         /static /images /img /css
+acl url_static  path_end         .gif .png .jpg .css .js
+ignore-persist  if url_static
+</code></pre>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#force-persist">force-persist</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, and <a href="#7">section 7</a> about ACL usage.</div>
 <a class="anchor" name="load-server-state-from-file"></a><a class="anchor" name="4-load-server-state-from-file"></a><a class="anchor" name="4.2-load-server-state-from-file"></a><a class="anchor" name="load-server-state-from-file (Proxies)"></a><a class="anchor" name="load-server-state-from-file (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="load-server-state-from-file"></a><a href="#4.2-load-server-state-from-file">load-server-state-from-file</a></b> <span style="color: #800">{ global | local | none }</span></div><pre class="text">Allow seamless reload of HAProxy
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9295,7 +9304,7 @@ find the &quot;+PONG&quot; response message.
 <pre class="prettyprint">
 <code>option redis-check
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option smtpchk"></a><a class="anchor" name="4-option smtpchk"></a><a class="anchor" name="4.2-option smtpchk"></a><a class="anchor" name="option smtpchk (Proxies)"></a><a class="anchor" name="option smtpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option smtpchk"></a><a href="#4.2-option%20smtpchk">option smtpchk</a></b></div><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option smtpchk"></a><a class="anchor" name="4-option smtpchk"></a><a class="anchor" name="4.2-option smtpchk"></a><a class="anchor" name="option smtpchk (Proxies)"></a><a class="anchor" name="option smtpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option smtpchk"></a><a href="#4.2-option%20smtpchk">option smtpchk</a></b> <span style="color: #080">&lt;hello&gt;</span> <span style="color: #080">&lt;domain&gt;</span></div><pre class="text">Use SMTP health checks for server testing
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -12136,9 +12145,11 @@ tcp-request content reject
 </div><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code><span class="comment"># Track the last IP from X-Forwarded-For</span>
+<code><span class="comment"># Track the last IP(stick-table type string) from X-Forwarded-For</span>
 tcp-request inspect-delay 10s
 tcp-request content track-sc0 hdr(x-forwarded-for,-1)
+<span class="comment"># Or track the last IP(stick-table type ip|ipv6) from X-Forwarded-For</span>
+tcp-request content track-sc0 req.hdr_ip(x-forwarded-for,-1)
 </code></pre>
 </div><div class="separator">
 <span class="label label-success">Example:</span>
@@ -12150,7 +12161,7 @@ tcp-request content track-sc0 base table req-rate
 </div><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">Track per-frontend and per-backend counters, block abusers at the frontend when the backend detects abuse.</div><code>frontend http
+<div class="example-desc">Track per-frontend and per-backend counters, block abusers at the frontend when the backend detects abuse(and marks gpc0).</div><code>frontend http
     <span class="comment"># Use General Purpose Couter 0 in SC0 as a global abuse counter</span>
     <span class="comment"># protecting all our sites</span>
     stick-table type ip size 1m expire 5m store gpc0
@@ -12164,7 +12175,7 @@ backend http_dynamic
     <span class="comment"># by SC1), block it globally in the frontend.</span>
     stick-table type ip size 1m expire 5m store http_req_rate(10s)
     acl click_too_fast sc1_http_req_rate gt 10
-    acl mark_as_abuser sc0_inc_gpc0 gt 0
+    acl mark_as_abuser sc0_inc_gpc0(http) gt 0
     tcp-request content track-sc1 src
     tcp-request content reject if click_too_fast mark_as_abuser
 </code></pre>
@@ -12721,9 +12732,10 @@ will use the other timeouts (timeout.server or timeout.tunnel).
           can be in any other unit if the number is suffixed by the unit,
           as explained at the top of this document.</pre>
 </div>
-<pre class="text">When a connection is tarpitted using &quot;<a href="#reqtarpit">reqtarpit</a>&quot;, it is maintained open with
-no activity for a certain amount of time, then closed. &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;
-defines how long it will be maintained open.
+<pre class="text">When a connection is tarpitted using &quot;http-request tarpit&quot; or
+&quot;<a href="#reqtarpit">reqtarpit</a>&quot;, it is maintained open with no activity for a certain
+amount of time, then closed. &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot; defines how long it will
+be maintained open.
 
 The value is specified in milliseconds by default, but can be in any other
 unit if the number is suffixed by the unit, as specified at the top of this
@@ -14759,9 +14771,9 @@ requests with a content-length greater than 0, and finally every request which
 is not either GET/HEAD/POST/OPTIONS !
 
    acl missing_cl hdr_cnt(Content-length) eq 0
-   block if HTTP_URL_STAR !METH_OPTIONS || METH_POST missing_cl
-   block if METH_GET HTTP_CONTENT
-   block unless METH_GET or METH_POST or METH_OPTIONS
+   http-request deny if HTTP_URL_STAR !METH_OPTIONS || METH_POST missing_cl
+   http-request deny if METH_GET HTTP_CONTENT
+   http-request deny unless METH_GET or METH_POST or METH_OPTIONS
 
 To select a different backend for requests to static contents on the &quot;www&quot; site
 and to every request on the &quot;img&quot;, &quot;video&quot;, &quot;download&quot; and &quot;ftp&quot; hosts :
@@ -14784,11 +14796,11 @@ the braces must be seen as independent words). Example :
    The following rule :
 
        acl missing_cl hdr_cnt(Content-length) eq 0
-       block if METH_POST missing_cl
+       http-request deny if METH_POST missing_cl
 
    Can also be written that way :
 
-       block if METH_POST { hdr_cnt(Content-length) eq 0 }
+       http-request deny if METH_POST { hdr_cnt(Content-length) eq 0 }
 
 It is generally not recommended to use this construct because it's a lot easier
 to leave errors in the configuration when written that way. However, for very
@@ -14806,7 +14818,8 @@ good use is the following :
 
         monitor fail if { nbsrv(dynamic) lt 2 } || { nbsrv(static) lt 2 }
 
-See <a href="#4.2">section 4.2</a> for detailed help on the &quot;<a href="#block">block</a>&quot; and &quot;<a href="#use_backend">use_backend</a>&quot; keywords.
+See <a href="#4.2">section 4.2</a> for detailed help on the &quot;http-request deny&quot; and &quot;<a href="#use_backend">use_backend</a>&quot;
+keywords.
 </pre></div>
 <a class="anchor" id="7.3" name="7.3"></a>
 <h2 id="chapter-7.3" data-target="7.3"><small><a class="small" href="#7.3">7.3.</a></small> Fetching samples</h2>
@@ -18412,7 +18425,7 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev1 &ndash; Configuration Manual<br>
+							HAProxy 1.8-dev1-3 &ndash; Configuration Manual<br>
 							<small>2017/04/03, willy tarreau</small>
 						</div>
 					</div>
@@ -18516,7 +18529,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev1-3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
