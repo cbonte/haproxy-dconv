@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev1 - Management Guide</title>
+		<title>HAProxy version 1.8-dev2 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -421,7 +421,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/04/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/06/23</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -432,7 +432,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.8-dev1</strong></p>
+							<p><strong>version 1.8-dev2</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								<br>
@@ -724,8 +724,6 @@ list of options is :
     configuration. It is recommended to always force it in any init script so
     that a faulty configuration doesn't prevent the system from booting.
 
-  -Ds : work in systemd mode. Only used by the systemd wrapper.
-
   -L &lt;name&gt; : change the local peer name to &lt;name&gt;, which defaults to the local
     hostname. This is used only with peers replication.
 
@@ -734,6 +732,13 @@ list of options is :
 
   -V : enable verbose mode (disables quiet mode). Reverts the effect of &quot;-q&quot; or
     &quot;quiet&quot;.
+
+  -W : master-worker mode. It is equivalent to the &quot;master-worker&quot; keyword in
+    the &quot;global&quot; section of the configuration. This mode will launch a &quot;master&quot;
+    which will monitor the &quot;workers&quot;. Using this mode, you can reload HAProxy
+    directly by sending a SIGUSR2 signal to the master.  The master-worker mode
+    is compatible either with the foreground or daemon mode.  It is
+    recommended to use this mode with multiprocess and systemd.
 
   -c : only performs a check of the configuration files and exits before trying
     to bind. The exit status is zero if everything is OK, or non-zero if an
@@ -840,6 +845,12 @@ list of options is :
 
   -vv : display the version, build options, libraries versions and usable
     pollers. This output is systematically requested when filing a bug report.
+
+  -x &lt;unix_socket&gt; : connect to the specified socket and try to retrieve any
+    listening sockets from the old process, and use them instead of trying to
+    bind new ones. This is useful to avoid missing any new connection when
+    reloading the configuration on Linux. The capability must be enable on the
+    stats socket using &quot;expose-fd listeners&quot; in your configuration.
 
 A safe way to start HAProxy from an init file consists in forcing the daemon
 mode, storing existing pids to a pid file and using this pid file to notify
@@ -974,6 +985,12 @@ Both of these signals may be sent by the new haproxy process itself during a
 reload or restart, so that they are sent at the latest possible moment and only
 if absolutely required. This is what is performed by the &quot;-st&quot; (hard) and &quot;-sf&quot;
 (graceful) options respectively.
+
+In master-worker mode, it is not needed to start a new haproxy process in
+order to reload the configuration. The master process reacts to the SIGUSR2
+signal by reexecuting itself with the -sf parameter followed by the PIDs of
+the workers. The master will then parse the configuration file and fork new
+workers.
 
 To understand better how these signals are used, it is important to understand
 the whole restart mechanism.
@@ -2108,10 +2125,12 @@ from load balancing but still allows it to be checked and to accept new
 persistent connections. Changes are propagated to tracking servers if any.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> weight <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. This is the exact
 equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command below.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> fqdn <span style="color: #080">&lt;FQDN&gt;</span></div><pre class="text">Change a server's FQDN to the value passed in argument.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
 the response. The &lt;response&gt; must be passed as a base64 encoded string of the
-DER encoded response from the OCSP server.
+DER encoded response from the OCSP server. This command is not supported with
+BoringSSL.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -2399,6 +2418,9 @@ fields and their order per file format version :
                                   0x20 = SRV_ADMF_RMAINT
                                     The server is in maintenance because of an
                                     IP address resolution failure.
+                                  0x40 = SRV_ADMF_HMAINT
+                                    The server FQDN was set from stats socket.
+
    srv_uweight:                 User visible server's weight.
    srv_iweight:                 Server's initial weight.
    srv_time_since_last_change:  Time since last operational change.
@@ -2440,6 +2462,7 @@ fields and their order per file format version :
                                 configuration.
    srv_f_forced_id:             Flag to know if the server's ID is forced by
                                 configuration.
+   srv_fqdn:                    Server FQDN.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
 configured for levels &quot;operator&quot; or &quot;admin&quot;.
@@ -3068,7 +3091,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev1 &ndash; Management Guide<br>
+							HAProxy 1.8-dev2 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3172,7 +3195,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

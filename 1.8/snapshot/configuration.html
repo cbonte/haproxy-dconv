@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev1-3 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev2-34 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -924,6 +924,8 @@
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-B"><h4>B</h4>
 								
+							<a class="list-group-item" href="#b64dec">b64dec</a>
+							
 							<a class="list-group-item" href="#backlog (Alphabetically sorted keywords reference)">backlog (Alphabetically sorted keywords reference)</a>
 							
 							<a class="list-group-item" href="#backlog (Bind options)">backlog (Bind options)</a>
@@ -1163,6 +1165,10 @@
 							
 							<a class="list-group-item" href="#even">even</a>
 							
+							<a class="list-group-item" href="#expose-fd">expose-fd</a>
+							
+							<a class="list-group-item" href="#expose-fd listeners">expose-fd listeners</a>
+							
 							<a class="list-group-item" href="#external-check">external-check</a>
 							
 							<a class="list-group-item" href="#external-check command">external-check command</a>
@@ -1222,21 +1228,15 @@
 							
 							<a class="list-group-item" href="#force-persist">force-persist</a>
 							
-							<a class="list-group-item" href="#force-sslv3 (Bind options)">force-sslv3 (Bind options)</a>
+							<a class="list-group-item" href="#force-sslv3">force-sslv3</a>
 							
-							<a class="list-group-item" href="#force-sslv3 (Server and default-server options)">force-sslv3 (Server and default-server options)</a>
+							<a class="list-group-item" href="#force-tlsv10">force-tlsv10</a>
 							
-							<a class="list-group-item" href="#force-tlsv10 (Bind options)">force-tlsv10 (Bind options)</a>
+							<a class="list-group-item" href="#force-tlsv11">force-tlsv11</a>
 							
-							<a class="list-group-item" href="#force-tlsv10 (Server and default-server options)">force-tlsv10 (Server and default-server options)</a>
+							<a class="list-group-item" href="#force-tlsv12">force-tlsv12</a>
 							
-							<a class="list-group-item" href="#force-tlsv11 (Bind options)">force-tlsv11 (Bind options)</a>
-							
-							<a class="list-group-item" href="#force-tlsv11 (Server and default-server options)">force-tlsv11 (Server and default-server options)</a>
-							
-							<a class="list-group-item" href="#force-tlsv12 (Bind options)">force-tlsv12 (Bind options)</a>
-							
-							<a class="list-group-item" href="#force-tlsv12 (Server and default-server options)">force-tlsv12 (Server and default-server options)</a>
+							<a class="list-group-item" href="#force-tlsv13">force-tlsv13</a>
 							
 							<a class="list-group-item" href="#fullconn">fullconn</a>
 							
@@ -1371,6 +1371,8 @@
 							<a class="list-group-item" href="#mailers">mailers</a>
 							
 							<a class="list-group-item" href="#map">map</a>
+							
+							<a class="list-group-item" href="#master-worker">master-worker</a>
 							
 							<a class="list-group-item" href="#max-keep-alive-queue">max-keep-alive-queue</a>
 							
@@ -1527,14 +1529,6 @@
 							
 							<a class="list-group-item" href="#no-check-ssl">no-check-ssl</a>
 							
-							<a class="list-group-item" href="#no-force-sslv3">no-force-sslv3</a>
-							
-							<a class="list-group-item" href="#no-force-tlsv10">no-force-tlsv10</a>
-							
-							<a class="list-group-item" href="#no-force-tlsv11">no-force-tlsv11</a>
-							
-							<a class="list-group-item" href="#no-force-tlsv12">no-force-tlsv12</a>
-							
 							<a class="list-group-item" href="#no-send-proxy">no-send-proxy</a>
 							
 							<a class="list-group-item" href="#no-send-proxy-v2">no-send-proxy-v2</a>
@@ -1547,25 +1541,19 @@
 							
 							<a class="list-group-item" href="#no-ssl-reuse">no-ssl-reuse</a>
 							
-							<a class="list-group-item" href="#no-sslv3 (Bind options)">no-sslv3 (Bind options)</a>
-							
-							<a class="list-group-item" href="#no-sslv3 (Server and default-server options)">no-sslv3 (Server and default-server options)</a>
+							<a class="list-group-item" href="#no-sslv3">no-sslv3</a>
 							
 							<a class="list-group-item" href="#no-tls-tickets (Bind options)">no-tls-tickets (Bind options)</a>
 							
 							<a class="list-group-item" href="#no-tls-tickets (Server and default-server options)">no-tls-tickets (Server and default-server options)</a>
 							
-							<a class="list-group-item" href="#no-tlsv10 (Bind options)">no-tlsv10 (Bind options)</a>
+							<a class="list-group-item" href="#no-tlsv10">no-tlsv10</a>
 							
-							<a class="list-group-item" href="#no-tlsv10 (Server and default-server options)">no-tlsv10 (Server and default-server options)</a>
+							<a class="list-group-item" href="#no-tlsv11">no-tlsv11</a>
 							
-							<a class="list-group-item" href="#no-tlsv11 (Bind options)">no-tlsv11 (Bind options)</a>
+							<a class="list-group-item" href="#no-tlsv12">no-tlsv12</a>
 							
-							<a class="list-group-item" href="#no-tlsv11 (Server and default-server options)">no-tlsv11 (Server and default-server options)</a>
-							
-							<a class="list-group-item" href="#no-tlsv12 (Bind options)">no-tlsv12 (Bind options)</a>
-							
-							<a class="list-group-item" href="#no-tlsv12 (Server and default-server options)">no-tlsv12 (Server and default-server options)</a>
+							<a class="list-group-item" href="#no-tlsv13">no-tlsv13</a>
 							
 							<a class="list-group-item" href="#no-verifyhost">no-verifyhost</a>
 							
@@ -1729,6 +1717,8 @@
 							
 							<a class="list-group-item" href="#port">port</a>
 							
+							<a class="list-group-item" href="#prefer-client-ciphers">prefer-client-ciphers</a>
+							
 							<a class="list-group-item" href="#presetenv">presetenv</a>
 							
 							<a class="list-group-item" href="#proc">proc</a>
@@ -1802,6 +1792,10 @@
 							<a class="list-group-item" href="#req.hdr_names">req.hdr_names</a>
 							
 							<a class="list-group-item" href="#req.hdr_val">req.hdr_val</a>
+							
+							<a class="list-group-item" href="#req.hdrs">req.hdrs</a>
+							
+							<a class="list-group-item" href="#req.hdrs_bin">req.hdrs_bin</a>
 							
 							<a class="list-group-item" href="#req.len">req.len</a>
 							
@@ -1900,6 +1894,8 @@
 							<a class="list-group-item" href="#res.ver">res.ver</a>
 							
 							<a class="list-group-item" href="#resetenv">resetenv</a>
+							
+							<a class="list-group-item" href="#resolution_pool_size">resolution_pool_size</a>
 							
 							<a class="list-group-item" href="#resolve-net">resolve-net</a>
 							
@@ -2118,6 +2114,8 @@
 							
 							<a class="list-group-item" href="#server-state-file-name">server-state-file-name</a>
 							
+							<a class="list-group-item" href="#server-template">server-template</a>
+							
 							<a class="list-group-item" href="#set-cookie">set-cookie</a>
 							
 							<a class="list-group-item" href="#setenv">setenv</a>
@@ -2209,6 +2207,18 @@
 							<a class="list-group-item" href="#ssl-default-server-options">ssl-default-server-options</a>
 							
 							<a class="list-group-item" href="#ssl-dh-param-file">ssl-dh-param-file</a>
+							
+							<a class="list-group-item" href="#ssl-engine">ssl-engine</a>
+							
+							<a class="list-group-item" href="#ssl-max-ver (Bind options)">ssl-max-ver (Bind options)</a>
+							
+							<a class="list-group-item" href="#ssl-max-ver (Server and default-server options)">ssl-max-ver (Server and default-server options)</a>
+							
+							<a class="list-group-item" href="#ssl-min-ver (Bind options)">ssl-min-ver (Bind options)</a>
+							
+							<a class="list-group-item" href="#ssl-min-ver (Server and default-server options)">ssl-min-ver (Server and default-server options)</a>
+							
+							<a class="list-group-item" href="#ssl-mode-async">ssl-mode-async</a>
 							
 							<a class="list-group-item" href="#ssl-reuse">ssl-reuse</a>
 							
@@ -2311,8 +2321,6 @@
 							<a class="list-group-item" href="#ssl_fc_unique_id">ssl_fc_unique_id</a>
 							
 							<a class="list-group-item" href="#ssl_fc_use_keysize">ssl_fc_use_keysize</a>
-							
-							<a class="list-group-item" href="#sslv3">sslv3</a>
 							
 							<a class="list-group-item" href="#stats (Process management and security)">stats (Process management and security)</a>
 							
@@ -2489,12 +2497,6 @@
 							
 							<a class="list-group-item" href="#tls-tickets">tls-tickets</a>
 							
-							<a class="list-group-item" href="#tlsv10">tlsv10</a>
-							
-							<a class="list-group-item" href="#tlsv11">tlsv11</a>
-							
-							<a class="list-group-item" href="#tlsv12">tlsv12</a>
-							
 							<a class="list-group-item" href="#track">track</a>
 							
 							<a class="list-group-item" href="#transparent">transparent</a>
@@ -2510,6 +2512,8 @@
 							<a class="list-group-item" href="#tune.comp.maxlevel">tune.comp.maxlevel</a>
 							
 							<a class="list-group-item" href="#tune.http.cookielen">tune.http.cookielen</a>
+							
+							<a class="list-group-item" href="#tune.http.logurilen">tune.http.logurilen</a>
 							
 							<a class="list-group-item" href="#tune.http.maxhdr">tune.http.maxhdr</a>
 							
@@ -2685,7 +2689,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/04/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/06/23</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2696,11 +2700,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev1-3</strong></p>
+							<p><strong>version 1.8-dev2-34</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/04/03
+								2017/06/02
 							</p>
 						</div>
 
@@ -3699,7 +3703,7 @@ about the way they could be written, but it is important not to accuse an
 application of being buggy if it does unusual, valid things.
 
 Important note:
-   As suggested by RFC2616, HAProxy normalizes headers by replacing line breaks
+   As suggested by RFC7231, HAProxy normalizes headers by replacing line breaks
    in the middle of headers by LWS in order to join multi-line headers. This
    is necessary for proper analysis and helps less capable HTTP parsers to work
    correctly and not to be fooled by such complex constructs.
@@ -3745,7 +3749,7 @@ The status code is always 3-digit. The first digit indicates a general status :
  - 4xx = error caused by the client (eg: 401, 403, 404)
  - 5xx = error caused by the server (eg: 500, 502, 503)
 
-Please refer to RFC2616 for the detailed meaning of all such codes. The
+Please refer to RFC7231 for the detailed meaning of all such codes. The
 &quot;reason&quot; field is just a hint, but is not parsed by clients. Anything can be
 found there, but it's a common practice to respect the well-established
 messages. It can be composed of one or multiple words, such as &quot;OK&quot;, &quot;Found&quot;,
@@ -4005,12 +4009,15 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#spread-checks">spread-checks</a>
    - <a href="#server-state-base">server-state-base</a>
    - <a href="#server-state-file">server-state-file</a>
+   - <a href="#ssl-engine">ssl-engine</a>
+   - <a href="#ssl-mode-async">ssl-mode-async</a>
    - <a href="#tune.buffers.limit">tune.buffers.limit</a>
    - <a href="#tune.buffers.reserve">tune.buffers.reserve</a>
    - <a href="#tune.bufsize">tune.bufsize</a>
    - <a href="#tune.chksize">tune.chksize</a>
    - <a href="#tune.comp.maxlevel">tune.comp.maxlevel</a>
    - <a href="#tune.http.cookielen">tune.http.cookielen</a>
+   - <a href="#tune.http.logurilen">tune.http.logurilen</a>
    - <a href="#tune.http.maxhdr">tune.http.maxhdr</a>
    - <a href="#tune.idletimer">tune.idletimer</a>
    - <a href="#tune.lua.forced-yield">tune.lua.forced-yield</a>
@@ -4144,7 +4151,8 @@ configured with &quot;<a href="#log%20global">log global</a>&quot;.
          truncate them before sending them. Accepted values are 80 to 65535
          inclusive. The default value of 1024 is generally fine for all
          standard usages. Some specific cases of long captures or
-         JSON-formated logs may require larger values.
+         JSON-formated logs may require larger values. You may also need to
+         increase &quot;<a href="#tune.http.logurilen">tune.http.logurilen</a>&quot; if your request uris are truncated.
 
 &lt;format&gt; is the log format used when generating syslog messages. It may be
          one of the following :
@@ -4181,6 +4189,18 @@ Sometimes it can be useful to differentiate between multiple processes
 running on the same host. See also the per-proxy &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log-tag<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log-tag%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log-tag%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; directive.
 </pre><a class="anchor" name="lua-load"></a><a class="anchor" name="3-lua-load"></a><a class="anchor" name="3.1-lua-load"></a><a class="anchor" name="lua-load (Global parameters)"></a><a class="anchor" name="lua-load (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="lua-load"></a><a href="#3.1-lua-load">lua-load</a></b> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">This global directive loads and executes a Lua file. This directive can be
 used multiple times.
+</pre><a class="anchor" name="master-worker"></a><a class="anchor" name="3-master-worker"></a><a class="anchor" name="3.1-master-worker"></a><a class="anchor" name="master-worker (Global parameters)"></a><a class="anchor" name="master-worker (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="master-worker"></a><a href="#3.1-master-worker">master-worker</a></b> <span style="color: #008">[exit-on-failure]</span></div><pre class="text">Master-worker mode. It is equivalent to the command line &quot;-W&quot; argument.
+This mode will launch a &quot;master&quot; which will monitor the &quot;workers&quot;. Using
+this mode, you can reload HAProxy directly by sending a SIGUSR2 signal to
+the master.  The master-worker mode is compatible either with the foreground
+or daemon mode. It is recommended to use this mode with multiprocess and
+systemd.
+The &quot;exit-on-failure&quot; option allows the master to kill every workers and
+exit when one of the current workers died. It is convenient to combine this
+option with Restart=on-failure in a systemd unit file in order to relaunch
+the whole process.
+
+See alors &quot;-W&quot; in the management guide.
 </pre><a class="anchor" name="nbproc"></a><a class="anchor" name="3-nbproc"></a><a class="anchor" name="3.1-nbproc"></a><a class="anchor" name="nbproc (Global parameters)"></a><a class="anchor" name="nbproc (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#3.1-nbproc">nbproc</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Creates &lt;number&gt; processes when going daemon. This requires the &quot;<a href="#daemon">daemon</a>&quot;
 mode. By default, only one process is created, which is the recommended mode
 of operation. For systems limited to small sets of file descriptors per
@@ -4241,7 +4261,7 @@ keyword to see available options.
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>global
-   ssl-default-bind-options no-sslv3 no-tls-tickets
+   ssl-default-bind-options ssl-min-ver TLSv1.0 no-tls-tickets
 </code></pre>
 </div><a class="anchor" name="ssl-default-server-ciphers"></a><a class="anchor" name="3-ssl-default-server-ciphers"></a><a class="anchor" name="3.1-ssl-default-server-ciphers"></a><a class="anchor" name="ssl-default-server-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphers"></a><a href="#3.1-ssl-default-server-ciphers">ssl-default-server-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 sets the default string describing the list of cipher algorithms that are
@@ -4270,7 +4290,7 @@ forced using cmdline option '-dV'.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
 Connections to this socket will return various statistics outputs and even
 allow some commands to be issued to change some runtime settings. Please
-consult <a href="#9.2">section 9.2</a> &quot;Unix Socket commands&quot; of Management Guide for more
+consult <a href="#9.3">section 9.3</a> &quot;Unix Socket commands&quot; of Management Guide for more
 details.
 
 All parameters supported by &quot;<a href="#bind">bind</a>&quot; lines are supported, for instance to
@@ -4534,6 +4554,26 @@ located on the same physical server. With the help of this parameter, it
 becomes possible to add some randomness in the check interval between 0
 and +/- 50%. A value between 2 and 5 seems to show good results. The
 default value remains at 0.
+</pre><a class="anchor" name="ssl-engine"></a><a class="anchor" name="3-ssl-engine"></a><a class="anchor" name="3.2-ssl-engine"></a><a class="anchor" name="ssl-engine (Global parameters)"></a><a class="anchor" name="ssl-engine (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="ssl-engine"></a><a href="#3.2-ssl-engine">ssl-engine</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[algo <span style="color: #080">&lt;comma-seperated list of algorithms&gt;</span>]</span></div><pre class="text">Sets the OpenSSL engine to &lt;name&gt;. List of valid values for &lt;name&gt; may be
+obtained using the command &quot;openssl engine&quot;.  This statement may be used
+multiple times, it will simply enable multiple crypto engines. Referencing an
+unsupported engine will prevent haproxy from starting. Note that many engines
+will lead to lower HTTPS performance than pure software with recent
+processors. The optional command &quot;algo&quot; sets the default algorithms an ENGINE
+will supply using the OPENSSL function ENGINE_set_default_string(). A value
+of &quot;ALL&quot; uses the engine for all cryptographic operations.  If no list of
+algo is specified then the value of &quot;ALL&quot; is used.  A comma-seperated list
+of different algorithms may be specified, including: RSA, DSA, DH, EC, RAND,
+CIPHERS, DIGESTS, PKEY, PKEY_CRYPTO, PKEY_ASN1. This is the same format that
+openssl configuration file uses:
+https://www.openssl.org/docs/man1.0.2/apps/config.html
+</pre><a class="anchor" name="ssl-mode-async"></a><a class="anchor" name="3-ssl-mode-async"></a><a class="anchor" name="3.2-ssl-mode-async"></a><a class="anchor" name="ssl-mode-async (Global parameters)"></a><a class="anchor" name="ssl-mode-async (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="ssl-mode-async"></a><a href="#3.2-ssl-mode-async">ssl-mode-async</a></b></div><pre class="text">Adds SSL_MODE_ASYNC mode to the SSL context. This enables asynchronous TLS
+I/O operations if asynchronous capable SSL engines are used. The current
+implementation supports a maximum of 32 engines. The Openssl ASYNC API
+doesn't support moving read/write buffers and is not compliant with
+haproxy's buffer management. So the asynchronous mode is disabled on
+read/write  operations (it is only enabled during initial and reneg
+handshakes).
 </pre><a class="anchor" name="tune.buffers.limit"></a><a class="anchor" name="3-tune.buffers.limit"></a><a class="anchor" name="3.2-tune.buffers.limit"></a><a class="anchor" name="tune.buffers.limit (Global parameters)"></a><a class="anchor" name="tune.buffers.limit (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.buffers.limit"></a><a href="#3.2-tune.buffers.limit">tune.buffers.limit</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets a hard limit on the number of buffers which may be allocated per process.
 The default value is zero which means unlimited. The minimum non-zero value
 will always be greater than &quot;<a href="#tune.buffers.reserve">tune.buffers.reserve</a>&quot; and should ideally always
@@ -4581,15 +4621,21 @@ their configured value (they share a same pool). This value is per request
 per response, so the memory allocated is twice this value per connection.
 When not specified, the limit is set to 63 characters. It is recommended not
 to change this value.
+</pre><a class="anchor" name="tune.http.logurilen"></a><a class="anchor" name="3-tune.http.logurilen"></a><a class="anchor" name="3.2-tune.http.logurilen"></a><a class="anchor" name="tune.http.logurilen (Global parameters)"></a><a class="anchor" name="tune.http.logurilen (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.http.logurilen"></a><a href="#3.2-tune.http.logurilen">tune.http.logurilen</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum length of request uri in logs. This prevent to truncate long
+requests uris with valuable query strings in log lines. This is not related
+to syslog limits. If you increase this limit, you may also increase the
+'log ... len yyyy' parameter. Your syslog deamon may also need specific
+configuration directives too.
+The default value is 1024.
 </pre><a class="anchor" name="tune.http.maxhdr"></a><a class="anchor" name="3-tune.http.maxhdr"></a><a class="anchor" name="3.2-tune.http.maxhdr"></a><a class="anchor" name="tune.http.maxhdr (Global parameters)"></a><a class="anchor" name="tune.http.maxhdr (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.http.maxhdr"></a><a href="#3.2-tune.http.maxhdr">tune.http.maxhdr</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of headers in a request. When a request comes with a
 number of headers greater than this value (including the first line), it is
 rejected with a &quot;400 Bad Request&quot; status code. Similarly, too large responses
 are blocked with &quot;502 Bad Gateway&quot;. The default value is 101, which is enough
 for all usages, considering that the widely deployed Apache server uses the
 same limit. It can be useful to push this limit further to temporarily allow
-a buggy application to work by the time it gets fixed. Keep in mind that each
-new header consumes 32bits of memory for each session, so don't push this
-limit too high.
+a buggy application to work by the time it gets fixed. The accepted range is
+1..32767. Keep in mind that each new header consumes 32bits of memory for
+each session, so don't push this limit too high.
 </pre><a class="anchor" name="tune.idletimer"></a><a class="anchor" name="3-tune.idletimer"></a><a class="anchor" name="3.2-tune.idletimer"></a><a class="anchor" name="tune.idletimer (Global parameters)"></a><a class="anchor" name="tune.idletimer (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.idletimer"></a><a href="#3.2-tune.idletimer">tune.idletimer</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets the duration after which haproxy will consider that an empty buffer is
 probably associated with an idle stream. This is used to optimally adjust
 some packet sizes while forwarding large and small data alternatively. The
@@ -5146,11 +5192,12 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-rsprep">rsprep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-server">server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-server-state-file-name">server-state-file-name</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-server-template">server-template</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-source">source</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20hide-version">stats hide-version</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stats%20http-request">stats http-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -5165,13 +5212,13 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-stick%20on">stick on</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stick%20store-request">stick store-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-stick%20store-response">stick store-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-stick-table">stick-table</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td None><a href="#4-stick-table">stick-table</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20connect">tcp-check connect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20send">tcp-check send</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-check%20send-binary">tcp-check send-binary</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20inspect-delay">tcp-request inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-tcp-request%20session">tcp-request session</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -5191,8 +5238,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td None><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td None><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td None><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td None><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td None><a href="#4-use_backend">use_backend</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -5488,7 +5535,7 @@ extension with &quot;<a href="#url_param">url_param</a>&quot; must be considered
   - Expect: 100-continue is not supported, load balancing will fall back to
     Round Robin.
 
-  - Transfer-Encoding (RFC2616 3.6.1) is only supported in the first chunk.
+  - Transfer-Encoding (RFC7230 3.3.1) is only supported in the first chunk.
     If the entire parameter value is not present in the first chunk, the
     selection of server is undefined (actually, defined by how little
     actually appeared in the first chunk).
@@ -5672,7 +5719,9 @@ if/unless &lt;condition&gt; is matched. A 403 error will be returned if the requ
 is blocked. The condition has to reference ACLs (see <a href="#7">section 7</a>). This is
 typically used to deny access to certain sensitive resources if some
 conditions are met or not met. There is no fixed limit to the number of
-&quot;<a href="#block">block</a>&quot; statements per instance.
+&quot;<a href="#block">block</a>&quot; statements per instance. To block connections at layer 4 (without
+sending a 403 error) see &quot;tcp-request connection reject&quot; and
+&quot;tcp-request content reject&quot; rules.
 
 This form is deprecated, do not use it in any new configuration, use the new
 &quot;http-request deny&quot; instead.
@@ -5686,8 +5735,8 @@ acl local_dst    hdr(host) -i localhost
 <span class="comment">#block if invalid_src || local_dst</span>
 http-request deny if invalid_src || local_dst
 </code></pre>
-</div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
-</pre><a class="anchor" name="capture"></a><a class="anchor" name="4-capture"></a><a class="anchor" name="4.2-capture"></a><a class="anchor" name="capture (Proxies)"></a><a class="anchor" name="capture (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture cookie"></a><a class="anchor" name="4-capture cookie"></a><a class="anchor" name="4.2-capture cookie"></a><a class="anchor" name="capture cookie (Proxies)"></a><a class="anchor" name="capture cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="capture cookie"></a><a href="#4.2-capture%20cookie">capture cookie</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log a cookie in the request and in the response.
+</div><div class="page-header"><b>See also :</b> <a href="#7">section 7</a> about ACL usage, &quot;http-request deny&quot;, &quot;http-response deny&quot;, &quot;tcp-request connection reject&quot; and &quot;tcp-request content reject&quot;.</div>
+<a class="anchor" name="capture"></a><a class="anchor" name="4-capture"></a><a class="anchor" name="4.2-capture"></a><a class="anchor" name="capture (Proxies)"></a><a class="anchor" name="capture (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture cookie"></a><a class="anchor" name="4-capture cookie"></a><a class="anchor" name="4.2-capture cookie"></a><a class="anchor" name="capture cookie (Proxies)"></a><a class="anchor" name="capture cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="capture cookie"></a><a href="#4.2-capture%20cookie">capture cookie</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log a cookie in the request and in the response.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td></tr>
@@ -6302,7 +6351,8 @@ errorfile 503 /etc/haproxy/errorfiles/503sorry.http
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 200, 400, 403, 408, 500, 502, 503, and 504.
+          generating codes 200, 400, 403, 405, 408, 429, 500, 502, 503, and
+          504.
 
 &lt;url&gt;     it is the exact contents of the &quot;Location&quot; header. It may contain
           either a relative URI to an error page hosted on the same site,
@@ -6331,7 +6381,8 @@ request.
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 400, 403, 408, 500, 502, 503, and 504.
+          generating codes 200, 400, 403, 405, 408, 429, 500, 502, 503, and
+          504.
 
 &lt;url&gt;     it is the exact contents of the &quot;Location&quot; header. It may contain
           either a relative URI to an error page hosted on the same site,
@@ -7728,7 +7779,7 @@ over the stats socket and redirect output.
 
 The format of the file is versionned and is very specific. To understand it,
 please read the documentation of the &quot;show servers state&quot; command (chapter
-9.2 of Management Guide).
+9.3 of Management Guide).
 </pre><div class="separator">
 <span class="label label-info">Arguments:</span><pre class="prettyprint arguments">global     load the content of the file pointed by the global directive
            named &quot;<a href="#server-state-file">server-state-file</a>&quot;.
@@ -8695,7 +8746,7 @@ HTTP keep-alive and pipelining on the client side.  This provides the lowest
 latency on the client side (slow network) and the fastest session reuse on
 the server side to save server resources, similarly to &quot;<a href="#option%20forceclose">option forceclose</a>&quot;.
 It also permits non-keepalive capable servers to be served in keep-alive mode
-to the clients if they conform to the requirements of RFC2616. Please note
+to the clients if they conform to the requirements of RFC7230. Please note
 that some servers do not always conform to those requirements when they see
 &quot;Connection: close&quot; in the request. The effect will be that keep-alive will
 never be used. A workaround consists in enabling &quot;option
@@ -8754,7 +8805,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">While RFC2616 explicitly states that HTTP/1.1 agents must use the
+<pre class="text">While RFC7230 explicitly states that HTTP/1.1 agents must use the
 Connection header to indicate their wish of persistent or non-persistent
 connections, both browsers and proxies ignore this header for proxied
 connections and make use of the undocumented, non-standard Proxy-Connection
@@ -10470,7 +10521,45 @@ backend bk
    load-server-state-from-file
 </code></pre>
 </div><div class="page-header"><b>See also:</b> &quot;server-state-file-base&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
-<a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Set the source address for outgoing connections
+<a class="anchor" name="server-template"></a><a class="anchor" name="4-server-template"></a><a class="anchor" name="4.2-server-template"></a><a class="anchor" name="server-template (Proxies)"></a><a class="anchor" name="server-template (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-template"></a><a href="#4.2-server-template">server-template</a></b> <span style="color: #080">&lt;prefix&gt;</span> <span style="color: #080">&lt;num | range&gt;</span> <span style="color: #080">&lt;fqdn&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[params*]</span></div><pre class="text">Set a template to initialize servers with shared parameters.
+The names of these servers are built from &lt;prefix&gt; and &lt;num | range&gt; parameters.
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments:</span><pre class="prettyprint arguments">&lt;prefix&gt;  A prefix for the server names to be built.
+
+&lt;num | range&gt;
+          If &lt;num&gt; is provided, this template initializes &lt;num&gt; servers
+          with 1 up to &lt;num&gt; as server name suffixes. A range of numbers
+          &lt;num_low&gt;-&lt;num_high&gt; may also be used to use &lt;num_low&gt; up to
+          &lt;num_high&gt; as server name suffixes.
+
+&lt;fqdn&gt;    A FQDN for all the servers this template initializes.
+
+&lt;port&gt;    Same meaning as &quot;<a href="#server">server</a>&quot; &lt;port&gt; argument (see &quot;<a href="#server">server</a>&quot; keyword).
+
+&lt;params*&gt;
+          Remaining server parameters among all those supported by &quot;<a href="#server">server</a>&quot;
+          keyword.</pre>
+</div>
+<div class="separator">
+<span class="label label-success">Examples:</span>
+<pre class="prettyprint">
+<code><span class="comment"># Initializes 3 servers with srv1, srv2 and srv3 as names,</span>
+<span class="comment"># google.com as FQDN, and health-check enabled.</span>
+server-template srv 1-3 google.com:80 check
+
+<span class="comment"># or</span>
+server-template srv 3 google.com:80 check
+
+<span class="comment"># would be equivalent to:</span>
+server srv1 google.com:80 check
+server srv2 google.com:80 check
+server srv3 google.com:80 check
+</code></pre>
+</div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Set the source address for outgoing connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -12180,7 +12269,7 @@ backend http_dynamic
     tcp-request content reject if click_too_fast mark_as_abuser
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;, &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot;, and &quot;<a href="#tcp-request%20inspect-delay">tcp-request inspect-delay</a>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;, &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot;, &quot;<a href="#tcp-request%20inspect-delay">tcp-request inspect-delay</a>&quot;, and &quot;<a href="#http-request">http-request</a>&quot;.</div>
 <a class="anchor" name="tcp-request"></a><a class="anchor" name="4-tcp-request"></a><a class="anchor" name="4.2-tcp-request"></a><a class="anchor" name="tcp-request (Proxies)"></a><a class="anchor" name="tcp-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-request inspect-delay"></a><a class="anchor" name="4-tcp-request inspect-delay"></a><a class="anchor" name="4.2-tcp-request inspect-delay"></a><a class="anchor" name="tcp-request inspect-delay (Proxies)"></a><a class="anchor" name="tcp-request inspect-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-request inspect-delay"></a><a href="#4.2-tcp-request%20inspect-delay">tcp-request inspect-delay</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for data during content inspection
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13175,7 +13264,8 @@ filter per certificate, with the following format for each line :
       &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
 
 sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;ca_file&quot;, &quot;crl_file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;,
-&quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration.
+&quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
 It override the configuration set in bind line for the certificate.
 
 Wildcards are supported in the SNI filter. Negative filter are also supported,
@@ -13209,19 +13299,27 @@ broken in all kernels up to 2.6.31, as the connection is never accepted until
 the client talks. This can cause issues with front firewalls which would see
 an established connection while the proxy will only see it in SYN_RECV. This
 option is only supported on TCPv4/TCPv6 sockets and ignored by other ones.
+</pre><a class="anchor" name="expose-fd"></a><a class="anchor" name="5-expose-fd"></a><a class="anchor" name="5.1-expose-fd"></a><a class="anchor" name="expose-fd (Bind and Server options)"></a><a class="anchor" name="expose-fd (Bind options)"></a><a class="anchor" name="expose-fd listeners"></a><a class="anchor" name="5-expose-fd listeners"></a><a class="anchor" name="5.1-expose-fd listeners"></a><a class="anchor" name="expose-fd listeners (Bind and Server options)"></a><a class="anchor" name="expose-fd listeners (Bind options)"></a><div class="keyword"><b><a class="anchor" name="expose-fd listeners"></a><a href="#5.1-expose-fd%20listeners">expose-fd listeners</a></b></div><pre class="text">This option is only usable with the stats socket. It gives your stats socket
+the capability to pass listeners FD to another HAProxy process.
+During a reload with the master-worker mode, the process is automatically
+reexecuted adding -x and one of the stats socket with this option.
+See alors &quot;-x&quot; in the management guide.
 </pre><a class="anchor" name="force-sslv3"></a><a class="anchor" name="5-force-sslv3"></a><a class="anchor" name="5.1-force-sslv3"></a><a class="anchor" name="force-sslv3 (Bind and Server options)"></a><a class="anchor" name="force-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-sslv3"></a><a href="#5.1-force-sslv3">force-sslv3</a></b></div><pre class="text">This option enforces use of SSLv3 only on SSL connections instantiated from
 this listener. SSLv3 is generally less expensive than the TLS counterparts
 for high connection rates. This option is also available on global statement
-&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="force-tlsv10"></a><a class="anchor" name="5-force-tlsv10"></a><a class="anchor" name="5.1-force-tlsv10"></a><a class="anchor" name="force-tlsv10 (Bind and Server options)"></a><a class="anchor" name="force-tlsv10 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv10"></a><a href="#5.1-force-tlsv10">force-tlsv10</a></b></div><pre class="text">This option enforces use of TLSv1.0 only on SSL connections instantiated from
 this listener. This option is also available on global statement
-&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="force-tlsv11"></a><a class="anchor" name="5-force-tlsv11"></a><a class="anchor" name="5.1-force-tlsv11"></a><a class="anchor" name="force-tlsv11 (Bind and Server options)"></a><a class="anchor" name="force-tlsv11 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv11"></a><a href="#5.1-force-tlsv11">force-tlsv11</a></b></div><pre class="text">This option enforces use of TLSv1.1 only on SSL connections instantiated from
 this listener. This option is also available on global statement
-&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="force-tlsv12"></a><a class="anchor" name="5-force-tlsv12"></a><a class="anchor" name="5.1-force-tlsv12"></a><a class="anchor" name="force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="force-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv12"></a><a href="#5.1-force-tlsv12">force-tlsv12</a></b></div><pre class="text">This option enforces use of TLSv1.2 only on SSL connections instantiated from
 this listener. This option is also available on global statement
-&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;no-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+</pre><a class="anchor" name="force-tlsv13"></a><a class="anchor" name="5-force-tlsv13"></a><a class="anchor" name="5.1-force-tlsv13"></a><a class="anchor" name="force-tlsv13 (Bind and Server options)"></a><a class="anchor" name="force-tlsv13 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv13"></a><a href="#5.1-force-tlsv13">force-tlsv13</a></b></div><pre class="text">This option enforces use of TLSv1.3 only on SSL connections instantiated from
+this listener. This option is also available on global statement
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="generate-certificates"></a><a class="anchor" name="5-generate-certificates"></a><a class="anchor" name="5.1-generate-certificates"></a><a class="anchor" name="generate-certificates (Bind and Server options)"></a><a class="anchor" name="generate-certificates (Bind options)"></a><div class="keyword"><b><a class="anchor" name="generate-certificates"></a><a href="#5.1-generate-certificates">generate-certificates</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 enables the dynamic SSL certificates generation. A CA certificate and its
 private key are necessary (see 'ca-sign-file'). When HAProxy is configured as
@@ -13313,8 +13411,8 @@ one for an RDP socket.
 disables support for SSLv3 on any sockets instantiated from the listener when
 SSL is supported. Note that SSLv2 is forced disabled in the code and cannot
 be enabled using any configuration option. This option is also available on
-global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;force-tls*&quot;,
-and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
 </pre><a class="anchor" name="no-tls-tickets"></a><a class="anchor" name="5-no-tls-tickets"></a><a class="anchor" name="5.1-no-tls-tickets"></a><a class="anchor" name="no-tls-tickets (Bind and Server options)"></a><a class="anchor" name="no-tls-tickets (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tls-tickets"></a><a href="#5.1-no-tls-tickets">no-tls-tickets</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables the stateless session resumption (RFC 5077 TLS Ticket
 extension) and force to use stateful session resumption. Stateless
@@ -13324,26 +13422,35 @@ available on global statement &quot;<a href="#ssl-default-bind-options">ssl-defa
 disables support for TLSv1.0 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
 cannot be enabled using any configuration option. This option is also
-available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also
-&quot;force-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
 </pre><a class="anchor" name="no-tlsv11"></a><a class="anchor" name="5-no-tlsv11"></a><a class="anchor" name="5.1-no-tlsv11"></a><a class="anchor" name="no-tlsv11 (Bind and Server options)"></a><a class="anchor" name="no-tlsv11 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv11"></a><a href="#5.1-no-tlsv11">no-tlsv11</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for TLSv1.1 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
 cannot be enabled using any configuration option. This option is also
-available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also
-&quot;force-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
 </pre><a class="anchor" name="no-tlsv12"></a><a class="anchor" name="5-no-tlsv12"></a><a class="anchor" name="5.1-no-tlsv12"></a><a class="anchor" name="no-tlsv12 (Bind and Server options)"></a><a class="anchor" name="no-tlsv12 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv12"></a><a href="#5.1-no-tlsv12">no-tlsv12</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for TLSv1.2 on any sockets instantiated from the listener
 when SSL is supported. Note that SSLv2 is forced disabled in the code and
 cannot be enabled using any configuration option. This option is also
-available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also
-&quot;force-tlsv*&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
+</pre><a class="anchor" name="no-tlsv13"></a><a class="anchor" name="5-no-tlsv13"></a><a class="anchor" name="5.1-no-tlsv13"></a><a class="anchor" name="no-tlsv13 (Bind and Server options)"></a><a class="anchor" name="no-tlsv13 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv13"></a><a href="#5.1-no-tlsv13">no-tlsv13</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+disables support for TLSv1.3 on any sockets instantiated from the listener
+when SSL is supported. Note that SSLv2 is forced disabled in the code and
+cannot be enabled using any configuration option. This option is also
+available on global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
 </pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.1-npn"></a><a class="anchor" name="npn (Bind and Server options)"></a><a class="anchor" name="npn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.1-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
 as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
 This requires that the SSL library is build with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
 replaced with the ALPN extension (see the &quot;<a href="#alpn">alpn</a>&quot; keyword).
+</pre><a class="anchor" name="prefer-client-ciphers"></a><a class="anchor" name="5-prefer-client-ciphers"></a><a class="anchor" name="5.1-prefer-client-ciphers"></a><a class="anchor" name="prefer-client-ciphers (Bind and Server options)"></a><a class="anchor" name="prefer-client-ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="prefer-client-ciphers"></a><a href="#5.1-prefer-client-ciphers">prefer-client-ciphers</a></b></div><pre class="text">Use the client's preference when selecting the cipher suite, by default
+the server's preference is enforced. This option is also available on
+global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;.
 </pre><a class="anchor" name="process"></a><a class="anchor" name="5-process"></a><a class="anchor" name="5.1-process"></a><a class="anchor" name="process (Bind and Server options)"></a><a class="anchor" name="process (Bind options)"></a><div class="keyword"><b><a class="anchor" name="process"></a><a href="#5.1-process">process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span></div><pre class="text">This restricts the list of processes on which this listener is allowed to
 run. It does not enforce any process but eliminates those which do not match.
 If the frontend uses a &quot;<a href="#bind-process">bind-process</a>&quot; setting, the intersection between the
@@ -13362,7 +13469,14 @@ above is known for supporting this. See also &quot;<a href="#bind-process">bind-
 enables SSL deciphering on connections instantiated from this listener. A
 certificate is necessary (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; above). All contents in the buffers will
 appear in clear text, so that ACLs and HTTP processing will only have access
-to deciphered contents.
+to deciphered contents. SSLv3 is disabled per default, use &quot;ssl-min-ver SSLv3&quot;
+to enable it.
+</pre><a class="anchor" name="ssl-max-ver"></a><a class="anchor" name="5-ssl-max-ver"></a><a class="anchor" name="5.1-ssl-max-ver"></a><a class="anchor" name="ssl-max-ver (Bind and Server options)"></a><a class="anchor" name="ssl-max-ver (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl-max-ver"></a><a href="#5.1-ssl-max-ver">ssl-max-ver</a></b> <span style="color: #008">[ SSLv3 | TLSv1.0 | TLSv1.1 | TLSv1.2 | TLSv1.3 ]</span></div><pre class="text">This option enforces use of &lt;version&gt; or lower on SSL connections instantiated
+from this listener. This option is also available on global statement
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+</pre><a class="anchor" name="ssl-min-ver"></a><a class="anchor" name="5-ssl-min-ver"></a><a class="anchor" name="5.1-ssl-min-ver"></a><a class="anchor" name="ssl-min-ver (Bind and Server options)"></a><a class="anchor" name="ssl-min-ver (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl-min-ver"></a><a href="#5.1-ssl-min-ver">ssl-min-ver</a></b> <span style="color: #008">[ SSLv3 | TLSv1.0 | TLSv1.1 | TLSv1.2 | TLSv1.3 ]</span></div><pre class="text">This option enforces use of &lt;version&gt; or upper on SSL connections instantiated
+from this listener. This option is also available on global statement
+&quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="strict-sni"></a><a class="anchor" name="5-strict-sni"></a><a class="anchor" name="5.1-strict-sni"></a><a class="anchor" name="strict-sni (Bind and Server options)"></a><a class="anchor" name="strict-sni (Bind options)"></a><div class="keyword"><b><a class="anchor" name="strict-sni"></a><a href="#5.1-strict-sni">strict-sni</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. The
 SSL/TLS negotiation is allow only if the client provided an SNI which match
 a certificate. The default certificate is not used.
@@ -13632,16 +13746,19 @@ unspecified. See also the &quot;<a href="#check">check</a>&quot;, &quot;<a href=
 </pre><a class="anchor" name="force-sslv3"></a><a class="anchor" name="5-force-sslv3"></a><a class="anchor" name="5.2-force-sslv3"></a><a class="anchor" name="force-sslv3 (Bind and Server options)"></a><a class="anchor" name="force-sslv3 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-sslv3"></a><a href="#5.2-force-sslv3">force-sslv3</a></b></div><pre class="text">This option enforces use of SSLv3 only when SSL is used to communicate with
 the server. SSLv3 is generally less expensive than the TLS counterparts for
 high connection rates. This option is also available on global statement
-&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<a href="#no-force-sslv3">no-force-sslv3</a>&quot;, &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and ssl-max-ver&quot;.
 </pre><a class="anchor" name="force-tlsv10"></a><a class="anchor" name="5-force-tlsv10"></a><a class="anchor" name="5.2-force-tlsv10"></a><a class="anchor" name="force-tlsv10 (Bind and Server options)"></a><a class="anchor" name="force-tlsv10 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv10"></a><a href="#5.2-force-tlsv10">force-tlsv10</a></b></div><pre class="text">This option enforces use of TLSv1.0 only when SSL is used to communicate with
 the server. This option is also available on global statement
-&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<a href="#no-force-tlsv10">no-force-tlsv10</a>&quot;, &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and ssl-max-ver&quot;.
 </pre><a class="anchor" name="force-tlsv11"></a><a class="anchor" name="5-force-tlsv11"></a><a class="anchor" name="5.2-force-tlsv11"></a><a class="anchor" name="force-tlsv11 (Bind and Server options)"></a><a class="anchor" name="force-tlsv11 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv11"></a><a href="#5.2-force-tlsv11">force-tlsv11</a></b></div><pre class="text">This option enforces use of TLSv1.1 only when SSL is used to communicate with
 the server. This option is also available on global statement
-&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<a href="#no-force-tlsv11">no-force-tlsv11</a>&quot;, &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and ssl-max-ver&quot;.
 </pre><a class="anchor" name="force-tlsv12"></a><a class="anchor" name="5-force-tlsv12"></a><a class="anchor" name="5.2-force-tlsv12"></a><a class="anchor" name="force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="force-tlsv12 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv12"></a><a href="#5.2-force-tlsv12">force-tlsv12</a></b></div><pre class="text">This option enforces use of TLSv1.2 only when SSL is used to communicate with
 the server. This option is also available on global statement
-&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<a href="#no-force-tlsv12">no-force-tlsv12</a>&quot;, &quot;no-tlsv*&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and ssl-max-ver&quot;.
+</pre><a class="anchor" name="force-tlsv13"></a><a class="anchor" name="5-force-tlsv13"></a><a class="anchor" name="5.2-force-tlsv13"></a><a class="anchor" name="force-tlsv13 (Bind and Server options)"></a><a class="anchor" name="force-tlsv13 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="force-tlsv13"></a><a href="#5.2-force-tlsv13">force-tlsv13</a></b></div><pre class="text">This option enforces use of TLSv1.3 only when SSL is used to communicate with
+the server. This option is also available on global statement
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and ssl-max-ver&quot;.
 </pre><a class="anchor" name="id"></a><a class="anchor" name="5-id"></a><a class="anchor" name="5.2-id"></a><a class="anchor" name="id (Bind and Server options)"></a><a class="anchor" name="id (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="id"></a><a href="#5.2-id">id</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Set a persistent ID for the server. This ID must be positive and unique for
 the proxy. An unused ID will automatically be assigned if unset. The first
 assigned value will be 1. This ID is currently only returned in statistics.
@@ -13737,26 +13854,6 @@ setting which would have been inherited from &quot;<a href="#default-server">def
 default value.
 It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
 &quot;<a href="#default-server">default-server</a>&quot; &quot;<a href="#check-ssl">check-ssl</a>&quot; setting.
-</pre><a class="anchor" name="no-force-sslv3"></a><a class="anchor" name="5-no-force-sslv3"></a><a class="anchor" name="5.2-no-force-sslv3"></a><a class="anchor" name="no-force-sslv3 (Bind and Server options)"></a><a class="anchor" name="no-force-sslv3 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-force-sslv3"></a><a href="#5.2-no-force-sslv3">no-force-sslv3</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
-</pre><a class="anchor" name="no-force-tlsv10"></a><a class="anchor" name="5-no-force-tlsv10"></a><a class="anchor" name="5.2-no-force-tlsv10"></a><a class="anchor" name="no-force-tlsv10 (Bind and Server options)"></a><a class="anchor" name="no-force-tlsv10 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-force-tlsv10"></a><a href="#5.2-no-force-tlsv10">no-force-tlsv10</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-tlsv10<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-tlsv10%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-tlsv10%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-tlsv10<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-tlsv10%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-tlsv10%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
-</pre><a class="anchor" name="no-force-tlsv11"></a><a class="anchor" name="5-no-force-tlsv11"></a><a class="anchor" name="5.2-no-force-tlsv11"></a><a class="anchor" name="no-force-tlsv11 (Bind and Server options)"></a><a class="anchor" name="no-force-tlsv11 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-force-tlsv11"></a><a href="#5.2-no-force-tlsv11">no-force-tlsv11</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-tlsv11<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-tlsv11%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-tlsv11%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-tlsv11<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-tlsv11%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-tlsv11%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
-</pre><a class="anchor" name="no-force-tlsv12"></a><a class="anchor" name="5-no-force-tlsv12"></a><a class="anchor" name="5.2-no-force-tlsv12"></a><a class="anchor" name="no-force-tlsv12 (Bind and Server options)"></a><a class="anchor" name="no-force-tlsv12 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-force-tlsv12"></a><a href="#5.2-no-force-tlsv12">no-force-tlsv12</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-tlsv12<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-tlsv12%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-tlsv12%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-tlsv12<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-tlsv12%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-tlsv12%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
 </pre><a class="anchor" name="no-send-proxy"></a><a class="anchor" name="5-no-send-proxy"></a><a class="anchor" name="5.2-no-send-proxy"></a><a class="anchor" name="no-send-proxy (Bind and Server options)"></a><a class="anchor" name="no-send-proxy (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-send-proxy"></a><a href="#5.2-no-send-proxy">no-send-proxy</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<a href="#send-proxy">send-proxy</a>&quot;
 setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
 default value.
@@ -13788,7 +13885,9 @@ new connection. It's probably only useful for benchmarking, troubleshooting,
 and for paranoid users.
 </pre><a class="anchor" name="no-sslv3"></a><a class="anchor" name="5-no-sslv3"></a><a class="anchor" name="5.2-no-sslv3"></a><a class="anchor" name="no-sslv3 (Bind and Server options)"></a><a class="anchor" name="no-sslv3 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-sslv3"></a><a href="#5.2-no-sslv3">no-sslv3</a></b></div><pre class="text">This option disables support for SSLv3 when SSL is used to communicate with
 the server. Note that SSLv2 is disabled in the code and cannot be enabled
-using any configuration option. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
+using any configuration option. Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
+
+Supported in default-server: No
 </pre><a class="anchor" name="no-tls-tickets"></a><a class="anchor" name="5-no-tls-tickets"></a><a class="anchor" name="5.2-no-tls-tickets"></a><a class="anchor" name="no-tls-tickets (Bind and Server options)"></a><a class="anchor" name="no-tls-tickets (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tls-tickets"></a><a href="#5.2-no-tls-tickets">no-tls-tickets</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables the stateless session resumption (RFC 5077 TLS Ticket
 extension) and force to use stateful session resumption. Stateless
@@ -13800,19 +13899,33 @@ the server. Note that SSLv2 is disabled in the code and cannot be enabled
 using any configuration option. TLSv1 is more expensive than SSLv3 so it
 often makes sense to disable it when communicating with local servers. This
 option is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
-See also &quot;<a href="#tlsv10">tlsv10</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
+Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
+
+Supported in default-server: No
 </pre><a class="anchor" name="no-tlsv11"></a><a class="anchor" name="5-no-tlsv11"></a><a class="anchor" name="5.2-no-tlsv11"></a><a class="anchor" name="no-tlsv11 (Bind and Server options)"></a><a class="anchor" name="no-tlsv11 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv11"></a><a href="#5.2-no-tlsv11">no-tlsv11</a></b></div><pre class="text">This option disables support for TLSv1.1 when SSL is used to communicate with
 the server. Note that SSLv2 is disabled in the code and cannot be enabled
 using any configuration option. TLSv1 is more expensive than SSLv3 so it
 often makes sense to disable it when communicating with local servers. This
 option is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
-See also &quot;<a href="#tlsv11">tlsv11</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
+Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
+
+Supported in default-server: No
 </pre><a class="anchor" name="no-tlsv12"></a><a class="anchor" name="5-no-tlsv12"></a><a class="anchor" name="5.2-no-tlsv12"></a><a class="anchor" name="no-tlsv12 (Bind and Server options)"></a><a class="anchor" name="no-tlsv12 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv12"></a><a href="#5.2-no-tlsv12">no-tlsv12</a></b></div><pre class="text">This option disables support for TLSv1.2 when SSL is used to communicate with
 the server. Note that SSLv2 is disabled in the code and cannot be enabled
 using any configuration option. TLSv1 is more expensive than SSLv3 so it
 often makes sense to disable it when communicating with local servers. This
 option is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
-See also &quot;<a href="#tlsv12">tlsv12</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">force-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#force-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#force-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;force-tlsv*&quot;.
+Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
+
+Supported in default-server: No
+</pre><a class="anchor" name="no-tlsv13"></a><a class="anchor" name="5-no-tlsv13"></a><a class="anchor" name="5.2-no-tlsv13"></a><a class="anchor" name="no-tlsv13 (Bind and Server options)"></a><a class="anchor" name="no-tlsv13 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tlsv13"></a><a href="#5.2-no-tlsv13">no-tlsv13</a></b></div><pre class="text">This option disables support for TLSv1.3 when SSL is used to communicate with
+the server. Note that SSLv2 is disabled in the code and cannot be enabled
+using any configuration option. TLSv1 is more expensive than SSLv3 so it
+often makes sense to disable it when communicating with local servers. This
+option is also available on global statement &quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;.
+Use &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; instead.
+
+Supported in default-server: No
 </pre><a class="anchor" name="no-verifyhost"></a><a class="anchor" name="5-no-verifyhost"></a><a class="anchor" name="5.2-no-verifyhost"></a><a class="anchor" name="no-verifyhost (Bind and Server options)"></a><a class="anchor" name="no-verifyhost (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-verifyhost"></a><a href="#5.2-no-verifyhost">no-verifyhost</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<a href="#verifyhost">verifyhost</a>&quot;
 setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
 default value.
@@ -14013,11 +14126,12 @@ checks are automatically sent in SSL too unless there is a &quot;<a href="#port"
 &quot;<a href="#addr">addr</a>&quot; directive indicating the check should be sent to a different location.
 See the &quot;<a href="#no-ssl">no-ssl</a>&quot; to disable &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option and &quot;<a href="#check-ssl">check-ssl</a>&quot; option to force
 SSL health checks.
-</pre><a class="anchor" name="sslv3"></a><a class="anchor" name="5-sslv3"></a><a class="anchor" name="5.2-sslv3"></a><a class="anchor" name="sslv3 (Bind and Server options)"></a><a class="anchor" name="sslv3 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="sslv3"></a><a href="#5.2-sslv3">sslv3</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-sslv3<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-sslv3%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-sslv3%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
+</pre><a class="anchor" name="ssl-max-ver"></a><a class="anchor" name="5-ssl-max-ver"></a><a class="anchor" name="5.2-ssl-max-ver"></a><a class="anchor" name="ssl-max-ver (Bind and Server options)"></a><a class="anchor" name="ssl-max-ver (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ssl-max-ver"></a><a href="#5.2-ssl-max-ver">ssl-max-ver</a></b> <span style="color: #008">[ SSLv3 | TLSv1.0 | TLSv1.1 | TLSv1.2 | TLSv1.3 ]</span></div><pre class="text">This option enforces use of &lt;version&gt; or lower when SSL is used to communicate
+with the server. This option is also available on global statement
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
+</pre><a class="anchor" name="ssl-min-ver"></a><a class="anchor" name="5-ssl-min-ver"></a><a class="anchor" name="5.2-ssl-min-ver"></a><a class="anchor" name="ssl-min-ver (Bind and Server options)"></a><a class="anchor" name="ssl-min-ver (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ssl-min-ver"></a><a href="#5.2-ssl-min-ver">ssl-min-ver</a></b> <span style="color: #008">[ SSLv3 | TLSv1.0 | TLSv1.1 | TLSv1.2 | TLSv1.3 ]</span></div><pre class="text">This option enforces use of &lt;version&gt; or upper when SSL is used to communicate
+with the server. This option is also available on global statement
+&quot;<a href="#ssl-default-server-options">ssl-default-server-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="ssl-reuse"></a><a class="anchor" name="5-ssl-reuse"></a><a class="anchor" name="5.2-ssl-reuse"></a><a class="anchor" name="ssl-reuse (Bind and Server options)"></a><a class="anchor" name="ssl-reuse (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ssl-reuse"></a><a href="#5.2-ssl-reuse">ssl-reuse</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<a href="#no-ssl-reuse">no-ssl-reuse</a>&quot;
 setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
 default value.
@@ -14046,21 +14160,6 @@ another one. It is possible to track a server which itself tracks another
 server, provided that at the end of the chain, a server has health checks
 enabled. If &lt;proxy&gt; is omitted the current one is used. If disable-on-404 is
 used, it has to be enabled on both proxies.
-</pre><a class="anchor" name="tlsv10"></a><a class="anchor" name="5-tlsv10"></a><a class="anchor" name="5.2-tlsv10"></a><a class="anchor" name="tlsv10 (Bind and Server options)"></a><a class="anchor" name="tlsv10 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tlsv10"></a><a href="#5.2-tlsv10">tlsv10</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-tlsv10<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-tlsv10%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-tlsv10%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-tlsv10<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-tlsv10%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-tlsv10%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
-</pre><a class="anchor" name="tlsv11"></a><a class="anchor" name="5-tlsv11"></a><a class="anchor" name="5.2-tlsv11"></a><a class="anchor" name="tlsv11 (Bind and Server options)"></a><a class="anchor" name="tlsv11 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tlsv11"></a><a href="#5.2-tlsv11">tlsv11</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-tlsv11<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-tlsv11%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-tlsv11%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-tlsv11<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-tlsv11%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-tlsv11%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
-</pre><a class="anchor" name="tlsv12"></a><a class="anchor" name="5-tlsv12"></a><a class="anchor" name="5.2-tlsv12"></a><a class="anchor" name="tlsv12 (Bind and Server options)"></a><a class="anchor" name="tlsv12 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tlsv12"></a><a href="#5.2-tlsv12">tlsv12</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-tlsv12<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-tlsv12%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-tlsv12%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
-setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
-default value.
-It may also be used as &quot;<a href="#default-server">default-server</a>&quot; setting to reset any previous
-&quot;<a href="#default-server">default-server</a>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-tlsv12<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-tlsv12%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-tlsv12%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
 </pre><a class="anchor" name="tls-tickets"></a><a class="anchor" name="5-tls-tickets"></a><a class="anchor" name="5.2-tls-tickets"></a><a class="anchor" name="tls-tickets (Bind and Server options)"></a><a class="anchor" name="tls-tickets (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tls-tickets"></a><a href="#5.2-tls-tickets">tls-tickets</a></b></div><pre class="text">This option may be used as &quot;<a href="#server">server</a>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">no-tls-tickets<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#no-tls-tickets%20%28Bind%20options%29">Bind options</a></li><li><a href="#no-tls-tickets%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
 setting which would have been inherited from &quot;<a href="#default-server">default-server</a>&quot; directive as
 default value.
@@ -14103,9 +14202,6 @@ This chapter describes how HAProxy can be configured to process server's name
 resolution at run time.
 Whether run time server name resolution has been enable or not, HAProxy will
 carry on doing the first resolution when parsing the configuration.
-
-Bear in mind that DNS resolution is triggered by health checks. This makes
-health checks mandatory to allow DNS resolution.
 </pre></div>
 <a class="anchor" id="5.3.1" name="5.3.1"></a>
 <h3 id="chapter-5.3.1" data-target="5.3.1"><small><a class="small" href="#5.3.1">5.3.1.</a></small> Global overview</h3>
@@ -14198,6 +14294,9 @@ Default value is 10s for &quot;valid&quot; and 30s for others.
 Note: since the name resolution is triggered by the health checks, a new
       resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
       the healch check.
+</pre><a class="anchor" name="resolution_pool_size"></a><a class="anchor" name="5-resolution_pool_size"></a><a class="anchor" name="5.3.2-resolution_pool_size"></a><a class="anchor" name="resolution_pool_size (Bind and Server options)"></a><a class="anchor" name="resolution_pool_size (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolution_pool_size"></a><a href="#5.3.2-resolution_pool_size">resolution_pool_size</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number of resolutions available in the pool for this resolvers.
+If not defines, it defaults to 64. If your configuration requires more than
+&lt;nb&gt;, then HAProxy will return an error when parsing the configuration.
 </pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3.2-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3.2-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
 giving up.
 Default value: 3
@@ -14919,6 +15018,8 @@ indication about its scope. The scopes allowed are:
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'.  The name may only
 contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
+</pre><a class="anchor" name="b64dec"></a><a class="anchor" name="7-b64dec"></a><a class="anchor" name="7.3.1-b64dec"></a><a class="anchor" name="b64dec (Using ACLs and fetching samples)"></a><a class="anchor" name="b64dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="b64dec"></a><a href="#7.3.1-b64dec">b64dec</a></b></div><pre class="text">Converts (decodes) a base64 encoded input string to its binary
+representation. It performs the inverse operation of base64().
 </pre><a class="anchor" name="base64"></a><a class="anchor" name="7-base64"></a><a class="anchor" name="7.3.1-base64"></a><a class="anchor" name="base64 (Using ACLs and fetching samples)"></a><a class="anchor" name="base64 (Converters)"></a><div class="keyword"><b><a class="anchor" name="base64"></a><a href="#7.3.1-base64">base64</a></b></div><pre class="text">Converts a binary input sample to a base64 string. It is used to log or
 transfer binary content in a way that can be reliably transferred (eg:
 an SSL ID can be copied in a header).
@@ -16231,6 +16332,21 @@ a response such as in &quot;stick store response&quot;.
 </pre><a class="anchor" name="payload_lv"></a><a class="anchor" name="7-payload_lv"></a><a class="anchor" name="7.3.5-payload_lv"></a><a class="anchor" name="payload_lv (Using ACLs and fetching samples)"></a><a class="anchor" name="payload_lv (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="payload_lv"></a><a href="#7.3.5-payload_lv">payload_lv</a></b>(<span style="color: #080">&lt;offset1&gt;</span>,<span style="color: #080">&lt;length&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;offset2&gt;</span>]</span>) : binary <span class="label label-warning">(deprecated)</span></div><pre class="text">This is an alias for &quot;<a href="#req.payload_lv">req.payload_lv</a>&quot; when used in the context of a request
 (eg: &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20match">stick match</a>&quot;), and for &quot;<a href="#res.payload_lv">res.payload_lv</a>&quot; when used in the
 context of a response such as in &quot;stick store response&quot;.
+</pre><a class="anchor" name="req.hdrs"></a><a class="anchor" name="7-req.hdrs"></a><a class="anchor" name="7.3.5-req.hdrs"></a><a class="anchor" name="req.hdrs (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdrs (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.hdrs"></a><a href="#7.3.5-req.hdrs">req.hdrs</a></b> : string</div><pre class="text">Returns the current request headers as string including the last empty line
+separating headers from the request body. The last empty line can be used to
+detect a truncated header block. This sample fetch is useful for some SPOE
+headers analyzers and for advanced logging.
+</pre><a class="anchor" name="req.hdrs_bin"></a><a class="anchor" name="7-req.hdrs_bin"></a><a class="anchor" name="7.3.5-req.hdrs_bin"></a><a class="anchor" name="req.hdrs_bin (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdrs_bin (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.hdrs_bin"></a><a href="#7.3.5-req.hdrs_bin">req.hdrs_bin</a></b> : binary</div><pre class="text">Returns the current request headers contained in preparsed binary form. This
+is useful for offloading some processing with SPOE. Each string is described
+by a length followed by the number of bytes indicated in the length. The
+length is represented using the variable integer encoding detailed in the
+SPOE documentation. The end of the list is marked by a couple of empty header
+names and values (length of 0 for both).
+
+*(&lt;str:header-name&gt;&lt;str:header-value&gt;)&lt;empty string&gt;&lt;empty string&gt;
+
+int:  refer to the SPOE documentation for the encoding
+str:  &lt;int:length&gt;&lt;bytes&gt;
 </pre><a class="anchor" name="req.len"></a><a class="anchor" name="7-req.len"></a><a class="anchor" name="7.3.5-req.len"></a><a class="anchor" name="req.len (Using ACLs and fetching samples)"></a><a class="anchor" name="req.len (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.len"></a><a href="#7.3.5-req.len">req.len</a></b> : integer</div><a class="anchor" name="req_len"></a><a class="anchor" name="7-req_len"></a><a class="anchor" name="7.3.5-req_len"></a><a class="anchor" name="req_len (Using ACLs and fetching samples)"></a><a class="anchor" name="req_len (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req_len"></a><a href="#7.3.5-req_len">req_len</a></b> : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value corresponding to the number of bytes present in the
 request buffer. This is mostly used in ACL. It is important to understand
 that this test does not return false as long as the buffer is changing. This
@@ -16567,7 +16683,7 @@ the first one. Negative values indicate positions relative to the last one,
 with -1 being the last one. A typical use is with the X-Forwarded-For header
 once converted to IP, associated with an IP stick-table. The function
 considers any comma as a delimiter for distinct values. If full-line headers
-are desired instead, use req.fhdr(). Please carefully check RFC2616 to know
+are desired instead, use req.fhdr(). Please carefully check RFC7231 to know
 how certain headers are supposed to be parsed. Also, some of them are case
 insensitive (eg: Connection).
 
@@ -18425,8 +18541,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev1-3 &ndash; Configuration Manual<br>
-							<small>2017/04/03, willy tarreau</small>
+							HAProxy 1.8-dev2-34 &ndash; Configuration Manual<br>
+							<small>2017/06/02, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18529,7 +18645,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev1-3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2-34', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
