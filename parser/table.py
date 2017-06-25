@@ -49,7 +49,7 @@ class TableParser(parser.Parser):
                     else:
                         # Data
                         columns = line.split("|")
-                        for j in xrange(0, len(columns)):
+                        for j in range(0, len(columns)):
                             try:
                                 if row[j]:
                                     row[j] += "<br />"

@@ -12,10 +12,7 @@ import datetime
 
 
 
-try:
-    from urllib.parse import quote  # python3 import
-except ImportError:
-    from urllib.parse import quote  # python2.7 import
+from urllib.parse import quote
 
 from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
