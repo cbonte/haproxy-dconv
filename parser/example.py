@@ -2,7 +2,7 @@ import re
 import parser
 
 # Detect examples blocks
-class Parser(parser.Parser):
+class ExampleParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         template = pctxt.templates.get_template("parser/example/comment.tpl")

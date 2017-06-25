@@ -1,28 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# Copyright 2012 Cyril Bonté
-# Copyright 2017 David Kremer
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+"""
+This module is made of the various high-level method used to effectively
+convert the Haproxy documentation into a suitable form
+"""
 from __future__ import print_function
 
 import os
 import re
 import sys
 import cgi
-import subprocess
 import datetime
 
 
@@ -38,39 +23,7 @@ from mako.exceptions import TopLevelLookupException
 import parser
 
 
-def get_git_version():
-    """
-    Fetch the last known version of the HAProxy current repository
-    """
-    return get_git_version_in_path(os.getcwd())
 
-
-def get_git_version_in_path(path):
-    """
-    Feth the last known version of the git repository given as an argument
-    """
-    if not path or not os.path.isdir(os.path.join(path,".git")):
-        print("This does not appear to be a Git repository.", file=sys.stderr)
-        return
-
-    try:
-        p = subprocess.Popen(["git", "describe", "--tags", "--match", "v*"],
-                             cwd=path,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-    except EnvironmentError:
-        return False
-    version = p.communicate()[0]
-
-    if p.returncode != 0:
-        return False
-
-    if len(version) < 2:
-        return False
-
-    version = version[1:].strip()
-    version = re.sub(r'-g.*', '', version)
-    return version
 
 def getTitleDetails(string):
     array = string.split(".")

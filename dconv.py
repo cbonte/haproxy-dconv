@@ -21,9 +21,6 @@ from optparse import OptionParser
 
 from parser import converter, git_parser
 
-VERSION = ""
-HAPROXY_GIT_VERSION = False
-
 
 def main():
     """

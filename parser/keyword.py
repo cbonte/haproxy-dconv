@@ -2,7 +2,7 @@ import re
 import parser
 from urllib import quote
 
-class Parser(parser.Parser):
+class KeyWordParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (

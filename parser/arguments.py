@@ -5,7 +5,7 @@ import parser
 '''
 TODO: Allow inner data parsing (this will allow to parse the examples provided in an arguments block)
 '''
-class Parser(parser.Parser):
+class ArgumentParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         #template = pctxt.templates.get_template("parser/arguments.tpl")
