@@ -26,13 +26,11 @@ def main():
     """
     Main script to execute the conversion process
     """
-    global VERSION, HAPROXY_GIT_VERSION
 
     usage = "Usage: %prog [options] file..."
 
     optparser = OptionParser(
-        description='Generate HTML Document from HAProxy configuation.txt',
-        version=VERSION,
+        description='Generate HTML Document from HAProxy configuration.txt',
         usage=usage
     )
     optparser.add_option(
@@ -60,16 +58,16 @@ def main():
 
     os.chdir(os.path.dirname(__file__))
 
-    VERSION = git_parser.get_git_version()
-    if not VERSION:
+    # check the haproxy-dconv repository version
+    dconv_version = git_parser.get_git_version_from_cwd()
+    if not dconv_version:
         sys.exit(1)
 
-    HAPROXY_GIT_VERSION = git_parser.get_git_version_in_path(
+    haproxy_version = git_parser.get_git_version_in_path(
                             option.git_directory
-                          )
+                      )
 
-    converter.convert_all(files, option.output_directory, option.base,
-                          version=VERSION, haproxy_version=HAPROXY_GIT_VERSION)
+    converter.convert_all(files, option.output_directory, option.base)
 
 
 if __name__ == '__main__':
