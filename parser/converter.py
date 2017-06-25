@@ -2,7 +2,7 @@
 This module is made of the various high-level method used to effectively
 convert the Haproxy documentation into a suitable form
 """
-from __future__ import print_function
+
 
 import os
 import re
@@ -15,7 +15,7 @@ import datetime
 try:
     from urllib.parse import quote  # python3 import
 except ImportError:
-    from urllib import quote  # python2.7 import
+    from urllib.parse import quote  # python2.7 import
 
 from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException

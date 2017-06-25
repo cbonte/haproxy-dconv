@@ -25,17 +25,17 @@ class ArgumentParser(parser.Parser):
 
             indent = parser.get_indent(line)
 
-            pctxt.next()
+            next(pctxt)
             pctxt.eat_empty_lines()
 
             arglines = []
             if desc != "none":
                 add_empty_lines = 0
                 while pctxt.has_more_lines() and (parser.get_indent(pctxt.get_line()) > indent):
-                    for j in xrange(0, add_empty_lines):
+                    for j in range(0, add_empty_lines):
                         arglines.append("")
                     arglines.append(pctxt.get_line())
-                    pctxt.next()
+                    next(pctxt)
                     add_empty_lines = pctxt.eat_empty_lines()
                     '''
                     print line

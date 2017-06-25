@@ -36,14 +36,14 @@ class PContext:
         count = 0
         while self.has_more_lines() and self.lines[self.i].strip():
             count += 1
-            self.next()
+            next(self)
         return count
 
     def eat_empty_lines(self):
         count = 0
         while self.has_more_lines() and not self.lines[self.i].strip():
             count += 1
-            self.next()
+            next(self)
         return count
 
     def next(self, count=1):

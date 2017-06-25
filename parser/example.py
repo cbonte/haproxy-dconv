@@ -29,9 +29,9 @@ class ExampleParser(parser.Parser):
                 # And some description are on multiple lines
                 while pctxt.get_line(1) and parser.get_indent(pctxt.get_line(1)) == desc_indent:
                     desc += " " + pctxt.get_line(1).strip()
-                    pctxt.next()
+                    next(pctxt)
 
-            pctxt.next()
+            next(pctxt)
             add_empty_line = pctxt.eat_empty_lines()
 
             content = []
@@ -42,14 +42,14 @@ class ExampleParser(parser.Parser):
                 add_empty_line = 0
                 while pctxt.has_more_lines() and ((not pctxt.get_line()) or (parser.get_indent(pctxt.get_line()) > indent)):
                     if pctxt.get_line():
-                        for j in xrange(0, add_empty_line):
+                        for j in range(0, add_empty_line):
                             content.append("")
 
                         content.append(re.sub(r'(#.*)$', self.comment, pctxt.get_line()))
                         add_empty_line = 0
                     else:
                         add_empty_line += 1
-                    pctxt.next()
+                    next(pctxt)
             elif parser.get_indent(pctxt.get_line()) == indent:
                 # Simple example that can't have empty lines
                 if add_empty_line and desc:
@@ -60,7 +60,7 @@ class ExampleParser(parser.Parser):
                 else:
                     while pctxt.has_more_lines() and (parser.get_indent(pctxt.get_line()) >= indent):
                         content.append(pctxt.get_line())
-                        pctxt.next()
+                        next(pctxt)
                     pctxt.eat_empty_lines() # Skip empty remaining lines
 
             pctxt.stop = True

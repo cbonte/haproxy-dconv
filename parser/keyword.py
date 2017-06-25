@@ -1,6 +1,6 @@
 import re
 import parser
-from urllib import quote
+from urllib.parse import quote
 
 class KeyWordParser(parser.Parser):
     def __init__(self, pctxt):
@@ -40,7 +40,7 @@ class KeyWordParser(parser.Parser):
 
             if keyword and (len(splitKeyword) <= 5):
                 toplevel = pctxt.details["toplevel"]
-                for j in xrange(0, len(splitKeyword)):
+                for j in range(0, len(splitKeyword)):
                     subKeyword = " ".join(splitKeyword[0:j + 1])
                     if subKeyword != "no":
                         if not subKeyword in keywords:
@@ -66,7 +66,7 @@ class KeyWordParser(parser.Parser):
                 while nextline.startswith("   "):
                     # Found parameters on the next line
                     parameters += "\n" + nextline
-                    pctxt.next()
+                    next(pctxt)
                     if pctxt.has_more_lines(1):
                         nextline = pctxt.get_line(1)
                     else:
@@ -75,13 +75,13 @@ class KeyWordParser(parser.Parser):
 
                 parameters = self.colorize(parameters)
                 res += '<div class="keyword">%s<b><a class="anchor" name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, quote("%s-%s" % (pctxt.details["chapter"], keyword)), keyword, parameters, suffix)
-                pctxt.next()
+                next(pctxt)
                 pctxt.stop = True
             elif line.startswith("/*"):
                 # Skip comments in the documentation
                 while not pctxt.get_line().endswith("*/"):
-                    pctxt.next()
-                pctxt.next()
+                    next(pctxt)
+                next(pctxt)
             else:
                 # This is probably not a keyword but a text, ignore it
                 res += line
