@@ -107,7 +107,7 @@ function _generate_file()
 			fi
 
 
-			$WORK_DIR/haproxy-dconv/master/haproxy-dconv.py -i $gitpath/doc/$infile -o $destfile --base=$base &&
+			$WORK_DIR/haproxy-dconv/master/dconv.py -i $gitpath/doc/$infile -o $destfile --base=$base &&
 			echo "<!-- git:$git_version -->" >> $destfile &&
 			sed -i "s/\(<\!-- $HTAG -->\)\(.*\)\(<\!-- \/$HTAG -->\)/\1${git_version_simple}\3/" $docroot/index.html
 
