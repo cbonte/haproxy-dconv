@@ -21,6 +21,13 @@ from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
 
 import parser
+import parser.arguments
+import parser.underline
+import parser.keyword
+import parser.example
+import parser.table
+import parser.seealso
+
 
 
 
@@ -108,13 +115,12 @@ def documentAppend(text, retline = True):
 
 def init_parsers(pctxt):
     return [
-        parser.underline.Parser(pctxt),
-        parser.arguments.Parser(pctxt),
-        parser.seealso.Parser(pctxt),
-        parser.example.Parser(pctxt),
-        parser.table.Parser(pctxt),
-        parser.underline.Parser(pctxt),
-        parser.keyword.Parser(pctxt),
+        parser.underline.UnderlineParser(pctxt),
+        parser.arguments.ArgumentParser(pctxt),
+        parser.seealso.SeeAlsoParser(pctxt),
+        parser.example.ExampleParser(pctxt),
+        parser.table.TableParser(pctxt),
+        parser.keyword.KeyWordParser(pctxt),
     ]
 
 # The parser itself
@@ -124,10 +130,8 @@ def convert_all(infiles, outdir, base=''):
     menu = []
     for infile in infiles:
         basefile = os.path.basename(infile).replace(".txt", ".html")
-        outfile = os.path.join(
-            outdir,
-            basefile,
-        )
+        outfile = os.path.join( outdir, basefile )
+
         pctxt = parser.PContext(
             TemplateLookup(
                 directories=[
@@ -153,18 +157,17 @@ def convert_all(infiles, outdir, base=''):
 def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
     global document, keywords, keywordsCount, chapters, keyword_conflicts
 
-    if len(base) > 0 and base[:-1] != '/':
+    if base and base[:-1] != '/':
         base += '/'
 
     hasSummary = False
 
-    data = []
-    fd = parser.file(infile,"r")
-    for line in fd:
-        line.replace("\t", " " * 8)
-        line = line.rstrip()
-        data.append(line)
-    fd.close()
+    # read data from the input file,
+    # store everything as a list of string
+    # after replacing tabulation characters
+    # with 8 spaces
+    with open(infile) as fd:
+        data = [line.replace("\t", " "*8).rstrip() for line in fd.readlines()]
 
     parsers = init_parsers(pctxt)
 
@@ -317,13 +320,13 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     # - the version
                     # - the author
                     # - the date
-                    next(pctxt)
+                    pctxt.next()
                     pctxt.context['headers']['title'] = pctxt.get_line().strip()
-                    next(pctxt)
+                    pctxt.next()
                     subtitle = ""
                     while not re.match("^-+$", pctxt.get_line().strip()):
                         subtitle += " " + pctxt.get_line().strip()
-                        next(pctxt)
+                        pctxt.next()
                     pctxt.context['headers']['subtitle'] += subtitle.strip()
                     if not pctxt.context['headers']['subtitle']:
                         # No subtitle, try to guess one from the title if it
@@ -331,13 +334,13 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                         if pctxt.context['headers']['title'].startswith('HAProxy '):
                             pctxt.context['headers']['subtitle'] = pctxt.context['headers']['title'][8:]
                             pctxt.context['headers']['title'] = 'HAProxy'
-                    next(pctxt)
+                    pctxt.next()
                     pctxt.context['headers']['version'] = pctxt.get_line().strip()
-                    next(pctxt)
+                    pctxt.next()
                     pctxt.context['headers']['author'] = pctxt.get_line().strip()
-                    next(pctxt)
+                    pctxt.next()
                     pctxt.context['headers']['date'] = pctxt.get_line().strip()
-                    next(pctxt)
+                    pctxt.next()
                     if haproxy_version:
                         pctxt.context['headers']['version'] = 'version ' + haproxy_version
 
@@ -371,7 +374,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     # delays the rendering
                     if delay or line != "":
                         delay.append(line)
-                    next(pctxt)
+                    pctxt.next()
                 elif pctxt.stop:
                     while delay and delay[-1].strip() == "":
                         del delay[-1]
@@ -388,7 +391,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                         documentAppend('<pre class="text">%s\n</pre>' % "\n".join(delay), False)
                     delay = []
                     documentAppend(line, True)
-                    next(pctxt)
+                    pctxt.next()
 
             while delay and delay[-1].strip() == "":
                 del delay[-1]

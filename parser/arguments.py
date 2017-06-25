@@ -25,7 +25,7 @@ class ArgumentParser(parser.Parser):
 
             indent = parser.get_indent(line)
 
-            next(pctxt)
+            pctxt.next()
             pctxt.eat_empty_lines()
 
             arglines = []
@@ -35,7 +35,7 @@ class ArgumentParser(parser.Parser):
                     for j in range(0, add_empty_lines):
                         arglines.append("")
                     arglines.append(pctxt.get_line())
-                    next(pctxt)
+                    pctxt.next()
                     add_empty_lines = pctxt.eat_empty_lines()
                     '''
                     print line

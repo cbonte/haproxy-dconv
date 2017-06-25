@@ -25,7 +25,8 @@ class KeyWordParser(parser.Parser):
                 keyword = parsed.group(1)
                 arg     = parsed.group(4)
                 parameters = line[len(keyword) + len(arg):]
-                if (parameters != "" and not re.match("^ +((&lt;|\[|\{|/).*|(: [a-z +]+))?(\(deprecated\))?$", parameters)):
+                if (parameters != ""
+                    and not re.match("^ +((&lt;|\[|\{|/).*|(: [a-z +]+))?(\(deprecated\))?$", parameters)):
                     # Dirty hack
                     # - parameters should only start with the characer "<", "[", "{", "/"
                     # - or a column (":") followed by a alpha keywords to identify fetching samples (optionally separated by the character "+")
@@ -56,7 +57,10 @@ class KeyWordParser(parser.Parser):
                 if deprecated != -1:
                     prefix = ""
                     suffix = ""
-                    parameters = parameters.replace("(deprecated)", '<span class="label label-warning">(deprecated)</span>')
+                    parameters = parameters.replace(
+                        "(deprecated)",
+                        '<span class="label label-warning">(deprecated)</span>'
+                    )
                 else:
                     prefix = ""
                     suffix = ""
@@ -66,7 +70,7 @@ class KeyWordParser(parser.Parser):
                 while nextline.startswith("   "):
                     # Found parameters on the next line
                     parameters += "\n" + nextline
-                    next(pctxt)
+                    pctxt.next()
                     if pctxt.has_more_lines(1):
                         nextline = pctxt.get_line(1)
                     else:
@@ -75,13 +79,13 @@ class KeyWordParser(parser.Parser):
 
                 parameters = self.colorize(parameters)
                 res += '<div class="keyword">%s<b><a class="anchor" name="%s"></a><a href="#%s">%s</a></b>%s%s</div>' % (prefix, keyword, quote("%s-%s" % (pctxt.details["chapter"], keyword)), keyword, parameters, suffix)
-                next(pctxt)
+                pctxt.next()
                 pctxt.stop = True
             elif line.startswith("/*"):
                 # Skip comments in the documentation
                 while not pctxt.get_line().endswith("*/"):
-                    next(pctxt)
-                next(pctxt)
+                    pctxt.next()
+                pctxt.next()
             else:
                 # This is probably not a keyword but a text, ignore it
                 res += line

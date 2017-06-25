@@ -8,7 +8,7 @@ import sys
 import subprocess
 import re
 
-def get_git_version():
+def get_git_version_from_cwd():
     """
     Fetch the last known version of the HAProxy current repository
     """
@@ -38,6 +38,6 @@ def get_git_version_in_path(path):
     if len(version) < 2:
         return False
 
-    version = version[1:].strip()
+    version = version.decode().lstrip('v').rstrip()  # remove the 'v' tag and the EOL char
     version = re.sub(r'-g.*', '', version)
     return version

@@ -98,7 +98,7 @@ class TableParser(parser.Parser):
                             start = end + 1
                             if start >= len(headers):
                                 start = -1
-                        for j in xrange(0, nbColumns):
+                        for j in range(0, nbColumns):
                             try:
                                 row[j] += tmprow[j].strip()
                             except:
@@ -122,7 +122,7 @@ class TableParser(parser.Parser):
                             row.append(extra)
 
                     pctxt.next()
-            print >> sys.stderr, "Leaving table mode"
+            print("Leaving table mode", file=sys.stderr)
             pctxt.next() # skip useless next line
             pctxt.stop = True
 

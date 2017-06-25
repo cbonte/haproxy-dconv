@@ -16,10 +16,10 @@ class SeeAlsoParser(parser.Parser):
             # Some descriptions are on multiple lines
             while pctxt.has_more_lines(1) and parser.get_indent(pctxt.get_line(1)) >= indent and pctxt.get_line(1).strip() != '':
                 desc += " " + pctxt.get_line(1).strip()
-                next(pctxt)
+                pctxt.next()
 
             pctxt.eat_empty_lines()
-            next(pctxt)
+            pctxt.next()
             pctxt.stop = True
 
             template = pctxt.templates.get_template("parser/seealso.tpl")
