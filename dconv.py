@@ -16,7 +16,6 @@
 # limitations under the License.
 
 import os
-import sys
 from optparse import OptionParser
 
 from parser import converter, git_parser
