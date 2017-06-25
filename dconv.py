@@ -17,10 +17,9 @@
 
 import os
 import sys
-
 from optparse import OptionParser
 
-import converter
+from parser import converter, git_parser
 
 VERSION = ""
 HAPROXY_GIT_VERSION = False
@@ -64,11 +63,11 @@ def main():
 
     os.chdir(os.path.dirname(__file__))
 
-    VERSION = converter.get_git_version()
+    VERSION = git_parser.get_git_version()
     if not VERSION:
         sys.exit(1)
 
-    HAPROXY_GIT_VERSION = converter.get_git_version_in_path(
+    HAPROXY_GIT_VERSION = git_parser.get_git_version_in_path(
                             option.git_directory
                           )
 
