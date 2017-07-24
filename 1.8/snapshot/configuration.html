@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev2-34 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev2-93 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -2689,7 +2689,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/06/23</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/07/24</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2700,7 +2700,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev2-34</strong></p>
+							<p><strong>version 1.8-dev2-93</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -11453,7 +11453,7 @@ backend smtp
             was last created, refreshed or matched. The expiration delay is
             defined using the standard time format, similarly as the various
             timeouts. The maximum duration is slightly above 24 days. See
-            <a href="#2.2">section 2.2</a> for more information. If this delay is not specified,
+            <a href="#2.4">section 2.4</a> for more information. If this delay is not specified,
             the session won't automatically expire, but older entries will
             be removed once full. Be sure not to use the &quot;nopurge&quot; parameter
             if not expiration delay is specified.
@@ -11602,7 +11602,7 @@ something that can be ignored.
 <span class="comment"># computed over a sliding window of 30 seconds.</span>
 stick-table type ip size 1m expire 5m store gpc0,conn_rate(30s)
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick%20match">stick match</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20store-request">stick store-request</a>&quot;, <a href="#2.2">section 2.2</a> about time format and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick%20match">stick match</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20store-request">stick store-request</a>&quot;, <a href="#2.4">section 2.4</a> about time format and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="stick"></a><a class="anchor" name="4-stick"></a><a class="anchor" name="4.2-stick"></a><a class="anchor" name="stick (Proxies)"></a><a class="anchor" name="stick (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stick store-response"></a><a class="anchor" name="4-stick store-response"></a><a class="anchor" name="4.2-stick store-response"></a><a class="anchor" name="stick store-response (Proxies)"></a><a class="anchor" name="stick store-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stick store-response"></a><a href="#4.2-stick%20store-response">stick store-response</a></b> <span style="color: #080">&lt;pattern&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Define a response pattern used to create an entry in a stickiness table
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -14102,7 +14102,9 @@ seen as failed.
 string and uses the result as the host name sent in the SNI TLS extension to
 the server. A typical use case is to send the SNI received from the client in
 a bridged HTTPS scenario, using the &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot; sample fetch for the
-expression, though alternatives such as req.hdr(host) can also make sense.
+expression, though alternatives such as req.hdr(host) can also make sense. If
+&quot;verify required&quot; is set (which is the recommended setting), the resulting
+name will also be matched against the server certificate's names.
 </pre><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span> ...</div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter sets the source address which will be used when
 connecting to the server. It follows the exact same parameters and principle
 as the backend &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, except that it only applies to the server
@@ -14168,18 +14170,23 @@ It may also be used as &quot;<a href="#default-server">default-server</a>&quot; 
 </pre><a class="anchor" name="verify"></a><a class="anchor" name="5-verify"></a><a class="anchor" name="5.2-verify"></a><a class="anchor" name="verify (Bind and Server options)"></a><a class="anchor" name="verify (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verify"></a><a href="#5.2-verify">verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. If set
 to 'none', server certificate is not verified. In the other case, The
 certificate provided by the server is verified using CAs from 'ca-file'
-and optional CRLs from 'crl-file'. If 'ssl_server_verify' is not specified
-in global  section, this is the default. On verify failure the handshake
-is aborted. It is critically important to verify server certificates when
-using SSL to connect to servers, otherwise the communication is prone to
-trivial man-in-the-middle attacks rendering SSL totally useless.
+and optional CRLs from 'crl-file' after having checked that the names
+provided in the certificate match either the static host name passed using
+the &quot;<a href="#verifyhost">verifyhost</a>&quot; directive, or if not provided, the name passed using the
+&quot;<a href="#sni">sni</a>&quot; directive. When no name is found, the certificate's names are ignored.
+If 'ssl_server_verify' is not specified in global  section, this is the
+default. On verify failure the handshake is aborted. It is critically
+important to verify server certificates when using SSL to connect to servers,
+otherwise the communication is prone to trivial man-in-the-middle attacks
+rendering SSL totally useless.
 </pre><a class="anchor" name="verifyhost"></a><a class="anchor" name="5-verifyhost"></a><a class="anchor" name="5.2-verifyhost"></a><a class="anchor" name="verifyhost (Bind and Server options)"></a><a class="anchor" name="verifyhost (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verifyhost"></a><a href="#5.2-verifyhost">verifyhost</a></b> <span style="color: #080">&lt;hostname&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in, and
 only takes effect if 'verify required' is also specified. When set, the
 hostnames in the subject and subjectAlternateNames of the certificate
 provided by the server are checked. If none of the hostnames in the
 certificate match the specified hostname, the handshake is aborted. The
-hostnames in the server-provided certificate may include wildcards.
-See also &quot;<a href="#no-verifyhost">no-verifyhost</a>&quot; option.
+hostnames in the server-provided certificate may include wildcards. Note
+that the name provided here overrides (for the checks) any possible name
+passed using &quot;<a href="#sni">sni</a>&quot;. See also &quot;<a href="#no-verifyhost">no-verifyhost</a>&quot; option.
 </pre><a class="anchor" name="weight"></a><a class="anchor" name="5-weight"></a><a class="anchor" name="5.2-weight"></a><a class="anchor" name="weight (Bind and Server options)"></a><a class="anchor" name="weight (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="weight"></a><a href="#5.2-weight">weight</a></b> <span style="color: #080">&lt;weight&gt;</span></div><pre class="text">The &quot;<a href="#weight">weight</a>&quot; parameter is used to adjust the server's weight relative to
 other servers. All servers will receive a load proportional to their weight
 relative to the sum of all weights, so the higher the weight, the higher the
@@ -18541,7 +18548,7 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev2-34 &ndash; Configuration Manual<br>
+							HAProxy 1.8-dev2-93 &ndash; Configuration Manual<br>
 							<small>2017/06/02, willy tarreau</small>
 						</div>
 					</div>
@@ -18645,7 +18652,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2-34', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2-93', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
