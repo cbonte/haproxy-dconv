@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.7.6 - Configuration Manual</title>
+		<title>HAProxy version 1.7.8 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -2601,7 +2601,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/06/23</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/07/24</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2612,11 +2612,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.7.6</strong></p>
+							<p><strong>version 1.7.8</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/06/16
+								2017/07/07
 							</p>
 						</div>
 
@@ -4185,7 +4185,7 @@ forced using cmdline option '-dV'.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
 Connections to this socket will return various statistics outputs and even
 allow some commands to be issued to change some runtime settings. Please
-consult <a href="#9.2">section 9.2</a> &quot;Unix Socket commands&quot; of Management Guide for more
+consult <a href="#9.3">section 9.3</a> &quot;Unix Socket commands&quot; of Management Guide for more
 details.
 
 All parameters supported by &quot;<a href="#bind">bind</a>&quot; lines are supported, for instance to
@@ -4502,9 +4502,9 @@ rejected with a &quot;400 Bad Request&quot; status code. Similarly, too large re
 are blocked with &quot;502 Bad Gateway&quot;. The default value is 101, which is enough
 for all usages, considering that the widely deployed Apache server uses the
 same limit. It can be useful to push this limit further to temporarily allow
-a buggy application to work by the time it gets fixed. Keep in mind that each
-new header consumes 32bits of memory for each session, so don't push this
-limit too high.
+a buggy application to work by the time it gets fixed. The accepted range is
+1..32767. Keep in mind that each new header consumes 32bits of memory for
+each session, so don't push this limit too high.
 </pre><a class="anchor" name="tune.idletimer"></a><a class="anchor" name="3-tune.idletimer"></a><a class="anchor" name="3.2-tune.idletimer"></a><a class="anchor" name="tune.idletimer (Global parameters)"></a><a class="anchor" name="tune.idletimer (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.idletimer"></a><a href="#3.2-tune.idletimer">tune.idletimer</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets the duration after which haproxy will consider that an empty buffer is
 probably associated with an idle stream. This is used to optimally adjust
 some packet sizes while forwarding large and small data alternatively. The
@@ -7621,7 +7621,7 @@ over the stats socket and redirect output.
 
 The format of the file is versionned and is very specific. To understand it,
 please read the documentation of the &quot;show servers state&quot; command (chapter
-9.2 of Management Guide).
+9.3 of Management Guide).
 </pre><div class="separator">
 <span class="label label-info">Arguments:</span><pre class="prettyprint arguments">global     load the content of the file pointed by the global directive
            named &quot;<a href="#server-state-file">server-state-file</a>&quot;.
@@ -11257,7 +11257,7 @@ backend smtp
             was last created, refreshed or matched. The expiration delay is
             defined using the standard time format, similarly as the various
             timeouts. The maximum duration is slightly above 24 days. See
-            <a href="#2.2">section 2.2</a> for more information. If this delay is not specified,
+            <a href="#2.4">section 2.4</a> for more information. If this delay is not specified,
             the session won't automatically expire, but older entries will
             be removed once full. Be sure not to use the &quot;nopurge&quot; parameter
             if not expiration delay is specified.
@@ -11406,7 +11406,7 @@ something that can be ignored.
 <span class="comment"># computed over a sliding window of 30 seconds.</span>
 stick-table type ip size 1m expire 5m store gpc0,conn_rate(30s)
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick%20match">stick match</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20store-request">stick store-request</a>&quot;, <a href="#2.2">section 2.2</a> about time format and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick%20match">stick match</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20store-request">stick store-request</a>&quot;, <a href="#2.4">section 2.4</a> about time format and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="stick"></a><a class="anchor" name="4-stick"></a><a class="anchor" name="4.2-stick"></a><a class="anchor" name="stick (Proxies)"></a><a class="anchor" name="stick (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stick store-response"></a><a class="anchor" name="4-stick store-response"></a><a class="anchor" name="4.2-stick store-response"></a><a class="anchor" name="stick store-response (Proxies)"></a><a class="anchor" name="stick store-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stick store-response"></a><a href="#4.2-stick%20store-response">stick store-response</a></b> <span style="color: #080">&lt;pattern&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Define a response pattern used to create an entry in a stickiness table
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -18243,8 +18243,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.7.6 &ndash; Configuration Manual<br>
-							<small>2017/06/16, willy tarreau</small>
+							HAProxy 1.7.8 &ndash; Configuration Manual<br>
+							<small>2017/07/07, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18347,7 +18347,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.6', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.8', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
