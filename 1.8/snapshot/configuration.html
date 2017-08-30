@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev2-93 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev2-169 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -893,6 +893,8 @@
 							
 							<a class="list-group-item" href="#accept-proxy">accept-proxy</a>
 							
+							<a class="list-group-item" href="#accepted_payload_size">accepted_payload_size</a>
+							
 							<a class="list-group-item" href="#acl">acl</a>
 							
 							<a class="list-group-item" href="#add">add</a>
@@ -1524,6 +1526,8 @@
 							<a class="list-group-item" href="#no-agent-check">no-agent-check</a>
 							
 							<a class="list-group-item" href="#no-backup">no-backup</a>
+							
+							<a class="list-group-item" href="#no-ca-names">no-ca-names</a>
 							
 							<a class="list-group-item" href="#no-check">no-check</a>
 							
@@ -2689,7 +2693,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/07/24</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/08/30</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2700,7 +2704,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev2-93</strong></p>
+							<p><strong>version 1.8-dev2-169</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -13263,9 +13267,9 @@ filter per certificate, with the following format for each line :
 
       &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
 
-sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;ca_file&quot;, &quot;crl_file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;,
-&quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and
-&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
+sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
+crl-file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
 It override the configuration set in bind line for the certificate.
 
 Wildcards are supported in the SNI filter. Negative filter are also supported,
@@ -13407,6 +13411,8 @@ and high values are generally recommended for CPU intensive tasks such as SSL
 processing or bulk transfers which are less sensible to latency. For example,
 it may make sense to use a positive value for an SMTP socket and a negative
 one for an RDP socket.
+</pre><a class="anchor" name="no-ca-names"></a><a class="anchor" name="5-no-ca-names"></a><a class="anchor" name="5.1-no-ca-names"></a><a class="anchor" name="no-ca-names (Bind and Server options)"></a><a class="anchor" name="no-ca-names (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-ca-names"></a><a href="#5.1-no-ca-names">no-ca-names</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+prevents from send CA names in server hello message when ca-file is used.
 </pre><a class="anchor" name="no-sslv3"></a><a class="anchor" name="5-no-sslv3"></a><a class="anchor" name="5.1-no-sslv3"></a><a class="anchor" name="no-sslv3 (Bind and Server options)"></a><a class="anchor" name="no-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-sslv3"></a><a href="#5.1-no-sslv3">no-sslv3</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for SSLv3 on any sockets instantiated from the listener when
 SSL is supported. Note that SSLv2 is forced disabled in the code and cannot
@@ -14104,7 +14110,8 @@ the server. A typical use case is to send the SNI received from the client in
 a bridged HTTPS scenario, using the &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot; sample fetch for the
 expression, though alternatives such as req.hdr(host) can also make sense. If
 &quot;verify required&quot; is set (which is the recommended setting), the resulting
-name will also be matched against the server certificate's names.
+name will also be matched against the server certificate's names. See the
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; directive for more details.
 </pre><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span> ...</div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter sets the source address which will be used when
 connecting to the server. It follows the exact same parameters and principle
 as the backend &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, except that it only applies to the server
@@ -14169,24 +14176,26 @@ It may also be used as &quot;<a href="#default-server">default-server</a>&quot; 
 &quot;<a href="#default-server">default-server</a>&quot; &quot;no-tlsv-tickets&quot; setting.
 </pre><a class="anchor" name="verify"></a><a class="anchor" name="5-verify"></a><a class="anchor" name="5.2-verify"></a><a class="anchor" name="verify (Bind and Server options)"></a><a class="anchor" name="verify (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verify"></a><a href="#5.2-verify">verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. If set
 to 'none', server certificate is not verified. In the other case, The
-certificate provided by the server is verified using CAs from 'ca-file'
-and optional CRLs from 'crl-file' after having checked that the names
-provided in the certificate match either the static host name passed using
-the &quot;<a href="#verifyhost">verifyhost</a>&quot; directive, or if not provided, the name passed using the
-&quot;<a href="#sni">sni</a>&quot; directive. When no name is found, the certificate's names are ignored.
-If 'ssl_server_verify' is not specified in global  section, this is the
-default. On verify failure the handshake is aborted. It is critically
-important to verify server certificates when using SSL to connect to servers,
-otherwise the communication is prone to trivial man-in-the-middle attacks
-rendering SSL totally useless.
+certificate provided by the server is verified using CAs from 'ca-file' and
+optional CRLs from 'crl-file' after having checked that the names provided in
+the certificate's subject and subjectAlternateNames attributs match either
+the name passed using the &quot;<a href="#sni">sni</a>&quot; directive, or if not provided, the static
+host name passed using the &quot;<a href="#verifyhost">verifyhost</a>&quot; directive. When no name is found, the
+certificate's names are ignored. For this reason, without SNI it's important
+to use &quot;<a href="#verifyhost">verifyhost</a>&quot;. On verification failure the handshake is aborted. It is
+critically important to verify server certificates when using SSL to connect
+to servers, otherwise the communication is prone to trivial man-in-the-middle
+attacks rendering SSL totally useless. Unless &quot;ssl_server_verify&quot; appears in
+the global section, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; is set to &quot;required&quot; by default.
 </pre><a class="anchor" name="verifyhost"></a><a class="anchor" name="5-verifyhost"></a><a class="anchor" name="5.2-verifyhost"></a><a class="anchor" name="verifyhost (Bind and Server options)"></a><a class="anchor" name="verifyhost (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verifyhost"></a><a href="#5.2-verifyhost">verifyhost</a></b> <span style="color: #080">&lt;hostname&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in, and
-only takes effect if 'verify required' is also specified. When set, the
-hostnames in the subject and subjectAlternateNames of the certificate
-provided by the server are checked. If none of the hostnames in the
-certificate match the specified hostname, the handshake is aborted. The
-hostnames in the server-provided certificate may include wildcards. Note
-that the name provided here overrides (for the checks) any possible name
-passed using &quot;<a href="#sni">sni</a>&quot;. See also &quot;<a href="#no-verifyhost">no-verifyhost</a>&quot; option.
+only takes effect if 'verify required' is also specified. This directive sets
+a default static hostname to check the server's certificate against when no
+SNI was used to connect to the server. If SNI is not used, this is the only
+way to enable hostname verification. This static hostname, when set, will
+also be used for health checks (which cannot provide an SNI value). If none
+of the hostnames in the certificate match the specified hostname, the
+handshake is aborted. The hostnames in the server-provided certificate may
+include wildcards. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#sni">sni</a>&quot; and &quot;<a href="#no-verifyhost">no-verifyhost</a>&quot; options.
 </pre><a class="anchor" name="weight"></a><a class="anchor" name="5-weight"></a><a class="anchor" name="5.2-weight"></a><a class="anchor" name="weight (Bind and Server options)"></a><a class="anchor" name="weight (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="weight"></a><a href="#5.2-weight">weight</a></b> <span style="color: #080">&lt;weight&gt;</span></div><pre class="text">The &quot;<a href="#weight">weight</a>&quot; parameter is used to adjust the server's weight relative to
 other servers. All servers will receive a load proportional to their weight
 relative to the sum of all weights, so the higher the weight, the higher the
@@ -14227,6 +14236,13 @@ A few other events can trigger a name resolution at run time:
   - when a server's health check ends up in a connection timeout: this may be
     because the server has a new IP address. So we need to trigger a name
     resolution to know this new IP.
+
+When using resolvers, the server name can either be a hostname, or s SRV label.
+HAProxy considers anything that starts with an underscore a SRV label.
+If a SRV label is specified, then the corresponding SRV records will be
+retrieved from the DNS server, and the provided hostnames will be used. The
+SRV label will be checked periodically, and if any server are added or removed,
+haproxy will automatically do the same.
 
 A few things important to notice:
   - all the name servers are queried in the mean time. HAProxy will process the
@@ -14281,9 +14297,22 @@ For example, with 2 name servers configured in a resolvers section:
    HAProxy replays the query with a new type;
  - first response is truncated and second one is a NX Domain, then HAProxy
    stops resolution.
+
+As a DNS server may not answer all the IPs in one DNS request, haproxy keeps
+a cache of previous answers, an answer will be considered obsolete after
+&quot;hold obsolete&quot; seconds without the IP returned.
 </pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
 
 A resolvers section accept the following parameters:
+</pre><a class="anchor" name="accepted_payload_size"></a><a class="anchor" name="5-accepted_payload_size"></a><a class="anchor" name="5.3.2-accepted_payload_size"></a><a class="anchor" name="accepted_payload_size (Bind and Server options)"></a><a class="anchor" name="accepted_payload_size (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="accepted_payload_size"></a><a href="#5.3.2-accepted_payload_size">accepted_payload_size</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the maxium payload size accepted by HAProxy and announced to all the
+naeservers configured in this resolvers section.
+&lt;nb&gt; is in bytes. If not set, HAProxy announces 512. (minimal value defined
+     by RFC 6891)
+
+Note: to get bigger responses but still be sure that responses won't be
+      dropped on the wire, one can choose a value between 1280 and 1410.
+
+Note: the maximum allowed value is 8192.
 </pre><a class="anchor" name="nameserver"></a><a class="anchor" name="5-nameserver"></a><a class="anchor" name="5.3.2-nameserver"></a><a class="anchor" name="nameserver (Bind and Server options)"></a><a class="anchor" name="nameserver (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="nameserver"></a><a href="#5.3.2-nameserver">nameserver</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">DNS server description:
   &lt;id&gt;   : label of the server, should be unique
   &lt;ip&gt;   : IP address of the server
@@ -14291,12 +14320,12 @@ A resolvers section accept the following parameters:
 </pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3.2-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3.2-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
 on last resolution &lt;status&gt;
   &lt;status&gt; : last name resolution status. Acceptable values are &quot;nx&quot;,
-             &quot;other&quot;, &quot;refused&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">timeout<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#timeout%20%28Mailers%29">Mailers</a></li><li><a href="#timeout%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#timeout%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot;, &quot;valid&quot;.
+             &quot;other&quot;, &quot;refused&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">timeout<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#timeout%20%28Mailers%29">Mailers</a></li><li><a href="#timeout%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#timeout%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot;, &quot;valid&quot;, &quot;obsolete&quot;.
   &lt;period&gt; : interval between two successive name resolution when the last
              answer was in &lt;status&gt;. It follows the HAProxy time format.
              &lt;period&gt; is in milliseconds by default.
 
-Default value is 10s for &quot;valid&quot; and 30s for others.
+Default value is 10s for &quot;valid&quot;, 0s for &quot;obsolete&quot; and 30s for others.
 
 Note: since the name resolution is triggered by the health checks, a new
       resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
@@ -14332,6 +14361,7 @@ type.
   hold nx              30s
   hold timeout         30s
   hold valid           10s
+  hold obsolete        30s
 </code></pre>
 </div></div>
 <a class="anchor" id="6" name="6"></a>
@@ -18548,7 +18578,7 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev2-93 &ndash; Configuration Manual<br>
+							HAProxy 1.8-dev2-169 &ndash; Configuration Manual<br>
 							<small>2017/06/02, willy tarreau</small>
 						</div>
 					</div>
@@ -18652,7 +18682,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2-93', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2-169', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
