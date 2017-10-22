@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev2 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -893,6 +893,8 @@
 							
 							<a class="list-group-item" href="#accept-proxy">accept-proxy</a>
 							
+							<a class="list-group-item" href="#accepted_payload_size">accepted_payload_size</a>
+							
 							<a class="list-group-item" href="#acl">acl</a>
 							
 							<a class="list-group-item" href="#add">add</a>
@@ -1013,6 +1015,8 @@
 							
 							<a class="list-group-item" href="#check-send-proxy">check-send-proxy</a>
 							
+							<a class="list-group-item" href="#check-sni">check-sni</a>
+							
 							<a class="list-group-item" href="#check-ssl">check-ssl</a>
 							
 							<a class="list-group-item" href="#chroot">chroot</a>
@@ -1111,6 +1115,10 @@
 							<a class="list-group-item" href="#disabled (Server and default-server options)">disabled (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#dispatch">dispatch</a>
+							
+							<a class="list-group-item" href="#distcc_body">distcc_body</a>
+							
+							<a class="list-group-item" href="#distcc_param">distcc_param</a>
 							
 							<a class="list-group-item" href="#div">div</a>
 							
@@ -1524,6 +1532,8 @@
 							<a class="list-group-item" href="#no-agent-check">no-agent-check</a>
 							
 							<a class="list-group-item" href="#no-backup">no-backup</a>
+							
+							<a class="list-group-item" href="#no-ca-names">no-ca-names</a>
 							
 							<a class="list-group-item" href="#no-check">no-check</a>
 							
@@ -2120,6 +2130,8 @@
 							
 							<a class="list-group-item" href="#setenv">setenv</a>
 							
+							<a class="list-group-item" href="#severity-output">severity-output</a>
+							
 							<a class="list-group-item" href="#shdr">shdr</a>
 							
 							<a class="list-group-item" href="#shdr_cnt">shdr_cnt</a>
@@ -2189,6 +2201,8 @@
 							<a class="list-group-item" href="#srv_id">srv_id</a>
 							
 							<a class="list-group-item" href="#srv_is_up">srv_is_up</a>
+							
+							<a class="list-group-item" href="#srv_queue">srv_queue</a>
 							
 							<a class="list-group-item" href="#srv_sess_rate">srv_sess_rate</a>
 							
@@ -2689,7 +2703,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/08/30</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/10/22</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2700,11 +2714,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev2</strong></p>
+							<p><strong>version 1.8-dev3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/06/02
+								2017/10/22
 							</p>
 						</div>
 
@@ -4290,7 +4304,7 @@ forced using cmdline option '-dV'.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
 Connections to this socket will return various statistics outputs and even
 allow some commands to be issued to change some runtime settings. Please
-consult <a href="#9.2">section 9.2</a> &quot;Unix Socket commands&quot; of Management Guide for more
+consult <a href="#9.3">section 9.3</a> &quot;Unix Socket commands&quot; of Management Guide for more
 details.
 
 All parameters supported by &quot;<a href="#bind">bind</a>&quot; lines are supported, for instance to
@@ -4569,7 +4583,11 @@ openssl configuration file uses:
 https://www.openssl.org/docs/man1.0.2/apps/config.html
 </pre><a class="anchor" name="ssl-mode-async"></a><a class="anchor" name="3-ssl-mode-async"></a><a class="anchor" name="3.2-ssl-mode-async"></a><a class="anchor" name="ssl-mode-async (Global parameters)"></a><a class="anchor" name="ssl-mode-async (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="ssl-mode-async"></a><a href="#3.2-ssl-mode-async">ssl-mode-async</a></b></div><pre class="text">Adds SSL_MODE_ASYNC mode to the SSL context. This enables asynchronous TLS
 I/O operations if asynchronous capable SSL engines are used. The current
-implementation supports a maximum of 32 engines.
+implementation supports a maximum of 32 engines. The Openssl ASYNC API
+doesn't support moving read/write buffers and is not compliant with
+haproxy's buffer management. So the asynchronous mode is disabled on
+read/write  operations (it is only enabled during initial and reneg
+handshakes).
 </pre><a class="anchor" name="tune.buffers.limit"></a><a class="anchor" name="3-tune.buffers.limit"></a><a class="anchor" name="3.2-tune.buffers.limit"></a><a class="anchor" name="tune.buffers.limit (Global parameters)"></a><a class="anchor" name="tune.buffers.limit (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.buffers.limit"></a><a href="#3.2-tune.buffers.limit">tune.buffers.limit</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets a hard limit on the number of buffers which may be allocated per process.
 The default value is zero which means unlimited. The minimum non-zero value
 will always be greater than &quot;<a href="#tune.buffers.reserve">tune.buffers.reserve</a>&quot; and should ideally always
@@ -4629,9 +4647,9 @@ rejected with a &quot;400 Bad Request&quot; status code. Similarly, too large re
 are blocked with &quot;502 Bad Gateway&quot;. The default value is 101, which is enough
 for all usages, considering that the widely deployed Apache server uses the
 same limit. It can be useful to push this limit further to temporarily allow
-a buggy application to work by the time it gets fixed. Keep in mind that each
-new header consumes 32bits of memory for each session, so don't push this
-limit too high.
+a buggy application to work by the time it gets fixed. The accepted range is
+1..32767. Keep in mind that each new header consumes 32bits of memory for
+each session, so don't push this limit too high.
 </pre><a class="anchor" name="tune.idletimer"></a><a class="anchor" name="3-tune.idletimer"></a><a class="anchor" name="3.2-tune.idletimer"></a><a class="anchor" name="tune.idletimer (Global parameters)"></a><a class="anchor" name="tune.idletimer (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.idletimer"></a><a href="#3.2-tune.idletimer">tune.idletimer</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets the duration after which haproxy will consider that an empty buffer is
 probably associated with an idle stream. This is used to optimally adjust
 some packet sizes while forwarding large and small data alternatively. The
@@ -7775,7 +7793,7 @@ over the stats socket and redirect output.
 
 The format of the file is versionned and is very specific. To understand it,
 please read the documentation of the &quot;show servers state&quot; command (chapter
-9.2 of Management Guide).
+9.3 of Management Guide).
 </pre><div class="separator">
 <span class="label label-info">Arguments:</span><pre class="prettyprint arguments">global     load the content of the file pointed by the global directive
            named &quot;<a href="#server-state-file">server-state-file</a>&quot;.
@@ -11449,7 +11467,7 @@ backend smtp
             was last created, refreshed or matched. The expiration delay is
             defined using the standard time format, similarly as the various
             timeouts. The maximum duration is slightly above 24 days. See
-            <a href="#2.2">section 2.2</a> for more information. If this delay is not specified,
+            <a href="#2.4">section 2.4</a> for more information. If this delay is not specified,
             the session won't automatically expire, but older entries will
             be removed once full. Be sure not to use the &quot;nopurge&quot; parameter
             if not expiration delay is specified.
@@ -11598,7 +11616,7 @@ something that can be ignored.
 <span class="comment"># computed over a sliding window of 30 seconds.</span>
 stick-table type ip size 1m expire 5m store gpc0,conn_rate(30s)
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick%20match">stick match</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20store-request">stick store-request</a>&quot;, <a href="#2.2">section 2.2</a> about time format and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#stick%20match">stick match</a>&quot;, &quot;<a href="#stick%20on">stick on</a>&quot;, &quot;<a href="#stick%20store-request">stick store-request</a>&quot;, <a href="#2.4">section 2.4</a> about time format and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="stick"></a><a class="anchor" name="4-stick"></a><a class="anchor" name="4.2-stick"></a><a class="anchor" name="stick (Proxies)"></a><a class="anchor" name="stick (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stick store-response"></a><a class="anchor" name="4-stick store-response"></a><a class="anchor" name="4.2-stick store-response"></a><a class="anchor" name="stick store-response (Proxies)"></a><a class="anchor" name="stick store-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stick store-response"></a><a href="#4.2-stick%20store-response">stick store-response</a></b> <span style="color: #080">&lt;pattern&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Define a response pattern used to create an entry in a stickiness table
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13143,6 +13161,10 @@ the string describing the list of cipher algorithms (&quot;cipher suite&quot;) t
 negotiated during the SSL/TLS handshake. The format of the string is defined
 in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string
 such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes).
+Depending on the compatiblity and security requirements, the list of suitable
+ciphers depends on a variety of variables. For background information and
+recommendations see e. g. (https://wiki.mozilla.org/Security/Server_Side_TLS)
+and (https://mozilla.github.io/server-side-tls/ssl-config-generator/).
 </pre><a class="anchor" name="crl-file"></a><a class="anchor" name="5-crl-file"></a><a class="anchor" name="5.1-crl-file"></a><a class="anchor" name="crl-file (Bind and Server options)"></a><a class="anchor" name="crl-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crl-file"></a><a href="#5.1-crl-file">crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 designates a PEM file from which to load certificate revocation list used
 to verify client's certificate.
@@ -13259,8 +13281,9 @@ filter per certificate, with the following format for each line :
 
       &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
 
-sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;ca_file&quot;, &quot;crl_file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;,
-&quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration.
+sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
+crl-file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
 It override the configuration set in bind line for the certificate.
 
 Wildcards are supported in the SNI filter. Negative filter are also supported,
@@ -13363,6 +13386,16 @@ sockets. &lt;level&gt; can be one of :
   counters).
 - &quot;admin&quot; should be used with care, as everything is permitted (eg: clear
   all counters).
+</pre><a class="anchor" name="severity-output"></a><a class="anchor" name="5-severity-output"></a><a class="anchor" name="5.1-severity-output"></a><a class="anchor" name="severity-output (Bind and Server options)"></a><a class="anchor" name="severity-output (Bind options)"></a><div class="keyword"><b><a class="anchor" name="severity-output"></a><a href="#5.1-severity-output">severity-output</a></b> <span style="color: #080">&lt;format&gt;</span></div><pre class="text">This setting is used with the stats sockets only to configure severity
+level output prepended to informational feedback messages. Severity
+level of messages can range between 0 and 7, conforming to syslog
+rfc5424. Valid and successful socket commands requesting data
+(i.e. &quot;show map&quot;, &quot;get acl foo&quot; etc.) will never have a severity level
+prepended. It is ignored by other sockets. &lt;format&gt; can be one of :
+- &quot;none&quot; (default) no severity level is prepended to feedback messages.
+- &quot;number&quot; severity level is prepended as a number.
+- &quot;string&quot; severity level is prepended as a string following the
+  rfc5424 convention.
 </pre><a class="anchor" name="maxconn"></a><a class="anchor" name="5-maxconn"></a><a class="anchor" name="5.1-maxconn"></a><a class="anchor" name="maxconn (Bind and Server options)"></a><a class="anchor" name="maxconn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="maxconn"></a><a href="#5.1-maxconn">maxconn</a></b> <span style="color: #080">&lt;maxconn&gt;</span></div><pre class="text">Limits the sockets to this number of concurrent connections. Extraneous
 connections will remain in the system's backlog until a connection is
 released. If unspecified, the limit will be the same as the frontend's
@@ -13402,6 +13435,8 @@ and high values are generally recommended for CPU intensive tasks such as SSL
 processing or bulk transfers which are less sensible to latency. For example,
 it may make sense to use a positive value for an SMTP socket and a negative
 one for an RDP socket.
+</pre><a class="anchor" name="no-ca-names"></a><a class="anchor" name="5-no-ca-names"></a><a class="anchor" name="5.1-no-ca-names"></a><a class="anchor" name="no-ca-names (Bind and Server options)"></a><a class="anchor" name="no-ca-names (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-ca-names"></a><a href="#5.1-no-ca-names">no-ca-names</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
+prevents from send CA names in server hello message when ca-file is used.
 </pre><a class="anchor" name="no-sslv3"></a><a class="anchor" name="5-no-sslv3"></a><a class="anchor" name="5.1-no-sslv3"></a><a class="anchor" name="no-sslv3 (Bind and Server options)"></a><a class="anchor" name="no-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-sslv3"></a><a href="#5.1-no-sslv3">no-sslv3</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for SSLv3 on any sockets instantiated from the listener when
 SSL is supported. Note that SSLv2 is forced disabled in the code and cannot
@@ -13464,7 +13499,8 @@ above is known for supporting this. See also &quot;<a href="#bind-process">bind-
 enables SSL deciphering on connections instantiated from this listener. A
 certificate is necessary (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; above). All contents in the buffers will
 appear in clear text, so that ACLs and HTTP processing will only have access
-to deciphered contents.
+to deciphered contents. SSLv3 is disabled per default, use &quot;ssl-min-ver SSLv3&quot;
+to enable it.
 </pre><a class="anchor" name="ssl-max-ver"></a><a class="anchor" name="5-ssl-max-ver"></a><a class="anchor" name="5.1-ssl-max-ver"></a><a class="anchor" name="ssl-max-ver (Bind and Server options)"></a><a class="anchor" name="ssl-max-ver (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl-max-ver"></a><a href="#5.1-ssl-max-ver">ssl-max-ver</a></b> <span style="color: #008">[ SSLv3 | TLSv1.0 | TLSv1.1 | TLSv1.2 | TLSv1.3 ]</span></div><pre class="text">This option enforces use of &lt;version&gt; or lower on SSL connections instantiated
 from this listener. This option is also available on global statement
 &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;.
@@ -13685,6 +13721,8 @@ if it is already enabled for normal traffic and if no &quot;<a href="#port">port
 directive is present. However, if such a directive is present, the
 &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; option needs to be used to force the use of the
 protocol. See also the &quot;<a href="#send-proxy">send-proxy</a>&quot; option for more information.
+</pre><a class="anchor" name="check-sni"></a><a class="anchor" name="5-check-sni"></a><a class="anchor" name="5.2-check-sni"></a><a class="anchor" name="check-sni (Bind and Server options)"></a><a class="anchor" name="check-sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-sni"></a><a href="#5.2-check-sni">check-sni</a></b></div><pre class="text">This option allows you to specify the SNI to be used when doing health checks
+over SSL.
 </pre><a class="anchor" name="check-ssl"></a><a class="anchor" name="5-check-ssl"></a><a class="anchor" name="5.2-check-ssl"></a><a class="anchor" name="check-ssl (Bind and Server options)"></a><a class="anchor" name="check-ssl (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-ssl"></a><a href="#5.2-check-ssl">check-ssl</a></b></div><pre class="text">This option forces encryption of all health checks over SSL, regardless of
 whether the server uses SSL or not for the normal traffic. This is generally
 used when an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive is specified and SSL health
@@ -14096,7 +14134,10 @@ seen as failed.
 string and uses the result as the host name sent in the SNI TLS extension to
 the server. A typical use case is to send the SNI received from the client in
 a bridged HTTPS scenario, using the &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot; sample fetch for the
-expression, though alternatives such as req.hdr(host) can also make sense.
+expression, though alternatives such as req.hdr(host) can also make sense. If
+&quot;verify required&quot; is set (which is the recommended setting), the resulting
+name will also be matched against the server certificate's names. See the
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; directive for more details.
 </pre><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and Server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span> ...</div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter sets the source address which will be used when
 connecting to the server. It follows the exact same parameters and principle
 as the backend &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, except that it only applies to the server
@@ -14161,19 +14202,26 @@ It may also be used as &quot;<a href="#default-server">default-server</a>&quot; 
 &quot;<a href="#default-server">default-server</a>&quot; &quot;no-tlsv-tickets&quot; setting.
 </pre><a class="anchor" name="verify"></a><a class="anchor" name="5-verify"></a><a class="anchor" name="5.2-verify"></a><a class="anchor" name="verify (Bind and Server options)"></a><a class="anchor" name="verify (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verify"></a><a href="#5.2-verify">verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. If set
 to 'none', server certificate is not verified. In the other case, The
-certificate provided by the server is verified using CAs from 'ca-file'
-and optional CRLs from 'crl-file'. If 'ssl_server_verify' is not specified
-in global  section, this is the default. On verify failure the handshake
-is aborted. It is critically important to verify server certificates when
-using SSL to connect to servers, otherwise the communication is prone to
-trivial man-in-the-middle attacks rendering SSL totally useless.
+certificate provided by the server is verified using CAs from 'ca-file' and
+optional CRLs from 'crl-file' after having checked that the names provided in
+the certificate's subject and subjectAlternateNames attributs match either
+the name passed using the &quot;<a href="#sni">sni</a>&quot; directive, or if not provided, the static
+host name passed using the &quot;<a href="#verifyhost">verifyhost</a>&quot; directive. When no name is found, the
+certificate's names are ignored. For this reason, without SNI it's important
+to use &quot;<a href="#verifyhost">verifyhost</a>&quot;. On verification failure the handshake is aborted. It is
+critically important to verify server certificates when using SSL to connect
+to servers, otherwise the communication is prone to trivial man-in-the-middle
+attacks rendering SSL totally useless. Unless &quot;ssl_server_verify&quot; appears in
+the global section, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; is set to &quot;required&quot; by default.
 </pre><a class="anchor" name="verifyhost"></a><a class="anchor" name="5-verifyhost"></a><a class="anchor" name="5.2-verifyhost"></a><a class="anchor" name="verifyhost (Bind and Server options)"></a><a class="anchor" name="verifyhost (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="verifyhost"></a><a href="#5.2-verifyhost">verifyhost</a></b> <span style="color: #080">&lt;hostname&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in, and
-only takes effect if 'verify required' is also specified. When set, the
-hostnames in the subject and subjectAlternateNames of the certificate
-provided by the server are checked. If none of the hostnames in the
-certificate match the specified hostname, the handshake is aborted. The
-hostnames in the server-provided certificate may include wildcards.
-See also &quot;<a href="#no-verifyhost">no-verifyhost</a>&quot; option.
+only takes effect if 'verify required' is also specified. This directive sets
+a default static hostname to check the server's certificate against when no
+SNI was used to connect to the server. If SNI is not used, this is the only
+way to enable hostname verification. This static hostname, when set, will
+also be used for health checks (which cannot provide an SNI value). If none
+of the hostnames in the certificate match the specified hostname, the
+handshake is aborted. The hostnames in the server-provided certificate may
+include wildcards. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#sni">sni</a>&quot; and &quot;<a href="#no-verifyhost">no-verifyhost</a>&quot; options.
 </pre><a class="anchor" name="weight"></a><a class="anchor" name="5-weight"></a><a class="anchor" name="5.2-weight"></a><a class="anchor" name="weight (Bind and Server options)"></a><a class="anchor" name="weight (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="weight"></a><a href="#5.2-weight">weight</a></b> <span style="color: #080">&lt;weight&gt;</span></div><pre class="text">The &quot;<a href="#weight">weight</a>&quot; parameter is used to adjust the server's weight relative to
 other servers. All servers will receive a load proportional to their weight
 relative to the sum of all weights, so the higher the weight, the higher the
@@ -14214,6 +14262,13 @@ A few other events can trigger a name resolution at run time:
   - when a server's health check ends up in a connection timeout: this may be
     because the server has a new IP address. So we need to trigger a name
     resolution to know this new IP.
+
+When using resolvers, the server name can either be a hostname, or s SRV label.
+HAProxy considers anything that starts with an underscore a SRV label.
+If a SRV label is specified, then the corresponding SRV records will be
+retrieved from the DNS server, and the provided hostnames will be used. The
+SRV label will be checked periodically, and if any server are added or removed,
+haproxy will automatically do the same.
 
 A few things important to notice:
   - all the name servers are queried in the mean time. HAProxy will process the
@@ -14268,9 +14323,22 @@ For example, with 2 name servers configured in a resolvers section:
    HAProxy replays the query with a new type;
  - first response is truncated and second one is a NX Domain, then HAProxy
    stops resolution.
+
+As a DNS server may not answer all the IPs in one DNS request, haproxy keeps
+a cache of previous answers, an answer will be considered obsolete after
+&quot;hold obsolete&quot; seconds without the IP returned.
 </pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
 
 A resolvers section accept the following parameters:
+</pre><a class="anchor" name="accepted_payload_size"></a><a class="anchor" name="5-accepted_payload_size"></a><a class="anchor" name="5.3.2-accepted_payload_size"></a><a class="anchor" name="accepted_payload_size (Bind and Server options)"></a><a class="anchor" name="accepted_payload_size (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="accepted_payload_size"></a><a href="#5.3.2-accepted_payload_size">accepted_payload_size</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the maxium payload size accepted by HAProxy and announced to all the
+naeservers configured in this resolvers section.
+&lt;nb&gt; is in bytes. If not set, HAProxy announces 512. (minimal value defined
+     by RFC 6891)
+
+Note: to get bigger responses but still be sure that responses won't be
+      dropped on the wire, one can choose a value between 1280 and 1410.
+
+Note: the maximum allowed value is 8192.
 </pre><a class="anchor" name="nameserver"></a><a class="anchor" name="5-nameserver"></a><a class="anchor" name="5.3.2-nameserver"></a><a class="anchor" name="nameserver (Bind and Server options)"></a><a class="anchor" name="nameserver (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="nameserver"></a><a href="#5.3.2-nameserver">nameserver</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">DNS server description:
   &lt;id&gt;   : label of the server, should be unique
   &lt;ip&gt;   : IP address of the server
@@ -14278,12 +14346,12 @@ A resolvers section accept the following parameters:
 </pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3.2-hold"></a><a class="anchor" name="hold (Bind and Server options)"></a><a class="anchor" name="hold (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3.2-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
 on last resolution &lt;status&gt;
   &lt;status&gt; : last name resolution status. Acceptable values are &quot;nx&quot;,
-             &quot;other&quot;, &quot;refused&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">timeout<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#timeout%20%28Mailers%29">Mailers</a></li><li><a href="#timeout%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#timeout%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot;, &quot;valid&quot;.
+             &quot;other&quot;, &quot;refused&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">timeout<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#timeout%20%28Mailers%29">Mailers</a></li><li><a href="#timeout%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#timeout%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot;, &quot;valid&quot;, &quot;obsolete&quot;.
   &lt;period&gt; : interval between two successive name resolution when the last
              answer was in &lt;status&gt;. It follows the HAProxy time format.
              &lt;period&gt; is in milliseconds by default.
 
-Default value is 10s for &quot;valid&quot; and 30s for others.
+Default value is 10s for &quot;valid&quot;, 0s for &quot;obsolete&quot; and 30s for others.
 
 Note: since the name resolution is triggered by the health checks, a new
       resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
@@ -14319,6 +14387,7 @@ type.
   hold nx              30s
   hold timeout         30s
   hold valid           10s
+  hold obsolete        30s
 </code></pre>
 </div></div>
 <a class="anchor" id="6" name="6"></a>
@@ -15601,6 +15670,30 @@ It is useful combined with the http_date converter.
 <code><span class="comment"># set an expires header to now+1 hour in every response</span>
 http-response set-header Expires %[date(3600),http_date]
 </code></pre>
+</div><a class="anchor" name="distcc_body"></a><a class="anchor" name="7-distcc_body"></a><a class="anchor" name="7.3.2-distcc_body"></a><a class="anchor" name="distcc_body (Using ACLs and fetching samples)"></a><a class="anchor" name="distcc_body (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="distcc_body"></a><a href="#7.3.2-distcc_body">distcc_body</a></b>(<span style="color: #080">&lt;token&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) : binary</div><pre class="text">Parses a distcc message and returns the body associated to occurrence #&lt;occ&gt;
+of the token &lt;token&gt;. Occurrences start at 1, and when unspecified, any may
+match though in practice only the first one is checked for now. This can be
+used to extract file names or arguments in files built using distcc through
+haproxy. Please refer to distcc's protocol documentation for the complete
+list of supported tokens.
+</pre><a class="anchor" name="distcc_param"></a><a class="anchor" name="7-distcc_param"></a><a class="anchor" name="7.3.2-distcc_param"></a><a class="anchor" name="distcc_param (Using ACLs and fetching samples)"></a><a class="anchor" name="distcc_param (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="distcc_param"></a><a href="#7.3.2-distcc_param">distcc_param</a></b>(<span style="color: #080">&lt;token&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) : integer</div><pre class="text">Parses a distcc message and returns the parameter associated to occurrence
+#&lt;occ&gt; of the token &lt;token&gt;. Occurrences start at 1, and when unspecified,
+any may match though in practice only the first one is checked for now. This
+can be used to extract certain information such as the protocol version, the
+file size or the argument in files built using distcc through haproxy.
+Another use case consists in waiting for the start of the preprocessed file
+contents before connecting to the server to avoid keeping idle connections.
+Please refer to distcc's protocol documentation for the complete list of
+supported tokens.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># wait up to 20s for the pre-processed file to be uploaded</span>
+tcp-request inspect-delay 20s
+tcp-request content accept if { distcc_param(DOTI) -m found }
+<span class="comment"># send large files to the big farm</span>
+use_backend big_farm if { distcc_param(DOTI) gt 1000000 }
+</code></pre>
 </div><a class="anchor" name="env"></a><a class="anchor" name="7-env"></a><a class="anchor" name="7.3.2-env"></a><a class="anchor" name="env (Using ACLs and fetching samples)"></a><a class="anchor" name="env (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="env"></a><a href="#7.3.2-env">env</a></b>(<span style="color: #080">&lt;name&gt;</span>) : string</div><pre class="text">Returns a string containing the value of environment variable &lt;name&gt;. As a
 reminder, environment variables are per-process and are sampled when the
 process starts. This can be useful to pass some information to a next hop
@@ -15698,6 +15791,12 @@ an external status reported via a health check (eg: a geographical site's
 availability). Another possible use which is more of a hack consists in
 using dummy servers as boolean variables that can be enabled or disabled from
 the CLI, so that rules depending on those ACLs can be tweaked in realtime.
+</pre><a class="anchor" name="srv_queue"></a><a class="anchor" name="7-srv_queue"></a><a class="anchor" name="7.3.2-srv_queue"></a><a class="anchor" name="srv_queue (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_queue (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="srv_queue"></a><a href="#7.3.2-srv_queue">srv_queue</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of connections currently
+pending in the designated server's queue. If &lt;backend&gt; is omitted, then the
+server is looked up in the current backend. It can sometimes be used together
+with the &quot;<a href="#use-server">use-server</a>&quot; directive to force to use a known faster server when it
+is not much loaded. See also the &quot;<a href="#srv_conn">srv_conn</a>&quot;, &quot;<a href="#avg_queue">avg_queue</a>&quot; and &quot;<a href="#queue">queue</a>&quot; sample
+fetch methods.
 </pre><a class="anchor" name="srv_sess_rate"></a><a class="anchor" name="7-srv_sess_rate"></a><a class="anchor" name="7.3.2-srv_sess_rate"></a><a class="anchor" name="srv_sess_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_sess_rate (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="srv_sess_rate"></a><a href="#7.3.2-srv_sess_rate">srv_sess_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span>) : integer</div><pre class="text">Returns an integer corresponding to the sessions creation rate on the
 designated server, in number of new sessions per second. If &lt;backend&gt; is
 omitted, then the server is looked up in the current backend. This is mostly
@@ -16255,9 +16354,8 @@ hexadecimal. The maximum returned value length is according with the value of
 </pre><a class="anchor" name="ssl_fc_cipherlist_str"></a><a class="anchor" name="7-ssl_fc_cipherlist_str"></a><a class="anchor" name="7.3.4-ssl_fc_cipherlist_str"></a><a class="anchor" name="ssl_fc_cipherlist_str (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_cipherlist_str (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipherlist_str"></a><a href="#7.3.4-ssl_fc_cipherlist_str">ssl_fc_cipherlist_str</a></b> : string</div><pre class="text">Returns the decoded text form of the client hello cipher list. The maximum
 number of ciphers returned is according with the value of
 &quot;<a href="#tune.ssl.capture-cipherlist-size">tune.ssl.capture-cipherlist-size</a>&quot;. Note that this sample-fetch is only
-avaible with OpenSSL &gt; 1.0.2 compiled with the option enable-ssl-trace.
-If the function is not enabled, this sample-fetch returns the hash
-like &quot;<a href="#ssl_fc_cipherlist_xxh">ssl_fc_cipherlist_xxh</a>&quot;.
+avaible with OpenSSL &gt;= 1.0.2. If the function is not enabled, this
+sample-fetch returns the hash like &quot;<a href="#ssl_fc_cipherlist_xxh">ssl_fc_cipherlist_xxh</a>&quot;.
 </pre><a class="anchor" name="ssl_fc_cipherlist_xxh"></a><a class="anchor" name="7-ssl_fc_cipherlist_xxh"></a><a class="anchor" name="7.3.4-ssl_fc_cipherlist_xxh"></a><a class="anchor" name="ssl_fc_cipherlist_xxh (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_cipherlist_xxh (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipherlist_xxh"></a><a href="#7.3.4-ssl_fc_cipherlist_xxh">ssl_fc_cipherlist_xxh</a></b> : integer</div><pre class="text">Returns a xxh64 of the cipher list. This hash can be return only is the value
 &quot;<a href="#tune.ssl.capture-cipherlist-size">tune.ssl.capture-cipherlist-size</a>&quot; is set greater than 0, however the hash
 take in account all the data of the cipher list.
@@ -17249,7 +17347,7 @@ Detailed fields description :
     of thumb, when a '+' is present in front of the retry count, this count
     should not be attributed to the logged server.
 
-  - &quot;srv_queue&quot; is the total number of requests which were processed before
+  - &quot;<a href="#srv_queue">srv_queue</a>&quot; is the total number of requests which were processed before
     this one in the server queue. It is zero when the request has not gone
     through the server queue. It makes it possible to estimate the approximate
     server's response time by dividing the time spent in queue by the number of
@@ -17469,7 +17567,7 @@ Detailed fields description :
     of thumb, when a '+' is present in front of the retry count, this count
     should not be attributed to the logged server.
 
-  - &quot;srv_queue&quot; is the total number of requests which were processed before
+  - &quot;<a href="#srv_queue">srv_queue</a>&quot; is the total number of requests which were processed before
     this one in the server queue. It is zero when the request has not gone
     through the server queue. It makes it possible to estimate the approximate
     server's response time by dividing the time spent in queue by the number of
@@ -18535,8 +18633,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev2 &ndash; Configuration Manual<br>
-							<small>2017/06/02, willy tarreau</small>
+							HAProxy 1.8-dev3 &ndash; Configuration Manual<br>
+							<small>2017/10/22, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18639,7 +18737,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

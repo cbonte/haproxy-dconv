@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev2-169 - Configuration Manual</title>
+		<title>HAProxy version 1.8-dev3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -1015,6 +1015,8 @@
 							
 							<a class="list-group-item" href="#check-send-proxy">check-send-proxy</a>
 							
+							<a class="list-group-item" href="#check-sni">check-sni</a>
+							
 							<a class="list-group-item" href="#check-ssl">check-ssl</a>
 							
 							<a class="list-group-item" href="#chroot">chroot</a>
@@ -1113,6 +1115,10 @@
 							<a class="list-group-item" href="#disabled (Server and default-server options)">disabled (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#dispatch">dispatch</a>
+							
+							<a class="list-group-item" href="#distcc_body">distcc_body</a>
+							
+							<a class="list-group-item" href="#distcc_param">distcc_param</a>
 							
 							<a class="list-group-item" href="#div">div</a>
 							
@@ -2124,6 +2130,8 @@
 							
 							<a class="list-group-item" href="#setenv">setenv</a>
 							
+							<a class="list-group-item" href="#severity-output">severity-output</a>
+							
 							<a class="list-group-item" href="#shdr">shdr</a>
 							
 							<a class="list-group-item" href="#shdr_cnt">shdr_cnt</a>
@@ -2193,6 +2201,8 @@
 							<a class="list-group-item" href="#srv_id">srv_id</a>
 							
 							<a class="list-group-item" href="#srv_is_up">srv_is_up</a>
+							
+							<a class="list-group-item" href="#srv_queue">srv_queue</a>
 							
 							<a class="list-group-item" href="#srv_sess_rate">srv_sess_rate</a>
 							
@@ -2693,7 +2703,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/08/30</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/10/22</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2704,11 +2714,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev2-169</strong></p>
+							<p><strong>version 1.8-dev3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/06/02
+								2017/10/22
 							</p>
 						</div>
 
@@ -13151,6 +13161,10 @@ the string describing the list of cipher algorithms (&quot;cipher suite&quot;) t
 negotiated during the SSL/TLS handshake. The format of the string is defined
 in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string
 such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes).
+Depending on the compatiblity and security requirements, the list of suitable
+ciphers depends on a variety of variables. For background information and
+recommendations see e. g. (https://wiki.mozilla.org/Security/Server_Side_TLS)
+and (https://mozilla.github.io/server-side-tls/ssl-config-generator/).
 </pre><a class="anchor" name="crl-file"></a><a class="anchor" name="5-crl-file"></a><a class="anchor" name="5.1-crl-file"></a><a class="anchor" name="crl-file (Bind and Server options)"></a><a class="anchor" name="crl-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crl-file"></a><a href="#5.1-crl-file">crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 designates a PEM file from which to load certificate revocation list used
 to verify client's certificate.
@@ -13372,6 +13386,16 @@ sockets. &lt;level&gt; can be one of :
   counters).
 - &quot;admin&quot; should be used with care, as everything is permitted (eg: clear
   all counters).
+</pre><a class="anchor" name="severity-output"></a><a class="anchor" name="5-severity-output"></a><a class="anchor" name="5.1-severity-output"></a><a class="anchor" name="severity-output (Bind and Server options)"></a><a class="anchor" name="severity-output (Bind options)"></a><div class="keyword"><b><a class="anchor" name="severity-output"></a><a href="#5.1-severity-output">severity-output</a></b> <span style="color: #080">&lt;format&gt;</span></div><pre class="text">This setting is used with the stats sockets only to configure severity
+level output prepended to informational feedback messages. Severity
+level of messages can range between 0 and 7, conforming to syslog
+rfc5424. Valid and successful socket commands requesting data
+(i.e. &quot;show map&quot;, &quot;get acl foo&quot; etc.) will never have a severity level
+prepended. It is ignored by other sockets. &lt;format&gt; can be one of :
+- &quot;none&quot; (default) no severity level is prepended to feedback messages.
+- &quot;number&quot; severity level is prepended as a number.
+- &quot;string&quot; severity level is prepended as a string following the
+  rfc5424 convention.
 </pre><a class="anchor" name="maxconn"></a><a class="anchor" name="5-maxconn"></a><a class="anchor" name="5.1-maxconn"></a><a class="anchor" name="maxconn (Bind and Server options)"></a><a class="anchor" name="maxconn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="maxconn"></a><a href="#5.1-maxconn">maxconn</a></b> <span style="color: #080">&lt;maxconn&gt;</span></div><pre class="text">Limits the sockets to this number of concurrent connections. Extraneous
 connections will remain in the system's backlog until a connection is
 released. If unspecified, the limit will be the same as the frontend's
@@ -13697,6 +13721,8 @@ if it is already enabled for normal traffic and if no &quot;<a href="#port">port
 directive is present. However, if such a directive is present, the
 &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; option needs to be used to force the use of the
 protocol. See also the &quot;<a href="#send-proxy">send-proxy</a>&quot; option for more information.
+</pre><a class="anchor" name="check-sni"></a><a class="anchor" name="5-check-sni"></a><a class="anchor" name="5.2-check-sni"></a><a class="anchor" name="check-sni (Bind and Server options)"></a><a class="anchor" name="check-sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-sni"></a><a href="#5.2-check-sni">check-sni</a></b></div><pre class="text">This option allows you to specify the SNI to be used when doing health checks
+over SSL.
 </pre><a class="anchor" name="check-ssl"></a><a class="anchor" name="5-check-ssl"></a><a class="anchor" name="5.2-check-ssl"></a><a class="anchor" name="check-ssl (Bind and Server options)"></a><a class="anchor" name="check-ssl (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-ssl"></a><a href="#5.2-check-ssl">check-ssl</a></b></div><pre class="text">This option forces encryption of all health checks over SSL, regardless of
 whether the server uses SSL or not for the normal traffic. This is generally
 used when an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive is specified and SSL health
@@ -15644,6 +15670,30 @@ It is useful combined with the http_date converter.
 <code><span class="comment"># set an expires header to now+1 hour in every response</span>
 http-response set-header Expires %[date(3600),http_date]
 </code></pre>
+</div><a class="anchor" name="distcc_body"></a><a class="anchor" name="7-distcc_body"></a><a class="anchor" name="7.3.2-distcc_body"></a><a class="anchor" name="distcc_body (Using ACLs and fetching samples)"></a><a class="anchor" name="distcc_body (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="distcc_body"></a><a href="#7.3.2-distcc_body">distcc_body</a></b>(<span style="color: #080">&lt;token&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) : binary</div><pre class="text">Parses a distcc message and returns the body associated to occurrence #&lt;occ&gt;
+of the token &lt;token&gt;. Occurrences start at 1, and when unspecified, any may
+match though in practice only the first one is checked for now. This can be
+used to extract file names or arguments in files built using distcc through
+haproxy. Please refer to distcc's protocol documentation for the complete
+list of supported tokens.
+</pre><a class="anchor" name="distcc_param"></a><a class="anchor" name="7-distcc_param"></a><a class="anchor" name="7.3.2-distcc_param"></a><a class="anchor" name="distcc_param (Using ACLs and fetching samples)"></a><a class="anchor" name="distcc_param (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="distcc_param"></a><a href="#7.3.2-distcc_param">distcc_param</a></b>(<span style="color: #080">&lt;token&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) : integer</div><pre class="text">Parses a distcc message and returns the parameter associated to occurrence
+#&lt;occ&gt; of the token &lt;token&gt;. Occurrences start at 1, and when unspecified,
+any may match though in practice only the first one is checked for now. This
+can be used to extract certain information such as the protocol version, the
+file size or the argument in files built using distcc through haproxy.
+Another use case consists in waiting for the start of the preprocessed file
+contents before connecting to the server to avoid keeping idle connections.
+Please refer to distcc's protocol documentation for the complete list of
+supported tokens.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code><span class="comment"># wait up to 20s for the pre-processed file to be uploaded</span>
+tcp-request inspect-delay 20s
+tcp-request content accept if { distcc_param(DOTI) -m found }
+<span class="comment"># send large files to the big farm</span>
+use_backend big_farm if { distcc_param(DOTI) gt 1000000 }
+</code></pre>
 </div><a class="anchor" name="env"></a><a class="anchor" name="7-env"></a><a class="anchor" name="7.3.2-env"></a><a class="anchor" name="env (Using ACLs and fetching samples)"></a><a class="anchor" name="env (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="env"></a><a href="#7.3.2-env">env</a></b>(<span style="color: #080">&lt;name&gt;</span>) : string</div><pre class="text">Returns a string containing the value of environment variable &lt;name&gt;. As a
 reminder, environment variables are per-process and are sampled when the
 process starts. This can be useful to pass some information to a next hop
@@ -15741,6 +15791,12 @@ an external status reported via a health check (eg: a geographical site's
 availability). Another possible use which is more of a hack consists in
 using dummy servers as boolean variables that can be enabled or disabled from
 the CLI, so that rules depending on those ACLs can be tweaked in realtime.
+</pre><a class="anchor" name="srv_queue"></a><a class="anchor" name="7-srv_queue"></a><a class="anchor" name="7.3.2-srv_queue"></a><a class="anchor" name="srv_queue (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_queue (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="srv_queue"></a><a href="#7.3.2-srv_queue">srv_queue</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of connections currently
+pending in the designated server's queue. If &lt;backend&gt; is omitted, then the
+server is looked up in the current backend. It can sometimes be used together
+with the &quot;<a href="#use-server">use-server</a>&quot; directive to force to use a known faster server when it
+is not much loaded. See also the &quot;<a href="#srv_conn">srv_conn</a>&quot;, &quot;<a href="#avg_queue">avg_queue</a>&quot; and &quot;<a href="#queue">queue</a>&quot; sample
+fetch methods.
 </pre><a class="anchor" name="srv_sess_rate"></a><a class="anchor" name="7-srv_sess_rate"></a><a class="anchor" name="7.3.2-srv_sess_rate"></a><a class="anchor" name="srv_sess_rate (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_sess_rate (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="srv_sess_rate"></a><a href="#7.3.2-srv_sess_rate">srv_sess_rate</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span>) : integer</div><pre class="text">Returns an integer corresponding to the sessions creation rate on the
 designated server, in number of new sessions per second. If &lt;backend&gt; is
 omitted, then the server is looked up in the current backend. This is mostly
@@ -16298,9 +16354,8 @@ hexadecimal. The maximum returned value length is according with the value of
 </pre><a class="anchor" name="ssl_fc_cipherlist_str"></a><a class="anchor" name="7-ssl_fc_cipherlist_str"></a><a class="anchor" name="7.3.4-ssl_fc_cipherlist_str"></a><a class="anchor" name="ssl_fc_cipherlist_str (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_cipherlist_str (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipherlist_str"></a><a href="#7.3.4-ssl_fc_cipherlist_str">ssl_fc_cipherlist_str</a></b> : string</div><pre class="text">Returns the decoded text form of the client hello cipher list. The maximum
 number of ciphers returned is according with the value of
 &quot;<a href="#tune.ssl.capture-cipherlist-size">tune.ssl.capture-cipherlist-size</a>&quot;. Note that this sample-fetch is only
-avaible with OpenSSL &gt; 1.0.2 compiled with the option enable-ssl-trace.
-If the function is not enabled, this sample-fetch returns the hash
-like &quot;<a href="#ssl_fc_cipherlist_xxh">ssl_fc_cipherlist_xxh</a>&quot;.
+avaible with OpenSSL &gt;= 1.0.2. If the function is not enabled, this
+sample-fetch returns the hash like &quot;<a href="#ssl_fc_cipherlist_xxh">ssl_fc_cipherlist_xxh</a>&quot;.
 </pre><a class="anchor" name="ssl_fc_cipherlist_xxh"></a><a class="anchor" name="7-ssl_fc_cipherlist_xxh"></a><a class="anchor" name="7.3.4-ssl_fc_cipherlist_xxh"></a><a class="anchor" name="ssl_fc_cipherlist_xxh (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_cipherlist_xxh (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_cipherlist_xxh"></a><a href="#7.3.4-ssl_fc_cipherlist_xxh">ssl_fc_cipherlist_xxh</a></b> : integer</div><pre class="text">Returns a xxh64 of the cipher list. This hash can be return only is the value
 &quot;<a href="#tune.ssl.capture-cipherlist-size">tune.ssl.capture-cipherlist-size</a>&quot; is set greater than 0, however the hash
 take in account all the data of the cipher list.
@@ -17292,7 +17347,7 @@ Detailed fields description :
     of thumb, when a '+' is present in front of the retry count, this count
     should not be attributed to the logged server.
 
-  - &quot;srv_queue&quot; is the total number of requests which were processed before
+  - &quot;<a href="#srv_queue">srv_queue</a>&quot; is the total number of requests which were processed before
     this one in the server queue. It is zero when the request has not gone
     through the server queue. It makes it possible to estimate the approximate
     server's response time by dividing the time spent in queue by the number of
@@ -17512,7 +17567,7 @@ Detailed fields description :
     of thumb, when a '+' is present in front of the retry count, this count
     should not be attributed to the logged server.
 
-  - &quot;srv_queue&quot; is the total number of requests which were processed before
+  - &quot;<a href="#srv_queue">srv_queue</a>&quot; is the total number of requests which were processed before
     this one in the server queue. It is zero when the request has not gone
     through the server queue. It makes it possible to estimate the approximate
     server's response time by dividing the time spent in queue by the number of
@@ -18578,8 +18633,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev2-169 &ndash; Configuration Manual<br>
-							<small>2017/06/02, willy tarreau</small>
+							HAProxy 1.8-dev3 &ndash; Configuration Manual<br>
+							<small>2017/10/22, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18682,7 +18737,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2-169', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

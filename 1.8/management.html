@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev2 - Management Guide</title>
+		<title>HAProxy version 1.8-dev3 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -344,6 +344,8 @@
 							
 							<a class="list-group-item" href="#set server">set server</a>
 							
+							<a class="list-group-item" href="#set severity-output">set severity-output</a>
+							
 							<a class="list-group-item" href="#set ssl">set ssl</a>
 							
 							<a class="list-group-item" href="#set ssl ocsp-response">set ssl ocsp-response</a>
@@ -371,6 +373,8 @@
 							<a class="list-group-item" href="#show env">show env</a>
 							
 							<a class="list-group-item" href="#show errors">show errors</a>
+							
+							<a class="list-group-item" href="#show fd">show fd</a>
 							
 							<a class="list-group-item" href="#show info">show info</a>
 							
@@ -421,7 +425,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/08/30</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/10/22</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -432,7 +436,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.8-dev2</strong></p>
+							<p><strong>version 1.8-dev3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								<br>
@@ -1551,6 +1555,8 @@ S (Servers).
         L7TOUT  -&gt; layer 7 (HTTP/SMTP) timeout
         L7RSP   -&gt; layer 7 invalid response - protocol error
         L7STS   -&gt; layer 7 response error, for example HTTP 5xx
+     Notice: If a check is currently running, the last known status will be
+     reported, prefixed with &quot;* &quot;. e. g. &quot;* L7OK&quot;.
  37. check_code [...S]: layer5-7 code, if available
  38. check_duration [...S]: time in ms took to finish last health check
  39. hrsp_1xx [.FBS]: http responses with 1xx code
@@ -1843,6 +1849,11 @@ The list of commands currently supported on the stats socket is provided below.
 If an unknown command is sent, haproxy displays the usage message which reminds
 all supported commands. Some commands support a more complex syntax, generally
 it will explain what part of the command is invalid when this happens.
+
+Some commands require a higher level of privilege to work. If you do not have
+enough privilege, you will get an error &quot;Permission denied&quot;. Please check
+the &quot;level&quot; option of the &quot;bind&quot; keyword lines in the configuration manual
+for more information.
 </pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add acl"></a><a class="anchor" name="9-add acl"></a><a class="anchor" name="9.3-add acl"></a><a class="anchor" name="add acl (Statistics and monitoring)"></a><a class="anchor" name="add acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add acl"></a><a href="#9.3-add%20acl">add acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;pattern&gt;</span></div><pre class="text">Add an entry into the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by
 &quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. This
 command cannot be used if the reference &lt;acl&gt; is a file also used with a map.
@@ -2126,6 +2137,8 @@ persistent connections. Changes are propagated to tracking servers if any.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> weight <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. This is the exact
 equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command below.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> fqdn <span style="color: #080">&lt;FQDN&gt;</span></div><pre class="text">Change a server's FQDN to the value passed in argument.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set severity-output"></a><a class="anchor" name="9-set severity-output"></a><a class="anchor" name="9.3-set severity-output"></a><a class="anchor" name="set severity-output (Statistics and monitoring)"></a><a class="anchor" name="set severity-output (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set severity-output"></a><a href="#9.3-set%20severity-output">set severity-output</a></b> <span style="color: #008">[ none | number | string ]</span></div><pre class="text">Change the severity output format of the stats socket connected to for the
+duration of the current session.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
 the response. The &lt;response&gt; must be passed as a base64 encoded string of the
@@ -2168,6 +2181,13 @@ enable it again after the update by setting it back to 100%. This command
 is restricted and can only be issued on sockets configured for level
 &quot;admin&quot;. Both the backend and the server may be specified either by their
 name or by their numeric ID, prefixed with a sharp ('#').
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show acl"></a><a class="anchor" name="9-show acl"></a><a class="anchor" name="9.3-show acl"></a><a class="anchor" name="show acl (Statistics and monitoring)"></a><a class="anchor" name="show acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show acl"></a><a href="#9.3-show%20acl">show acl</a></b> <span style="color: #008">[<span style="color: #080">&lt;acl&gt;</span>]</span></div><pre class="text">Dump info about acl converters. Without argument, the list of all available
+acls is returned. If a &lt;acl&gt; is specified, its contents are dumped. &lt;acl&gt; if
+the #&lt;id&gt; or &lt;file&gt;. The dump format is the same than the map even for the
+sample value. The data returned are not a list of available ACL, but are the
+list of all patterns composing any ACL. Many of these patterns can be shared
+with maps.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show backend"></a><a class="anchor" name="9-show backend"></a><a class="anchor" name="9.3-show backend"></a><a class="anchor" name="show backend (Statistics and monitoring)"></a><a class="anchor" name="show backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show backend"></a><a href="#9.3-show%20backend">show backend</a></b></div><pre class="text">Dump the list of backends available in the running process
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cli"></a><a class="anchor" name="9-show cli"></a><a class="anchor" name="9.3-show cli"></a><a class="anchor" name="show cli (Statistics and monitoring)"></a><a class="anchor" name="show cli (Unix Socket commands)"></a><a class="anchor" name="show cli sockets"></a><a class="anchor" name="9-show cli sockets"></a><a class="anchor" name="9.3-show cli sockets"></a><a class="anchor" name="show cli sockets (Statistics and monitoring)"></a><a class="anchor" name="show cli sockets (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cli sockets"></a><a href="#9.3-show%20cli%20sockets">show cli sockets</a></b></div><pre class="text">List CLI sockets. The output format is composed of 3 fields separated by
 spaces. The first field is the socket address, it can be a unix socket, a
 ipv4 address:port couple or a ipv6 one. Socket of other types won't be dump.
@@ -2248,7 +2268,23 @@ received by frontend fe-eth0 whose ID is 1. The total response length was
 is the slash ('/') in header name &quot;header/bizarre&quot;, which is not a valid
 HTTP character for a header name.
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show backend"></a><a class="anchor" name="9-show backend"></a><a class="anchor" name="9.3-show backend"></a><a class="anchor" name="show backend (Statistics and monitoring)"></a><a class="anchor" name="show backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show backend"></a><a href="#9.3-show%20backend">show backend</a></b></div><pre class="text">Dump the list of backends available in the running process
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show fd"></a><a class="anchor" name="9-show fd"></a><a class="anchor" name="9.3-show fd"></a><a class="anchor" name="show fd (Statistics and monitoring)"></a><a class="anchor" name="show fd (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show fd"></a><a href="#9.3-show%20fd">show fd</a></b> <span style="color: #008">[<span style="color: #080">&lt;fd&gt;</span>]</span></div><pre class="text">Dump the list of either all open file descriptors or just the one number &lt;fd&gt;
+if specified. This is only aimed at developers who need to observe internal
+states in order to debug complex issues such as abnormal CPU usages. One fd
+is reported per lines, and for each of them, its state in the poller using
+upper case letters for enabled flags and lower case for disabled flags, using
+&quot;P&quot; for &quot;polled&quot;, &quot;R&quot; for &quot;ready&quot;, &quot;A&quot; for &quot;active&quot;, the events status using
+&quot;H&quot; for &quot;hangup&quot;, &quot;E&quot; for &quot;error&quot;, &quot;O&quot; for &quot;output&quot;, &quot;P&quot; for &quot;priority&quot; and
+&quot;I&quot; for &quot;input&quot;, a few other flags like &quot;N&quot; for &quot;new&quot; (just added into the fd
+cache), &quot;U&quot; for &quot;updated&quot; (received an update in the fd cache), &quot;L&quot; for
+&quot;linger_risk&quot;, &quot;C&quot; for &quot;cloned&quot;, then the cached entry position, the pointer
+to the internal owner, the pointer to the I/O callback and its name when
+known. When the owner is a connection, the connection flags, and the target
+are reported (frontend, proxy or server). When the owner is a listener, the
+listener's state and its frontend are reported. There is no point in using
+this command without a good knowledge of the internals. It's worth noting
+that the output format may evolve over time so this output must not be parsed
+by tools designed to be durable.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
 optional argument, field numbers, names and types are emitted as well so that
 external monitoring products can easily retrieve, possibly aggregate, then
@@ -2360,12 +2396,6 @@ as reference for the operation &quot;<a href="#del%20map">del map</a>&quot; and 
 the pattern and the third column is the sample if available. The data returned
 are not directly a list of available maps, but are the list of all patterns
 composing any map. Many of these patterns can be shared with ACL.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show acl"></a><a class="anchor" name="9-show acl"></a><a class="anchor" name="9.3-show acl"></a><a class="anchor" name="show acl (Statistics and monitoring)"></a><a class="anchor" name="show acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show acl"></a><a href="#9.3-show%20acl">show acl</a></b> <span style="color: #008">[<span style="color: #080">&lt;acl&gt;</span>]</span></div><pre class="text">Dump info about acl converters. Without argument, the list of all available
-acls is returned. If a &lt;acl&gt; is specified, its contents are dumped. &lt;acl&gt; if
-the #&lt;id&gt; or &lt;file&gt;. The dump format is the same than the map even for the
-sample value. The data returned are not a list of available ACL, but are the
-list of all patterns composing any ACL. Many of these patterns can be shared
-with maps.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show pools"></a><a class="anchor" name="9-show pools"></a><a class="anchor" name="9.3-show pools"></a><a class="anchor" name="show pools (Statistics and monitoring)"></a><a class="anchor" name="show pools (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show pools"></a><a href="#9.3-show%20pools">show pools</a></b></div><pre class="text">Dump the status of internal memory pools. This is useful to track memory
 usage when suspecting a memory leak for example. It does exactly the same
 as the SIGQUIT when running in foreground except that it does not flush
@@ -2463,6 +2493,7 @@ fields and their order per file format version :
    srv_f_forced_id:             Flag to know if the server's ID is forced by
                                 configuration.
    srv_fqdn:                    Server FQDN.
+   srv_port:                    Server port.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
 configured for levels &quot;operator&quot; or &quot;admin&quot;.
@@ -3091,7 +3122,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev2 &ndash; Management Guide<br>
+							HAProxy 1.8-dev3 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3195,7 +3226,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
