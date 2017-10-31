@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-dev3 - Configuration Manual</title>
+		<title>HAProxy version 1.8-rc1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-60" rel="stylesheet" />
@@ -911,6 +911,8 @@
 							
 							<a class="list-group-item" href="#agent-send">agent-send</a>
 							
+							<a class="list-group-item" href="#allow-0rtt">allow-0rtt</a>
+							
 							<a class="list-group-item" href="#alpn">alpn</a>
 							
 							<a class="list-group-item" href="#always_false">always_false</a>
@@ -1192,6 +1194,8 @@
 							
 							<a class="list-group-item" href="#fc_fackets">fc_fackets</a>
 							
+							<a class="list-group-item" href="#fc_http_major">fc_http_major</a>
+							
 							<a class="list-group-item" href="#fc_lost">fc_lost</a>
 							
 							<a class="list-group-item" href="#fc_rcvd_proxy">fc_rcvd_proxy</a>
@@ -1283,6 +1287,8 @@
 							<a class="list-group-item" href="#hdr_val">hdr_val</a>
 							
 							<a class="list-group-item" href="#hex">hex</a>
+							
+							<a class="list-group-item" href="#hex2i">hex2i</a>
 							
 							<a class="list-group-item" href="#hold">hold</a>
 							
@@ -1450,6 +1456,8 @@
 							<a class="list-group-item" href="#nbsrv (Converters)">nbsrv (Converters)</a>
 							
 							<a class="list-group-item" href="#nbsrv (Fetching samples from internal states)">nbsrv (Fetching samples from internal states)</a>
+							
+							<a class="list-group-item" href="#nbthread">nbthread</a>
 							
 							<a class="list-group-item" href="#neg">neg</a>
 							
@@ -2132,6 +2140,8 @@
 							
 							<a class="list-group-item" href="#severity-output">severity-output</a>
 							
+							<a class="list-group-item" href="#sha1">sha1</a>
+							
 							<a class="list-group-item" href="#shdr">shdr</a>
 							
 							<a class="list-group-item" href="#shdr_cnt">shdr_cnt</a>
@@ -2320,6 +2330,8 @@
 							
 							<a class="list-group-item" href="#ssl_fc_has_crt">ssl_fc_has_crt</a>
 							
+							<a class="list-group-item" href="#ssl_fc_has_early">ssl_fc_has_early</a>
+							
 							<a class="list-group-item" href="#ssl_fc_has_sni">ssl_fc_has_sni</a>
 							
 							<a class="list-group-item" href="#ssl_fc_is_resumed">ssl_fc_is_resumed</a>
@@ -2471,6 +2483,8 @@
 							
 							<a class="list-group-item" href="#tfo">tfo</a>
 							
+							<a class="list-group-item" href="#thread-map">thread-map</a>
+							
 							<a class="list-group-item" href="#timeout (Mailers)">timeout (Mailers)</a>
 							
 							<a class="list-group-item" href="#timeout (Alphabetically sorted keywords reference)">timeout (Alphabetically sorted keywords reference)</a>
@@ -2524,6 +2538,12 @@
 							<a class="list-group-item" href="#tune.chksize">tune.chksize</a>
 							
 							<a class="list-group-item" href="#tune.comp.maxlevel">tune.comp.maxlevel</a>
+							
+							<a class="list-group-item" href="#tune.h2.header-table-size">tune.h2.header-table-size</a>
+							
+							<a class="list-group-item" href="#tune.h2.initial-window-size">tune.h2.initial-window-size</a>
+							
+							<a class="list-group-item" href="#tune.h2.max-concurrent-streams">tune.h2.max-concurrent-streams</a>
 							
 							<a class="list-group-item" href="#tune.http.cookielen">tune.http.cookielen</a>
 							
@@ -2703,7 +2723,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/10/22</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-60</b> on <b>2017/11/01</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2714,11 +2734,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-dev3</strong></p>
+							<p><strong>version 1.8-rc1</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/10/22
+								2017/10/31
 							</p>
 						</div>
 
@@ -3975,6 +3995,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#log-send-hostname">log-send-hostname</a>
    - <a href="#lua-load">lua-load</a>
    - <a href="#nbproc">nbproc</a>
+   - <a href="#nbthread">nbthread</a>
    - <a href="#node">node</a>
    - <a href="#pidfile">pidfile</a>
    - <a href="#presetenv">presetenv</a>
@@ -3990,6 +4011,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#ssl-default-server-options">ssl-default-server-options</a>
    - <a href="#ssl-dh-param-file">ssl-dh-param-file</a>
    - <a href="#ssl-server-verify">ssl-server-verify</a>
+   - <a href="#thread-map">thread-map</a>
    - <a href="#unix-bind">unix-bind</a>
    - <a href="#unsetenv">unsetenv</a>
    - <a href="#51degrees-data-file">51degrees-data-file</a>
@@ -4030,6 +4052,9 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.bufsize">tune.bufsize</a>
    - <a href="#tune.chksize">tune.chksize</a>
    - <a href="#tune.comp.maxlevel">tune.comp.maxlevel</a>
+   - <a href="#tune.h2.header-table-size">tune.h2.header-table-size</a>
+   - <a href="#tune.h2.initial-window-size">tune.h2.initial-window-size</a>
+   - <a href="#tune.h2.max-concurrent-streams">tune.h2.max-concurrent-streams</a>
    - <a href="#tune.http.cookielen">tune.http.cookielen</a>
    - <a href="#tune.http.logurilen">tune.http.logurilen</a>
    - <a href="#tune.http.maxhdr">tune.http.maxhdr</a>
@@ -4220,6 +4245,11 @@ mode. By default, only one process is created, which is the recommended mode
 of operation. For systems limited to small sets of file descriptors per
 process, it may be needed to fork multiple daemons. USING MULTIPLE PROCESSES
 IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">daemon</a>&quot;.
+</pre><a class="anchor" name="nbthread"></a><a class="anchor" name="3-nbthread"></a><a class="anchor" name="3.1-nbthread"></a><a class="anchor" name="nbthread (Global parameters)"></a><a class="anchor" name="nbthread (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="nbthread"></a><a href="#3.1-nbthread">nbthread</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting is only available when support for threads was built in. It
+creates &lt;number&gt; threads for each created processes. It means if HAProxy is
+started in foreground, it only creates &lt;number&gt; threads for the first
+process. FOR NOW, THREADS SUPPORT IN HAPROXY IS HIGHLY EXPERIMENTAL AND IT
+MUST BE ENABLED WITH CAUTION AND AT YOUR OWN RISK. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="pidfile"></a><a class="anchor" name="3-pidfile"></a><a class="anchor" name="3.1-pidfile"></a><a class="anchor" name="pidfile (Global parameters)"></a><a class="anchor" name="pidfile (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="pidfile"></a><a href="#3.1-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes pids of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
 starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.
@@ -4301,6 +4331,12 @@ parameters should not be considered secure anymore.
 </pre><a class="anchor" name="ssl-server-verify"></a><a class="anchor" name="3-ssl-server-verify"></a><a class="anchor" name="3.1-ssl-server-verify"></a><a class="anchor" name="ssl-server-verify (Global parameters)"></a><a class="anchor" name="ssl-server-verify (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-server-verify"></a><a href="#3.1-ssl-server-verify">ssl-server-verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">The default behavior for SSL verify on servers side. If specified to 'none',
 servers certificates are not verified. The default is 'required' except if
 forced using cmdline option '-dV'.
+</pre><a class="anchor" name="thread-map"></a><a class="anchor" name="3-thread-map"></a><a class="anchor" name="3.1-thread-map"></a><a class="anchor" name="thread-map (Global parameters)"></a><a class="anchor" name="thread-map (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="thread-map"></a><a href="#3.1-thread-map">thread-map</a></b> <span style="color: #080">&lt;&quot;all&quot;|&quot;<a href="#odd">odd</a>&quot;|&quot;<a href="#even">even</a>&quot;|process_num&gt;</span> <span style="color: #080">&lt;&quot;all&quot;|&quot;<a href="#odd">odd</a>&quot;|&quot;<a href="#even">even</a>&quot;|thread_num&gt;</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">This setting is only available when support for threads was built in. It
+binds a thread to a specific CPU set. The process must be specified to allow
+different mapping for different processes. For details about the arguments,
+see &quot;<a href="#cpu-map">cpu-map</a>&quot; directive. A thread will be bound on the intersection of its
+mapping and the one of the process on which it is attached. If the
+intersection is null, no specific bind will be set for the thread.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
 Connections to this socket will return various statistics outputs and even
 allow some commands to be issued to change some runtime settings. Please
@@ -4627,6 +4663,26 @@ checks whenever possible.
 usage during compression. This value affects CPU usage during compression.
 Each session using compression initializes the compression algorithm with
 this value. The default value is 1.
+</pre><a class="anchor" name="tune.h2.header-table-size"></a><a class="anchor" name="3-tune.h2.header-table-size"></a><a class="anchor" name="3.2-tune.h2.header-table-size"></a><a class="anchor" name="tune.h2.header-table-size (Global parameters)"></a><a class="anchor" name="tune.h2.header-table-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.h2.header-table-size"></a><a href="#3.2-tune.h2.header-table-size">tune.h2.header-table-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the HTTP/2 dynamic header table size. It defaults to 4096 bytes and
+cannot be larger than 65536 bytes. A larger value may help certain clients
+send more compact requests, depending on their capabilities. This amount of
+memory is consumed for each HTTP/2 connection. It is recommended not to
+change it.
+</pre><a class="anchor" name="tune.h2.initial-window-size"></a><a class="anchor" name="3-tune.h2.initial-window-size"></a><a class="anchor" name="3.2-tune.h2.initial-window-size"></a><a class="anchor" name="tune.h2.initial-window-size (Global parameters)"></a><a class="anchor" name="tune.h2.initial-window-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.h2.initial-window-size"></a><a href="#3.2-tune.h2.initial-window-size">tune.h2.initial-window-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the HTTP/2 initial window size, which is the number of bytes the client
+can upload before waiting for an acknowledgement from haproxy. This setting
+only affects payload contents (ie: the body of POST requests), not headers.
+The default value is 65535, which roughly allows up to 5 Mbps of upload
+bandwidth per client over a network showing a 100 ms ping time, or 500 Mbps
+over a 1-ms local network. It can make sense to increase this value to allow
+faster uploads, or to reduce it to increase fairness when dealing with many
+clients. It doesn't affect resource usage.
+</pre><a class="anchor" name="tune.h2.max-concurrent-streams"></a><a class="anchor" name="3-tune.h2.max-concurrent-streams"></a><a class="anchor" name="3.2-tune.h2.max-concurrent-streams"></a><a class="anchor" name="tune.h2.max-concurrent-streams (Global parameters)"></a><a class="anchor" name="tune.h2.max-concurrent-streams (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.h2.max-concurrent-streams"></a><a href="#3.2-tune.h2.max-concurrent-streams">tune.h2.max-concurrent-streams</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the HTTP/2 maximum number of concurrent streams per connection (ie the
+number of outstanding requests on a single connection). The default value is
+100. A larger one may slightly improve page load time for complex sites when
+visited over high latency networks, but increases the amount of resources a
+single client may allocate. A value of zero disables the limit so a single
+client may create as many streams as allocatable by haproxy. It is highly
+recommended not to change this value.
 </pre><a class="anchor" name="tune.http.cookielen"></a><a class="anchor" name="3-tune.http.cookielen"></a><a class="anchor" name="3.2-tune.http.cookielen"></a><a class="anchor" name="tune.http.cookielen (Global parameters)"></a><a class="anchor" name="tune.http.cookielen (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.http.cookielen"></a><a href="#3.2-tune.http.cookielen">tune.http.cookielen</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum length of captured cookies. This is the maximum value that
 the &quot;capture cookie xxx len yyy&quot; will be allowed to take, and any upper value
 will automatically be truncated to this one. It is important not to set too
@@ -6317,8 +6373,8 @@ defaults has been set to &quot;<span class="dropdown"><a class="dropdown-toggle"
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 200, 400, 403, 405, 408, 429, 500, 502, 503, and
-          504.
+          generating codes 200, 400, 403, 405, 408, 425, 429, 500, 502,
+          503, and 504.
 
 &lt;file&gt;    designates a file containing the full HTTP response. It is
           recommended to follow the common practice of appending &quot;.http&quot; to
@@ -6365,8 +6421,8 @@ errorfile 503 /etc/haproxy/errorfiles/503sorry.http
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 200, 400, 403, 405, 408, 429, 500, 502, 503, and
-          504.
+          generating codes 200, 400, 403, 405, 408, 425, 429, 500, 502,
+          503, and 504.
 
 &lt;url&gt;     it is the exact contents of the &quot;Location&quot; header. It may contain
           either a relative URI to an error page hosted on the same site,
@@ -6395,8 +6451,8 @@ request.
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 200, 400, 403, 405, 408, 429, 500, 502, 503, and
-          504.
+          generating codes 200, 400, 403, 405, 408, 425, 429, 500, 502,
+          503, and 504.
 
 &lt;url&gt;     it is the exact contents of the &quot;Location&quot; header. It may contain
           either a relative URI to an error page hosted on the same site,
@@ -6887,9 +6943,10 @@ Example of a header received by the application server :
               <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
               sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
               sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
-              silent-drop |
-             }</span>
-             <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 requests
+              silent-drop |</span></div><pre class="text">	      send-spoe-group
+             }
+             [ { if | unless } &lt;condition&gt; ]
+  Access control for Layer 7 requests
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -7285,6 +7342,23 @@ http-request set-dst-port int(4000)
     pass the first router, though it's still delivered to local networks. Do
     not use it unless you fully understand how it works.
 
+
+  - &quot;wait-for-handshake&quot; : this will delay the processing of the request
+    until the SSL handshake happened. This is mostly useful to delay
+    processing early data until we're sure they are valid.
+
+  - send-spoe-group &lt;engine-name&gt; &lt;group-name&gt; :
+    This action is used to trigger sending of a group of SPOE messages. To do
+    so, the SPOE engine used to send messages must be defined, as well as the
+    SPOE group to send. Of course, the SPOE engine must refer to an existing
+    SPOE filter. If not engine name is provided on the SPOE filter line, the
+    SPOE agent name must be used.
+
+      &lt;engine-name&gt; The SPOE engine name.
+
+      &lt;group-name&gt;  The SPOE group name as specified in the engine
+                    configuration.
+
 There is no limit to the number of http-request statements per instance.
 
 It is important to know that http-request rules are processed very early in
@@ -7368,9 +7442,10 @@ http-request del-map(map.lst) %[src]                     if delmap
                 <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
                 sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
                 sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
-                silent-drop |
-              }</span>
-              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 responses
+                silent-drop |</span></div><pre class="text">		send-spoe-group
+              }
+              [ { if | unless } &lt;condition&gt; ]
+  Access control for Layer 7 responses
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -7618,6 +7693,18 @@ http-response set-status 503 reason &quot;Slow Down&quot;.
     systems, the socket's TTL is reduced to 1 so that the TCP reset doesn't
     pass the first router, though it's still delivered to local networks. Do
     not use it unless you fully understand how it works.
+
+  - send-spoe-group &lt;engine-name&gt; &lt;group-name&gt; :
+    This action is used to trigger sending of a group of SPOE messages. To do
+    so, the SPOE engine used to send messages must be defined, as well as the
+    SPOE group to send. Of course, the SPOE engine must refer to an existing
+    SPOE filter. If not engine name is provided on the SPOE filter line, the
+    SPOE agent name must be used.
+
+      &lt;engine-name&gt; The SPOE engine name.
+
+      &lt;group-name&gt;  The SPOE group name as specified in the engine
+                    configuration.
 
 There is no limit to the number of http-response statements per instance.
 
@@ -12163,6 +12250,7 @@ Several types of actions are supported :
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
   - unset-var(&lt;var-name&gt;)
   - silent-drop
+  - send-spoe-group &lt;engin-name&gt; &lt;group-name&gt;
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
@@ -12215,6 +12303,16 @@ variables can be used, without any layer7 contents.
 
 The &quot;unset-var&quot; is used to unset a variable. See above for details about
 &lt;var-name&gt;.
+
+The &quot;send-spoe-group&quot; is used to trigger sending of a group of SPOE
+messages. To do so, the SPOE engine used to send messages must be defined, as
+well as the SPOE group to send. Of course, the SPOE engine must refer to an
+existing SPOE filter. If not engine name is provided on the SPOE filter line,
+the SPOE agent name must be used.
+
+  &lt;engine-name&gt; The SPOE engine name.
+
+  &lt;group-name&gt;  The SPOE group name as specified in the engine configuration.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -12408,6 +12506,9 @@ Several types of actions are supported :
       TCP reset doesn't pass the first router, though it's still delivered to
       local networks. Do not use it unless you fully understand how it works.
 
+  - send-spoe-group &lt;engine-name&gt; &lt;group-name&gt;
+      Send a group of SPOE messages.
+
 Note that the &quot;if/unless&quot; condition is optional. If no condition is set on
 the action, it is simply performed unconditionally. That can be useful for
 for changing the default action to a reject.
@@ -12449,7 +12550,17 @@ declared inline.
 <pre class="prettyprint">
 <code>tcp-request content unset-var(sess.my_var)
 </code></pre>
-</div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
+</div><pre class="text">The &quot;send-spoe-group&quot; is used to trigger sending of a group of SPOE
+messages. To do so, the SPOE engine used to send messages must be defined, as
+well as the SPOE group to send. Of course, the SPOE engine must refer to an
+existing SPOE filter. If not engine name is provided on the SPOE filter line,
+the SPOE agent name must be used.
+
+  &lt;engine-name&gt; The SPOE engine name.
+
+  &lt;group-name&gt;  The SPOE group name as specified in the engine configuration.
+
+See <a href="#7">section 7</a> about ACL usage.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;, &quot;<a href="#tcp-response%20inspect-delay">tcp-response inspect-delay</a>&quot;</div>
 <a class="anchor" name="tcp-request"></a><a class="anchor" name="4-tcp-request"></a><a class="anchor" name="4.2-tcp-request"></a><a class="anchor" name="tcp-request (Proxies)"></a><a class="anchor" name="tcp-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-request session"></a><a class="anchor" name="4-tcp-request session"></a><a class="anchor" name="4.2-tcp-request session"></a><a class="anchor" name="tcp-request session (Proxies)"></a><a class="anchor" name="tcp-request session (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-request session"></a><a href="#4.2-tcp-request%20session">tcp-request session</a></b> <span style="color: #080">&lt;action&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;condition&gt;</span>]</span></div><pre class="text">Perform an action on a validated session depending on a layer 5 condition
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -13120,6 +13231,8 @@ components can be used as an efficient and reliable alternative to the
 X-Forwarded-For mechanism which is not always reliable and not even always
 usable. See also &quot;tcp-request connection expect-proxy&quot; for a finer-grained
 setting of which client is allowed to use the protocol.
+</pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.1-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and Server options)"></a><a class="anchor" name="allow-0rtt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.1-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow receiving early data when using TLS 1.3. This is disabled by default,
+due to security considerations.
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.1-alpn"></a><a class="anchor" name="alpn (Bind and Server options)"></a><a class="anchor" name="alpn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.1-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
@@ -13262,8 +13375,9 @@ Assuming bundle in the example above contained the following:
 to use both RSA and ECDSA cipher suites. Users connecting with an SNI of
 &quot;rsa.example.com&quot; will only be able to use RSA cipher suites, and users
 connecting with &quot;ecdsa.example.com&quot; will only be able to use ECDSA cipher
-suites. With BoringSSL multi-cert is natively supported, no need to bundle
-certificates. ECDSA certificate will be preferred if client support it.
+suites. With BoringSSL and Openssl &gt;= 1.1.1 multi-cert is natively supported,
+no need to bundle certificates. ECDSA certificate will be preferred if client
+support it.
 
 If a directory name is given as the &lt;cert&gt; argument, haproxy will
 automatically search and load bundled files in that directory.
@@ -13283,7 +13397,7 @@ filter per certificate, with the following format for each line :
 
 sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
 crl-file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL
-&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
+and Openssl &gt;= 1.1.1 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
 It override the configuration set in bind line for the certificate.
 
 Wildcards are supported in the SNI filter. Negative filter are also supported,
@@ -13297,9 +13411,9 @@ the 'strict-sni' option may be used.
 
 Multi-cert bundling (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;) is supported with crt-list, as long as only
 the base name is given in the crt-list. SNI filter will do the same work on
-all bundled certificates. With BoringSSL multi-cert is natively supported,
-avoid multi-cert bundling. RSA and ECDSA certificates can be declared in a
-row, and set different ssl and filter parameter.
+all bundled certificates. With BoringSSL and Openssl &gt;= 1.1.1 multi-cert is
+natively supported, avoid multi-cert bundling. RSA and ECDSA certificates can
+be declared in a row, and set different ssl and filter parameter.
 
 crt-list file example:
       cert1.pem
@@ -14059,10 +14173,6 @@ configured network, another address is selected.
 </code></pre>
 </div><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Points to an existing &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">resolvers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#resolvers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#resolvers%20%28The%20resolvers%20section%29">The resolvers section</a></li></ul></span>&quot; section to resolve current server's
 hostname.
-In order to be operational, DNS resolution requires that health check is
-enabled on the server. Actually, health checks triggers the DNS resolution.
-You must precise one 'resolvers' parameter on each server line where DNS
-resolution is required.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -14089,10 +14199,10 @@ See also the &quot;<a href="#no-send-proxy">no-send-proxy</a>&quot; option of th
 over any connection established to this server. The PROXY protocol informs
 the other end about the layer 3/4 addresses of the incoming connection, so
 that it can know the client's address or the public address it accessed to,
-whatever the upper layer protocol. This setting must not be used if the
-server isn't aware of this version of the protocol. See also the
-&quot;<a href="#no-send-proxy-v2">no-send-proxy-v2</a>&quot; option of this section and send-proxy&quot; option of the
-&quot;<a href="#bind">bind</a>&quot; keyword.
+whatever the upper layer protocol. It also send ALPN information if an alpn
+have been negotiated. This setting must not be used if the server isn't aware
+of this version of the protocol. See also the &quot;<a href="#no-send-proxy-v2">no-send-proxy-v2</a>&quot; option of
+this section and send-proxy&quot; option of the &quot;<a href="#bind">bind</a>&quot; keyword.
 </pre><a class="anchor" name="send-proxy-v2-ssl"></a><a class="anchor" name="5-send-proxy-v2-ssl"></a><a class="anchor" name="5.2-send-proxy-v2-ssl"></a><a class="anchor" name="send-proxy-v2-ssl (Bind and Server options)"></a><a class="anchor" name="send-proxy-v2-ssl (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="send-proxy-v2-ssl"></a><a href="#5.2-send-proxy-v2-ssl">send-proxy-v2-ssl</a></b></div><pre class="text">The &quot;<a href="#send-proxy-v2-ssl">send-proxy-v2-ssl</a>&quot; parameter enforces use of the PROXY protocol version
 2 over any connection established to this server. The PROXY protocol informs
 the other end about the layer 3/4 addresses of the incoming connection, so
@@ -14254,21 +14364,20 @@ different steps of the process life:
      host name. It uses libc functions to get the host name resolved. This
      resolution relies on /etc/resolv.conf file.
 
-  2. at run time, when HAProxy gets prepared to run a health check on a server,
-     it verifies if the current name resolution is still considered as valid.
-     If not, it processes a new resolution, in parallel of the health check.
+  2. at run time, HAProxy performs periodically name resolutions for servers
+     requiring DNS resolutions.
 
 A few other events can trigger a name resolution at run time:
   - when a server's health check ends up in a connection timeout: this may be
     because the server has a new IP address. So we need to trigger a name
     resolution to know this new IP.
 
-When using resolvers, the server name can either be a hostname, or s SRV label.
-HAProxy considers anything that starts with an underscore a SRV label.
-If a SRV label is specified, then the corresponding SRV records will be
-retrieved from the DNS server, and the provided hostnames will be used. The
-SRV label will be checked periodically, and if any server are added or removed,
-haproxy will automatically do the same.
+When using resolvers, the server name can either be a hostname, or a SRV label.
+HAProxy considers anything that starts with an underscore as a SRV label.  If a
+SRV label is specified, then the corresponding SRV records will be retrieved
+from the DNS server, and the provided hostnames will be used. The SRV label
+will be checked periodically, and if any server are added or removed, haproxy
+will automatically do the same.
 
 A few things important to notice:
   - all the name servers are queried in the mean time. HAProxy will process the
@@ -14280,9 +14389,8 @@ A few things important to notice:
 <a class="anchor" id="5.3.2" name="5.3.2"></a>
 <h3 id="chapter-5.3.2" data-target="5.3.2"><small><a class="small" href="#5.3.2">5.3.2.</a></small> The resolvers section</h3>
 <div><pre class="text">This section is dedicated to host information related to name resolution in
-HAProxy.
-There can be as many as resolvers section as needed. Each section can contain
-many name servers.
+HAProxy. There can be as many as resolvers section as needed. Each section can
+contain many name servers.
 
 When multiple name servers are configured in a resolvers section, then HAProxy
 uses the first valid response. In case of invalid responses, only the last one
@@ -14290,48 +14398,45 @@ is treated. Purpose is to give the chance to a slow server to deliver a valid
 answer after a fast faulty or outdated server.
 
 When each server returns a different error type, then only the last error is
-used by HAProxy to decide what type of behavior to apply.
+used by HAProxy. The following processing is applied on this error:
 
-Two types of behavior can be applied:
- 1. stop DNS resolution
- 2. replay the DNS query with a new query type
-      In such case, the following types are applied in this exact order:
-        1. ANY query type
-        2. query type corresponding to family pointed by resolve-prefer
-           server's parameter
-        3. remaining family type
+  1. HAProxy retries the same DNS query with a new query type. The A queries are
+     switch to AAAA or the opposite. SRV queries are not concerned here. Timeout
+     errors are also excluded.
 
-HAProxy stops DNS resolution when the following errors occur:
- - invalid DNS response packet
- - wrong name in the query section of the response
- - NX domain
- - Query refused by server
- - CNAME not pointing to an IP address
+  2. When the fallback on the query type was done (or not applicable), HAProxy
+     retries the original DNS query, with the preferred query type.
 
-HAProxy tries a new query type when the following errors occur:
- - no Answer records in the response
- - DNS response truncated
- - Error in DNS response
- - No expected DNS records found in the response
- - name server timeout
+  3. HAProxy retries previous steps &lt;resolve_retires&gt; times. If no valid
+     response is received after that, it stops the DNS resolution and reports
+     the error.
 
-For example, with 2 name servers configured in a resolvers section:
- - first response is valid and is applied directly, second response is ignored
- - first response is invalid and second one is valid, then second response is
-   applied;
- - first response is a NX domain and second one a truncated response, then
-   HAProxy replays the query with a new type;
- - first response is truncated and second one is a NX Domain, then HAProxy
-   stops resolution.
+For example, with 2 name servers configured in a resolvers section, the
+following scenarios are possible:
+
+  - First response is valid and is applied directly, second response is
+    ignored
+
+  - First response is invalid and second one is valid, then second response is
+    applied
+
+  - First response is a NX domain and second one a truncated response, then
+    HAProxy retries the query with a new type
+
+  - First response is a NX domain and second one is a timeout, then HAProxy
+    retries the query with a new type
+
+  - Query timed out for both name servers, then HAProxy retries it with the
+    same query type
 
 As a DNS server may not answer all the IPs in one DNS request, haproxy keeps
 a cache of previous answers, an answer will be considered obsolete after
-&quot;hold obsolete&quot; seconds without the IP returned.
+&lt;hold obsolete&gt; seconds without the IP returned.
 </pre><a class="anchor" name="resolvers"></a><a class="anchor" name="5-resolvers"></a><a class="anchor" name="5.3.2-resolvers"></a><a class="anchor" name="resolvers (Bind and Server options)"></a><a class="anchor" name="resolvers (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolvers"></a><a href="#5.3.2-resolvers">resolvers</a></b> <span style="color: #080">&lt;resolvers id&gt;</span></div><pre class="text">  Creates a new name server list labelled &lt;resolvers id&gt;
 
 A resolvers section accept the following parameters:
 </pre><a class="anchor" name="accepted_payload_size"></a><a class="anchor" name="5-accepted_payload_size"></a><a class="anchor" name="5.3.2-accepted_payload_size"></a><a class="anchor" name="accepted_payload_size (Bind and Server options)"></a><a class="anchor" name="accepted_payload_size (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="accepted_payload_size"></a><a href="#5.3.2-accepted_payload_size">accepted_payload_size</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the maxium payload size accepted by HAProxy and announced to all the
-naeservers configured in this resolvers section.
+name servers configured in this resolvers section.
 &lt;nb&gt; is in bytes. If not set, HAProxy announces 512. (minimal value defined
      by RFC 6891)
 
@@ -14352,11 +14457,7 @@ on last resolution &lt;status&gt;
              &lt;period&gt; is in milliseconds by default.
 
 Default value is 10s for &quot;valid&quot;, 0s for &quot;obsolete&quot; and 30s for others.
-
-Note: since the name resolution is triggered by the health checks, a new
-      resolution is triggered after &lt;period&gt; modulo the &lt;inter&gt; parameter of
-      the healch check.
-</pre><a class="anchor" name="resolution_pool_size"></a><a class="anchor" name="5-resolution_pool_size"></a><a class="anchor" name="5.3.2-resolution_pool_size"></a><a class="anchor" name="resolution_pool_size (Bind and Server options)"></a><a class="anchor" name="resolution_pool_size (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolution_pool_size"></a><a href="#5.3.2-resolution_pool_size">resolution_pool_size</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number of resolutions available in the pool for this resolvers.
+</pre><a class="anchor" name="resolution_pool_size"></a><a class="anchor" name="5-resolution_pool_size"></a><a class="anchor" name="5.3.2-resolution_pool_size"></a><a class="anchor" name="resolution_pool_size (Bind and Server options)"></a><a class="anchor" name="resolution_pool_size (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolution_pool_size"></a><a href="#5.3.2-resolution_pool_size">resolution_pool_size</a></b> <span style="color: #080">&lt;nb&gt;</span>  <span class="label label-warning">(deprecated)</span></div><pre class="text">Defines the number of resolutions available in the pool for this resolvers.
 If not defines, it defaults to 64. If your configuration requires more than
 &lt;nb&gt;, then HAProxy will return an error when parsing the configuration.
 </pre><a class="anchor" name="resolve_retries"></a><a class="anchor" name="5-resolve_retries"></a><a class="anchor" name="5.3.2-resolve_retries"></a><a class="anchor" name="resolve_retries (Bind and Server options)"></a><a class="anchor" name="resolve_retries (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="resolve_retries"></a><a href="#5.3.2-resolve_retries">resolve_retries</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Defines the number &lt;nb&gt; of queries to send to resolve a server name before
@@ -14366,14 +14467,17 @@ Default value: 3
 A retry occurs on name server timeout or when the full sequence of DNS query
 type failover is over and we need to start up from the default ANY query
 type.
-</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">Defines timeouts related to name resolution
-   &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
-             events available are:
-             - retry: time between two DNS queries, when no response have
-                      been received.
-                      Default value: 1s
-   &lt;time&gt;  : time related to the event. It follows the HAProxy time format.
-             &lt;time&gt; is expressed in milliseconds.
+</pre><a class="anchor" name="timeout"></a><a class="anchor" name="5-timeout"></a><a class="anchor" name="5.3.2-timeout"></a><a class="anchor" name="timeout (Bind and Server options)"></a><a class="anchor" name="timeout (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="timeout"></a><a href="#5.3.2-timeout">timeout</a></b> <span style="color: #080">&lt;event&gt;</span> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">  Defines timeouts related to name resolution
+     &lt;event&gt; : the event on which the &lt;time&gt; timeout period applies to.
+               events available are:
+	       - resolve : default time to trigger name resolutions when no
+	                   other time applied.
+                           Default value: 1s
+               - retry   : time between two DNS queries, when no valid response
+	                   have been received.
+                           Default value: 1s
+     &lt;time&gt;  : time related to the event. It follows the HAProxy time format.
+               &lt;time&gt; is expressed in milliseconds.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -14381,6 +14485,7 @@ type.
   nameserver dns1 10.0.0.1:53
   nameserver dns2 10.0.0.2:53
   resolve_retries       3
+  timeout resolve       1s
   timeout retry         1s
   hold other           30s
   hold refused         30s
@@ -15153,6 +15258,8 @@ list of chars.
 input byte. It is used to log or transfer hex dumps of some binary input data
 in a way that can be reliably transferred (eg: an SSL ID can be copied in a
 header).
+</pre><a class="anchor" name="hex2i"></a><a class="anchor" name="7-hex2i"></a><a class="anchor" name="7.3.1-hex2i"></a><a class="anchor" name="hex2i (Using ACLs and fetching samples)"></a><a class="anchor" name="hex2i (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex2i"></a><a href="#7.3.1-hex2i">hex2i</a></b></div><pre class="text">Converts a hex string containing two hex digits per input byte to an
+integer. If the input value can not be converted, then zero is returned.
 </pre><a class="anchor" name="http_date"></a><a class="anchor" name="7-http_date"></a><a class="anchor" name="7.3.1-http_date"></a><a class="anchor" name="http_date (Using ACLs and fetching samples)"></a><a class="anchor" name="http_date (Converters)"></a><div class="keyword"><b><a class="anchor" name="http_date"></a><a href="#7.3.1-http_date">http_date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>)</div><pre class="text">Converts an integer supposed to contain a date since epoch to a string
 representing this date in a format suitable for use in HTTP header fields. If
 an offset value is specified, then it is a number of seconds that is added to
@@ -15397,6 +15504,8 @@ set-var(&lt;var name&gt;)
     &quot;res&quot;  : the variable is shared only during response processing.
   This prefix is followed by a name. The separator is a '.'. The name may only
   contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
+</pre><a class="anchor" name="sha1"></a><a class="anchor" name="7-sha1"></a><a class="anchor" name="7.3.1-sha1"></a><a class="anchor" name="sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="sha1 (Converters)"></a><div class="keyword"><b><a class="anchor" name="sha1"></a><a href="#7.3.1-sha1">sha1</a></b></div><pre class="text">Converts a binary input sample to a SHA1 digest. The result is a binary
+sample with length of 20 bytes.
 </pre><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type signed integer, and returns
 the result as an signed integer. Note: in order to subtract the input from
 a constant, simply perform a &quot;neg,add(value)&quot;. &lt;value&gt; can be a numeric value
@@ -15877,6 +15986,9 @@ This might be used when running in transparent mode, when assigning dynamic
 ports to some clients for a whole application session, to stick all users to
 a same server, or to pass the destination port information to a server using
 an HTTP header.
+</pre><a class="anchor" name="fc_http_major"></a><a class="anchor" name="7-fc_http_major"></a><a class="anchor" name="7.3.3-fc_http_major"></a><a class="anchor" name="fc_http_major (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_http_major (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_http_major"></a><a href="#7.3.3-fc_http_major">fc_http_major</a></b> : integer</div><pre class="text">Reports the front connection's HTTP major version encoding, which may be 1
+for HTTP/0.9 to HTTP/1.1 or 2 for HTTP/2. Note, this is based on the on-wire
+encoding and not on the version present in the request header.
 </pre><a class="anchor" name="fc_rcvd_proxy"></a><a class="anchor" name="7-fc_rcvd_proxy"></a><a class="anchor" name="7.3.3-fc_rcvd_proxy"></a><a class="anchor" name="fc_rcvd_proxy (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rcvd_proxy (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rcvd_proxy"></a><a href="#7.3.3-fc_rcvd_proxy">fc_rcvd_proxy</a></b> : boolean</div><pre class="text">Returns true if the client initiated the connection with a PROXY protocol
 header.
 </pre><a class="anchor" name="fc_rtt"></a><a class="anchor" name="7-fc_rtt"></a><a class="anchor" name="7.3.3-fc_rtt"></a><a class="anchor" name="fc_rtt (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rtt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rtt"></a><a href="#7.3.3-fc_rtt">fc_rtt</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the Round Trip Time (RTT) measured by the kernel for the client
@@ -16365,6 +16477,9 @@ Note: on SSL session resumption with Session ID or TLS ticket, client
 certificate is not present in the current connection but may be retrieved
 from the cache or the ticket. So prefer &quot;<a href="#ssl_c_used">ssl_c_used</a>&quot; if you want to check if
 current SSL session uses a client certificate.
+</pre><a class="anchor" name="ssl_fc_has_early"></a><a class="anchor" name="7-ssl_fc_has_early"></a><a class="anchor" name="7.3.4-ssl_fc_has_early"></a><a class="anchor" name="ssl_fc_has_early (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_early (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_early"></a><a href="#7.3.4-ssl_fc_has_early">ssl_fc_has_early</a></b> : boolean</div><pre class="text">Returns true if early data were sent, and the handshake didn't happen yet. As
+it has security implications, it is useful to be able to refuse those, or
+wait until the handshake happened.
 </pre><a class="anchor" name="ssl_fc_has_sni"></a><a class="anchor" name="7-ssl_fc_has_sni"></a><a class="anchor" name="7.3.4-ssl_fc_has_sni"></a><a class="anchor" name="ssl_fc_has_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_sni"></a><a href="#7.3.4-ssl_fc_has_sni">ssl_fc_has_sni</a></b> : boolean</div><pre class="text">This checks for the presence of a Server Name Indication TLS extension (SNI)
 in an incoming connection was made over an SSL/TLS transport layer. Returns
 true when the incoming connection presents a TLS SNI field. This requires
@@ -18633,8 +18748,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-dev3 &ndash; Configuration Manual<br>
-							<small>2017/10/22, willy tarreau</small>
+							HAProxy 1.8-rc1 &ndash; Configuration Manual<br>
+							<small>2017/10/31, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18737,7 +18852,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-dev3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-rc1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-60', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
