@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-rc2 - Configuration Manual</title>
+		<title>HAProxy version 1.8-rc3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-61" rel="stylesheet" />
@@ -2723,7 +2723,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2017/11/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2017/11/13</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2734,11 +2734,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-rc2</strong></p>
+							<p><strong>version 1.8-rc3</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/11/03
+								2017/11/11
 							</p>
 						</div>
 
@@ -4907,10 +4907,20 @@ proceeded by &quot;users&quot; keyword.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="3-user"></a><a class="anchor" name="3.4-user"></a><a class="anchor" name="user (Global parameters)"></a><a class="anchor" name="user (Userlists)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#3.4-user">user</a></b> <span style="color: #080">&lt;username&gt;</span> <span style="color: #008">[password|insecure-password <span style="color: #080">&lt;password&gt;</span>]</span>
                 <span style="color: #008">[groups <span style="color: #080">&lt;group&gt;</span>,<span style="color: #080">&lt;group&gt;</span>,(...)]</span></div><pre class="text">Adds user &lt;username&gt; to the current userlist. Both secure (encrypted) and
 insecure (unencrypted) passwords can be used. Encrypted passwords are
-evaluated using the crypt(3) function so depending of the system's
-capabilities, different algorithms are supported. For example modern Glibc
-based Linux system supports MD5, SHA-256, SHA-512 and of course classic,
-DES-based method of encrypting passwords.
+evaluated using the crypt(3) function, so depending on the system's
+capabilities, different algorithms are supported. For example, modern Glibc
+based Linux systems support MD5, SHA-256, SHA-512, and, of course, the
+classic DES-based method of encrypting passwords.
+
+Attention: Be aware that using encrypted passwords might cause significantly
+increased CPU usage, depending on the number of requests, and the algorithm
+used. For any of the hashed variants, the password for each request must
+be processed through the chosen algorithm, before it can be compared to the
+value specified in the config file. Most current algorithms are deliberately
+designed to be expensive to compute to achieve resistance against brute
+force attacks. They do not simply salt/hash the clear text password once,
+but thousands of times. This can quickly become a major factor in haproxy's
+overall CPU consumption!
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -18748,8 +18758,8 @@ Important note:
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-rc2 &ndash; Configuration Manual<br>
-							<small>2017/11/03, willy tarreau</small>
+							HAProxy 1.8-rc3 &ndash; Configuration Manual<br>
+							<small>2017/11/11, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18852,7 +18862,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-rc2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-rc3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-61', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
