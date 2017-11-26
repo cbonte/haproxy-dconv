@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-rc4 - Configuration Manual</title>
+		<title>HAProxy version 1.8.0 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-61" rel="stylesheet" />
@@ -136,6 +136,26 @@
 							<div class="tab">
 							<a href="#1.3.2">The response headers</a>
 							</div>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>10.</small></b></td>
+					<td>
+							<a href="#10"><br><b>Cache</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><small>10.2.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#10.2">1 Cache section</a>
 							</div>
 					<td>
 				</tr>
@@ -985,6 +1005,8 @@
 							
 							<a class="list-group-item" href="#ca-sign-pass">ca-sign-pass</a>
 							
+							<a class="list-group-item" href="#cache">cache</a>
+							
 							<a class="list-group-item" href="#capture">capture</a>
 							
 							<a class="list-group-item" href="#capture cookie">capture cookie</a>
@@ -1302,9 +1324,17 @@
 							
 							<a class="list-group-item" href="#http-check send-state">http-check send-state</a>
 							
-							<a class="list-group-item" href="#http-request">http-request</a>
+							<a class="list-group-item" href="#http-request (1 Cache section)">http-request (1 Cache section)</a>
 							
-							<a class="list-group-item" href="#http-response">http-response</a>
+							<a class="list-group-item" href="#http-request (Alphabetically sorted keywords reference)">http-request (Alphabetically sorted keywords reference)</a>
+							
+							<a class="list-group-item" href="#http-request cache-use">http-request cache-use</a>
+							
+							<a class="list-group-item" href="#http-response (1 Cache section)">http-response (1 Cache section)</a>
+							
+							<a class="list-group-item" href="#http-response (Alphabetically sorted keywords reference)">http-response (Alphabetically sorted keywords reference)</a>
+							
+							<a class="list-group-item" href="#http-response cache-store">http-response cache-store</a>
 							
 							<a class="list-group-item" href="#http-reuse">http-reuse</a>
 							
@@ -1387,6 +1417,8 @@
 							<a class="list-group-item" href="#map">map</a>
 							
 							<a class="list-group-item" href="#master-worker">master-worker</a>
+							
+							<a class="list-group-item" href="#max-age">max-age</a>
 							
 							<a class="list-group-item" href="#max-keep-alive-queue">max-keep-alive-queue</a>
 							
@@ -2483,7 +2515,7 @@
 							
 							<a class="list-group-item" href="#tfo">tfo</a>
 							
-							<a class="list-group-item" href="#thread-map">thread-map</a>
+							<a class="list-group-item" href="#thread">thread</a>
 							
 							<a class="list-group-item" href="#timeout (Mailers)">timeout (Mailers)</a>
 							
@@ -2524,6 +2556,8 @@
 							<a class="list-group-item" href="#tls-ticket-keys">tls-ticket-keys</a>
 							
 							<a class="list-group-item" href="#tls-tickets">tls-tickets</a>
+							
+							<a class="list-group-item" href="#total-max-size">total-max-size</a>
 							
 							<a class="list-group-item" href="#track">track</a>
 							
@@ -2723,7 +2757,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2017/11/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2017/11/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2734,11 +2768,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8-rc4</strong></p>
+							<p><strong>version 1.8.0</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/11/19
+								2017/11/26
 							</p>
 						</div>
 
@@ -2856,6 +2890,26 @@ Note to documentation contributors :
 							<div class="tab">
 							<a href="#1.3.2">The response headers</a>
 							</div>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><br><b><small>10.</small></b></td>
+					<td>
+							<a href="#10"><br><b>Cache</b></a>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><small>10.2.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#10.2">1 Cache section</a>
 							</div>
 					<td>
 				</tr>
@@ -3625,7 +3679,7 @@ power required on the server side. It is generally better than the close mode,
 but not always because the clients often limit their concurrent connections to
 a smaller value.
 
-A last improvement in the communications is the pipelining mode. It still uses
+Another improvement in the communications is the pipelining mode. It still uses
 keep-alive, but the client does not wait for the first response to send the
 second request. This is useful for fetching large number of images composing a
 page :
@@ -3638,10 +3692,18 @@ correctly support pipelining since there is no way to associate a response with
 the corresponding request in HTTP. For this reason, it is mandatory for the
 server to reply in the exact same order as the requests were received.
 
+The next improvement is the multiplexed mode, as implemented in HTTP/2. This
+time, each transaction is assigned a single stream identifier, and all streams
+are multiplexed over an existing connection. Many requests can be sent in
+parallel by the client, and responses can arrive in any order since they also
+carry the stream identifier.
+
 By default HAProxy operates in keep-alive mode with regards to persistent
 connections: for each connection it processes each request and response, and
 leaves the connection idle on both sides between the end of a response and the
-start of a new request.
+start of a new request. When it receives HTTP/2 connections from a client, it
+processes all the requests in parallel and leaves the connection idling,
+waiting for new requests, just as if it was a keep-alive HTTP connection.
 
 HAProxy supports 5 connection modes :
   - keep alive    : all requests and responses are processed (default)
@@ -3650,6 +3712,12 @@ HAProxy supports 5 connection modes :
   - passive close : tunnel with &quot;Connection: close&quot; added in both directions.
   - server close  : the server-facing connection is closed after the response.
   - forced close  : the connection is actively closed after end of response.
+
+For HTTP/2, the connection mode ressembles more the &quot;server close&quot; mode : given
+the independance of all streams, there is currently no place to hook the idle
+server connection after a response, so it is closed after the response. HTTP/2
+is only supported for incoming connections, not on connections going to
+servers.
 </pre></div>
 <a class="anchor" id="1.2" name="1.2"></a>
 <h2 id="chapter-1.2" data-target="1.2"><small><a class="small" href="#1.2">1.2.</a></small> HTTP request</h2>
@@ -3711,6 +3779,13 @@ mark is called the &quot;<a href="#path">path</a>&quot;. It is typically the rel
 on the server. The part after the question mark is called the &quot;query string&quot;.
 It is mostly used with GET requests sent to dynamic scripts and is very
 specific to the language, framework or application in use.
+
+HTTP/2 doesn't convey a version information with the request, so the version is
+assumed to be the same as the one of the underlying protocol (ie: &quot;HTTP/2&quot;).
+However, haproxy natively processes HTTP/1.x requests and headers, so requests
+received over an HTTP/2 connection are transcoded to HTTP/1.1 before being
+processed. This explains why they still appear as &quot;HTTP/1.1&quot; in haproxy's logs
+as well as in server logs.
 </pre></div>
 <a class="anchor" id="1.2.2" name="1.2.2"></a>
 <h3 id="chapter-1.2.2" data-target="1.2.2"><small><a class="small" href="#1.2.2">1.2.2.</a></small> The request headers</h3>
@@ -3725,7 +3800,8 @@ define a total of 3 values for the &quot;Accept:&quot; header.
 
 Contrary to a common mis-conception, header names are not case-sensitive, and
 their values are not either if they refer to other header names (such as the
-&quot;Connection:&quot; header).
+&quot;Connection:&quot; header). In HTTP/2, header names are always sent in lower case,
+as can be seen when running in debug mode.
 
 The end of the headers is indicated by the first empty line. People often say
 that it's a double line feed, which is not exact, even if a double line feed
@@ -4011,7 +4087,6 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#ssl-default-server-options">ssl-default-server-options</a>
    - <a href="#ssl-dh-param-file">ssl-dh-param-file</a>
    - <a href="#ssl-server-verify">ssl-server-verify</a>
-   - <a href="#thread-map">thread-map</a>
    - <a href="#unix-bind">unix-bind</a>
    - <a href="#unsetenv">unsetenv</a>
    - <a href="#51degrees-data-file">51degrees-data-file</a>
@@ -4104,25 +4179,86 @@ vulnerability would be exploited, since it would make it very hard for the
 attacker to exploit the system. This only works when the process is started
 with superuser privileges. It is important to ensure that &lt;jail_dir&gt; is both
 empty and unwritable to anyone.
-</pre><a class="anchor" name="cpu-map"></a><a class="anchor" name="3-cpu-map"></a><a class="anchor" name="3.1-cpu-map"></a><a class="anchor" name="cpu-map (Global parameters)"></a><a class="anchor" name="cpu-map (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="cpu-map"></a><a href="#3.1-cpu-map">cpu-map</a></b> <span style="color: #080">&lt;&quot;all&quot;|&quot;<a href="#odd">odd</a>&quot;|&quot;<a href="#even">even</a>&quot;|process_num&gt;</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">On Linux 2.6 and above, it is possible to bind a process to a specific CPU
-set. This means that the process will never run on other CPUs. The &quot;<a href="#cpu-map">cpu-map</a>&quot;
-directive specifies CPU sets for process sets. The first argument is the
-process number to bind. This process must have a number between 1 and 32 or
-64, depending on the machine's word size, and any process IDs above nbproc
-are ignored. It is possible to specify all processes at once using &quot;all&quot;,
-only odd numbers using &quot;<a href="#odd">odd</a>&quot; or even numbers using &quot;<a href="#even">even</a>&quot;, just like with the
-&quot;<a href="#bind-process">bind-process</a>&quot; directive. The second and forthcoming arguments are CPU sets.
-Each CPU set is either a unique number between 0 and 31 or 63 or a range with
-two such numbers delimited by a dash ('-'). Multiple CPU numbers or ranges
-may be specified, and the processes will be allowed to bind to all of them.
-Obviously, multiple &quot;<a href="#cpu-map">cpu-map</a>&quot; directives may be specified. Each &quot;<a href="#cpu-map">cpu-map</a>&quot;
-directive will replace the previous ones when they overlap.
-</pre><a class="anchor" name="crt-base"></a><a class="anchor" name="3-crt-base"></a><a class="anchor" name="3.1-crt-base"></a><a class="anchor" name="crt-base (Global parameters)"></a><a class="anchor" name="crt-base (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="crt-base"></a><a href="#3.1-crt-base">crt-base</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a default directory to fetch SSL certificates from when a relative
+</pre><a class="anchor" name="cpu-map"></a><a class="anchor" name="3-cpu-map"></a><a class="anchor" name="3.1-cpu-map"></a><a class="anchor" name="cpu-map (Global parameters)"></a><a class="anchor" name="cpu-map (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="cpu-map"></a><a href="#3.1-cpu-map">cpu-map</a></b> <span style="color: #008">[auto:]</span><span style="color: #080">&lt;process-set&gt;</span><span style="color: #008">[/<span style="color: #080">&lt;thread-set&gt;</span>]</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">On Linux 2.6 and above, it is possible to bind a process or a thread to a
+specific CPU set. This means that the process or the thread will never run on
+other CPUs. The &quot;<a href="#cpu-map">cpu-map</a>&quot; directive specifies CPU sets for process or thread
+sets. The first argument is a process set, eventually followed by a thread
+set. These sets have the format
+
+    all | odd | even | number[-[number]]
+
+&lt;number&gt;&gt; must be a number between 1 and 32 or 64, depending on the machine's
+word size. any process IDs above nbrpoc and any thread IDs above nbthread are
+ignored. It is possible to specify a range with two such number delimited by
+a dash ('-'). It also is possible to specify all processes at once using
+&quot;all&quot;, only odd numbers using &quot;<a href="#odd">odd</a>&quot; or even numbers using &quot;<a href="#even">even</a>&quot;, just like
+with the &quot;<a href="#bind-process">bind-process</a>&quot; directive. The second and forthcoming arguments are
+CPU sets.  Each CPU set is either a unique number between 0 and 31 or 63 or a
+range with two such numbers delimited by a dash ('-'). Multiple CPU numbers
+or ranges may be specified, and the processes or threads will be allowed to
+bind to all of them.  Obviously, multiple &quot;<a href="#cpu-map">cpu-map</a>&quot; directives may be
+specified. Each &quot;<a href="#cpu-map">cpu-map</a>&quot; directive will replace the previous ones when they
+overlap. A thread will be bound on the intersection of its mapping and the
+one of the process on which it is attached. If the intersection is null, no
+specific binding will be set for the thread.
+
+Ranges can be partially defined. The higher bound can be omitted. In such
+case, it is replaced by the corresponding maximum value, 32 or 64 depending
+on the machine's word size.
+
+The prefix &quot;auto:&quot; can be added before the process set to let HAProxy
+automatically bind a process or a thread to a CPU by incrementing
+process/thread and CPU sets. To be valid, both sets must have the same
+size. No matter the declaration order of the CPU sets, it will be bound from
+the lowest to the highest bound. Having a process and a thread range with the
+&quot;auto:&quot; prefix is not supported. Only one range is supported, the other one
+must be a fixed number.
+</pre><div class="separator">
+<span class="label label-success">Examples:</span>
+<pre class="prettyprint">
+<code>cpu-map 1-4 0-3   <span class="comment"># bind processes 1 to 4 on the first 4 CPUs</span>
+
+cpu-map 1/all 0-3 <span class="comment"># bind all threads of the first process on the</span>
+                  <span class="comment"># first 4 CPUs</span>
+
+cpu-map 1- 0-     <span class="comment"># will be replaced by &quot;cpu-map 1-64 0-63&quot;</span>
+                  <span class="comment"># or &quot;cpu-map 1-32 0-31&quot; depending on the machine's</span>
+                  <span class="comment"># word size.</span>
+
+<span class="comment"># all these lines bind the process 1 to the cpu 0, the process 2 to cpu 1</span>
+<span class="comment"># and so on.</span>
+cpu-map auto:1-4   0-3
+cpu-map auto:1-4   0-1 2-3
+cpu-map auto:1-4   3 2 1 0
+
+<span class="comment"># all these lines bind the thread 1 to the cpu 0, the thread 2 to cpu 1</span>
+<span class="comment"># and so on.</span>
+cpu-map auto:1/1-4   0-3
+cpu-map auto:1/1-4   0-1 2-3
+cpu-map auto:1/1-4   3 2 1 0
+
+<span class="comment"># bind each process to exaclty one CPU using all/odd/even keyword</span>
+cpu-map auto:all   0-63
+cpu-map auto:even  0-31
+cpu-map auto:odd   32-63
+
+<span class="comment"># invalid cpu-map because process and CPU sets have different sizes.</span>
+cpu-map auto:1-4   0    <span class="comment"># invalid</span>
+cpu-map auto:1     0-3  <span class="comment"># invalid</span>
+
+<span class="comment"># invalid cpu-map because automatic binding is used with a process range</span>
+<span class="comment"># and a thread range.</span>
+cpu-map auto:all/all   0 <span class="comment"># invalid</span>
+cpu-map auto:all/1-4   0 <span class="comment"># invalid</span>
+cpu-map auto:1-4/all   0 <span class="comment"># invalid</span>
+</code></pre>
+</div><a class="anchor" name="crt-base"></a><a class="anchor" name="3-crt-base"></a><a class="anchor" name="3.1-crt-base"></a><a class="anchor" name="crt-base (Global parameters)"></a><a class="anchor" name="crt-base (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="crt-base"></a><a href="#3.1-crt-base">crt-base</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a default directory to fetch SSL certificates from when a relative
 path is used with &quot;crtfile&quot; directives. Absolute locations specified after
 &quot;crtfile&quot; prevail and ignore &quot;<a href="#crt-base">crt-base</a>&quot;.
 </pre><a class="anchor" name="daemon"></a><a class="anchor" name="3-daemon"></a><a class="anchor" name="3.1-daemon"></a><a class="anchor" name="daemon (Global parameters)"></a><a class="anchor" name="daemon (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="daemon"></a><a href="#3.1-daemon">daemon</a></b></div><pre class="text">Makes the process fork into background. This is the recommended mode of
 operation. It is equivalent to the command line &quot;-D&quot; argument. It can be
-disabled by the command line &quot;-db&quot; argument.
+disabled by the command line &quot;-db&quot; argument. This option is ignored in
+systemd mode.
 </pre><a class="anchor" name="deviceatlas-json-file"></a><a class="anchor" name="3-deviceatlas-json-file"></a><a class="anchor" name="3.1-deviceatlas-json-file"></a><a class="anchor" name="deviceatlas-json-file (Global parameters)"></a><a class="anchor" name="deviceatlas-json-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="deviceatlas-json-file"></a><a href="#3.1-deviceatlas-json-file">deviceatlas-json-file</a></b> <span style="color: #080">&lt;path&gt;</span></div><pre class="text">Sets the path of the DeviceAtlas JSON data file to be loaded by the API.
 The path must be a valid JSON data file and accessible by Haproxy process.
 </pre><a class="anchor" name="deviceatlas-log-level"></a><a class="anchor" name="3-deviceatlas-log-level"></a><a class="anchor" name="3.1-deviceatlas-log-level"></a><a class="anchor" name="deviceatlas-log-level (Global parameters)"></a><a class="anchor" name="deviceatlas-log-level (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="deviceatlas-log-level"></a><a href="#3.1-deviceatlas-log-level">deviceatlas-log-level</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Sets the level of informations returned by the API. This directive is
@@ -4228,18 +4364,19 @@ Sometimes it can be useful to differentiate between multiple processes
 running on the same host. See also the per-proxy &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log-tag<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log-tag%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log-tag%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; directive.
 </pre><a class="anchor" name="lua-load"></a><a class="anchor" name="3-lua-load"></a><a class="anchor" name="3.1-lua-load"></a><a class="anchor" name="lua-load (Global parameters)"></a><a class="anchor" name="lua-load (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="lua-load"></a><a href="#3.1-lua-load">lua-load</a></b> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">This global directive loads and executes a Lua file. This directive can be
 used multiple times.
-</pre><a class="anchor" name="master-worker"></a><a class="anchor" name="3-master-worker"></a><a class="anchor" name="3.1-master-worker"></a><a class="anchor" name="master-worker (Global parameters)"></a><a class="anchor" name="master-worker (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="master-worker"></a><a href="#3.1-master-worker">master-worker</a></b> <span style="color: #008">[exit-on-failure]</span></div><pre class="text">Master-worker mode. It is equivalent to the command line &quot;-W&quot; argument.
+</pre><a class="anchor" name="master-worker"></a><a class="anchor" name="3-master-worker"></a><a class="anchor" name="3.1-master-worker"></a><a class="anchor" name="master-worker (Global parameters)"></a><a class="anchor" name="master-worker (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="master-worker"></a><a href="#3.1-master-worker">master-worker</a></b> <span style="color: #008">[no-exit-on-failure]</span></div><pre class="text">Master-worker mode. It is equivalent to the command line &quot;-W&quot; argument.
 This mode will launch a &quot;master&quot; which will monitor the &quot;workers&quot;. Using
 this mode, you can reload HAProxy directly by sending a SIGUSR2 signal to
 the master.  The master-worker mode is compatible either with the foreground
 or daemon mode. It is recommended to use this mode with multiprocess and
 systemd.
-The &quot;exit-on-failure&quot; option allows the master to kill every workers and
-exit when one of the current workers died. It is convenient to combine this
-option with Restart=on-failure in a systemd unit file in order to relaunch
-the whole process.
+By default, if a worker exits with a bad return code, in the case of a
+segfault for example, all workers will be killed, and the master will leave.
+It is convenient to combine this behavior with Restart=on-failure in a
+systemd unit file in order to relaunch the whole process. If you don't want
+this behavior, you must use the keyword &quot;no-exit-on-failure&quot;.
 
-See alors &quot;-W&quot; in the management guide.
+See also &quot;-W&quot; in the management guide.
 </pre><a class="anchor" name="nbproc"></a><a class="anchor" name="3-nbproc"></a><a class="anchor" name="3.1-nbproc"></a><a class="anchor" name="nbproc (Global parameters)"></a><a class="anchor" name="nbproc (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#3.1-nbproc">nbproc</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Creates &lt;number&gt; processes when going daemon. This requires the &quot;<a href="#daemon">daemon</a>&quot;
 mode. By default, only one process is created, which is the recommended mode
 of operation. For systems limited to small sets of file descriptors per
@@ -4265,15 +4402,17 @@ OpenSSL or even external checks. This must be used with extreme care and only
 after complete validation. The changes immediately take effect so that the
 next line in the configuration file sees the new environment. See also
 &quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#presetenv">presetenv</a>&quot;, and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
-</pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats bind-process"></a><a class="anchor" name="3-stats bind-process"></a><a class="anchor" name="3.1-stats bind-process"></a><a class="anchor" name="stats bind-process (Global parameters)"></a><a class="anchor" name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats bind-process"></a><a href="#3.1-stats%20bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
+</pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats bind-process"></a><a class="anchor" name="3-stats bind-process"></a><a class="anchor" name="3.1-stats bind-process"></a><a class="anchor" name="stats bind-process (Global parameters)"></a><a class="anchor" name="stats bind-process (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats bind-process"></a><a href="#3.1-stats%20bind-process">stats bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;process_num&gt;</span><span style="color: #008">[-<span style="color: #008">[process_num</span></span></span>&gt;]] ] ...</div><pre class="text">Limits the stats socket to a certain set of processes numbers. By default the
 stats socket is bound to all processes, causing a warning to be emitted when
 nbproc is greater than 1 because there is no way to select the target process
 when connecting. However, by using this setting, it becomes possible to pin
 the stats socket to a specific set of processes, typically the first one. The
 warning will automatically be disabled when this setting is used, whatever
 the number of processes used. The maximum process ID depends on the machine's
-word size (32 or 64). A better option consists in using the &quot;<a href="#process">process</a>&quot; setting
-of the &quot;<a href="#stats%20socket">stats socket</a>&quot; line to force the process on each line.
+word size (32 or 64). Ranges can be partially defined. The higher bound can
+be omitted. In such case, it is replaced by the corresponding maximum
+value. A better option consists in using the &quot;<a href="#process">process</a>&quot; setting of the &quot;stats
+socket&quot; line to force the process on each line.
 </pre><a class="anchor" name="server-state-base"></a><a class="anchor" name="3-server-state-base"></a><a class="anchor" name="3.1-server-state-base"></a><a class="anchor" name="server-state-base (Global parameters)"></a><a class="anchor" name="server-state-base (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="server-state-base"></a><a href="#3.1-server-state-base">server-state-base</a></b> <span style="color: #080">&lt;directory&gt;</span></div><pre class="text">Specifies the directory prefix to be prepended in front of all servers state
 file names which do not start with a '/'. See also &quot;<a href="#server-state-file">server-state-file</a>&quot;,
 &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; and &quot;<a href="#server-state-file-name">server-state-file-name</a>&quot;.
@@ -4331,12 +4470,6 @@ parameters should not be considered secure anymore.
 </pre><a class="anchor" name="ssl-server-verify"></a><a class="anchor" name="3-ssl-server-verify"></a><a class="anchor" name="3.1-ssl-server-verify"></a><a class="anchor" name="ssl-server-verify (Global parameters)"></a><a class="anchor" name="ssl-server-verify (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-server-verify"></a><a href="#3.1-ssl-server-verify">ssl-server-verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">The default behavior for SSL verify on servers side. If specified to 'none',
 servers certificates are not verified. The default is 'required' except if
 forced using cmdline option '-dV'.
-</pre><a class="anchor" name="thread-map"></a><a class="anchor" name="3-thread-map"></a><a class="anchor" name="3.1-thread-map"></a><a class="anchor" name="thread-map (Global parameters)"></a><a class="anchor" name="thread-map (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="thread-map"></a><a href="#3.1-thread-map">thread-map</a></b> <span style="color: #080">&lt;&quot;all&quot;|&quot;<a href="#odd">odd</a>&quot;|&quot;<a href="#even">even</a>&quot;|process_num&gt;</span> <span style="color: #080">&lt;&quot;all&quot;|&quot;<a href="#odd">odd</a>&quot;|&quot;<a href="#even">even</a>&quot;|thread_num&gt;</span> <span style="color: #080">&lt;cpu-set&gt;</span>...</div><pre class="text">This setting is only available when support for threads was built in. It
-binds a thread to a specific CPU set. The process must be specified to allow
-different mapping for different processes. For details about the arguments,
-see &quot;<a href="#cpu-map">cpu-map</a>&quot; directive. A thread will be bound on the intersection of its
-mapping and the one of the process on which it is attached. If the
-intersection is null, no specific bind will be set for the thread.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
 Connections to this socket will return various statistics outputs and even
 allow some commands to be issued to change some runtime settings. Please
@@ -4650,8 +4783,9 @@ can be changed at build time. It is strongly recommended not to change this
 from the default value, as very low values will break some services such as
 statistics, and values larger than default size will increase memory usage,
 possibly causing the system to run out of memory. At least the global maxconn
-parameter should be decreased by the same factor as this one is increased.
-If HTTP request is larger than (tune.bufsize - tune.maxrewrite), haproxy will
+parameter should be decreased by the same factor as this one is increased. In
+addition, use of HTTP/2 mandates that this value must be 16384 or more. If an
+HTTP request is larger than (tune.bufsize - tune.maxrewrite), haproxy will
 return HTTP 400 (Bad Request) error. Similarly if an HTTP response is larger
 than this size, haproxy will return HTTP 502 (Bad Gateway).
 </pre><a class="anchor" name="tune.chksize"></a><a class="anchor" name="3-tune.chksize"></a><a class="anchor" name="3.2-tune.chksize"></a><a class="anchor" name="tune.chksize (Global parameters)"></a><a class="anchor" name="tune.chksize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.chksize"></a><a href="#3.2-tune.chksize">tune.chksize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the check buffer size to this size (in bytes). Higher values may help
@@ -5725,7 +5859,7 @@ listen external_bind_app1
       &quot;,unix-tightsocklen=0&quot; to any abstract socket definition in socat to
       make it compatible with HAProxy's.
 </pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#option%20forwardfor">option forwardfor</a>&quot;, &quot;<a href="#unix-bind">unix-bind</a>&quot; and the PROXY protocol documentation, and <a href="#5">section 5</a> about bind options.</div>
-<a class="anchor" name="bind-process"></a><a class="anchor" name="4-bind-process"></a><a class="anchor" name="4.2-bind-process"></a><a class="anchor" name="bind-process (Proxies)"></a><a class="anchor" name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind-process"></a><a href="#4.2-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.
+<a class="anchor" name="bind-process"></a><a class="anchor" name="4-bind-process"></a><a class="anchor" name="4.2-bind-process"></a><a class="anchor" name="bind-process (Proxies)"></a><a class="anchor" name="bind-process (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="bind-process"></a><a href="#4.2-bind-process">bind-process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;process_num&gt;</span><span style="color: #008">[-<span style="color: #008">[<span style="color: #080">&lt;process_num&gt;</span>]</span>]</span> ]</span> ...</div><pre class="text">Limit visibility of an instance to a certain set of processes numbers.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -5742,11 +5876,13 @@ even          This instance will be enabled on processes 2,4,6,...64. This
               with less than 2 processes otherwise some instances might be
               missing from all processes.
 
-number        The instance will be enabled on this process number or range,
+process_num   The instance will be enabled on this process number or range,
               whose values must all be between 1 and 32 or 64 depending on
-              the machine's word size. If a proxy is bound to process
-              numbers greater than the configured global.nbproc, it will
-              either be forced to process #1 if a single process was
+              the machine's word size. Ranges can be partially defined. The
+              higher bound can be omitted. In such case, it is replaced by
+              the corresponding maximum value. If a proxy is bound to
+              process numbers greater than the configured global.nbproc, it
+              will either be forced to process #1 if a single process was
               specified, or to all processes otherwise.</pre>
 </div>
 <pre class="text">This keyword limits binding of certain instances to certain processes. This
@@ -6935,7 +7071,7 @@ Example of a header received by the application server :
   &gt;&gt;&gt;  X-Haproxy-Server-State: UP 2/3; name=bck/srv2; node=lb1; weight=1/2; \
          scur=13/22; qcur=0
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;</div>
-<a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> |
+<a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request"></a><a href="#4.2-http-request">http-request</a></b> <span style="color: #800">{ allow | auth <span style="color: #008">[realm <span style="color: #080">&lt;realm&gt;</span>]</span> | redirect <span style="color: #080">&lt;rule&gt;</span> | reject |
               tarpit <span style="color: #008">[deny_status <span style="color: #080">&lt;status&gt;</span>]</span> | deny <span style="color: #008">[deny_status <span style="color: #080">&lt;status&gt;</span>]</span> |
               add-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> | set-header <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> |
               capture <span style="color: #080">&lt;sample&gt;</span> <span style="color: #008">[ len <span style="color: #080">&lt;length&gt;</span> | id <span style="color: #080">&lt;id&gt;</span> ]</span> |
@@ -6953,10 +7089,11 @@ Example of a header received by the application server :
               <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
               sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
               sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
-              silent-drop |</span></div><pre class="text">	      send-spoe-group
-             }
-             [ { if | unless } &lt;condition&gt; ]
-  Access control for Layer 7 requests
+              silent-drop |
+              send-spoe-group |
+              cache-use
+             }</span>
+             <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 requests
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -6969,13 +7106,18 @@ if the condition is true.
 
 The first keyword is the rule's action. Currently supported actions include :
   - &quot;allow&quot; : this stops the evaluation of the rules and lets the request
-    pass the check. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated.
+    pass the check. No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated.
 
   - &quot;deny&quot; : this stops the evaluation of the rules and immediately rejects
     the request and emits an HTTP 403 error, or optionally the status code
     specified as an argument to &quot;deny_status&quot;. The list of permitted status
     codes is limited to those that can be overridden by the &quot;<a href="#errorfile">errorfile</a>&quot;
-    directive. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated.
+    directive. No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated.
+
+  - &quot;reject&quot; : this stops the evaluation of the rules and immediately closes
+    the connection without sending any response. It acts similarly to the
+    &quot;tcp-request content reject&quot; rules. It can be useful to force an
+    immediate connection closure on HTTP/2 connections.
 
   - &quot;tarpit&quot; : this stops the evaluation of the rules and immediately blocks
     the request without responding for a delay specified by &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;
@@ -6993,14 +7135,14 @@ The first keyword is the rule's action. Currently supported actions include :
 
   - &quot;auth&quot; : this stops the evaluation of the rules and immediately responds
     with an HTTP 401 or 407 error code to invite the user to present a valid
-    user name and password. No further &quot;<a href="#http-request">http-request</a>&quot; rules are evaluated. An
+    user name and password. No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated. An
     optional &quot;realm&quot; parameter is supported, it sets the authentication realm
     that is returned with the response (typically the application's name).
 
   - &quot;<a href="#redirect">redirect</a>&quot; : this performs an HTTP redirection based on a redirect rule.
     This is exactly the same as the &quot;<a href="#redirect">redirect</a>&quot; statement except that it
     inserts a redirect rule which can be processed in the middle of other
-    &quot;<a href="#http-request">http-request</a>&quot; rules and that these rules use the &quot;<a href="#log-format">log-format</a>&quot; strings.
+    &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules and that these rules use the &quot;<a href="#log-format">log-format</a>&quot; strings.
     See the &quot;<a href="#redirect">redirect</a>&quot; keyword for the rule's syntax.
 
   - &quot;add-header&quot; appends an HTTP header field whose name is specified in
@@ -7184,6 +7326,9 @@ http-request set-query %[query,regsub(%3D,=,g)]
   directive &quot;http-request capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot; keyword.
   If the slot &lt;id&gt; doesn't exist, then HAProxy fails parsing the
   configuration to prevent unexpected behavior at run time.
+
+- cache-use &lt;name&gt; :
+  See <a href="#10.2">section 10.2</a> about cache setup.
 
 - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
   enables tracking of sticky counters from current request. These rules
@@ -7452,10 +7597,11 @@ http-request del-map(map.lst) %[src]                     if delmap
                 <span style="color: #800">{ track-sc0 | track-sc1 | track-sc2 }</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #008">[table <span style="color: #080">&lt;table&gt;</span>]</span> |
                 sc-inc-gpc0(<span style="color: #080">&lt;sc-id&gt;</span>) |
                 sc-set-gpt0(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> |
-                silent-drop |</span></div><pre class="text">		send-spoe-group
-              }
-              [ { if | unless } &lt;condition&gt; ]
-  Access control for Layer 7 responses
+                silent-drop |
+                send-spoe-group |
+                cache-store
+              }</span>
+              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for Layer 7 responses
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -7469,11 +7615,11 @@ rules are applied first, followed by the frontend's rules.
 
 The first keyword is the rule's action. Currently supported actions include :
   - &quot;allow&quot; : this stops the evaluation of the rules and lets the response
-    pass the check. No further &quot;<a href="#http-response">http-response</a>&quot; rules are evaluated for the
+    pass the check. No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated for the
     current section.
 
   - &quot;deny&quot; : this stops the evaluation of the rules and immediately rejects
-    the response and emits an HTTP 502 error. No further &quot;<a href="#http-response">http-response</a>&quot;
+    the response and emits an HTTP 502 error. No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;
     rules are evaluated.
 
   - &quot;add-header&quot; appends an HTTP header field whose name is specified in
@@ -7629,6 +7775,9 @@ http-response set-status 503 reason &quot;Slow Down&quot;.
   If the slot &lt;id&gt; doesn't exist, then HAProxy fails parsing the
   configuration to prevent unexpected behavior at run time.
 
+- cache-store &lt;name&gt; :
+  See <a href="#10.2">section 10.2</a> about cache setup.
+
 - &quot;<a href="#redirect">redirect</a>&quot; : this performs an HTTP redirection based on a redirect rule.
   This supports a format string similarly to &quot;http-request redirect&quot; rules,
   with the exception that only the &quot;location&quot; type of redirect is possible
@@ -7747,7 +7896,7 @@ use_backend bk_appli if { hdr(Host),map_str(map.lst) -m found }
 http-response set-map(map.lst) %[src] %[res.hdr(X-Value)] if value
 http-response del-map(map.lst) %[src]                     if ! value
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#http-request">http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
+</div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
 <a class="anchor" name="http-reuse"></a><a class="anchor" name="4-http-reuse"></a><a class="anchor" name="4.2-http-reuse"></a><a class="anchor" name="http-reuse (Proxies)"></a><a class="anchor" name="http-reuse (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-reuse"></a><a href="#4.2-http-reuse">http-reuse</a></b> <span style="color: #800">{ never | safe | aggressive | always }</span></div><pre class="text">Declare how idle HTTP connections may be shared between requests
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10042,7 +10191,7 @@ no delay is needed at all to detect the threshold.
 response. If no condition is specified, the redirect applies unconditionally.
 </pre><div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;loc&gt;     With &quot;<a href="#redirect%20location">redirect location</a>&quot;, the exact value in &lt;loc&gt; is placed into
-          the HTTP &quot;Location&quot; header. When used in an &quot;<a href="#http-request">http-request</a>&quot; rule,
+          the HTTP &quot;Location&quot; header. When used in an &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rule,
           &lt;loc&gt; value follows the log-format rules and can include some
           dynamic values (see Custom Log Format in <a href="#8.2.4">section 8.2.4</a>).
 
@@ -10052,7 +10201,7 @@ response. If no condition is specified, the redirect applies unconditionally.
           below). As a special case, if &lt;pfx&gt; equals exactly &quot;/&quot;, then
           nothing is inserted before the original URI. It allows one to
           redirect to the same URL (for instance, to insert a cookie). When
-          used in an &quot;<a href="#http-request">http-request</a>&quot; rule, &lt;pfx&gt; value follows the log-format
+          used in an &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rule, &lt;pfx&gt; value follows the log-format
           rules and can include some dynamic values (see Custom Log Format
           in <a href="#8.2.4">section 8.2.4</a>).
 
@@ -10064,7 +10213,7 @@ response. If no condition is specified, the redirect applies unconditionally.
           no &quot;Host&quot; header is found, then an empty host component will be
           returned, which most recent browsers interpret as redirecting to
           the same host. This directive is mostly used to redirect HTTP to
-          HTTPS. When used in an &quot;<a href="#http-request">http-request</a>&quot; rule, &lt;sch&gt; value follows
+          HTTPS. When used in an &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rule, &lt;sch&gt; value follows
           the log-format rules and can include some dynamic values (see
           Custom Log Format in <a href="#8.2.4">section 8.2.4</a>).
 
@@ -10191,7 +10340,7 @@ responses.
 <div class="example-desc">Add &quot;X-Proto: SSL&quot; to requests coming via port 81</div><code>acl is-ssl  dst_port       81
 reqadd      X-Proto:\ SSL  if is-ssl
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqallow"></a><a class="anchor" name="4-reqallow"></a><a class="anchor" name="4.2-reqallow"></a><a class="anchor" name="reqallow (Proxies)"></a><a class="anchor" name="reqallow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqallow"></a><a href="#4.2-reqallow">reqallow</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqiallow"></a><a class="anchor" name="4-reqiallow"></a><a class="anchor" name="4.2-reqiallow"></a><a class="anchor" name="reqiallow (Proxies)"></a><a class="anchor" name="reqiallow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqiallow"></a><a href="#4.2-reqiallow">reqiallow</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> (ignore case)</div><pre class="text">Definitely allow an HTTP request if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10224,7 +10373,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqiallow ^Host:\ www\.
 reqideny  ^Host:\ .*\.local
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqdel"></a><a class="anchor" name="4-reqdel"></a><a class="anchor" name="4.2-reqdel"></a><a class="anchor" name="reqdel (Proxies)"></a><a class="anchor" name="reqdel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqdel"></a><a href="#4.2-reqdel">reqdel</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqidel"></a><a class="anchor" name="4-reqidel"></a><a class="anchor" name="4.2-reqidel"></a><a class="anchor" name="reqidel (Proxies)"></a><a class="anchor" name="reqidel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqidel"></a><a href="#4.2-reqidel">reqidel</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Delete all headers matching a regular expression in an HTTP request
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10256,7 +10405,7 @@ responses. Keep in mind that header names are not case-sensitive.
 reqidel ^X-Forwarded-For:.*
 reqidel ^Cookie:.*SERVER=
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqdeny"></a><a class="anchor" name="4-reqdeny"></a><a class="anchor" name="4.2-reqdeny"></a><a class="anchor" name="reqdeny (Proxies)"></a><a class="anchor" name="reqdeny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqdeny"></a><a href="#4.2-reqdeny">reqdeny</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqideny"></a><a class="anchor" name="4-reqideny"></a><a class="anchor" name="4.2-reqideny"></a><a class="anchor" name="reqideny (Proxies)"></a><a class="anchor" name="reqideny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqideny"></a><a href="#4.2-reqideny">reqideny</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Deny an HTTP request if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10293,7 +10442,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqpass"></a><a class="anchor" name="4-reqpass"></a><a class="anchor" name="4.2-reqpass"></a><a class="anchor" name="reqpass (Proxies)"></a><a class="anchor" name="reqpass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqpass"></a><a href="#4.2-reqpass">reqpass</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqipass"></a><a class="anchor" name="4-reqipass"></a><a class="anchor" name="4.2-reqipass"></a><a class="anchor" name="reqipass (Proxies)"></a><a class="anchor" name="reqipass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqipass"></a><a href="#4.2-reqipass">reqipass</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Ignore any HTTP request line matching a regular expression in next rules
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10326,7 +10475,7 @@ reqipass  ^Host:\ www.private\.local
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqrep"></a><a class="anchor" name="4-reqrep"></a><a class="anchor" name="4.2-reqrep"></a><a class="anchor" name="reqrep (Proxies)"></a><a class="anchor" name="reqrep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqrep"></a><a href="#4.2-reqrep">reqrep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqirep"></a><a class="anchor" name="4-reqirep"></a><a class="anchor" name="4.2-reqirep"></a><a class="anchor" name="reqirep (Proxies)"></a><a class="anchor" name="reqirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqirep"></a><a href="#4.2-reqirep">reqirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>   (ignore case)</div><pre class="text">Replace a regular expression with a string in an HTTP request line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10366,7 +10515,7 @@ reqrep ^([^\ :]*)\ /static/(.*)     \1\ /\2
 <span class="comment"># replace &quot;www.mydomain.com&quot; with &quot;www&quot; in the host name.</span>
 reqirep ^Host:\ www.mydomain.com   Host:\ www
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqtarpit"></a><a class="anchor" name="4-reqtarpit"></a><a class="anchor" name="4.2-reqtarpit"></a><a class="anchor" name="reqtarpit (Proxies)"></a><a class="anchor" name="reqtarpit (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqtarpit"></a><a href="#4.2-reqtarpit">reqtarpit</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="reqitarpit"></a><a class="anchor" name="4-reqitarpit"></a><a class="anchor" name="4.2-reqitarpit"></a><a class="anchor" name="reqitarpit (Proxies)"></a><a class="anchor" name="reqitarpit (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqitarpit"></a><a href="#4.2-reqitarpit">reqitarpit</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Tarpit an HTTP request containing a line matching a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10409,7 +10558,7 @@ reqitarpit ^User-Agent:
 acl badguys src 10.1.0.3 172.16.13.20/28
 reqitarpit . if badguys
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, &quot;<a href="#http-request">http-request</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#reqpass">reqpass</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="retries"></a><a class="anchor" name="4-retries"></a><a class="anchor" name="4.2-retries"></a><a class="anchor" name="retries (Proxies)"></a><a class="anchor" name="retries (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="retries"></a><a href="#4.2-retries">retries</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Set the number of retries to perform on a server after a connection failure
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10450,7 +10599,7 @@ the last header of an HTTP response.
 Header transformations only apply to traffic which passes through HAProxy,
 and not to traffic generated by HAProxy, such as health-checks or error
 responses.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#rspdel">rspdel</a>&quot; &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#rspdel">rspdel</a>&quot; &quot;<a href="#reqadd">reqadd</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rspdel"></a><a class="anchor" name="4-rspdel"></a><a class="anchor" name="4.2-rspdel"></a><a class="anchor" name="rspdel (Proxies)"></a><a class="anchor" name="rspdel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspdel"></a><a href="#4.2-rspdel">rspdel</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspidel"></a><a class="anchor" name="4-rspidel"></a><a class="anchor" name="4.2-rspidel"></a><a class="anchor" name="rspidel (Proxies)"></a><a class="anchor" name="rspidel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspidel"></a><a href="#4.2-rspidel">rspidel</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Delete all headers matching a regular expression in an HTTP response
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10482,7 +10631,7 @@ responses. Keep in mind that header names are not case-sensitive.
 <code><span class="comment"># remove the Server header from responses</span>
 rspidel ^Server:.*
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rsprep">rsprep</a>&quot;, &quot;<a href="#reqdel">reqdel</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rspdeny"></a><a class="anchor" name="4-rspdeny"></a><a class="anchor" name="4.2-rspdeny"></a><a class="anchor" name="rspdeny (Proxies)"></a><a class="anchor" name="rspdeny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspdeny"></a><a href="#4.2-rspdeny">rspdeny</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspideny"></a><a class="anchor" name="4-rspideny"></a><a class="anchor" name="4.2-rspideny"></a><a class="anchor" name="rspideny (Proxies)"></a><a class="anchor" name="rspideny (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspideny"></a><a href="#4.2-rspideny">rspideny</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Block an HTTP response if a line matches a regular expression
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10518,7 +10667,7 @@ Rspdeny should be avoided in new designs.
 <code><span class="comment"># Ensure that no content type matching ms-word will leak</span>
 rspideny  ^Content-type:\.*/ms-word
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rsprep"></a><a class="anchor" name="4-rsprep"></a><a class="anchor" name="4.2-rsprep"></a><a class="anchor" name="rsprep (Proxies)"></a><a class="anchor" name="rsprep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rsprep"></a><a href="#4.2-rsprep">rsprep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><a class="anchor" name="rspirep"></a><a class="anchor" name="4-rspirep"></a><a class="anchor" name="4.2-rspirep"></a><a class="anchor" name="rspirep (Proxies)"></a><a class="anchor" name="rspirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspirep"></a><a href="#4.2-rspirep">rspirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span>  (ignore case)</div><pre class="text">Replace a regular expression with a string in an HTTP response line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10557,7 +10706,7 @@ are not case-sensitive.
 <code><span class="comment"># replace &quot;Location: 127.0.0.1:8080&quot; with &quot;Location: www.mydomain.com&quot;</span>
 rspirep ^Location:\ 127.0.0.1:8080    Location:\ www.mydomain.com
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<a href="#http-response">http-response</a>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#rspadd">rspadd</a>&quot;, &quot;<a href="#rspdel">rspdel</a>&quot;, &quot;<a href="#reqrep">reqrep</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="server"></a><a class="anchor" name="4-server"></a><a class="anchor" name="4.2-server"></a><a class="anchor" name="server (Proxies)"></a><a class="anchor" name="server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server"></a><a href="#4.2-server">server</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;address&gt;</span><span style="color: #008">[:<span style="color: #008">[port]</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Declare a server in a backend
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -11034,7 +11183,7 @@ backend private_monitoring
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
-<pre class="text">As &quot;<a href="#http-request">http-request</a>&quot;, these set of options allow to fine control access to
+<pre class="text">As &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, these set of options allow to fine control access to
 statistics. Each option may be followed by if/unless and acl.
 First option with matched condition (or option without condition) is final.
 For &quot;deny&quot; a 403 error will be returned, for &quot;allow&quot; normal processing is
@@ -11043,7 +11192,7 @@ should be asked to enter a username and password.
 
 There is no fixed limit to the number of http-request statements per
 instance.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#http-request">http-request</a>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#3.4">section 3.4</a> about userlists and <a href="#7">section 7</a> about ACL usage.</div>
 <a class="anchor" name="stats"></a><a class="anchor" name="4-stats"></a><a class="anchor" name="4.2-stats"></a><a class="anchor" name="stats (Proxies)"></a><a class="anchor" name="stats (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stats realm"></a><a class="anchor" name="4-stats realm"></a><a class="anchor" name="4.2-stats realm"></a><a class="anchor" name="stats realm (Proxies)"></a><a class="anchor" name="stats realm (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stats realm"></a><a href="#4.2-stats%20realm">stats realm</a></b> <span style="color: #080">&lt;realm&gt;</span></div><pre class="text">Enable statistics and set authentication realm
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -12391,7 +12540,7 @@ backend http_dynamic
     tcp-request content reject if click_too_fast mark_as_abuser
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;, &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot;, &quot;<a href="#tcp-request%20inspect-delay">tcp-request inspect-delay</a>&quot;, and &quot;<a href="#http-request">http-request</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;, &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot;, &quot;<a href="#tcp-request%20inspect-delay">tcp-request inspect-delay</a>&quot;, and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;.</div>
 <a class="anchor" name="tcp-request"></a><a class="anchor" name="4-tcp-request"></a><a class="anchor" name="4.2-tcp-request"></a><a class="anchor" name="tcp-request (Proxies)"></a><a class="anchor" name="tcp-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-request inspect-delay"></a><a class="anchor" name="4-tcp-request inspect-delay"></a><a class="anchor" name="4.2-tcp-request inspect-delay"></a><a class="anchor" name="tcp-request inspect-delay (Proxies)"></a><a class="anchor" name="tcp-request inspect-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-request inspect-delay"></a><a href="#4.2-tcp-request%20inspect-delay">tcp-request inspect-delay</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for data during content inspection
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -12723,6 +12872,8 @@ is not recommended. Such a usage is accepted and works but reports a warning
 during startup because it may results in accumulation of expired sessions in
 the system if the system's timeouts are not configured either.
 
+This also applies to HTTP/2 connections, which will be closed with GOAWAY.
+
 This parameter replaces the old, deprecated &quot;<a href="#clitimeout">clitimeout</a>&quot;. It is recommended
 to use it to write new configurations. The form &quot;<a href="#timeout%20clitimeout">timeout clitimeout</a>&quot; is
 provided only by backwards compatibility but its use is strongly discouraged.
@@ -12744,7 +12895,9 @@ in one direction. This is particularly useful to avoid keeping connections in
 FIN_WAIT state for too long when clients do not disconnect cleanly. This
 problem is particularly common long connections such as RDP or WebSocket.
 Note that this timeout can override &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot; when a connection shuts
-down in one direction.
+down in one direction. It is applied to idle HTTP/2 connections once a GOAWAY
+frame was sent, often indicating an expectation that the connection quickly
+ends.
 
 This parameter is specific to frontends, but can be specified once for all in
 &quot;defaults&quot; sections. By default it is not set, so half-closed connections
@@ -12796,13 +12949,13 @@ once the request has started to present itself.
 
 The &quot;<a href="#option%20http-keep-alive">http-keep-alive</a>&quot; timeout covers these needs. It will define how long to
 wait for a new HTTP request to start coming after a response was sent. Once
-the first byte of request has been seen, the &quot;<a href="#http-request">http-request</a>&quot; timeout is used
+the first byte of request has been seen, the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; timeout is used
 to wait for the complete request to come. Note that empty lines prior to a
 new request do not refresh the timeout and are not counted as a new request.
 
 There is also another difference between the two timeouts : when a connection
 expires during timeout http-keep-alive, no error is returned, the connection
-just closes. If the connection expires in &quot;<a href="#http-request">http-request</a>&quot; while waiting for a
+just closes. If the connection expires in &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; while waiting for a
 connection to complete, a HTTP 408 error is returned.
 
 In general it is optimal to set this value to a few tens to hundreds of
@@ -12812,10 +12965,14 @@ without waiting for further clicks. Also, if set to a very small value (eg:
 non-pipelined ones. It may be a nice trade-off for very large sites running
 with tens to hundreds of thousands of clients.
 
-If this parameter is not set, the &quot;<a href="#http-request">http-request</a>&quot; timeout applies, and if both
+If this parameter is not set, the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%281%20Cache%20section%29">1 Cache section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; timeout applies, and if both
 are not set, &quot;<a href="#timeout%20client">timeout client</a>&quot; still applies at the lower level. It should be
 set in the frontend to take effect, unless the frontend is in TCP mode, in
 which case the HTTP backend's timeout will be used.
+
+When using HTTP/2 &quot;<a href="#timeout%20client">timeout client</a>&quot; is applied instead. This is so we can keep
+using short keep-alive timeouts in HTTP/1.1 while using longer ones in HTTP/2
+(where we only have one connection per client and a connection setup).
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout http-request"></a><a class="anchor" name="4-timeout http-request"></a><a class="anchor" name="4.2-timeout http-request"></a><a class="anchor" name="timeout http-request (Proxies)"></a><a class="anchor" name="timeout http-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout http-request"></a><a href="#4.2-timeout%20http-request">timeout http-request</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for a complete HTTP request
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -13248,7 +13405,15 @@ list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
 quotes). This requires that the SSL library is build with support for TLS
 extensions enabled (check with haproxy -vv). The ALPN extension replaces the
-initial NPN extension.
+initial NPN extension. ALPN is required to enable HTTP/2 on an HTTP frontend.
+Versions of OpenSSL prior to 1.0.2 didn't support ALPN and only supposed the
+now obsolete NPN extension. At the time of writing this, most browsers still
+support both ALPN and NPN for HTTP/2 so a fallback to NPN may still work for
+a while. But ALPN must be used whenever possible. If both HTTP/2 and HTTP/1.1
+are expected to be supported, both versions can be advertised, in order of
+preference, like below :
+
+     bind :443 ssl crt pub.pem alpn h2,http/1.1
 </pre><a class="anchor" name="backlog"></a><a class="anchor" name="5-backlog"></a><a class="anchor" name="5.1-backlog"></a><a class="anchor" name="backlog (Bind and Server options)"></a><a class="anchor" name="backlog (Bind options)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#5.1-backlog">backlog</a></b> <span style="color: #080">&lt;backlog&gt;</span></div><pre class="text">Sets the socket's backlog to this value. If unspecified, the frontend's
 backlog is used instead, which generally defaults to the maxconn value.
 </pre><a class="anchor" name="curves"></a><a class="anchor" name="5-curves"></a><a class="anchor" name="5.1-curves"></a><a class="anchor" name="curves (Bind and Server options)"></a><a class="anchor" name="curves (Bind options)"></a><div class="keyword"><b><a class="anchor" name="curves"></a><a href="#5.1-curves">curves</a></b> <span style="color: #080">&lt;curves&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
@@ -13601,24 +13766,36 @@ as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
 This requires that the SSL library is build with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
-replaced with the ALPN extension (see the &quot;<a href="#alpn">alpn</a>&quot; keyword).
+replaced with the ALPN extension (see the &quot;<a href="#alpn">alpn</a>&quot; keyword), though this one is
+only available starting with OpenSSL 1.0.2. If HTTP/2 is desired on an older
+version of OpenSSL, NPN might still be used as most clients still support it
+at the time of writing this. It is possible to enable both NPN and ALPN
+though it probably doesn't make any sense out of testing.
 </pre><a class="anchor" name="prefer-client-ciphers"></a><a class="anchor" name="5-prefer-client-ciphers"></a><a class="anchor" name="5.1-prefer-client-ciphers"></a><a class="anchor" name="prefer-client-ciphers (Bind and Server options)"></a><a class="anchor" name="prefer-client-ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="prefer-client-ciphers"></a><a href="#5.1-prefer-client-ciphers">prefer-client-ciphers</a></b></div><pre class="text">Use the client's preference when selecting the cipher suite, by default
 the server's preference is enforced. This option is also available on
 global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;.
-</pre><a class="anchor" name="process"></a><a class="anchor" name="5-process"></a><a class="anchor" name="5.1-process"></a><a class="anchor" name="process (Bind and Server options)"></a><a class="anchor" name="process (Bind options)"></a><div class="keyword"><b><a class="anchor" name="process"></a><a href="#5.1-process">process</a></b> <span style="color: #008">[ all | odd | even | <span style="color: #080">&lt;number 1-64&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;number 1-64&gt;</span>]</span> ]</span></div><pre class="text">This restricts the list of processes on which this listener is allowed to
-run. It does not enforce any process but eliminates those which do not match.
-If the frontend uses a &quot;<a href="#bind-process">bind-process</a>&quot; setting, the intersection between the
-two is applied. If in the end the listener is not allowed to run on any
-remaining process, a warning is emitted, and the listener will either run on
-the first process of the listener if a single process was specified, or on
-all of its processes if multiple processes were specified. For the unlikely
-case where several ranges are needed, this directive may be repeated. The
-main purpose of this directive is to be used with the stats sockets and have
-one different socket per process. The second purpose is to have multiple bind
-lines sharing the same IP:port but not the same process in a listener, so
-that the system can distribute the incoming connections into multiple queues
-and allow a smoother inter-process load balancing. Currently Linux 3.9 and
-above is known for supporting this. See also &quot;<a href="#bind-process">bind-process</a>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;.
+</pre><a class="anchor" name="process"></a><a class="anchor" name="5-process"></a><a class="anchor" name="5.1-process"></a><a class="anchor" name="process (Bind and Server options)"></a><a class="anchor" name="process (Bind options)"></a><div class="keyword"><b><a class="anchor" name="process"></a><a href="#5.1-process">process</a></b> <span style="color: #080">&lt;process-set&gt;</span><span style="color: #008">[/<span style="color: #080">&lt;thread-set&gt;</span>]</span></div><pre class="text">This restricts the list of processes and/or threads on which this listener is
+allowed to run. It does not enforce any process but eliminates those which do
+not match.  If the frontend uses a &quot;<a href="#bind-process">bind-process</a>&quot; setting, the intersection
+between the two is applied. If in the end the listener is not allowed to run
+on any remaining process, a warning is emitted, and the listener will either
+run on the first process of the listener if a single process was specified,
+or on all of its processes if multiple processes were specified. If a thread
+set is specified, it limits the threads allowed to process inoming
+connections for this listener, for the corresponding process set. For the
+unlikely case where several ranges are needed, this directive may be
+repeated. &lt;process-set&gt; and &lt;thread-set&gt; must use the format
+
+    all | odd | even | number[-[number]]
+
+Ranges can be partially defined. The higher bound can be omitted. In such
+case, it is replaced by the corresponding maximum value. The main purpose of
+this directive is to be used with the stats sockets and have one different
+socket per process. The second purpose is to have multiple bind lines sharing
+the same IP:port but not the same process in a listener, so that the system
+can distribute the incoming connections into multiple queues and allow a
+smoother inter-process load balancing. Currently Linux 3.9 and above is known
+for supporting this. See also &quot;<a href="#bind-process">bind-process</a>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="ssl"></a><a class="anchor" name="5-ssl"></a><a class="anchor" name="5.1-ssl"></a><a class="anchor" name="ssl (Bind and Server options)"></a><a class="anchor" name="ssl (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl"></a><a href="#5.1-ssl">ssl</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 enables SSL deciphering on connections instantiated from this listener. A
 certificate is necessary (see &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; above). All contents in the buffers will
@@ -15940,6 +16117,9 @@ stick-table or in the designated stick-table. See also table_cnt.
 </pre><a class="anchor" name="table_cnt"></a><a class="anchor" name="7-table_cnt"></a><a class="anchor" name="7.3.2-table_cnt"></a><a class="anchor" name="table_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="table_cnt (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="table_cnt"></a><a href="#7.3.2-table_cnt">table_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;table&gt;</span>]</span>) : integer</div><pre class="text">Returns the total number of entries currently in use in the current proxy's
 stick-table or in the designated stick-table. See also src_conn_cnt and
 table_avl for other entry counting methods.
+</pre><a class="anchor" name="thread"></a><a class="anchor" name="7-thread"></a><a class="anchor" name="7.3.2-thread"></a><a class="anchor" name="thread (Using ACLs and fetching samples)"></a><a class="anchor" name="thread (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="thread"></a><a href="#7.3.2-thread">thread</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the position of the thread calling
+the function, between 0 and (global.nbthread-1). This is useful for logging
+and debugging purposes.
 </pre><a class="anchor" name="var"></a><a class="anchor" name="7-var"></a><a class="anchor" name="7.3.2-var"></a><a class="anchor" name="var (Using ACLs and fetching samples)"></a><a class="anchor" name="var (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="var"></a><a href="#7.3.2-var">var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) : undefined</div><pre class="text">Returns a variable with the stored type. If the variable is not set, the
 sample fetch fails. The name of the variable starts with an indication
 about its scope. The scopes allowed are:
@@ -18752,14 +18932,96 @@ For all information about the SPOE configuration and the SPOP specification, see
 Important note:
     The SPOE filter is highly experimental for now and was not heavily
     tested. It is really not production ready. So use it carefully.
-</pre>
+</pre></div>
+<a class="anchor" id="10" name="10"></a>
+<div class="page-header"><h1 id="chapter-10" data-target="10"><small><a class="small" href="#10">10.</a></small> Cache</h1>
+</div><div><pre class="text">HAProxy provides a cache, which was designed to perform cache on small objects
+(favicon, css...). This is a minimalist low-maintenance cache which runs in
+RAM.
+
+The cache is based on a memory which is shared between processes and threads,
+this memory is splitted in blocks of 1k.
+
+If an object is not used anymore, it can be deleted to store a new object
+independently of its expiration date. The oldest objects are deleted first
+when we try to allocate a new one.
+
+The cache use a hash of the host header and the URI as the key.
+
+It's possible to view the status of a cache using the Unix socket command
+&quot;show cache&quot; consult <a href="#9.3">section 9.3</a> &quot;Unix Socket commands&quot; of Management Guide
+for more details.
+
+When an object is delivered from the cache, the server name in the log is
+replaced by &quot;&lt;CACHE&gt;&quot;.
+</pre></div>
+<a class="anchor" id="10" name="10"></a>
+<div class="page-header"><h1 id="chapter-10" data-target="10"><small><a class="small" href="#10">10.</a></small> 1 Limitation</h1>
+</div><div><pre class="text">The cache won't store and won't deliver objects in these cases:
+
+- If the response is not a 200
+- If the response contains a Vary header
+- If the response does not contain a Content-Length header or if the
+  Content-Length + the headers size is greater than a buffer size - the
+  reserve.
+- If the response is not cacheable
+
+- If the request is not a GET
+- If the HTTP version of the request is smaller than 1.1
+
+Caution!: Due to the current limitation of the filters, it is not recommended
+to use the cache with other filters. Using them can cause undefined behavior
+if they modify the response (compression for exemple).
+</pre></div>
+<a class="anchor" id="10" name="10"></a>
+<div class="page-header"><h1 id="chapter-10" data-target="10"><small><a class="small" href="#10">10.</a></small> 2 Setup</h1>
+</div><div><pre class="text">To setup a cache, you must define a cache section and use it in a proxy with
+the corresponding http-request and response actions.
+</pre></div>
+<a class="anchor" id="10.2" name="10.2"></a>
+<h2 id="chapter-10.2" data-target="10.2"><small><a class="small" href="#10.2">10.2.</a></small> 1 Cache section</h2>
+<div><a class="anchor" name="cache"></a><a class="anchor" name="10-cache"></a><a class="anchor" name="10.2-cache"></a><a class="anchor" name="cache (Cache)"></a><a class="anchor" name="cache (1 Cache section)"></a><div class="keyword"><b><a class="anchor" name="cache"></a><a href="#10.2-cache">cache</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Declare a cache section, allocate a shared cache memory named &lt;name&gt;, the
+size of cache is mandatory.
+</pre><a class="anchor" name="total-max-size"></a><a class="anchor" name="10-total-max-size"></a><a class="anchor" name="10.2-total-max-size"></a><a class="anchor" name="total-max-size (Cache)"></a><a class="anchor" name="total-max-size (1 Cache section)"></a><div class="keyword"><b><a class="anchor" name="total-max-size"></a><a href="#10.2-total-max-size">total-max-size</a></b> <span style="color: #080">&lt;megabytes&gt;</span></div><pre class="text">Define the size in RAM of the cache in megabytes. this size is splitted in
+blocks of 1kb which are used by the cache entries.
+</pre><a class="anchor" name="max-age"></a><a class="anchor" name="10-max-age"></a><a class="anchor" name="10.2-max-age"></a><a class="anchor" name="max-age (Cache)"></a><a class="anchor" name="max-age (1 Cache section)"></a><div class="keyword"><b><a class="anchor" name="max-age"></a><a href="#10.2-max-age">max-age</a></b> <span style="color: #080">&lt;seconds&gt;</span></div><pre class="text">Define the maximum expiration duration. The expiration is set has the lowest
+value between the s-maxage or max-age (in this order) directive in the
+Cache-Control response header and this value. The default value is 60
+seconds, which means that you can't cache an object more than 60 seconds by
+default.
+</pre></div>
+<a class="anchor" id="10.2" name="10.2"></a>
+<h2 id="chapter-10.2" data-target="10.2"><small><a class="small" href="#10.2">10.2.</a></small> 2 Proxy section</h2>
+<div><a class="anchor" name="http-request"></a><a class="anchor" name="10-http-request"></a><a class="anchor" name="10.2-http-request"></a><a class="anchor" name="http-request (Cache)"></a><a class="anchor" name="http-request (1 Cache section)"></a><a class="anchor" name="http-request cache-use"></a><a class="anchor" name="10-http-request cache-use"></a><a class="anchor" name="10.2-http-request cache-use"></a><a class="anchor" name="http-request cache-use (Cache)"></a><a class="anchor" name="http-request cache-use (1 Cache section)"></a><div class="keyword"><b><a class="anchor" name="http-request cache-use"></a><a href="#10.2-http-request%20cache-use">http-request cache-use</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Try to deliver a cached object from the cache &lt;name&gt;. This directive is also
+mandatory to store the cache as it calculates the cache hash. If you want to
+use a condition for both storage and delivering that's a good idea to put it
+after this one.
+</pre><a class="anchor" name="http-response"></a><a class="anchor" name="10-http-response"></a><a class="anchor" name="10.2-http-response"></a><a class="anchor" name="http-response (Cache)"></a><a class="anchor" name="http-response (1 Cache section)"></a><a class="anchor" name="http-response cache-store"></a><a class="anchor" name="10-http-response cache-store"></a><a class="anchor" name="10.2-http-response cache-store"></a><a class="anchor" name="http-response cache-store (Cache)"></a><a class="anchor" name="http-response cache-store (1 Cache section)"></a><div class="keyword"><b><a class="anchor" name="http-response cache-store"></a><a href="#10.2-http-response%20cache-store">http-response cache-store</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Store an http-response within the cache. The storage of the response headers
+is done at this step, which means you can use others http-response actions
+to modify headers before or after the storage of the response. This action
+is responsible for the setup of the cache storage filter.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>backend bck1
+  mode http
+
+  http-request cache-use foobar
+  http-response cache-store foobar
+  server srv1 127.0.0.1:80
+
+cache foobar
+  total-max-size 4
+  max-age 240
+</code></pre>
+</div>
 </div>
 
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-rc4 &ndash; Configuration Manual<br>
-							<small>2017/11/19, willy tarreau</small>
+							HAProxy 1.8.0 &ndash; Configuration Manual<br>
+							<small>2017/11/26, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -18862,7 +19124,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-rc4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-61', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

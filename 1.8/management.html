@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8-rc4 - Management Guide</title>
+		<title>HAProxy version 1.8.0 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-61" rel="stylesheet" />
@@ -366,6 +366,8 @@
 							
 							<a class="list-group-item" href="#show backend">show backend</a>
 							
+							<a class="list-group-item" href="#show cache">show cache</a>
+							
 							<a class="list-group-item" href="#show cli">show cli</a>
 							
 							<a class="list-group-item" href="#show cli sockets">show cli sockets</a>
@@ -425,7 +427,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2017/11/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2017/11/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -436,7 +438,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.8-rc4</strong></p>
+							<p><strong>version 1.8.0</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								<br>
@@ -760,7 +762,7 @@ list of options is :
     difficult to troubleshoot.
 
   -dM[&lt;byte&gt;] : forces memory poisoning, which means that each and every
-    memory region allocated with malloc() or pool_alloc2() will be filled with
+    memory region allocated with malloc() or pool_alloc() will be filled with
     &lt;byte&gt; before being passed to the caller. When &lt;byte&gt; is not specified, it
     defaults to 0x50 ('P'). While this slightly slows down operations, it is
     useful to reliably trigger issues resulting from missing initializations in
@@ -2204,7 +2206,27 @@ separated by commas, it can be numbers or 'all'.
 127.0.0.2:9969 user 2
 [::1]:9999 operator 2
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show env"></a><a class="anchor" name="9-show env"></a><a class="anchor" name="9.3-show env"></a><a class="anchor" name="show env (Statistics and monitoring)"></a><a class="anchor" name="show env (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show env"></a><a href="#9.3-show%20env">show env</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Dump one or all environment variables known by the process. Without any
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cache"></a><a class="anchor" name="9-show cache"></a><a class="anchor" name="9.3-show cache"></a><a class="anchor" name="show cache (Statistics and monitoring)"></a><a class="anchor" name="show cache (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cache"></a><a href="#9.3-show%20cache">show cache</a></b></div><pre class="text">List the configurated caches and the objects stored in each cache tree.
+
+$ echo 'show cache' | socat stdio /tmp/sock1
+0x7f6ac6c5b03a: foobar (shctx:0x7f6ac6c5b000, available blocks:3918)
+       1          2             3                             4
+
+1. pointer to the cache structure
+2. cache name
+3. pointer to the mmap area (shctx)
+4. number of blocks available for reuse in the shctx
+
+0x7f6ac6c5b4cc hash:286881868 size:39114 (39 blocks), refcount:9, expire:237
+         1               2            3        4            5           6
+
+1. pointer to the cache entry
+2. first 32 bits of the hash
+3. size of the object in bytes
+4. number of blocks used for the object
+5. number of transactions using the entry
+6. expiration time, can be negative if already expired
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show env"></a><a class="anchor" name="9-show env"></a><a class="anchor" name="9.3-show env"></a><a class="anchor" name="show env (Statistics and monitoring)"></a><a class="anchor" name="show env (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show env"></a><a href="#9.3-show%20env">show env</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Dump one or all environment variables known by the process. Without any
 argument, all variables are dumped. With an argument, only the specified
 variable is dumped if it exists. Otherwise &quot;Variable not found&quot; is emitted.
 Variables are dumped in the same format as they are stored or returned by the
@@ -3122,7 +3144,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8-rc4 &ndash; Management Guide<br>
+							HAProxy 1.8.0 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3226,7 +3248,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8-rc4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-61', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
