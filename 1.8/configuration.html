@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.3 - Configuration Manual</title>
+		<title>HAProxy version 1.8.4 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-61" rel="stylesheet" />
@@ -2794,7 +2794,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2018/01/16</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2018/02/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2805,11 +2805,11 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.3</strong></p>
+							<p><strong>version 1.8.4</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								willy tarreau<br>
-								2017/12/30
+								2018/02/08
 							</p>
 						</div>
 
@@ -13739,7 +13739,12 @@ currently only supported on Linux. The interface must be a primary system
 interface, not an aliased interface. It is also possible to bind multiple
 frontends to the same address if they are bound to different interfaces. Note
 that binding to a network interface requires root privileges. This parameter
-is only compatible with TCPv4/TCPv6 sockets.
+is only compatible with TCPv4/TCPv6 sockets. When specified, return traffic
+uses the same interface as inbound traffic, and its associated routing table,
+even if there are explicit routes through different interfaces configured.
+This can prove useful to address asymmetric routing issues when the same
+client IP addresses need to be able to reach frontends hosted on different
+interfaces.
 </pre><a class="anchor" name="level"></a><a class="anchor" name="5-level"></a><a class="anchor" name="5.1-level"></a><a class="anchor" name="level (Bind and server options)"></a><a class="anchor" name="level (Bind options)"></a><div class="keyword"><b><a class="anchor" name="level"></a><a href="#5.1-level">level</a></b> <span style="color: #080">&lt;level&gt;</span></div><pre class="text">This setting is used with the stats sockets only to restrict the nature of
 the commands that can be issued on the socket. It is ignored by other
 sockets. &lt;level&gt; can be one of :
@@ -16752,7 +16757,8 @@ true when the incoming connection presents a TLS SNI field. This requires
 that the SSL library is build with support for TLS extensions enabled (check
 haproxy -vv).
 </pre><a class="anchor" name="ssl_fc_is_resumed"></a><a class="anchor" name="7-ssl_fc_is_resumed"></a><a class="anchor" name="7.3.4-ssl_fc_is_resumed"></a><a class="anchor" name="ssl_fc_is_resumed (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_is_resumed (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_is_resumed"></a><a href="#7.3.4-ssl_fc_is_resumed">ssl_fc_is_resumed</a></b> : boolean</div><pre class="text">Returns true if the SSL/TLS session has been resumed through the use of
-SSL session cache or TLS tickets.
+SSL session cache or TLS tickets on an incoming connection over an SSL/TLS
+transport layer.
 </pre><a class="anchor" name="ssl_fc_npn"></a><a class="anchor" name="7-ssl_fc_npn"></a><a class="anchor" name="7.3.4-ssl_fc_npn"></a><a class="anchor" name="ssl_fc_npn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_npn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_npn"></a><a href="#7.3.4-ssl_fc_npn">ssl_fc_npn</a></b> : string</div><pre class="text">This extracts the Next Protocol Negotiation field from an incoming connection
 made via a TLS transport layer and locally deciphered by haproxy. The result
 is a string containing the protocol name advertised by the client. The SSL
@@ -19096,8 +19102,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.3 &ndash; Configuration Manual<br>
-							<small>2017/12/30, willy tarreau</small>
+							HAProxy 1.8.4 &ndash; Configuration Manual<br>
+							<small>2018/02/08, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19200,7 +19206,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.4', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-61', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
