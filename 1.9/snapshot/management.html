@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev0-137 - Management Guide</title>
+		<title>HAProxy version 1.9-dev0-225 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-61" rel="stylesheet" />
@@ -364,6 +364,8 @@
 							
 							<a class="list-group-item" href="#show acl">show acl</a>
 							
+							<a class="list-group-item" href="#show activity">show activity</a>
+							
 							<a class="list-group-item" href="#show backend">show backend</a>
 							
 							<a class="list-group-item" href="#show cache">show cache</a>
@@ -427,7 +429,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2018/01/16</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2018/02/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -438,7 +440,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.9-dev0-137</strong></p>
+							<p><strong>version 1.9-dev0-225</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								<br>
@@ -745,6 +747,10 @@ list of options is :
     directly by sending a SIGUSR2 signal to the master.  The master-worker mode
     is compatible either with the foreground or daemon mode.  It is
     recommended to use this mode with multiprocess and systemd.
+
+  -Ws : master-worker mode with support of `notify` type of systemd service.
+    This option is only available when HAProxy was built with `USE_SYSTEMD`
+    build option enabled.
 
   -c : only performs a check of the configuration files and exits before trying
     to bind. The exit status is zero if everything is OK, or non-zero if an
@@ -1866,7 +1872,8 @@ mainly used to fill a map after a clear operation. Note that if the reference
 &lt;map&gt; is a file and is shared with a map, this map will contain also a new
 pattern entry.
 </pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.3-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters"></a><a href="#9.3-clear%20counters">clear counters</a></b></div><pre class="text">Clear the max values of the statistics counters in each proxy (frontend &amp;
-backend) and in each server. The accumulated counters are not affected. This
+backend) and in each server. The accumulated counters are not affected. The
+internal activity counters reported by &quot;<a href="#show%20activity">show activity</a>&quot; are also reset. This
 can be used to get clean counters after an incident, without having to
 restart nor to clear traffic counters. This command is restricted and can
 only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.
@@ -2307,6 +2314,16 @@ listener's state and its frontend are reported. There is no point in using
 this command without a good knowledge of the internals. It's worth noting
 that the output format may evolve over time so this output must not be parsed
 by tools designed to be durable.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show activity"></a><a class="anchor" name="9-show activity"></a><a class="anchor" name="9.3-show activity"></a><a class="anchor" name="show activity (Statistics and monitoring)"></a><a class="anchor" name="show activity (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show activity"></a><a href="#9.3-show%20activity">show activity</a></b></div><pre class="text">Reports some counters about internal events that will help developers and
+more generally people who know haproxy well enough to narrow down the causes
+of reports of abnormal behaviours. A typical example would be a properly
+running process never sleeping and eating 100% of the CPU. The output fields
+will be made of one line per metric, and per-thread counters on the same
+line. These counters are 32-bit and will wrap during the process' life, which
+is not a problem since calls to this command will typically be performed
+twice. The fields are purposely not documented so that their exact meaning is
+verified in the code where the counters are fed. These values are also reset
+by the &quot;<a href="#clear%20counters">clear counters</a>&quot; command.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
 optional argument, field numbers, names and types are emitted as well so that
 external monitoring products can easily retrieve, possibly aggregate, then
@@ -3144,7 +3161,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev0-137 &ndash; Management Guide<br>
+							HAProxy 1.9-dev0-225 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3248,7 +3265,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-137', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-225', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-61', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
