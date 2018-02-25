@@ -5,7 +5,7 @@
 		<title>HAProxy version 1.9-dev0-245 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../../css/page.css?0.3.1-61" rel="stylesheet" />
+		<link href="../../css/page.css?0.3.1-62" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -1409,6 +1409,10 @@
 							<a class="list-group-item" href="#inter">inter</a>
 							
 							<a class="list-group-item" href="#interface">interface</a>
+							
+							<a class="list-group-item" href="#ipv4">ipv4</a>
+							
+							<a class="list-group-item" href="#ipv6">ipv6</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-J"><h4>J</h4>
@@ -2846,7 +2850,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2018/02/25</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/02/25</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -14499,7 +14503,7 @@ if unspecified. See also the &quot;<a href="#check">check</a>&quot;, &quot;<a hr
 </pre><a class="anchor" name="resolve-prefer"></a><a class="anchor" name="5-resolve-prefer"></a><a class="anchor" name="5.2-resolve-prefer"></a><a class="anchor" name="resolve-prefer (Bind and server options)"></a><a class="anchor" name="resolve-prefer (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-prefer"></a><a href="#5.2-resolve-prefer">resolve-prefer</a></b> <span style="color: #080">&lt;family&gt;</span></div><pre class="text">When DNS resolution is enabled for a server and multiple IP addresses from
 different families are returned, HAProxy will prefer using an IP address
 from the family mentioned in the &quot;<a href="#resolve-prefer">resolve-prefer</a>&quot; parameter.
-Available families: &quot;ipv4&quot; and &quot;ipv6&quot;
+Available families: &quot;<a href="#ipv4">ipv4</a>&quot; and &quot;<a href="#ipv6">ipv6</a>&quot;
 
 Default value: ipv6
 </pre><div class="separator">
@@ -16246,13 +16250,9 @@ frontend mail
     tcp-request content accept if WAIT_END
 </code></pre>
 </div><a class="anchor" name="hostname"></a><a class="anchor" name="7-hostname"></a><a class="anchor" name="7.3.2-hostname"></a><a class="anchor" name="hostname (Using ACLs and fetching samples)"></a><a class="anchor" name="hostname (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="hostname"></a><a href="#7.3.2-hostname">hostname</a></b> : string</div><pre class="text">Returns the system hostname.
-</pre><a class="anchor" name="int"></a><a class="anchor" name="7-int"></a><a class="anchor" name="7.3.2-int"></a><a class="anchor" name="int (Using ACLs and fetching samples)"></a><a class="anchor" name="int (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="int"></a><a href="#7.3.2-int">int</a></b>(<span style="color: #080">&lt;integer&gt;</span>) : signed integer</div><pre class="text">  Returns a signed integer.
-
-ipv4(&lt;ipv4&gt;) : ipv4
-  Returns an ipv4.
-
-ipv6(&lt;ipv6&gt;) : ipv6
-  Returns an ipv6.
+</pre><a class="anchor" name="int"></a><a class="anchor" name="7-int"></a><a class="anchor" name="7.3.2-int"></a><a class="anchor" name="int (Using ACLs and fetching samples)"></a><a class="anchor" name="int (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="int"></a><a href="#7.3.2-int">int</a></b>(<span style="color: #080">&lt;integer&gt;</span>) : signed integer</div><pre class="text">Returns a signed integer.
+</pre><a class="anchor" name="ipv4"></a><a class="anchor" name="7-ipv4"></a><a class="anchor" name="7.3.2-ipv4"></a><a class="anchor" name="ipv4 (Using ACLs and fetching samples)"></a><a class="anchor" name="ipv4 (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="ipv4"></a><a href="#7.3.2-ipv4">ipv4</a></b>(<span style="color: #080">&lt;ipv4&gt;</span>) : ipv4</div><pre class="text">Returns an ipv4.
+</pre><a class="anchor" name="ipv6"></a><a class="anchor" name="7-ipv6"></a><a class="anchor" name="7.3.2-ipv6"></a><a class="anchor" name="ipv6 (Using ACLs and fetching samples)"></a><a class="anchor" name="ipv6 (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="ipv6"></a><a href="#7.3.2-ipv6">ipv6</a></b>(<span style="color: #080">&lt;ipv6&gt;</span>) : ipv6</div><pre class="text">Returns an ipv6.
 </pre><a class="anchor" name="meth"></a><a class="anchor" name="7-meth"></a><a class="anchor" name="7.3.2-meth"></a><a class="anchor" name="meth (Using ACLs and fetching samples)"></a><a class="anchor" name="meth (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="meth"></a><a href="#7.3.2-meth">meth</a></b>(<span style="color: #080">&lt;method&gt;</span>) : method</div><pre class="text">Returns a method.
 </pre><a class="anchor" name="nbproc"></a><a class="anchor" name="7-nbproc"></a><a class="anchor" name="7.3.2-nbproc"></a><a class="anchor" name="nbproc (Using ACLs and fetching samples)"></a><a class="anchor" name="nbproc (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#7.3.2-nbproc">nbproc</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the number of processes that were
 started (it equals the global &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; setting). This is useful for logging
@@ -19376,7 +19376,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
 piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-245', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-61', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-62', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
