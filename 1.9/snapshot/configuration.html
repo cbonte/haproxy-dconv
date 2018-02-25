@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev0-225 - Configuration Manual</title>
+		<title>HAProxy version 1.9-dev0-245 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-61" rel="stylesheet" />
@@ -1095,6 +1095,8 @@
 							<a class="list-group-item" href="#compression offload">compression offload</a>
 							
 							<a class="list-group-item" href="#compression type">compression type</a>
+							
+							<a class="list-group-item" href="#concat">concat</a>
 							
 							<a class="list-group-item" href="#connslots">connslots</a>
 							
@@ -2367,6 +2369,8 @@
 							
 							<a class="list-group-item" href="#ssl_bc_cipher">ssl_bc_cipher</a>
 							
+							<a class="list-group-item" href="#ssl_bc_is_resumed">ssl_bc_is_resumed</a>
+							
 							<a class="list-group-item" href="#ssl_bc_protocol">ssl_bc_protocol</a>
 							
 							<a class="list-group-item" href="#ssl_bc_session_id">ssl_bc_session_id</a>
@@ -2842,7 +2846,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2018/02/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-61</b> on <b>2018/02/25</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2853,7 +2857,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9-dev0-225</strong></p>
+							<p><strong>version 1.9-dev0-245</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -9306,7 +9310,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httplog"></a><a class="anchor" name="4-option httplog"></a><a class="anchor" name="4.2-option httplog"></a><a class="anchor" name="option httplog (Proxies)"></a><a class="anchor" name="option httplog (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httplog"></a><a href="#4.2-option%20httplog">option httplog</a></b> <span style="color: #008">[ clf ]</span></div><pre class="text">Enable logging of HTTP request, session state and timers
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td></tr>
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">clf       if the &quot;clf&quot; argument is added, then the output format will be
@@ -9322,8 +9326,6 @@ but not limited to, the HTTP request, the connection timers, the session
 status, the connections numbers, the captured headers and cookies, the
 frontend, backend and server name, and of course the source address and
 ports.
-
-This option may be set either in the frontend or the backend.
 
 Specifying only &quot;<a href="#option%20httplog">option httplog</a>&quot; will automatically clear the 'clf' mode
 if it was set by default.
@@ -10126,7 +10128,7 @@ backends.
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option tcplog"></a><a class="anchor" name="4-option tcplog"></a><a class="anchor" name="4.2-option tcplog"></a><a class="anchor" name="option tcplog (Proxies)"></a><a class="anchor" name="option tcplog (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option tcplog"></a><a href="#4.2-option%20tcplog">option tcplog</a></b></div><pre class="text">Enable advanced logging of TCP connections with session state and timers
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td></tr>
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
@@ -10139,8 +10141,6 @@ numbers, the frontend, backend and server name, and of course the source
 address and ports. This option is useful for pure TCP proxies in order to
 find which of the client or server disconnects or times out. For normal HTTP
 proxies, it's better to use &quot;<a href="#option%20httplog">option httplog</a>&quot; which is even more complete.
-
-This option may be set either in the frontend or the backend.
 
 &quot;<a href="#option%20tcplog">option tcplog</a>&quot; overrides any previous &quot;<a href="#log-format">log-format</a>&quot; directive.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httplog">option httplog</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
@@ -15548,7 +15548,28 @@ presence of a flag).
 </pre><a class="anchor" name="bytes"></a><a class="anchor" name="7-bytes"></a><a class="anchor" name="7.3.1-bytes"></a><a class="anchor" name="bytes (Using ACLs and fetching samples)"></a><a class="anchor" name="bytes (Converters)"></a><div class="keyword"><b><a class="anchor" name="bytes"></a><a href="#7.3.1-bytes">bytes</a></b>(<span style="color: #080">&lt;offset&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;length&gt;</span>]</span>)</div><pre class="text">Extracts some bytes from an input binary sample. The result is a binary
 sample starting at an offset (in bytes) of the original sample and
 optionally truncated at the given length.
-</pre><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type signed integer, applies a ones-complement
+</pre><a class="anchor" name="concat"></a><a class="anchor" name="7-concat"></a><a class="anchor" name="7.3.1-concat"></a><a class="anchor" name="concat (Using ACLs and fetching samples)"></a><a class="anchor" name="concat (Converters)"></a><div class="keyword"><b><a class="anchor" name="concat"></a><a href="#7.3.1-concat">concat</a></b>(<span style="color: #008">[<span style="color: #080">&lt;start&gt;</span>]</span>,<span style="color: #008">[<span style="color: #080">&lt;var&gt;</span>]</span>,<span style="color: #008">[<span style="color: #080">&lt;end&gt;</span>]</span>)</div><pre class="text">Concatenates up to 3 fields after the current sample which is then turned to
+a string. The first one, &lt;start&gt;, is a constant string, that will be appended
+immediately after the existing sample. It may be omitted if not used. The
+second one, &lt;var&gt;, is a variable name. The variable will be looked up, its
+contents converted to a string, and it will be appended immediately after the
+&lt;first&gt; part. If the variable is not found, nothing is appended. It may be
+omitted as well. The third field, &lt;end&gt; is a constant string that will be
+appended after the variable. It may also be omitted. Together, these elements
+allow to concatenate variables with delimiters to an existing set of
+variables. This can be used to build new variables made of a succession of
+other variables, such as colon-delimited varlues. Note that due to the config
+parser, it is not possible to use a comma nor a closing parenthesis as
+delimitors.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request session set-var(sess.src) src
+tcp-request session set-var(sess.dn)  ssl_c_s_dn
+tcp-request session set-var(txn.sig) str(),concat(&lt;ip=,sess.ip,&gt;),concat(&lt;dn=,sess.dn,&gt;)
+http-request set-header x-hap-sig %[var(txn.sig)]
+</code></pre>
+</div><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type signed integer, applies a ones-complement
 (flips all bits) and returns the result as an signed integer.
 </pre><a class="anchor" name="crc32"></a><a class="anchor" name="7-crc32"></a><a class="anchor" name="7.3.1-crc32"></a><a class="anchor" name="crc32 (Using ACLs and fetching samples)"></a><a class="anchor" name="crc32 (Converters)"></a><div class="keyword"><b><a class="anchor" name="crc32"></a><a href="#7.3.1-crc32">crc32</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the CRC32
 hash function. Optionally, it is possible to apply a full avalanche hash
@@ -16733,6 +16754,9 @@ other a server with the &quot;<span class="dropdown"><a class="dropdown-toggle" 
 connection was made over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_bc_cipher"></a><a class="anchor" name="7-ssl_bc_cipher"></a><a class="anchor" name="7.3.4-ssl_bc_cipher"></a><a class="anchor" name="ssl_bc_cipher (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_cipher (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_cipher"></a><a href="#7.3.4-ssl_bc_cipher">ssl_bc_cipher</a></b> : string</div><pre class="text">Returns the name of the used cipher when the outgoing connection was made
 over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_is_resumed"></a><a class="anchor" name="7-ssl_bc_is_resumed"></a><a class="anchor" name="7.3.4-ssl_bc_is_resumed"></a><a class="anchor" name="ssl_bc_is_resumed (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_is_resumed (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_is_resumed"></a><a href="#7.3.4-ssl_bc_is_resumed">ssl_bc_is_resumed</a></b> : boolean</div><pre class="text">Returns true when the back connection was made over an SSL/TLS transport
+layer and the newly created SSL session was resumed using a cached
+session or a TLS ticket.
 </pre><a class="anchor" name="ssl_bc_protocol"></a><a class="anchor" name="7-ssl_bc_protocol"></a><a class="anchor" name="7.3.4-ssl_bc_protocol"></a><a class="anchor" name="ssl_bc_protocol (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_protocol (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_protocol"></a><a href="#7.3.4-ssl_bc_protocol">ssl_bc_protocol</a></b> : string</div><pre class="text">Returns the name of the used protocol when the outgoing connection was made
 over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_bc_unique_id"></a><a class="anchor" name="7-ssl_bc_unique_id"></a><a class="anchor" name="7.3.4-ssl_bc_unique_id"></a><a class="anchor" name="ssl_bc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_unique_id"></a><a href="#7.3.4-ssl_bc_unique_id">ssl_bc_unique_id</a></b> : binary</div><pre class="text">When the outgoing connection was made over an SSL/TLS transport layer,
@@ -19247,7 +19271,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev0-225 &ndash; Configuration Manual<br>
+							HAProxy 1.9-dev0-245 &ndash; Configuration Manual<br>
 							<small>2017/11/26, willy tarreau</small>
 						</div>
 					</div>
@@ -19351,7 +19375,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-225', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-245', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-61', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
