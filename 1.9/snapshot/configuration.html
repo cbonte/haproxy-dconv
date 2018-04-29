@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev0-303 - Configuration Manual</title>
+		<title>HAProxy version 1.9-dev0-371 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-62" rel="stylesheet" />
@@ -1279,6 +1279,8 @@
 							
 							<a class="list-group-item" href="#fe_conn">fe_conn</a>
 							
+							<a class="list-group-item" href="#fe_defbe">fe_defbe</a>
+							
 							<a class="list-group-item" href="#fe_id">fe_id</a>
 							
 							<a class="list-group-item" href="#fe_name">fe_name</a>
@@ -2529,6 +2531,8 @@
 							
 							<a class="list-group-item" href="#str">str</a>
 							
+							<a class="list-group-item" href="#strcmp">strcmp</a>
+							
 							<a class="list-group-item" href="#strict-sni">strict-sni</a>
 							
 							<a class="list-group-item" href="#sub">sub</a>
@@ -2852,7 +2856,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/03/23</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/04/29</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2863,7 +2867,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9-dev0-303</strong></p>
+							<p><strong>version 1.9-dev0-371</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4115,7 +4119,9 @@ log &quot;${LOCAL_SYSLOG}:514&quot; local0 notice   <span class="comment"># send
 
 user &quot;$HAPROXY_USER&quot;
 </code></pre>
-</div></div>
+</div><pre class="text">A special variable $HAPROXY_LOCALPEER is defined at the startup of the process
+which contains the name of the local peer. (See &quot;-L&quot; in the management guide.)
+</pre></div>
 <a class="anchor" id="2.4" name="2.4"></a>
 <h2 id="chapter-2.4" data-target="2.4"><small><a class="small" href="#2.4">2.4.</a></small> Time format</h2>
 <div><pre class="text">Some parameters involve values representing time, such as timeouts. These
@@ -15637,10 +15643,22 @@ collect rough statistics. It must not be used for security purposes as a
 and the &quot;<a href="#hash-type">hash-type</a>&quot; directive.
 </pre><a class="anchor" name="even"></a><a class="anchor" name="7-even"></a><a class="anchor" name="7.3.1-even"></a><a class="anchor" name="even (Using ACLs and fetching samples)"></a><a class="anchor" name="even (Converters)"></a><div class="keyword"><b><a class="anchor" name="even"></a><a href="#7.3.1-even">even</a></b></div><pre class="text">Returns a boolean TRUE if the input value of type signed integer is even
 otherwise returns FALSE. It is functionally equivalent to &quot;not,and(1),bool&quot;.
-</pre><a class="anchor" name="field"></a><a class="anchor" name="7-field"></a><a class="anchor" name="7.3.1-field"></a><a class="anchor" name="field (Using ACLs and fetching samples)"></a><a class="anchor" name="field (Converters)"></a><div class="keyword"><b><a class="anchor" name="field"></a><a href="#7.3.1-field">field</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span>)</div><pre class="text">Extracts the substring at the given index considering given delimiters from
-an input string. Indexes start at 1 and delimiters are a string formatted
-list of chars.
-</pre><a class="anchor" name="hex"></a><a class="anchor" name="7-hex"></a><a class="anchor" name="7.3.1-hex"></a><a class="anchor" name="hex (Using ACLs and fetching samples)"></a><a class="anchor" name="hex (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex"></a><a href="#7.3.1-hex">hex</a></b></div><pre class="text">Converts a binary input sample to a hex string containing two hex digits per
+</pre><a class="anchor" name="field"></a><a class="anchor" name="7-field"></a><a class="anchor" name="7.3.1-field"></a><a class="anchor" name="field (Using ACLs and fetching samples)"></a><a class="anchor" name="field (Converters)"></a><div class="keyword"><b><a class="anchor" name="field"></a><a href="#7.3.1-field">field</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;count&gt;</span>]</span>)</div><pre class="text">Extracts the substring at the given index counting from the beginning
+(positive index) or from the end (negative index) considering given delimiters
+from an input string. Indexes start at 1 or -1 and delimiters are a string
+formatted list of chars. Optionally you can specify &lt;count&gt; of fields to
+extract (default: 1). Value of 0 indicates extraction of all remaining
+fields.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>str(f1_f2_f3__f5),field(5,_)    <span class="comment"># f5</span>
+str(f1_f2_f3__f5),field(2,_,0)  <span class="comment"># f2_f3__f5</span>
+str(f1_f2_f3__f5),field(2,_,2)  <span class="comment"># f2_f3</span>
+str(f1_f2_f3__f5),field(-2,_,3) <span class="comment"># f2_f3_</span>
+str(f1_f2_f3__f5),field(-3,_,0) <span class="comment"># f1_f2_f3</span>
+</code></pre>
+</div><a class="anchor" name="hex"></a><a class="anchor" name="7-hex"></a><a class="anchor" name="7.3.1-hex"></a><a class="anchor" name="hex (Using ACLs and fetching samples)"></a><a class="anchor" name="hex (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex"></a><a href="#7.3.1-hex">hex</a></b></div><pre class="text">Converts a binary input sample to a hex string containing two hex digits per
 input byte. It is used to log or transfer hex dumps of some binary input data
 in a way that can be reliably transferred (e.g. an SSL ID can be copied in a
 header).
@@ -15900,7 +15918,20 @@ set-var(&lt;var name&gt;)
   contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
 </pre><a class="anchor" name="sha1"></a><a class="anchor" name="7-sha1"></a><a class="anchor" name="7.3.1-sha1"></a><a class="anchor" name="sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="sha1 (Converters)"></a><div class="keyword"><b><a class="anchor" name="sha1"></a><a href="#7.3.1-sha1">sha1</a></b></div><pre class="text">Converts a binary input sample to a SHA1 digest. The result is a binary
 sample with length of 20 bytes.
-</pre><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type signed integer, and returns
+</pre><a class="anchor" name="strcmp"></a><a class="anchor" name="7-strcmp"></a><a class="anchor" name="7.3.1-strcmp"></a><a class="anchor" name="strcmp (Using ACLs and fetching samples)"></a><a class="anchor" name="strcmp (Converters)"></a><div class="keyword"><b><a class="anchor" name="strcmp"></a><a href="#7.3.1-strcmp">strcmp</a></b>(<span style="color: #080">&lt;var&gt;</span>)</div><pre class="text">Compares the contents of &lt;var&gt; with the input value of type string. Returns
+the result as a signed integer compatible with strcmp(3): 0 if both strings
+are identical. A value less than 0 if the left string is lexicographically
+smaller than the right string or if the left string is shorter. A value greater
+than 0 otherwise (right string greater than left string or the right string is
+shorter).
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>http-request set-var(txn.host) hdr(host)
+<span class="comment"># Check whether the client is attempting domain fronting.</span>
+acl ssl_sni_http_host_match ssl_fc_sni,strcmp(txn.host) eq 0
+</code></pre>
+</div><a class="anchor" name="sub"></a><a class="anchor" name="7-sub"></a><a class="anchor" name="7.3.1-sub"></a><a class="anchor" name="sub (Using ACLs and fetching samples)"></a><a class="anchor" name="sub (Converters)"></a><div class="keyword"><b><a class="anchor" name="sub"></a><a href="#7.3.1-sub">sub</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Subtracts &lt;value&gt; from the input value of type signed integer, and returns
 the result as an signed integer. Note: in order to subtract the input from
 a constant, simply perform a &quot;neg,add(value)&quot;. &lt;value&gt; can be a numeric value
 or a variable name. The name of the variable starts with an indication about
@@ -16063,9 +16094,21 @@ by your operating system. See also the ltime converter.
 <span class="comment"># e.g.  20140710162350 127.0.0.1:57325</span>
 log-format %[date,utime(%Y%m%d%H%M%S)]\ %ci:%cp
 </code></pre>
-</div><a class="anchor" name="word"></a><a class="anchor" name="7-word"></a><a class="anchor" name="7.3.1-word"></a><a class="anchor" name="word (Using ACLs and fetching samples)"></a><a class="anchor" name="word (Converters)"></a><div class="keyword"><b><a class="anchor" name="word"></a><a href="#7.3.1-word">word</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span>)</div><pre class="text">Extracts the nth word considering given delimiters from an input string.
-Indexes start at 1 and delimiters are a string formatted list of chars.
-</pre><a class="anchor" name="wt6"></a><a class="anchor" name="7-wt6"></a><a class="anchor" name="7.3.1-wt6"></a><a class="anchor" name="wt6 (Using ACLs and fetching samples)"></a><a class="anchor" name="wt6 (Converters)"></a><div class="keyword"><b><a class="anchor" name="wt6"></a><a href="#7.3.1-wt6">wt6</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the WT6
+</div><a class="anchor" name="word"></a><a class="anchor" name="7-word"></a><a class="anchor" name="7.3.1-word"></a><a class="anchor" name="word (Using ACLs and fetching samples)"></a><a class="anchor" name="word (Converters)"></a><div class="keyword"><b><a class="anchor" name="word"></a><a href="#7.3.1-word">word</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;count&gt;</span>]</span>)</div><pre class="text">Extracts the nth word counting from the beginning (positive index) or from
+the end (negative index) considering given delimiters from an input string.
+Indexes start at 1 or -1 and delimiters are a string formatted list of chars.
+Optionally you can specify &lt;count&gt; of words to extract (default: 1).
+Value of 0 indicates extraction of all remaining words.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>str(f1_f2_f3__f5),word(4,_)    <span class="comment"># f5</span>
+str(f1_f2_f3__f5),word(2,_,0)  <span class="comment"># f2_f3__f5</span>
+str(f1_f2_f3__f5),word(3,_,2)  <span class="comment"># f3__f5</span>
+str(f1_f2_f3__f5),word(-2,_,3) <span class="comment"># f1_f2_f3</span>
+str(f1_f2_f3__f5),word(-3,_,0) <span class="comment"># f1_f2</span>
+</code></pre>
+</div><a class="anchor" name="wt6"></a><a class="anchor" name="7-wt6"></a><a class="anchor" name="7.3.1-wt6"></a><a class="anchor" name="wt6 (Using ACLs and fetching samples)"></a><a class="anchor" name="wt6 (Converters)"></a><div class="keyword"><b><a class="anchor" name="wt6"></a><a href="#7.3.1-wt6">wt6</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the WT6
 hash function. Optionally, it is possible to apply a full avalanche hash
 function to the output if the optional &lt;avalanche&gt; argument equals 1. This
 converter uses the same functions as used by the various hash-based load
@@ -16434,6 +16477,8 @@ Linux kernels before 2.4, the sample fetch fails.
 connection. If the server connection is not established, if the connection is
 not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fe_defbe"></a><a class="anchor" name="7-fe_defbe"></a><a class="anchor" name="7.3.3-fe_defbe"></a><a class="anchor" name="fe_defbe (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_defbe (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_defbe"></a><a href="#7.3.3-fe_defbe">fe_defbe</a></b> : string</div><pre class="text">Returns a string containing the frontend's default backend name. It can be
+used in frontends to check which backend will handle requests by default.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend's id. It can be used in
 backends to check from which frontend it was called, or to stick all users
 coming via a same frontend to the same server.
@@ -19282,7 +19327,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev0-303 &ndash; Configuration Manual<br>
+							HAProxy 1.9-dev0-371 &ndash; Configuration Manual<br>
 							<small>2017/11/26, willy tarreau</small>
 						</div>
 					</div>
@@ -19386,7 +19431,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-303', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-371', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-62', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
