@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev0-371 - Configuration Manual</title>
+		<title>HAProxy version 1.9-dev0-416 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-62" rel="stylesheet" />
@@ -2383,6 +2383,8 @@
 							
 							<a class="list-group-item" href="#ssl_bc_session_id">ssl_bc_session_id</a>
 							
+							<a class="list-group-item" href="#ssl_bc_session_key">ssl_bc_session_key</a>
+							
 							<a class="list-group-item" href="#ssl_bc_unique_id">ssl_bc_unique_id</a>
 							
 							<a class="list-group-item" href="#ssl_bc_use_keysize">ssl_bc_use_keysize</a>
@@ -2466,6 +2468,8 @@
 							<a class="list-group-item" href="#ssl_fc_protocol">ssl_fc_protocol</a>
 							
 							<a class="list-group-item" href="#ssl_fc_session_id">ssl_fc_session_id</a>
+							
+							<a class="list-group-item" href="#ssl_fc_session_key">ssl_fc_session_key</a>
 							
 							<a class="list-group-item" href="#ssl_fc_sni">ssl_fc_sni</a>
 							
@@ -2712,6 +2716,8 @@
 							
 							<a class="list-group-item" href="#tune.recv_enough">tune.recv_enough</a>
 							
+							<a class="list-group-item" href="#tune.runqueue-depth">tune.runqueue-depth</a>
+							
 							<a class="list-group-item" href="#tune.sndbuf.client">tune.sndbuf.client</a>
 							
 							<a class="list-group-item" href="#tune.sndbuf.server">tune.sndbuf.server</a>
@@ -2856,7 +2862,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/04/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/05/29</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2867,7 +2873,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9-dev0-371</strong></p>
+							<p><strong>version 1.9-dev0-416</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -4285,6 +4291,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.rcvbuf.client">tune.rcvbuf.client</a>
    - <a href="#tune.rcvbuf.server">tune.rcvbuf.server</a>
    - <a href="#tune.recv_enough">tune.recv_enough</a>
+   - <a href="#tune.runqueue-depth">tune.runqueue-depth</a>
    - <a href="#tune.sndbuf.client">tune.sndbuf.client</a>
    - <a href="#tune.sndbuf.server">tune.sndbuf.server</a>
    - <a href="#tune.ssl.cachesize">tune.ssl.cachesize</a>
@@ -5070,6 +5077,9 @@ socket buffers. One of them is that a read returns more than &lt;recv_enough&gt;
 bytes, which defaults to 10136 (7 segments of 1448 each). This default value
 may be changed by this setting to better deal with workloads involving lots
 of short messages such as telnet or SSH sessions.
+</pre><a class="anchor" name="tune.runqueue-depth"></a><a class="anchor" name="3-tune.runqueue-depth"></a><a class="anchor" name="3.2-tune.runqueue-depth"></a><a class="anchor" name="tune.runqueue-depth (Global parameters)"></a><a class="anchor" name="tune.runqueue-depth (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.runqueue-depth"></a><a href="#3.2-tune.runqueue-depth">tune.runqueue-depth</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maxinum amount of task that can be processed at once when running
+tasks. The default value is 200. Increasing it may incur latency when
+dealing with I/Os, making it too small can incur extra overhead.
 </pre><a class="anchor" name="tune.sndbuf.client"></a><a class="anchor" name="3-tune.sndbuf.client"></a><a class="anchor" name="3.2-tune.sndbuf.client"></a><a class="anchor" name="tune.sndbuf.client (Global parameters)"></a><a class="anchor" name="tune.sndbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.client"></a><a href="#3.2-tune.sndbuf.client">tune.sndbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.sndbuf.server"></a><a class="anchor" name="3-tune.sndbuf.server"></a><a class="anchor" name="3.2-tune.sndbuf.server"></a><a class="anchor" name="tune.sndbuf.server (Global parameters)"></a><a class="anchor" name="tune.sndbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.server"></a><a href="#3.2-tune.sndbuf.server">tune.sndbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket send buffer size on the client or the server side to
 the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
@@ -5828,6 +5838,16 @@ two, and never more than some limits (usually 32768).
               This algorithm is static by default, which means that
               changing a server's weight on the fly will have no effect,
               but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
+
+  random      A random number will be used as the key for the consistent
+              hashing function. This means that the servers' weights are
+              respected, dynamic weight changes immediately take effect, as
+              well as new server additions. Random load balancing can be
+              useful with large farms or when servers are frequently added
+              or removed. The hash-balance-factor directive can be used to
+              further improve fairness of the load balancing, especially
+              in situations where servers show highly variable response
+              times.
 
   rdp-cookie
   rdp-cookie(&lt;name&gt;)
@@ -6967,6 +6987,9 @@ simplify it.
   found. A higher &lt;factor&gt; allows more imbalance between the servers, while a
   lower &lt;factor&gt; means that more servers will be checked on average, affecting
   performance. Reasonable values are from 125 to 200.
+
+  This setting is also used by &quot;balance random&quot; which internally relies on the
+  consistent hashing mechanism.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot; and &quot;<a href="#hash-type">hash-type</a>&quot;.</div>
 <a class="anchor" name="hash-type"></a><a class="anchor" name="4-hash-type"></a><a class="anchor" name="4.2-hash-type"></a><a class="anchor" name="hash-type (Proxies)"></a><a class="anchor" name="hash-type (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="hash-type"></a><a href="#4.2-hash-type">hash-type</a></b> <span style="color: #080">&lt;method&gt;</span> <span style="color: #080">&lt;function&gt;</span> <span style="color: #080">&lt;modifier&gt;</span></div><pre class="text">Specify a method to use for mapping hashes to servers
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -13946,6 +13969,9 @@ though it probably doesn't make any sense out of testing.
 </pre><a class="anchor" name="prefer-client-ciphers"></a><a class="anchor" name="5-prefer-client-ciphers"></a><a class="anchor" name="5.1-prefer-client-ciphers"></a><a class="anchor" name="prefer-client-ciphers (Bind and server options)"></a><a class="anchor" name="prefer-client-ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="prefer-client-ciphers"></a><a href="#5.1-prefer-client-ciphers">prefer-client-ciphers</a></b></div><pre class="text">Use the client's preference when selecting the cipher suite, by default
 the server's preference is enforced. This option is also available on
 global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-options</a>&quot;.
+Note that with OpenSSL &gt;= 1.1.1 ChaCha20-Poly1305 is reprioritized anyway
+(without setting this option), if a ChaCha20-Poly1305 cipher is at the top of
+the client cipher list.
 </pre><a class="anchor" name="process"></a><a class="anchor" name="5-process"></a><a class="anchor" name="5.1-process"></a><a class="anchor" name="process (Bind and server options)"></a><a class="anchor" name="process (Bind options)"></a><div class="keyword"><b><a class="anchor" name="process"></a><a href="#5.1-process">process</a></b> <span style="color: #080">&lt;process-set&gt;</span><span style="color: #008">[/<span style="color: #080">&lt;thread-set&gt;</span>]</span></div><pre class="text">This restricts the list of processes and/or threads on which this listener is
 allowed to run. It does not enforce any process but eliminates those which do
 not match. If the frontend uses a &quot;<a href="#bind-process">bind-process</a>&quot; setting, the intersection
@@ -16821,6 +16847,10 @@ can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot
 </pre><a class="anchor" name="ssl_bc_session_id"></a><a class="anchor" name="7-ssl_bc_session_id"></a><a class="anchor" name="7.3.4-ssl_bc_session_id"></a><a class="anchor" name="ssl_bc_session_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_session_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_session_id"></a><a href="#7.3.4-ssl_bc_session_id">ssl_bc_session_id</a></b> : binary</div><pre class="text">Returns the SSL ID of the back connection when the outgoing connection was
 made over an SSL/TLS transport layer. It is useful to log if we want to know
 if session was reused or not.
+</pre><a class="anchor" name="ssl_bc_session_key"></a><a class="anchor" name="7-ssl_bc_session_key"></a><a class="anchor" name="7.3.4-ssl_bc_session_key"></a><a class="anchor" name="ssl_bc_session_key (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_session_key (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_session_key"></a><a href="#7.3.4-ssl_bc_session_key">ssl_bc_session_key</a></b> : binary</div><pre class="text">Returns the SSL session master key of the back connection when the outgoing
+connection was made over an SSL/TLS transport layer. It is useful to decrypt
+traffic sent using ephemeral ciphers. This requires OpenSSL &gt;= 1.1.0, or
+BoringSSL.
 </pre><a class="anchor" name="ssl_bc_use_keysize"></a><a class="anchor" name="7-ssl_bc_use_keysize"></a><a class="anchor" name="7.3.4-ssl_bc_use_keysize"></a><a class="anchor" name="ssl_bc_use_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_use_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_use_keysize"></a><a href="#7.3.4-ssl_bc_use_keysize">ssl_bc_use_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size used in bits when the outgoing
 connection was made over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_c_ca_err"></a><a class="anchor" name="7-ssl_c_ca_err"></a><a class="anchor" name="7.3.4-ssl_c_ca_err"></a><a class="anchor" name="ssl_c_ca_err (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_c_ca_err (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_c_ca_err"></a><a href="#7.3.4-ssl_c_ca_err">ssl_c_ca_err</a></b> : integer</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
@@ -17001,6 +17031,10 @@ can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot
 made over an SSL/TLS transport layer. It is useful to stick a given client to
 a server. It is important to note that some browsers refresh their session ID
 every few minutes.
+</pre><a class="anchor" name="ssl_fc_session_key"></a><a class="anchor" name="7-ssl_fc_session_key"></a><a class="anchor" name="7.3.4-ssl_fc_session_key"></a><a class="anchor" name="ssl_fc_session_key (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_session_key (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_session_key"></a><a href="#7.3.4-ssl_fc_session_key">ssl_fc_session_key</a></b> : binary</div><pre class="text">Returns the SSL session master key of the front connection when the incoming
+connection was made over an SSL/TLS transport layer. It is useful to decrypt
+traffic sent using ephemeral ciphers. This requires OpenSSL &gt;= 1.1.0, or
+BoringSSL.
 </pre><a class="anchor" name="ssl_fc_sni"></a><a class="anchor" name="7-ssl_fc_sni"></a><a class="anchor" name="7.3.4-ssl_fc_sni"></a><a class="anchor" name="ssl_fc_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_sni"></a><a href="#7.3.4-ssl_fc_sni">ssl_fc_sni</a></b> : string</div><pre class="text">This extracts the Server Name Indication TLS extension (SNI) field from an
 incoming connection made via an SSL/TLS transport layer and locally
 deciphered by haproxy. The result (when present) typically is a string
@@ -19275,6 +19309,7 @@ replaced by &quot;&lt;CACHE&gt;&quot;.
 
 - If the request is not a GET
 - If the HTTP version of the request is smaller than 1.1
+- If the request contains an Authorization header
 
 Caution!: Due to the current limitation of the filters, it is not recommended
 to use the cache with other filters. Using them can cause undefined behavior
@@ -19327,7 +19362,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev0-371 &ndash; Configuration Manual<br>
+							HAProxy 1.9-dev0-416 &ndash; Configuration Manual<br>
 							<small>2017/11/26, willy tarreau</small>
 						</div>
 					</div>
@@ -19431,7 +19466,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-371', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-416', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-62', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
