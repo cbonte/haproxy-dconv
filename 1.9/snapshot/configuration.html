@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev0-416 - Configuration Manual</title>
+		<title>HAProxy version 1.9-dev0-478 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-62" rel="stylesheet" />
@@ -1798,6 +1798,8 @@
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-P"><h4>P</h4>
 								
+							<a class="list-group-item" href="#parse-resolv-conf">parse-resolv-conf</a>
+							
 							<a class="list-group-item" href="#path">path</a>
 							
 							<a class="list-group-item" href="#payload">payload</a>
@@ -1999,6 +2001,8 @@
 							<a class="list-group-item" href="#resolution_pool_size">resolution_pool_size</a>
 							
 							<a class="list-group-item" href="#resolve-net">resolve-net</a>
+							
+							<a class="list-group-item" href="#resolve-opts">resolve-opts</a>
 							
 							<a class="list-group-item" href="#resolve-prefer">resolve-prefer</a>
 							
@@ -2862,7 +2866,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/05/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/07/15</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2873,7 +2877,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9-dev0-416</strong></p>
+							<p><strong>version 1.9-dev0-478</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -14534,6 +14538,39 @@ loop between the client and HAProxy!
 </div><a class="anchor" name="rise"></a><a class="anchor" name="5-rise"></a><a class="anchor" name="5.2-rise"></a><a class="anchor" name="rise (Bind and server options)"></a><a class="anchor" name="rise (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="rise"></a><a href="#5.2-rise">rise</a></b> <span style="color: #080">&lt;count&gt;</span></div><pre class="text">The &quot;<a href="#rise">rise</a>&quot; parameter states that a server will be considered as operational
 after &lt;count&gt; consecutive successful health checks. This value defaults to 2
 if unspecified. See also the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#inter">inter</a>&quot; and &quot;<a href="#fall">fall</a>&quot; parameters.
+</pre><a class="anchor" name="resolve-opts"></a><a class="anchor" name="5-resolve-opts"></a><a class="anchor" name="5.2-resolve-opts"></a><a class="anchor" name="resolve-opts (Bind and server options)"></a><a class="anchor" name="resolve-opts (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-opts"></a><a href="#5.2-resolve-opts">resolve-opts</a></b> <span style="color: #080">&lt;option&gt;</span>,<span style="color: #080">&lt;option&gt;</span>,...</div><pre class="text">Comma separated list of options to apply to DNS resolution linked to this
+server.
+
+Available options:
+
+* allow-dup-ip
+  By default, HAProxy prevents IP address duplication in a backend when DNS
+  resolution at runtime is in operation.
+  That said, for some cases, it makes sense that two servers (in the same
+  backend, being resolved by the same FQDN) have the same IP address.
+  For such case, simply enable this option.
+  This is the opposite of prevent-dup-ip.
+
+* prevent-dup-ip
+  Ensure HAProxy's default behavior is enforced on a server: prevent re-using
+  an IP address already set to a server in the same backend and sharing the
+  same fqdn.
+  This is the opposite of allow-dup-ip.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>backend b_myapp
+  default-server init-addr none resolvers dns
+  server s1 myapp.example.com:80 check resolve-opts allow-dup-ip
+  server s2 myapp.example.com:81 check resolve-opts allow-dup-ip
+</code></pre>
+</div><pre class="text">With the option allow-dup-ip set:
+* if the nameserver returns a single IP address, then both servers will use
+  it
+* If the nameserver returns 2 IP addresses, then each server will pick up a
+  different address
+
+Default value: not set
 </pre><a class="anchor" name="resolve-prefer"></a><a class="anchor" name="5-resolve-prefer"></a><a class="anchor" name="5.2-resolve-prefer"></a><a class="anchor" name="resolve-prefer (Bind and server options)"></a><a class="anchor" name="resolve-prefer (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-prefer"></a><a href="#5.2-resolve-prefer">resolve-prefer</a></b> <span style="color: #080">&lt;family&gt;</span></div><pre class="text">When DNS resolution is enabled for a server and multiple IP addresses from
 different families are returned, HAProxy will prefer using an IP address
 from the family mentioned in the &quot;<a href="#resolve-prefer">resolve-prefer</a>&quot; parameter.
@@ -14837,6 +14874,9 @@ Note: the maximum allowed value is 8192.
   &lt;id&gt;   : label of the server, should be unique
   &lt;ip&gt;   : IP address of the server
   &lt;port&gt; : port where the DNS service actually runs
+</pre><a class="anchor" name="parse-resolv-conf"></a><a class="anchor" name="5-parse-resolv-conf"></a><a class="anchor" name="5.3.2-parse-resolv-conf"></a><a class="anchor" name="parse-resolv-conf (Bind and server options)"></a><a class="anchor" name="parse-resolv-conf (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="parse-resolv-conf"></a><a href="#5.3.2-parse-resolv-conf">parse-resolv-conf</a></b></div><pre class="text">Adds all nameservers found in /etc/resolv.conf to this resolvers nameservers
+list. Ordered as if each nameserver in /etc/resolv.conf was individually
+placed in the resolvers section in place of this directive.
 </pre><a class="anchor" name="hold"></a><a class="anchor" name="5-hold"></a><a class="anchor" name="5.3.2-hold"></a><a class="anchor" name="hold (Bind and server options)"></a><a class="anchor" name="hold (The resolvers section)"></a><div class="keyword"><b><a class="anchor" name="hold"></a><a href="#5.3.2-hold">hold</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #080">&lt;period&gt;</span></div><pre class="text">Defines &lt;period&gt; during which the last name resolution should be kept based
 on last resolution &lt;status&gt;
   &lt;status&gt; : last name resolution status. Acceptable values are &quot;nx&quot;,
@@ -14873,6 +14913,7 @@ type.
 <code>resolvers mydns
   nameserver dns1 10.0.0.1:53
   nameserver dns2 10.0.0.2:53
+  parse-resolv-conf
   resolve_retries       3
   timeout resolve       1s
   timeout retry         1s
@@ -19362,7 +19403,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev0-416 &ndash; Configuration Manual<br>
+							HAProxy 1.9-dev0-478 &ndash; Configuration Manual<br>
 							<small>2017/11/26, willy tarreau</small>
 						</div>
 					</div>
@@ -19466,7 +19507,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-416', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0-478', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-62', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
