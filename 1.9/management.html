@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev0 - Management Guide</title>
+		<title>HAProxy version 1.9-dev1 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.3.1-62" rel="stylesheet" />
@@ -364,6 +364,8 @@
 							
 							<a class="list-group-item" href="#show acl">show acl</a>
 							
+							<a class="list-group-item" href="#show activity">show activity</a>
+							
 							<a class="list-group-item" href="#show backend">show backend</a>
 							
 							<a class="list-group-item" href="#show cache">show cache</a>
@@ -427,7 +429,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/07/15</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/08/06</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -438,7 +440,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.9-dev0</strong></p>
+							<p><strong>version 1.9-dev1</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../img/logo-med.png" /></a><br>
 								<br>
@@ -731,7 +733,9 @@ list of options is :
     that a faulty configuration doesn't prevent the system from booting.
 
   -L &lt;name&gt; : change the local peer name to &lt;name&gt;, which defaults to the local
-    hostname. This is used only with peers replication.
+    hostname. This is used only with peers replication. You can use the
+    variable $HAPROXY_LOCALPEER in the configuration file to reference the
+    peer name.
 
   -N &lt;limit&gt; : sets the default per-proxy maxconn to &lt;limit&gt; instead of the
     builtin default value (usually 2000). Only useful for debugging.
@@ -745,6 +749,10 @@ list of options is :
     directly by sending a SIGUSR2 signal to the master.  The master-worker mode
     is compatible either with the foreground or daemon mode.  It is
     recommended to use this mode with multiprocess and systemd.
+
+  -Ws : master-worker mode with support of `notify` type of systemd service.
+    This option is only available when HAProxy was built with `USE_SYSTEMD`
+    build option enabled.
 
   -c : only performs a check of the configuration files and exits before trying
     to bind. The exit status is zero if everything is OK, or non-zero if an
@@ -1619,6 +1627,7 @@ S (Servers).
  80: intercepted [.FB.]: cum. number of intercepted requests (monitor, stats)
  81: dcon [LF..]: requests denied by &quot;tcp-request connection&quot; rules
  82: dses [LF..]: requests denied by &quot;tcp-request session&quot; rules
+ 83: wrew [LFBS]: cumulative number of failed header rewriting warnings
 </pre></div>
 <a class="anchor" id="9" name="9"></a>
 <div class="page-header"><h1 id="chapter-9" data-target="9"><small><a class="small" href="#9">9.</a></small> 2) Typed output format</h1>
@@ -1843,6 +1852,18 @@ delimiter to mark an end of output for each command, and takes care of ensuring
 that no command can emit an empty line on output. A script can thus easily
 parse the output even when multiple commands were pipelined on a single line.
 
+Some commands may take an optional payload. To add one to a command, the first
+line needs to end with the &quot;&lt;&lt;\n&quot; pattern. The next lines will be treated as
+the payload and can contain as many lines as needed. To validate a command with
+a payload, it needs to end with an empty line.
+
+Limitations do exist: the length of the whole buffer passed to the CLI must
+not be greater than tune.bfsize and the pattern &quot;&lt;&lt;&quot; must not be glued to the
+last word of the line.
+
+When entering a paylod while in interactive mode, the prompt will change from
+&quot;&gt; &quot; to &quot;+ &quot;.
+
 It is important to understand that when multiple haproxy processes are started
 on the same sockets, any process may pick up the request and will output its
 own stats.
@@ -1860,13 +1881,31 @@ for more information.
 &quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. This
 command cannot be used if the reference &lt;acl&gt; is a file also used with a map.
 In this case, you must use the command &quot;<a href="#add%20map">add map</a>&quot; in place of &quot;<a href="#add%20acl">add acl</a>&quot;.
-</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.3-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.3-add%20map">add map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Add an entry into the map &lt;map&gt; to associate the value &lt;value&gt; to the key
+</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.3-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.3-add%20map">add map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.3-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.3-add%20map">add map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">Add an entry into the map &lt;map&gt; to associate the value &lt;value&gt; to the key
 &lt;key&gt;. This command does not verify if the entry already exists. It is
 mainly used to fill a map after a clear operation. Note that if the reference
 &lt;map&gt; is a file and is shared with a map, this map will contain also a new
-pattern entry.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.3-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters"></a><a href="#9.3-clear%20counters">clear counters</a></b></div><pre class="text">Clear the max values of the statistics counters in each proxy (frontend &amp;
-backend) and in each server. The accumulated counters are not affected. This
+pattern entry. Using the payload syntax it is possible to add multiple
+key/value pairs by entering them on separate lines. On each new line, the
+first word is the key and the rest of the line is considered to be the value
+which can even contains spaces.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># socat /tmp/sock1 -</span>
+prompt
+
+&gt; add map <span class="comment">#-1 &lt;&lt;</span>
++ key1 value1
++ key2 value2 with spaces
++ key3 value3 also with spaces
++ key4 value4
+
+&gt;
+</code></pre>
+</div><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.3-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters"></a><a href="#9.3-clear%20counters">clear counters</a></b></div><pre class="text">Clear the max values of the statistics counters in each proxy (frontend &amp;
+backend) and in each server. The accumulated counters are not affected. The
+internal activity counters reported by &quot;<a href="#show%20activity">show activity</a>&quot; are also reset. This
 can be used to get clean counters after an incident, without having to
 restart nor to clear traffic counters. This command is restricted and can
 only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.
@@ -2141,7 +2180,7 @@ equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command bel
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> fqdn <span style="color: #080">&lt;FQDN&gt;</span></div><pre class="text">Change a server's FQDN to the value passed in argument.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set severity-output"></a><a class="anchor" name="9-set severity-output"></a><a class="anchor" name="9.3-set severity-output"></a><a class="anchor" name="set severity-output (Statistics and monitoring)"></a><a class="anchor" name="set severity-output (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set severity-output"></a><a href="#9.3-set%20severity-output">set severity-output</a></b> <span style="color: #008">[ none | number | string ]</span></div><pre class="text">Change the severity output format of the stats socket connected to for the
 duration of the current session.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response | payload&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
 the response. The &lt;response&gt; must be passed as a base64 encoded string of the
 DER encoded response from the OCSP server. This command is not supported with
@@ -2152,6 +2191,10 @@ BoringSSL.
 <code>openssl ocsp -issuer issuer.pem -cert server.pem \
              -host ocsp.issuer.com:80 -respout resp.der
 echo &quot;set ssl ocsp-response $(base64 -w 10000 resp.der)&quot; | \
+             socat stdio /var/run/haproxy.stat
+
+using the payload syntax:
+echo -e &quot;set ssl ocsp-response &lt;&lt;\n$(base64 resp.der)\n&quot; | \
              socat stdio /var/run/haproxy.stat
 </code></pre>
 </div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl tls-key"></a><a class="anchor" name="9-set ssl tls-key"></a><a class="anchor" name="9.3-set ssl tls-key"></a><a class="anchor" name="set ssl tls-key (Statistics and monitoring)"></a><a class="anchor" name="set ssl tls-key (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl tls-key"></a><a href="#9.3-set%20ssl%20tls-key">set ssl tls-key</a></b> <span style="color: #080">&lt;id&gt;</span> <span style="color: #080">&lt;tlskey&gt;</span></div><pre class="text">Set the next TLS key for the &lt;id&gt; listener to &lt;tlskey&gt;. This key becomes the
@@ -2206,7 +2249,7 @@ separated by commas, it can be numbers or 'all'.
 127.0.0.2:9969 user 2
 [::1]:9999 operator 2
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cache"></a><a class="anchor" name="9-show cache"></a><a class="anchor" name="9.3-show cache"></a><a class="anchor" name="show cache (Statistics and monitoring)"></a><a class="anchor" name="show cache (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cache"></a><a href="#9.3-show%20cache">show cache</a></b></div><pre class="text">List the configurated caches and the objects stored in each cache tree.
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cache"></a><a class="anchor" name="9-show cache"></a><a class="anchor" name="9.3-show cache"></a><a class="anchor" name="show cache (Statistics and monitoring)"></a><a class="anchor" name="show cache (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cache"></a><a href="#9.3-show%20cache">show cache</a></b></div><pre class="text">List the configured caches and the objects stored in each cache tree.
 
 $ echo 'show cache' | socat stdio /tmp/sock1
 0x7f6ac6c5b03a: foobar (shctx:0x7f6ac6c5b000, available blocks:3918)
@@ -2307,6 +2350,16 @@ listener's state and its frontend are reported. There is no point in using
 this command without a good knowledge of the internals. It's worth noting
 that the output format may evolve over time so this output must not be parsed
 by tools designed to be durable.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show activity"></a><a class="anchor" name="9-show activity"></a><a class="anchor" name="9.3-show activity"></a><a class="anchor" name="show activity (Statistics and monitoring)"></a><a class="anchor" name="show activity (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show activity"></a><a href="#9.3-show%20activity">show activity</a></b></div><pre class="text">Reports some counters about internal events that will help developers and
+more generally people who know haproxy well enough to narrow down the causes
+of reports of abnormal behaviours. A typical example would be a properly
+running process never sleeping and eating 100% of the CPU. The output fields
+will be made of one line per metric, and per-thread counters on the same
+line. These counters are 32-bit and will wrap during the process' life, which
+is not a problem since calls to this command will typically be performed
+twice. The fields are purposely not documented so that their exact meaning is
+verified in the code where the counters are fed. These values are also reset
+by the &quot;<a href="#clear%20counters">clear counters</a>&quot; command.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
 optional argument, field numbers, names and types are emitted as well so that
 external monitoring products can easily retrieve, possibly aggregate, then
@@ -3144,7 +3197,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev0 &ndash; Management Guide<br>
+							HAProxy 1.9-dev1 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3248,7 +3301,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-62', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
