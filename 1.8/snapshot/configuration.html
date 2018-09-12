@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.13 - Configuration Manual</title>
+		<title>HAProxy version 1.8.13-24 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.3.1-62" rel="stylesheet" />
@@ -1990,6 +1990,8 @@
 							
 							<a class="list-group-item" href="#resolve-net">resolve-net</a>
 							
+							<a class="list-group-item" href="#resolve-opts">resolve-opts</a>
+							
 							<a class="list-group-item" href="#resolve-prefer">resolve-prefer</a>
 							
 							<a class="list-group-item" href="#resolve_retries">resolve_retries</a>
@@ -2798,7 +2800,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/08/01</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.3.1-62</b> on <b>2018/09/12</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2809,7 +2811,7 @@
 						<div class="text-center">
 							<h1>HAProxy</h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.13</strong></p>
+							<p><strong>version 1.8.13-24</strong></p>
 							<p>
 								<a href="http://www.haproxy.org/" title="HAProxy Home Page"><img src="../../img/logo-med.png" /></a><br>
 								willy tarreau<br>
@@ -13471,7 +13473,7 @@ components can be used as an efficient and reliable alternative to the
 X-Forwarded-For mechanism which is not always reliable and not even always
 usable. See also &quot;tcp-request connection expect-proxy&quot; for a finer-grained
 setting of which client is allowed to use the protocol.
-</pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.1-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.1-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow receiving early data when using TLS 1.3. This is disabled by default,
+</pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.1-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.1-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow receiving early data when using TLSv1.3. This is disabled by default,
 due to security considerations.
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.1-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.1-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
@@ -14414,6 +14416,39 @@ loop between the client and HAProxy!
 </div><a class="anchor" name="rise"></a><a class="anchor" name="5-rise"></a><a class="anchor" name="5.2-rise"></a><a class="anchor" name="rise (Bind and server options)"></a><a class="anchor" name="rise (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="rise"></a><a href="#5.2-rise">rise</a></b> <span style="color: #080">&lt;count&gt;</span></div><pre class="text">The &quot;<a href="#rise">rise</a>&quot; parameter states that a server will be considered as operational
 after &lt;count&gt; consecutive successful health checks. This value defaults to 2
 if unspecified. See also the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#inter">inter</a>&quot; and &quot;<a href="#fall">fall</a>&quot; parameters.
+</pre><a class="anchor" name="resolve-opts"></a><a class="anchor" name="5-resolve-opts"></a><a class="anchor" name="5.2-resolve-opts"></a><a class="anchor" name="resolve-opts (Bind and server options)"></a><a class="anchor" name="resolve-opts (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-opts"></a><a href="#5.2-resolve-opts">resolve-opts</a></b> <span style="color: #080">&lt;option&gt;</span>,<span style="color: #080">&lt;option&gt;</span>,...</div><pre class="text">Comma separated list of options to apply to DNS resolution linked to this
+server.
+
+Available options:
+
+* allow-dup-ip
+  By default, HAProxy prevents IP address duplication in a backend when DNS
+  resolution at runtime is in operation.
+  That said, for some cases, it makes sense that two servers (in the same
+  backend, being resolved by the same FQDN) have the same IP address.
+  For such case, simply enable this option.
+  This is the opposite of prevent-dup-ip.
+
+* prevent-dup-ip
+  Ensure HAProxy's default behavior is enforced on a server: prevent re-using
+  an IP address already set to a server in the same backend and sharing the
+  same fqdn.
+  This is the opposite of allow-dup-ip.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>backend b_myapp
+  default-server init-addr none resolvers dns
+  server s1 myapp.example.com:80 check resolve-opts allow-dup-ip
+  server s2 myapp.example.com:81 check resolve-opts allow-dup-ip
+</code></pre>
+</div><pre class="text">With the option allow-dup-ip set:
+* if the nameserver returns a single IP address, then both servers will use
+  it
+* If the nameserver returns 2 IP addresses, then each server will pick up a
+  different address
+
+Default value: not set
 </pre><a class="anchor" name="resolve-prefer"></a><a class="anchor" name="5-resolve-prefer"></a><a class="anchor" name="5.2-resolve-prefer"></a><a class="anchor" name="resolve-prefer (Bind and server options)"></a><a class="anchor" name="resolve-prefer (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-prefer"></a><a href="#5.2-resolve-prefer">resolve-prefer</a></b> <span style="color: #080">&lt;family&gt;</span></div><pre class="text">When DNS resolution is enabled for a server and multiple IP addresses from
 different families are returned, HAProxy will prefer using an IP address
 from the family mentioned in the &quot;<a href="#resolve-prefer">resolve-prefer</a>&quot; parameter.
@@ -18112,7 +18147,7 @@ Please refer to the table below for currently defined variables :
   |   | %t   | date_time      (with millisecond resolution)  | date        |
   | H | %tr  | date_time of HTTP request                     | date        |
   | H | %trg | gmt_date_time of start of HTTP request        | date        |
-  | H | %trl | locla_date_time of start of HTTP request      | date        |
+  | H | %trl | local_date_time of start of HTTP request      | date        |
   |   | %ts  | termination_state                             | string      |
   | H | %tsc | termination_state with cookie status          | string      |
   +---+------+-----------------------------------------------+-------------+
@@ -19093,7 +19128,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.13 &ndash; Configuration Manual<br>
+							HAProxy 1.8.13-24 &ndash; Configuration Manual<br>
 							<small>2018/07/30, willy tarreau</small>
 						</div>
 					</div>
@@ -19197,7 +19232,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.13', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.13-24', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.3.1-62', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
