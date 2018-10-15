@@ -1,7 +1,7 @@
 import re
 import parser
 
-class Parser(parser.Parser):
+class SeeAlsoParser(parser.Parser):
     def parse(self, line):
         pctxt = self.pctxt
 

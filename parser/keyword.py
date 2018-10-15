@@ -1,8 +1,8 @@
 import re
 import parser
-from urllib import quote
+from urllib.parse import quote
 
-class Parser(parser.Parser):
+class KeyWordParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (
@@ -40,7 +40,7 @@ class Parser(parser.Parser):
 
             if keyword and (len(splitKeyword) <= 5):
                 toplevel = pctxt.details["toplevel"]
-                for j in xrange(0, len(splitKeyword)):
+                for j in range(0, len(splitKeyword)):
                     subKeyword = " ".join(splitKeyword[0:j + 1])
                     if subKeyword != "no":
                         if not subKeyword in keywords:
@@ -56,7 +56,10 @@ class Parser(parser.Parser):
                 if deprecated != -1:
                     prefix = ""
                     suffix = ""
-                    parameters = parameters.replace("(deprecated)", '<span class="label label-warning">(deprecated)</span>')
+                    parameters = parameters.replace(
+                        "(deprecated)",
+                        '<span class="label label-warning">(deprecated)</span>'
+                    )
                 else:
                     prefix = ""
                     suffix = ""

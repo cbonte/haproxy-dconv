@@ -2,7 +2,7 @@ import re
 import sys
 import parser
 
-class Parser(parser.Parser):
+class TableParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         self.table1Pattern = re.compile(r'^ *(-+\+)+-+')
@@ -30,7 +30,7 @@ class Parser(parser.Parser):
             lineSeparator = nextline
             nbColumns = nextline.count("+") + 1
             extraColumns = 0
-            print >> sys.stderr, "Entering table mode (%d columns)" % nbColumns
+            print("Entering table mode (%d columns)" % nbColumns, file=sys.stderr)
             table = []
             if line.find("|") != -1:
                 row = []
@@ -49,7 +49,7 @@ class Parser(parser.Parser):
                     else:
                         # Data
                         columns = line.split("|")
-                        for j in xrange(0, len(columns)):
+                        for j in range(0, len(columns)):
                             try:
                                 if row[j]:
                                     row[j] += "<br />"
@@ -98,7 +98,7 @@ class Parser(parser.Parser):
                             start = end + 1
                             if start >= len(headers):
                                 start = -1
-                        for j in xrange(0, nbColumns):
+                        for j in range(0, nbColumns):
                             try:
                                 row[j] += tmprow[j].strip()
                             except:
@@ -122,7 +122,7 @@ class Parser(parser.Parser):
                             row.append(extra)
 
                     pctxt.next()
-            print >> sys.stderr, "Leaving table mode"
+            print("Leaving table mode", file=sys.stderr)
             pctxt.next() # skip useless next line
             pctxt.stop = True
 
@@ -219,7 +219,7 @@ class Parser(parser.Parser):
                     tplcol['keyword'] = keyword
                 tplcol['extra'] = []
                 if j == 0 and len(row) > maxColumns:
-                    for k in xrange(maxColumns, len(row)):
+                    for k in range(maxColumns, len(row)):
                         tplcol['extra'].append(row[k])
                 tplcol['data'] = data
                 cols.append(tplcol)

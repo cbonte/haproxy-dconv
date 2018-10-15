@@ -1,4 +1,4 @@
-<% from urllib import quote %>
+<% from urllib.parse import quote %>
 <% base = pctxt.context['base'] %>
 <tr>\
 % for col in columns:

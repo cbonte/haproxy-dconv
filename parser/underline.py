@@ -1,6 +1,6 @@
 import parser
 
-class Parser(parser.Parser):
+class UnderlineParser(parser.Parser):
     # Detect underlines
     def parse(self, line):
         pctxt = self.pctxt

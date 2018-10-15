@@ -5,7 +5,7 @@ import parser
 '''
 TODO: Allow inner data parsing (this will allow to parse the examples provided in an arguments block)
 '''
-class Parser(parser.Parser):
+class ArgumentParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         #template = pctxt.templates.get_template("parser/arguments.tpl")
@@ -32,7 +32,7 @@ class Parser(parser.Parser):
             if desc != "none":
                 add_empty_lines = 0
                 while pctxt.has_more_lines() and (parser.get_indent(pctxt.get_line()) > indent):
-                    for j in xrange(0, add_empty_lines):
+                    for j in range(0, add_empty_lines):
                         arglines.append("")
                     arglines.append(pctxt.get_line())
                     pctxt.next()

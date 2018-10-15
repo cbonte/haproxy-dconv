@@ -2,7 +2,7 @@ import re
 import parser
 
 # Detect examples blocks
-class Parser(parser.Parser):
+class ExampleParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         template = pctxt.templates.get_template("parser/example/comment.tpl")
@@ -42,7 +42,7 @@ class Parser(parser.Parser):
                 add_empty_line = 0
                 while pctxt.has_more_lines() and ((not pctxt.get_line()) or (parser.get_indent(pctxt.get_line()) > indent)):
                     if pctxt.get_line():
-                        for j in xrange(0, add_empty_line):
+                        for j in range(0, add_empty_line):
                             content.append("")
 
                         content.append(re.sub(r'(#.*)$', self.comment, pctxt.get_line()))
