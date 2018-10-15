@@ -19,7 +19,7 @@
     elif data in ['*']:
         style = "class=\"pagination-centered\""
     else:
-        style = None
+        style = ""
 %>\
 <td ${style}>\
 % if "keyword" in col:
