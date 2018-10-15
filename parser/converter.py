@@ -122,7 +122,7 @@ def init_parsers(pctxt):
 
 # The parser itself
 
-def convert_all(infiles, outdir, base=''):
+def convert_all(infiles, outdir, base='', version='', haproxy_version=''):
     converted = []
     menu = []
     for infile in infiles:
@@ -136,7 +136,7 @@ def convert_all(infiles, outdir, base=''):
                 ]
             )
         )
-        data = convert(pctxt, infile, outfile, base)
+        data = convert(pctxt, infile, outfile, base, version, haproxy_version)
         converted.append((outfile, data))
 
         menu.append((basefile, data['pctxt'].context['headers']['subtitle']))
