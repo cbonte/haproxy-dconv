@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev3 - Configuration Manual</title>
+		<title>HAProxy version 1.9-dev4 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -1087,6 +1087,10 @@
 							<a class="list-group-item" href="#ciphers (Bind options)">ciphers (Bind options)</a>
 							
 							<a class="list-group-item" href="#ciphers (Server and default-server options)">ciphers (Server and default-server options)</a>
+							
+							<a class="list-group-item" href="#ciphersuites (Bind options)">ciphersuites (Bind options)</a>
+							
+							<a class="list-group-item" href="#ciphersuites (Server and default-server options)">ciphersuites (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#clitimeout">clitimeout</a>
 							
@@ -2361,9 +2365,13 @@
 							
 							<a class="list-group-item" href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>
 							
+							<a class="list-group-item" href="#ssl-default-bind-ciphersuites">ssl-default-bind-ciphersuites</a>
+							
 							<a class="list-group-item" href="#ssl-default-bind-options">ssl-default-bind-options</a>
 							
 							<a class="list-group-item" href="#ssl-default-server-ciphers">ssl-default-server-ciphers</a>
+							
+							<a class="list-group-item" href="#ssl-default-server-ciphersuites">ssl-default-server-ciphersuites</a>
 							
 							<a class="list-group-item" href="#ssl-default-server-options">ssl-default-server-options</a>
 							
@@ -2876,7 +2884,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/10/15</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/10/22</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2887,10 +2895,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9-dev3</strong></p>
+							<p><strong>version 1.9-dev4</strong></p>
 							<p>
 								willy tarreau<br>
-								2018/09/29
+								2018/10/21
 							</p>
 						</div>
 
@@ -3860,13 +3868,12 @@ start of a new request. When it receives HTTP/2 connections from a client, it
 processes all the requests in parallel and leaves the connection idling,
 waiting for new requests, just as if it was a keep-alive HTTP connection.
 
-HAProxy supports 5 connection modes :
+HAProxy supports 4 connection modes :
   - keep alive    : all requests and responses are processed (default)
   - tunnel        : only the first request and response are processed,
                     everything else is forwarded with no analysis.
-  - passive close : tunnel with &quot;Connection: close&quot; added in both directions.
   - server close  : the server-facing connection is closed after the response.
-  - forced close  : the connection is actively closed after end of response.
+  - close         : the connection is actively closed after end of response.
 
 For HTTP/2, the connection mode resembles more the &quot;server close&quot; mode : given
 the independence of all streams, there is currently no place to hook the idle
@@ -4239,8 +4246,10 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#setenv">setenv</a>
    - <a href="#stats">stats</a>
    - <a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>
+   - <a href="#ssl-default-bind-ciphersuites">ssl-default-bind-ciphersuites</a>
    - <a href="#ssl-default-bind-options">ssl-default-bind-options</a>
    - <a href="#ssl-default-server-ciphers">ssl-default-server-ciphers</a>
+   - <a href="#ssl-default-server-ciphersuites">ssl-default-server-ciphersuites</a>
    - <a href="#ssl-default-server-options">ssl-default-server-options</a>
    - <a href="#ssl-dh-param-file">ssl-dh-param-file</a>
    - <a href="#ssl-server-verify">ssl-server-verify</a>
@@ -4590,11 +4599,23 @@ the configuration file sees the new value. See also &quot;<a href="#presetenv">p
 and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
-that are negotiated during the SSL/TLS handshake for all &quot;<a href="#bind">bind</a>&quot; lines which
-do not explicitly define theirs. The format of the string is defined in
-&quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string such
-as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes). Please check the
-&quot;<a href="#bind">bind</a>&quot; keyword for more information.
+that are negotiated during the SSL/TLS handshake except for TLSv1.3 for all
+&quot;<a href="#bind">bind</a>&quot; lines which do not explicitly define theirs. The format of the string
+is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance
+a string such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes). For
+TLSv1.3 cipher configuration, please check the &quot;<a href="#ssl-default-bind-ciphersuites">ssl-default-bind-ciphersuites</a>&quot;
+keyword. Please check the &quot;<a href="#bind">bind</a>&quot; keyword for more information.
+</pre><a class="anchor" name="ssl-default-bind-ciphersuites"></a><a class="anchor" name="3-ssl-default-bind-ciphersuites"></a><a class="anchor" name="3.1-ssl-default-bind-ciphersuites"></a><a class="anchor" name="ssl-default-bind-ciphersuites (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphersuites (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphersuites"></a><a href="#3.1-ssl-default-bind-ciphersuites">ssl-default-bind-ciphersuites</a></b> <span style="color: #080">&lt;ciphersuites&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in and
+OpenSSL 1.1.1 or later was used to build HAProxy. It sets the default string
+describing the list of cipher algorithms (&quot;cipher suite&quot;) that are negotiated
+during the TLSv1.3 handshake for all &quot;<a href="#bind">bind</a>&quot; lines which do not explicitly define
+theirs. The format of the string is defined in
+&quot;man 1 ciphers&quot; from OpenSSL man pages under the section &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and can
+be for instance a string such as
+&quot;TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256&quot;
+(without quotes). For cipher configuration for TLSv1.2 and earlier, please check
+the &quot;<a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>&quot; keyword. Please check the &quot;<a href="#bind">bind</a>&quot; keyword for more
+information.
 </pre><a class="anchor" name="ssl-default-bind-options"></a><a class="anchor" name="3-ssl-default-bind-options"></a><a class="anchor" name="3.1-ssl-default-bind-options"></a><a class="anchor" name="ssl-default-bind-options (Global parameters)"></a><a class="anchor" name="ssl-default-bind-options (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-options"></a><a href="#3.1-ssl-default-bind-options">ssl-default-bind-options</a></b> <span style="color: #008">[<span style="color: #080">&lt;option&gt;</span>]</span>...</div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 default ssl-options to force on all &quot;<a href="#bind">bind</a>&quot; lines. Please check the &quot;<a href="#bind">bind</a>&quot;
 keyword to see available options.
@@ -4606,10 +4627,19 @@ keyword to see available options.
 </code></pre>
 </div><a class="anchor" name="ssl-default-server-ciphers"></a><a class="anchor" name="3-ssl-default-server-ciphers"></a><a class="anchor" name="3.1-ssl-default-server-ciphers"></a><a class="anchor" name="ssl-default-server-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphers"></a><a href="#3.1-ssl-default-server-ciphers">ssl-default-server-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 sets the default string describing the list of cipher algorithms that are
-negotiated during the SSL/TLS handshake with the server, for all &quot;<a href="#server">server</a>&quot;
-lines which do not explicitly define theirs. The format of the string is
-defined in &quot;man 1 ciphers&quot;. Please check the &quot;<a href="#server">server</a>&quot; keyword for more
-information.
+negotiated during the SSL/TLS handshake except for TLSv1.3 with the server,
+for all &quot;<a href="#server">server</a>&quot; lines which do not explicitly define theirs. The format of
+the string is defined in &quot;man 1 ciphers&quot;. For TLSv1.3 cipher configuration,
+please check the &quot;<a href="#ssl-default-server-ciphersuites">ssl-default-server-ciphersuites</a>&quot; keyword. Please check the
+&quot;<a href="#server">server</a>&quot; keyword for more information.
+</pre><a class="anchor" name="ssl-default-server-ciphersuites"></a><a class="anchor" name="3-ssl-default-server-ciphersuites"></a><a class="anchor" name="3.1-ssl-default-server-ciphersuites"></a><a class="anchor" name="ssl-default-server-ciphersuites (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphersuites (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphersuites"></a><a href="#3.1-ssl-default-server-ciphersuites">ssl-default-server-ciphersuites</a></b> <span style="color: #080">&lt;ciphersuites&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in and
+OpenSSL 1.1.1 or later was used to build HAProxy. It sets the default
+string describing the list of cipher algorithms that are negotiated during
+the TLSv1.3 handshake with the server, for all &quot;<a href="#server">server</a>&quot; lines which do not
+explicitly define theirs. The format of the string is defined in
+&quot;man 1 ciphers&quot; under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section. For cipher configuration for
+TLSv1.2 and earlier, please check the &quot;<a href="#ssl-default-server-ciphers">ssl-default-server-ciphers</a>&quot; keyword.
+Please check the &quot;<a href="#server">server</a>&quot; keyword for more information.
 </pre><a class="anchor" name="ssl-default-server-options"></a><a class="anchor" name="3-ssl-default-server-options"></a><a class="anchor" name="3.1-ssl-default-server-options"></a><a class="anchor" name="ssl-default-server-options (Global parameters)"></a><a class="anchor" name="ssl-default-server-options (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-options"></a><a href="#3.1-ssl-default-server-options">ssl-default-server-options</a></b> <span style="color: #008">[<span style="color: #080">&lt;option&gt;</span>]</span>...</div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 default ssl-options to force on all &quot;<a href="#server">server</a>&quot; lines. Please check the &quot;<a href="#server">server</a>&quot;
 keyword to see available options.
@@ -5114,7 +5144,7 @@ the number of CPU-intensive SSL handshakes by ensuring that all users keep
 their session as long as possible. All entries are pre-allocated upon startup
 and are shared between all processes if &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; is greater than 1. Setting
 this value to 0 disables the SSL session cache.
-</pre><a class="anchor" name="tune.ssl.force-private-cache"></a><a class="anchor" name="3-tune.ssl.force-private-cache"></a><a class="anchor" name="3.2-tune.ssl.force-private-cache"></a><a class="anchor" name="tune.ssl.force-private-cache (Global parameters)"></a><a class="anchor" name="tune.ssl.force-private-cache (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.force-private-cache"></a><a href="#3.2-tune.ssl.force-private-cache">tune.ssl.force-private-cache</a></b></div><pre class="text">This boolean disables SSL session cache sharing between all processes. It
+</pre><a class="anchor" name="tune.ssl.force-private-cache"></a><a class="anchor" name="3-tune.ssl.force-private-cache"></a><a class="anchor" name="3.2-tune.ssl.force-private-cache"></a><a class="anchor" name="tune.ssl.force-private-cache (Global parameters)"></a><a class="anchor" name="tune.ssl.force-private-cache (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.force-private-cache"></a><a href="#3.2-tune.ssl.force-private-cache">tune.ssl.force-private-cache</a></b></div><pre class="text">This option disables SSL session cache sharing between all processes. It
 should normally not be used since it will force many renegotiations due to
 clients hitting a random process. But it may be required on some operating
 systems where none of the SSL cache synchronization method may be used. In
@@ -5371,7 +5401,7 @@ arbitrary criteria.
 
 In HTTP mode, the processing applied to requests and responses flowing over
 a connection depends in the combination of the frontend's HTTP options and
-the backend's. HAProxy supports 5 connection modes :
+the backend's. HAProxy supports 4 connection modes :
 
   - KAL : keep alive (&quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;) which is the default mode : all
     requests and responses are processed, and connections remain open but idle
@@ -5380,37 +5410,32 @@ the backend's. HAProxy supports 5 connection modes :
   - TUN: tunnel (&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;) : this was the default mode for versions
     1.0 to 1.5-dev21 : only the first request and response are processed, and
     everything else is forwarded with no analysis at all. This mode should not
-    be used as it creates lots of trouble with logging and HTTP processing.
-
-  - PCL: passive close (&quot;<a href="#option%20httpclose">option httpclose</a>&quot;) : exactly the same as tunnel mode,
-    but with &quot;Connection: close&quot; appended in both directions to try to make
-    both ends close after the first request/response exchange.
+    be used as it creates lots of trouble with logging and HTTP processing. It
+    is supported only on frontends.
 
   - SCL: server close (&quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;) : the server-facing
     connection is closed after the end of the response is received, but the
     client-facing connection remains open.
 
-  - FCL: forced close (&quot;<a href="#option%20forceclose">option forceclose</a>&quot;) : the connection is actively closed
-    after the end of the response.
+  - CLO: close (&quot;<a href="#option%20httpclose">option httpclose</a>&quot;): the connection is closed after the end of
+    the response and &quot;Connection: close&quot; appended in both directions.
 
 The effective mode that will be applied to a connection passing through a
 frontend and a backend can be determined by both proxy modes according to the
 following matrix, but in short, the modes are symmetric, keep-alive is the
-weakest option and force close is the strongest.
+weakest option and close is the strongest.
 
-                          Backend mode
+                   Backend mode
 
-                | KAL | TUN | PCL | SCL | FCL
-            ----+-----+-----+-----+-----+----
-            KAL | KAL | TUN | PCL | SCL | FCL
-            ----+-----+-----+-----+-----+----
-            TUN | TUN | TUN | PCL | SCL | FCL
- Frontend   ----+-----+-----+-----+-----+----
-   mode     PCL | PCL | PCL | PCL | FCL | FCL
-            ----+-----+-----+-----+-----+----
-            SCL | SCL | SCL | FCL | SCL | FCL
-            ----+-----+-----+-----+-----+----
-            FCL | FCL | FCL | FCL | FCL | FCL
+                | KAL | SCL | CLO
+            ----+-----+-----+----
+            KAL | KAL | SCL | CLO
+            ----+-----+-----+----
+            TUN | TUN | SCL | CLO
+ Frontend   ----+-----+-----+----
+   mode     SCL | SCL | SCL | CLO
+            ----+-----+-----+----
+            CLO | CLO | CLO | CLO
 </pre></div>
 <a class="anchor" id="4.1" name="4.1"></a>
 <h2 id="chapter-4.1" data-target="4.1"><small><a class="small" href="#4.1">4.1.</a></small> Proxy keywords matrix</h2>
@@ -5492,15 +5517,15 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20contstats"><span class="pull-right"><span>(*)</span></span>option contstats</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlog-normal"><span class="pull-right"><span>(*)</span></span>option dontlog-normal</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlognull"><span class="pull-right"><span>(*)</span></span>option dontlognull</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td ><a href="#4-option%20forceclose"><span class="pull-right"><span>(*)</span></span>option forceclose</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td ><a href="#4-option%20forceclose%20%20%20%20%20%20%28deprectated%29"><span class="pull-right"><span>(*)</span></span>option forceclose      (deprectated)</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20forwardfor">option forwardfor</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-buffer-request"><span class="pull-right"><span>(*)</span></span>option http-buffer-request</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-ignore-probes"><span class="pull-right"><span>(*)</span></span>option http-ignore-probes</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http-keep-alive"><span class="pull-right"><span>(*)</span></span>option http-keep-alive</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-no-delay"><span class="pull-right"><span>(*)</span></span>option http-no-delay</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-option%20http-pretend-keepalive"><span class="pull-right"><span>(*)</span></span>option http-pretend-keepalive</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td ><a href="#4-option%20http-pretend-keepalive"><span class="pull-right"><span>(*)</span></span>option http-pretend-keepalive</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-server-close"><span class="pull-right"><span>(*)</span></span>option http-server-close</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-option%20http-tunnel"><span class="pull-right"><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td ><a href="#4-option%20http-tunnel"><span class="pull-right"><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http-use-proxy-header"><span class="pull-right"><span>(*)</span></span>option http-use-proxy-header</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20httpchk">option httpchk</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20httpclose"><span class="pull-right"><span>(*)</span></span>option httpclose</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -8926,33 +8951,7 @@ would not be logged.
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
 </pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option forceclose"></a><a class="anchor" name="4-option forceclose"></a><a class="anchor" name="4.2-option forceclose"></a><a class="anchor" name="option forceclose (Proxies)"></a><a class="anchor" name="option forceclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option forceclose"></a><a href="#4.2-option%20forceclose">option forceclose</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option forceclose"></a><a class="anchor" name="4-no option forceclose"></a><a class="anchor" name="4.2-no option forceclose"></a><a class="anchor" name="no option forceclose (Proxies)"></a><a class="anchor" name="no option forceclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option forceclose"></a><a href="#4.2-no%20option%20forceclose">no option forceclose</a></b></div><pre class="text">Enable or disable active connection closing after response is transferred.
-</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
-</table></div>
-<div class="separator">
-<span class="label label-info">Arguments :</span> none
-</div>
-<pre class="text">Some HTTP servers do not necessarily close the connections when they receive
-the &quot;Connection: close&quot; set by &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, and if the client does not
-close either, then the connection remains open till the timeout expires. This
-causes high number of simultaneous connections on the servers and shows high
-global session times in the logs.
-
-When this happens, it is possible to use &quot;<a href="#option%20forceclose">option forceclose</a>&quot;. It will
-actively close the outgoing server channel as soon as the server has finished
-to respond and release some resources earlier than with &quot;<a href="#option%20httpclose">option httpclose</a>&quot;.
-
-This option may also be combined with &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, which
-will disable sending of the &quot;Connection: close&quot; header, but will still cause
-the connection to be closed once the whole response is received.
-
-This option disables and replaces any previous &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;option
-http-server-close&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
-
-If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
-in a specific instance by prepending the &quot;no&quot; keyword before it.
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option forceclose"></a><a class="anchor" name="4-option forceclose"></a><a class="anchor" name="4.2-option forceclose"></a><a class="anchor" name="option forceclose (Proxies)"></a><a class="anchor" name="option forceclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option forceclose"></a><a href="#4.2-option%20forceclose">option forceclose</a></b> <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option forceclose"></a><a class="anchor" name="4-no option forceclose"></a><a class="anchor" name="4.2-no option forceclose"></a><a class="anchor" name="no option forceclose (Proxies)"></a><a class="anchor" name="no option forceclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option forceclose"></a><a href="#4.2-no%20option%20forceclose">no option forceclose</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">This is an alias for &quot;<a href="#option%20httpclose">option httpclose</a>&quot;. Thus this option is deprecated.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot; and &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option forwardfor"></a><a class="anchor" name="4-option forwardfor"></a><a class="anchor" name="4.2-option forwardfor"></a><a class="anchor" name="option forwardfor (Proxies)"></a><a class="anchor" name="option forwardfor (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option forwardfor"></a><a href="#4.2-option%20forwardfor">option forwardfor</a></b> <span style="color: #008">[ except <span style="color: #080">&lt;network&gt;</span> ]</span> <span style="color: #008">[ header <span style="color: #080">&lt;name&gt;</span> ]</span> <span style="color: #008">[ if-none ]</span></div><pre class="text">Enable insertion of the X-Forwarded-For header to requests sent to servers
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -9015,7 +9014,7 @@ backend www
     mode http
     option forwardfor header X-Client
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-buffer-request"></a><a class="anchor" name="4-option http-buffer-request"></a><a class="anchor" name="4.2-option http-buffer-request"></a><a class="anchor" name="option http-buffer-request (Proxies)"></a><a class="anchor" name="option http-buffer-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-buffer-request"></a><a href="#4.2-option%20http-buffer-request">option http-buffer-request</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-buffer-request"></a><a class="anchor" name="4-no option http-buffer-request"></a><a class="anchor" name="4.2-no option http-buffer-request"></a><a class="anchor" name="no option http-buffer-request (Proxies)"></a><a class="anchor" name="no option http-buffer-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-buffer-request"></a><a href="#4.2-no%20option%20http-buffer-request">no option http-buffer-request</a></b></div><pre class="text">Enable or disable waiting for whole HTTP request body before proceeding
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9078,11 +9077,11 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 </div>
 <pre class="text">By default HAProxy operates in keep-alive mode with regards to persistent
 connections: for each connection it processes each request and response, and
-leaves the connection idle on both sides between the end of a response and the
-start of a new request. This mode may be changed by several options such as
-&quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
-&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. This option allows to set back the keep-alive mode,
-which can be useful when another mode was used in a defaults section.
+leaves the connection idle on both sides between the end of a response and
+the start of a new request. This mode may be changed by several options such
+as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
+This option allows to set back the keep-alive mode, which can be useful when
+another mode was used in a defaults section.
 
 Setting &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot; enables HTTP keep-alive mode on the client-
 and server- sides. This provides the lowest latency on the client side (slow
@@ -9117,10 +9116,9 @@ timeout defined by &quot;<a href="#timeout%20http-keep-alive">timeout http-keep-
 not set.
 
 This option disables and replaces any previous &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;option
-http-server-close&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. When backend
-and frontend options differ, all of these 4 options have precedence over
-&quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20prefer-last-server">option prefer-last-server</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
+http-server-close&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. When backend and frontend options
+differ, all of these 4 options have precedence over &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;.
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;,, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20prefer-last-server">option prefer-last-server</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-no-delay"></a><a class="anchor" name="4-option http-no-delay"></a><a class="anchor" name="4.2-option http-no-delay"></a><a class="anchor" name="option http-no-delay (Proxies)"></a><a class="anchor" name="option http-no-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-no-delay"></a><a href="#4.2-option%20http-no-delay">option http-no-delay</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-no-delay"></a><a class="anchor" name="4-no option http-no-delay"></a><a class="anchor" name="4.2-no option http-no-delay"></a><a class="anchor" name="no option http-no-delay (Proxies)"></a><a class="anchor" name="no option http-no-delay (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-no-delay"></a><a href="#4.2-no%20option%20http-no-delay">no option http-no-delay</a></b></div><pre class="text">Instruct the system to favor low interactive delays over performance in HTTP
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9156,12 +9154,12 @@ latency environments.
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-pretend-keepalive"></a><a class="anchor" name="4-option http-pretend-keepalive"></a><a class="anchor" name="4.2-option http-pretend-keepalive"></a><a class="anchor" name="option http-pretend-keepalive (Proxies)"></a><a class="anchor" name="option http-pretend-keepalive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-pretend-keepalive"></a><a href="#4.2-option%20http-pretend-keepalive">option http-pretend-keepalive</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-pretend-keepalive"></a><a class="anchor" name="4-no option http-pretend-keepalive"></a><a class="anchor" name="4.2-no option http-pretend-keepalive"></a><a class="anchor" name="no option http-pretend-keepalive (Proxies)"></a><a class="anchor" name="no option http-pretend-keepalive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-pretend-keepalive"></a><a href="#4.2-no%20option%20http-pretend-keepalive">no option http-pretend-keepalive</a></b></div><pre class="text">Define whether haproxy will announce keepalive to the server or not
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">When running with &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; or &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, haproxy
+<pre class="text">When running with &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; or &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, haproxy
 adds a &quot;Connection: close&quot; header to the request forwarded to the server.
 Unfortunately, when some servers see this header, they automatically refrain
 from using the chunked encoding for responses of unknown length, while this
@@ -9174,7 +9172,7 @@ By setting &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-
 believe it will keep the connection alive. The server will then not fall back
 to the abnormal undesired above. When haproxy gets the whole response, it
 will close the connection with the server just as it would do with the
-&quot;<a href="#option%20forceclose">forceclose</a>&quot; option. That way the client gets a normal response and the
+&quot;<a href="#option%20httpclose">option httpclose</a>&quot;. That way the client gets a normal response and the
 connection is correctly closed on the server side.
 
 It is recommended not to enable this option by default, because most servers
@@ -9185,15 +9183,16 @@ worth noting that when this option is enabled, haproxy will have slightly
 less work to do. So if haproxy is the bottleneck on the whole architecture,
 enabling this option might save a few CPU cycles.
 
-This option may be set both in a frontend and in a backend. It is enabled if
-at least one of the frontend or backend holding a connection has it enabled.
-This option may be combined with &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, which will cause
-keepalive to be announced to the server and close to be announced to the
-client. This practice is discouraged though.
+This option may be set in backend and listen sections. Using it in a frontend
+section will be ignored and a warning will be reported during startup. It is
+a backend related option, so there is no real reason to set it on a
+frontend. This option may be combined with &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, which will
+cause keepalive to be announced to the server and close to be announced to
+the client. This practice is discouraged though.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, and &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, and &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-server-close"></a><a class="anchor" name="4-option http-server-close"></a><a class="anchor" name="4.2-option http-server-close"></a><a class="anchor" name="option http-server-close (Proxies)"></a><a class="anchor" name="option http-server-close (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-server-close"></a><a href="#4.2-option%20http-server-close">option http-server-close</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-server-close"></a><a class="anchor" name="4-no option http-server-close"></a><a class="anchor" name="4.2-no option http-server-close"></a><a class="anchor" name="no option http-server-close (Proxies)"></a><a class="anchor" name="no option http-server-close (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-server-close"></a><a href="#4.2-no%20option%20http-server-close">no option http-server-close</a></b></div><pre class="text">Enable or disable HTTP connection closing on the server side
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9206,18 +9205,17 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 connections: for each connection it processes each request and response, and
 leaves the connection idle on both sides between the end of a response and
 the start of a new request. This mode may be changed by several options such
-as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
-&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. Setting &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; enables HTTP
-connection-close mode on the server side while keeping the ability to support
-HTTP keep-alive and pipelining on the client side. This provides the lowest
-latency on the client side (slow network) and the fastest session reuse on
-the server side to save server resources, similarly to &quot;<a href="#option%20forceclose">option forceclose</a>&quot;.
-It also permits non-keepalive capable servers to be served in keep-alive mode
-to the clients if they conform to the requirements of RFC7230. Please note
-that some servers do not always conform to those requirements when they see
-&quot;Connection: close&quot; in the request. The effect will be that keep-alive will
-never be used. A workaround consists in enabling &quot;option
-http-pretend-keepalive&quot;.
+as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
+Setting &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; enables HTTP connection-close mode on the
+server side while keeping the ability to support HTTP keep-alive and
+pipelining on the client side. This provides the lowest latency on the client
+side (slow network) and the fastest session reuse on the server side to save
+server resources, similarly to &quot;<a href="#option%20httpclose">option httpclose</a>&quot;.  It also permits
+non-keepalive capable servers to be served in keep-alive mode to the clients
+if they conform to the requirements of RFC7230. Please note that some servers
+do not always conform to those requirements when they see &quot;Connection: close&quot;
+in the request. The effect will be that keep-alive will never be used. A
+workaround consists in enabling &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;.
 
 At the moment, logs will not indicate whether requests came from the same
 session or not. The accept date reported in the logs corresponds to the end
@@ -9228,18 +9226,17 @@ not set.
 
 This option may be set both in a frontend and in a backend. It is enabled if
 at least one of the frontend or backend holding a connection has it enabled.
-It disables and replaces any previous &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;,
-&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot; or &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;. Please check <a href="#4">section 4</a>
-(&quot;Proxies&quot;) to see how this option combines with others when frontend and
-backend options differ.
+It disables and replaces any previous &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;
+or &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;. Please check <a href="#4">section 4</a> (&quot;Proxies&quot;) to see how
+this option combines with others when frontend and backend options differ.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-tunnel"></a><a class="anchor" name="4-option http-tunnel"></a><a class="anchor" name="4.2-option http-tunnel"></a><a class="anchor" name="option http-tunnel (Proxies)"></a><a class="anchor" name="option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-tunnel"></a><a href="#4.2-option%20http-tunnel">option http-tunnel</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-tunnel"></a><a class="anchor" name="4-no option http-tunnel"></a><a class="anchor" name="4.2-no option http-tunnel"></a><a class="anchor" name="no option http-tunnel (Proxies)"></a><a class="anchor" name="no option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-tunnel"></a><a href="#4.2-no%20option%20http-tunnel">no option http-tunnel</a></b></div><pre class="text">Disable or enable HTTP connection processing after first transaction
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
@@ -9248,8 +9245,7 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 connections: for each connection it processes each request and response, and
 leaves the connection idle on both sides between the end of a response and
 the start of a new request. This mode may be changed by several options such
-as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
-&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
+as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
 
 Option &quot;<a href="#option%20http-tunnel">http-tunnel</a>&quot; disables any HTTP processing past the first request and
 the first response. This is the mode which was used by default in versions
@@ -9261,9 +9257,14 @@ everything which works at the HTTP level, including header parsing/addition,
 cookie processing or content switching will only work for the first request
 and will be ignored after the first response.
 
+This option may be set on frontend and listen sections. Using it on a backend
+section will be ignored and a warning will be reported during the startup. It
+is a frontend related option, so there is no real reason to set it on a
+backend.
+
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-use-proxy-header"></a><a class="anchor" name="4-option http-use-proxy-header"></a><a class="anchor" name="4.2-option http-use-proxy-header"></a><a class="anchor" name="option http-use-proxy-header (Proxies)"></a><a class="anchor" name="option http-use-proxy-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-use-proxy-header"></a><a href="#4.2-option%20http-use-proxy-header">option http-use-proxy-header</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-use-proxy-header"></a><a class="anchor" name="4-no option http-use-proxy-header"></a><a class="anchor" name="4.2-no option http-use-proxy-header"></a><a class="anchor" name="no option http-use-proxy-header (Proxies)"></a><a class="anchor" name="no option http-use-proxy-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-use-proxy-header"></a><a href="#4.2-no%20option%20http-use-proxy-header">no option http-use-proxy-header</a></b></div><pre class="text">Make use of non-standard Proxy-Connection header instead of Connection
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9292,7 +9293,7 @@ proxied request. That makes it possible to check or enforce authentication in
 front of an existing proxy.
 
 This option should normally never be used, except in front of a proxy.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot; and &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, and &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b></div><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b> <span style="color: #080">&lt;uri&gt;</span></div><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b> <span style="color: #080">&lt;method&gt;</span> <span style="color: #080">&lt;uri&gt;</span></div><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b> <span style="color: #080">&lt;method&gt;</span> <span style="color: #080">&lt;uri&gt;</span> <span style="color: #080">&lt;version&gt;</span></div><pre class="text">Enable HTTP protocol to check on the servers health
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9337,7 +9338,7 @@ backend https_relay
     server apache1 192.168.1.1:443 check port 80
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20ssl-hello-chk">option ssl-hello-chk</a>&quot;, &quot;<a href="#option%20smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option%20mysql-check">option mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#http-check">http-check</a>&quot; and the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#port">port</a>&quot; and &quot;<a href="#inter">inter</a>&quot; server options.</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpclose"></a><a class="anchor" name="4-option httpclose"></a><a class="anchor" name="4.2-option httpclose"></a><a class="anchor" name="option httpclose (Proxies)"></a><a class="anchor" name="option httpclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpclose"></a><a href="#4.2-option%20httpclose">option httpclose</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option httpclose"></a><a class="anchor" name="4-no option httpclose"></a><a class="anchor" name="4.2-no option httpclose"></a><a class="anchor" name="no option httpclose (Proxies)"></a><a class="anchor" name="no option httpclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option httpclose"></a><a href="#4.2-no%20option%20httpclose">no option httpclose</a></b></div><pre class="text">Enable or disable passive HTTP connection closing
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpclose"></a><a class="anchor" name="4-option httpclose"></a><a class="anchor" name="4.2-option httpclose"></a><a class="anchor" name="option httpclose (Proxies)"></a><a class="anchor" name="option httpclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpclose"></a><a href="#4.2-option%20httpclose">option httpclose</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option httpclose"></a><a class="anchor" name="4-no option httpclose"></a><a class="anchor" name="4.2-no option httpclose"></a><a class="anchor" name="no option httpclose (Proxies)"></a><a class="anchor" name="no option httpclose (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option httpclose"></a><a href="#4.2-no%20option%20httpclose">no option httpclose</a></b></div><pre class="text">Enable or disable HTTP connection closing
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -9349,36 +9350,28 @@ backend https_relay
 connections: for each connection it processes each request and response, and
 leaves the connection idle on both sides between the end of a response and
 the start of a new request. This mode may be changed by several options such
-as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or
-&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
+as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20httpclose">option httpclose</a>&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;.
 
-If &quot;<a href="#option%20httpclose">option httpclose</a>&quot; is set, HAProxy will work in HTTP tunnel mode and check
-if a &quot;Connection: close&quot; header is already set in each direction, and will
-add one if missing. Each end should react to this by actively closing the TCP
-connection after each transfer, thus resulting in a switch to the HTTP close
-mode. Any &quot;Connection&quot; header different from &quot;close&quot; will also be removed.
-Note that this option is deprecated since what it does is very cheap but not
-reliable. Using &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; or &quot;<a href="#option%20forceclose">option forceclose</a>&quot; is strongly
-recommended instead.
+If &quot;<a href="#option%20httpclose">option httpclose</a>&quot; is set, HAProxy will close connections with the server
+and the client as soon as the request and the response are received. It will
+alos check if a &quot;Connection: close&quot; header is already set in each direction,
+and will add one if missing. Any &quot;Connection&quot; header different from &quot;close&quot;
+will also be removed.
 
-It seldom happens that some servers incorrectly ignore this header and do not
-close the connection even though they reply &quot;Connection: close&quot;. For this
-reason, they are not compatible with older HTTP 1.0 browsers. If this happens
-it is possible to use the &quot;<a href="#option%20forceclose">option forceclose</a>&quot; which actively closes the
-request connection once the server responds. Option &quot;<a href="#option%20forceclose">forceclose</a>&quot; also
-releases the server connection earlier because it does not have to wait for
-the client to acknowledge it.
+This option may also be combined with &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, which
+will disable sending of the &quot;Connection: close&quot; header, but will still cause
+the connection to be closed once the whole response is received.
 
 This option may be set both in a frontend and in a backend. It is enabled if
 at least one of the frontend or backend holding a connection has it enabled.
 It disables and replaces any previous &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;,
-&quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. Please
-check <a href="#4">section 4</a> (&quot;Proxies&quot;) to see how this option combines with others when
-frontend and backend options differ.
+&quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot; or &quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;. Please check <a href="#4">section 4</a>
+(&quot;Proxies&quot;) to see how this option combines with others when frontend and
+backend options differ.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20forceclose">option forceclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; and &quot;1.1. The HTTP transaction model&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot; and &quot;1.1. The HTTP transaction model&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httplog"></a><a class="anchor" name="4-option httplog"></a><a class="anchor" name="4.2-option httplog"></a><a class="anchor" name="option httplog (Proxies)"></a><a class="anchor" name="option httplog (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httplog"></a><a href="#4.2-option%20httplog">option httplog</a></b> <span style="color: #008">[ clf ]</span></div><pre class="text">Enable logging of HTTP request, session state and timers
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9705,7 +9698,7 @@ backend www
     mode http
     option originalto header X-Client-Dst
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20forceclose">option forceclose</a>&quot;</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option persist"></a><a class="anchor" name="4-option persist"></a><a class="anchor" name="4.2-option persist"></a><a class="anchor" name="option persist (Proxies)"></a><a class="anchor" name="option persist (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option persist"></a><a href="#4.2-option%20persist">option persist</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option persist"></a><a class="anchor" name="4-no option persist"></a><a class="anchor" name="4.2-no option persist"></a><a class="anchor" name="no option persist (Proxies)"></a><a class="anchor" name="no option persist (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option persist"></a><a href="#4.2-no%20option%20persist">no option persist</a></b></div><pre class="text">Enable or disable forced persistence on down servers
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9828,7 +9821,7 @@ find the &quot;+PONG&quot; response message.
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;hello&gt;   is an optional argument. It is the &quot;hello&quot; command to use. It can
-          be either &quot;HELO&quot; (for SMTP) or &quot;EHLO&quot; (for ESTMP). All other
+          be either &quot;HELO&quot; (for SMTP) or &quot;EHLO&quot; (for ESMTP). All other
           values will be turned into the default command (&quot;HELO&quot;).
 
 &lt;domain&gt;  is the domain name to present to the server. It may only be
@@ -13700,13 +13693,24 @@ the dynamic generation of certificates is enabled. See
 'generate-certificates' for details.
 </pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.1-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.1-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the string describing the list of cipher algorithms (&quot;cipher suite&quot;) that are
-negotiated during the SSL/TLS handshake. The format of the string is defined
-in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance a string
-such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes).
-Depending on the compatibility and security requirements, the list of suitable
-ciphers depends on a variety of variables. For background information and
-recommendations see e. g. (https://wiki.mozilla.org/Security/Server_Side_TLS)
-and (https://mozilla.github.io/server-side-tls/ssl-config-generator/).
+negotiated during the SSL/TLS handshake except for TLSv1.3. The format of the
+string is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for
+instance a string such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without
+quotes). Depending on the compatibility and security requirements, the list
+of suitable ciphers depends on a variety of variables. For background
+information and recommendations see e.g.
+(https://wiki.mozilla.org/Security/Server_Side_TLS) and
+(https://mozilla.github.io/server-side-tls/ssl-config-generator/). For TLSv1.3
+cipher configuration, please check the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword.
+</pre><a class="anchor" name="ciphersuites"></a><a class="anchor" name="5-ciphersuites"></a><a class="anchor" name="5.1-ciphersuites"></a><a class="anchor" name="ciphersuites (Bind and server options)"></a><a class="anchor" name="ciphersuites (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ciphersuites"></a><a href="#5.1-ciphersuites">ciphersuites</a></b> <span style="color: #080">&lt;ciphersuites&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in and
+OpenSSL 1.1.1 or later was used to build HAProxy. It sets the string describing
+the list of cipher algorithms (&quot;cipher suite&quot;) that are negotiated during the
+TLSv1.3 handshake. The format of the string is defined in &quot;man 1 ciphers&quot; from
+OpenSSL man pages under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section, and can be for instance a
+string such as
+&quot;TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256&quot;
+(without quotes). For cipher configuration for TLSv1.2 and earlier, please check
+the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword.
 </pre><a class="anchor" name="crl-file"></a><a class="anchor" name="5-crl-file"></a><a class="anchor" name="5.1-crl-file"></a><a class="anchor" name="crl-file (Bind and server options)"></a><a class="anchor" name="crl-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crl-file"></a><a href="#5.1-crl-file">crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 designates a PEM file from which to load certificate revocation list used
 to verify client's certificate.
@@ -14304,14 +14308,20 @@ common use is to send HTTPS checks by combining &quot;<a href="#option%20httpchk
 All SSL settings are common to health checks and traffic (e.g. ciphers).
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information and &quot;<a href="#no-check-ssl">no-check-ssl</a>&quot; to disable
 this option.
-</pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.2-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.2-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This option sets the string describing the list of cipher algorithms that is
-is negotiated during the SSL/TLS handshake with the server. The format of the
+</pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.2-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.2-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. This
+option sets the string describing the list of cipher algorithms that is
+negotiated during the SSL/TLS handshake with the server. The format of the
 string is defined in &quot;man 1 ciphers&quot;. When SSL is used to communicate with
 servers on the local network, it is common to see a weaker set of algorithms
 than what is used over the internet. Doing so reduces CPU usage on both the
 server and haproxy while still keeping it compatible with deployed software.
 Some algorithms such as RC4-SHA1 are reasonably cheap. If no security at all
 is needed and just connectivity, using DES can be appropriate.
+</pre><a class="anchor" name="ciphersuites"></a><a class="anchor" name="5-ciphersuites"></a><a class="anchor" name="5.2-ciphersuites"></a><a class="anchor" name="ciphersuites (Bind and server options)"></a><a class="anchor" name="ciphersuites (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphersuites"></a><a href="#5.2-ciphersuites">ciphersuites</a></b> <span style="color: #080">&lt;ciphersuites&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in and
+OpenSSL 1.1.1 or later was used to build HAProxy. This option sets the string
+describing the list of cipher algorithms that is negotiated during the TLS
+1.3 handshake with the server. The format of the string is defined in
+&quot;man 1 ciphers&quot; under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section.
 </pre><a class="anchor" name="cookie"></a><a class="anchor" name="5-cookie"></a><a class="anchor" name="5.2-cookie"></a><a class="anchor" name="cookie (Bind and server options)"></a><a class="anchor" name="cookie (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="cookie"></a><a href="#5.2-cookie">cookie</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot; parameter sets the cookie value assigned to the server to
 &lt;value&gt;. This value will be checked in incoming requests, and the first
 operational server possessing the same value will be selected. In return, in
@@ -19516,8 +19526,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev3 &ndash; Configuration Manual<br>
-							<small>2018/09/29, willy tarreau</small>
+							HAProxy 1.9-dev4 &ndash; Configuration Manual<br>
+							<small>2018/10/21, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19620,7 +19630,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev4', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
