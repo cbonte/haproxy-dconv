@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev6-21 - Configuration Manual</title>
+		<title>HAProxy version 1.9-dev8 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -970,7 +970,9 @@
 							
 							<a class="list-group-item" href="#allow-0rtt">allow-0rtt</a>
 							
-							<a class="list-group-item" href="#alpn">alpn</a>
+							<a class="list-group-item" href="#alpn (Bind options)">alpn (Bind options)</a>
+							
+							<a class="list-group-item" href="#alpn (Server and default-server options)">alpn (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#always_false">always_false</a>
 							
@@ -1026,6 +1028,8 @@
 							<a class="list-group-item" href="#bool (Converters)">bool (Converters)</a>
 							
 							<a class="list-group-item" href="#bool (Fetching samples from internal states)">bool (Fetching samples from internal states)</a>
+							
+							<a class="list-group-item" href="#busy-polling">busy-polling</a>
 							
 							<a class="list-group-item" href="#bytes">bytes</a>
 							
@@ -1123,6 +1127,12 @@
 							<a class="list-group-item" href="#cpl">cpl</a>
 							
 							<a class="list-group-item" href="#cpu-map">cpu-map</a>
+							
+							<a class="list-group-item" href="#cpu_calls">cpu_calls</a>
+							
+							<a class="list-group-item" href="#cpu_ns_avg">cpu_ns_avg</a>
+							
+							<a class="list-group-item" href="#cpu_ns_tot">cpu_ns_tot</a>
 							
 							<a class="list-group-item" href="#crc32">crc32</a>
 							
@@ -1574,6 +1584,10 @@
 								
 							<a class="list-group-item" href="#language">language</a>
 							
+							<a class="list-group-item" href="#lat_ns_avg">lat_ns_avg</a>
+							
+							<a class="list-group-item" href="#lat_ns_tot">lat_ns_tot</a>
+							
 							<a class="list-group-item" href="#length">length</a>
 							
 							<a class="list-group-item" href="#level">level</a>
@@ -1824,7 +1838,9 @@
 							
 							<a class="list-group-item" href="#not">not</a>
 							
-							<a class="list-group-item" href="#npn">npn</a>
+							<a class="list-group-item" href="#npn (Bind options)">npn (Bind options)</a>
+							
+							<a class="list-group-item" href="#npn (Server and default-server options)">npn (Server and default-server options)</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-O"><h4>O</h4>
@@ -1981,6 +1997,8 @@
 							<a class="list-group-item" href="#proc">proc</a>
 							
 							<a class="list-group-item" href="#process">process</a>
+							
+							<a class="list-group-item" href="#profiling.tasks">profiling.tasks</a>
 							
 							<a class="list-group-item" href="#proto">proto</a>
 							
@@ -2543,9 +2561,13 @@
 							
 							<a class="list-group-item" href="#ssl_bc_alg_keysize">ssl_bc_alg_keysize</a>
 							
+							<a class="list-group-item" href="#ssl_bc_alpn">ssl_bc_alpn</a>
+							
 							<a class="list-group-item" href="#ssl_bc_cipher">ssl_bc_cipher</a>
 							
 							<a class="list-group-item" href="#ssl_bc_is_resumed">ssl_bc_is_resumed</a>
+							
+							<a class="list-group-item" href="#ssl_bc_npn">ssl_bc_npn</a>
 							
 							<a class="list-group-item" href="#ssl_bc_protocol">ssl_bc_protocol</a>
 							
@@ -3030,7 +3052,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/11/13</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/11/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3041,10 +3063,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9-dev6-21</strong></p>
+							<p><strong>version 1.9-dev8</strong></p>
 							<p>
 								willy tarreau<br>
-								2018/11/11
+								2018/11/25
 							</p>
 						</div>
 
@@ -4429,6 +4451,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#nosplice">nosplice</a>
    - <a href="#nogetaddrinfo">nogetaddrinfo</a>
    - <a href="#noreuseport">noreuseport</a>
+   - <a href="#profiling.tasks">profiling.tasks</a>
    - <a href="#spread-checks">spread-checks</a>
    - <a href="#server-state-base">server-state-base</a>
    - <a href="#server-state-file">server-state-file</a>
@@ -4992,7 +5015,24 @@ with USE_WURFL=1.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
 <h2 id="chapter-3.2" data-target="3.2"><small><a class="small" href="#3.2">3.2.</a></small> Performance tuning</h2>
-<div><a class="anchor" name="max-spread-checks"></a><a class="anchor" name="3-max-spread-checks"></a><a class="anchor" name="3.2-max-spread-checks"></a><a class="anchor" name="max-spread-checks (Global parameters)"></a><a class="anchor" name="max-spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="max-spread-checks"></a><a href="#3.2-max-spread-checks">max-spread-checks</a></b> <span style="color: #080">&lt;delay in milliseconds&gt;</span></div><pre class="text">By default, haproxy tries to spread the start of health checks across the
+<div><a class="anchor" name="busy-polling"></a><a class="anchor" name="3-busy-polling"></a><a class="anchor" name="3.2-busy-polling"></a><a class="anchor" name="busy-polling (Global parameters)"></a><a class="anchor" name="busy-polling (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="busy-polling"></a><a href="#3.2-busy-polling">busy-polling</a></b></div><pre class="text">In some situations, especially when dealing with low latency on processors
+supporting a variable frequency or when running inside virtual machines, each
+time the process waits for an I/O using the poller, the processor goes back
+to sleep or is offered to another VM for a long time, and it causes
+excessively high latencies. This option provides a solution preventing the
+processor from sleeping by always using a null timeout on the pollers. This
+results in a significant latency reduction (30 to 100 microseconds observed)
+at the expense of a risk to overheat the processor. It may even be used with
+threads, in which case improperly bound threads may heavily conflict,
+resulting in a worse performance and high values for the CPU stolen fields
+in &quot;show info&quot; output, indicating which threads are misconfigured. It is
+important not to let the process run on the same processor as the network
+interrupts when this option is used. It is also better to avoid using it on
+multiple CPU threads sharing the same core. This option is disabled by
+default. If it has been enabled, it may still be forcibly disabled by
+prefixing it with the &quot;no&quot; keyword. It is ignored by the &quot;select&quot; and
+&quot;poll&quot; pollers.
+</pre><a class="anchor" name="max-spread-checks"></a><a class="anchor" name="3-max-spread-checks"></a><a class="anchor" name="3.2-max-spread-checks"></a><a class="anchor" name="max-spread-checks (Global parameters)"></a><a class="anchor" name="max-spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="max-spread-checks"></a><a href="#3.2-max-spread-checks">max-spread-checks</a></b> <span style="color: #080">&lt;delay in milliseconds&gt;</span></div><pre class="text">By default, haproxy tries to spread the start of health checks across the
 smallest health check interval of all the servers in a farm. The principle is
 to avoid hammering services running on the same server. But when using large
 check intervals (10 seconds or more), the last servers in the farm take some
@@ -5101,6 +5141,14 @@ case of doubt. See also &quot;<a href="#option%20splice-auto">option splice-auto
 the command line argument &quot;-dG&quot;. Deprecated gethostbyname(3) will be used.
 </pre><a class="anchor" name="noreuseport"></a><a class="anchor" name="3-noreuseport"></a><a class="anchor" name="3.2-noreuseport"></a><a class="anchor" name="noreuseport (Global parameters)"></a><a class="anchor" name="noreuseport (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="noreuseport"></a><a href="#3.2-noreuseport">noreuseport</a></b></div><pre class="text">Disables the use of SO_REUSEPORT - see socket(7). It is equivalent to the
 command line argument &quot;-dR&quot;.
+</pre><a class="anchor" name="profiling.tasks"></a><a class="anchor" name="3-profiling.tasks"></a><a class="anchor" name="3.2-profiling.tasks"></a><a class="anchor" name="profiling.tasks (Global parameters)"></a><a class="anchor" name="profiling.tasks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="profiling.tasks"></a><a href="#3.2-profiling.tasks">profiling.tasks</a></b> <span style="color: #800">{ on | off }</span></div><pre class="text">Enables ('on') or disables ('off') per-task CPU profiling. CPU profiling per
+task can be very convenient to report where the time is spent and which
+requests have what effect on which other request. It is not enabled by
+default as it may consume a little bit extra CPU. This requires a system
+supporting the clock_gettime(2) syscall with clock identifiers
+CLOCK_MONOTONIC and CLOCK_THREAD_CPUTIME_ID, otherwise the reported time will
+be zero. This option may be changed at run time using &quot;set profiling&quot; on the
+CLI.
 </pre><a class="anchor" name="spread-checks"></a><a class="anchor" name="3-spread-checks"></a><a class="anchor" name="3.2-spread-checks"></a><a class="anchor" name="spread-checks (Global parameters)"></a><a class="anchor" name="spread-checks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="spread-checks"></a><a href="#3.2-spread-checks">spread-checks</a></b> <span style="color: #080">&lt;0..50, in percent&gt;</span></div><pre class="text">Sometimes it is desirable to avoid sending agent and health checks to
 servers at exact intervals, for instance when many logical servers are
 located on the same physical server. With the help of this parameter, it
@@ -7592,7 +7640,8 @@ No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="
 This appends an HTTP header field to this response whose name is specified in
 &lt;name&gt; and whose value is defined by &lt;fmt&gt; which follows the log-format rules
 (see Custom Log Format in <a href="#8.2.4">section 8.2.4</a>). This is particularly useful to pass
-to the client som
+to the client some Link headers to preload resources required to render the
+HTML documents.
 
 See RFC 8297 for more information.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request redirect"></a><a class="anchor" name="4-http-request redirect"></a><a class="anchor" name="4.2-http-request redirect"></a><a class="anchor" name="http-request redirect (Proxies)"></a><a class="anchor" name="http-request redirect (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request redirect"></a><a href="#4.2-http-request%20redirect">http-request redirect</a></b> <span style="color: #080">&lt;rule&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This performs an HTTP redirection based on a redirect rule. This is exactly
@@ -13979,7 +14028,7 @@ filter per certificate, with the following format for each line :
 
       &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
 
-sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
+sslbindconf support &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">npn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#npn%20%28Bind%20options%29">Bind options</a></li><li><a href="#npn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
 crl-file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL
 and Openssl &gt;= 1.1.1 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
 It override the configuration set in bind line for the certificate.
@@ -14180,7 +14229,7 @@ as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
 This requires that the SSL library is build with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
-replaced with the ALPN extension (see the &quot;<a href="#alpn">alpn</a>&quot; keyword), though this one is
+replaced with the ALPN extension (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword), though this one is
 only available starting with OpenSSL 1.0.2. If HTTP/2 is desired on an older
 version of OpenSSL, NPN might still be used as most clients still support it
 at the time of writing this. It is possible to enable both NPN and ALPN
@@ -14219,7 +14268,7 @@ be usable on the frontend side. The list of available protocols is reported
 in haproxy -vv.
 Idea behind this optipon is to bypass the selection of the best multiplexer's
 protocol for all connections instantiated from this listening socket. For
-instance, it is possible to force the http/2 on clear TCP by specifing &quot;proto
+instance, it is possible to force the http/2 on clear TCP by specifying &quot;proto
 h2&quot; on the bind line.
 </pre><a class="anchor" name="ssl"></a><a class="anchor" name="5-ssl"></a><a class="anchor" name="5.1-ssl"></a><a class="anchor" name="ssl (Bind and server options)"></a><a class="anchor" name="ssl (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ssl"></a><a href="#5.1-ssl">ssl</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 enables SSL deciphering on connections instantiated from this listener. A
@@ -14419,6 +14468,18 @@ hostname, it will be resolved.
 </pre><a class="anchor" name="agent-port"></a><a class="anchor" name="5-agent-port"></a><a class="anchor" name="5.2-agent-port"></a><a class="anchor" name="agent-port (Bind and server options)"></a><a class="anchor" name="agent-port (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-port"></a><a href="#5.2-agent-port">agent-port</a></b> <span style="color: #080">&lt;port&gt;</span></div><pre class="text">The &quot;<a href="#agent-port">agent-port</a>&quot; parameter sets the TCP port used for agent checks.
 
 See also the &quot;<a href="#agent-check">agent-check</a>&quot; and &quot;<a href="#agent-inter">agent-inter</a>&quot; parameters.
+</pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.2-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.2-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
+list as supported on top of ALPN. The protocol list consists in a comma-
+delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
+quotes). This requires that the SSL library is build with support for TLS
+extensions enabled (check with haproxy -vv). The ALPN extension replaces the
+initial NPN extension. ALPN is required to connect to HTTP/2 servers.
+Versions of OpenSSL prior to 1.0.2 didn't support ALPN and only supposed the
+now obsolete NPN extension.
+If both HTTP/2 and HTTP/1.1 are expected to be supported, both versions can
+be advertised, in order of preference, like below :
+
+     server 127.0.0.1:443 ssl crt pub.pem alpn h2,http/1.1
 </pre><a class="anchor" name="backup"></a><a class="anchor" name="5-backup"></a><a class="anchor" name="5.2-backup"></a><a class="anchor" name="backup (Bind and server options)"></a><a class="anchor" name="backup (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="backup"></a><a href="#5.2-backup">backup</a></b></div><pre class="text">When &quot;<a href="#backup">backup</a>&quot; is present on a server line, the server is only used in load
 balancing when all other non-backup servers are unavailable. Requests coming
 with a persistence cookie referencing the server will always be served
@@ -14698,6 +14759,13 @@ It may also be used as &quot;<a href="#default-server">default-server</a>&quot; 
 </pre><a class="anchor" name="non-stick"></a><a class="anchor" name="5-non-stick"></a><a class="anchor" name="5.2-non-stick"></a><a class="anchor" name="non-stick (Bind and server options)"></a><a class="anchor" name="non-stick (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="non-stick"></a><a href="#5.2-non-stick">non-stick</a></b></div><pre class="text">Never add connections allocated to this sever to a stick-table.
 This may be used in conjunction with backup to ensure that
 stick-table persistence is disabled for backup servers.
+</pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.2-npn"></a><a class="anchor" name="npn (Bind and server options)"></a><a class="anchor" name="npn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.2-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
+as supported on top of NPN. The protocol list consists in a comma-delimited
+list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
+This requires that the SSL library is build with support for TLS extensions
+enabled (check with haproxy -vv). Note that the NPN extension has been
+replaced with the ALPN extension (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword), though this one is
+only available starting with OpenSSL 1.0.2.
 </pre><a class="anchor" name="observe"></a><a class="anchor" name="5-observe"></a><a class="anchor" name="5.2-observe"></a><a class="anchor" name="observe (Bind and server options)"></a><a class="anchor" name="observe (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="observe"></a><a href="#5.2-observe">observe</a></b> <span style="color: #080">&lt;mode&gt;</span></div><pre class="text">This option enables health adjusting based on observing communication with
 the server. By default this functionality is disabled and enabling it also
 requires to enable health checks. There are two supported modes: &quot;layer4&quot; and
@@ -16529,6 +16597,36 @@ OTHER CAVEATS AND NOTES: at this point in time, the code does not take care
 of dynamic connections. Also, if any of the server maxconn, or maxqueue is 0,
 then this fetch clearly does not make sense, in which case the value returned
 will be -1.
+</pre><a class="anchor" name="cpu_calls"></a><a class="anchor" name="7-cpu_calls"></a><a class="anchor" name="7.3.2-cpu_calls"></a><a class="anchor" name="cpu_calls (Using ACLs and fetching samples)"></a><a class="anchor" name="cpu_calls (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="cpu_calls"></a><a href="#7.3.2-cpu_calls">cpu_calls</a></b> : integer</div><pre class="text">Returns the number of calls to the task processing the stream or current
+request since it was allocated. This number is reset for each new request on
+the same connections in case of HTTP keep-alive. This value should usually be
+low and stable (around 2 calls for a typically simple request) but may become
+high if some processing (compression, caching or analysis) is performed. This
+is purely for performance monitoring purposes.
+</pre><a class="anchor" name="cpu_ns_avg"></a><a class="anchor" name="7-cpu_ns_avg"></a><a class="anchor" name="7.3.2-cpu_ns_avg"></a><a class="anchor" name="cpu_ns_avg (Using ACLs and fetching samples)"></a><a class="anchor" name="cpu_ns_avg (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="cpu_ns_avg"></a><a href="#7.3.2-cpu_ns_avg">cpu_ns_avg</a></b> : integer</div><pre class="text">Returns the average number of nanoseconds spent in each call to the task
+processing the stream or current request. This number is reset for each new
+request on the same connections in case of HTTP keep-alive. This value
+indicates the overall cost of processing the request or the connection for
+each call. There is no good nor bad value but the time spent in a call
+automatically causes latency for other processing (see lat_ns_avg below),
+and may affect other connection's apparent response time. Certain operations
+like compression, complex regex matching or heavy Lua operations may directly
+affect this value, and having it in the logs will make it easier to spot the
+faulty processing that needs to be fixed to recover decent performance.
+Note: this value is exactly cpu_ns_tot divided by cpu_calls.
+</pre><a class="anchor" name="cpu_ns_tot"></a><a class="anchor" name="7-cpu_ns_tot"></a><a class="anchor" name="7.3.2-cpu_ns_tot"></a><a class="anchor" name="cpu_ns_tot (Using ACLs and fetching samples)"></a><a class="anchor" name="cpu_ns_tot (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="cpu_ns_tot"></a><a href="#7.3.2-cpu_ns_tot">cpu_ns_tot</a></b> : integer</div><pre class="text">Returns the total number of nanoseconds spent in each call to the task
+processing the stream or current request. This number is reset for each new
+request on the same connections in case of HTTP keep-alive. This value
+indicates the overall cost of processing the request or the connection for
+each call. There is no good nor bad value but the time spent in a call
+automatically causes latency for other processing (see lat_ns_avg below),
+induces CPU costs on the machine, and may affect other connection's apparent
+response time. Certain operations like compression, complex regex matching or
+heavy Lua operations may directly affect this value, and having it in the
+logs will make it easier to spot the faulty processing that needs to be fixed
+to recover decent performance. The value may be artificially high due to a
+high cpu_calls count, for example when processing many HTTP chunks, and for
+this reason it is often preferred to log cpu_ns_avg instead.
 </pre><a class="anchor" name="date"></a><a class="anchor" name="7-date"></a><a class="anchor" name="7.3.2-date"></a><a class="anchor" name="date (Using ACLs and fetching samples)"></a><a class="anchor" name="date (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="date"></a><a href="#7.3.2-date">date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>) : integer</div><pre class="text">Returns the current date as the epoch (number of seconds since 01/01/1970).
 If an offset value is specified, then it is a number of seconds that is added
 to the current date before returning the value. This is particularly useful
@@ -16620,6 +16718,39 @@ frontend mail
 </pre><a class="anchor" name="int"></a><a class="anchor" name="7-int"></a><a class="anchor" name="7.3.2-int"></a><a class="anchor" name="int (Using ACLs and fetching samples)"></a><a class="anchor" name="int (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="int"></a><a href="#7.3.2-int">int</a></b>(<span style="color: #080">&lt;integer&gt;</span>) : signed integer</div><pre class="text">Returns a signed integer.
 </pre><a class="anchor" name="ipv4"></a><a class="anchor" name="7-ipv4"></a><a class="anchor" name="7.3.2-ipv4"></a><a class="anchor" name="ipv4 (Using ACLs and fetching samples)"></a><a class="anchor" name="ipv4 (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="ipv4"></a><a href="#7.3.2-ipv4">ipv4</a></b>(<span style="color: #080">&lt;ipv4&gt;</span>) : ipv4</div><pre class="text">Returns an ipv4.
 </pre><a class="anchor" name="ipv6"></a><a class="anchor" name="7-ipv6"></a><a class="anchor" name="7.3.2-ipv6"></a><a class="anchor" name="ipv6 (Using ACLs and fetching samples)"></a><a class="anchor" name="ipv6 (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="ipv6"></a><a href="#7.3.2-ipv6">ipv6</a></b>(<span style="color: #080">&lt;ipv6&gt;</span>) : ipv6</div><pre class="text">Returns an ipv6.
+</pre><a class="anchor" name="lat_ns_avg"></a><a class="anchor" name="7-lat_ns_avg"></a><a class="anchor" name="7.3.2-lat_ns_avg"></a><a class="anchor" name="lat_ns_avg (Using ACLs and fetching samples)"></a><a class="anchor" name="lat_ns_avg (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="lat_ns_avg"></a><a href="#7.3.2-lat_ns_avg">lat_ns_avg</a></b> : integer</div><pre class="text">Returns the average number of nanoseconds spent between the moment the task
+handling the stream is woken up and the moment it is effectively called. This
+number is reset for each new request on the same connections in case of HTTP
+keep-alive. This value indicates the overall latency inflicted to the current
+request by all other requests being processed in parallel, and is a direct
+indicator of perceived performance due to noisy neighbours. In order to keep
+the value low, it is possible to reduce the scheduler's run queue depth using
+&quot;<a href="#tune.runqueue-depth">tune.runqueue-depth</a>&quot;, to reduce the number of concurrent events processed at
+once using &quot;<a href="#tune.maxpollevents">tune.maxpollevents</a>&quot;, to decrease the stream's nice value using
+the &quot;<a href="#nice">nice</a>&quot; option on the &quot;<a href="#bind">bind</a>&quot; lines or in the frontend, or to look for
+other heavy requests in logs (those exhibiting large values of &quot;<a href="#cpu_ns_avg">cpu_ns_avg</a>&quot;),
+whose processing needs to be adjusted or fixed. Compression of large buffers
+could be a culprit, like heavy regex or long lists of regex.
+Note: this value is exactly lat_ns_tot divided by cpu_calls.
+</pre><a class="anchor" name="lat_ns_tot"></a><a class="anchor" name="7-lat_ns_tot"></a><a class="anchor" name="7.3.2-lat_ns_tot"></a><a class="anchor" name="lat_ns_tot (Using ACLs and fetching samples)"></a><a class="anchor" name="lat_ns_tot (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="lat_ns_tot"></a><a href="#7.3.2-lat_ns_tot">lat_ns_tot</a></b> : integer</div><pre class="text">Returns the total number of nanoseconds spent between the moment the task
+handling the stream is woken up and the moment it is effectively called. This
+number is reset for each new request on the same connections in case of HTTP
+keep-alive. This value indicates the overall latency inflicted to the current
+request by all other requests being processed in parallel, and is a direct
+indicator of perceived performance due to noisy neighbours. In order to keep
+the value low, it is possible to reduce the scheduler's run queue depth using
+&quot;<a href="#tune.runqueue-depth">tune.runqueue-depth</a>&quot;, to reduce the number of concurrent events processed at
+once using &quot;<a href="#tune.maxpollevents">tune.maxpollevents</a>&quot;, to decrease the stream's nice value using
+the &quot;<a href="#nice">nice</a>&quot; option on the &quot;<a href="#bind">bind</a>&quot; lines or in the frontend, or to look for
+other heavy requests in logs (those exhibiting large values of &quot;<a href="#cpu_ns_avg">cpu_ns_avg</a>&quot;),
+whose processing needs to be adjusted or fixed. Compression of large buffers
+could be a culprit, like heavy regex or long lists of regex. Note: while it
+may intuitively seem that the total latency adds to a transfer time, it is
+almost never true because while a task waits for the CPU, network buffers
+continue to fill up and the next call will process more at once. The value
+may be artificially high due to a high cpu_calls count, for example when
+processing many HTTP chunks, and for this reason it is often preferred to log
+lat_ns_avg instead, which is a more relevant performance indicator.
 </pre><a class="anchor" name="meth"></a><a class="anchor" name="7-meth"></a><a class="anchor" name="7.3.2-meth"></a><a class="anchor" name="meth (Using ACLs and fetching samples)"></a><a class="anchor" name="meth (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="meth"></a><a href="#7.3.2-meth">meth</a></b>(<span style="color: #080">&lt;method&gt;</span>) : method</div><pre class="text">Returns a method.
 </pre><a class="anchor" name="nbproc"></a><a class="anchor" name="7-nbproc"></a><a class="anchor" name="7.3.2-nbproc"></a><a class="anchor" name="nbproc (Using ACLs and fetching samples)"></a><a class="anchor" name="nbproc (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#7.3.2-nbproc">nbproc</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the number of processes that were
 started (it equals the global &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; setting). This is useful for logging
@@ -17141,11 +17272,28 @@ layer and is locally deciphered. This means the outgoing connection was made
 other a server with the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option.
 </pre><a class="anchor" name="ssl_bc_alg_keysize"></a><a class="anchor" name="7-ssl_bc_alg_keysize"></a><a class="anchor" name="7.3.4-ssl_bc_alg_keysize"></a><a class="anchor" name="ssl_bc_alg_keysize (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_alg_keysize (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_alg_keysize"></a><a href="#7.3.4-ssl_bc_alg_keysize">ssl_bc_alg_keysize</a></b> : integer</div><pre class="text">Returns the symmetric cipher key size supported in bits when the outgoing
 connection was made over an SSL/TLS transport layer.
+</pre><a class="anchor" name="ssl_bc_alpn"></a><a class="anchor" name="7-ssl_bc_alpn"></a><a class="anchor" name="7.3.4-ssl_bc_alpn"></a><a class="anchor" name="ssl_bc_alpn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_alpn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_alpn"></a><a href="#7.3.4-ssl_bc_alpn">ssl_bc_alpn</a></b> : string</div><pre class="text">This extracts the Application Layer Protocol Negotiation field from an
+outgoing connection made via a TLS transport layer.
+The result is a string containing the protocol name negociated with the
+server. The SSL library must have been built with support for TLS
+extensions enabled (check haproxy -vv). Note that the TLS ALPN extension is
+not advertised unless the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword on the &quot;<a href="#server">server</a>&quot; line specifies a
+protocol list. Also, nothing forces the server to pick a protocol from this
+list, any other one may be requested. The TLS ALPN extension is meant to
+replace the TLS NPN extension. See also &quot;<a href="#ssl_bc_npn">ssl_bc_npn</a>&quot;.
 </pre><a class="anchor" name="ssl_bc_cipher"></a><a class="anchor" name="7-ssl_bc_cipher"></a><a class="anchor" name="7.3.4-ssl_bc_cipher"></a><a class="anchor" name="ssl_bc_cipher (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_cipher (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_cipher"></a><a href="#7.3.4-ssl_bc_cipher">ssl_bc_cipher</a></b> : string</div><pre class="text">Returns the name of the used cipher when the outgoing connection was made
 over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_bc_is_resumed"></a><a class="anchor" name="7-ssl_bc_is_resumed"></a><a class="anchor" name="7.3.4-ssl_bc_is_resumed"></a><a class="anchor" name="ssl_bc_is_resumed (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_is_resumed (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_is_resumed"></a><a href="#7.3.4-ssl_bc_is_resumed">ssl_bc_is_resumed</a></b> : boolean</div><pre class="text">Returns true when the back connection was made over an SSL/TLS transport
 layer and the newly created SSL session was resumed using a cached
 session or a TLS ticket.
+</pre><a class="anchor" name="ssl_bc_npn"></a><a class="anchor" name="7-ssl_bc_npn"></a><a class="anchor" name="7.3.4-ssl_bc_npn"></a><a class="anchor" name="ssl_bc_npn (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_npn (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_npn"></a><a href="#7.3.4-ssl_bc_npn">ssl_bc_npn</a></b> : string</div><pre class="text">This extracts the Next Protocol Negotiation field from an outgoing connection
+made via a TLS transport layer. The result is a string containing the
+protocol name negociated with the server . The SSL library must have been
+built with support for TLS extensions enabled (check haproxy -vv). Note that
+the TLS NPN extension is not advertised unless the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">npn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#npn%20%28Bind%20options%29">Bind options</a></li><li><a href="#npn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword on the
+&quot;<a href="#server">server</a>&quot; line specifies a protocol list. Also, nothing forces the server to
+pick a protocol from this list, any other one may be used. Please note that
+the TLS NPN extension was replaced with ALPN.
 </pre><a class="anchor" name="ssl_bc_protocol"></a><a class="anchor" name="7-ssl_bc_protocol"></a><a class="anchor" name="7.3.4-ssl_bc_protocol"></a><a class="anchor" name="ssl_bc_protocol (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_protocol (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_protocol"></a><a href="#7.3.4-ssl_bc_protocol">ssl_bc_protocol</a></b> : string</div><pre class="text">Returns the name of the used protocol when the outgoing connection was made
 over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_bc_unique_id"></a><a class="anchor" name="7-ssl_bc_unique_id"></a><a class="anchor" name="7.3.4-ssl_bc_unique_id"></a><a class="anchor" name="ssl_bc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_bc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_bc_unique_id"></a><a href="#7.3.4-ssl_bc_unique_id">ssl_bc_unique_id</a></b> : binary</div><pre class="text">When the outgoing connection was made over an SSL/TLS transport layer,
@@ -17284,7 +17432,7 @@ incoming connection made via a TLS transport layer and locally deciphered by
 haproxy. The result is a string containing the protocol name advertised by
 the client. The SSL library must have been built with support for TLS
 extensions enabled (check haproxy -vv). Note that the TLS ALPN extension is
-not advertised unless the &quot;<a href="#alpn">alpn</a>&quot; keyword on the &quot;<a href="#bind">bind</a>&quot; line specifies a
+not advertised unless the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword on the &quot;<a href="#bind">bind</a>&quot; line specifies a
 protocol list. Also, nothing forces the client to pick a protocol from this
 list, any other one may be requested. The TLS ALPN extension is meant to
 replace the TLS NPN extension. See also &quot;<a href="#ssl_fc_npn">ssl_fc_npn</a>&quot;.
@@ -17326,7 +17474,7 @@ made via a TLS transport layer and locally deciphered by haproxy. The result
 is a string containing the protocol name advertised by the client. The SSL
 library must have been built with support for TLS extensions enabled (check
 haproxy -vv). Note that the TLS NPN extension is not advertised unless the
-&quot;<a href="#npn">npn</a>&quot; keyword on the &quot;<a href="#bind">bind</a>&quot; line specifies a protocol list. Also, nothing
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">npn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#npn%20%28Bind%20options%29">Bind options</a></li><li><a href="#npn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword on the &quot;<a href="#bind">bind</a>&quot; line specifies a protocol list. Also, nothing
 forces the client to pick a protocol from this list, any other one may be
 requested. Please note that the TLS NPN extension was replaced with ALPN.
 </pre><a class="anchor" name="ssl_fc_protocol"></a><a class="anchor" name="7-ssl_fc_protocol"></a><a class="anchor" name="7.3.4-ssl_fc_protocol"></a><a class="anchor" name="ssl_fc_protocol (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_protocol (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_protocol"></a><a href="#7.3.4-ssl_fc_protocol">ssl_fc_protocol</a></b> : string</div><pre class="text">Returns the name of the used protocol when the incoming connection was made
@@ -19678,8 +19826,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev6-21 &ndash; Configuration Manual<br>
-							<small>2018/11/11, willy tarreau</small>
+							HAProxy 1.9-dev8 &ndash; Configuration Manual<br>
+							<small>2018/11/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19782,7 +19930,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev6-21', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev8', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

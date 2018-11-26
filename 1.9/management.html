@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev6 - Management Guide</title>
+		<title>HAProxy version 1.9-dev8 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -324,6 +324,8 @@
 							
 							<a class="list-group-item" href="#set maxconn server">set maxconn server</a>
 							
+							<a class="list-group-item" href="#set profiling">set profiling</a>
+							
 							<a class="list-group-item" href="#set rate-limit">set rate-limit</a>
 							
 							<a class="list-group-item" href="#set rate-limit connections">set rate-limit connections</a>
@@ -386,6 +388,8 @@
 							
 							<a class="list-group-item" href="#show pools">show pools</a>
 							
+							<a class="list-group-item" href="#show profiling">show profiling</a>
+							
 							<a class="list-group-item" href="#show schema">show schema</a>
 							
 							<a class="list-group-item" href="#show schema json">show schema json</a>
@@ -429,7 +433,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/11/13</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/11/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -440,7 +444,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.9-dev6</strong></p>
+							<p><strong>version 1.9-dev8</strong></p>
 							<p>
 								<br>
 								
@@ -1838,7 +1842,7 @@ example :
     # echo &quot;show info;show stat;show table&quot; | socat /var/run/haproxy stdio
 
 If a command needs to use a semi-colon or a backslash (eg: in a value), it
-must be preceeded by a backslash ('\').
+must be preceded by a backslash ('\').
 
 The interactive mode displays a prompt ('&gt;') and waits for commands to be
 entered on the line, then processes them, and displays the prompt again to wait
@@ -2143,6 +2147,9 @@ pending, they will immediately be accepted. If it is lowered to a value below
 the current number of connections, new connections acceptation will be
 delayed until the threshold is reached. A value of zero restores the initial
 setting.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set profiling"></a><a class="anchor" name="9-set profiling"></a><a class="anchor" name="9.3-set profiling"></a><a class="anchor" name="set profiling (Statistics and monitoring)"></a><a class="anchor" name="set profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set profiling"></a><a href="#9.3-set%20profiling">set profiling</a></b> <span style="color: #800">{ tasks }</span> <span style="color: #800">{ on | off }</span></div><pre class="text">Enables or disables CPU profiling for the indicated subsystem. This is
+equivalent to setting or clearing the &quot;profiling&quot; settings in the &quot;global&quot;
+section of the configuration file. Please also see &quot;<a href="#show%20profiling">show profiling</a>&quot;.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.3-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections"></a><a class="anchor" name="9-set rate-limit connections"></a><a class="anchor" name="9.3-set rate-limit connections"></a><a class="anchor" name="set rate-limit connections (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections global"></a><a class="anchor" name="9-set rate-limit connections global"></a><a class="anchor" name="9.3-set rate-limit connections global"></a><a class="anchor" name="set rate-limit connections global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit connections global"></a><a href="#9.3-set%20rate-limit%20connections%20global">set rate-limit connections global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide connection rate limit, which is set by the global
 'maxconnrate' setting. A value of zero disables the limitation. This limit
 applies to all frontends and the change has an immediate effect. The value
@@ -2485,6 +2492,8 @@ composing any map. Many of these patterns can be shared with ACL.
 usage when suspecting a memory leak for example. It does exactly the same
 as the SIGQUIT when running in foreground except that it does not flush
 the pools.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show profiling"></a><a class="anchor" name="9-show profiling"></a><a class="anchor" name="9.3-show profiling"></a><a class="anchor" name="show profiling (Statistics and monitoring)"></a><a class="anchor" name="show profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show profiling"></a><a href="#9.3-show%20profiling">show profiling</a></b></div><pre class="text">Dumps the current profiling settings, one per line, as well as the command
+needed to change them.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show servers"></a><a class="anchor" name="9-show servers"></a><a class="anchor" name="9.3-show servers"></a><a class="anchor" name="show servers (Statistics and monitoring)"></a><a class="anchor" name="show servers (Unix Socket commands)"></a><a class="anchor" name="show servers state"></a><a class="anchor" name="9-show servers state"></a><a class="anchor" name="9.3-show servers state"></a><a class="anchor" name="show servers state (Statistics and monitoring)"></a><a class="anchor" name="show servers state (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show servers state"></a><a href="#9.3-show%20servers%20state">show servers state</a></b> <span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span></div><pre class="text">Dump the state of the servers found in the running configuration. A backend
 name or identifier may be provided to limit the output to this backend only.
 
@@ -3208,7 +3217,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev6 &ndash; Management Guide<br>
+							HAProxy 1.9-dev8 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3312,7 +3321,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev6', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev8', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
