@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev9 - Management Guide</title>
+		<title>HAProxy version 1.9-dev10-126 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -163,6 +163,17 @@
 			
 				
 				<tr>
+					<td><small>9.4.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.4">Master CLI</a>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
 					<td><br><b><small>10.</small></b></td>
 					<td>
 							<a href="#10"><br><b>Tricks for easier configuration management</b></a>
@@ -296,6 +307,11 @@
 							<a class="list-group-item" href="#interrupts are assigned under">interrupts are assigned under</a>
 							
                                                                 </div> <!-- /letter -->
+								<div class="letter" id="letter-O"><h4>O</h4>
+								
+							<a class="list-group-item" href="#operator">operator</a>
+							
+                                                                </div> <!-- /letter -->
 								<div class="letter" id="letter-P"><h4>P</h4>
 								
 							<a class="list-group-item" href="#prompt">prompt</a>
@@ -374,6 +390,8 @@
 							
 							<a class="list-group-item" href="#show cli">show cli</a>
 							
+							<a class="list-group-item" href="#show cli level">show cli level</a>
+							
 							<a class="list-group-item" href="#show cli sockets">show cli sockets</a>
 							
 							<a class="list-group-item" href="#show env">show env</a>
@@ -419,6 +437,11 @@
 							<a class="list-group-item" href="#shutdown sessions server">shutdown sessions server</a>
 							
                                                                 </div> <!-- /letter -->
+								<div class="letter" id="letter-U"><h4>U</h4>
+								
+							<a class="list-group-item" href="#user">user</a>
+							
+                                                                </div> <!-- /letter -->
 								<div class="letter" id="letter-W"><h4>W</h4>
 								
 							<a class="list-group-item" href="#where">where</a>
@@ -433,7 +456,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/12/04</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/12/15</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -444,7 +467,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.9-dev9</strong></p>
+							<p><strong>version 1.9-dev10-126</strong></p>
 							<p>
 								<br>
 								
@@ -574,6 +597,17 @@
 					<td>
 							<div class="tab">
 							<a href="#9.3">Unix Socket commands</a>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><small>9.4.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.4">Master CLI</a>
 							</div>
 					<td>
 				</tr>
@@ -843,6 +877,15 @@ list of options is :
   -q : set &quot;quiet&quot; mode. This disables some messages during the configuration
     parsing and during startup. It can be used in combination with &quot;-c&quot; to
     just check if a configuration file is valid or not.
+
+  -S &lt;bind&gt;[,bind_options...]: in master-worker mode, bind a master CLI, which
+    allows the access to every processes, running or leaving ones.
+    For security reasons, it is recommended to bind the master CLI to a local
+    UNIX socket. The bind options are the same as the keyword &quot;bind&quot; in
+    the configuration file with words separated by commas instead of spaces.
+
+    Note that this socket can't be used to retrieve the listening sockets from
+    an old process during a seamless reload.
 
   -sf &lt;pid&gt;* : send the &quot;finish&quot; signal (SIGUSR1) to older processes after boot
     completion to ask them to finish what they are doing and to leave. &lt;pid&gt;
@@ -1921,7 +1964,7 @@ backend) and in each server. The accumulated counters are not affected. The
 internal activity counters reported by &quot;<a href="#show%20activity">show activity</a>&quot; are also reset. This
 can be used to get clean counters after an incident, without having to
 restart nor to clear traffic counters. This command is restricted and can
-only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.
+only be issued on sockets configured for levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;.
 </pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.3-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><a class="anchor" name="clear counters all"></a><a class="anchor" name="9-clear counters all"></a><a class="anchor" name="9.3-clear counters all"></a><a class="anchor" name="clear counters all (Statistics and monitoring)"></a><a class="anchor" name="clear counters all (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters all"></a><a href="#9.3-clear%20counters%20all">clear counters all</a></b></div><pre class="text">Clear all statistics counters in each proxy (frontend &amp; backend) and in each
 server. This has the same effect as restarting. This command is restricted
 and can only be issued on sockets configured for level &quot;admin&quot;.
@@ -2250,6 +2293,26 @@ sample value. The data returned are not a list of available ACL, but are the
 list of all patterns composing any ACL. Many of these patterns can be shared
 with maps.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show backend"></a><a class="anchor" name="9-show backend"></a><a class="anchor" name="9.3-show backend"></a><a class="anchor" name="show backend (Statistics and monitoring)"></a><a class="anchor" name="show backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show backend"></a><a href="#9.3-show%20backend">show backend</a></b></div><pre class="text">Dump the list of backends available in the running process
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cli"></a><a class="anchor" name="9-show cli"></a><a class="anchor" name="9.3-show cli"></a><a class="anchor" name="show cli (Statistics and monitoring)"></a><a class="anchor" name="show cli (Unix Socket commands)"></a><a class="anchor" name="show cli level"></a><a class="anchor" name="9-show cli level"></a><a class="anchor" name="9.3-show cli level"></a><a class="anchor" name="show cli level (Statistics and monitoring)"></a><a class="anchor" name="show cli level (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cli level"></a><a href="#9.3-show%20cli%20level">show cli level</a></b></div><pre class="text">Display the CLI level of the current CLI session. The result could be
+'admin', 'operator' or 'user'. See also the 'operator' and 'user' commands.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>$ socat /tmp/sock1 readline
+prompt
+&gt; operator
+&gt; show cli level
+operator
+&gt; user
+&gt; show cli level
+user
+&gt; operator
+Permission denied
+</code></pre>
+</div><a class="anchor" name="operator"></a><a class="anchor" name="9-operator"></a><a class="anchor" name="9.3-operator"></a><a class="anchor" name="operator (Statistics and monitoring)"></a><a class="anchor" name="operator (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="operator"></a><a href="#9.3-operator">operator</a></b></div><pre class="text">Decrease the CLI level of the current CLI session to operator. It can't be
+increase. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;
+</pre><a class="anchor" name="user"></a><a class="anchor" name="9-user"></a><a class="anchor" name="9.3-user"></a><a class="anchor" name="user (Statistics and monitoring)"></a><a class="anchor" name="user (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#9.3-user">user</a></b></div><pre class="text">Decrease the CLI level of the current CLI session to user. It can't be
+increase. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cli"></a><a class="anchor" name="9-show cli"></a><a class="anchor" name="9.3-show cli"></a><a class="anchor" name="show cli (Statistics and monitoring)"></a><a class="anchor" name="show cli (Unix Socket commands)"></a><a class="anchor" name="show cli sockets"></a><a class="anchor" name="9-show cli sockets"></a><a class="anchor" name="9.3-show cli sockets"></a><a class="anchor" name="show cli sockets (Statistics and monitoring)"></a><a class="anchor" name="show cli sockets (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cli sockets"></a><a href="#9.3-show%20cli%20sockets">show cli sockets</a></b></div><pre class="text">List CLI sockets. The output format is composed of 3 fields separated by
 spaces. The first field is the socket address, it can be a unix socket, a
 ipv4 address:port couple or a ipv6 one. Socket of other types won't be dump.
@@ -2293,7 +2356,7 @@ Variables are dumped in the same format as they are stored or returned by the
 &quot;env&quot; utility, that is, &quot;&lt;name&gt;=&lt;value&gt;&quot;. This can be handy when debugging
 certain configuration files making heavy use of environment variables to
 ensure that they contain the expected values. This command is restricted and
-can only be issued on sockets configured for levels &quot;operator&quot; or &quot;admin&quot;.
+can only be issued on sockets configured for levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show errors"></a><a class="anchor" name="9-show errors"></a><a class="anchor" name="9.3-show errors"></a><a class="anchor" name="show errors (Statistics and monitoring)"></a><a class="anchor" name="show errors (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show errors"></a><a href="#9.3-show%20errors">show errors</a></b> <span style="color: #008">[<span style="color: #080">&lt;iid&gt;</span>|<span style="color: #080">&lt;proxy&gt;</span>]</span> <span style="color: #008">[request|response]</span></div><pre class="text">Dump last known request and response errors collected by frontends and
 backends. If &lt;iid&gt; is specified, the limit the dump to errors concerning
 either frontend or backend whose ID is &lt;iid&gt;. Proxy ID &quot;-1&quot; will cause
@@ -2301,7 +2364,7 @@ all instances to be dumped. If a proxy name is specified instead, its ID
 will be used as the filter. If &quot;request&quot; or &quot;response&quot; is added after the
 proxy name or ID, only request or response errors will be dumped. This
 command is restricted and can only be issued on sockets configured for
-levels &quot;operator&quot; or &quot;admin&quot;.
+levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;.
 
 The errors which may be collected are the last request and response errors
 caused by protocol violations, often due to invalid characters in header
@@ -2591,7 +2654,7 @@ fields and their order per file format version :
    srvrecord:                   DNS SRV record associated to this SRV.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
-configured for levels &quot;operator&quot; or &quot;admin&quot;.
+configured for levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Display a lot of internal information about the specified session identifier.
 This identifier is the first field at the beginning of the lines in the dumps
 of &quot;<a href="#show%20sess">show sess</a>&quot; (it corresponds to the session pointer). Those information are
@@ -2889,6 +2952,99 @@ flag in the logs.
 can be used to terminate long-running sessions after a server is put into
 maintenance mode, for instance. Such terminated sessions are reported with a
 'K' flag in the logs.
+</pre></div>
+<a class="anchor" id="9.4" name="9.4"></a>
+<h2 id="chapter-9.4" data-target="9.4"><small><a class="small" href="#9.4">9.4.</a></small> Master CLI</h2>
+<div><pre class="text">The master CLI is a socket bound to the master process in master-worker mode.
+This CLI gives access to the unix socket commands in every running or leaving
+processes and allows a basic supervision of those processes.
+
+The master CLI is configurable only from the haproxy program arguments with
+the -S option. This option also takes bind options separated by commas.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># haproxy -W -S 127.0.0.1:1234 -f test1.cfg</span>
+<span class="comment"># haproxy -Ws -S /tmp/master-socket,uid,1000,gid,1000,mode,600 -f test1.cfg</span>
+<span class="comment"># haproxy -W -S /tmp/master-socket,level,user -f test1.cfg</span>
+</code></pre>
+</div><pre class="text">The master CLI introduces a new 'show proc' command to surpervise the
+processes:
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>$ echo 'show proc' | socat /var/run/haproxy-master.sock -
+<span class="comment">#&lt;PID&gt;          &lt;type&gt;          &lt;relative PID&gt;  &lt;reloads&gt;       &lt;uptime&gt;</span>
+1162            master          0               5               0d 00h02m07s
+<span class="comment"># workers</span>
+1271            worker          1               0               0d 00h00m00s
+1272            worker          2               0               0d 00h00m00s
+<span class="comment"># old workers</span>
+1233            worker          [was: 1]        3               0d 00h00m43s
+</code></pre>
+</div><pre class="text">In this example, the master has been reloaded 5 times but one of the old
+worker is still running and survived 3 reloads. You could access the CLI of
+this worker to understand what's going on.
+
+When the prompt is enabled (via the &quot;<a href="#prompt">prompt</a>&quot; command), the context the CLI is
+working on is displayed in the prompt. The master is identified by the &quot;master&quot;
+string, and other processes are identified with their PID. In case the last
+reload failed, the master prompt will be changed to &quot;master[ReloadFailed]&gt;&quot; so
+that it becomes visible that the process is still running on the previous
+configuration and that the new configuration is not operational.
+
+The master CLI uses a special prefix notation to access the multiple
+processes. This notation is easily identifiable as it begins by a @.
+
+A @ prefix can be followed by a relative process number or by an exclamation
+point and a PID. (e.g. @1 or @!1271). A @ alone could be use to specify the
+master. Leaving processes are only accessible with the PID as relative process
+number are only usable with the current processes.
+</pre><div class="separator">
+<span class="label label-success">Examples:</span>
+<pre class="prettyprint">
+<code>$ socat /var/run/haproxy-master.sock readline
+prompt
+master&gt; @1 show info; @2 show info
+[...]
+Process_num: 1
+Pid: 1271
+[...]
+Process_num: 2
+Pid: 1272
+[...]
+master&gt;
+
+$ echo '@!1271 show info; @!1272 show info' | socat /var/run/haproxy-master.sock -
+[...]
+</code></pre>
+</div><pre class="text">A prefix could be use as a command, which will send every next commands to
+the specified process.
+</pre><div class="separator">
+<span class="label label-success">Examples:</span>
+<pre class="prettyprint">
+<code>$ socat /var/run/haproxy-master.sock readline
+prompt
+master&gt; @1
+1271&gt; show info
+[...]
+1271&gt; show stat
+[...]
+1271&gt; @
+master&gt;
+
+$ echo '@1; show info; show stat; @2; show info; show stat' | socat /var/run/haproxy-master.sock -
+[...]
+</code></pre>
+</div><pre class="text">You can also reload the HAProxy master process with the &quot;reload&quot; command which
+does the same as a `kill -USR2` on the master process, provided that the user
+has at least &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot; privileges.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>$ echo &quot;reload&quot; | socat /var/run/haproxy-master.sock
+</code></pre>
+</div><pre class="text">Note that a reload will close the connection to the master CLI.
 </pre></div>
 <a class="anchor" id="10" name="10"></a>
 <div class="page-header"><h1 id="chapter-10" data-target="10"><small><a class="small" href="#10">10.</a></small> Tricks for easier configuration management</h1>
@@ -3217,7 +3373,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev9 &ndash; Management Guide<br>
+							HAProxy 1.9-dev10-126 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3321,7 +3477,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev9', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev10-126', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
