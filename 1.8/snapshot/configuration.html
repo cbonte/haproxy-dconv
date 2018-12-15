@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.14-41 - Configuration Manual</title>
+		<title>HAProxy version 1.8.15 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -2808,7 +2808,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/11/13</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/12/15</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2819,10 +2819,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.14-41</strong></p>
+							<p><strong>version 1.8.15</strong></p>
 							<p>
 								willy tarreau<br>
-								2018/09/20
+								2018/12/13
 							</p>
 						</div>
 
@@ -7446,9 +7446,11 @@ http-request set-query %[query,regsub(%3D,=,g)]
 
 - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
   enables tracking of sticky counters from current request. These rules
-  do not stop evaluation and do not change default action. Three sets of
-  counters may be simultaneously tracked by the same connection. The first
-  &quot;track-sc0&quot; rule executed enables tracking of the counters of the
+  do not stop evaluation and do not change default action. The number of
+  counters that may be simultaneously tracked by the same connection is set
+  in MAX_SESS_STKCTR at build time (reported in haproxy -vv) which defaults
+  to 3, so the track-sc number is between 0 and (MAX_SESS_STCKTR-1). The
+  first &quot;track-sc0&quot; rule executed enables tracking of the counters of the
   specified table as the first set. The first &quot;track-sc1&quot; rule executed
   enables tracking of the counters of the specified table as the second
   set. The first &quot;track-sc2&quot; rule executed enables tracking of the
@@ -9369,7 +9371,7 @@ the option is set on the backend, it will disable read timeout updates on
 data sent to the server. Doing so will typically break large HTTP posts from
 slow lines, so use it with caution.
 
-Note: older versions used to call this setting &quot;<a href="#option%20independent-streams">option independent-streams</a>&quot;
+Note: older versions used to call this setting &quot;option independant-streams&quot;
       with a spelling mistake. This spelling is still supported but
       deprecated.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;</div>
@@ -12313,16 +12315,18 @@ Four types of actions are supported :
 
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;] :
       enables tracking of sticky counters from current connection. These
-      rules do not stop evaluation and do not change default action. 3 sets
-      of counters may be simultaneously tracked by the same connection. The
-      first &quot;track-sc0&quot; rule executed enables tracking of the counters of the
-      specified table as the first set. The first &quot;track-sc1&quot; rule executed
-      enables tracking of the counters of the specified table as the second
-      set. The first &quot;track-sc2&quot; rule executed enables tracking of the
-      counters of the specified table as the third set. It is a recommended
-      practice to use the first set of counters for the per-frontend counters
-      and the second set for the per-backend ones. But this is just a
-      guideline, all may be used everywhere.
+      rules do not stop evaluation and do not change default action. The
+      number of counters that may be simultaneously tracked by the same
+      connection is set in MAX_SESS_STKCTR at build time (reported in
+      haproxy -vv) whichs defaults to 3, so the track-sc number is between 0
+      and (MAX_SESS_STCKTR-1). The first &quot;track-sc0&quot; rule executed enables
+      tracking of the counters of the specified table as the first set. The
+      first &quot;track-sc1&quot; rule executed enables tracking of the counters of the
+      specified table as the second set. The first &quot;track-sc2&quot; rule executed
+      enables tracking of the counters of the specified table as the third
+      set. It is a recommended practice to use the first set of counters for
+      the per-frontend counters and the second set for the per-backend ones.
+      But this is just a guideline, all may be used everywhere.
 
       These actions take one or two arguments :
         &lt;key&gt;   is mandatory, and is a sample expression rule as described
@@ -14146,8 +14150,9 @@ if it is already enabled for normal traffic and if no &quot;<a href="#port">port
 directive is present. However, if such a directive is present, the
 &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; option needs to be used to force the use of the
 protocol. See also the &quot;<a href="#send-proxy">send-proxy</a>&quot; option for more information.
-</pre><a class="anchor" name="check-sni"></a><a class="anchor" name="5-check-sni"></a><a class="anchor" name="5.2-check-sni"></a><a class="anchor" name="check-sni (Bind and server options)"></a><a class="anchor" name="check-sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-sni"></a><a href="#5.2-check-sni">check-sni</a></b></div><pre class="text">This option allows you to specify the SNI to be used when doing health checks
-over SSL.
+</pre><a class="anchor" name="check-sni"></a><a class="anchor" name="5-check-sni"></a><a class="anchor" name="5.2-check-sni"></a><a class="anchor" name="check-sni (Bind and server options)"></a><a class="anchor" name="check-sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-sni"></a><a href="#5.2-check-sni">check-sni</a></b> <span style="color: #080">&lt;sni&gt;</span></div><pre class="text">This option allows you to specify the SNI to be used when doing health checks
+over SSL. It is only possible to use a string to set &lt;sni&gt;. If you want to
+set a SNI for proxied traffic, see &quot;<a href="#sni">sni</a>&quot;.
 </pre><a class="anchor" name="check-ssl"></a><a class="anchor" name="5-check-ssl"></a><a class="anchor" name="5.2-check-ssl"></a><a class="anchor" name="check-ssl (Bind and server options)"></a><a class="anchor" name="check-ssl (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-ssl"></a><a href="#5.2-check-ssl">check-ssl</a></b></div><pre class="text">This option forces encryption of all health checks over SSL, regardless of
 whether the server uses SSL or not for the normal traffic. This is generally
 used when an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive is specified and SSL health
@@ -14597,7 +14602,8 @@ a bridged HTTPS scenario, using the &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&q
 expression, though alternatives such as req.hdr(host) can also make sense. If
 &quot;verify required&quot; is set (which is the recommended setting), the resulting
 name will also be matched against the server certificate's names. See the
-&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; directive for more details.
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; directive for more details. If you want to set a SNI for health
+checks, see the &quot;<a href="#check-sni">check-sni</a>&quot; directive for more details.
 </pre><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span> ...</div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter sets the source address which will be used when
 connecting to the server. It follows the exact same parameters and principle
 as the backend &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, except that it only applies to the server
@@ -16297,10 +16303,13 @@ sets unless they require some future information. Those generally include
 TCP/IP addresses and ports, as well as elements from stick-tables related to
 the incoming connection. For retrieving a value from a sticky counters, the
 counter number can be explicitly set as 0, 1, or 2 using the pre-defined
-&quot;sc0_&quot;, &quot;sc1_&quot;, or &quot;sc2_&quot; prefix, or it can be specified as the first integer
-argument when using the &quot;sc_&quot; prefix. An optional table may be specified with
-the &quot;sc*&quot; form, in which case the currently tracked key will be looked up into
-this alternate table instead of the table currently being tracked.
+&quot;sc0_&quot;, &quot;sc1_&quot;, or &quot;sc2_&quot; prefix. These three pre-defined prefixes can only be
+used if MAX_SESS_STKCTR value does not exceed 3, otherwise the counter number
+can be specified as the first integer argument when using the &quot;sc_&quot; prefix.
+Starting from &quot;sc_0&quot; to &quot;sc_N&quot; where N is (MAX_SESS_STKCTR-1). An optional
+table may be specified with the &quot;sc*&quot; form, in which case the currently
+tracked key will be looked up into this alternate table instead of the table
+currently being tracked.
 </pre><a class="anchor" name="be_id"></a><a class="anchor" name="7-be_id"></a><a class="anchor" name="7.3.3-be_id"></a><a class="anchor" name="be_id (Using ACLs and fetching samples)"></a><a class="anchor" name="be_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="be_id"></a><a href="#7.3.3-be_id">be_id</a></b> : integer</div><pre class="text">Returns an integer containing the current backend's id. It can be used in
 frontends with responses to check which backend processed the request.
 </pre><a class="anchor" name="be_name"></a><a class="anchor" name="7-be_name"></a><a class="anchor" name="7.3.3-be_name"></a><a class="anchor" name="be_name (Using ACLs and fetching samples)"></a><a class="anchor" name="be_name (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="be_name"></a><a href="#7.3.3-be_name">be_name</a></b> : string</div><pre class="text">Returns a string containing the current backend's name. It can be used in
@@ -19186,8 +19195,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.14-41 &ndash; Configuration Manual<br>
-							<small>2018/09/20, willy tarreau</small>
+							HAProxy 1.8.15 &ndash; Configuration Manual<br>
+							<small>2018/12/13, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19290,7 +19299,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.14-41', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.15', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
