@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9-dev10 - Configuration Manual</title>
+		<title>HAProxy version 1.9.0 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -866,6 +866,17 @@
 			
 				
 				<tr>
+					<td><small>9.4.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.4">Cache</a>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
 					<td><br><b><small>10.</small></b></td>
 					<td>
 							<a href="#10"><br><b>Cache</b></a>
@@ -1315,6 +1326,10 @@
 							
 							<a class="list-group-item" href="#filter (Stream Processing Offload Engine (SPOE))">filter (Stream Processing Offload Engine (SPOE))</a>
 							
+							<a class="list-group-item" href="#filter (Cache)">filter (Cache)</a>
+							
+							<a class="list-group-item" href="#filter cache">filter cache</a>
+							
 							<a class="list-group-item" href="#filter compression">filter compression</a>
 							
 							<a class="list-group-item" href="#filter spoe">filter spoe</a>
@@ -1558,8 +1573,6 @@
 							
 							<a class="list-group-item" href="#id (Server and default-server options)">id (Server and default-server options)</a>
 							
-							<a class="list-group-item" href="#idle-timeout">idle-timeout</a>
-							
 							<a class="list-group-item" href="#ignore-persist">ignore-persist</a>
 							
 							<a class="list-group-item" href="#in_table">in_table</a>
@@ -1634,6 +1647,8 @@
 							<a class="list-group-item" href="#max-keep-alive-queue">max-keep-alive-queue</a>
 							
 							<a class="list-group-item" href="#max-object-size">max-object-size</a>
+							
+							<a class="list-group-item" href="#max-session-srv-conns">max-session-srv-conns</a>
 							
 							<a class="list-group-item" href="#max-spread-checks">max-spread-checks</a>
 							
@@ -1985,6 +2000,10 @@
 							<a class="list-group-item" href="#persist rdp-cookie">persist rdp-cookie</a>
 							
 							<a class="list-group-item" href="#pidfile">pidfile</a>
+							
+							<a class="list-group-item" href="#pool-max-conn">pool-max-conn</a>
+							
+							<a class="list-group-item" href="#pool-purge-delay">pool-purge-delay</a>
 							
 							<a class="list-group-item" href="#port">port</a>
 							
@@ -3054,7 +3073,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/12/15</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/12/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3065,10 +3084,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9-dev10</strong></p>
+							<p><strong>version 1.9.0</strong></p>
 							<p>
 								willy tarreau<br>
-								2018/12/08
+								2018/12/19
 							</p>
 						</div>
 
@@ -3909,6 +3928,17 @@ Note to documentation contributors :
 					<td>
 							<div class="tab">
 							<a href="#9.3">Stream Processing Offload Engine (SPOE)</a>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><small>9.4.</small></td>
+					<td>
+							<div class="tab">
+							<a href="#9.4">Cache</a>
 							</div>
 					<td>
 				</tr>
@@ -5207,7 +5237,9 @@ parameter should be decreased by the same factor as this one is increased. In
 addition, use of HTTP/2 mandates that this value must be 16384 or more. If an
 HTTP request is larger than (tune.bufsize - tune.maxrewrite), haproxy will
 return HTTP 400 (Bad Request) error. Similarly if an HTTP response is larger
-than this size, haproxy will return HTTP 502 (Bad Gateway).
+than this size, haproxy will return HTTP 502 (Bad Gateway). Note that the
+value set using this parameter will automatically be rounded up to the next
+multiple of 8 on 32-bit machines and 16 on 64-bit machines.
 </pre><a class="anchor" name="tune.chksize"></a><a class="anchor" name="3-tune.chksize"></a><a class="anchor" name="3.2-tune.chksize"></a><a class="anchor" name="tune.chksize (Global parameters)"></a><a class="anchor" name="tune.chksize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.chksize"></a><a href="#3.2-tune.chksize">tune.chksize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the check buffer size to this size (in bytes). Higher values may help
 find string or regex patterns in very large pages, though doing so may imply
 more memory and CPU usage. The default value is 16384 and can be changed at
@@ -8254,32 +8286,31 @@ about &lt;var-name&gt;.
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <pre class="text">By default, a connection established between haproxy and the backend server
-belongs to the session that initiated it. The downside is that between the
-response and the next request, the connection remains idle and is not used.
-In many cases for performance reasons it is desirable to make it possible to
-reuse these idle connections to serve other requests from different sessions.
-This directive allows to tune this behavior.
+which is considered safe for reuse is moved back to the server's idle
+connections pool so that any other request can make use of it. This is the
+&quot;safe&quot; strategy below.
 
 The argument indicates the desired connection reuse strategy :
 
-  - &quot;never&quot;  : idle connections are never shared between sessions. This is
-               the default choice. It may be enforced to cancel a different
-               strategy inherited from a defaults section or for
-               troubleshooting. For example, if an old bogus application
-               considers that multiple requests over the same connection come
-               from the same client and it is not possible to fix the
-               application, it may be desirable to disable connection sharing
-               in a single backend. An example of such an application could
-               be an old haproxy using cookie insertion in tunnel mode and
-               not checking any request past the first one.
+  - &quot;never&quot;  : idle connections are never shared between sessions. This mode
+               may be enforced to cancel a different strategy inherited from
+               a defaults section or for troubleshooting. For example, if an
+               old bogus application considers that multiple requests over
+               the same connection come from the same client and it is not
+               possible to fix the application, it may be desirable to
+               disable connection sharing in a single backend. An example of
+               such an application could be an old haproxy using cookie
+               insertion in tunnel mode and not checking any request past the
+               first one.
 
-  - &quot;safe&quot;   : this is the recommended strategy. The first request of a
-               session is always sent over its own connection, and only
-               subsequent requests may be dispatched over other existing
-               connections. This ensures that in case the server closes the
-               connection when the request is being sent, the browser can
-               decide to silently retry it. Since it is exactly equivalent to
-               regular keep-alive, there should be no side effects.
+  - &quot;safe&quot;   : this is the default and the recommended strategy. The first
+               request of a session is always sent over its own connection,
+               and only subsequent requests may be dispatched over other
+               existing connections. This ensures that in case the server
+               closes the connection when the request is being sent, the
+               browser can decide to silently retry it. Since it is exactly
+               equivalent to regular keep-alive, there should be no side
+               effects.
 
   - &quot;aggressive&quot; : this mode may be useful in webservices environments where
                all servers are not necessarily known and where it would be
@@ -8663,7 +8694,10 @@ Note that this has no impact on responses which are maintained to the same
 server consecutively to a 401 response. They will still go to the same server
 even if they have to be queued.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20prefer-last-server">option prefer-last-server</a>&quot;, server &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#maxconn%20%28Performance%20tuning%29">Performance tuning</a></li><li><a href="#maxconn%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#maxconn%20%28Bind%20options%29">Bind options</a></li><li><a href="#maxconn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and cookie persistence.</div>
-<a class="anchor" name="maxconn"></a><a class="anchor" name="4-maxconn"></a><a class="anchor" name="4.2-maxconn"></a><a class="anchor" name="maxconn (Proxies)"></a><a class="anchor" name="maxconn (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="maxconn"></a><a href="#4.2-maxconn">maxconn</a></b> <span style="color: #080">&lt;conns&gt;</span></div><pre class="text">Fix the maximum number of concurrent connections on a frontend
+<a class="anchor" name="max-session-srv-conns"></a><a class="anchor" name="4-max-session-srv-conns"></a><a class="anchor" name="4.2-max-session-srv-conns"></a><a class="anchor" name="max-session-srv-conns (Proxies)"></a><a class="anchor" name="max-session-srv-conns (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="max-session-srv-conns"></a><a href="#4.2-max-session-srv-conns">max-session-srv-conns</a></b> <span style="color: #080">&lt;nb&gt;</span></div><pre class="text">Set the maximum number of outgoing connections we can keep idling for a given
+client session. The default is 5 (it precisely equals MAX_SRV_LIST which is
+defined at build time).
+</pre><a class="anchor" name="maxconn"></a><a class="anchor" name="4-maxconn"></a><a class="anchor" name="4.2-maxconn"></a><a class="anchor" name="maxconn (Proxies)"></a><a class="anchor" name="maxconn (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="maxconn"></a><a href="#4.2-maxconn">maxconn</a></b> <span style="color: #080">&lt;conns&gt;</span></div><pre class="text">Fix the maximum number of concurrent connections on a frontend
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
@@ -14385,9 +14419,9 @@ This parameter is ignored if the &quot;<a href="#check">check</a>&quot; paramete
 &quot;<a href="#port">port</a>&quot; parameter.
 </pre><a class="anchor" name="agent-check"></a><a class="anchor" name="5-agent-check"></a><a class="anchor" name="5.2-agent-check"></a><a class="anchor" name="agent-check (Bind and server options)"></a><a class="anchor" name="agent-check (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-check"></a><a href="#5.2-agent-check">agent-check</a></b></div><pre class="text">Enable an auxiliary agent check which is run independently of a regular
 health check. An agent health check is performed by making a TCP connection
-to the port set by the &quot;<a href="#agent-port">agent-port</a>&quot; parameter and reading an ASCII string.
-The string is made of a series of words delimited by spaces, tabs or commas
-in any order, optionally terminated by '\r' and/or '\n', each consisting of :
+to the port set by the &quot;<a href="#agent-port">agent-port</a>&quot; parameter and reading an ASCII string
+terminated by the first '\r' or '\n' met. The string is made of a series of
+words delimited by spaces, tabs or commas in any order, each consisting of :
 
 - An ASCII representation of a positive integer percentage, e.g. &quot;75%&quot;.
   Values in this format will set the weight proportional to the initial
@@ -14510,8 +14544,9 @@ if it is already enabled for normal traffic and if no &quot;<a href="#port">port
 directive is present. However, if such a directive is present, the
 &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; option needs to be used to force the use of the
 protocol. See also the &quot;<a href="#send-proxy">send-proxy</a>&quot; option for more information.
-</pre><a class="anchor" name="check-sni"></a><a class="anchor" name="5-check-sni"></a><a class="anchor" name="5.2-check-sni"></a><a class="anchor" name="check-sni (Bind and server options)"></a><a class="anchor" name="check-sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-sni"></a><a href="#5.2-check-sni">check-sni</a></b></div><pre class="text">This option allows you to specify the SNI to be used when doing health checks
-over SSL.
+</pre><a class="anchor" name="check-sni"></a><a class="anchor" name="5-check-sni"></a><a class="anchor" name="5.2-check-sni"></a><a class="anchor" name="check-sni (Bind and server options)"></a><a class="anchor" name="check-sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-sni"></a><a href="#5.2-check-sni">check-sni</a></b> <span style="color: #080">&lt;sni&gt;</span></div><pre class="text">This option allows you to specify the SNI to be used when doing health checks
+over SSL. It is only possible to use a string to set &lt;sni&gt;. If you want to
+set a SNI for proxied traffic, see &quot;<a href="#sni">sni</a>&quot;.
 </pre><a class="anchor" name="check-ssl"></a><a class="anchor" name="5-check-ssl"></a><a class="anchor" name="5.2-check-ssl"></a><a class="anchor" name="check-ssl (Bind and server options)"></a><a class="anchor" name="check-ssl (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-ssl"></a><a href="#5.2-check-ssl">check-ssl</a></b></div><pre class="text">This option forces encryption of all health checks over SSL, regardless of
 whether the server uses SSL or not for the normal traffic. This is generally
 used when an explicit &quot;<a href="#port">port</a>&quot; or &quot;<a href="#addr">addr</a>&quot; directive is specified and SSL health
@@ -14589,10 +14624,6 @@ the server. This option is also available on global statement
 </pre><a class="anchor" name="id"></a><a class="anchor" name="5-id"></a><a class="anchor" name="5.2-id"></a><a class="anchor" name="id (Bind and server options)"></a><a class="anchor" name="id (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="id"></a><a href="#5.2-id">id</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Set a persistent ID for the server. This ID must be positive and unique for
 the proxy. An unused ID will automatically be assigned if unset. The first
 assigned value will be 1. This ID is currently only returned in statistics.
-</pre><a class="anchor" name="idle-timeout"></a><a class="anchor" name="5-idle-timeout"></a><a class="anchor" name="5.2-idle-timeout"></a><a class="anchor" name="idle-timeout (Bind and server options)"></a><a class="anchor" name="idle-timeout (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="idle-timeout"></a><a href="#5.2-idle-timeout">idle-timeout</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Set the time to keep a connection alive before destroying it. By default
-connections are destroyed as soon as they are unused, if idle-timeout is
-non-zero, then connection are kept alive for up to &lt;delay&gt; before being
-destroyed, and can be reused if no other connection is available.
 </pre><a class="anchor" name="init-addr"></a><a class="anchor" name="5-init-addr"></a><a class="anchor" name="5.2-init-addr"></a><a class="anchor" name="init-addr (Bind and server options)"></a><a class="anchor" name="init-addr (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="init-addr"></a><a href="#5.2-init-addr">init-addr</a></b> <span style="color: #800">{last | libc | none | <span style="color: #080">&lt;ip&gt;</span>}</span>,<span style="color: #008">[...]</span>*</div><pre class="text">Indicate in what order the server's address should be resolved upon startup
 if it uses an FQDN. Attempts are made to resolve the address by applying in
 turn each of the methods mentioned in the comma-delimited list. The first
@@ -14814,6 +14845,15 @@ Currently one action is available:
   with an 'U' termination code (for &quot;Up&quot;).
 
 Actions are disabled by default
+</pre><a class="anchor" name="pool-max-conn"></a><a class="anchor" name="5-pool-max-conn"></a><a class="anchor" name="5.2-pool-max-conn"></a><a class="anchor" name="pool-max-conn (Bind and server options)"></a><a class="anchor" name="pool-max-conn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="pool-max-conn"></a><a href="#5.2-pool-max-conn">pool-max-conn</a></b> <span style="color: #080">&lt;max&gt;</span></div><pre class="text">Set the maximum number of idling connections for a server. -1 means unlimited
+connections, 0 means no idle connections. The default is -1. When idle
+connections are enabled, orphaned idle connections which do not belong to any
+client session anymore are moved to a dedicated pool so that they remain
+usable by future clients. This only applies to connections that can be shared
+according to the same principles as those applying to &quot;<a href="#http-reuse">http-reuse</a>&quot;.
+</pre><a class="anchor" name="pool-purge-delay"></a><a class="anchor" name="5-pool-purge-delay"></a><a class="anchor" name="5.2-pool-purge-delay"></a><a class="anchor" name="pool-purge-delay (Bind and server options)"></a><a class="anchor" name="pool-purge-delay (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="pool-purge-delay"></a><a href="#5.2-pool-purge-delay">pool-purge-delay</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the delay to start purging idle connections. Each &lt;delay&gt; interval, half
+of the idle connections are closed. 0 means it's never purged. The default is
+1s.
 </pre><a class="anchor" name="port"></a><a class="anchor" name="5-port"></a><a class="anchor" name="5.2-port"></a><a class="anchor" name="port (Bind and server options)"></a><a class="anchor" name="port (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="port"></a><a href="#5.2-port">port</a></b> <span style="color: #080">&lt;port&gt;</span></div><pre class="text">Using the &quot;<a href="#port">port</a>&quot; parameter, it becomes possible to use a different port to
 send health-checks. On some servers, it may be desirable to dedicate a port
 to a specific component able to perform complex tests which are more suitable
@@ -14985,7 +15025,8 @@ a bridged HTTPS scenario, using the &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&q
 expression, though alternatives such as req.hdr(host) can also make sense. If
 &quot;verify required&quot; is set (which is the recommended setting), the resulting
 name will also be matched against the server certificate's names. See the
-&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; directive for more details.
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; directive for more details. If you want to set a SNI for health
+checks, see the &quot;<a href="#check-sni">check-sni</a>&quot; directive for more details.
 </pre><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="5-source"></a><a class="anchor" name="5.2-source"></a><a class="anchor" name="source (Bind and server options)"></a><a class="anchor" name="source (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#5.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;pl&gt;</span><span style="color: #008">[-<span style="color: #080">&lt;ph&gt;</span>]</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span> ...</div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; parameter sets the source address which will be used when
 connecting to the server. It follows the exact same parameters and principle
 as the backend &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword, except that it only applies to the server
@@ -19682,7 +19723,7 @@ reading. Their sole purpose is to explain how to decipher them.
 </div><div><pre class="text">Here are listed officially supported filters with the list of parameters they
 accept. Depending on compile options, some of these filters might be
 unavailable. The list of available filters is reported in haproxy -vv.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">filter<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#filter%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#filter%20%28Trace%29">Trace</a></li><li><a href="#filter%20%28HTTP%20compression%29">HTTP compression</a></li><li><a href="#filter%20%28Stream%20Processing%20Offload%20Engine%20%28SPOE%29%29">Stream Processing Offload Engine (SPOE)</a></li></ul></span>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">filter<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#filter%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#filter%20%28Trace%29">Trace</a></li><li><a href="#filter%20%28HTTP%20compression%29">HTTP compression</a></li><li><a href="#filter%20%28Stream%20Processing%20Offload%20Engine%20%28SPOE%29%29">Stream Processing Offload Engine (SPOE)</a></li><li><a href="#filter%20%28Cache%29">Cache</a></li></ul></span>&quot;</div>
 </div>
 <a class="anchor" id="9.1" name="9.1"></a>
 <h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> Trace</h2>
@@ -19715,11 +19756,13 @@ a server by adding some latencies in the processing.
 <h2 id="chapter-9.2" data-target="9.2"><small><a class="small" href="#9.2">9.2.</a></small> HTTP compression</h2>
 <div><a class="anchor" name="filter"></a><a class="anchor" name="9-filter"></a><a class="anchor" name="9.2-filter"></a><a class="anchor" name="filter (Supported filters)"></a><a class="anchor" name="filter (HTTP compression)"></a><a class="anchor" name="filter compression"></a><a class="anchor" name="9-filter compression"></a><a class="anchor" name="9.2-filter compression"></a><a class="anchor" name="filter compression (Supported filters)"></a><a class="anchor" name="filter compression (HTTP compression)"></a><div class="keyword"><b><a class="anchor" name="filter compression"></a><a href="#9.2-filter%20compression">filter compression</a></b></div><pre class="text">The HTTP compression has been moved in a filter in HAProxy 1.7. &quot;<a href="#compression">compression</a>&quot;
 keyword must still be used to enable and configure the HTTP compression. And
-when no other filter is used, it is enough. But it is mandatory to explicitly
-use a filter line to enable the HTTP compression when two or more filters are
-used for the same listener/frontend/backend. This is important to know the
-filters evaluation order.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#compression">compression</a>&quot;</div>
+when no other filter is used, it is enough. When used with the cache enabled,
+it is also enough. In this case, the compression is always done after the
+response is stored in the cache. But it is mandatory to explicitly use a filter
+line to enable the HTTP compression when at least one filter other than the
+cache is used for the same listener/frontend/backend. This is important to know
+the filters evaluation order.
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#compression">compression</a>&quot; and <a href="#9.4">section 9.4</a> about the cache filter.</div>
 </div>
 <a class="anchor" id="9.3" name="9.3"></a>
 <h2 id="chapter-9.3" data-target="9.3"><small><a class="small" href="#9.3">9.3.</a></small> Stream Processing Offload Engine (SPOE)</h2>
@@ -19748,6 +19791,22 @@ Important note:
     The SPOE filter is highly experimental for now and was not heavily
     tested. It is really not production ready. So use it carefully.
 </pre></div>
+<a class="anchor" id="9.4" name="9.4"></a>
+<h2 id="chapter-9.4" data-target="9.4"><small><a class="small" href="#9.4">9.4.</a></small> Cache</h2>
+<div><a class="anchor" name="filter"></a><a class="anchor" name="9-filter"></a><a class="anchor" name="9.4-filter"></a><a class="anchor" name="filter (Supported filters)"></a><a class="anchor" name="filter (Cache)"></a><a class="anchor" name="filter cache"></a><a class="anchor" name="9-filter cache"></a><a class="anchor" name="9.4-filter cache"></a><a class="anchor" name="filter cache (Supported filters)"></a><a class="anchor" name="filter cache (Cache)"></a><div class="keyword"><b><a class="anchor" name="filter cache"></a><a href="#9.4-filter%20cache">filter cache</a></b> <span style="color: #080">&lt;name&gt;</span></div><div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;name&gt;      is name of the cache section this filter will use.</pre>
+</div>
+<pre class="text">The cache uses a filter to store cacheable responses. The HTTP rules
+&quot;cache-store&quot; and &quot;cache-use&quot; must be used to define how and when to use a
+cache. By default the correpsonding filter is implicitly defined. And when no
+other filters than cache or compression are used, it is enough. In such case,
+the compression filter is always evaluated after the cache filter. But it is
+mandatory to explicitly use a filter line to use a cache when at least one
+filter other than the compression is used for the same
+listener/frontend/backend. This is important to know the filters evaluation
+order.
+</pre><div class="page-header"><b>See also :</b> <a href="#9.2">section 9.2</a> about the compression filter and <a href="#10">section 10</a> about cache.</div>
+</div>
 <a class="anchor" id="10" name="10"></a>
 <div class="page-header"><h1 id="chapter-10" data-target="10"><small><a class="small" href="#10">10.</a></small> Cache</h1>
 </div><div><pre class="text">HAProxy provides a cache, which was designed to perform cache on small objects
@@ -19783,9 +19842,11 @@ replaced by &quot;&lt;CACHE&gt;&quot;.
 - If the HTTP version of the request is smaller than 1.1
 - If the request contains an Authorization header
 
-Caution!: Due to the current limitation of the filters, it is not recommended
-to use the cache with other filters. Using them can cause undefined behavior
-if they modify the response (compression for example).
+Caution!: For HAProxy version prior to 1.9, due to the limitation of the
+filters, it is not recommended to use the cache with other filters. Using them
+can cause undefined behavior if they modify the response (compression for
+example). For HAProxy 1.9 and greater, it is safe, for HTX proxies only (see
+&quot;<a href="#option%20http-use-htx">option http-use-htx</a>&quot; for details).
 </pre></div>
 <a class="anchor" id="10.2" name="10.2"></a>
 <h2 id="chapter-10.2" data-target="10.2"><small><a class="small" href="#10.2">10.2.</a></small> Setup</h2>
@@ -19837,8 +19898,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9-dev10 &ndash; Configuration Manual<br>
-							<small>2018/12/08, willy tarreau</small>
+							HAProxy 1.9.0 &ndash; Configuration Manual<br>
+							<small>2018/12/19, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19941,7 +20002,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9-dev10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
