@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.0 - Configuration Manual</title>
+		<title>HAProxy version 1.9.2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -1091,6 +1091,8 @@
 							
 							<a class="list-group-item" href="#check">check</a>
 							
+							<a class="list-group-item" href="#check-alpn">check-alpn</a>
+							
 							<a class="list-group-item" href="#check-send-proxy">check-send-proxy</a>
 							
 							<a class="list-group-item" href="#check-sni">check-sni</a>
@@ -2109,6 +2111,8 @@
 							
 							<a class="list-group-item" href="#req.rdp_cookie_cnt">req.rdp_cookie_cnt</a>
 							
+							<a class="list-group-item" href="#req.ssl_alpn">req.ssl_alpn</a>
+							
 							<a class="list-group-item" href="#req.ssl_ec_ext">req.ssl_ec_ext</a>
 							
 							<a class="list-group-item" href="#req.ssl_hello_type">req.ssl_hello_type</a>
@@ -3073,7 +3077,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2018/12/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/01/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3084,10 +3088,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9.0</strong></p>
+							<p><strong>version 1.9.2</strong></p>
 							<p>
 								willy tarreau<br>
-								2018/12/19
+								2019/01/16
 							</p>
 						</div>
 
@@ -7634,7 +7638,7 @@ returned with the response (typically the application's name).
 <code>acl auth_ok http_auth_group(L1) G1
 http-request auth unless auth_ok
 </code></pre>
-</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request cache-use"></a><a class="anchor" name="4-http-request cache-use"></a><a class="anchor" name="4.2-http-request cache-use"></a><a class="anchor" name="http-request cache-use (Proxies)"></a><a class="anchor" name="http-request cache-use (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request cache-use"></a><a href="#4.2-http-request%20cache-use">http-request cache-use</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">See <a href="#10.2">section 10.2</a> about cache setup.
+</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request cache-use"></a><a class="anchor" name="4-http-request cache-use"></a><a class="anchor" name="4.2-http-request cache-use"></a><a class="anchor" name="http-request cache-use (Proxies)"></a><a class="anchor" name="http-request cache-use (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request cache-use"></a><a href="#4.2-http-request%20cache-use">http-request cache-use</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">See <a href="#10.2">section 10.2</a> about cache setup.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request capture"></a><a class="anchor" name="4-http-request capture"></a><a class="anchor" name="4.2-http-request capture"></a><a class="anchor" name="http-request capture (Proxies)"></a><a class="anchor" name="http-request capture (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request capture"></a><a href="#4.2-http-request%20capture">http-request capture</a></b> <span style="color: #080">&lt;sample&gt;</span> <span style="color: #008">[ len <span style="color: #080">&lt;length&gt;</span> | id <span style="color: #080">&lt;id&gt;</span> ]</span>
                      <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This captures sample expression &lt;sample&gt; from the request buffer, and
 converts it to a string of at most &lt;len&gt; characters. The resulting string is
@@ -8080,7 +8084,7 @@ Note that header addition is performed immediately, so one rule might reuse
 the resulting header from a previous rule.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response allow"></a><a class="anchor" name="4-http-response allow"></a><a class="anchor" name="4.2-http-response allow"></a><a class="anchor" name="http-response allow (Proxies)"></a><a class="anchor" name="http-response allow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response allow"></a><a href="#4.2-http-response%20allow">http-response allow</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and lets the response pass the check.
 No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated for the current section.
-</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response cache-store"></a><a class="anchor" name="4-http-response cache-store"></a><a class="anchor" name="4.2-http-response cache-store"></a><a class="anchor" name="http-response cache-store (Proxies)"></a><a class="anchor" name="http-response cache-store (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response cache-store"></a><a href="#4.2-http-response%20cache-store">http-response cache-store</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">See <a href="#10.2">section 10.2</a> about cache setup.
+</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response cache-store"></a><a class="anchor" name="4-http-response cache-store"></a><a class="anchor" name="4.2-http-response cache-store"></a><a class="anchor" name="http-response cache-store (Proxies)"></a><a class="anchor" name="http-response cache-store (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response cache-store"></a><a href="#4.2-http-response%20cache-store">http-response cache-store</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">See <a href="#10.2">section 10.2</a> about cache setup.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response capture"></a><a class="anchor" name="4-http-response capture"></a><a class="anchor" name="4.2-http-response capture"></a><a class="anchor" name="http-response capture (Proxies)"></a><a class="anchor" name="http-response capture (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response capture"></a><a href="#4.2-http-response%20capture">http-response capture</a></b> <span style="color: #080">&lt;sample&gt;</span> id <span style="color: #080">&lt;id&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This captures sample expression &lt;sample&gt; from the response buffer, and
 converts it to a string. The resulting string is stored into the next request
 &quot;<a href="#capture">capture</a>&quot; slot, so it will possibly appear next to some captured HTTP
@@ -10017,8 +10021,8 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 definitely stick to it because they cannot flush the cookie, so they will not
 be able to access the service anymore.
 
-Specifying &quot;<a href="#option%20redispatch">option redispatch</a>&quot; will allow the proxy to break their
-persistence and redistribute them to a working server.
+Specifying &quot;<a href="#option%20redispatch">option redispatch</a>&quot; will allow the proxy to break cookie or
+consistent hash based persistence and redistribute them to a working server.
 
 It also allows to retry connections to another server in case of multiple
 connection failures. Of course, it requires having &quot;<a href="#retries">retries</a>&quot; set to a nonzero
@@ -13882,7 +13886,10 @@ X-Forwarded-For mechanism which is not always reliable and not even always
 usable. See also &quot;tcp-request connection expect-proxy&quot; for a finer-grained
 setting of which client is allowed to use the protocol.
 </pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.1-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.1-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow receiving early data when using TLSv1.3. This is disabled by default,
-due to security considerations.
+due to security considerations. Because it is vulnerable to replay attacks,
+you should only allow if for requests that are safe to replay, ie requests
+that are idempotent. You can use the &quot;wait-for-handshake&quot; action for any
+request that wouldn't be safe with early data.
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.1-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.1-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
@@ -14345,13 +14352,16 @@ is only supported on TCPv4/TCPv6 sockets and ignored by other ones. You may
 need to build HAProxy with USE_TFO=1 if your libc doesn't define
 TCP_FASTOPEN.
 </pre><a class="anchor" name="tls-ticket-keys"></a><a class="anchor" name="5-tls-ticket-keys"></a><a class="anchor" name="5.1-tls-ticket-keys"></a><a class="anchor" name="tls-ticket-keys (Bind and server options)"></a><a class="anchor" name="tls-ticket-keys (Bind options)"></a><div class="keyword"><b><a class="anchor" name="tls-ticket-keys"></a><a href="#5.1-tls-ticket-keys">tls-ticket-keys</a></b> <span style="color: #080">&lt;keyfile&gt;</span></div><pre class="text">Sets the TLS ticket keys file to load the keys from. The keys need to be 48
-bytes long, encoded with base64 (ex. openssl rand -base64 48). Number of keys
-is specified by the TLS_TICKETS_NO build option (default 3) and at least as
-many keys need to be present in the file. Last TLS_TICKETS_NO keys will be
-used for decryption and the penultimate one for encryption. This enables easy
-key rotation by just appending new key to the file and reloading the process.
-Keys must be periodically rotated (ex. every 12h) or Perfect Forward Secrecy
-is compromised. It is also a good idea to keep the keys off any permanent
+or 80 bytes long, depending if aes128 or aes256 is used, encoded with base64
+with one line per key (ex. openssl rand 80 | openssl base64 -A | xargs echo).
+The first key determines the key length used for next keys: you can't mix
+aes128 and aes256 keys. Number of keys is specified by the TLS_TICKETS_NO
+build option (default 3) and at least as many keys need to be present in
+the file. Last TLS_TICKETS_NO keys will be used for decryption and the
+penultimate one for encryption. This enables easy key rotation by just
+appending new key to the file and reloading the process.  Keys must be
+periodically rotated (ex. every 12h) or Perfect Forward Secrecy is
+compromised. It is also a good idea to keep the keys off any permanent
 storage such as hard drives (hint: use tmpfs and don't swap those files).
 Lifetime hint can be changed using tune.ssl.timeout.
 </pre><a class="anchor" name="transparent"></a><a class="anchor" name="5-transparent"></a><a class="anchor" name="5.1-transparent"></a><a class="anchor" name="transparent (Bind and server options)"></a><a class="anchor" name="transparent (Bind options)"></a><div class="keyword"><b><a class="anchor" name="transparent"></a><a href="#5.1-transparent">transparent</a></b></div><pre class="text">Is an optional keyword which is supported only on certain Linux kernels. It
@@ -14544,6 +14554,9 @@ if it is already enabled for normal traffic and if no &quot;<a href="#port">port
 directive is present. However, if such a directive is present, the
 &quot;<a href="#check-send-proxy">check-send-proxy</a>&quot; option needs to be used to force the use of the
 protocol. See also the &quot;<a href="#send-proxy">send-proxy</a>&quot; option for more information.
+</pre><a class="anchor" name="check-alpn"></a><a class="anchor" name="5-check-alpn"></a><a class="anchor" name="5.2-check-alpn"></a><a class="anchor" name="check-alpn (Bind and server options)"></a><a class="anchor" name="check-alpn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-alpn"></a><a href="#5.2-check-alpn">check-alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">Defines which protocols to advertise with ALPN. The protocol list consists in
+a comma-delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot;
+(without quotes). If it is not set, the server ALPN is used.
 </pre><a class="anchor" name="check-sni"></a><a class="anchor" name="5-check-sni"></a><a class="anchor" name="5.2-check-sni"></a><a class="anchor" name="check-sni (Bind and server options)"></a><a class="anchor" name="check-sni (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-sni"></a><a href="#5.2-check-sni">check-sni</a></b> <span style="color: #080">&lt;sni&gt;</span></div><pre class="text">This option allows you to specify the SNI to be used when doing health checks
 over SSL. It is only possible to use a string to set &lt;sni&gt;. If you want to
 set a SNI for proxied traffic, see &quot;<a href="#sni">sni</a>&quot;.
@@ -17677,7 +17690,23 @@ used in ACL.
 
 ACL derivatives :
   req_rdp_cookie_cnt([&lt;name&gt;]) : integer match
-</pre><a class="anchor" name="req.ssl_ec_ext"></a><a class="anchor" name="7-req.ssl_ec_ext"></a><a class="anchor" name="7.3.5-req.ssl_ec_ext"></a><a class="anchor" name="req.ssl_ec_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_ec_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_ec_ext"></a><a href="#7.3.5-req.ssl_ec_ext">req.ssl_ec_ext</a></b> : boolean</div><pre class="text">Returns a boolean identifying if client sent the Supported Elliptic Curves
+</pre><a class="anchor" name="req.ssl_alpn"></a><a class="anchor" name="7-req.ssl_alpn"></a><a class="anchor" name="7.3.5-req.ssl_alpn"></a><a class="anchor" name="req.ssl_alpn (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_alpn (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_alpn"></a><a href="#7.3.5-req.ssl_alpn">req.ssl_alpn</a></b> : string</div><pre class="text">Returns a string containing the values of the Application-Layer Protocol
+Negotiation (ALPN) TLS extension (RFC7301), sent by the client within the SSL
+ClientHello message. Note that this only applies to raw contents found in the
+request buffer and not to the contents deciphered via an SSL data layer, so
+this will not work with &quot;<a href="#bind">bind</a>&quot; lines having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option. This is useful
+in ACL to make a routing decision based upon the ALPN preferences of a TLS
+client, like in the example below. See also &quot;<a href="#ssl_fc_alpn">ssl_fc_alpn</a>&quot;.
+</pre><div class="separator">
+<span class="label label-success">Examples :</span>
+<pre class="prettyprint">
+<code><span class="comment"># Wait for a client hello for at most 5 seconds</span>
+tcp-request inspect-delay 5s
+tcp-request content accept if { req_ssl_hello_type 1 }
+use_backend bk_acme if { req.ssl_alpn acme-tls/1 }
+default_backend bk_default
+</code></pre>
+</div><a class="anchor" name="req.ssl_ec_ext"></a><a class="anchor" name="7-req.ssl_ec_ext"></a><a class="anchor" name="7.3.5-req.ssl_ec_ext"></a><a class="anchor" name="req.ssl_ec_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_ec_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_ec_ext"></a><a href="#7.3.5-req.ssl_ec_ext">req.ssl_ec_ext</a></b> : boolean</div><pre class="text">Returns a boolean identifying if client sent the Supported Elliptic Curves
 Extension as defined in RFC4492, <a href="#5.1">section 5.1</a>. within the SSL ClientHello
 message. This can be used to present ECC compatible clients with EC
 certificate and to use RSA for all others, on the same IP address. Note that
@@ -19870,11 +19899,11 @@ default.
 </pre></div>
 <a class="anchor" id="10.2.2" name="10.2.2"></a>
 <h3 id="chapter-10.2.2" data-target="10.2.2"><small><a class="small" href="#10.2.2">10.2.2.</a></small> Proxy section</h3>
-<div><a class="anchor" name="http-request"></a><a class="anchor" name="10-http-request"></a><a class="anchor" name="10.2.2-http-request"></a><a class="anchor" name="http-request (Cache)"></a><a class="anchor" name="http-request (Proxy section)"></a><a class="anchor" name="http-request cache-use"></a><a class="anchor" name="10-http-request cache-use"></a><a class="anchor" name="10.2.2-http-request cache-use"></a><a class="anchor" name="http-request cache-use (Cache)"></a><a class="anchor" name="http-request cache-use (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-request cache-use"></a><a href="#10.2.2-http-request%20cache-use">http-request cache-use</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Try to deliver a cached object from the cache &lt;name&gt;. This directive is also
+<div><a class="anchor" name="http-request"></a><a class="anchor" name="10-http-request"></a><a class="anchor" name="10.2.2-http-request"></a><a class="anchor" name="http-request (Cache)"></a><a class="anchor" name="http-request (Proxy section)"></a><a class="anchor" name="http-request cache-use"></a><a class="anchor" name="10-http-request cache-use"></a><a class="anchor" name="10.2.2-http-request cache-use"></a><a class="anchor" name="http-request cache-use (Cache)"></a><a class="anchor" name="http-request cache-use (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-request cache-use"></a><a href="#10.2.2-http-request%20cache-use">http-request cache-use</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Try to deliver a cached object from the cache &lt;name&gt;. This directive is also
 mandatory to store the cache as it calculates the cache hash. If you want to
 use a condition for both storage and delivering that's a good idea to put it
 after this one.
-</pre><a class="anchor" name="http-response"></a><a class="anchor" name="10-http-response"></a><a class="anchor" name="10.2.2-http-response"></a><a class="anchor" name="http-response (Cache)"></a><a class="anchor" name="http-response (Proxy section)"></a><a class="anchor" name="http-response cache-store"></a><a class="anchor" name="10-http-response cache-store"></a><a class="anchor" name="10.2.2-http-response cache-store"></a><a class="anchor" name="http-response cache-store (Cache)"></a><a class="anchor" name="http-response cache-store (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-response cache-store"></a><a href="#10.2.2-http-response%20cache-store">http-response cache-store</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Store an http-response within the cache. The storage of the response headers
+</pre><a class="anchor" name="http-response"></a><a class="anchor" name="10-http-response"></a><a class="anchor" name="10.2.2-http-response"></a><a class="anchor" name="http-response (Cache)"></a><a class="anchor" name="http-response (Proxy section)"></a><a class="anchor" name="http-response cache-store"></a><a class="anchor" name="10-http-response cache-store"></a><a class="anchor" name="10.2.2-http-response cache-store"></a><a class="anchor" name="http-response cache-store (Cache)"></a><a class="anchor" name="http-response cache-store (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-response cache-store"></a><a href="#10.2.2-http-response%20cache-store">http-response cache-store</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Store an http-response within the cache. The storage of the response headers
 is done at this step, which means you can use others http-response actions
 to modify headers before or after the storage of the response. This action
 is responsible for the setup of the cache storage filter.
@@ -19898,8 +19927,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.0 &ndash; Configuration Manual<br>
-							<small>2018/12/19, willy tarreau</small>
+							HAProxy 1.9.2 &ndash; Configuration Manual<br>
+							<small>2019/01/16, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20002,7 +20031,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
