@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.17 - Configuration Manual</title>
+		<title>HAProxy version 1.8.17-13 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -2808,7 +2808,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/01/21</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/01/29</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2819,7 +2819,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.17</strong></p>
+							<p><strong>version 1.8.17-13</strong></p>
 							<p>
 								willy tarreau<br>
 								2019/01/08
@@ -13511,7 +13511,10 @@ X-Forwarded-For mechanism which is not always reliable and not even always
 usable. See also &quot;tcp-request connection expect-proxy&quot; for a finer-grained
 setting of which client is allowed to use the protocol.
 </pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.1-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.1-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow receiving early data when using TLSv1.3. This is disabled by default,
-due to security considerations.
+due to security considerations. Because it is vulnerable to replay attacks,
+you should only allow if for requests that are safe to replay, ie requests
+that are idempotent. You can use the &quot;wait-for-handshake&quot; action for any
+request that wouldn't be safe with early data.
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.1-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.1-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
@@ -16318,7 +16321,12 @@ frontends with responses to check which backend processed the request.
 which is the address the client connected to. It can be useful when running
 in transparent mode. It is of type IP and works on both IPv4 and IPv6 tables.
 On IPv6 tables, IPv4 address is mapped to its IPv6 equivalent, according to
-RFC 4291.
+RFC 4291. When the incoming connection passed through address translation or
+redirection involving connection tracking, the original destination address
+before the redirection will be reported. On Linux systems, the source and
+destination may seldom appear reversed if the nf_conntrack_tcp_loose sysctl
+is set, because a late response may reopen a timed out connection and switch
+what is believed to be the source and the destination.
 </pre><a class="anchor" name="dst_conn"></a><a class="anchor" name="7-dst_conn"></a><a class="anchor" name="7.3.3-dst_conn"></a><a class="anchor" name="dst_conn (Using ACLs and fetching samples)"></a><a class="anchor" name="dst_conn (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="dst_conn"></a><a href="#7.3.3-dst_conn">dst_conn</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the number of currently established
 connections on the same socket including the one being evaluated. It is
 normally used with ACLs but can as well be used to pass the information to
@@ -16493,7 +16501,13 @@ TCP-level source address which is used, and not the address of a client
 behind a proxy. However if the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; or &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; bind
 directive is used, it can be the address of a client behind another
 PROXY-protocol compatible component for all rule sets except
-&quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.
+&quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address. When the incoming
+connection passed through address translation or redirection involving
+connection tracking, the original destination address before the redirection
+will be reported. On Linux systems, the source and destination may seldom
+appear reversed if the nf_conntrack_tcp_loose sysctl is set, because a late
+response may reopen a timed out connection and switch what is believed to be
+the source and the destination.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -19167,11 +19181,11 @@ default.
 </pre></div>
 <a class="anchor" id="10.2.2" name="10.2.2"></a>
 <h3 id="chapter-10.2.2" data-target="10.2.2"><small><a class="small" href="#10.2.2">10.2.2.</a></small> Proxy section</h3>
-<div><a class="anchor" name="http-request"></a><a class="anchor" name="10-http-request"></a><a class="anchor" name="10.2.2-http-request"></a><a class="anchor" name="http-request (Cache)"></a><a class="anchor" name="http-request (Proxy section)"></a><a class="anchor" name="http-request cache-use"></a><a class="anchor" name="10-http-request cache-use"></a><a class="anchor" name="10.2.2-http-request cache-use"></a><a class="anchor" name="http-request cache-use (Cache)"></a><a class="anchor" name="http-request cache-use (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-request cache-use"></a><a href="#10.2.2-http-request%20cache-use">http-request cache-use</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Try to deliver a cached object from the cache &lt;name&gt;. This directive is also
+<div><a class="anchor" name="http-request"></a><a class="anchor" name="10-http-request"></a><a class="anchor" name="10.2.2-http-request"></a><a class="anchor" name="http-request (Cache)"></a><a class="anchor" name="http-request (Proxy section)"></a><a class="anchor" name="http-request cache-use"></a><a class="anchor" name="10-http-request cache-use"></a><a class="anchor" name="10.2.2-http-request cache-use"></a><a class="anchor" name="http-request cache-use (Cache)"></a><a class="anchor" name="http-request cache-use (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-request cache-use"></a><a href="#10.2.2-http-request%20cache-use">http-request cache-use</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Try to deliver a cached object from the cache &lt;name&gt;. This directive is also
 mandatory to store the cache as it calculates the cache hash. If you want to
 use a condition for both storage and delivering that's a good idea to put it
 after this one.
-</pre><a class="anchor" name="http-response"></a><a class="anchor" name="10-http-response"></a><a class="anchor" name="10.2.2-http-response"></a><a class="anchor" name="http-response (Cache)"></a><a class="anchor" name="http-response (Proxy section)"></a><a class="anchor" name="http-response cache-store"></a><a class="anchor" name="10-http-response cache-store"></a><a class="anchor" name="10.2.2-http-response cache-store"></a><a class="anchor" name="http-response cache-store (Cache)"></a><a class="anchor" name="http-response cache-store (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-response cache-store"></a><a href="#10.2.2-http-response%20cache-store">http-response cache-store</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Store an http-response within the cache. The storage of the response headers
+</pre><a class="anchor" name="http-response"></a><a class="anchor" name="10-http-response"></a><a class="anchor" name="10.2.2-http-response"></a><a class="anchor" name="http-response (Cache)"></a><a class="anchor" name="http-response (Proxy section)"></a><a class="anchor" name="http-response cache-store"></a><a class="anchor" name="10-http-response cache-store"></a><a class="anchor" name="10.2.2-http-response cache-store"></a><a class="anchor" name="http-response cache-store (Cache)"></a><a class="anchor" name="http-response cache-store (Proxy section)"></a><div class="keyword"><b><a class="anchor" name="http-response cache-store"></a><a href="#10.2.2-http-response%20cache-store">http-response cache-store</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Store an http-response within the cache. The storage of the response headers
 is done at this step, which means you can use others http-response actions
 to modify headers before or after the storage of the response. This action
 is responsible for the setup of the cache storage filter.
@@ -19195,7 +19209,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.17 &ndash; Configuration Manual<br>
+							HAProxy 1.8.17-13 &ndash; Configuration Manual<br>
 							<small>2019/01/08, willy tarreau</small>
 						</div>
 					</div>
@@ -19299,7 +19313,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.17', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.17-13', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
