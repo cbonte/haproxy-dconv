@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.2 - Configuration Manual</title>
+		<title>HAProxy version 1.9.3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -1650,6 +1650,8 @@
 							
 							<a class="list-group-item" href="#max-object-size">max-object-size</a>
 							
+							<a class="list-group-item" href="#max-reuse">max-reuse</a>
+							
 							<a class="list-group-item" href="#max-session-srv-conns">max-session-srv-conns</a>
 							
 							<a class="list-group-item" href="#max-spread-checks">max-spread-checks</a>
@@ -3077,7 +3079,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/01/21</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/01/29</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3088,10 +3090,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9.2</strong></p>
+							<p><strong>version 1.9.3</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/01/16
+								2019/01/29
 							</p>
 						</div>
 
@@ -4789,12 +4791,12 @@ See also &quot;-W&quot; in the management guide.
 mode. By default, only one process is created, which is the recommended mode
 of operation. For systems limited to small sets of file descriptors per
 process, it may be needed to fork multiple daemons. USING MULTIPLE PROCESSES
-IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">daemon</a>&quot;.
+IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">daemon</a>&quot; and
+&quot;<a href="#nbthread">nbthread</a>&quot;.
 </pre><a class="anchor" name="nbthread"></a><a class="anchor" name="3-nbthread"></a><a class="anchor" name="3.1-nbthread"></a><a class="anchor" name="nbthread (Global parameters)"></a><a class="anchor" name="nbthread (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="nbthread"></a><a href="#3.1-nbthread">nbthread</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting is only available when support for threads was built in. It
 creates &lt;number&gt; threads for each created processes. It means if HAProxy is
 started in foreground, it only creates &lt;number&gt; threads for the first
-process. FOR NOW, THREADS SUPPORT IN HAPROXY IS HIGHLY EXPERIMENTAL AND IT
-MUST BE ENABLED WITH CAUTION AND AT YOUR OWN RISK. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;.
+process. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="pidfile"></a><a class="anchor" name="3-pidfile"></a><a class="anchor" name="3.1-pidfile"></a><a class="anchor" name="pidfile (Global parameters)"></a><a class="anchor" name="pidfile (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="pidfile"></a><a href="#3.1-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes PIDs of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
 starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.
@@ -14697,6 +14699,14 @@ waiting to be served. This will break persistence but may allow people to
 quickly re-log in when the server they try to connect to is dying. The
 default value is &quot;0&quot; which means the queue is unlimited. See also the
 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#maxconn%20%28Performance%20tuning%29">Performance tuning</a></li><li><a href="#maxconn%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#maxconn%20%28Bind%20options%29">Bind options</a></li><li><a href="#maxconn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<a href="#minconn">minconn</a>&quot; parameters.
+</pre><a class="anchor" name="max-reuse"></a><a class="anchor" name="5-max-reuse"></a><a class="anchor" name="5.2-max-reuse"></a><a class="anchor" name="max-reuse (Bind and server options)"></a><a class="anchor" name="max-reuse (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="max-reuse"></a><a href="#5.2-max-reuse">max-reuse</a></b> <span style="color: #080">&lt;count&gt;</span></div><pre class="text">The &quot;<a href="#max-reuse">max-reuse</a>&quot; argument indicates the HTTP connection processors that they
+should not reuse a server connection more than this number of times to send
+new requests. Permitted values are -1 (the default), which disables this
+limit, or any positive value. Value zero will effectively disable keep-alive.
+This is only used to work around certain server bugs which cause them to leak
+resources over time. The argument is not necessarily respected by the lower
+layers as there might be technical limitations making it impossible to
+enforce. At least HTTP/2 connections to servers will respect it.
 </pre><a class="anchor" name="minconn"></a><a class="anchor" name="5-minconn"></a><a class="anchor" name="5.2-minconn"></a><a class="anchor" name="minconn (Bind and server options)"></a><a class="anchor" name="minconn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="minconn"></a><a href="#5.2-minconn">minconn</a></b> <span style="color: #080">&lt;minconn&gt;</span></div><pre class="text">When the &quot;<a href="#minconn">minconn</a>&quot; parameter is set, the maxconn limit becomes a dynamic
 limit following the backend's load. The server will always accept at least
 &lt;minconn&gt; connections, never more than &lt;maxconn&gt;, and the limit will be on
@@ -16942,7 +16952,12 @@ frontends with responses to check which backend processed the request.
 which is the address the client connected to. It can be useful when running
 in transparent mode. It is of type IP and works on both IPv4 and IPv6 tables.
 On IPv6 tables, IPv4 address is mapped to its IPv6 equivalent, according to
-RFC 4291.
+RFC 4291. When the incoming connection passed through address translation or
+redirection involving connection tracking, the original destination address
+before the redirection will be reported. On Linux systems, the source and
+destination may seldom appear reversed if the nf_conntrack_tcp_loose sysctl
+is set, because a late response may reopen a timed out connection and switch
+what is believed to be the source and the destination.
 </pre><a class="anchor" name="dst_conn"></a><a class="anchor" name="7-dst_conn"></a><a class="anchor" name="7.3.3-dst_conn"></a><a class="anchor" name="dst_conn (Using ACLs and fetching samples)"></a><a class="anchor" name="dst_conn (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="dst_conn"></a><a href="#7.3.3-dst_conn">dst_conn</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the number of currently established
 connections on the same socket including the one being evaluated. It is
 normally used with ACLs but can as well be used to pass the information to
@@ -17137,7 +17152,13 @@ TCP-level source address which is used, and not the address of a client
 behind a proxy. However if the &quot;<a href="#accept-proxy">accept-proxy</a>&quot; or &quot;<a href="#accept-netscaler-cip">accept-netscaler-cip</a>&quot; bind
 directive is used, it can be the address of a client behind another
 PROXY-protocol compatible component for all rule sets except
-&quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address.
+&quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; which sees the real address. When the incoming
+connection passed through address translation or redirection involving
+connection tracking, the original destination address before the redirection
+will be reported. On Linux systems, the source and destination may seldom
+appear reversed if the nf_conntrack_tcp_loose sysctl is set, because a late
+response may reopen a timed out connection and switch what is believed to be
+the source and the destination.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -19927,8 +19948,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.2 &ndash; Configuration Manual<br>
-							<small>2019/01/16, willy tarreau</small>
+							HAProxy 1.9.3 &ndash; Configuration Manual<br>
+							<small>2019/01/29, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20031,7 +20052,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
