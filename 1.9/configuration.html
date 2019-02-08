@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.3 - Configuration Manual</title>
+		<title>HAProxy version 1.9.4 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -1017,6 +1017,8 @@
 							<a class="list-group-item" href="#base32+src">base32+src</a>
 							
 							<a class="list-group-item" href="#base64">base64</a>
+							
+							<a class="list-group-item" href="#bc_http_major">bc_http_major</a>
 							
 							<a class="list-group-item" href="#be_conn">be_conn</a>
 							
@@ -3079,7 +3081,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/01/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/02/08</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3090,10 +3092,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9.3</strong></p>
+							<p><strong>version 1.9.4</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/01/29
+								2019/02/06
 							</p>
 						</div>
 
@@ -6638,9 +6640,7 @@ Compression is disabled when:
   * the request does not advertise a supported compression algorithm in the
     &quot;Accept-Encoding&quot; header
   * the response message is not HTTP/1.1
-  * HTTP status code is not 200
-  * response header &quot;Transfer-Encoding&quot; contains &quot;chunked&quot; (Temporary
-    Workaround)
+  * HTTP status code is not one of 200, 201, 202, or 203
   * response contain neither a &quot;Content-Length&quot; header nor a
     &quot;Transfer-Encoding&quot; whose last value is &quot;chunked&quot;
   * response contains a &quot;Content-Type&quot; header whose first value starts with
@@ -6651,9 +6651,9 @@ Compression is disabled when:
     and later
   * The response contains a &quot;Content-Encoding&quot; header, indicating that the
     response is already compressed (see compression offload)
+  * The response contains an invalid &quot;ETag&quot; header or multiple ETag headers
 
-Note: The compression does not rewrite Etag headers, and does not emit the
-      Warning header.
+Note: The compression does not emit the Warning header.
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
@@ -16939,11 +16939,9 @@ Starting from &quot;sc_0&quot; to &quot;sc_N&quot; where N is (MAX_SESS_STKCTR-1
 table may be specified with the &quot;sc*&quot; form, in which case the currently
 tracked key will be looked up into this alternate table instead of the table
 currently being tracked.
-
-bc_http_major: integer
-  Returns the backend connection's HTTP major version encoding, which may be 1
-  for HTTP/0.9 to HTTP/1.1 or 2 for HTTP/2. Note, this is based on the on-wire
-  encoding and not the version present in the request header.
+</pre><a class="anchor" name="bc_http_major"></a><a class="anchor" name="7-bc_http_major"></a><a class="anchor" name="7.3.3-bc_http_major"></a><a class="anchor" name="bc_http_major (Using ACLs and fetching samples)"></a><a class="anchor" name="bc_http_major (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="bc_http_major"></a><a href="#7.3.3-bc_http_major">bc_http_major</a></b> : integer</div><pre class="text">Returns the backend connection's HTTP major version encoding, which may be 1
+for HTTP/0.9 to HTTP/1.1 or 2 for HTTP/2. Note, this is based on the on-wire
+encoding and not the version present in the request header.
 </pre><a class="anchor" name="be_id"></a><a class="anchor" name="7-be_id"></a><a class="anchor" name="7.3.3-be_id"></a><a class="anchor" name="be_id (Using ACLs and fetching samples)"></a><a class="anchor" name="be_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="be_id"></a><a href="#7.3.3-be_id">be_id</a></b> : integer</div><pre class="text">Returns an integer containing the current backend's id. It can be used in
 frontends with responses to check which backend processed the request.
 </pre><a class="anchor" name="be_name"></a><a class="anchor" name="7-be_name"></a><a class="anchor" name="7.3.3-be_name"></a><a class="anchor" name="be_name (Using ACLs and fetching samples)"></a><a class="anchor" name="be_name (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="be_name"></a><a href="#7.3.3-be_name">be_name</a></b> : string</div><pre class="text">Returns a string containing the current backend's name. It can be used in
@@ -19948,8 +19946,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.3 &ndash; Configuration Manual<br>
-							<small>2019/01/29, willy tarreau</small>
+							HAProxy 1.9.4 &ndash; Configuration Manual<br>
+							<small>2019/02/06, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20052,7 +20050,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.4', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
