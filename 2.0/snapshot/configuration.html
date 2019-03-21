@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0-dev0-284 - Configuration Manual</title>
+		<title>HAProxy version 2.0-dev1-155 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -2035,6 +2035,8 @@
 							
 							<a class="list-group-item" href="#proto">proto</a>
 							
+							<a class="list-group-item" href="#protobuf">protobuf</a>
+							
 							<a class="list-group-item" href="#proxy-v2-options">proxy-v2-options</a>
 							
                                                                 </div> <!-- /letter -->
@@ -2911,6 +2913,8 @@
 							
 							<a class="list-group-item" href="#tune.h2.max-concurrent-streams">tune.h2.max-concurrent-streams</a>
 							
+							<a class="list-group-item" href="#tune.h2.max-frame-size">tune.h2.max-frame-size</a>
+							
 							<a class="list-group-item" href="#tune.http.cookielen">tune.http.cookielen</a>
 							
 							<a class="list-group-item" href="#tune.http.logurilen">tune.http.logurilen</a>
@@ -2918,6 +2922,8 @@
 							<a class="list-group-item" href="#tune.http.maxhdr">tune.http.maxhdr</a>
 							
 							<a class="list-group-item" href="#tune.idletimer">tune.idletimer</a>
+							
+							<a class="list-group-item" href="#tune.listener.multi-queue">tune.listener.multi-queue</a>
 							
 							<a class="list-group-item" href="#tune.lua.forced-yield">tune.lua.forced-yield</a>
 							
@@ -2987,6 +2993,8 @@
 							<a class="list-group-item" href="#uid (Bind options)">uid (Bind options)</a>
 							
 							<a class="list-group-item" href="#ulimit-n">ulimit-n</a>
+							
+							<a class="list-group-item" href="#ungrpc">ungrpc</a>
 							
 							<a class="list-group-item" href="#unique-id">unique-id</a>
 							
@@ -3058,20 +3066,6 @@
 							
 							<a class="list-group-item" href="#wt6">wt6</a>
 							
-							<a class="list-group-item" href="#wurfl-cache-size">wurfl-cache-size</a>
-							
-							<a class="list-group-item" href="#wurfl-data-file">wurfl-data-file</a>
-							
-							<a class="list-group-item" href="#wurfl-engine-mode">wurfl-engine-mode</a>
-							
-							<a class="list-group-item" href="#wurfl-information-list">wurfl-information-list</a>
-							
-							<a class="list-group-item" href="#wurfl-information-list-separator">wurfl-information-list-separator</a>
-							
-							<a class="list-group-item" href="#wurfl-patch-file">wurfl-patch-file</a>
-							
-							<a class="list-group-item" href="#wurfl-useragent-priority">wurfl-useragent-priority</a>
-							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-X"><h4>X</h4>
 								
@@ -3091,7 +3085,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/02/08</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/03/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3102,10 +3096,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0-dev0-284</strong></p>
+							<p><strong>version 2.0-dev1-155</strong></p>
 							<p>
 								willy tarreau<br>
-								2018/12/22
+								2019/02/26
 							</p>
 						</div>
 
@@ -4477,12 +4471,6 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#51degrees-property-name-list">51degrees-property-name-list</a>
    - <a href="#51degrees-property-separator">51degrees-property-separator</a>
    - <a href="#51degrees-cache-size">51degrees-cache-size</a>
-   - <a href="#wurfl-data-file">wurfl-data-file</a>
-   - <a href="#wurfl-information-list">wurfl-information-list</a>
-   - <a href="#wurfl-information-list-separator">wurfl-information-list-separator</a>
-   - <a href="#wurfl-engine-mode">wurfl-engine-mode</a>
-   - <a href="#wurfl-cache-size">wurfl-cache-size</a>
-   - <a href="#wurfl-useragent-priority">wurfl-useragent-priority</a>
 
  * Performance tuning
    - <a href="#max-spread-checks">max-spread-checks</a>
@@ -4802,13 +4790,23 @@ See also &quot;-W&quot; in the management guide.
 </pre><a class="anchor" name="nbproc"></a><a class="anchor" name="3-nbproc"></a><a class="anchor" name="3.1-nbproc"></a><a class="anchor" name="nbproc (Global parameters)"></a><a class="anchor" name="nbproc (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#3.1-nbproc">nbproc</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Creates &lt;number&gt; processes when going daemon. This requires the &quot;<a href="#daemon">daemon</a>&quot;
 mode. By default, only one process is created, which is the recommended mode
 of operation. For systems limited to small sets of file descriptors per
-process, it may be needed to fork multiple daemons. USING MULTIPLE PROCESSES
+process, it may be needed to fork multiple daemons. When set to a value
+larger than 1, threads are automatically disabled. USING MULTIPLE PROCESSES
 IS HARDER TO DEBUG AND IS REALLY DISCOURAGED. See also &quot;<a href="#daemon">daemon</a>&quot; and
 &quot;<a href="#nbthread">nbthread</a>&quot;.
 </pre><a class="anchor" name="nbthread"></a><a class="anchor" name="3-nbthread"></a><a class="anchor" name="3.1-nbthread"></a><a class="anchor" name="nbthread (Global parameters)"></a><a class="anchor" name="nbthread (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="nbthread"></a><a href="#3.1-nbthread">nbthread</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting is only available when support for threads was built in. It
-creates &lt;number&gt; threads for each created processes. It means if HAProxy is
-started in foreground, it only creates &lt;number&gt; threads for the first
-process. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;.
+makes haproxy run on &lt;number&gt; threads. This is exclusive with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;. While
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; historically used to be the only way to use multiple processors, it
+also involved a number of shortcomings related to the lack of synchronization
+between processes (health-checks, peers, stick-tables, stats, ...) which do
+not affect threads. As such, any modern configuration is strongly encouraged
+to migrate away from &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; to &quot;<a href="#nbthread">nbthread</a>&quot;. &quot;<a href="#nbthread">nbthread</a>&quot; also works when
+HAProxy is started in foreground. On some platforms supporting CPU affinity,
+when nbproc is not used, the default &quot;<a href="#nbthread">nbthread</a>&quot; value is automatically set to
+the number of CPUs the process is bound to upon startup. This means that the
+thread count can easily be adjusted from the calling process using commands
+like &quot;taskset&quot; or &quot;cpuset&quot;. Otherwise, this value defaults to 1. The default
+value is reported in the output of &quot;haproxy -vv&quot;. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="pidfile"></a><a class="anchor" name="3-pidfile"></a><a class="anchor" name="3.1-pidfile"></a><a class="anchor" name="pidfile (Global parameters)"></a><a class="anchor" name="pidfile (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="pidfile"></a><a href="#3.1-pidfile">pidfile</a></b> <span style="color: #080">&lt;pidfile&gt;</span></div><pre class="text">Writes PIDs of all daemons into file &lt;pidfile&gt;. This option is equivalent to
 the &quot;-p&quot; command line argument. The file must be accessible to the user
 starting the process. See also &quot;<a href="#daemon">daemon</a>&quot;.
@@ -4992,81 +4990,6 @@ By default, this cache is disabled.
 
 Please note that this option is only available when haproxy has been
 compiled with USE_51DEGREES.
-</pre><a class="anchor" name="wurfl-data-file"></a><a class="anchor" name="3-wurfl-data-file"></a><a class="anchor" name="3.1-wurfl-data-file"></a><a class="anchor" name="wurfl-data-file (Global parameters)"></a><a class="anchor" name="wurfl-data-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-data-file"></a><a href="#3.1-wurfl-data-file">wurfl-data-file</a></b> <span style="color: #080">&lt;file path&gt;</span></div><pre class="text">The path of the WURFL data file to provide device detection services. The
-file should be accessible by HAProxy with relevant permissions.
-
-Please note that this option is only available when haproxy has been compiled
-with USE_WURFL=1.
-</pre><a class="anchor" name="wurfl-information-list"></a><a class="anchor" name="3-wurfl-information-list"></a><a class="anchor" name="3.1-wurfl-information-list"></a><a class="anchor" name="wurfl-information-list (Global parameters)"></a><a class="anchor" name="wurfl-information-list (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-information-list"></a><a href="#3.1-wurfl-information-list">wurfl-information-list</a></b> <span style="color: #008">[<span style="color: #080">&lt;capability&gt;</span>]</span>*</div><pre class="text">A space-delimited list of WURFL capabilities, virtual capabilities, property
-names we plan to use in injected headers. A full list of capability and
-virtual capability names is available on the Scientiamobile website :
-
-    https://www.scientiamobile.com/wurflCapability
-
-Valid WURFL properties are:
-- wurfl_id                    Contains the device ID of the matched device.
-
-- wurfl_root_id               Contains the device root ID of the matched
-                              device.
-
-- wurfl_isdevroot             Tells if the matched device is a root device.
-                              Possible values are &quot;TRUE&quot; or &quot;FALSE&quot;.
-
-- wurfl_useragent             The original useragent coming with this
-                              particular web request.
-
-- wurfl_api_version           Contains a string representing the currently
-                              used Libwurfl API version.
-
-- wurfl_engine_target         Contains a string representing the currently
-                              set WURFL Engine Target. Possible values are
-                              &quot;HIGH_ACCURACY&quot;, &quot;HIGH_PERFORMANCE&quot;, &quot;INVALID&quot;.
-
-- wurfl_info                  A string containing information on the parsed
-                              wurfl.xml and its full path.
-
-- wurfl_last_load_time        Contains the UNIX timestamp of the last time
-                              WURFL has been loaded successfully.
-
-- wurfl_normalized_useragent  The normalized useragent.
-
-- wurfl_useragent_priority    The user agent priority used by WURFL.
-
-Please note that this option is only available when haproxy has been compiled
-with USE_WURFL=1.
-</pre><a class="anchor" name="wurfl-information-list-separator"></a><a class="anchor" name="3-wurfl-information-list-separator"></a><a class="anchor" name="3.1-wurfl-information-list-separator"></a><a class="anchor" name="wurfl-information-list-separator (Global parameters)"></a><a class="anchor" name="wurfl-information-list-separator (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-information-list-separator"></a><a href="#3.1-wurfl-information-list-separator">wurfl-information-list-separator</a></b> <span style="color: #080">&lt;char&gt;</span></div><pre class="text">A char that will be used to separate values in a response header containing
-WURFL results. If not set that a comma (',') will be used by default.
-
-Please note that this option is only available when haproxy has been compiled
-with USE_WURFL=1.
-</pre><a class="anchor" name="wurfl-patch-file"></a><a class="anchor" name="3-wurfl-patch-file"></a><a class="anchor" name="3.1-wurfl-patch-file"></a><a class="anchor" name="wurfl-patch-file (Global parameters)"></a><a class="anchor" name="wurfl-patch-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-patch-file"></a><a href="#3.1-wurfl-patch-file">wurfl-patch-file</a></b> <span style="color: #008">[<span style="color: #080">&lt;file path&gt;</span>]</span></div><pre class="text">A list of WURFL patch file paths. Note that patches are loaded during startup
-thus before the chroot.
-
-Please note that this option is only available when haproxy has been compiled
-with USE_WURFL=1.
-</pre><a class="anchor" name="wurfl-engine-mode"></a><a class="anchor" name="3-wurfl-engine-mode"></a><a class="anchor" name="3.1-wurfl-engine-mode"></a><a class="anchor" name="wurfl-engine-mode (Global parameters)"></a><a class="anchor" name="wurfl-engine-mode (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-engine-mode"></a><a href="#3.1-wurfl-engine-mode">wurfl-engine-mode</a></b> <span style="color: #800">{ accuracy | performance }</span></div><pre class="text">Sets the WURFL engine target. You can choose between 'accuracy' or
-'performance' targets. In performance mode, desktop web browser detection is
-done programmatically without referencing the WURFL data. As a result, most
-desktop web browsers are returned as generic_web_browser WURFL ID for
-performance. If either performance or accuracy are not defined, performance
-mode is enabled by default.
-
-Please note that this option is only available when haproxy has been compiled
-with USE_WURFL=1.
-</pre><a class="anchor" name="wurfl-cache-size"></a><a class="anchor" name="3-wurfl-cache-size"></a><a class="anchor" name="3.1-wurfl-cache-size"></a><a class="anchor" name="wurfl-cache-size (Global parameters)"></a><a class="anchor" name="wurfl-cache-size (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-cache-size"></a><a href="#3.1-wurfl-cache-size">wurfl-cache-size</a></b> <span style="color: #080">&lt;U&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;D&gt;</span>]</span></div><pre class="text">Sets the WURFL caching strategy. Here &lt;U&gt; is the Useragent cache size, and
-&lt;D&gt; is the internal device cache size. There are three possibilities here :
-- &quot;0&quot;     : no cache is used.
-- &lt;U&gt;     : the Single LRU cache is used, the size is expressed in elements.
-- &lt;U&gt;,&lt;D&gt; : the Double LRU cache is used, both sizes are in elements. This is
-            the highest performing option.
-
-Please note that this option is only available when haproxy has been compiled
-with USE_WURFL=1.
-</pre><a class="anchor" name="wurfl-useragent-priority"></a><a class="anchor" name="3-wurfl-useragent-priority"></a><a class="anchor" name="3.1-wurfl-useragent-priority"></a><a class="anchor" name="wurfl-useragent-priority (Global parameters)"></a><a class="anchor" name="wurfl-useragent-priority (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-useragent-priority"></a><a href="#3.1-wurfl-useragent-priority">wurfl-useragent-priority</a></b> <span style="color: #800">{ plain | sideloaded_browser }</span></div><pre class="text">Tells WURFL if it should prioritize use of the plain user agent ('plain')
-over the default sideloaded browser user agent ('sideloaded_browser').
-
-Please note that this option is only available when haproxy has been compiled
-with USE_WURFL=1.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
 <h2 id="chapter-3.2" data-target="3.2"><small><a class="small" href="#3.2">3.2.</a></small> Performance tuning</h2>
@@ -5102,11 +5025,12 @@ automatically adjusted according to this value. See also &quot;<a href="#ulimit-
 the &quot;select&quot; poller cannot reliably use more than 1024 file descriptors on
 some platforms. If your platform only supports select and reports &quot;select
 FAILED&quot; on startup, you need to reduce maxconn until it works (slightly
-below 500 in general). If this value is not set, it will default to the value
-set in DEFAULT_MAXCONN at build time (reported in haproxy -vv) if no memory
-limit is enforced, or will be computed based on the memory limit, the buffer
-size, memory allocated to compression, SSL cache size, and use or not of SSL
-and the associated maxsslconn (which can also be automatic).
+below 500 in general). If this value is not set, it will automatically be
+calculated based on the current file descriptors limit reported by the
+&quot;ulimit -n&quot; command, possibly reduced to a lower value if a memory limit
+is enforced, based on the buffer size, memory allocated to compression, SSL
+cache size, and use or not of SSL and the associated maxsslconn (which can
+also be automatic).
 </pre><a class="anchor" name="maxconnrate"></a><a class="anchor" name="3-maxconnrate"></a><a class="anchor" name="3.2-maxconnrate"></a><a class="anchor" name="maxconnrate (Global parameters)"></a><a class="anchor" name="maxconnrate (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="maxconnrate"></a><a href="#3.2-maxconnrate">maxconnrate</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum per-process number of connections per second to &lt;number&gt;.
 Proxies will stop accepting connections when this limit is reached. It can be
 used to limit the global capacity regardless of each frontend capacity. It is
@@ -5272,6 +5196,10 @@ checks whenever possible.
 usage during compression. This value affects CPU usage during compression.
 Each session using compression initializes the compression algorithm with
 this value. The default value is 1.
+</pre><a class="anchor" name="tune.fail-alloc"></a><a class="anchor" name="3-tune.fail-alloc"></a><a class="anchor" name="3.2-tune.fail-alloc"></a><a class="anchor" name="tune.fail-alloc (Global parameters)"></a><a class="anchor" name="tune.fail-alloc (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.fail-alloc"></a><a href="#3.2-tune.fail-alloc">tune.fail-alloc</a></b></div><pre class="text">If compiled with DEBUG_FAIL_ALLOC, gives the percentage of chances an
+allocation attempt fails. Must be between 0 (no failure) and 100 (no
+success). This is useful to debug and make sure memory failures are handled
+gracefully.
 </pre><a class="anchor" name="tune.h2.header-table-size"></a><a class="anchor" name="3-tune.h2.header-table-size"></a><a class="anchor" name="3.2-tune.h2.header-table-size"></a><a class="anchor" name="tune.h2.header-table-size (Global parameters)"></a><a class="anchor" name="tune.h2.header-table-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.h2.header-table-size"></a><a href="#3.2-tune.h2.header-table-size">tune.h2.header-table-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the HTTP/2 dynamic header table size. It defaults to 4096 bytes and
 cannot be larger than 65536 bytes. A larger value may help certain clients
 send more compact requests, depending on their capabilities. This amount of
@@ -5292,6 +5220,13 @@ visited over high latency networks, but increases the amount of resources a
 single client may allocate. A value of zero disables the limit so a single
 client may create as many streams as allocatable by haproxy. It is highly
 recommended not to change this value.
+</pre><a class="anchor" name="tune.h2.max-frame-size"></a><a class="anchor" name="3-tune.h2.max-frame-size"></a><a class="anchor" name="3.2-tune.h2.max-frame-size"></a><a class="anchor" name="tune.h2.max-frame-size (Global parameters)"></a><a class="anchor" name="tune.h2.max-frame-size (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.h2.max-frame-size"></a><a href="#3.2-tune.h2.max-frame-size">tune.h2.max-frame-size</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the HTTP/2 maximum frame size that haproxy announces it is willing to
+receive to its peers. The default value is the largest between 16384 and the
+buffer size (tune.bufsize). In any case, haproxy will not announce support
+for frame sizes larger than buffers. The main purpose of this setting is to
+allow to limit the maximum frame size setting when using large buffers. Too
+large frame sizes might have performance impact or cause some peers to
+misbehave. It is highly recommended not to change this value.
 </pre><a class="anchor" name="tune.http.cookielen"></a><a class="anchor" name="3-tune.http.cookielen"></a><a class="anchor" name="3.2-tune.http.cookielen"></a><a class="anchor" name="tune.http.cookielen (Global parameters)"></a><a class="anchor" name="tune.http.cookielen (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.http.cookielen"></a><a href="#3.2-tune.http.cookielen">tune.http.cookielen</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum length of captured cookies. This is the maximum value that
 the &quot;capture cookie xxx len yyy&quot; will be allowed to take, and any upper value
 will automatically be truncated to this one. It is important not to set too
@@ -5324,6 +5259,15 @@ means that haproxy will not try to detect idle streams. The default is 1000,
 which seems to correctly detect end user pauses (e.g. read a page before
 clicking). There should be not reason for changing this value. Please check
 tune.ssl.maxrecord below.
+</pre><a class="anchor" name="tune.listener.multi-queue"></a><a class="anchor" name="3-tune.listener.multi-queue"></a><a class="anchor" name="3.2-tune.listener.multi-queue"></a><a class="anchor" name="tune.listener.multi-queue (Global parameters)"></a><a class="anchor" name="tune.listener.multi-queue (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.listener.multi-queue"></a><a href="#3.2-tune.listener.multi-queue">tune.listener.multi-queue</a></b> <span style="color: #800">{ on | off }</span></div><pre class="text">Enables ('on') or disables ('off') the listener's multi-queue accept which
+spreads the incoming traffic to all threads a &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bind<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bind%20%28Peers%29">Peers</a></li><li><a href="#bind%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; line is allowed to run
+on instead of taking them for itself. This provides a smoother traffic
+distribution and scales much better, especially in environments where threads
+may be unevenly loaded due to external activity (network interrupts colliding
+with one thread for example). This option is enabled by default, but it may
+be forcefully disabled for troubleshooting or for situations where it is
+estimated that the operating system already provides a good enough
+distribution and connections are extremely short-lived.
 </pre><a class="anchor" name="tune.lua.forced-yield"></a><a class="anchor" name="3-tune.lua.forced-yield"></a><a class="anchor" name="3.2-tune.lua.forced-yield"></a><a class="anchor" name="tune.lua.forced-yield (Global parameters)"></a><a class="anchor" name="tune.lua.forced-yield (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.lua.forced-yield"></a><a href="#3.2-tune.lua.forced-yield">tune.lua.forced-yield</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This directive forces the Lua engine to execute a yield each &lt;number&gt; of
 instructions executed. This permits interrupting a long script and allows the
 HAProxy scheduler to process other tasks like accepting connections or
@@ -5347,10 +5291,6 @@ check servers.
 preventing infinite loops or spending too much time in Lua. This timeout
 counts only the pure Lua runtime. If the Lua does a sleep, the sleep is
 not taken in account. The default timeout is 4s.
-</pre><a class="anchor" name="tune.fail-alloc"></a><a class="anchor" name="3-tune.fail-alloc"></a><a class="anchor" name="3.2-tune.fail-alloc"></a><a class="anchor" name="tune.fail-alloc (Global parameters)"></a><a class="anchor" name="tune.fail-alloc (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.fail-alloc"></a><a href="#3.2-tune.fail-alloc">tune.fail-alloc</a></b></div><pre class="text">If compiled with DEBUG_FAIL_ALLOC, gives the percentage of chances an
-allocation attempt fails. Must be between 0 (no failure) and 100 (no
-success). This is useful to debug and make sure memory failures are handled
-gracefully.
 </pre><a class="anchor" name="tune.maxaccept"></a><a class="anchor" name="3-tune.maxaccept"></a><a class="anchor" name="3.2-tune.maxaccept"></a><a class="anchor" name="tune.maxaccept (Global parameters)"></a><a class="anchor" name="tune.maxaccept (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.maxaccept"></a><a href="#3.2-tune.maxaccept">tune.maxaccept</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of consecutive connections a process may accept in a
 row before switching to other work. In single process mode, higher numbers
 give better performance at high connection rates. However in multi-process
@@ -8792,7 +8732,8 @@ Also, when &lt;conns&gt; is set to large values, it is possible that the servers
 are not sized to accept such loads, and for this reason it is generally wise
 to assign them some reasonable connection limits.
 
-By default, this value is set to 2000.
+When this value is set to zero, which is the default, the global &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#maxconn%20%28Performance%20tuning%29">Performance tuning</a></li><li><a href="#maxconn%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#maxconn%20%28Bind%20options%29">Bind options</a></li><li><a href="#maxconn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+value is used.
 </pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#server%20%28Peers%29">Peers</a></li><li><a href="#server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, global section's &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">maxconn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#maxconn%20%28Performance%20tuning%29">Performance tuning</a></li><li><a href="#maxconn%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#maxconn%20%28Bind%20options%29">Bind options</a></li><li><a href="#maxconn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#fullconn">fullconn</a>&quot;</div>
 <a class="anchor" name="mode"></a><a class="anchor" name="4-mode"></a><a class="anchor" name="4.2-mode"></a><a class="anchor" name="mode (Proxies)"></a><a class="anchor" name="mode (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="mode"></a><a href="#4.2-mode">mode</a></b> <span style="color: #800">{ tcp|http|health }</span></div><pre class="text">Set the running mode or protocol of the instance
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -13971,7 +13912,7 @@ are expected to be supported, both versions can be advertised, in order of
 preference, like below :
 
      bind :443 ssl crt pub.pem alpn h2,http/1.1
-</pre><a class="anchor" name="backlog"></a><a class="anchor" name="5-backlog"></a><a class="anchor" name="5.1-backlog"></a><a class="anchor" name="backlog (Bind and server options)"></a><a class="anchor" name="backlog (Bind options)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#5.1-backlog">backlog</a></b> <span style="color: #080">&lt;backlog&gt;</span></div><pre class="text">Sets the socket's backlog to this value. If unspecified, the frontend's
+</pre><a class="anchor" name="backlog"></a><a class="anchor" name="5-backlog"></a><a class="anchor" name="5.1-backlog"></a><a class="anchor" name="backlog (Bind and server options)"></a><a class="anchor" name="backlog (Bind options)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#5.1-backlog">backlog</a></b> <span style="color: #080">&lt;backlog&gt;</span></div><pre class="text">Sets the socket's backlog to this value. If unspecified or 0, the frontend's
 backlog is used instead, which generally defaults to the maxconn value.
 </pre><a class="anchor" name="curves"></a><a class="anchor" name="5-curves"></a><a class="anchor" name="5.1-curves"></a><a class="anchor" name="curves (Bind and server options)"></a><a class="anchor" name="curves (Bind options)"></a><div class="keyword"><b><a class="anchor" name="curves"></a><a href="#5.1-curves">curves</a></b> <span style="color: #080">&lt;curves&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the string describing the list of elliptic curves algorithms (&quot;curve suite&quot;)
@@ -14344,7 +14285,7 @@ global statement &quot;<a href="#ssl-default-bind-options">ssl-default-bind-opti
 Note that with OpenSSL &gt;= 1.1.1 ChaCha20-Poly1305 is reprioritized anyway
 (without setting this option), if a ChaCha20-Poly1305 cipher is at the top of
 the client cipher list.
-</pre><a class="anchor" name="process"></a><a class="anchor" name="5-process"></a><a class="anchor" name="5.1-process"></a><a class="anchor" name="process (Bind and server options)"></a><a class="anchor" name="process (Bind options)"></a><div class="keyword"><b><a class="anchor" name="process"></a><a href="#5.1-process">process</a></b> <span style="color: #080">&lt;process-set&gt;</span><span style="color: #008">[/<span style="color: #080">&lt;thread-set&gt;</span>]</span></div><pre class="text">This restricts the list of processes and/or threads on which this listener is
+</pre><a class="anchor" name="process"></a><a class="anchor" name="5-process"></a><a class="anchor" name="5.1-process"></a><a class="anchor" name="process (Bind and server options)"></a><a class="anchor" name="process (Bind options)"></a><div class="keyword"><b><a class="anchor" name="process"></a><a href="#5.1-process">process</a></b> <span style="color: #080">&lt;process-set&gt;</span><span style="color: #008">[/<span style="color: #080">&lt;thread-set&gt;</span>]</span></div><pre class="text">This restricts the list of processes or threads on which this listener is
 allowed to run. It does not enforce any process but eliminates those which do
 not match. If the frontend uses a &quot;<a href="#bind-process">bind-process</a>&quot; setting, the intersection
 between the two is applied. If in the end the listener is not allowed to run
@@ -14352,9 +14293,11 @@ on any remaining process, a warning is emitted, and the listener will either
 run on the first process of the listener if a single process was specified,
 or on all of its processes if multiple processes were specified. If a thread
 set is specified, it limits the threads allowed to process incoming
-connections for this listener, for the corresponding process set. For the
-unlikely case where several ranges are needed, this directive may be
-repeated. &lt;process-set&gt; and &lt;thread-set&gt; must use the format
+connections for this listener, for the the process set. If multiple processes
+and threads are configured, a warning is emitted, as it either results from a
+configuration error or a misunderstanding of these models. For the unlikely
+case where several ranges are needed, this directive may be repeated.
+&lt;process-set&gt; and &lt;thread-set&gt; must use the format
 
     all | odd | even | number[-[number]]
 
@@ -14935,8 +14878,8 @@ client session anymore are moved to a dedicated pool so that they remain
 usable by future clients. This only applies to connections that can be shared
 according to the same principles as those applying to &quot;<a href="#http-reuse">http-reuse</a>&quot;.
 </pre><a class="anchor" name="pool-purge-delay"></a><a class="anchor" name="5-pool-purge-delay"></a><a class="anchor" name="5.2-pool-purge-delay"></a><a class="anchor" name="pool-purge-delay (Bind and server options)"></a><a class="anchor" name="pool-purge-delay (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="pool-purge-delay"></a><a href="#5.2-pool-purge-delay">pool-purge-delay</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the delay to start purging idle connections. Each &lt;delay&gt; interval, half
-of the idle connections are closed. 0 means it's never purged. The default is
-1s.
+of the idle connections are closed. 0 means we don't keep any idle connection.
+The default is 1s.
 </pre><a class="anchor" name="port"></a><a class="anchor" name="5-port"></a><a class="anchor" name="5.2-port"></a><a class="anchor" name="port (Bind and server options)"></a><a class="anchor" name="port (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="port"></a><a href="#5.2-port">port</a></b> <span style="color: #080">&lt;port&gt;</span></div><pre class="text">Using the &quot;<a href="#port">port</a>&quot; parameter, it becomes possible to use a different port to
 send health-checks. On some servers, it may be desirable to dedicate a port
 to a specific component able to perform complex tests which are more suitable
@@ -16366,6 +16309,17 @@ indication about its scope. The scopes allowed are:
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'. The name may only
 contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
+</pre><a class="anchor" name="protobuf"></a><a class="anchor" name="7-protobuf"></a><a class="anchor" name="7.3.1-protobuf"></a><a class="anchor" name="protobuf (Using ACLs and fetching samples)"></a><a class="anchor" name="protobuf (Converters)"></a><div class="keyword"><b><a class="anchor" name="protobuf"></a><a href="#7.3.1-protobuf">protobuf</a></b>(<span style="color: #080">&lt;field_number&gt;</span>,<span style="color: #008">[<span style="color: #080">&lt;field_type&gt;</span>]</span>)</div><pre class="text">This extracts the protocol buffers message field in raw mode of an input binary
+sample representation of a protocol buffer message with &lt;field_number&gt; as field
+number (dotted notation) if &lt;field_type&gt; is not present, or as an integer sample
+if this field is present (see also &quot;<a href="#ungrpc">ungrpc</a>&quot; below).
+The list of the authorized types is the following one: &quot;int32&quot;, &quot;int64&quot;, &quot;uint32&quot;,
+&quot;uint64&quot;, &quot;sint32&quot;, &quot;sint64&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bool<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bool%20%28Converters%29">Converters</a></li><li><a href="#bool%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;, &quot;enum&quot; for the &quot;varint&quot; wire type 0
+&quot;fixed64&quot;, &quot;sfixed64&quot;, &quot;double&quot; for the 64bit wire type 1, &quot;fixed32&quot;, &quot;sfixed32&quot;,
+&quot;float&quot; for the wire type 5. Note that &quot;string&quot; is considered as a length-delimited
+type, so it does not require any &lt;field_type&gt; argument to be extracted.
+More information may be found here about the protocol buffers message field types:
+https://developers.google.com/protocol-buffers/docs/encoding
 </pre><a class="anchor" name="regsub"></a><a class="anchor" name="7-regsub"></a><a class="anchor" name="7.3.1-regsub"></a><a class="anchor" name="regsub (Using ACLs and fetching samples)"></a><a class="anchor" name="regsub (Converters)"></a><div class="keyword"><b><a class="anchor" name="regsub"></a><a href="#7.3.1-regsub">regsub</a></b>(<span style="color: #080">&lt;regex&gt;</span>,<span style="color: #080">&lt;subst&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;flags&gt;</span>]</span>)</div><pre class="text">Applies a regex-based substitution to the input string. It does the same
 operation as the well-known &quot;sed&quot; utility with &quot;s/&lt;regex&gt;/&lt;subst&gt;/&quot;. By
 default it will replace in the input string the first occurrence of the
@@ -16567,10 +16521,67 @@ sc_trackers sample fetch keyword.
 </pre><a class="anchor" name="upper"></a><a class="anchor" name="7-upper"></a><a class="anchor" name="7.3.1-upper"></a><a class="anchor" name="upper (Using ACLs and fetching samples)"></a><a class="anchor" name="upper (Converters)"></a><div class="keyword"><b><a class="anchor" name="upper"></a><a href="#7.3.1-upper">upper</a></b></div><pre class="text">Convert a string sample to upper case. This can only be placed after a string
 sample fetch function or after a transformation keyword returning a string
 type. The result is of type string.
-</pre><a class="anchor" name="url_dec"></a><a class="anchor" name="7-url_dec"></a><a class="anchor" name="7.3.1-url_dec"></a><a class="anchor" name="url_dec (Using ACLs and fetching samples)"></a><a class="anchor" name="url_dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="url_dec"></a><a href="#7.3.1-url_dec">url_dec</a></b></div><pre class="text">  Takes an url-encoded string provided as input and returns the decoded
-  version as output. The input and the output are of type string.
+</pre><a class="anchor" name="url_dec"></a><a class="anchor" name="7-url_dec"></a><a class="anchor" name="7.3.1-url_dec"></a><a class="anchor" name="url_dec (Using ACLs and fetching samples)"></a><a class="anchor" name="url_dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="url_dec"></a><a href="#7.3.1-url_dec">url_dec</a></b></div><pre class="text">Takes an url-encoded string provided as input and returns the decoded
+version as output. The input and the output are of type string.
+</pre><a class="anchor" name="ungrpc"></a><a class="anchor" name="7-ungrpc"></a><a class="anchor" name="7.3.1-ungrpc"></a><a class="anchor" name="ungrpc (Using ACLs and fetching samples)"></a><a class="anchor" name="ungrpc (Converters)"></a><div class="keyword"><b><a class="anchor" name="ungrpc"></a><a href="#7.3.1-ungrpc">ungrpc</a></b>(<span style="color: #080">&lt;field_number&gt;</span>,<span style="color: #008">[<span style="color: #080">&lt;field_type&gt;</span>]</span>)</div><pre class="text">This extracts the protocol buffers message field in raw mode of an input binary
+sample representation of a gRPC message with &lt;field_number&gt; as field number
+(dotted notation) if &lt;field_type&gt; is not present, or as an integer sample if this
+field is present.
+The list of the authorized types is the following one: &quot;int32&quot;, &quot;int64&quot;, &quot;uint32&quot;,
+&quot;uint64&quot;, &quot;sint32&quot;, &quot;sint64&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bool<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bool%20%28Converters%29">Converters</a></li><li><a href="#bool%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;, &quot;enum&quot; for the &quot;varint&quot; wire type 0
+&quot;fixed64&quot;, &quot;sfixed64&quot;, &quot;double&quot; for the 64bit wire type 1, &quot;fixed32&quot;, &quot;sfixed32&quot;,
+&quot;float&quot; for the wire type 5. Note that &quot;string&quot; is considered as a length-delimited
+type, so it does not require any &lt;field_type&gt; argument to be extracted.
+More information may be found here about the protocol buffers message field types:
+https://developers.google.com/protocol-buffers/docs/encoding
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>// with such a protocol buffer .proto file content adapted from
+// https://github.com/grpc/grpc/blob/master/examples/protos/route_guide.proto
 
-unset-var(&lt;var name&gt;)
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+message PPoint {
+  Point point = 59;
+}
+
+message Rectangle {
+  // One corner of the rectangle.
+  PPoint lo = 48;
+  // The other corner of the rectangle.
+  PPoint hi = 49;
+}
+
+let's say a body request is made of a &quot;Rectangle&quot; object value (two PPoint
+protocol buffers messages), the four protocol buffers fields could be
+extracted with these &quot;<a href="#ungrpc">ungrpc</a>&quot; directives:
+
+req.body,ungrpc(48.59.1,int32) <span class="comment"># &quot;latitude&quot; of &quot;lo&quot; first PPoint</span>
+req.body,ungrpc(48.59.2,int32) <span class="comment"># &quot;longitude&quot; of &quot;lo&quot; first PPoint</span>
+req.body,ungrpc(49.59.1,int32) <span class="comment"># &quot;latidude&quot; of &quot;hi&quot; second PPoint</span>
+req.body,ungrpc(49.59.2,int32) <span class="comment"># &quot;longitude&quot; of &quot;hi&quot; second PPoint</span>
+
+We could also extract the intermediary 48.59 field as a binary sample as follows:
+
+req.body,ungrpc(48.59)
+
+As a gRPC message is alway made of a gRPC header followed by protocol buffers
+messages, in the previous example the &quot;latitude&quot; of &quot;lo&quot; first PPoint
+could be extracted with these equivalent directives:
+
+req.body,ungrpc(48.59),protobuf(1,int32)
+req.body,ungrpc(48),protobuf(59.1,int32)
+req.body,ungrpc(48),protobuf(59),protobuf(1,int32)
+
+Note that the first convert must be &quot;<a href="#ungrpc">ungrpc</a>&quot;, the remaining ones must be
+&quot;<a href="#protobuf">protobuf</a>&quot; and only the last one may have or not a second argument to
+interpret the previous binary sample.
+</code></pre>
+</div><pre class="text">unset-var(&lt;var name&gt;)
   Unsets a variable if the input content is defined. The name of the variable
   starts with an indication about its scope. The scopes allowed are:
     &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
@@ -20006,8 +20017,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0-dev0-284 &ndash; Configuration Manual<br>
-							<small>2018/12/22, willy tarreau</small>
+							HAProxy 2.0-dev1-155 &ndash; Configuration Manual<br>
+							<small>2019/02/26, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20110,7 +20121,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev0-284', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev1-155', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
