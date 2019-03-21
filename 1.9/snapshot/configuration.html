@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.4 - Configuration Manual</title>
+		<title>HAProxy version 1.9.5-3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -3081,7 +3081,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/02/08</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/03/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3092,10 +3092,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9.4</strong></p>
+							<p><strong>version 1.9.5-3</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/02/06
+								2019/03/19
 							</p>
 						</div>
 
@@ -4844,22 +4844,22 @@ the configuration file sees the new value. See also &quot;<a href="#presetenv">p
 and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
-that are negotiated during the SSL/TLS handshake except for TLSv1.3 for all
+that are negotiated during the SSL/TLS handshake up to TLSv1.2 for all
 &quot;<a href="#bind">bind</a>&quot; lines which do not explicitly define theirs. The format of the string
-is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for instance
-a string such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without quotes). For
-TLSv1.3 cipher configuration, please check the &quot;<a href="#ssl-default-bind-ciphersuites">ssl-default-bind-ciphersuites</a>&quot;
-keyword. Please check the &quot;<a href="#bind">bind</a>&quot; keyword for more information.
+is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages. For background
+information and recommendations see e.g.
+(https://wiki.mozilla.org/Security/Server_Side_TLS) and
+(https://mozilla.github.io/server-side-tls/ssl-config-generator/). For TLSv1.3
+cipher configuration, please check the &quot;<a href="#ssl-default-bind-ciphersuites">ssl-default-bind-ciphersuites</a>&quot; keyword.
+Please check the &quot;<a href="#bind">bind</a>&quot; keyword for more information.
 </pre><a class="anchor" name="ssl-default-bind-ciphersuites"></a><a class="anchor" name="3-ssl-default-bind-ciphersuites"></a><a class="anchor" name="3.1-ssl-default-bind-ciphersuites"></a><a class="anchor" name="ssl-default-bind-ciphersuites (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphersuites (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphersuites"></a><a href="#3.1-ssl-default-bind-ciphersuites">ssl-default-bind-ciphersuites</a></b> <span style="color: #080">&lt;ciphersuites&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in and
 OpenSSL 1.1.1 or later was used to build HAProxy. It sets the default string
 describing the list of cipher algorithms (&quot;cipher suite&quot;) that are negotiated
 during the TLSv1.3 handshake for all &quot;<a href="#bind">bind</a>&quot; lines which do not explicitly define
 theirs. The format of the string is defined in
-&quot;man 1 ciphers&quot; from OpenSSL man pages under the section &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, and can
-be for instance a string such as
-&quot;TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256&quot;
-(without quotes). For cipher configuration for TLSv1.2 and earlier, please check
-the &quot;<a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>&quot; keyword. Please check the &quot;<a href="#bind">bind</a>&quot; keyword for more
+&quot;man 1 ciphers&quot; from OpenSSL man pages under the section &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;. For
+cipher configuration for TLSv1.2 and earlier, please check the
+&quot;<a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>&quot; keyword. Please check the &quot;<a href="#bind">bind</a>&quot; keyword for more
 information.
 </pre><a class="anchor" name="ssl-default-bind-options"></a><a class="anchor" name="3-ssl-default-bind-options"></a><a class="anchor" name="3.1-ssl-default-bind-options"></a><a class="anchor" name="ssl-default-bind-options (Global parameters)"></a><a class="anchor" name="ssl-default-bind-options (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-options"></a><a href="#3.1-ssl-default-bind-options">ssl-default-bind-options</a></b> <span style="color: #008">[<span style="color: #080">&lt;option&gt;</span>]</span>...</div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 default ssl-options to force on all &quot;<a href="#bind">bind</a>&quot; lines. Please check the &quot;<a href="#bind">bind</a>&quot;
@@ -4872,19 +4872,24 @@ keyword to see available options.
 </code></pre>
 </div><a class="anchor" name="ssl-default-server-ciphers"></a><a class="anchor" name="3-ssl-default-server-ciphers"></a><a class="anchor" name="3.1-ssl-default-server-ciphers"></a><a class="anchor" name="ssl-default-server-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphers"></a><a href="#3.1-ssl-default-server-ciphers">ssl-default-server-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 sets the default string describing the list of cipher algorithms that are
-negotiated during the SSL/TLS handshake except for TLSv1.3 with the server,
+negotiated during the SSL/TLS handshake up to TLSv1.2 with the server,
 for all &quot;<a href="#server">server</a>&quot; lines which do not explicitly define theirs. The format of
-the string is defined in &quot;man 1 ciphers&quot;. For TLSv1.3 cipher configuration,
-please check the &quot;<a href="#ssl-default-server-ciphersuites">ssl-default-server-ciphersuites</a>&quot; keyword. Please check the
-&quot;<a href="#server">server</a>&quot; keyword for more information.
+the string is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages. For background
+information and recommendations see e.g.
+(https://wiki.mozilla.org/Security/Server_Side_TLS) and
+(https://mozilla.github.io/server-side-tls/ssl-config-generator/).
+For TLSv1.3 cipher configuration, please check the
+&quot;<a href="#ssl-default-server-ciphersuites">ssl-default-server-ciphersuites</a>&quot; keyword. Please check the &quot;<a href="#server">server</a>&quot; keyword
+for more information.
 </pre><a class="anchor" name="ssl-default-server-ciphersuites"></a><a class="anchor" name="3-ssl-default-server-ciphersuites"></a><a class="anchor" name="3.1-ssl-default-server-ciphersuites"></a><a class="anchor" name="ssl-default-server-ciphersuites (Global parameters)"></a><a class="anchor" name="ssl-default-server-ciphersuites (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-ciphersuites"></a><a href="#3.1-ssl-default-server-ciphersuites">ssl-default-server-ciphersuites</a></b> <span style="color: #080">&lt;ciphersuites&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in and
 OpenSSL 1.1.1 or later was used to build HAProxy. It sets the default
 string describing the list of cipher algorithms that are negotiated during
 the TLSv1.3 handshake with the server, for all &quot;<a href="#server">server</a>&quot; lines which do not
 explicitly define theirs. The format of the string is defined in
-&quot;man 1 ciphers&quot; under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section. For cipher configuration for
-TLSv1.2 and earlier, please check the &quot;<a href="#ssl-default-server-ciphers">ssl-default-server-ciphers</a>&quot; keyword.
-Please check the &quot;<a href="#server">server</a>&quot; keyword for more information.
+&quot;man 1 ciphers&quot; from OpenSSL man pages under the section &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;. For
+cipher configuration for TLSv1.2 and earlier, please check the
+&quot;<a href="#ssl-default-server-ciphers">ssl-default-server-ciphers</a>&quot; keyword. Please check the &quot;<a href="#server">server</a>&quot; keyword for
+more information.
 </pre><a class="anchor" name="ssl-default-server-options"></a><a class="anchor" name="3-ssl-default-server-options"></a><a class="anchor" name="3.1-ssl-default-server-options"></a><a class="anchor" name="ssl-default-server-options (Global parameters)"></a><a class="anchor" name="ssl-default-server-options (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-server-options"></a><a href="#3.1-ssl-default-server-options">ssl-default-server-options</a></b> <span style="color: #008">[<span style="color: #080">&lt;option&gt;</span>]</span>...</div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 default ssl-options to force on all &quot;<a href="#server">server</a>&quot; lines. Please check the &quot;<a href="#server">server</a>&quot;
 keyword to see available options.
@@ -13938,11 +13943,8 @@ the dynamic generation of certificates is enabled. See
 'generate-certificates' for details.
 </pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.1-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.1-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the string describing the list of cipher algorithms (&quot;cipher suite&quot;) that are
-negotiated during the SSL/TLS handshake except for TLSv1.3. The format of the
-string is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages, and can be for
-instance a string such as &quot;AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH&quot; (without
-quotes). Depending on the compatibility and security requirements, the list
-of suitable ciphers depends on a variety of variables. For background
+negotiated during the SSL/TLS handshake up to TLSv1.2. The format of the
+string is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages. For background
 information and recommendations see e.g.
 (https://wiki.mozilla.org/Security/Server_Side_TLS) and
 (https://mozilla.github.io/server-side-tls/ssl-config-generator/). For TLSv1.3
@@ -13951,11 +13953,8 @@ cipher configuration, please check the &quot;<span class="dropdown"><a class="dr
 OpenSSL 1.1.1 or later was used to build HAProxy. It sets the string describing
 the list of cipher algorithms (&quot;cipher suite&quot;) that are negotiated during the
 TLSv1.3 handshake. The format of the string is defined in &quot;man 1 ciphers&quot; from
-OpenSSL man pages under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section, and can be for instance a
-string such as
-&quot;TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256&quot;
-(without quotes). For cipher configuration for TLSv1.2 and earlier, please check
-the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword.
+OpenSSL man pages under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section. For cipher configuration
+for TLSv1.2 and earlier, please check the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword.
 </pre><a class="anchor" name="crl-file"></a><a class="anchor" name="5-crl-file"></a><a class="anchor" name="5.1-crl-file"></a><a class="anchor" name="crl-file (Bind and server options)"></a><a class="anchor" name="crl-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="crl-file"></a><a href="#5.1-crl-file">crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 designates a PEM file from which to load certificate revocation list used
 to verify client's certificate.
@@ -14575,17 +14574,18 @@ this option.
 </pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.2-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.2-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. This
 option sets the string describing the list of cipher algorithms that is
 negotiated during the SSL/TLS handshake with the server. The format of the
-string is defined in &quot;man 1 ciphers&quot;. When SSL is used to communicate with
-servers on the local network, it is common to see a weaker set of algorithms
-than what is used over the internet. Doing so reduces CPU usage on both the
-server and haproxy while still keeping it compatible with deployed software.
-Some algorithms such as RC4-SHA1 are reasonably cheap. If no security at all
-is needed and just connectivity, using DES can be appropriate.
+string is defined in &quot;man 1 ciphers&quot; from OpenSSL man pages. For background
+information and recommendations see e.g.
+(https://wiki.mozilla.org/Security/Server_Side_TLS) and
+(https://mozilla.github.io/server-side-tls/ssl-config-generator/). For TLSv1.3
+cipher configuration, please check the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword.
 </pre><a class="anchor" name="ciphersuites"></a><a class="anchor" name="5-ciphersuites"></a><a class="anchor" name="5.2-ciphersuites"></a><a class="anchor" name="ciphersuites (Bind and server options)"></a><a class="anchor" name="ciphersuites (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphersuites"></a><a href="#5.2-ciphersuites">ciphersuites</a></b> <span style="color: #080">&lt;ciphersuites&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in and
 OpenSSL 1.1.1 or later was used to build HAProxy. This option sets the string
 describing the list of cipher algorithms that is negotiated during the TLS
 1.3 handshake with the server. The format of the string is defined in
-&quot;man 1 ciphers&quot; under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section.
+&quot;man 1 ciphers&quot; from OpenSSL man pages under the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; section.
+For cipher configuration for TLSv1.2 and earlier, please check the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+keyword.
 </pre><a class="anchor" name="cookie"></a><a class="anchor" name="5-cookie"></a><a class="anchor" name="5.2-cookie"></a><a class="anchor" name="cookie (Bind and server options)"></a><a class="anchor" name="cookie (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="cookie"></a><a href="#5.2-cookie">cookie</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot; parameter sets the cookie value assigned to the server to
 &lt;value&gt;. This value will be checked in incoming requests, and the first
 operational server possessing the same value will be selected. In return, in
@@ -19946,8 +19946,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.4 &ndash; Configuration Manual<br>
-							<small>2019/02/06, willy tarreau</small>
+							HAProxy 1.9.5-3 &ndash; Configuration Manual<br>
+							<small>2019/03/19, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20050,7 +20050,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.5-3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
