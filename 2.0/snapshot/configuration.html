@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0-dev2-25 - Configuration Manual</title>
+		<title>HAProxy version 2.0-dev2-228 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -969,6 +969,8 @@
 							
 							<a class="list-group-item" href="#addr">addr</a>
 							
+							<a class="list-group-item" href="#aes_gcm_dec">aes_gcm_dec</a>
+							
 							<a class="list-group-item" href="#agent-addr">agent-addr</a>
 							
 							<a class="list-group-item" href="#agent-check">agent-check</a>
@@ -1433,6 +1435,8 @@
 							<a class="list-group-item" href="#http-request del-map">http-request del-map</a>
 							
 							<a class="list-group-item" href="#http-request deny">http-request deny</a>
+							
+							<a class="list-group-item" href="#http-request do-resolve">http-request do-resolve</a>
 							
 							<a class="list-group-item" href="#http-request early-hint">http-request early-hint</a>
 							
@@ -2470,6 +2474,8 @@
 							
 							<a class="list-group-item" href="#set-cookie">set-cookie</a>
 							
+							<a class="list-group-item" href="#set-dumpable">set-dumpable</a>
+							
 							<a class="list-group-item" href="#setenv">setenv</a>
 							
 							<a class="list-group-item" href="#severity-output">severity-output</a>
@@ -2945,6 +2951,10 @@
 							
 							<a class="list-group-item" href="#tune.pipesize">tune.pipesize</a>
 							
+							<a class="list-group-item" href="#tune.pool-high-fd-ratio">tune.pool-high-fd-ratio</a>
+							
+							<a class="list-group-item" href="#tune.pool-low-fd-ratio">tune.pool-low-fd-ratio</a>
+							
 							<a class="list-group-item" href="#tune.rcvbuf.client">tune.rcvbuf.client</a>
 							
 							<a class="list-group-item" href="#tune.rcvbuf.server">tune.rcvbuf.server</a>
@@ -3066,6 +3076,16 @@
 							
 							<a class="list-group-item" href="#wt6">wt6</a>
 							
+							<a class="list-group-item" href="#wurfl-cache-size">wurfl-cache-size</a>
+							
+							<a class="list-group-item" href="#wurfl-data-file">wurfl-data-file</a>
+							
+							<a class="list-group-item" href="#wurfl-information-list">wurfl-information-list</a>
+							
+							<a class="list-group-item" href="#wurfl-information-list-separator">wurfl-information-list-separator</a>
+							
+							<a class="list-group-item" href="#wurfl-patch-file">wurfl-patch-file</a>
+							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-X"><h4>X</h4>
 								
@@ -3085,7 +3105,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/03/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/04/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3096,7 +3116,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0-dev2-25</strong></p>
+							<p><strong>version 2.0-dev2-228</strong></p>
 							<p>
 								willy tarreau<br>
 								2019/03/26
@@ -4083,7 +4103,7 @@ waiting for new requests, just as if it was a keep-alive HTTP connection.
 HAProxy supports 4 connection modes :
   - keep alive    : all requests and responses are processed (default)
   - tunnel        : only the first request and response are processed,
-                    everything else is forwarded with no analysis.
+                    everything else is forwarded with no analysis (deprecated).
   - server close  : the server-facing connection is closed after the response.
   - close         : the connection is actively closed after end of response.
 
@@ -4455,6 +4475,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#uid">uid</a>
    - <a href="#ulimit-n">ulimit-n</a>
    - <a href="#user">user</a>
+   - <a href="#set-dumpable">set-dumpable</a>
    - <a href="#setenv">setenv</a>
    - <a href="#stats">stats</a>
    - <a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>
@@ -4471,6 +4492,10 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#51degrees-property-name-list">51degrees-property-name-list</a>
    - <a href="#51degrees-property-separator">51degrees-property-separator</a>
    - <a href="#51degrees-cache-size">51degrees-cache-size</a>
+   - <a href="#wurfl-data-file">wurfl-data-file</a>
+   - <a href="#wurfl-information-list">wurfl-information-list</a>
+   - <a href="#wurfl-information-list-separator">wurfl-information-list-separator</a>
+   - <a href="#wurfl-cache-size">wurfl-cache-size</a>
 
  * Performance tuning
    - <a href="#max-spread-checks">max-spread-checks</a>
@@ -4850,6 +4875,23 @@ configuration. See also &quot;<a href="#server-state-base">server-state-base</a>
 is overwritten. The changes immediately take effect so that the next line in
 the configuration file sees the new value. See also &quot;<a href="#presetenv">presetenv</a>&quot;, &quot;<a href="#resetenv">resetenv</a>&quot;,
 and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
+</pre><a class="anchor" name="set-dumpable"></a><a class="anchor" name="3-set-dumpable"></a><a class="anchor" name="3.1-set-dumpable"></a><a class="anchor" name="set-dumpable (Global parameters)"></a><a class="anchor" name="set-dumpable (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="set-dumpable"></a><a href="#3.1-set-dumpable">set-dumpable</a></b></div><pre class="text">This option is better left disabled by default and enabled only upon a
+developer's request. It has no impact on performance nor stability but will
+try hard to re-enable core dumps that were possibly disabled by file size
+limitations (ulimit -f), core size limitations (ulimit -c), or &quot;dumpability&quot;
+of a process after changing its UID/GID (such as /proc/sys/fs/suid_dumpable
+on Linux). Core dumps might still be limited by the current directory's
+permissions (check what directory the file is started from), the chroot
+directory's permission (it may be needed to temporarily disable the chroot
+directive or to move it to a dedicated writable location), or any other
+system-specific constraint. For example, some Linux flavours are notorious
+for replacing the default core file with a path to an executable not even
+installed on the system (check /proc/sys/kernel/core_pattern). Often, simply
+writing &quot;core&quot;, &quot;core.%p&quot; or &quot;/var/log/core/core.%p&quot; addresses the issue.
+When trying to enable this option waiting for a rare issue to re-appear, it's
+often a good idea to first try to obtain such a dump by issuing, for example,
+&quot;kill -11&quot; to the haproxy process and verify that it leaves a core where
+expected when dying.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
 that are negotiated during the SSL/TLS handshake up to TLSv1.2 for all
@@ -4990,6 +5032,59 @@ By default, this cache is disabled.
 
 Please note that this option is only available when haproxy has been
 compiled with USE_51DEGREES.
+</pre><a class="anchor" name="wurfl-data-file"></a><a class="anchor" name="3-wurfl-data-file"></a><a class="anchor" name="3.1-wurfl-data-file"></a><a class="anchor" name="wurfl-data-file (Global parameters)"></a><a class="anchor" name="wurfl-data-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-data-file"></a><a href="#3.1-wurfl-data-file">wurfl-data-file</a></b> <span style="color: #080">&lt;file path&gt;</span></div><pre class="text">The path of the WURFL data file to provide device detection services. The
+file should be accessible by HAProxy with relevant permissions.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-information-list"></a><a class="anchor" name="3-wurfl-information-list"></a><a class="anchor" name="3.1-wurfl-information-list"></a><a class="anchor" name="wurfl-information-list (Global parameters)"></a><a class="anchor" name="wurfl-information-list (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-information-list"></a><a href="#3.1-wurfl-information-list">wurfl-information-list</a></b> <span style="color: #008">[<span style="color: #080">&lt;capability&gt;</span>]</span>*</div><pre class="text">A space-delimited list of WURFL capabilities, virtual capabilities, property
+names we plan to use in injected headers. A full list of capability and
+virtual capability names is available on the Scientiamobile website :
+
+    https://www.scientiamobile.com/wurflCapability
+
+Valid WURFL properties are:
+- wurfl_id                    Contains the device ID of the matched device.
+
+- wurfl_root_id               Contains the device root ID of the matched
+                              device.
+
+- wurfl_isdevroot             Tells if the matched device is a root device.
+                              Possible values are &quot;TRUE&quot; or &quot;FALSE&quot;.
+
+- wurfl_useragent             The original useragent coming with this
+                              particular web request.
+
+- wurfl_api_version           Contains a string representing the currently
+                              used Libwurfl API version.
+
+- wurfl_info                  A string containing information on the parsed
+                              wurfl.xml and its full path.
+
+- wurfl_last_load_time        Contains the UNIX timestamp of the last time
+                              WURFL has been loaded successfully.
+
+- wurfl_normalized_useragent  The normalized useragent.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-information-list-separator"></a><a class="anchor" name="3-wurfl-information-list-separator"></a><a class="anchor" name="3.1-wurfl-information-list-separator"></a><a class="anchor" name="wurfl-information-list-separator (Global parameters)"></a><a class="anchor" name="wurfl-information-list-separator (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-information-list-separator"></a><a href="#3.1-wurfl-information-list-separator">wurfl-information-list-separator</a></b> <span style="color: #080">&lt;char&gt;</span></div><pre class="text">A char that will be used to separate values in a response header containing
+WURFL results. If not set that a comma (',') will be used by default.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-patch-file"></a><a class="anchor" name="3-wurfl-patch-file"></a><a class="anchor" name="3.1-wurfl-patch-file"></a><a class="anchor" name="wurfl-patch-file (Global parameters)"></a><a class="anchor" name="wurfl-patch-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-patch-file"></a><a href="#3.1-wurfl-patch-file">wurfl-patch-file</a></b> <span style="color: #008">[<span style="color: #080">&lt;file path&gt;</span>]</span></div><pre class="text">A list of WURFL patch file paths. Note that patches are loaded during startup
+thus before the chroot.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
+</pre><a class="anchor" name="wurfl-cache-size"></a><a class="anchor" name="3-wurfl-cache-size"></a><a class="anchor" name="3.1-wurfl-cache-size"></a><a class="anchor" name="wurfl-cache-size (Global parameters)"></a><a class="anchor" name="wurfl-cache-size (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="wurfl-cache-size"></a><a href="#3.1-wurfl-cache-size">wurfl-cache-size</a></b> <span style="color: #080">&lt;size&gt;</span></div><pre class="text">Sets the WURFL Useragent cache size. For faster lookups, already processed user
+agents are kept in a LRU cache :
+- &quot;0&quot;     : no cache is used.
+- &lt;size&gt;  : size of lru cache in elements.
+
+Please note that this option is only available when haproxy has been compiled
+with USE_WURFL=1.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
 <h2 id="chapter-3.2" data-target="3.2"><small><a class="small" href="#3.2">3.2.</a></small> Performance tuning</h2>
@@ -5120,10 +5215,21 @@ case of doubt. See also &quot;<a href="#option%20splice-auto">option splice-auto
 the command line argument &quot;-dG&quot;. Deprecated gethostbyname(3) will be used.
 </pre><a class="anchor" name="noreuseport"></a><a class="anchor" name="3-noreuseport"></a><a class="anchor" name="3.2-noreuseport"></a><a class="anchor" name="noreuseport (Global parameters)"></a><a class="anchor" name="noreuseport (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="noreuseport"></a><a href="#3.2-noreuseport">noreuseport</a></b></div><pre class="text">Disables the use of SO_REUSEPORT - see socket(7). It is equivalent to the
 command line argument &quot;-dR&quot;.
-</pre><a class="anchor" name="profiling.tasks"></a><a class="anchor" name="3-profiling.tasks"></a><a class="anchor" name="3.2-profiling.tasks"></a><a class="anchor" name="profiling.tasks (Global parameters)"></a><a class="anchor" name="profiling.tasks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="profiling.tasks"></a><a href="#3.2-profiling.tasks">profiling.tasks</a></b> <span style="color: #800">{ on | off }</span></div><pre class="text">Enables ('on') or disables ('off') per-task CPU profiling. CPU profiling per
-task can be very convenient to report where the time is spent and which
-requests have what effect on which other request. It is not enabled by
-default as it may consume a little bit extra CPU. This requires a system
+</pre><a class="anchor" name="profiling.tasks"></a><a class="anchor" name="3-profiling.tasks"></a><a class="anchor" name="3.2-profiling.tasks"></a><a class="anchor" name="profiling.tasks (Global parameters)"></a><a class="anchor" name="profiling.tasks (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="profiling.tasks"></a><a href="#3.2-profiling.tasks">profiling.tasks</a></b> <span style="color: #800">{ auto | on | off }</span></div><pre class="text">Enables ('on') or disables ('off') per-task CPU profiling. When set to 'auto'
+the profiling automatically turns on a thread when it starts to suffer from
+an average latency of 1000 microseconds or higher as reported in the
+&quot;avg_loop_us&quot; activity field, and automatically turns off when the latency
+reutnrs below 990 microseconds (this value is an average over the last 1024
+loops so it does not vary quickly and tends to significantly smooth short
+spikes). It may also spontaneously trigger from time to time on overloaded
+systems, containers, or virtual machines, or when the system swaps (which
+must absolutely never happen on a load balancer).
+
+CPU profiling per task can be very convenient to report where the time is
+spent and which requests have what effect on which other request. Enabling
+it will typically affect the overall's performance by less than 1%, thus it
+is recommended to leave it to the default 'auto' value so that it only
+operates when a problem is identified. This feature requires a system
 supporting the clock_gettime(2) syscall with clock identifiers
 CLOCK_MONOTONIC and CLOCK_THREAD_CPUTIME_ID, otherwise the reported time will
 be zero. This option may be changed at run time using &quot;set profiling&quot; on the
@@ -5339,6 +5445,17 @@ it can improve performance to increase pipe sizes, especially if it is
 suspected that pipes are not filled and that many calls to splice() are
 performed. This has an impact on the kernel's memory footprint, so this must
 not be changed if impacts are not understood.
+</pre><a class="anchor" name="tune.pool-low-fd-ratio"></a><a class="anchor" name="3-tune.pool-low-fd-ratio"></a><a class="anchor" name="3.2-tune.pool-low-fd-ratio"></a><a class="anchor" name="tune.pool-low-fd-ratio (Global parameters)"></a><a class="anchor" name="tune.pool-low-fd-ratio (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pool-low-fd-ratio"></a><a href="#3.2-tune.pool-low-fd-ratio">tune.pool-low-fd-ratio</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting sets the max number of file descriptors (in percentage) used by
+haproxy globally against the maximum number of file descriptors haproxy can
+use before we stop putting connection into the idle pool for reuse. The
+default is 20.
+</pre><a class="anchor" name="tune.pool-high-fd-ratio"></a><a class="anchor" name="3-tune.pool-high-fd-ratio"></a><a class="anchor" name="3.2-tune.pool-high-fd-ratio"></a><a class="anchor" name="tune.pool-high-fd-ratio (Global parameters)"></a><a class="anchor" name="tune.pool-high-fd-ratio (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pool-high-fd-ratio"></a><a href="#3.2-tune.pool-high-fd-ratio">tune.pool-high-fd-ratio</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting sets the max number of file descriptors (in percentage) used by
+haproxy globally against the maximum number of file descriptors haproxy can
+use before we start killing idle connections when we can't reuse a connection
+and we have to create a new one. The default is 25 (one quarter of the file
+descriptor will mean that roughly half of the maximum front connections can
+keep an idle connection behind, anything beyond this probably doesn't make
+much sense in the general case when targetting connection reuse).
 </pre><a class="anchor" name="tune.rcvbuf.client"></a><a class="anchor" name="3-tune.rcvbuf.client"></a><a class="anchor" name="3.2-tune.rcvbuf.client"></a><a class="anchor" name="tune.rcvbuf.client (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.client"></a><a href="#3.2-tune.rcvbuf.client">tune.rcvbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.rcvbuf.server"></a><a class="anchor" name="3-tune.rcvbuf.server"></a><a class="anchor" name="3.2-tune.rcvbuf.server"></a><a class="anchor" name="tune.rcvbuf.server (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.server"></a><a href="#3.2-tune.rcvbuf.server">tune.rcvbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket receive buffer size on the client or the server side
 to the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
@@ -5669,8 +5786,10 @@ the backend's. HAProxy supports 4 connection modes :
   - TUN: tunnel (&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;) : this was the default mode for versions
     1.0 to 1.5-dev21 : only the first request and response are processed, and
     everything else is forwarded with no analysis at all. This mode should not
-    be used as it creates lots of trouble with logging and HTTP processing. It
-    is supported only on frontends.
+    be used as it creates lots of trouble with logging and HTTP processing.
+    And because it cannot work in HTTP/2, this option is deprecated and it is
+    only supported on legacy HTTP frontends. In HTX, it is ignored and a
+    warning is emitted during HAProxy startup.
 
   - SCL: server close (&quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;) : the server-facing
     connection is closed after the end of the response is received, but the
@@ -5784,7 +5903,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20http-no-delay"><span class="pull-right"><span>(*)</span></span>option http-no-delay</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-pretend-keepalive"><span class="pull-right"><span>(*)</span></span>option http-pretend-keepalive</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-server-close"><span class="pull-right"><span>(*)</span></span>option http-server-close</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-option%20http-tunnel"><span class="pull-right"><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<tr><td ><a href="#4-option%20http-tunnel"><span class="pull-right"><span class="label label-warning">(deprecated)</span><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http-use-proxy-header"><span class="pull-right"><span>(*)</span></span>option http-use-proxy-header</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http-use-htx"><span class="pull-right"><span>(*)</span></span>option http-use-htx</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20httpchk">option httpchk</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -7681,6 +7800,58 @@ and emits an HTTP 403 error, or optionally the status code specified as an
 argument to &quot;deny_status&quot;. The list of permitted status codes is limited to
 those that can be overridden by the &quot;<a href="#errorfile">errorfile</a>&quot; directive.
 No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated.
+</pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request do-resolve"></a><a class="anchor" name="4-http-request do-resolve"></a><a class="anchor" name="4.2-http-request do-resolve"></a><a class="anchor" name="http-request do-resolve (Proxies)"></a><a class="anchor" name="http-request do-resolve (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request do-resolve"></a><a href="#4.2-http-request%20do-resolve">http-request do-resolve</a></b>(<span style="color: #080">&lt;var&gt;</span>,<span style="color: #080">&lt;resolvers&gt;</span>,<span style="color: #008">[ipv4,ipv6]</span>) <span style="color: #080">&lt;expr&gt;</span> :</div><pre class="text">This action performs a DNS resolution of the output of &lt;expr&gt; and stores
+the result in the variable &lt;var&gt;. It uses the DNS resolvers section
+pointed by &lt;resolvers&gt;.
+It is possible to choose a resolution preference using the optional
+arguments 'ipv4' or 'ipv6'.
+When performing the DNS resolution, the client side connection is on
+pause waiting till the end of the resolution.
+If an IP address can be found, it is stored into &lt;var&gt;. If any kind of
+error occurs, then &lt;var&gt; is not set.
+One can use this action to discover a server IP address at run time and
+based on information found in the request (IE a Host header).
+If this action is used to find the server's IP address (using the
+&quot;set-dst&quot; action), then the server IP address in the backend must be set
+to 0.0.0.0.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>resolvers mydns
+  nameserver local 127.0.0.53:53
+  nameserver google 8.8.8.8:53
+  timeout retry   1s
+  hold valid 10s
+  hold nx 3s
+  hold other 3s
+  hold obsolete 0s
+  accepted_payload_size 8192
+
+frontend fe
+  bind 10.42.0.1:80
+  http-request do-resolve(txn.myip,mydns,ipv4) hdr(Host),lower
+  http-request capture var(txn.myip) len 40
+
+  <span class="comment"># return 503 when the variable is not set,</span>
+  <span class="comment"># which mean DNS resolution error</span>
+  use_backend b_503 unless { var(txn.myip) -m found }
+
+  default_backend be
+
+backend b_503
+  <span class="comment"># dummy backend used to return 503.</span>
+  <span class="comment"># one can use the errorfile directive to send a nice</span>
+  <span class="comment"># 503 error page to end users</span>
+
+backend be
+  <span class="comment"># rule to prevent HAProxy from reconnecting to services</span>
+  <span class="comment"># on the local network (forged DNS name used to scan the network)</span>
+  http-request deny if { var(txn.myip) -m ip 127.0.0.0/8 10.0.0.0/8 }
+  http-request set-dst var(txn.myip)
+  server clear 0.0.0.0:0
+</code></pre>
+</div><pre class="text">NOTE: Don't forget to set the &quot;protection&quot; rules to ensure HAProxy won't
+      be used to scan the network or worst won't loop over itself...
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request early-hint"></a><a class="anchor" name="4-http-request early-hint"></a><a class="anchor" name="4.2-http-request early-hint"></a><a class="anchor" name="http-request early-hint (Proxies)"></a><a class="anchor" name="http-request early-hint (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request early-hint"></a><a href="#4.2-http-request%20early-hint">http-request early-hint</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to build an HTTP 103 Early Hints response prior to any other one.
 This appends an HTTP header field to this response whose name is specified in
 &lt;name&gt; and whose value is defined by &lt;fmt&gt; which follows the log-format rules
@@ -9447,7 +9618,7 @@ this option combines with others when frontend and backend options differ.
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-tunnel"></a><a class="anchor" name="4-option http-tunnel"></a><a class="anchor" name="4.2-option http-tunnel"></a><a class="anchor" name="option http-tunnel (Proxies)"></a><a class="anchor" name="option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-tunnel"></a><a href="#4.2-option%20http-tunnel">option http-tunnel</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-tunnel"></a><a class="anchor" name="4-no option http-tunnel"></a><a class="anchor" name="4.2-no option http-tunnel"></a><a class="anchor" name="no option http-tunnel (Proxies)"></a><a class="anchor" name="no option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-tunnel"></a><a href="#4.2-no%20option%20http-tunnel">no option http-tunnel</a></b></div><pre class="text">Disable or enable HTTP connection processing after first transaction
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-tunnel"></a><a class="anchor" name="4-option http-tunnel"></a><a class="anchor" name="4.2-option http-tunnel"></a><a class="anchor" name="option http-tunnel (Proxies)"></a><a class="anchor" name="option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-tunnel"></a><a href="#4.2-option%20http-tunnel">option http-tunnel</a></b>    <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-tunnel"></a><a class="anchor" name="4-no option http-tunnel"></a><a class="anchor" name="4.2-no option http-tunnel"></a><a class="anchor" name="no option http-tunnel (Proxies)"></a><a class="anchor" name="no option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-tunnel"></a><a href="#4.2-no%20option%20http-tunnel">no option http-tunnel</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">Disable or enable HTTP connection processing after first transaction.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td></tr>
@@ -9455,7 +9626,11 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default HAProxy operates in keep-alive mode with regards to persistent
+<pre class="text">Warning : Because it cannot work in HTTP/2, this option is deprecated and it
+is only supported on legacy HTTP frontends. In HTX, it is ignored and a
+warning is emitted during HAProxy startup.
+
+By default HAProxy operates in keep-alive mode with regards to persistent
 connections: for each connection it processes each request and response, and
 leaves the connection idle on both sides between the end of a response and
 the start of a new request. This mode may be changed by several options such
@@ -9516,28 +9691,28 @@ This option should normally never be used, except in front of a proxy.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, the HTTP protocol is processed as-is. Inserting, deleting, or
+<pre class="text">Historically, the HTTP protocol is processed as-is. Inserting, deleting, or
 modifying a header field requires to rewrite the affected part in the buffer
-and to move the buffer's tail accordingly. Since this principle has deep
-roots in haproxy, the HTTP/2 protocol is converted to HTTP/1.1 before being
-processed this way. It also results in the inability to establish HTTP/2
-connections to servers because of the loss of HTTP/2 semantics in the HTTP/1
-representation.
+and to move the buffer's tail accordingly. This mode is known as the legacy
+HTTP mode. Since this principle has deep roots in haproxy, the HTTP/2
+protocol is converted to HTTP/1.1 before being processed this way. It also
+results in the inability to establish HTTP/2 connections to servers because
+of the loss of HTTP/2 semantics in the HTTP/1 representation.
 
 HTX is the name of a totally new native internal representation for the HTTP
 protocol, that is agnostic to the version and aims at preserving semantics
 all along the chain. It relies on a fast parsing, tokenizing and indexing of
 the protocol elements so that no more memory moves are necessary and that
-most elements are directly accessed. This mechanism is still limited to the
-most basic operations (no compression, filters, Lua, applets, cache, etc).
-But it supports using either HTTP/1 or HTTP/2 on any side regardless of the
-other side's version.
+most elements are directly accessed. It supports using either HTTP/1 or
+HTTP/2 on any side regardless of the other side's version. It also supports
+upgrades from TCP to HTTP and implicit ones from HTTP/1 to HTTP/2 (matching
+the HTTP/2 preface).
 
-This option indicates that HTX needs to be used. It will cause errors to be
-emitted if incompatible features are used, but will allow H2 to be selected
-as a server protocol. It is recommended to use this option on new reasonably
-simple configurations, but since the feature still has incomplete functional
-coverage, it is not enabled by default.
+This option indicates that HTX needs to be used. Since the version 2.0-dev3,
+the HTX is the default mode. To switch back on the legacy HTTP mode, the
+option must be explicitly disabled using the &quot;no&quot; prefix. For prior versions,
+the feature has incomplete functional coverage, so it is not enabled by
+default.
 </pre><div class="page-header"><b>See also :</b> &quot;mode http&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b></div><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b> <span style="color: #080">&lt;uri&gt;</span></div><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b> <span style="color: #080">&lt;method&gt;</span> <span style="color: #080">&lt;uri&gt;</span></div><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option httpchk"></a><a class="anchor" name="4-option httpchk"></a><a class="anchor" name="4.2-option httpchk"></a><a class="anchor" name="option httpchk (Proxies)"></a><a class="anchor" name="option httpchk (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option httpchk"></a><a href="#4.2-option%20httpchk">option httpchk</a></b> <span style="color: #080">&lt;method&gt;</span> <span style="color: #080">&lt;uri&gt;</span> <span style="color: #080">&lt;version&gt;</span></div><pre class="text">Enable HTTP protocol to check on the servers health
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -12870,6 +13045,7 @@ inserted.
 
 Several types of actions are supported :
   - accept : the request is accepted
+  - do-resolve: perform a DNS resolution
   - reject : the request is rejected and the connection is closed
   - capture : the specified sample expression is captured
   - set-priority-class &lt;expr&gt; | set-priority-offset &lt;expr&gt;
@@ -12877,6 +13053,8 @@ Several types of actions are supported :
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-inc-gpc1(&lt;sc-id&gt;)
   - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
+  - set-dst &lt;expr&gt;
+  - set-dst-port &lt;expr&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
   - unset-var(&lt;var-name&gt;)
   - silent-drop
@@ -12884,6 +13062,8 @@ Several types of actions are supported :
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
+For &quot;do-resolve&quot; action, please check the &quot;<a href="#http-request%20do-resolve">http-request do-resolve</a>&quot;
+configuration section.
 
 While there is nothing mandatory about it, it is recommended to use the
 track-sc0 in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot; rules, track-sc1 for &quot;tcp-request
@@ -12909,6 +13089,9 @@ Tracking layer7 information is also possible provided that the information
 are present when the rule is processed. The rule processing engine is able to
 wait until the inspect delay expires when the data to be tracked is not yet
 available.
+
+The &quot;set-dst&quot; and &quot;set-dst-port&quot; are used to set respectively the destination
+IP and port. More information on how to use it at &quot;<a href="#http-request%20set-dst">http-request set-dst</a>&quot;.
 
 The &quot;set-var&quot; is used to set the content of a variable. The variable is
 declared inline. For &quot;<a href="#tcp-request%20session">tcp-request session</a>&quot; rules, only session-level
@@ -15981,7 +16164,19 @@ scopes allowed are:
   &quot;res&quot;  : the variable is shared only during response processing
 This prefix is followed by a name. The separator is a '.'. The name may only
 contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
-</pre><a class="anchor" name="and"></a><a class="anchor" name="7-and"></a><a class="anchor" name="7.3.1-and"></a><a class="anchor" name="and (Using ACLs and fetching samples)"></a><a class="anchor" name="and (Converters)"></a><div class="keyword"><b><a class="anchor" name="and"></a><a href="#7.3.1-and">and</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;AND&quot; between &lt;value&gt; and the input value of type signed
+</pre><a class="anchor" name="aes_gcm_dec"></a><a class="anchor" name="7-aes_gcm_dec"></a><a class="anchor" name="7.3.1-aes_gcm_dec"></a><a class="anchor" name="aes_gcm_dec (Using ACLs and fetching samples)"></a><a class="anchor" name="aes_gcm_dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="aes_gcm_dec"></a><a href="#7.3.1-aes_gcm_dec">aes_gcm_dec</a></b>(<span style="color: #080">&lt;bits&gt;</span>,<span style="color: #080">&lt;nonce&gt;</span>,<span style="color: #080">&lt;key&gt;</span>,<span style="color: #080">&lt;aead_tag&gt;</span>)</div><pre class="text">Decrypts the raw byte input using the AES128-GCM, AES192-GCM or
+AES256-GCM algorithm, depending on the &lt;bits&gt; parameter. All other parameters
+need to be base64 encoded and the returned result is in raw byte format.
+If the &lt;aead_tag&gt; validation fails, the converter doesn't return any data.
+The &lt;nonce&gt;, &lt;key&gt; and &lt;aead_tag&gt; can either be strings or variables. This
+converter requires at least OpenSSL 1.0.1.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response set-header X-Decrypted-Text %[var(txn.enc),\
+  aes_gcm_dec(128,txn.nonce,Zm9vb2Zvb29mb29wZm9vbw==,txn.aead_tag)]
+</code></pre>
+</div><a class="anchor" name="and"></a><a class="anchor" name="7-and"></a><a class="anchor" name="7.3.1-and"></a><a class="anchor" name="and (Using ACLs and fetching samples)"></a><a class="anchor" name="and (Converters)"></a><div class="keyword"><b><a class="anchor" name="and"></a><a href="#7.3.1-and">and</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Performs a bitwise &quot;AND&quot; between &lt;value&gt; and the input value of type signed
 integer, and returns the result as an signed integer. &lt;value&gt; can be a
 numeric value or a variable name. The name of the variable starts with an
 indication about its scope. The scopes allowed are:
@@ -20017,7 +20212,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0-dev2-25 &ndash; Configuration Manual<br>
+							HAProxy 2.0-dev2-228 &ndash; Configuration Manual<br>
 							<small>2019/03/26, willy tarreau</small>
 						</div>
 					</div>
@@ -20121,7 +20316,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev2-25', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev2-228', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
