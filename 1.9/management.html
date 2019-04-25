@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.6 - Management Guide</title>
+		<title>HAProxy version 1.9.7 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -404,6 +404,8 @@
 							
 							<a class="list-group-item" href="#show map">show map</a>
 							
+							<a class="list-group-item" href="#show peers">show peers</a>
+							
 							<a class="list-group-item" href="#show pools">show pools</a>
 							
 							<a class="list-group-item" href="#show profiling">show profiling</a>
@@ -456,7 +458,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/03/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/04/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -467,7 +469,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.9.6</strong></p>
+							<p><strong>version 1.9.7</strong></p>
 							<p>
 								<br>
 								
@@ -2551,6 +2553,57 @@ as reference for the operation &quot;<a href="#del%20map">del map</a>&quot; and 
 the pattern and the third column is the sample if available. The data returned
 are not directly a list of available maps, but are the list of all patterns
 composing any map. Many of these patterns can be shared with ACL.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show peers"></a><a class="anchor" name="9-show peers"></a><a class="anchor" name="9.3-show peers"></a><a class="anchor" name="show peers (Statistics and monitoring)"></a><a class="anchor" name="show peers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show peers"></a><a href="#9.3-show%20peers">show peers</a></b> <span style="color: #008">[<span style="color: #080">&lt;peers section&gt;</span>]</span></div><pre class="text">Dump info about the peers configured in &quot;peers&quot; sections. Without argument,
+the list of the peers belonging to all the &quot;peers&quot; sections are listed. If
+&lt;peers section&gt; is specified, only the information about the peers belonging
+to this &quot;peers&quot; section are dumped.
+
+Here are two examples of ouputs where hostA, hostB and hostC peers belong to
+&quot;sharedlb&quot; peers sections. Only hostA and hostB are connected. Only hostA has
+sent data to hostB.
+
+$ echo &quot;<a href="#show%20peers">show peers</a>&quot; | socat - /tmp/hostA
+0x55deb0224320: [15/Apr/2019:11:28:01] id=sharedlb state=0 flags=0x3 \
+  resync_timeout=&lt;PAST&gt; task_calls=45122
+    0x55deb022b540: id=hostC(remote) addr=127.0.0.12:10002 status=CONN \
+      reconnect=4s confirm=0
+      flags=0x0
+    0x55deb022a440: id=hostA(local) addr=127.0.0.10:10000 status=NONE \
+      reconnect=&lt;NEVER&gt; confirm=0
+      flags=0x0
+    0x55deb0227d70: id=hostB(remote) addr=127.0.0.11:10001 status=ESTA
+      reconnect=2s confirm=0
+      flags=0x20000200 appctx:0x55deb028fba0 st0=7 st1=0 task_calls=14456 \
+        state=EST
+      xprt=RAW src=127.0.0.1:37257 addr=127.0.0.10:10000
+      remote_table:0x55deb0224a10 id=stkt local_id=1 remote_id=1
+      last_local_table:0x55deb0224a10 id=stkt local_id=1 remote_id=1
+      shared tables:
+        0x55deb0224a10 local_id=1 remote_id=1 flags=0x0 remote_data=0x65
+          last_acked=0 last_pushed=3 last_get=0 teaching_origin=0 update=3
+          table:0x55deb022d6a0 id=stkt update=3 localupdate=3 \
+            commitupdate=3 syncing=0
+
+$ echo &quot;<a href="#show%20peers">show peers</a>&quot; | socat - /tmp/hostB
+0x55871b5ab320: [15/Apr/2019:11:28:03] id=sharedlb state=0 flags=0x3 \
+  resync_timeout=&lt;PAST&gt; task_calls=3
+    0x55871b5b2540: id=hostC(remote) addr=127.0.0.12:10002 status=CONN \
+      reconnect=3s confirm=0
+      flags=0x0
+    0x55871b5b1440: id=hostB(local) addr=127.0.0.11:10001 status=NONE \
+      reconnect=&lt;NEVER&gt; confirm=0
+      flags=0x0
+    0x55871b5aed70: id=hostA(remote) addr=127.0.0.10:10000 status=ESTA \
+      reconnect=2s confirm=0
+      flags=0x20000200 appctx:0x7fa46800ee00 st0=7 st1=0 task_calls=62356 \
+        state=EST
+      remote_table:0x55871b5ab960 id=stkt local_id=1 remote_id=1
+      last_local_table:0x55871b5ab960 id=stkt local_id=1 remote_id=1
+      shared tables:
+        0x55871b5ab960 local_id=1 remote_id=1 flags=0x0 remote_data=0x65
+          last_acked=3 last_pushed=0 last_get=3 teaching_origin=0 update=0
+          table:0x55871b5b46a0 id=stkt update=1 localupdate=0 \
+            commitupdate=0 syncing=0
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show pools"></a><a class="anchor" name="9-show pools"></a><a class="anchor" name="9.3-show pools"></a><a class="anchor" name="show pools (Statistics and monitoring)"></a><a class="anchor" name="show pools (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show pools"></a><a href="#9.3-show%20pools">show pools</a></b></div><pre class="text">Dump the status of internal memory pools. This is useful to track memory
 usage when suspecting a memory leak for example. It does exactly the same
 as the SIGQUIT when running in foreground except that it does not flush
@@ -3373,7 +3426,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.6 &ndash; Management Guide<br>
+							HAProxy 1.9.7 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3477,7 +3530,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.6', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.7', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

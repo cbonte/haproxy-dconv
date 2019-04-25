@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.6 - Configuration Manual</title>
+		<title>HAProxy version 1.9.7 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -2460,6 +2460,8 @@
 							
 							<a class="list-group-item" href="#set-cookie">set-cookie</a>
 							
+							<a class="list-group-item" href="#set-dumpable">set-dumpable</a>
+							
 							<a class="list-group-item" href="#setenv">setenv</a>
 							
 							<a class="list-group-item" href="#severity-output">severity-output</a>
@@ -3081,7 +3083,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/03/29</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/04/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3092,10 +3094,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9.6</strong></p>
+							<p><strong>version 1.9.7</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/03/29
+								2019/04/25
 							</p>
 						</div>
 
@@ -4079,7 +4081,7 @@ waiting for new requests, just as if it was a keep-alive HTTP connection.
 HAProxy supports 4 connection modes :
   - keep alive    : all requests and responses are processed (default)
   - tunnel        : only the first request and response are processed,
-                    everything else is forwarded with no analysis.
+                    everything else is forwarded with no analysis (deprecated).
   - server close  : the server-facing connection is closed after the response.
   - close         : the connection is actively closed after end of response.
 
@@ -4451,6 +4453,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#uid">uid</a>
    - <a href="#ulimit-n">ulimit-n</a>
    - <a href="#user">user</a>
+   - <a href="#set-dumpable">set-dumpable</a>
    - <a href="#setenv">setenv</a>
    - <a href="#stats">stats</a>
    - <a href="#ssl-default-bind-ciphers">ssl-default-bind-ciphers</a>
@@ -4842,6 +4845,23 @@ configuration. See also &quot;<a href="#server-state-base">server-state-base</a>
 is overwritten. The changes immediately take effect so that the next line in
 the configuration file sees the new value. See also &quot;<a href="#presetenv">presetenv</a>&quot;, &quot;<a href="#resetenv">resetenv</a>&quot;,
 and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
+</pre><a class="anchor" name="set-dumpable"></a><a class="anchor" name="3-set-dumpable"></a><a class="anchor" name="3.1-set-dumpable"></a><a class="anchor" name="set-dumpable (Global parameters)"></a><a class="anchor" name="set-dumpable (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="set-dumpable"></a><a href="#3.1-set-dumpable">set-dumpable</a></b></div><pre class="text">This option is better left disabled by default and enabled only upon a
+developer's request. It has no impact on performance nor stability but will
+try hard to re-enable core dumps that were possibly disabled by file size
+limitations (ulimit -f), core size limitations (ulimit -c), or &quot;dumpability&quot;
+of a process after changing its UID/GID (such as /proc/sys/fs/suid_dumpable
+on Linux). Core dumps might still be limited by the current directory's
+permissions (check what directory the file is started from), the chroot
+directory's permission (it may be needed to temporarily disable the chroot
+directive or to move it to a dedicated writable location), or any other
+system-specific constraint. For example, some Linux flavours are notorious
+for replacing the default core file with a path to an executable not even
+installed on the system (check /proc/sys/kernel/core_pattern). Often, simply
+writing &quot;core&quot;, &quot;core.%p&quot; or &quot;/var/log/core/core.%p&quot; addresses the issue.
+When trying to enable this option waiting for a rare issue to re-appear, it's
+often a good idea to first try to obtain such a dump by issuing, for example,
+&quot;kill -11&quot; to the haproxy process and verify that it leaves a core where
+expected when dying.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
 that are negotiated during the SSL/TLS handshake up to TLSv1.2 for all
@@ -5687,8 +5707,10 @@ the backend's. HAProxy supports 4 connection modes :
   - TUN: tunnel (&quot;<a href="#option%20http-tunnel">option http-tunnel</a>&quot;) : this was the default mode for versions
     1.0 to 1.5-dev21 : only the first request and response are processed, and
     everything else is forwarded with no analysis at all. This mode should not
-    be used as it creates lots of trouble with logging and HTTP processing. It
-    is supported only on frontends.
+    be used as it creates lots of trouble with logging and HTTP processing.
+    And because it cannot work in HTTP/2, this option is deprecated and it is
+    only supported on legacy HTTP frontends. In HTX, it is ignored and a
+    warning is emitted during HAProxy startup.
 
   - SCL: server close (&quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;) : the server-facing
     connection is closed after the end of the response is received, but the
@@ -5802,7 +5824,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20http-no-delay"><span class="pull-right"><span>(*)</span></span>option http-no-delay</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-pretend-keepalive"><span class="pull-right"><span>(*)</span></span>option http-pretend-keepalive</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-server-close"><span class="pull-right"><span>(*)</span></span>option http-server-close</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-option%20http-tunnel"><span class="pull-right"><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<tr><td ><a href="#4-option%20http-tunnel"><span class="pull-right"><span class="label label-warning">(deprecated)</span><span>(*)</span></span>option http-tunnel</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http-use-proxy-header"><span class="pull-right"><span>(*)</span></span>option http-use-proxy-header</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http-use-htx"><span class="pull-right"><span>(*)</span></span>option http-use-htx</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20httpchk">option httpchk</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -9446,7 +9468,7 @@ this option combines with others when frontend and backend options differ.
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-pretend-keepalive">option http-pretend-keepalive</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;, and &quot;1.1. The HTTP transaction model&quot;.</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-tunnel"></a><a class="anchor" name="4-option http-tunnel"></a><a class="anchor" name="4.2-option http-tunnel"></a><a class="anchor" name="option http-tunnel (Proxies)"></a><a class="anchor" name="option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-tunnel"></a><a href="#4.2-option%20http-tunnel">option http-tunnel</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-tunnel"></a><a class="anchor" name="4-no option http-tunnel"></a><a class="anchor" name="4.2-no option http-tunnel"></a><a class="anchor" name="no option http-tunnel (Proxies)"></a><a class="anchor" name="no option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-tunnel"></a><a href="#4.2-no%20option%20http-tunnel">no option http-tunnel</a></b></div><pre class="text">Disable or enable HTTP connection processing after first transaction
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-tunnel"></a><a class="anchor" name="4-option http-tunnel"></a><a class="anchor" name="4.2-option http-tunnel"></a><a class="anchor" name="option http-tunnel (Proxies)"></a><a class="anchor" name="option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-tunnel"></a><a href="#4.2-option%20http-tunnel">option http-tunnel</a></b>    <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-tunnel"></a><a class="anchor" name="4-no option http-tunnel"></a><a class="anchor" name="4.2-no option http-tunnel"></a><a class="anchor" name="no option http-tunnel (Proxies)"></a><a class="anchor" name="no option http-tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-tunnel"></a><a href="#4.2-no%20option%20http-tunnel">no option http-tunnel</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">Disable or enable HTTP connection processing after first transaction.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td></tr>
@@ -9454,7 +9476,11 @@ in a specific instance by prepending the &quot;no&quot; keyword before it.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default HAProxy operates in keep-alive mode with regards to persistent
+<pre class="text">Warning : Because it cannot work in HTTP/2, this option is deprecated and it
+is only supported on legacy HTTP frontends. In HTX, it is ignored and a
+warning is emitted during HAProxy startup.
+
+By default HAProxy operates in keep-alive mode with regards to persistent
 connections: for each connection it processes each request and response, and
 leaves the connection idle on both sides between the end of a response and
 the start of a new request. This mode may be changed by several options such
@@ -19946,8 +19972,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.6 &ndash; Configuration Manual<br>
-							<small>2019/03/29, willy tarreau</small>
+							HAProxy 1.9.7 &ndash; Configuration Manual<br>
+							<small>2019/04/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20050,7 +20076,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.6', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.7', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
