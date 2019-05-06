@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0-dev2-228 - Configuration Manual</title>
+		<title>HAProxy version 2.0-dev2-280 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -992,8 +992,6 @@
 							<a class="list-group-item" href="#always_true">always_true</a>
 							
 							<a class="list-group-item" href="#and">and</a>
-							
-							<a class="list-group-item" href="#appsession">appsession</a>
 							
 							<a class="list-group-item" href="#avg_queue">avg_queue</a>
 							
@@ -2233,6 +2231,8 @@
 							
 							<a class="list-group-item" href="#retries">retries</a>
 							
+							<a class="list-group-item" href="#retry-on">retry-on</a>
+							
 							<a class="list-group-item" href="#rise">rise</a>
 							
 							<a class="list-group-item" href="#rspadd">rspadd</a>
@@ -3105,7 +3105,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/04/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/05/06</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3116,7 +3116,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0-dev2-228</strong></p>
+							<p><strong>version 2.0-dev2-280</strong></p>
 							<p>
 								willy tarreau<br>
 								2019/03/26
@@ -4693,7 +4693,8 @@ in tcp mode). It applies both in TCP and HTTP mode.
 </code></pre>
 </div><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.1-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.1-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
-</pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Several global servers can be defined. They
+</pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
+    <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Several global servers can be defined. They
 will receive logs for starts and exits, as well as all logs from proxies
 configured with &quot;<a href="#log%20global">log global</a>&quot;.
 
@@ -4767,6 +4768,19 @@ configured with &quot;<a href="#log%20global">log global</a>&quot;.
             process name and system name are omitted. This is designed to be
             used in containers or during development, where the severity only
             depends on the file descriptor used (stdout/stderr).
+
+&lt;ranges&gt;   A list of comma-separated ranges to identify the logs to sample.
+           This is used to balance the load of the logs to send to the log
+           server. The limits of the ranges cannot be null. They are numbered
+           from 1. The size or period (in number of logs) of the sample must be
+           set with &lt;sample_size&gt; parameter.
+
+&lt;sample_size&gt;
+           The size of the sample in number of logs to consider when balancing
+           their logging loads. It is used to balance the load of the logs to
+           send to the syslog server. This size must be greater or equal to the
+           maximum of the high limits of the ranges.
+           (see also &lt;ranges&gt; parameter).
 
 &lt;facility&gt; must be one of the 24 standard syslog facilities :
 
@@ -5829,7 +5843,6 @@ specified in a previous &quot;defaults&quot; section.
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-acl">acl</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-appsession">appsession</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-backlog">backlog</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-balance">balance</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-bind">bind</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -5848,8 +5861,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-description">description</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-disabled">disabled</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-dispatch">dispatch</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-email-alert%20from">email-alert from</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-email-alert%20level">email-alert level</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-email-alert%20mailers">email-alert mailers</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-email-alert%20myhostname">email-alert myhostname</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -5869,8 +5882,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-http-check%20send-state">http-check send-state</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-request">http-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-response">http-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-http-reuse">http-reuse</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-http-send-name-header">http-send-name-header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-id">id</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-ignore-persist">ignore-persist</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -5890,12 +5903,12 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20accept-invalid-http-response"><span class="pull-right"><span>(*)</span></span>option accept-invalid-http-response</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20allbackups"><span class="pull-right"><span>(*)</span></span>option allbackups</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20checkcache"><span class="pull-right"><span>(*)</span></span>option checkcache</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20clitcpka"><span class="pull-right"><span>(*)</span></span>option clitcpka</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20contstats"><span class="pull-right"><span>(*)</span></span>option contstats</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlog-normal"><span class="pull-right"><span>(*)</span></span>option dontlog-normal</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlognull"><span class="pull-right"><span>(*)</span></span>option dontlognull</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td ><a href="#4-option%20forceclose%20%20%20%20%20%20%28deprectated%29"><span class="pull-right"><span>(*)</span></span>option forceclose      (deprectated)</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td ><a href="#4-option%20forceclose"><span class="pull-right"><span class="label label-warning">(deprecated)</span><span>(*)</span></span>option forceclose</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20forwardfor">option forwardfor</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-buffer-request"><span class="pull-right"><span>(*)</span></span>option http-buffer-request</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-ignore-probes"><span class="pull-right"><span>(*)</span></span>option http-ignore-probes</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -5911,8 +5924,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20httplog">option httplog</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http_proxy"><span class="pull-right"><span>(*)</span></span>option http_proxy</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20independent-streams"><span class="pull-right"><span>(*)</span></span>option independent-streams</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20ldap-check">option ldap-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20external-check">option external-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20log-health-checks"><span class="pull-right"><span>(*)</span></span>option log-health-checks</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20log-separate-errors"><span class="pull-right"><span>(*)</span></span>option log-separate-errors</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -5932,8 +5945,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20spop-check">option spop-check</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20tcp-check">option tcp-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcp-smart-accept"><span class="pull-right"><span>(*)</span></span>option tcp-smart-accept</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20tcp-smart-connect"><span class="pull-right"><span>(*)</span></span>option tcp-smart-connect</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -5953,8 +5966,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-reqdeny">reqdeny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqiallow">reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqidel">reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-reqideny">reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-reqipass">reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqirep">reqirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqitarpit">reqitarpit</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -5962,6 +5975,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-reqrep">reqrep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqtarpit">reqtarpit</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-retries">retries</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td ><a href="#4-retry-on">retry-on</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-rspadd">rspadd</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-rspdel">rspdel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-rspdeny">rspdeny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6040,57 +6054,7 @@ acl invalid_src  src_port     0:1023
 acl local_dst    hdr(host) -i localhost
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
-</pre><a class="anchor" name="appsession"></a><a class="anchor" name="4-appsession"></a><a class="anchor" name="4.2-appsession"></a><a class="anchor" name="appsession (Proxies)"></a><a class="anchor" name="appsession (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="appsession"></a><a href="#4.2-appsession">appsession</a></b> <span style="color: #080">&lt;cookie&gt;</span> len <span style="color: #080">&lt;length&gt;</span> timeout <span style="color: #080">&lt;holdtime&gt;</span>
-           <span style="color: #008">[request-learn]</span> <span style="color: #008">[prefix]</span> <span style="color: #008">[mode <span style="color: #080">&lt;path-parameters|query-string&gt;</span>]</span></div><pre class="text">Define session stickiness on an existing application cookie.
-</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
-</table></div>
-<div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;cookie&gt;   this is the name of the cookie used by the application and which
-           HAProxy will have to learn for each new session.
-
-&lt;length&gt;   this is the max number of characters that will be memorized and
-           checked in each cookie value.
-
-&lt;holdtime&gt; this is the time after which the cookie will be removed from
-           memory if unused. If no unit is specified, this time is in
-           milliseconds.
-
-request-learn
-           If this option is specified, then haproxy will be able to learn
-           the cookie found in the request in case the server does not
-           specify any in response. This is typically what happens with
-           PHPSESSID cookies, or when haproxy's session expires before
-           the application's session and the correct server is selected.
-           It is recommended to specify this option to improve reliability.
-
-prefix     When this option is specified, haproxy will match on the cookie
-           prefix (or URL parameter prefix). The appsession value is the
-           data following this prefix.
-
-           Example :
-           appsession ASPSESSIONID len 64 timeout 3h prefix
-
-           This will match the cookie ASPSESSIONIDXXX=XXXX,
-           the appsession value will be XXX=XXXX.
-
-mode       This option allows to change the URL parser mode.
-           2 modes are currently supported :
-           - path-parameters :
-             The parser looks for the appsession in the path parameters
-             part (each parameter is separated by a semi-colon), which is
-             convenient for JSESSIONID for example.
-             This is the default mode if the option is not set.
-           - query-string :
-             In this mode, the parser will look for the appsession in the
-             query string.</pre>
-</div>
-<pre class="text">As of version 1.6, appsessions was removed. It is more flexible and more
-convenient to use stick-tables instead, and stick-tables support multi-master
-replication and data conservation across reloads, which appsessions did not.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">cookie<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#cookie%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#cookie%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li><li><a href="#cookie%20%28Fetching%20HTTP%20samples%20%28Layer%207%29%29">Fetching HTTP samples (Layer 7)</a></li></ul></span>&quot;, &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#balance">balance</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">stick<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#stick%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#stick%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#stick-table">stick-table</a>&quot;, &quot;<a href="#ignore-persist">ignore-persist</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; and &quot;<a href="#bind-process">bind-process</a>&quot;.</div>
-<a class="anchor" name="backlog"></a><a class="anchor" name="4-backlog"></a><a class="anchor" name="4.2-backlog"></a><a class="anchor" name="backlog (Proxies)"></a><a class="anchor" name="backlog (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#4.2-backlog">backlog</a></b> <span style="color: #080">&lt;conns&gt;</span></div><pre class="text">Give hints to the system about the approximate listen backlog desired size
+</pre><a class="anchor" name="backlog"></a><a class="anchor" name="4-backlog"></a><a class="anchor" name="4.2-backlog"></a><a class="anchor" name="backlog (Proxies)"></a><a class="anchor" name="backlog (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="backlog"></a><a href="#4.2-backlog">backlog</a></b> <span style="color: #080">&lt;conns&gt;</span></div><pre class="text">Give hints to the system about the approximate listen backlog desired size
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td></tr>
@@ -8670,7 +8634,8 @@ Content of the file /etc/haproxy/states/bk would be like this:
   1 bk 1 s1 127.0.0.1 2 0 11 11 4 6 3 4 6 0 0
   1 bk 2 s2 127.0.0.1 2 0 12 12 4 6 3 4 6 0 0
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#server-state-file">server-state-file</a>&quot;, &quot;<a href="#server-state-file-name">server-state-file-name</a>&quot;, and &quot;show servers state&quot;</div>
-<a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><a class="anchor" name="log global"></a><a class="anchor" name="4-log global"></a><a class="anchor" name="4.2-log global"></a><a class="anchor" name="log global (Proxies)"></a><a class="anchor" name="log global (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log global"></a><a href="#4.2-log%20global">log global</a></b></div><a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#4.2-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no log"></a><a class="anchor" name="4-no log"></a><a class="anchor" name="4.2-no log"></a><a class="anchor" name="no log (Proxies)"></a><a class="anchor" name="no log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no log"></a><a href="#4.2-no%20log">no log</a></b></div><pre class="text">Enable per-instance logging of events and traffic.
+<a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><a class="anchor" name="log global"></a><a class="anchor" name="4-log global"></a><a class="anchor" name="4.2-log global"></a><a class="anchor" name="log global (Proxies)"></a><a class="anchor" name="log global (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log global"></a><a href="#4.2-log%20global">log global</a></b></div><a class="anchor" name="log"></a><a class="anchor" name="4-log"></a><a class="anchor" name="4.2-log"></a><a class="anchor" name="log (Proxies)"></a><a class="anchor" name="log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#4.2-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
+    <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no log"></a><a class="anchor" name="4-no log"></a><a class="anchor" name="4.2-no log"></a><a class="anchor" name="no log (Proxies)"></a><a class="anchor" name="no log (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no log"></a><a href="#4.2-no%20log">no log</a></b></div><pre class="text">Enable per-instance logging of events and traffic.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -8739,6 +8704,19 @@ Content of the file /etc/haproxy/states/bk would be like this:
            values are 80 to 65535 inclusive. The default value of 1024 is
            generally fine for all standard usages. Some specific cases of
            long captures or JSON-formatted logs may require larger values.
+
+&lt;ranges&gt;   A list of comma-separated ranges to identify the logs to sample.
+           This is used to balance the load of the logs to send to the log
+           server. The limits of the ranges cannot be null. They are numbered
+           from 1. The size or period (in number of logs) of the sample must
+           be set with &lt;sample_size&gt; parameter.
+
+&lt;sample_size&gt;
+           The size of the sample in number of logs to consider when balancing
+           their logging loads. It is used to balance the load of the logs to
+           send to the syslog server. This size must be greater or equal to the
+           maximum of the high limits of the ranges.
+           (see also &lt;ranges&gt; parameter).
 
 &lt;format&gt; is the log format used when generating syslog messages. It may be
          one of the following :
@@ -11197,6 +11175,81 @@ a retry occurs.
 When &quot;<a href="#option%20redispatch">option redispatch</a>&quot; is set, the last retry may be performed on another
 server even if a cookie references a different server.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20redispatch">option redispatch</a>&quot;</div>
+<a class="anchor" name="retry-on"></a><a class="anchor" name="4-retry-on"></a><a class="anchor" name="4.2-retry-on"></a><a class="anchor" name="retry-on (Proxies)"></a><a class="anchor" name="retry-on (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="retry-on"></a><a href="#4.2-retry-on">retry-on</a></b> <span style="color: #008">[list of keywords]</span></div><pre class="text">Specify when to attempt to automatically retry a failed request
+</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;keywords&gt;  is a list of keywords or HTTP status codes, each representing a
+            type of failure event on which an attempt to retry the request
+            is desired. Please read the notes at the bottom before changing
+            this setting. The following keywords are supported :
+
+  none              never retry
+
+  conn-failure      retry when the connection or the SSL handshake failed
+                    and the request could not be sent. This is the default.
+
+  empty-response    retry when the server connection was closed after part
+                    of the request was sent, and nothing was received from
+                    the server. This type of failure may be caused by the
+                    request timeout on the server side, poor network
+                    condition, or a server crash or restart while
+                    processing the request.
+
+  junk-response     retry when the server returned something not looking
+                    like a complete HTTP response. This includes partial
+                    responses headers as well as non-HTTP contents. It
+                    usually is a bad idea to retry on such events, which
+                    may be caused a configuration issue (wrong server port)
+                    or by the request being harmful to the server (buffer
+                    overflow attack for example).
+
+  response-timeout  the server timeout stroke while waiting for the server
+                    to respond to the request. This may be caused by poor
+                    network condition, the reuse of an idle connection
+                    which has expired on the path, or by the request being
+                    extremely expensive to process. It generally is a bad
+                    idea to retry on such events on servers dealing with
+                    heavy database processing (full scans, etc) as it may
+                    amplify denial of service attacks.
+
+  0rtt-rejected     retry requests which were sent over early data and were
+                    rejected by the server. These requests are generally
+                    considered to be safe to retry.
+
+  &lt;status&gt;          any HTTP status code among &quot;404&quot; (Not Found), &quot;408&quot;
+                    (Request Timeout), &quot;425&quot; (Too Early), &quot;500&quot; (Server
+                    Error), &quot;501&quot; (Not Implemented), &quot;502&quot; (Bad Gateway),
+                    &quot;503&quot; (Service Unavailable), &quot;504&quot; (Gateway Timeout).</pre>
+</div>
+<pre class="text">Using this directive replaces any previous settings with the new ones; it is
+not cumulative.
+
+Please note that using anything other than &quot;none&quot; and &quot;conn-failure&quot; requires
+to allocate a buffer and copy the whole request into it, so it has memory and
+performance impacts. Requests not fitting in a single buffer will never be
+retried (see the global tune.bufsize setting).
+
+You have to make sure the application has a replay protection mechanism built
+in such as a unique transaction IDs passed in requests, or that replaying the
+same request has no consequence, or it is very dangerous to use any retry-on
+value beside &quot;conn-failure&quot; and &quot;none&quot;. Static file servers and caches are
+generally considered safe against any type of retry. Using a status code can
+be useful to quickly leave a server showing an abnormal behavior (out of
+memory, file system issues, etc), but in this case it may be a good idea to
+immediately redispatch the connection to another server (please see &quot;option
+redispatch&quot; for this). Last, it is important to understand that most causes
+of failures are the requests themselves and that retrying a request causing a
+server to misbehave will often make the situation even worse for this server,
+or for the whole service in case of redispatch.
+
+Unless you know exactly how the application deals with replayed requests, you
+should not use this directive.
+
+The default is &quot;conn-failure&quot;.
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#retries">retries</a>&quot;, &quot;<a href="#option%20redispatch">option redispatch</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;</div>
 <a class="anchor" name="rspadd"></a><a class="anchor" name="4-rspadd"></a><a class="anchor" name="4.2-rspadd"></a><a class="anchor" name="rspadd (Proxies)"></a><a class="anchor" name="rspadd (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspadd"></a><a href="#4.2-rspadd">rspadd</a></b> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span></div><pre class="text">Add a header at the end of the HTTP response
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -18212,7 +18265,7 @@ used in ACLs, all matching names are iterated over until a value matches.
 header line from the request, or a &quot;Set-Cookie&quot; header from the response, and
 returns its value as a string. A typical use is to get multiple clients
 sharing a same profile use the same server. This can be similar to what
-&quot;<a href="#appsession">appsession</a>&quot; did with the &quot;request-learn&quot; statement, but with support for
+&quot;appsession&quot; did with the &quot;request-learn&quot; statement, but with support for
 multi-peer synchronization and state keeping across restarts. If no name is
 specified, the first cookie value is returned. This fetch should not be used
 anymore and should be replaced by req.cook() or res.cook() instead as it
@@ -18427,7 +18480,7 @@ ACL derivatives :
   resp_ver : exact string match
 </pre><a class="anchor" name="set-cookie"></a><a class="anchor" name="7-set-cookie"></a><a class="anchor" name="7.3.6-set-cookie"></a><a class="anchor" name="set-cookie (Using ACLs and fetching samples)"></a><a class="anchor" name="set-cookie (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="set-cookie"></a><a href="#7.3.6-set-cookie">set-cookie</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : string <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of the cookie name &lt;name&gt; on a &quot;Set-Cookie&quot;
 header line from the response and uses the corresponding value to match. This
-can be comparable to what &quot;<a href="#appsession">appsession</a>&quot; did with default options, but with
+can be comparable to what &quot;appsession&quot; did with default options, but with
 support for multi-peer synchronization and state keeping across restarts.
 
 This fetch function is deprecated and has been superseded by the &quot;<a href="#res.cook">res.cook</a>&quot;
@@ -20212,7 +20265,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0-dev2-228 &ndash; Configuration Manual<br>
+							HAProxy 2.0-dev2-280 &ndash; Configuration Manual<br>
 							<small>2019/03/26, willy tarreau</small>
 						</div>
 					</div>
@@ -20316,7 +20369,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev2-228', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev2-280', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
