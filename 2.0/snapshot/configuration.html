@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0-dev2-280 - Configuration Manual</title>
+		<title>HAProxy version 2.0-dev2-378 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -1434,6 +1434,8 @@
 							
 							<a class="list-group-item" href="#http-request deny">http-request deny</a>
 							
+							<a class="list-group-item" href="#http-request disable-l7-retry">http-request disable-l7-retry</a>
+							
 							<a class="list-group-item" href="#http-request do-resolve">http-request do-resolve</a>
 							
 							<a class="list-group-item" href="#http-request early-hint">http-request early-hint</a>
@@ -1713,6 +1715,8 @@
 							<a class="list-group-item" href="#mss">mss</a>
 							
 							<a class="list-group-item" href="#mul">mul</a>
+							
+							<a class="list-group-item" href="#mworker-max-reloads">mworker-max-reloads</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-N"><h4>N</h4>
@@ -2779,6 +2783,8 @@
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-T"><h4>T</h4>
 								
+							<a class="list-group-item" href="#table">table</a>
+							
 							<a class="list-group-item" href="#table_avl">table_avl</a>
 							
 							<a class="list-group-item" href="#table_bytes_in_rate">table_bytes_in_rate</a>
@@ -2851,7 +2857,9 @@
 							
 							<a class="list-group-item" href="#tcp-ut">tcp-ut</a>
 							
-							<a class="list-group-item" href="#tfo">tfo</a>
+							<a class="list-group-item" href="#tfo (Bind options)">tfo (Bind options)</a>
+							
+							<a class="list-group-item" href="#tfo (Server and default-server options)">tfo (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#thread">thread</a>
 							
@@ -3105,7 +3113,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/05/06</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/05/14</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3116,7 +3124,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0-dev2-280</strong></p>
+							<p><strong>version 2.0-dev2-378</strong></p>
 							<p>
 								willy tarreau<br>
 								2019/03/26
@@ -4466,6 +4474,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#log-tag">log-tag</a>
    - <a href="#log-send-hostname">log-send-hostname</a>
    - <a href="#lua-load">lua-load</a>
+   - <a href="#mworker-max-reloads">mworker-max-reloads</a>
    - <a href="#nbproc">nbproc</a>
    - <a href="#nbthread">nbthread</a>
    - <a href="#node">node</a>
@@ -4826,6 +4835,11 @@ systemd unit file in order to relaunch the whole process. If you don't want
 this behavior, you must use the keyword &quot;no-exit-on-failure&quot;.
 
 See also &quot;-W&quot; in the management guide.
+</pre><a class="anchor" name="mworker-max-reloads"></a><a class="anchor" name="3-mworker-max-reloads"></a><a class="anchor" name="3.1-mworker-max-reloads"></a><a class="anchor" name="mworker-max-reloads (Global parameters)"></a><a class="anchor" name="mworker-max-reloads (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="mworker-max-reloads"></a><a href="#3.1-mworker-max-reloads">mworker-max-reloads</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">In master-worker mode, this option limits the number of time a worker can
+survive to a reload. If the worker did not left after a reload, once its
+number of reloads is greater than this number, the worker will receive a
+SIGTERM. This option helps to keep under control the number of workers.
+See also &quot;show proc&quot; in the Management Guide.
 </pre><a class="anchor" name="nbproc"></a><a class="anchor" name="3-nbproc"></a><a class="anchor" name="3.1-nbproc"></a><a class="anchor" name="nbproc (Global parameters)"></a><a class="anchor" name="nbproc (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="nbproc"></a><a href="#3.1-nbproc">nbproc</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Creates &lt;number&gt; processes when going daemon. This requires the &quot;<a href="#daemon">daemon</a>&quot;
 mode. By default, only one process is created, which is the recommended mode
 of operation. For systems limited to small sets of file descriptors per
@@ -5711,7 +5725,53 @@ Example:
       server hostA  127.0.0.10:10000
       server hostB  <span class="comment">#local peer</span>
 </code></pre>
-</div></div>
+</div><a class="anchor" name="table"></a><a class="anchor" name="3-table"></a><a class="anchor" name="3.5-table"></a><a class="anchor" name="table (Global parameters)"></a><a class="anchor" name="table (Peers)"></a><div class="keyword"><b><a class="anchor" name="table"></a><a href="#3.5-table">table</a></b> <span style="color: #080">&lt;tablename&gt;</span> type <span style="color: #800">{ip | integer | string <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> | binary <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span>}</span>
+      size <span style="color: #080">&lt;size&gt;</span> <span style="color: #008">[expire <span style="color: #080">&lt;expire&gt;</span>]</span> <span style="color: #008">[nopurge]</span> <span style="color: #008">[store <span style="color: #080">&lt;data_type&gt;</span>]</span>*</div><pre class="text">Configure a stickiness table for the current section. This line is parsed
+exactly the same way as the &quot;<a href="#stick-table">stick-table</a>&quot; keyword in others section, except
+for the &quot;<a href="#peers">peers</a>&quot; argument which is not required here and with an aditionnal
+mandatory first parameter to designate the stick-table. Contrary to others
+sections, there may be several &quot;<a href="#table">table</a>&quot; lines in &quot;<a href="#peers">peers</a>&quot; sections (see also
+&quot;<a href="#stick-table">stick-table</a>&quot; keyword).
+
+Also be aware of the fact that &quot;<a href="#peers">peers</a>&quot; sections have their own stick-table
+namespaces to avoid collisions between stick-table names identical in
+different &quot;<a href="#peers">peers</a>&quot; section. This is internally handled prepending the &quot;<a href="#peers">peers</a>&quot;
+sections names to the name of the stick-tables followed by a '/' character.
+If somewhere else in the configuration file you have to refer to such
+stick-tables declared in &quot;<a href="#peers">peers</a>&quot; sections you must use the prefixed version
+of the stick-table name as follows:
+
+    peers mypeers
+        peer A ...
+        peer B ...
+        table t1 ...
+
+    frontend fe1
+        tcp-request content track-sc0 src table mypeers/t1
+
+This is also this prefixed version of the stick-table names which must be
+used to refer to stick-tables through the CLI.
+
+About &quot;<a href="#peers">peers</a>&quot; protocol, as only &quot;<a href="#peers">peers</a>&quot; belonging to the same section may
+communicate with each others, there is no need to do such a distinction.
+Several &quot;<a href="#peers">peers</a>&quot; sections may declare stick-tables with the same name.
+This is shorter version of the stick-table name  which is sent over the network.
+There is only a '/' character as prefix to avoid stick-table name collisions between
+stick-tables declared as backends and stick-table declared in &quot;<a href="#peers">peers</a>&quot; sections
+as follows in this weird but supported configuration:
+
+    peers mypeers
+        peer A ...
+        peer B ...
+        table t1 type string size 10m store gpc0
+
+    backend t1
+        stick-table type string size 10m store gpc0 peers mypeers
+
+Here &quot;t1&quot; table declared in &quot;mypeeers&quot; section has &quot;mypeers/t1&quot; as global name.
+&quot;t1&quot; table declared as a backend as &quot;t1&quot; as global name. But at peer protocol
+level the former table is named &quot;/t1&quot;, the latter is again named &quot;t1&quot;.
+</pre></div>
 <a class="anchor" id="3.6" name="3.6"></a>
 <h2 id="chapter-3.6" data-target="3.6"><small><a class="small" href="#3.6">3.6.</a></small> Mailers</h2>
 <div><pre class="text">It is possible to send email alerts when the state of servers changes.
@@ -7764,6 +7824,9 @@ and emits an HTTP 403 error, or optionally the status code specified as an
 argument to &quot;deny_status&quot;. The list of permitted status codes is limited to
 those that can be overridden by the &quot;<a href="#errorfile">errorfile</a>&quot; directive.
 No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated.
+</pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request disable-l7-retry"></a><a class="anchor" name="4-http-request disable-l7-retry"></a><a class="anchor" name="4.2-http-request disable-l7-retry"></a><a class="anchor" name="http-request disable-l7-retry (Proxies)"></a><a class="anchor" name="http-request disable-l7-retry (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request disable-l7-retry"></a><a href="#4.2-http-request%20disable-l7-retry">http-request disable-l7-retry</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This disables any attempt to retry the request if it fails for any other
+reason than a connection failure. This can be useful for example to make
+sure POST requests aren't retried on failure.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request do-resolve"></a><a class="anchor" name="4-http-request do-resolve"></a><a class="anchor" name="4.2-http-request do-resolve"></a><a class="anchor" name="http-request do-resolve (Proxies)"></a><a class="anchor" name="http-request do-resolve (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request do-resolve"></a><a href="#4.2-http-request%20do-resolve">http-request do-resolve</a></b>(<span style="color: #080">&lt;var&gt;</span>,<span style="color: #080">&lt;resolvers&gt;</span>,<span style="color: #008">[ipv4,ipv6]</span>) <span style="color: #080">&lt;expr&gt;</span> :</div><pre class="text">This action performs a DNS resolution of the output of &lt;expr&gt; and stores
 the result in the variable &lt;var&gt;. It uses the DNS resolvers section
 pointed by &lt;resolvers&gt;.
@@ -11222,7 +11285,13 @@ server even if a cookie references a different server.
   &lt;status&gt;          any HTTP status code among &quot;404&quot; (Not Found), &quot;408&quot;
                     (Request Timeout), &quot;425&quot; (Too Early), &quot;500&quot; (Server
                     Error), &quot;501&quot; (Not Implemented), &quot;502&quot; (Bad Gateway),
-                    &quot;503&quot; (Service Unavailable), &quot;504&quot; (Gateway Timeout).</pre>
+                    &quot;503&quot; (Service Unavailable), &quot;504&quot; (Gateway Timeout).
+
+  all-retryable-errors
+                    retry request for any error that are considered
+                    retryable. This currently activates &quot;conn-failure&quot;,
+                    &quot;empty-response&quot;, &quot;junk-response&quot;, &quot;response-timeout&quot;,
+                    &quot;0rtt-rejected&quot;, &quot;500&quot;, &quot;502&quot;, &quot;503&quot;, and &quot;504&quot;.</pre>
 </div>
 <pre class="text">Using this directive replaces any previous settings with the new ones; it is
 not cumulative.
@@ -12143,7 +12212,7 @@ transformation rules.
 The table has to be declared using the &quot;<a href="#stick-table">stick-table</a>&quot; statement. It must be of
 a type compatible with the pattern. By default it is the one which is present
 in the same backend. It is possible to share a table with other backends by
-referencing it using the &quot;table&quot; keyword. If another table is referenced,
+referencing it using the &quot;<a href="#table">table</a>&quot; keyword. If another table is referenced,
 the server's ID inside the backends are used. By default, all server IDs
 start at 1 in each backend, so the server ordering is enough. But in case of
 doubt, it is highly recommended to force server IDs using their &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
@@ -12265,7 +12334,7 @@ list of possible patterns and transformation rules.
 The table has to be declared using the &quot;<a href="#stick-table">stick-table</a>&quot; statement. It must be of
 a type compatible with the pattern. By default it is the one which is present
 in the same backend. It is possible to share a table with other backends by
-referencing it using the &quot;table&quot; keyword. If another table is referenced,
+referencing it using the &quot;<a href="#table">table</a>&quot; keyword. If another table is referenced,
 the server's ID inside the backends are used. By default, all server IDs
 start at 1 in each backend, so the server ordering is enough. But in case of
 doubt, it is highly recommended to force server IDs using their &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
@@ -12584,7 +12653,7 @@ rules.
 The table has to be declared using the &quot;<a href="#stick-table">stick-table</a>&quot; statement. It must be of
 a type compatible with the pattern. By default it is the one which is present
 in the same backend. It is possible to share a table with other backends by
-referencing it using the &quot;table&quot; keyword. If another table is referenced,
+referencing it using the &quot;<a href="#table">table</a>&quot; keyword. If another table is referenced,
 the server's ID inside the backends are used. By default, all server IDs
 start at 1 in each backend, so the server ordering is enough. But in case of
 doubt, it is highly recommended to force server IDs using their &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
@@ -14754,6 +14823,9 @@ hostname, it will be resolved.
 </pre><a class="anchor" name="agent-port"></a><a class="anchor" name="5-agent-port"></a><a class="anchor" name="5.2-agent-port"></a><a class="anchor" name="agent-port (Bind and server options)"></a><a class="anchor" name="agent-port (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-port"></a><a href="#5.2-agent-port">agent-port</a></b> <span style="color: #080">&lt;port&gt;</span></div><pre class="text">The &quot;<a href="#agent-port">agent-port</a>&quot; parameter sets the TCP port used for agent checks.
 
 See also the &quot;<a href="#agent-check">agent-check</a>&quot; and &quot;<a href="#agent-inter">agent-inter</a>&quot; parameters.
+</pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.2-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.2-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow sending early data to the server when using TLS 1.3.
+Note that early data will be sent only if the client used early data, or
+if the backend uses &quot;<a href="#retry-on">retry-on</a>&quot; with the &quot;0rtt-rejected&quot; keyword.
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.2-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.2-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
@@ -15341,6 +15413,12 @@ case is also to force dead server connections to die when health checks are
 too slow or during a soft reload since health checks are then disabled. The
 argument is a delay expressed in milliseconds by default. This only works for
 regular TCP connections, and is ignored for other protocols.
+</pre><a class="anchor" name="tfo"></a><a class="anchor" name="5-tfo"></a><a class="anchor" name="5.2-tfo"></a><a class="anchor" name="tfo (Bind and server options)"></a><a class="anchor" name="tfo (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tfo"></a><a href="#5.2-tfo">tfo</a></b></div><pre class="text">This option enables using TCP fast open when connecting to servers, on
+systems that support it (currently only the Linux kernel &gt;= 4.11).
+See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">tfo<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#tfo%20%28Bind%20options%29">Bind options</a></li><li><a href="#tfo%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; bind option for more information about TCP fast open.
+Please note that when using tfo, you should also use the &quot;conn-failure&quot;,
+&quot;empty-response&quot; and &quot;response-timeout&quot; keywords for &quot;<a href="#retry-on">retry-on</a>&quot;, or haproxy
+won't be able to retry the connection on failure.
 </pre><a class="anchor" name="track"></a><a class="anchor" name="5-track"></a><a class="anchor" name="5.2-track"></a><a class="anchor" name="track (Bind and server options)"></a><a class="anchor" name="track (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="track"></a><a href="#5.2-track">track</a></b> <span style="color: #008">[<span style="color: #080">&lt;proxy&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span></div><pre class="text">This option enables ability to set the current state of the server by tracking
 another one. It is possible to track a server which itself tracks another
 server, provided that at the end of the chain, a server has health checks
@@ -20265,7 +20343,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0-dev2-280 &ndash; Configuration Manual<br>
+							HAProxy 2.0-dev2-378 &ndash; Configuration Manual<br>
 							<small>2019/03/26, willy tarreau</small>
 						</div>
 					</div>
@@ -20369,7 +20447,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev2-280', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0-dev2-378', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
