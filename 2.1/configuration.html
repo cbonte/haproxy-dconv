@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1-dev0 - Configuration Manual</title>
+		<title>HAProxy version 2.1-dev1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -1049,8 +1049,6 @@
 							
 							<a class="list-group-item" href="#bind-process">bind-process</a>
 							
-							<a class="list-group-item" href="#block">block</a>
-							
 							<a class="list-group-item" href="#bool (Converters)">bool (Converters)</a>
 							
 							<a class="list-group-item" href="#bool (Fetching samples from internal states)">bool (Fetching samples from internal states)</a>
@@ -1126,8 +1124,6 @@
 							
 							<a class="list-group-item" href="#ciphersuites (Server and default-server options)">ciphersuites (Server and default-server options)</a>
 							
-							<a class="list-group-item" href="#clitimeout">clitimeout</a>
-							
 							<a class="list-group-item" href="#command">command</a>
 							
 							<a class="list-group-item" href="#compression">compression</a>
@@ -1141,8 +1137,6 @@
 							<a class="list-group-item" href="#concat">concat</a>
 							
 							<a class="list-group-item" href="#connslots">connslots</a>
-							
-							<a class="list-group-item" href="#contimeout">contimeout</a>
 							
 							<a class="list-group-item" href="#cook">cook</a>
 							
@@ -1389,6 +1383,8 @@
 							<a class="list-group-item" href="#group (Process management and security)">group (Process management and security)</a>
 							
 							<a class="list-group-item" href="#group (Userlists)">group (Userlists)</a>
+							
+							<a class="list-group-item" href="#group (Programs)">group (Programs)</a>
 							
 							<a class="list-group-item" href="#group (Bind options)">group (Bind options)</a>
 							
@@ -1858,6 +1854,8 @@
 							
 							<a class="list-group-item" href="#no-sslv3">no-sslv3</a>
 							
+							<a class="list-group-item" href="#no-tfo">no-tfo</a>
+							
 							<a class="list-group-item" href="#no-tls-tickets (Bind options)">no-tls-tickets (Bind options)</a>
 							
 							<a class="list-group-item" href="#no-tls-tickets (Server and default-server options)">no-tls-tickets (Server and default-server options)</a>
@@ -2097,10 +2095,6 @@
 							<a class="list-group-item" href="#redirect prefix">redirect prefix</a>
 							
 							<a class="list-group-item" href="#redirect scheme">redirect scheme</a>
-							
-							<a class="list-group-item" href="#redisp">redisp</a>
-							
-							<a class="list-group-item" href="#redispatch">redispatch</a>
 							
 							<a class="list-group-item" href="#regsub">regsub</a>
 							
@@ -2505,6 +2499,8 @@
 							
 							<a class="list-group-item" href="#sha1">sha1</a>
 							
+							<a class="list-group-item" href="#sha2">sha2</a>
+							
 							<a class="list-group-item" href="#shdr">shdr</a>
 							
 							<a class="list-group-item" href="#shdr_cnt">shdr_cnt</a>
@@ -2590,8 +2586,6 @@
 							<a class="list-group-item" href="#srv_queue">srv_queue</a>
 							
 							<a class="list-group-item" href="#srv_sess_rate">srv_sess_rate</a>
-							
-							<a class="list-group-item" href="#srvtimeout">srvtimeout</a>
 							
 							<a class="list-group-item" href="#ssl (Bind options)">ssl (Bind options)</a>
 							
@@ -2904,11 +2898,7 @@
 							
 							<a class="list-group-item" href="#timeout client-fin">timeout client-fin</a>
 							
-							<a class="list-group-item" href="#timeout clitimeout">timeout clitimeout</a>
-							
 							<a class="list-group-item" href="#timeout connect">timeout connect</a>
-							
-							<a class="list-group-item" href="#timeout contimeout">timeout contimeout</a>
 							
 							<a class="list-group-item" href="#timeout http-keep-alive">timeout http-keep-alive</a>
 							
@@ -2921,8 +2911,6 @@
 							<a class="list-group-item" href="#timeout server">timeout server</a>
 							
 							<a class="list-group-item" href="#timeout server-fin">timeout server-fin</a>
-							
-							<a class="list-group-item" href="#timeout srvtimeout">timeout srvtimeout</a>
 							
 							<a class="list-group-item" href="#timeout tarpit">timeout tarpit</a>
 							
@@ -3081,6 +3069,8 @@
 							
 							<a class="list-group-item" href="#user (Userlists)">user (Userlists)</a>
 							
+							<a class="list-group-item" href="#user (Programs)">user (Programs)</a>
+							
 							<a class="list-group-item" href="#user (Bind options)">user (Bind options)</a>
 							
 							<a class="list-group-item" href="#userlist">userlist</a>
@@ -3142,7 +3132,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/06/18</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/07/16</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3153,10 +3143,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1-dev0</strong></p>
+							<p><strong>version 2.1-dev1</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/06/16
+								2019/07/16
 							</p>
 						</div>
 
@@ -4319,7 +4309,7 @@ HAProxy may emit the following status codes by itself :
    400  for an invalid or too large request
    401  when an authentication is required to perform the action (when
         accessing the stats page)
-   403  when a request is forbidden by a &quot;<a href="#block">block</a>&quot; ACL or &quot;<a href="#reqdeny">reqdeny</a>&quot; filter
+   403  when a request is forbidden by a &quot;block&quot; ACL or &quot;<a href="#reqdeny">reqdeny</a>&quot; filter
    408  when the request timeout strikes before the request is complete
    500  when haproxy encounters an unrecoverable internal error, such as a
         memory allocation failure, which should never happen
@@ -4437,10 +4427,10 @@ file, or could be inherited by a program (See 3.7. Programs):
 
 * HAPROXY_MWORKER: In master-worker mode, this variable is set to 1.
 
-* HAPROXY_CLI: configured listeners adresses of the stats socket for every
+* HAPROXY_CLI: configured listeners addresses of the stats socket for every
   processes, separated by semicolons.
 
-* HAPROXY_MASTER_CLI: In master-worker mode, listeners adresses of the master
+* HAPROXY_MASTER_CLI: In master-worker mode, listeners addresses of the master
   CLI, separated by semicolons.
 
 See also &quot;<a href="#external-check%20command">external-check command</a>&quot; for other variables.
@@ -4742,7 +4732,7 @@ ID is dedicated to HAProxy or to a small set of similar daemons. HAProxy must
 be started with a user belonging to this group, or with superuser privileges.
 Note that if haproxy is started from a user having supplementary groups, it
 will only be able to drop these groups if started with superuser privileges.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="hard-stop-after"></a><a class="anchor" name="3-hard-stop-after"></a><a class="anchor" name="3.1-hard-stop-after"></a><a class="anchor" name="hard-stop-after (Global parameters)"></a><a class="anchor" name="hard-stop-after (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="hard-stop-after"></a><a href="#3.1-hard-stop-after">hard-stop-after</a></b> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">Defines the maximum time allowed to perform a clean soft-stop.
 </pre><div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;time&gt;  is the maximum time (by default in milliseconds) for which the
@@ -4759,7 +4749,7 @@ in tcp mode). It applies both in TCP and HTTP mode.
   hard-stop-after 30s
 </code></pre>
 </div><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.1-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.1-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
     <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Several global servers can be defined. They
 will receive logs for starts and exits, as well as all logs from proxies
@@ -4894,7 +4884,7 @@ this behavior, you must use the keyword &quot;no-exit-on-failure&quot;.
 
 See also &quot;-W&quot; in the management guide.
 </pre><a class="anchor" name="mworker-max-reloads"></a><a class="anchor" name="3-mworker-max-reloads"></a><a class="anchor" name="3.1-mworker-max-reloads"></a><a class="anchor" name="mworker-max-reloads (Global parameters)"></a><a class="anchor" name="mworker-max-reloads (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="mworker-max-reloads"></a><a href="#3.1-mworker-max-reloads">mworker-max-reloads</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">In master-worker mode, this option limits the number of time a worker can
-survive to a reload. If the worker did not left after a reload, once its
+survive to a reload. If the worker did not leave after a reload, once its
 number of reloads is greater than this number, the worker will receive a
 SIGTERM. This option helps to keep under control the number of workers.
 See also &quot;show proc&quot; in the Management Guide.
@@ -5061,7 +5051,7 @@ possible to change this value with &quot;<a href="#stats%20maxconn">stats maxcon
 </pre><a class="anchor" name="uid"></a><a class="anchor" name="3-uid"></a><a class="anchor" name="3.1-uid"></a><a class="anchor" name="uid (Global parameters)"></a><a class="anchor" name="uid (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="uid"></a><a href="#3.1-uid">uid</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Changes the process' user ID to &lt;number&gt;. It is recommended that the user ID
 is dedicated to HAProxy or to a small set of similar daemons. HAProxy must
 be started with superuser privileges in order to be able to switch to another
-one. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+one. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="ulimit-n"></a><a class="anchor" name="3-ulimit-n"></a><a class="anchor" name="3.1-ulimit-n"></a><a class="anchor" name="ulimit-n (Global parameters)"></a><a class="anchor" name="ulimit-n (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ulimit-n"></a><a href="#3.1-ulimit-n">ulimit-n</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of per-process file-descriptors to &lt;number&gt;. By
 default, it is automatically computed, so it is recommended not to use this
 option.
@@ -5084,7 +5074,7 @@ these variables remain. The changes immediately take effect so that the next
 line in the configuration file will not see these variables. See also
 &quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#presetenv">presetenv</a>&quot;, and &quot;<a href="#resetenv">resetenv</a>&quot;.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="3-user"></a><a class="anchor" name="3.1-user"></a><a class="anchor" name="user (Global parameters)"></a><a class="anchor" name="user (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#3.1-user">user</a></b> <span style="color: #080">&lt;user name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the UID of user name &lt;user name&gt; from /etc/passwd.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="node"></a><a class="anchor" name="3-node"></a><a class="anchor" name="3.1-node"></a><a class="anchor" name="node (Global parameters)"></a><a class="anchor" name="node (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="node"></a><a href="#3.1-node">node</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Only letters, digits, hyphen and underscore are allowed, like in DNS names.
 
 This statement is useful in HA configurations where two or more processes or
@@ -5310,7 +5300,7 @@ command line argument &quot;-dR&quot;.
 the profiling automatically turns on a thread when it starts to suffer from
 an average latency of 1000 microseconds or higher as reported in the
 &quot;avg_loop_us&quot; activity field, and automatically turns off when the latency
-reutnrs below 990 microseconds (this value is an average over the last 1024
+returns below 990 microseconds (this value is an average over the last 1024
 loops so it does not vary quickly and tends to significantly smooth short
 spikes). It may also spontaneously trigger from time to time on overloaded
 systems, containers, or virtual machines, or when the system swaps (which
@@ -5349,7 +5339,7 @@ I/O operations if asynchronous capable SSL engines are used. The current
 implementation supports a maximum of 32 engines. The Openssl ASYNC API
 doesn't support moving read/write buffers and is not compliant with
 haproxy's buffer management. So the asynchronous mode is disabled on
-read/write  operations (it is only enabled during initial and reneg
+read/write  operations (it is only enabled during initial and renegotiation
 handshakes).
 </pre><a class="anchor" name="tune.buffers.limit"></a><a class="anchor" name="3-tune.buffers.limit"></a><a class="anchor" name="3.2-tune.buffers.limit"></a><a class="anchor" name="tune.buffers.limit (Global parameters)"></a><a class="anchor" name="tune.buffers.limit (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.buffers.limit"></a><a href="#3.2-tune.buffers.limit">tune.buffers.limit</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets a hard limit on the number of buffers which may be allocated per process.
 The default value is zero which means unlimited. The minimum non-zero value
@@ -5454,7 +5444,7 @@ decision to use splice() or to send large buffers in SSL is modulated by this
 parameter. The value is in milliseconds between 0 and 65535. A value of zero
 means that haproxy will not try to detect idle streams. The default is 1000,
 which seems to correctly detect end user pauses (e.g. read a page before
-clicking). There should be not reason for changing this value. Please check
+clicking). There should be no reason for changing this value. Please check
 tune.ssl.maxrecord below.
 </pre><a class="anchor" name="tune.listener.multi-queue"></a><a class="anchor" name="3-tune.listener.multi-queue"></a><a class="anchor" name="3.2-tune.listener.multi-queue"></a><a class="anchor" name="tune.listener.multi-queue (Global parameters)"></a><a class="anchor" name="tune.listener.multi-queue (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.listener.multi-queue"></a><a href="#3.2-tune.listener.multi-queue">tune.listener.multi-queue</a></b> <span style="color: #800">{ on | off }</span></div><pre class="text">Enables ('on') or disables ('off') the listener's multi-queue accept which
 spreads the incoming traffic to all threads a &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bind<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bind%20%28Peers%29">Peers</a></li><li><a href="#bind%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; line is allowed to run
@@ -5546,11 +5536,11 @@ use before we start killing idle connections when we can't reuse a connection
 and we have to create a new one. The default is 25 (one quarter of the file
 descriptor will mean that roughly half of the maximum front connections can
 keep an idle connection behind, anything beyond this probably doesn't make
-much sense in the general case when targetting connection reuse).
+much sense in the general case when targeting connection reuse).
 </pre><a class="anchor" name="tune.rcvbuf.client"></a><a class="anchor" name="3-tune.rcvbuf.client"></a><a class="anchor" name="3.2-tune.rcvbuf.client"></a><a class="anchor" name="tune.rcvbuf.client (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.client"></a><a href="#3.2-tune.rcvbuf.client">tune.rcvbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.rcvbuf.server"></a><a class="anchor" name="3-tune.rcvbuf.server"></a><a class="anchor" name="3.2-tune.rcvbuf.server"></a><a class="anchor" name="tune.rcvbuf.server (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.server"></a><a href="#3.2-tune.rcvbuf.server">tune.rcvbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket receive buffer size on the client or the server side
 to the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
-the kernel autotune this value depending on the amount of available memory.
+the kernel auto-tune this value depending on the amount of available memory.
 However it can sometimes help to set it to very low values (e.g. 4096) in
 order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
@@ -5559,13 +5549,13 @@ socket buffers. One of them is that a read returns more than &lt;recv_enough&gt;
 bytes, which defaults to 10136 (7 segments of 1448 each). This default value
 may be changed by this setting to better deal with workloads involving lots
 of short messages such as telnet or SSH sessions.
-</pre><a class="anchor" name="tune.runqueue-depth"></a><a class="anchor" name="3-tune.runqueue-depth"></a><a class="anchor" name="3.2-tune.runqueue-depth"></a><a class="anchor" name="tune.runqueue-depth (Global parameters)"></a><a class="anchor" name="tune.runqueue-depth (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.runqueue-depth"></a><a href="#3.2-tune.runqueue-depth">tune.runqueue-depth</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maxinum amount of task that can be processed at once when running
+</pre><a class="anchor" name="tune.runqueue-depth"></a><a class="anchor" name="3-tune.runqueue-depth"></a><a class="anchor" name="3.2-tune.runqueue-depth"></a><a class="anchor" name="tune.runqueue-depth (Global parameters)"></a><a class="anchor" name="tune.runqueue-depth (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.runqueue-depth"></a><a href="#3.2-tune.runqueue-depth">tune.runqueue-depth</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of task that can be processed at once when running
 tasks. The default value is 200. Increasing it may incur latency when
 dealing with I/Os, making it too small can incur extra overhead.
 </pre><a class="anchor" name="tune.sndbuf.client"></a><a class="anchor" name="3-tune.sndbuf.client"></a><a class="anchor" name="3.2-tune.sndbuf.client"></a><a class="anchor" name="tune.sndbuf.client (Global parameters)"></a><a class="anchor" name="tune.sndbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.client"></a><a href="#3.2-tune.sndbuf.client">tune.sndbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.sndbuf.server"></a><a class="anchor" name="3-tune.sndbuf.server"></a><a class="anchor" name="3.2-tune.sndbuf.server"></a><a class="anchor" name="tune.sndbuf.server (Global parameters)"></a><a class="anchor" name="tune.sndbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.server"></a><a href="#3.2-tune.sndbuf.server">tune.sndbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket send buffer size on the client or the server side to
 the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
-the kernel autotune this value depending on the amount of available memory.
+the kernel auto-tune this value depending on the amount of available memory.
 However it can sometimes help to set it to very low values (e.g. 4096) in
 order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
@@ -5791,7 +5781,7 @@ Example:
 </div><a class="anchor" name="table"></a><a class="anchor" name="3-table"></a><a class="anchor" name="3.5-table"></a><a class="anchor" name="table (Global parameters)"></a><a class="anchor" name="table (Peers)"></a><div class="keyword"><b><a class="anchor" name="table"></a><a href="#3.5-table">table</a></b> <span style="color: #080">&lt;tablename&gt;</span> type <span style="color: #800">{ip | integer | string <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> | binary <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span>}</span>
       size <span style="color: #080">&lt;size&gt;</span> <span style="color: #008">[expire <span style="color: #080">&lt;expire&gt;</span>]</span> <span style="color: #008">[nopurge]</span> <span style="color: #008">[store <span style="color: #080">&lt;data_type&gt;</span>]</span>*</div><pre class="text">Configure a stickiness table for the current section. This line is parsed
 exactly the same way as the &quot;<a href="#stick-table">stick-table</a>&quot; keyword in others section, except
-for the &quot;<a href="#peers">peers</a>&quot; argument which is not required here and with an aditionnal
+for the &quot;<a href="#peers">peers</a>&quot; argument which is not required here and with an additional
 mandatory first parameter to designate the stick-table. Contrary to others
 sections, there may be several &quot;<a href="#table">table</a>&quot; lines in &quot;<a href="#peers">peers</a>&quot; sections (see also
 &quot;<a href="#stick-table">stick-table</a>&quot; keyword).
@@ -5895,6 +5885,10 @@ the management guide).
 up in the current PATH if it does not include an absolute path. This is a
 mandatory option of the program section. Arguments containing spaces must
 be enclosed in quotes or double quotes or be prefixed by a backslash.
+</pre><a class="anchor" name="user"></a><a class="anchor" name="3-user"></a><a class="anchor" name="3.7-user"></a><a class="anchor" name="user (Global parameters)"></a><a class="anchor" name="user (Programs)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#3.7-user">user</a></b> <span style="color: #080">&lt;user name&gt;</span></div><pre class="text">Changes the executed command user ID to the &lt;user name&gt; from /etc/passwd.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+</pre><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.7-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Programs)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.7-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Changes the executed command group ID to the &lt;group name&gt; from /etc/group.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="option"></a><a class="anchor" name="3-option"></a><a class="anchor" name="3.7-option"></a><a class="anchor" name="option (Global parameters)"></a><a class="anchor" name="option (Programs)"></a><a class="anchor" name="option start-on-reload"></a><a class="anchor" name="3-option start-on-reload"></a><a class="anchor" name="3.7-option start-on-reload"></a><a class="anchor" name="option start-on-reload (Global parameters)"></a><a class="anchor" name="option start-on-reload (Programs)"></a><div class="keyword"><b><a class="anchor" name="option start-on-reload"></a><a href="#3.7-option%20start-on-reload">option start-on-reload</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="3-no"></a><a class="anchor" name="3.7-no"></a><a class="anchor" name="no (Global parameters)"></a><a class="anchor" name="no (Programs)"></a><a class="anchor" name="no option"></a><a class="anchor" name="3-no option"></a><a class="anchor" name="3.7-no option"></a><a class="anchor" name="no option (Global parameters)"></a><a class="anchor" name="no option (Programs)"></a><a class="anchor" name="no option start-on-reload"></a><a class="anchor" name="3-no option start-on-reload"></a><a class="anchor" name="3.7-no option start-on-reload"></a><a class="anchor" name="no option start-on-reload (Global parameters)"></a><a class="anchor" name="no option start-on-reload (Programs)"></a><div class="keyword"><b><a class="anchor" name="no option start-on-reload"></a><a href="#3.7-no%20option%20start-on-reload">no option start-on-reload</a></b></div><pre class="text">Start (or not) a new instance of the program upon a reload of the master.
 The default is to start a new instance. This option may only be used in a
 program section.
@@ -5996,13 +5990,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-balance">balance</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-bind">bind</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-bind-process">bind-process</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-block"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>block</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-capture%20cookie">capture cookie</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-capture%20request%20header">capture request header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-capture%20response%20header">capture response header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td ><a href="#4-clitimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>clitimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-compression">compression</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-contimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>contimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-cookie">cookie</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-declare%20capture">declare capture</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-default-server">default-server</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6011,10 +6002,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-disabled">disabled</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-dispatch">dispatch</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-email-alert%20from">email-alert from</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-email-alert%20level">email-alert level</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-email-alert%20mailers">email-alert mailers</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-email-alert%20myhostname">email-alert myhostname</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-email-alert%20to">email-alert to</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-enabled">enabled</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-errorfile">errorfile</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6032,10 +6023,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-http-request">http-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-response">http-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-reuse">http-reuse</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-http-send-name-header">http-send-name-header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-id">id</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-ignore-persist">ignore-persist</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-load-server-state-from-file">load-server-state-from-file</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-log"><span class="pull-right"><span>(*)</span></span>log</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-log-format">log-format</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -6053,10 +6044,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20allbackups"><span class="pull-right"><span>(*)</span></span>option allbackups</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20checkcache"><span class="pull-right"><span>(*)</span></span>option checkcache</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20clitcpka"><span class="pull-right"><span>(*)</span></span>option clitcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20contstats"><span class="pull-right"><span>(*)</span></span>option contstats</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlog-normal"><span class="pull-right"><span>(*)</span></span>option dontlog-normal</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlognull"><span class="pull-right"><span>(*)</span></span>option dontlognull</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20forwardfor">option forwardfor</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-buffer-request"><span class="pull-right"><span>(*)</span></span>option http-buffer-request</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-ignore-probes"><span class="pull-right"><span>(*)</span></span>option http-ignore-probes</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -6074,10 +6065,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20independent-streams"><span class="pull-right"><span>(*)</span></span>option independent-streams</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20ldap-check">option ldap-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20external-check">option external-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20log-health-checks"><span class="pull-right"><span>(*)</span></span>option log-health-checks</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20log-separate-errors"><span class="pull-right"><span>(*)</span></span>option log-separate-errors</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20logasap"><span class="pull-right"><span>(*)</span></span>option logasap</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20mysql-check">option mysql-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20nolinger"><span class="pull-right"><span>(*)</span></span>option nolinger</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20originalto">option originalto</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6095,10 +6086,10 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcp-check">option tcp-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20tcp-smart-accept"><span class="pull-right"><span>(*)</span></span>option tcp-smart-accept</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20tcp-smart-connect"><span class="pull-right"><span>(*)</span></span>option tcp-smart-connect</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcpka">option tcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20tcplog">option tcplog</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20transparent"><span class="pull-right"><span>(*)</span></span>option transparent</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-external-check%20command">external-check command</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6106,8 +6097,6 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-persist%20rdp-cookie">persist rdp-cookie</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-rate-limit%20sessions">rate-limit sessions</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-redirect">redirect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-redisp"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>redisp</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-redispatch"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>redispatch</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqadd"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqadd</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqallow"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqdel"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqdel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6116,12 +6105,12 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-reqidel"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqideny"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqipass"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-reqirep"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqitarpit"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqitarpit</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqpass"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqpass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqrep"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqrep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqtarpit"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqtarpit</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-retries">retries</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-retry-on">retry-on</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-rspadd"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>rspadd</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6135,15 +6124,14 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-server-state-file-name">server-state-file-name</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-server-template">server-template</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-source">source</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20hide-version">stats hide-version</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20http-request">stats http-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20realm">stats realm</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20refresh">stats refresh</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-stats%20scope">stats scope</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20show-desc">stats show-desc</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20show-legends">stats show-legends</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6158,28 +6146,24 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20send">tcp-check send</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20send-binary">tcp-check send-binary</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-request%20inspect-delay">tcp-request inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-request%20session">tcp-request session</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-tcp-response%20content">tcp-response content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-response%20inspect-delay">tcp-response inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-timeout%20check">timeout check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20client">timeout client</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-timeout%20client-fin">timeout client-fin</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td ><a href="#4-timeout%20clitimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout clitimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-timeout%20connect">timeout connect</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-timeout%20contimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout contimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20http-keep-alive">timeout http-keep-alive</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20http-request">timeout http-request</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20queue">timeout queue</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20server">timeout server</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20server-fin">timeout server-fin</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -6427,7 +6411,7 @@ algorithm, mode nor option have been set. The algorithm may only be set once
 for each backend.
 
 With authentication schemes that require the same connection like NTLM, URI
-based alghoritms must not be used, as they would cause subsequent requests
+based algorithms must not be used, as they would cause subsequent requests
 to be routed to different backend servers, breaking the invalid assumptions
 NTLM relies on.
 </pre><div class="separator">
@@ -6639,33 +6623,6 @@ listen management
     bind-process 1-4
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; in global section, and &quot;<a href="#process">process</a>&quot; in <a href="#5.1">section 5.1</a>.</div>
-<a class="anchor" name="block"></a><a class="anchor" name="4-block"></a><a class="anchor" name="4.2-block"></a><a class="anchor" name="block (Proxies)"></a><a class="anchor" name="block (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="block"></a><a href="#4.2-block">block</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Block a layer 7 request if/unless a condition is matched
-</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
-</table></div>
-<pre class="text">The HTTP request will be blocked very early in the layer 7 processing
-if/unless &lt;condition&gt; is matched. A 403 error will be returned if the request
-is blocked. The condition has to reference ACLs (see <a href="#7">section 7</a>). This is
-typically used to deny access to certain sensitive resources if some
-conditions are met or not met. There is no fixed limit to the number of
-&quot;<a href="#block">block</a>&quot; statements per instance. To block connections at layer 4 (without
-sending a 403 error) see &quot;tcp-request connection reject&quot; and
-&quot;tcp-request content reject&quot; rules.
-
-This form is deprecated, do not use it in any new configuration, use the new
-&quot;<a href="#http-request%20deny">http-request deny</a>&quot; instead.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>acl invalid_src  src          0.0.0.0/7 224.0.0.0/3
-acl invalid_src  src_port     0:1023
-acl local_dst    hdr(host) -i localhost
-<span class="comment"># block is deprecated. Use http-request deny instead:</span>
-<span class="comment">#block if invalid_src || local_dst</span>
-http-request deny if invalid_src || local_dst
-</code></pre>
-</div><div class="page-header"><b>See also :</b> <a href="#7">section 7</a> about ACL usage, &quot;<a href="#http-request%20deny">http-request deny</a>&quot;, &quot;<a href="#http-response%20deny">http-response deny</a>&quot;, &quot;tcp-request connection reject&quot; and &quot;tcp-request content reject&quot;.</div>
 <a class="anchor" name="capture"></a><a class="anchor" name="4-capture"></a><a class="anchor" name="4.2-capture"></a><a class="anchor" name="capture (Proxies)"></a><a class="anchor" name="capture (Alphabetically sorted keywords reference)"></a><a class="anchor" name="capture cookie"></a><a class="anchor" name="4-capture cookie"></a><a class="anchor" name="4.2-capture cookie"></a><a class="anchor" name="capture cookie (Proxies)"></a><a class="anchor" name="capture cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="capture cookie"></a><a href="#4.2-capture%20cookie">capture cookie</a></b> <span style="color: #080">&lt;name&gt;</span> len <span style="color: #080">&lt;length&gt;</span></div><pre class="text">Capture and log a cookie in the request and in the response.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -6785,38 +6742,6 @@ in a &quot;defaults&quot; section.
 capture response header Location len 15
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#capture%20cookie">capture cookie</a>&quot;, &quot;<a href="#capture%20request%20header">capture request header</a>&quot; as well as <a href="#8">section 8</a> about logging.</div>
-<a class="anchor" name="clitimeout"></a><a class="anchor" name="4-clitimeout"></a><a class="anchor" name="4.2-clitimeout"></a><a class="anchor" name="clitimeout (Proxies)"></a><a class="anchor" name="clitimeout (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="clitimeout"></a><a href="#4.2-clitimeout">clitimeout</a></b> <span style="color: #080">&lt;timeout&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Set the maximum inactivity time on the client side.
-</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
-</table></div>
-<div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;timeout&gt; is the timeout value is specified in milliseconds by default, but
-          can be in any other unit if the number is suffixed by the unit,
-          as explained at the top of this document.</pre>
-</div>
-<pre class="text">The inactivity timeout applies when the client is expected to acknowledge or
-send data. In HTTP mode, this timeout is particularly important to consider
-during the first phase, when the client sends the request, and during the
-response while it is reading data sent by the server. The value is specified
-in milliseconds by default, but can be in any other unit if the number is
-suffixed by the unit, as specified at the top of this document. In TCP mode
-(and to a lesser extent, in HTTP mode), it is highly recommended that the
-client timeout remains equal to the server timeout in order to avoid complex
-situations to debug. It is a good practice to cover one or several TCP packet
-losses by specifying timeouts that are slightly above multiples of 3 seconds
-(e.g. 4 or 5 seconds).
-
-This parameter is specific to frontends, but can be specified once for all in
-&quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
-forget about it. An unspecified timeout results in an infinite timeout, which
-is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of expired sessions in
-the system if the system's timeouts are not configured either.
-
-This parameter is provided for compatibility but is currently deprecated.
-Please use &quot;<a href="#timeout%20client">timeout client</a>&quot; instead.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, and &quot;<a href="#srvtimeout">srvtimeout</a>&quot;.</div>
 <a class="anchor" name="compression"></a><a class="anchor" name="4-compression"></a><a class="anchor" name="4.2-compression"></a><a class="anchor" name="compression (Proxies)"></a><a class="anchor" name="compression (Alphabetically sorted keywords reference)"></a><a class="anchor" name="compression algo"></a><a class="anchor" name="4-compression algo"></a><a class="anchor" name="4.2-compression algo"></a><a class="anchor" name="compression algo (Proxies)"></a><a class="anchor" name="compression algo (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="compression algo"></a><a href="#4.2-compression%20algo">compression algo</a></b> <span style="color: #080">&lt;algorithm&gt;</span> ...</div><a class="anchor" name="compression"></a><a class="anchor" name="4-compression"></a><a class="anchor" name="4.2-compression"></a><a class="anchor" name="compression (Proxies)"></a><a class="anchor" name="compression (Alphabetically sorted keywords reference)"></a><a class="anchor" name="compression type"></a><a class="anchor" name="4-compression type"></a><a class="anchor" name="4.2-compression type"></a><a class="anchor" name="compression type (Proxies)"></a><a class="anchor" name="compression type (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="compression type"></a><a href="#4.2-compression%20type">compression type</a></b> <span style="color: #080">&lt;mime type&gt;</span> ...</div><a class="anchor" name="compression"></a><a class="anchor" name="4-compression"></a><a class="anchor" name="4.2-compression"></a><a class="anchor" name="compression (Proxies)"></a><a class="anchor" name="compression (Alphabetically sorted keywords reference)"></a><a class="anchor" name="compression offload"></a><a class="anchor" name="4-compression offload"></a><a class="anchor" name="4.2-compression offload"></a><a class="anchor" name="compression offload (Proxies)"></a><a class="anchor" name="compression offload (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="compression offload"></a><a href="#4.2-compression%20offload">compression offload</a></b></div><pre class="text">Enable HTTP compression.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -6896,36 +6821,7 @@ Note: The compression does not emit the Warning header.
 <code>compression algo gzip
 compression type text/html text/plain
 </code></pre>
-</div><a class="anchor" name="contimeout"></a><a class="anchor" name="4-contimeout"></a><a class="anchor" name="4.2-contimeout"></a><a class="anchor" name="contimeout (Proxies)"></a><a class="anchor" name="contimeout (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="contimeout"></a><a href="#4.2-contimeout">contimeout</a></b> <span style="color: #080">&lt;timeout&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Set the maximum time to wait for a connection attempt to a server to succeed.
-</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
-</table></div>
-<div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;timeout&gt; is the timeout value is specified in milliseconds by default, but
-          can be in any other unit if the number is suffixed by the unit,
-          as explained at the top of this document.</pre>
-</div>
-<pre class="text">If the server is located on the same LAN as haproxy, the connection should be
-immediate (less than a few milliseconds). Anyway, it is a good practice to
-cover one or several TCP packet losses by specifying timeouts that are
-slightly above multiples of 3 seconds (e.g. 4 or 5 seconds). By default, the
-connect timeout also presets the queue timeout to the same value if this one
-has not been specified. Historically, the contimeout was also used to set the
-tarpit timeout in a listen section, which is not possible in a pure frontend.
-
-This parameter is specific to backends, but can be specified once for all in
-&quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
-forget about it. An unspecified timeout results in an infinite timeout, which
-is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of failed sessions in
-the system if the system's timeouts are not configured either.
-
-This parameter is provided for backwards compatibility but is currently
-deprecated. Please use &quot;<a href="#timeout%20connect">timeout connect</a>&quot;, &quot;<a href="#timeout%20queue">timeout queue</a>&quot; or &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;
-instead.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20connect">timeout connect</a>&quot;, &quot;<a href="#timeout%20queue">timeout queue</a>&quot;, &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#contimeout">contimeout</a>&quot;.</div>
-<a class="anchor" name="cookie"></a><a class="anchor" name="4-cookie"></a><a class="anchor" name="4.2-cookie"></a><a class="anchor" name="cookie (Proxies)"></a><a class="anchor" name="cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="cookie"></a><a href="#4.2-cookie">cookie</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ rewrite | insert | prefix ]</span> <span style="color: #008">[ indirect ]</span> <span style="color: #008">[ nocache ]</span>
+</div><a class="anchor" name="cookie"></a><a class="anchor" name="4-cookie"></a><a class="anchor" name="4.2-cookie"></a><a class="anchor" name="cookie (Proxies)"></a><a class="anchor" name="cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="cookie"></a><a href="#4.2-cookie">cookie</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ rewrite | insert | prefix ]</span> <span style="color: #008">[ indirect ]</span> <span style="color: #008">[ nocache ]</span>
               <span style="color: #008">[ postonly ]</span> <span style="color: #008">[ preserve ]</span> <span style="color: #008">[ httponly ]</span> <span style="color: #008">[ secure ]</span>
               <span style="color: #008">[ domain <span style="color: #080">&lt;domain&gt;</span> ]</span>* <span style="color: #008">[ maxidle <span style="color: #080">&lt;idle&gt;</span> ]</span> <span style="color: #008">[ maxlife <span style="color: #080">&lt;life&gt;</span> ]</span>
               <span style="color: #008">[ dynamic ]</span></div><pre class="text">Enable cookie-based persistence in a backend.
@@ -7802,7 +7698,7 @@ below.
 There is no limit to the number of http-request statements per instance.
 
 It is important to know that http-request rules are processed very early in
-the HTTP processing, just after &quot;<a href="#block">block</a>&quot; rules and before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot;
+the HTTP processing, just after &quot;block&quot; rules and before &quot;<a href="#reqdel">reqdel</a>&quot; or &quot;<a href="#reqrep">reqrep</a>&quot;
 or &quot;<a href="#reqadd">reqadd</a>&quot; rules. That way, headers added by &quot;add-header&quot;/&quot;set-header&quot; are
 visible by almost all further ACL rules.
 
@@ -9194,7 +9090,7 @@ version and all headers are ignored, but the request must at least be valid
 at the HTTP level. This keyword may only be used with an HTTP-mode frontend.
 
 Monitor requests are processed very early, just after the request is parsed
-and even before any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; or &quot;<a href="#block">block</a>&quot; rulesets. The only rulesets
+and even before any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; or &quot;block&quot; rulesets. The only rulesets
 applied before are the tcp-request ones. They cannot be logged either, and it
 is the intended purpose. They are only used to report HAProxy's health to an
 upper component, nothing more. However, it is possible to add any number of
@@ -9927,7 +9823,7 @@ as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot
 
 If &quot;<a href="#option%20httpclose">option httpclose</a>&quot; is set, HAProxy will close connections with the server
 and the client as soon as the request and the response are received. It will
-alos check if a &quot;Connection: close&quot; header is already set in each direction,
+also check if a &quot;Connection: close&quot; header is already set in each direction,
 and will add one if missing. Any &quot;Connection&quot; header different from &quot;close&quot;
 will also be removed.
 
@@ -10030,10 +9926,6 @@ on data sent to the client. There probably is little use of this case. When
 the option is set on the backend, it will disable read timeout updates on
 data sent to the server. Doing so will typically break large HTTP posts from
 slow lines, so use it with caution.
-
-Note: older versions used to call this setting &quot;option independant-streams&quot;
-      with a spelling mistake. This spelling is still supported but
-      deprecated.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option ldap-check"></a><a class="anchor" name="4-option ldap-check"></a><a class="anchor" name="4.2-option ldap-check"></a><a class="anchor" name="option ldap-check (Proxies)"></a><a class="anchor" name="option ldap-check (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option ldap-check"></a><a href="#4.2-option%20ldap-check">option ldap-check</a></b></div><pre class="text">Use LDAPv3 health checks for server testing
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -10365,7 +10257,7 @@ connection failures. Of course, it requires having &quot;<a href="#retries">retr
 value.
 
 This form is the preferred form, which replaces both the &quot;<a href="#option%20redispatch">redispatch</a>&quot; and
-&quot;<a href="#redisp">redisp</a>&quot; keywords.
+&quot;redisp&quot; keywords.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
@@ -11065,29 +10957,7 @@ redirect code 301 prefix / drop-query append-slash if missing_slash
   unless { hdr_beg(host) -i www }
 </code></pre>
 </div><pre class="text">See <a href="#7">section 7</a> about ACL usage.
-</pre><a class="anchor" name="redisp"></a><a class="anchor" name="4-redisp"></a><a class="anchor" name="4.2-redisp"></a><a class="anchor" name="redisp (Proxies)"></a><a class="anchor" name="redisp (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="redisp"></a><a href="#4.2-redisp">redisp</a></b> <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="redispatch"></a><a class="anchor" name="4-redispatch"></a><a class="anchor" name="4.2-redispatch"></a><a class="anchor" name="redispatch (Proxies)"></a><a class="anchor" name="redispatch (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="redispatch"></a><a href="#4.2-redispatch">redispatch</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">Enable or disable session redistribution in case of connection failure
-</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
-</table></div>
-<div class="separator">
-<span class="label label-info">Arguments :</span> none
-</div>
-<pre class="text">In HTTP mode, if a server designated by a cookie is down, clients may
-definitely stick to it because they cannot flush the cookie, so they will not
-be able to access the service anymore.
-
-Specifying &quot;<a href="#option%20redispatch">redispatch</a>&quot; will allow the proxy to break their persistence and
-redistribute them to a working server.
-
-It also allows to retry last connection to another server in case of multiple
-connection failures. Of course, it requires having &quot;<a href="#retries">retries</a>&quot; set to a nonzero
-value.
-
-This form is deprecated, do not use it in any new configuration, use the new
-&quot;<a href="#option%20redispatch">option redispatch</a>&quot; instead.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20redispatch">option redispatch</a>&quot;</div>
-<a class="anchor" name="reqadd"></a><a class="anchor" name="4-reqadd"></a><a class="anchor" name="4.2-reqadd"></a><a class="anchor" name="reqadd (Proxies)"></a><a class="anchor" name="reqadd (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqadd"></a><a href="#4.2-reqadd">reqadd</a></b>  <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Add a header at the end of the HTTP request
+</pre><a class="anchor" name="reqadd"></a><a class="anchor" name="4-reqadd"></a><a class="anchor" name="4.2-reqadd"></a><a class="anchor" name="reqadd (Proxies)"></a><a class="anchor" name="reqadd (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqadd"></a><a href="#4.2-reqadd">reqadd</a></b>  <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Add a header at the end of the HTTP request
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -11145,7 +11015,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqiallow ^Host:\ www\.
 reqideny  ^Host:\ .*\.local
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;block&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqdel"></a><a class="anchor" name="4-reqdel"></a><a class="anchor" name="4.2-reqdel"></a><a class="anchor" name="reqdel (Proxies)"></a><a class="anchor" name="reqdel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqdel"></a><a href="#4.2-reqdel">reqdel</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="reqidel"></a><a class="anchor" name="4-reqidel"></a><a class="anchor" name="4.2-reqidel"></a><a class="anchor" name="reqidel (Proxies)"></a><a class="anchor" name="reqidel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqidel"></a><a href="#4.2-reqidel">reqidel</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> (ignore case) <span class="label label-warning">(deprecated)</span></div><pre class="text">Delete all headers matching a regular expression in an HTTP request
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -11214,7 +11084,7 @@ Reqdeny, reqallow and reqpass should be avoided in new designs.
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#rspdeny">rspdeny</a>&quot;, &quot;block&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqpass"></a><a class="anchor" name="4-reqpass"></a><a class="anchor" name="4.2-reqpass"></a><a class="anchor" name="reqpass (Proxies)"></a><a class="anchor" name="reqpass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqpass"></a><a href="#4.2-reqpass">reqpass</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="reqipass"></a><a class="anchor" name="4-reqipass"></a><a class="anchor" name="4.2-reqipass"></a><a class="anchor" name="reqipass (Proxies)"></a><a class="anchor" name="reqipass (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqipass"></a><a href="#4.2-reqipass">reqipass</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> (ignore case) <span class="label label-warning">(deprecated)</span></div><pre class="text">Ignore any HTTP request line matching a regular expression in next rules
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -11247,7 +11117,7 @@ reqipass  ^Host:\ www.private\.local
 reqideny  ^Host:\ .*\.local
 reqiallow ^Host:\ www\.
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqallow">reqallow</a>&quot;, &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;block&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, <a href="#6">section 6</a> about HTTP header manipulation, and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="reqrep"></a><a class="anchor" name="4-reqrep"></a><a class="anchor" name="4.2-reqrep"></a><a class="anchor" name="reqrep (Proxies)"></a><a class="anchor" name="reqrep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqrep"></a><a href="#4.2-reqrep">reqrep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="reqirep"></a><a class="anchor" name="4-reqirep"></a><a class="anchor" name="4.2-reqirep"></a><a class="anchor" name="reqirep (Proxies)"></a><a class="anchor" name="reqirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="reqirep"></a><a href="#4.2-reqirep">reqirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> (ignore case) <span class="label label-warning">(deprecated)</span></div><pre class="text">Replace a regular expression with a string in an HTTP request line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -11520,7 +11390,7 @@ Rspdeny should be avoided in new designs.
 <code><span class="comment"># Ensure that no content type matching ms-word will leak</span>
 rspideny  ^Content-type:\.*/ms-word
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;<a href="#block">block</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#reqdeny">reqdeny</a>&quot;, &quot;<a href="#acl">acl</a>&quot;, &quot;block&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;,  <a href="#6">section 6</a> about HTTP header manipulation and <a href="#7">section 7</a> about ACLs.</div>
 <a class="anchor" name="rsprep"></a><a class="anchor" name="4-rsprep"></a><a class="anchor" name="4.2-rsprep"></a><a class="anchor" name="rsprep (Proxies)"></a><a class="anchor" name="rsprep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rsprep"></a><a href="#4.2-rsprep">rsprep</a></b>  <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> <span class="label label-warning">(deprecated)</span></div><a class="anchor" name="rspirep"></a><a class="anchor" name="4-rspirep"></a><a class="anchor" name="4.2-rspirep"></a><a class="anchor" name="rspirep (Proxies)"></a><a class="anchor" name="rspirep (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rspirep"></a><a href="#4.2-rspirep">rspirep</a></b> <span style="color: #080">&lt;search&gt;</span> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #800">{if | unless}</span> <span style="color: #080">&lt;cond&gt;</span>]</span> (ignore case) <span class="label label-warning">(deprecated)</span></div><pre class="text">Replace a regular expression with a string in an HTTP response line
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -11818,43 +11688,6 @@ backend transparent_http
     source 0.0.0.0 usesrc hdr_ip(x-forwarded-for,-1)
 </code></pre>
 </div><div class="page-header"><b>See also :</b> the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">source<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#source%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#source%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; server option in <a href="#5">section 5</a>, the Tproxy patches for the Linux kernel on www.balabit.com, the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bind<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bind%20%28Peers%29">Peers</a></li><li><a href="#bind%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword.</div>
-<a class="anchor" name="srvtimeout"></a><a class="anchor" name="4-srvtimeout"></a><a class="anchor" name="4.2-srvtimeout"></a><a class="anchor" name="srvtimeout (Proxies)"></a><a class="anchor" name="srvtimeout (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="srvtimeout"></a><a href="#4.2-srvtimeout">srvtimeout</a></b> <span style="color: #080">&lt;timeout&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Set the maximum inactivity time on the server side.
-</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
-<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
-</table></div>
-<div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;timeout&gt; is the timeout value specified in milliseconds by default, but
-          can be in any other unit if the number is suffixed by the unit,
-          as explained at the top of this document.</pre>
-</div>
-<pre class="text">The inactivity timeout applies when the server is expected to acknowledge or
-send data. In HTTP mode, this timeout is particularly important to consider
-during the first phase of the server's response, when it has to send the
-headers, as it directly represents the server's processing time for the
-request. To find out what value to put there, it's often good to start with
-what would be considered as unacceptable response times, then check the logs
-to observe the response time distribution, and adjust the value accordingly.
-
-The value is specified in milliseconds by default, but can be in any other
-unit if the number is suffixed by the unit, as specified at the top of this
-document. In TCP mode (and to a lesser extent, in HTTP mode), it is highly
-recommended that the client timeout remains equal to the server timeout in
-order to avoid complex situations to debug. Whatever the expected server
-response times, it is a good practice to cover at least one or several TCP
-packet losses by specifying timeouts that are slightly above multiples of 3
-seconds (e.g. 4 or 5 seconds minimum).
-
-This parameter is specific to backends, but can be specified once for all in
-&quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
-forget about it. An unspecified timeout results in an infinite timeout, which
-is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of expired sessions in
-the system if the system's timeouts are not configured either.
-
-This parameter is provided for compatibility but is currently deprecated.
-Please use &quot;<a href="#timeout%20server">timeout server</a>&quot; instead.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot; and &quot;<a href="#clitimeout">clitimeout</a>&quot;.</div>
 <a class="anchor" name="stats"></a><a class="anchor" name="4-stats"></a><a class="anchor" name="4.2-stats"></a><a class="anchor" name="stats (Proxies)"></a><a class="anchor" name="stats (Alphabetically sorted keywords reference)"></a><a class="anchor" name="stats admin"></a><a class="anchor" name="4-stats admin"></a><a class="anchor" name="4.2-stats admin"></a><a class="anchor" name="stats admin (Proxies)"></a><a class="anchor" name="stats admin (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="stats admin"></a><a href="#4.2-stats%20admin">stats admin</a></b> <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;cond&gt;</span></div><pre class="text">Enable statistics admin level if/unless a condition is matched
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13079,7 +12912,7 @@ Four types of actions are supported :
       rules do not stop evaluation and do not change default action. The
       number of counters that may be simultaneously tracked by the same
       connection is set in MAX_SESS_STKCTR at build time (reported in
-      haproxy -vv) whichs defaults to 3, so the track-sc number is between 0
+      haproxy -vv) which defaults to 3, so the track-sc number is between 0
       and (MAX_SESS_STCKTR-1). The first &quot;track-sc0&quot; rule executed enables
       tracking of the counters of the specified table as the first set. The
       first &quot;track-sc1&quot; rule executed enables tracking of the counters of the
@@ -13752,7 +13585,7 @@ This parameter is specific to backends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
 forget about it.
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#timeout%20connect">timeout connect</a>&quot;, &quot;<a href="#timeout%20queue">timeout queue</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;.</div>
-<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout client"></a><a class="anchor" name="4-timeout client"></a><a class="anchor" name="4.2-timeout client"></a><a class="anchor" name="timeout client (Proxies)"></a><a class="anchor" name="timeout client (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout client"></a><a href="#4.2-timeout%20client">timeout client</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout clitimeout"></a><a class="anchor" name="4-timeout clitimeout"></a><a class="anchor" name="4.2-timeout clitimeout"></a><a class="anchor" name="timeout clitimeout (Proxies)"></a><a class="anchor" name="timeout clitimeout (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout clitimeout"></a><a href="#4.2-timeout%20clitimeout">timeout clitimeout</a></b> <span style="color: #080">&lt;timeout&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Set the maximum inactivity time on the client side.
+<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout client"></a><a class="anchor" name="4-timeout client"></a><a class="anchor" name="4.2-timeout client"></a><a class="anchor" name="timeout client (Proxies)"></a><a class="anchor" name="timeout client (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout client"></a><a href="#4.2-timeout%20client">timeout client</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum inactivity time on the client side.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
@@ -13783,15 +13616,11 @@ This parameter is specific to frontends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
 forget about it. An unspecified timeout results in an infinite timeout, which
 is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of expired sessions in
+during startup because it may result in accumulation of expired sessions in
 the system if the system's timeouts are not configured either.
 
 This also applies to HTTP/2 connections, which will be closed with GOAWAY.
-
-This parameter replaces the old, deprecated &quot;<a href="#clitimeout">clitimeout</a>&quot;. It is recommended
-to use it to write new configurations. The form &quot;<a href="#timeout%20clitimeout">timeout clitimeout</a>&quot; is
-provided only by backwards compatibility but its use is strongly discouraged.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#clitimeout">clitimeout</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout client-fin"></a><a class="anchor" name="4-timeout client-fin"></a><a class="anchor" name="4.2-timeout client-fin"></a><a class="anchor" name="timeout client-fin (Proxies)"></a><a class="anchor" name="timeout client-fin (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout client-fin"></a><a href="#4.2-timeout%20client-fin">timeout client-fin</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the inactivity timeout on the client side for half-closed connections.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13817,7 +13646,7 @@ This parameter is specific to frontends, but can be specified once for all in
 &quot;defaults&quot; sections. By default it is not set, so half-closed connections
 will use the other timeouts (timeout.client or timeout.tunnel).
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot;, &quot;<a href="#timeout%20server-fin">timeout server-fin</a>&quot;, and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
-<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout connect"></a><a class="anchor" name="4-timeout connect"></a><a class="anchor" name="4.2-timeout connect"></a><a class="anchor" name="timeout connect (Proxies)"></a><a class="anchor" name="timeout connect (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout connect"></a><a href="#4.2-timeout%20connect">timeout connect</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout contimeout"></a><a class="anchor" name="4-timeout contimeout"></a><a class="anchor" name="4.2-timeout contimeout"></a><a class="anchor" name="timeout contimeout (Proxies)"></a><a class="anchor" name="timeout contimeout (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout contimeout"></a><a href="#4.2-timeout%20contimeout">timeout contimeout</a></b> <span style="color: #080">&lt;timeout&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Set the maximum time to wait for a connection attempt to a server to succeed.
+<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout connect"></a><a class="anchor" name="4-timeout connect"></a><a class="anchor" name="4.2-timeout connect"></a><a class="anchor" name="timeout connect (Proxies)"></a><a class="anchor" name="timeout connect (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout connect"></a><a href="#4.2-timeout%20connect">timeout connect</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum time to wait for a connection attempt to a server to succeed.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -13838,13 +13667,9 @@ This parameter is specific to backends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
 forget about it. An unspecified timeout results in an infinite timeout, which
 is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of failed sessions in
+during startup because it may result in accumulation of failed sessions in
 the system if the system's timeouts are not configured either.
-
-This parameter replaces the old, deprecated &quot;<a href="#contimeout">contimeout</a>&quot;. It is recommended
-to use it to write new configurations. The form &quot;<a href="#timeout%20contimeout">timeout contimeout</a>&quot; is
-provided only by backwards compatibility but its use is strongly discouraged.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#timeout%20check">timeout check</a>&quot;, &quot;<a href="#timeout%20queue">timeout queue</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#contimeout">contimeout</a>&quot;, &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;.</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#timeout%20check">timeout check</a>&quot;, &quot;<a href="#timeout%20queue">timeout queue</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout http-keep-alive"></a><a class="anchor" name="4-timeout http-keep-alive"></a><a class="anchor" name="4.2-timeout http-keep-alive"></a><a class="anchor" name="timeout http-keep-alive (Proxies)"></a><a class="anchor" name="timeout http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout http-keep-alive"></a><a href="#4.2-timeout%20http-keep-alive">timeout http-keep-alive</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for a new HTTP request to appear
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13951,8 +13776,8 @@ The &quot;<a href="#timeout%20queue">timeout queue</a>&quot; statement allows to
 be left pending in a queue. If unspecified, the same value as the backend's
 connection timeout (&quot;<a href="#timeout%20connect">timeout connect</a>&quot;) is used, for backwards compatibility
 with older versions with no &quot;<a href="#timeout%20queue">timeout queue</a>&quot; parameter.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20connect">timeout connect</a>&quot;, &quot;<a href="#contimeout">contimeout</a>&quot;.</div>
-<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout server"></a><a class="anchor" name="4-timeout server"></a><a class="anchor" name="4.2-timeout server"></a><a class="anchor" name="timeout server (Proxies)"></a><a class="anchor" name="timeout server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout server"></a><a href="#4.2-timeout%20server">timeout server</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout srvtimeout"></a><a class="anchor" name="4-timeout srvtimeout"></a><a class="anchor" name="4.2-timeout srvtimeout"></a><a class="anchor" name="timeout srvtimeout (Proxies)"></a><a class="anchor" name="timeout srvtimeout (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout srvtimeout"></a><a href="#4.2-timeout%20srvtimeout">timeout srvtimeout</a></b> <span style="color: #080">&lt;timeout&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">Set the maximum inactivity time on the server side.
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20connect">timeout connect</a>&quot;.</div>
+<a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout server"></a><a class="anchor" name="4-timeout server"></a><a class="anchor" name="4.2-timeout server"></a><a class="anchor" name="timeout server (Proxies)"></a><a class="anchor" name="timeout server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout server"></a><a href="#4.2-timeout%20server">timeout server</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum inactivity time on the server side.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -13986,13 +13811,9 @@ This parameter is specific to backends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
 forget about it. An unspecified timeout results in an infinite timeout, which
 is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of expired sessions in
+during startup because it may result in accumulation of expired sessions in
 the system if the system's timeouts are not configured either.
-
-This parameter replaces the old, deprecated &quot;<a href="#srvtimeout">srvtimeout</a>&quot;. It is recommended
-to use it to write new configurations. The form &quot;<a href="#timeout%20srvtimeout">timeout srvtimeout</a>&quot; is
-provided only by backwards compatibility but its use is strongly discouraged.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#srvtimeout">srvtimeout</a>&quot;, &quot;<a href="#timeout%20client">timeout client</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout server-fin"></a><a class="anchor" name="4-timeout server-fin"></a><a class="anchor" name="4.2-timeout server-fin"></a><a class="anchor" name="timeout server-fin (Proxies)"></a><a class="anchor" name="timeout server-fin (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout server-fin"></a><a href="#4.2-timeout%20server-fin">timeout server-fin</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the inactivity timeout on the server side for half-closed connections.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -14037,7 +13858,7 @@ unit if the number is suffixed by the unit, as specified at the top of this
 document. If unspecified, the same value as the backend's connection timeout
 (&quot;<a href="#timeout%20connect">timeout connect</a>&quot;) is used, for backwards compatibility with older versions
 with no &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot; parameter.
-</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20connect">timeout connect</a>&quot;, &quot;<a href="#contimeout">contimeout</a>&quot;.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20connect">timeout connect</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout tunnel"></a><a class="anchor" name="4-timeout tunnel"></a><a class="anchor" name="4.2-timeout tunnel"></a><a class="anchor" name="timeout tunnel (Proxies)"></a><a class="anchor" name="timeout tunnel (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout tunnel"></a><a href="#4.2-timeout%20tunnel">timeout tunnel</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum inactivity time on the client and server side for tunnels.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -14314,13 +14135,13 @@ usable. See also &quot;tcp-request connection expect-proxy&quot; for a finer-gra
 setting of which client is allowed to use the protocol.
 </pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.1-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.1-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow receiving early data when using TLSv1.3. This is disabled by default,
 due to security considerations. Because it is vulnerable to replay attacks,
-you should only allow if for requests that are safe to replay, ie requests
+you should only allow if for requests that are safe to replay, i.e. requests
 that are idempotent. You can use the &quot;wait-for-handshake&quot; action for any
 request that wouldn't be safe with early data.
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.1-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.1-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
-quotes). This requires that the SSL library is build with support for TLS
+quotes). This requires that the SSL library is built with support for TLS
 extensions enabled (check with haproxy -vv). The ALPN extension replaces the
 initial NPN extension. ALPN is required to enable HTTP/2 on an HTTP frontend.
 Versions of OpenSSL prior to 1.0.2 didn't support ALPN and only supposed the
@@ -14567,7 +14388,7 @@ increases the HAProxy's memory footprint to reduce latency when the same
 certificate is used many times.
 </pre><a class="anchor" name="gid"></a><a class="anchor" name="5-gid"></a><a class="anchor" name="5.1-gid"></a><a class="anchor" name="gid (Bind and server options)"></a><a class="anchor" name="gid (Bind options)"></a><div class="keyword"><b><a class="anchor" name="gid"></a><a href="#5.1-gid">gid</a></b> <span style="color: #080">&lt;gid&gt;</span></div><pre class="text">Sets the group of the UNIX sockets to the designated system gid. It can also
 be set by default in the global section's &quot;<a href="#unix-bind">unix-bind</a>&quot; statement. Note that
-some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
+some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
 setting except that the group ID is used instead of its name. This setting is
 ignored by non UNIX sockets.
 </pre><a class="anchor" name="group"></a><a class="anchor" name="5-group"></a><a class="anchor" name="5.1-group"></a><a class="anchor" name="group (Bind and server options)"></a><a class="anchor" name="group (Bind options)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#5.1-group">group</a></b> <span style="color: #080">&lt;group&gt;</span></div><pre class="text">Sets the group of the UNIX sockets to the designated system group. It can
@@ -14594,7 +14415,7 @@ interfaces.
 </pre><a class="anchor" name="level"></a><a class="anchor" name="5-level"></a><a class="anchor" name="5.1-level"></a><a class="anchor" name="level (Bind and server options)"></a><a class="anchor" name="level (Bind options)"></a><div class="keyword"><b><a class="anchor" name="level"></a><a href="#5.1-level">level</a></b> <span style="color: #080">&lt;level&gt;</span></div><pre class="text">This setting is used with the stats sockets only to restrict the nature of
 the commands that can be issued on the socket. It is ignored by other
 sockets. &lt;level&gt; can be one of :
-- &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; is the least privileged level; only non-sensitive stats can be
+- &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; is the least privileged level; only non-sensitive stats can be
   read, and no change is allowed. It would make sense on systems where it
   is not easy to restrict access to the socket.
 - &quot;operator&quot; is the default level and fits most common uses. All data can
@@ -14691,7 +14512,7 @@ and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdow
 </pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.1-npn"></a><a class="anchor" name="npn (Bind and server options)"></a><a class="anchor" name="npn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.1-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
 as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
-This requires that the SSL library is build with support for TLS extensions
+This requires that the SSL library is built with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
 replaced with the ALPN extension (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword), though this one is
 only available starting with OpenSSL 1.0.2. If HTTP/2 is desired on an older
@@ -14809,7 +14630,7 @@ system-wide as it is per-listener. It has no effect on non-IPv6 sockets and
 has precedence over the &quot;<a href="#v4v6">v4v6</a>&quot; option.
 </pre><a class="anchor" name="uid"></a><a class="anchor" name="5-uid"></a><a class="anchor" name="5.1-uid"></a><a class="anchor" name="uid (Bind and server options)"></a><a class="anchor" name="uid (Bind options)"></a><div class="keyword"><b><a class="anchor" name="uid"></a><a href="#5.1-uid">uid</a></b> <span style="color: #080">&lt;uid&gt;</span></div><pre class="text">Sets the owner of the UNIX sockets to the designated system uid. It can also
 be set by default in the global section's &quot;<a href="#unix-bind">unix-bind</a>&quot; statement. Note that
-some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
+some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
 setting except that the user numeric ID is used instead of its name. This
 setting is ignored by non UNIX sockets.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="5-user"></a><a class="anchor" name="5.1-user"></a><a class="anchor" name="user (Bind and server options)"></a><a class="anchor" name="user (Bind options)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#5.1-user">user</a></b> <span style="color: #080">&lt;user&gt;</span></div><pre class="text">Sets the owner of the UNIX sockets to the designated system user. It can also
@@ -14943,7 +14764,7 @@ if the backend uses &quot;<a href="#retry-on">retry-on</a>&quot; with the &quot;
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.2-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.2-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
-quotes). This requires that the SSL library is build with support for TLS
+quotes). This requires that the SSL library is built with support for TLS
 extensions enabled (check with haproxy -vv). The ALPN extension replaces the
 initial NPN extension. ALPN is required to connect to HTTP/2 servers.
 Versions of OpenSSL prior to 1.0.2 didn't support ALPN and only supposed the
@@ -14996,7 +14817,7 @@ common use is to send HTTPS checks by combining &quot;<a href="#option%20httpchk
 All SSL settings are common to health checks and traffic (e.g. ciphers).
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information and &quot;<a href="#no-check-ssl">no-check-ssl</a>&quot; to disable
 this option.
-</pre><a class="anchor" name="check-via-socks4"></a><a class="anchor" name="5-check-via-socks4"></a><a class="anchor" name="5.2-check-via-socks4"></a><a class="anchor" name="check-via-socks4 (Bind and server options)"></a><a class="anchor" name="check-via-socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-via-socks4"></a><a href="#5.2-check-via-socks4">check-via-socks4</a></b></div><pre class="text">This option enables outgoinng health checks using upstream socks4 proxy. By
+</pre><a class="anchor" name="check-via-socks4"></a><a class="anchor" name="5-check-via-socks4"></a><a class="anchor" name="5.2-check-via-socks4"></a><a class="anchor" name="check-via-socks4 (Bind and server options)"></a><a class="anchor" name="check-via-socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-via-socks4"></a><a href="#5.2-check-via-socks4">check-via-socks4</a></b></div><pre class="text">This option enables outgoing health checks using upstream socks4 proxy. By
 default, the health checks won't go through socks tunnel even it was enabled
 for normal traffic.
 </pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.2-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.2-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. This
@@ -15244,13 +15065,18 @@ setting which would have been inherited from &quot;<span class="dropdown"><a cla
 default value.
 It may also be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any previous
 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; &quot;<a href="#verifyhost">verifyhost</a>&quot; setting.
+</pre><a class="anchor" name="no-tfo"></a><a class="anchor" name="5-no-tfo"></a><a class="anchor" name="5.2-no-tfo"></a><a class="anchor" name="no-tfo (Bind and server options)"></a><a class="anchor" name="no-tfo (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tfo"></a><a href="#5.2-no-tfo">no-tfo</a></b></div><pre class="text">This option may be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#server%20%28Peers%29">Peers</a></li><li><a href="#server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">tfo<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#tfo%20%28Bind%20options%29">Bind options</a></li><li><a href="#tfo%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+setting which would have been inherited from &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; directive as
+default value.
+It may also be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any previous
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">tfo<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#tfo%20%28Bind%20options%29">Bind options</a></li><li><a href="#tfo%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
 </pre><a class="anchor" name="non-stick"></a><a class="anchor" name="5-non-stick"></a><a class="anchor" name="5.2-non-stick"></a><a class="anchor" name="non-stick (Bind and server options)"></a><a class="anchor" name="non-stick (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="non-stick"></a><a href="#5.2-non-stick">non-stick</a></b></div><pre class="text">Never add connections allocated to this sever to a stick-table.
 This may be used in conjunction with backup to ensure that
 stick-table persistence is disabled for backup servers.
 </pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.2-npn"></a><a class="anchor" name="npn (Bind and server options)"></a><a class="anchor" name="npn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.2-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
 as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
-This requires that the SSL library is build with support for TLS extensions
+This requires that the SSL library is built with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
 replaced with the ALPN extension (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword), though this one is
 only available starting with OpenSSL 1.0.2.
@@ -15382,7 +15208,7 @@ Default value: ipv6
 <pre class="prettyprint">
 <code>server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6
 </code></pre>
-</div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This options prioritize th choice of an ip address matching a network. This is
+</div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This option prioritizes the choice of an ip address matching a network. This is
 useful with clouds to prefer a local ip. In some cases, a cloud high
 availability service can be announced with many ip addresses on many
 different datacenters. The latency between datacenter is not negligible, so
@@ -15517,7 +15343,7 @@ setting which would have been inherited from &quot;<span class="dropdown"><a cla
 default value.
 It may also be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any previous
 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; &quot;<a href="#non-stick">non-stick</a>&quot; setting.
-</pre><a class="anchor" name="socks4"></a><a class="anchor" name="5-socks4"></a><a class="anchor" name="5.2-socks4"></a><a class="anchor" name="socks4 (Bind and server options)"></a><a class="anchor" name="socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="socks4"></a><a href="#5.2-socks4">socks4</a></b> <span style="color: #080">&lt;addr&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">This option enables upstream socks4 tunnel for outgoinng connections to the
+</pre><a class="anchor" name="socks4"></a><a class="anchor" name="5-socks4"></a><a class="anchor" name="5.2-socks4"></a><a class="anchor" name="socks4 (Bind and server options)"></a><a class="anchor" name="socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="socks4"></a><a href="#5.2-socks4">socks4</a></b> <span style="color: #080">&lt;addr&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">This option enables upstream socks4 tunnel for outgoing connections to the
 server. Using this option won't force the health check to go via socks4 by
 default. You will have to use the keyword &quot;<a href="#check-via-socks4">check-via-socks4</a>&quot; to enable it.
 </pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.2-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and server options)"></a><a class="anchor" name="tcp-ut (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.2-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all outgoing connections to this server. This
@@ -15538,7 +15364,7 @@ systems that support it (currently only the Linux kernel &gt;= 4.11).
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">tfo<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#tfo%20%28Bind%20options%29">Bind options</a></li><li><a href="#tfo%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; bind option for more information about TCP fast open.
 Please note that when using tfo, you should also use the &quot;conn-failure&quot;,
 &quot;empty-response&quot; and &quot;response-timeout&quot; keywords for &quot;<a href="#retry-on">retry-on</a>&quot;, or haproxy
-won't be able to retry the connection on failure.
+won't be able to retry the connection on failure. See also &quot;<a href="#no-tfo">no-tfo</a>&quot;.
 </pre><a class="anchor" name="track"></a><a class="anchor" name="5-track"></a><a class="anchor" name="5.2-track"></a><a class="anchor" name="track (Bind and server options)"></a><a class="anchor" name="track (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="track"></a><a href="#5.2-track">track</a></b> <span style="color: #008">[<span style="color: #080">&lt;proxy&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span></div><pre class="text">This option enables ability to set the current state of the server by tracking
 another one. It is possible to track a server which itself tracks another
 server, provided that at the end of the chain, a server has health checks
@@ -15619,7 +15445,7 @@ will be checked periodically, and if any server are added or removed, haproxy
 will automatically do the same.
 
 A few things important to notice:
-  - all the name servers are queried in the mean time. HAProxy will process the
+  - all the name servers are queried in the meantime. HAProxy will process the
     first valid response.
 
   - a resolution is considered as invalid (NX, timeout, refused), when all the
@@ -15798,7 +15624,7 @@ is very common to users of the &quot;sed&quot; program.
 The &lt;string&gt; parameter represents the string which will systematically be added
 after the last header line. It can also use special character sequences above.
 </pre><h5>Notes related to these keywords :</h5><pre class="text">- these keywords are not always convenient to allow/deny based on header
-  contents. It is strongly recommended to use ACLs with the &quot;<a href="#block">block</a>&quot; keyword
+  contents. It is strongly recommended to use ACLs with the &quot;block&quot; keyword
   instead, resulting in far more flexible and manageable rules.
 
 - lines are always considered as a whole. It is not possible to reference
@@ -15824,7 +15650,7 @@ after the last header line. It can also use special character sequences above.
   from the frontend will be evaluated, then all req* rules from the backend
   will be evaluated. The reverse path is applied to responses.
 
-- req* statements are applied after &quot;<a href="#block">block</a>&quot; statements, so that &quot;<a href="#block">block</a>&quot; is
+- req* statements are applied after &quot;block&quot; statements, so that &quot;block&quot; is
   always the first one, but before &quot;<a href="#use_backend">use_backend</a>&quot; in order to permit rewriting
   before switching.
 </pre></div>
@@ -15977,7 +15803,7 @@ By default, if the parser cannot parse ip address it considers that the parsed
 string is maybe a domain name and try dns resolution. The flag &quot;-n&quot; disable this
 resolution. It is useful for detecting malformed ip lists. Note that if the DNS
 server is not reachable, the haproxy configuration parsing may last many minutes
-waiting fir the timeout. During this time no error messages are displayed. The
+waiting for the timeout. During this time no error messages are displayed. The
 flag &quot;-n&quot; disable this behavior. Note also that during the runtime, this
 function is disabled for the dynamic acl modifications.
 
@@ -16457,9 +16283,9 @@ omitted as well. The third field, &lt;end&gt; is a constant string that will be
 appended after the variable. It may also be omitted. Together, these elements
 allow to concatenate variables with delimiters to an existing set of
 variables. This can be used to build new variables made of a succession of
-other variables, such as colon-delimited varlues. Note that due to the config
+other variables, such as colon-delimited values. Note that due to the config
 parser, it is not possible to use a comma nor a closing parenthesis as
-delimitors.
+delimiters.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -16549,7 +16375,7 @@ input byte. It is used to log or transfer hex dumps of some binary input data
 in a way that can be reliably transferred (e.g. an SSL ID can be copied in a
 header).
 </pre><a class="anchor" name="hex2i"></a><a class="anchor" name="7-hex2i"></a><a class="anchor" name="7.3.1-hex2i"></a><a class="anchor" name="hex2i (Using ACLs and fetching samples)"></a><a class="anchor" name="hex2i (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex2i"></a><a href="#7.3.1-hex2i">hex2i</a></b></div><pre class="text">Converts a hex string containing two hex digits per input byte to an
-integer. If the input value can not be converted, then zero is returned.
+integer. If the input value cannot be converted, then zero is returned.
 </pre><a class="anchor" name="http_date"></a><a class="anchor" name="7-http_date"></a><a class="anchor" name="7.3.1-http_date"></a><a class="anchor" name="http_date (Using ACLs and fetching samples)"></a><a class="anchor" name="http_date (Converters)"></a><div class="keyword"><b><a class="anchor" name="http_date"></a><a href="#7.3.1-http_date">http_date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>)</div><pre class="text">Converts an integer supposed to contain a date since epoch to a string
 representing this date in a format suitable for use in HTTP header fields. If
 an offset value is specified, then it is a number of seconds that is added to
@@ -16813,8 +16639,16 @@ set-var(&lt;var name&gt;)
     &quot;res&quot;  : the variable is shared only during response processing.
   This prefix is followed by a name. The separator is a '.'. The name may only
   contain characters 'a-z', 'A-Z', '0-9', '.' and '_'.
-</pre><a class="anchor" name="sha1"></a><a class="anchor" name="7-sha1"></a><a class="anchor" name="7.3.1-sha1"></a><a class="anchor" name="sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="sha1 (Converters)"></a><div class="keyword"><b><a class="anchor" name="sha1"></a><a href="#7.3.1-sha1">sha1</a></b></div><pre class="text">Converts a binary input sample to a SHA1 digest. The result is a binary
+</pre><a class="anchor" name="sha1"></a><a class="anchor" name="7-sha1"></a><a class="anchor" name="7.3.1-sha1"></a><a class="anchor" name="sha1 (Using ACLs and fetching samples)"></a><a class="anchor" name="sha1 (Converters)"></a><div class="keyword"><b><a class="anchor" name="sha1"></a><a href="#7.3.1-sha1">sha1</a></b></div><pre class="text">Converts a binary input sample to a SHA-1 digest. The result is a binary
 sample with length of 20 bytes.
+</pre><a class="anchor" name="sha2"></a><a class="anchor" name="7-sha2"></a><a class="anchor" name="7.3.1-sha2"></a><a class="anchor" name="sha2 (Using ACLs and fetching samples)"></a><a class="anchor" name="sha2 (Converters)"></a><div class="keyword"><b><a class="anchor" name="sha2"></a><a href="#7.3.1-sha2">sha2</a></b>(<span style="color: #008">[<span style="color: #080">&lt;bits&gt;</span>]</span>)</div><pre class="text">Converts a binary input sample to a digest in the SHA-2 family. The result
+is a binary sample with length of &lt;bits&gt;/8 bytes.
+
+Valid values for &lt;bits&gt; are 224, 256, 384, 512, each corresponding to
+SHA-&lt;bits&gt;. The default value is 256.
+
+Please note that this converter is only available when haproxy has been
+compiled with USE_OPENSSL.
 </pre><a class="anchor" name="strcmp"></a><a class="anchor" name="7-strcmp"></a><a class="anchor" name="7.3.1-strcmp"></a><a class="anchor" name="strcmp (Using ACLs and fetching samples)"></a><a class="anchor" name="strcmp (Converters)"></a><div class="keyword"><b><a class="anchor" name="strcmp"></a><a href="#7.3.1-strcmp">strcmp</a></b>(<span style="color: #080">&lt;var&gt;</span>)</div><pre class="text">Compares the contents of &lt;var&gt; with the input value of type string. Returns
 the result as a signed integer compatible with strcmp(3): 0 if both strings
 are identical. A value less than 0 if the left string is lexicographically
@@ -17005,14 +16839,14 @@ extracted with these &quot;<a href="#ungrpc">ungrpc</a>&quot; directives:
 
 req.body,ungrpc(48.59.1,int32) <span class="comment"># &quot;latitude&quot; of &quot;lo&quot; first PPoint</span>
 req.body,ungrpc(48.59.2,int32) <span class="comment"># &quot;longitude&quot; of &quot;lo&quot; first PPoint</span>
-req.body,ungrpc(49.59.1,int32) <span class="comment"># &quot;latidude&quot; of &quot;hi&quot; second PPoint</span>
+req.body,ungrpc(49.59.1,int32) <span class="comment"># &quot;latitude&quot; of &quot;hi&quot; second PPoint</span>
 req.body,ungrpc(49.59.2,int32) <span class="comment"># &quot;longitude&quot; of &quot;hi&quot; second PPoint</span>
 
 We could also extract the intermediary 48.59 field as a binary sample as follows:
 
 req.body,ungrpc(48.59)
 
-As a gRPC message is alway made of a gRPC header followed by protocol buffers
+As a gRPC message is always made of a gRPC header followed by protocol buffers
 messages, in the previous example the &quot;latitude&quot; of &quot;lo&quot; first PPoint
 could be extracted with these equivalent directives:
 
@@ -18071,7 +17905,7 @@ wait until the handshake happened.
 </pre><a class="anchor" name="ssl_fc_has_sni"></a><a class="anchor" name="7-ssl_fc_has_sni"></a><a class="anchor" name="7.3.4-ssl_fc_has_sni"></a><a class="anchor" name="ssl_fc_has_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_sni"></a><a href="#7.3.4-ssl_fc_has_sni">ssl_fc_has_sni</a></b> : boolean</div><pre class="text">This checks for the presence of a Server Name Indication TLS extension (SNI)
 in an incoming connection was made over an SSL/TLS transport layer. Returns
 true when the incoming connection presents a TLS SNI field. This requires
-that the SSL library is build with support for TLS extensions enabled (check
+that the SSL library is built with support for TLS extensions enabled (check
 haproxy -vv).
 </pre><a class="anchor" name="ssl_fc_is_resumed"></a><a class="anchor" name="7-ssl_fc_is_resumed"></a><a class="anchor" name="7.3.4-ssl_fc_is_resumed"></a><a class="anchor" name="ssl_fc_is_resumed (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_is_resumed (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_is_resumed"></a><a href="#7.3.4-ssl_fc_is_resumed">ssl_fc_is_resumed</a></b> : boolean</div><pre class="text">Returns true if the SSL/TLS session has been resumed through the use of
 SSL session cache or TLS tickets on an incoming connection over an SSL/TLS
@@ -18109,7 +17943,7 @@ been built with support for TLS extensions enabled (check haproxy -vv).
 This fetch is different from &quot;<a href="#req_ssl_sni">req_ssl_sni</a>&quot; above in that it applies to the
 connection being deciphered by haproxy and not to SSL contents being blindly
 forwarded. See also &quot;ssl_fc_sni_end&quot; and &quot;ssl_fc_sni_reg&quot; below. This
-requires that the SSL library is build with support for TLS extensions
+requires that the SSL library is built with support for TLS extensions
 enabled (check haproxy -vv).
 
 ACL derivatives :
@@ -19181,7 +19015,7 @@ Detailed fields description :
   - &quot;TR&quot; is the total time in milliseconds spent waiting for a full HTTP
     request from the client (not counting body) after the first byte was
     received. It can be &quot;-1&quot; if the connection was aborted before a complete
-    request could be received or the a bad request was received. It should
+    request could be received or a bad request was received. It should
     always be very small because a request generally fits in one single packet.
     Large times here generally indicate network issues between the client and
     haproxy or requests being typed by hand. See <a href="#8.4">section 8.4</a> &quot;Timing Events&quot;
@@ -19219,7 +19053,7 @@ Detailed fields description :
 
   - &quot;bytes_read&quot; is the total number of bytes transmitted to the client when
     the log is emitted. This does include HTTP headers. If &quot;<a href="#option%20logasap">option logasap</a>&quot; is
-    specified, the this value will be prefixed with a '+' sign indicating that
+    specified, this value will be prefixed with a '+' sign indicating that
     the final one may be larger. Please note that this value is a 64-bit
     counter, so log analysis tools must be able to handle it without
     overflowing.
@@ -20372,7 +20206,7 @@ Important note:
 </div>
 <pre class="text">The cache uses a filter to store cacheable responses. The HTTP rules
 &quot;cache-store&quot; and &quot;cache-use&quot; must be used to define how and when to use a
-cache. By default the correpsonding filter is implicitly defined. And when no
+cache. By default the corresponding filter is implicitly defined. And when no
 other filters than cache or compression are used, it is enough. In such case,
 the compression filter is always evaluated after the cache filter. But it is
 mandatory to explicitly use a filter line to use a cache when at least one
@@ -20472,8 +20306,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1-dev0 &ndash; Configuration Manual<br>
-							<small>2019/06/16, willy tarreau</small>
+							HAProxy 2.1-dev1 &ndash; Configuration Manual<br>
+							<small>2019/07/16, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20576,7 +20410,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

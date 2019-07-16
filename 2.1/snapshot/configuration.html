@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1-dev0-11 - Configuration Manual</title>
+		<title>HAProxy version 2.1-dev1 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -1384,6 +1384,8 @@
 							
 							<a class="list-group-item" href="#group (Userlists)">group (Userlists)</a>
 							
+							<a class="list-group-item" href="#group (Programs)">group (Programs)</a>
+							
 							<a class="list-group-item" href="#group (Bind options)">group (Bind options)</a>
 							
                                                                 </div> <!-- /letter -->
@@ -1851,6 +1853,8 @@
 							<a class="list-group-item" href="#no-ssl-reuse">no-ssl-reuse</a>
 							
 							<a class="list-group-item" href="#no-sslv3">no-sslv3</a>
+							
+							<a class="list-group-item" href="#no-tfo">no-tfo</a>
 							
 							<a class="list-group-item" href="#no-tls-tickets (Bind options)">no-tls-tickets (Bind options)</a>
 							
@@ -3065,6 +3069,8 @@
 							
 							<a class="list-group-item" href="#user (Userlists)">user (Userlists)</a>
 							
+							<a class="list-group-item" href="#user (Programs)">user (Programs)</a>
+							
 							<a class="list-group-item" href="#user (Bind options)">user (Bind options)</a>
 							
 							<a class="list-group-item" href="#userlist">userlist</a>
@@ -3126,7 +3132,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/06/18</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/07/16</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3137,10 +3143,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1-dev0-11</strong></p>
+							<p><strong>version 2.1-dev1</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/06/16
+								2019/07/16
 							</p>
 						</div>
 
@@ -4421,10 +4427,10 @@ file, or could be inherited by a program (See 3.7. Programs):
 
 * HAPROXY_MWORKER: In master-worker mode, this variable is set to 1.
 
-* HAPROXY_CLI: configured listeners adresses of the stats socket for every
+* HAPROXY_CLI: configured listeners addresses of the stats socket for every
   processes, separated by semicolons.
 
-* HAPROXY_MASTER_CLI: In master-worker mode, listeners adresses of the master
+* HAPROXY_MASTER_CLI: In master-worker mode, listeners addresses of the master
   CLI, separated by semicolons.
 
 See also &quot;<a href="#external-check%20command">external-check command</a>&quot; for other variables.
@@ -4726,7 +4732,7 @@ ID is dedicated to HAProxy or to a small set of similar daemons. HAProxy must
 be started with a user belonging to this group, or with superuser privileges.
 Note that if haproxy is started from a user having supplementary groups, it
 will only be able to drop these groups if started with superuser privileges.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="hard-stop-after"></a><a class="anchor" name="3-hard-stop-after"></a><a class="anchor" name="3.1-hard-stop-after"></a><a class="anchor" name="hard-stop-after (Global parameters)"></a><a class="anchor" name="hard-stop-after (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="hard-stop-after"></a><a href="#3.1-hard-stop-after">hard-stop-after</a></b> <span style="color: #080">&lt;time&gt;</span></div><pre class="text">Defines the maximum time allowed to perform a clean soft-stop.
 </pre><div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;time&gt;  is the maximum time (by default in milliseconds) for which the
@@ -4743,7 +4749,7 @@ in tcp mode). It applies both in TCP and HTTP mode.
   hard-stop-after 30s
 </code></pre>
 </div><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.1-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.1-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
     <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Several global servers can be defined. They
 will receive logs for starts and exits, as well as all logs from proxies
@@ -4878,7 +4884,7 @@ this behavior, you must use the keyword &quot;no-exit-on-failure&quot;.
 
 See also &quot;-W&quot; in the management guide.
 </pre><a class="anchor" name="mworker-max-reloads"></a><a class="anchor" name="3-mworker-max-reloads"></a><a class="anchor" name="3.1-mworker-max-reloads"></a><a class="anchor" name="mworker-max-reloads (Global parameters)"></a><a class="anchor" name="mworker-max-reloads (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="mworker-max-reloads"></a><a href="#3.1-mworker-max-reloads">mworker-max-reloads</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">In master-worker mode, this option limits the number of time a worker can
-survive to a reload. If the worker did not left after a reload, once its
+survive to a reload. If the worker did not leave after a reload, once its
 number of reloads is greater than this number, the worker will receive a
 SIGTERM. This option helps to keep under control the number of workers.
 See also &quot;show proc&quot; in the Management Guide.
@@ -5045,7 +5051,7 @@ possible to change this value with &quot;<a href="#stats%20maxconn">stats maxcon
 </pre><a class="anchor" name="uid"></a><a class="anchor" name="3-uid"></a><a class="anchor" name="3.1-uid"></a><a class="anchor" name="uid (Global parameters)"></a><a class="anchor" name="uid (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="uid"></a><a href="#3.1-uid">uid</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Changes the process' user ID to &lt;number&gt;. It is recommended that the user ID
 is dedicated to HAProxy or to a small set of similar daemons. HAProxy must
 be started with superuser privileges in order to be able to switch to another
-one. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+one. See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="ulimit-n"></a><a class="anchor" name="3-ulimit-n"></a><a class="anchor" name="3.1-ulimit-n"></a><a class="anchor" name="ulimit-n (Global parameters)"></a><a class="anchor" name="ulimit-n (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ulimit-n"></a><a href="#3.1-ulimit-n">ulimit-n</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of per-process file-descriptors to &lt;number&gt;. By
 default, it is automatically computed, so it is recommended not to use this
 option.
@@ -5068,7 +5074,7 @@ these variables remain. The changes immediately take effect so that the next
 line in the configuration file will not see these variables. See also
 &quot;<a href="#setenv">setenv</a>&quot;, &quot;<a href="#presetenv">presetenv</a>&quot;, and &quot;<a href="#resetenv">resetenv</a>&quot;.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="3-user"></a><a class="anchor" name="3.1-user"></a><a class="anchor" name="user (Global parameters)"></a><a class="anchor" name="user (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#3.1-user">user</a></b> <span style="color: #080">&lt;user name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the UID of user name &lt;user name&gt; from /etc/passwd.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">uid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#uid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#uid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="node"></a><a class="anchor" name="3-node"></a><a class="anchor" name="3.1-node"></a><a class="anchor" name="node (Global parameters)"></a><a class="anchor" name="node (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="node"></a><a href="#3.1-node">node</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Only letters, digits, hyphen and underscore are allowed, like in DNS names.
 
 This statement is useful in HA configurations where two or more processes or
@@ -5294,7 +5300,7 @@ command line argument &quot;-dR&quot;.
 the profiling automatically turns on a thread when it starts to suffer from
 an average latency of 1000 microseconds or higher as reported in the
 &quot;avg_loop_us&quot; activity field, and automatically turns off when the latency
-reutnrs below 990 microseconds (this value is an average over the last 1024
+returns below 990 microseconds (this value is an average over the last 1024
 loops so it does not vary quickly and tends to significantly smooth short
 spikes). It may also spontaneously trigger from time to time on overloaded
 systems, containers, or virtual machines, or when the system swaps (which
@@ -5333,7 +5339,7 @@ I/O operations if asynchronous capable SSL engines are used. The current
 implementation supports a maximum of 32 engines. The Openssl ASYNC API
 doesn't support moving read/write buffers and is not compliant with
 haproxy's buffer management. So the asynchronous mode is disabled on
-read/write  operations (it is only enabled during initial and reneg
+read/write  operations (it is only enabled during initial and renegotiation
 handshakes).
 </pre><a class="anchor" name="tune.buffers.limit"></a><a class="anchor" name="3-tune.buffers.limit"></a><a class="anchor" name="3.2-tune.buffers.limit"></a><a class="anchor" name="tune.buffers.limit (Global parameters)"></a><a class="anchor" name="tune.buffers.limit (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.buffers.limit"></a><a href="#3.2-tune.buffers.limit">tune.buffers.limit</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets a hard limit on the number of buffers which may be allocated per process.
 The default value is zero which means unlimited. The minimum non-zero value
@@ -5438,7 +5444,7 @@ decision to use splice() or to send large buffers in SSL is modulated by this
 parameter. The value is in milliseconds between 0 and 65535. A value of zero
 means that haproxy will not try to detect idle streams. The default is 1000,
 which seems to correctly detect end user pauses (e.g. read a page before
-clicking). There should be not reason for changing this value. Please check
+clicking). There should be no reason for changing this value. Please check
 tune.ssl.maxrecord below.
 </pre><a class="anchor" name="tune.listener.multi-queue"></a><a class="anchor" name="3-tune.listener.multi-queue"></a><a class="anchor" name="3.2-tune.listener.multi-queue"></a><a class="anchor" name="tune.listener.multi-queue (Global parameters)"></a><a class="anchor" name="tune.listener.multi-queue (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.listener.multi-queue"></a><a href="#3.2-tune.listener.multi-queue">tune.listener.multi-queue</a></b> <span style="color: #800">{ on | off }</span></div><pre class="text">Enables ('on') or disables ('off') the listener's multi-queue accept which
 spreads the incoming traffic to all threads a &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bind<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bind%20%28Peers%29">Peers</a></li><li><a href="#bind%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; line is allowed to run
@@ -5530,11 +5536,11 @@ use before we start killing idle connections when we can't reuse a connection
 and we have to create a new one. The default is 25 (one quarter of the file
 descriptor will mean that roughly half of the maximum front connections can
 keep an idle connection behind, anything beyond this probably doesn't make
-much sense in the general case when targetting connection reuse).
+much sense in the general case when targeting connection reuse).
 </pre><a class="anchor" name="tune.rcvbuf.client"></a><a class="anchor" name="3-tune.rcvbuf.client"></a><a class="anchor" name="3.2-tune.rcvbuf.client"></a><a class="anchor" name="tune.rcvbuf.client (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.client"></a><a href="#3.2-tune.rcvbuf.client">tune.rcvbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.rcvbuf.server"></a><a class="anchor" name="3-tune.rcvbuf.server"></a><a class="anchor" name="3.2-tune.rcvbuf.server"></a><a class="anchor" name="tune.rcvbuf.server (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.server"></a><a href="#3.2-tune.rcvbuf.server">tune.rcvbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket receive buffer size on the client or the server side
 to the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
-the kernel autotune this value depending on the amount of available memory.
+the kernel auto-tune this value depending on the amount of available memory.
 However it can sometimes help to set it to very low values (e.g. 4096) in
 order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
@@ -5543,13 +5549,13 @@ socket buffers. One of them is that a read returns more than &lt;recv_enough&gt;
 bytes, which defaults to 10136 (7 segments of 1448 each). This default value
 may be changed by this setting to better deal with workloads involving lots
 of short messages such as telnet or SSH sessions.
-</pre><a class="anchor" name="tune.runqueue-depth"></a><a class="anchor" name="3-tune.runqueue-depth"></a><a class="anchor" name="3.2-tune.runqueue-depth"></a><a class="anchor" name="tune.runqueue-depth (Global parameters)"></a><a class="anchor" name="tune.runqueue-depth (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.runqueue-depth"></a><a href="#3.2-tune.runqueue-depth">tune.runqueue-depth</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maxinum amount of task that can be processed at once when running
+</pre><a class="anchor" name="tune.runqueue-depth"></a><a class="anchor" name="3-tune.runqueue-depth"></a><a class="anchor" name="3.2-tune.runqueue-depth"></a><a class="anchor" name="tune.runqueue-depth (Global parameters)"></a><a class="anchor" name="tune.runqueue-depth (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.runqueue-depth"></a><a href="#3.2-tune.runqueue-depth">tune.runqueue-depth</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of task that can be processed at once when running
 tasks. The default value is 200. Increasing it may incur latency when
 dealing with I/Os, making it too small can incur extra overhead.
 </pre><a class="anchor" name="tune.sndbuf.client"></a><a class="anchor" name="3-tune.sndbuf.client"></a><a class="anchor" name="3.2-tune.sndbuf.client"></a><a class="anchor" name="tune.sndbuf.client (Global parameters)"></a><a class="anchor" name="tune.sndbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.client"></a><a href="#3.2-tune.sndbuf.client">tune.sndbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.sndbuf.server"></a><a class="anchor" name="3-tune.sndbuf.server"></a><a class="anchor" name="3.2-tune.sndbuf.server"></a><a class="anchor" name="tune.sndbuf.server (Global parameters)"></a><a class="anchor" name="tune.sndbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sndbuf.server"></a><a href="#3.2-tune.sndbuf.server">tune.sndbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket send buffer size on the client or the server side to
 the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
-the kernel autotune this value depending on the amount of available memory.
+the kernel auto-tune this value depending on the amount of available memory.
 However it can sometimes help to set it to very low values (e.g. 4096) in
 order to save kernel memory by preventing it from buffering too large amounts
 of received data. Lower values will significantly increase CPU usage though.
@@ -5775,7 +5781,7 @@ Example:
 </div><a class="anchor" name="table"></a><a class="anchor" name="3-table"></a><a class="anchor" name="3.5-table"></a><a class="anchor" name="table (Global parameters)"></a><a class="anchor" name="table (Peers)"></a><div class="keyword"><b><a class="anchor" name="table"></a><a href="#3.5-table">table</a></b> <span style="color: #080">&lt;tablename&gt;</span> type <span style="color: #800">{ip | integer | string <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> | binary <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span>}</span>
       size <span style="color: #080">&lt;size&gt;</span> <span style="color: #008">[expire <span style="color: #080">&lt;expire&gt;</span>]</span> <span style="color: #008">[nopurge]</span> <span style="color: #008">[store <span style="color: #080">&lt;data_type&gt;</span>]</span>*</div><pre class="text">Configure a stickiness table for the current section. This line is parsed
 exactly the same way as the &quot;<a href="#stick-table">stick-table</a>&quot; keyword in others section, except
-for the &quot;<a href="#peers">peers</a>&quot; argument which is not required here and with an aditionnal
+for the &quot;<a href="#peers">peers</a>&quot; argument which is not required here and with an additional
 mandatory first parameter to designate the stick-table. Contrary to others
 sections, there may be several &quot;<a href="#table">table</a>&quot; lines in &quot;<a href="#peers">peers</a>&quot; sections (see also
 &quot;<a href="#stick-table">stick-table</a>&quot; keyword).
@@ -5879,6 +5885,10 @@ the management guide).
 up in the current PATH if it does not include an absolute path. This is a
 mandatory option of the program section. Arguments containing spaces must
 be enclosed in quotes or double quotes or be prefixed by a backslash.
+</pre><a class="anchor" name="user"></a><a class="anchor" name="3-user"></a><a class="anchor" name="3.7-user"></a><a class="anchor" name="user (Global parameters)"></a><a class="anchor" name="user (Programs)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#3.7-user">user</a></b> <span style="color: #080">&lt;user name&gt;</span></div><pre class="text">Changes the executed command user ID to the &lt;user name&gt; from /etc/passwd.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
+</pre><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.7-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Programs)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.7-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Changes the executed command group ID to the &lt;group name&gt; from /etc/group.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="option"></a><a class="anchor" name="3-option"></a><a class="anchor" name="3.7-option"></a><a class="anchor" name="option (Global parameters)"></a><a class="anchor" name="option (Programs)"></a><a class="anchor" name="option start-on-reload"></a><a class="anchor" name="3-option start-on-reload"></a><a class="anchor" name="3.7-option start-on-reload"></a><a class="anchor" name="option start-on-reload (Global parameters)"></a><a class="anchor" name="option start-on-reload (Programs)"></a><div class="keyword"><b><a class="anchor" name="option start-on-reload"></a><a href="#3.7-option%20start-on-reload">option start-on-reload</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="3-no"></a><a class="anchor" name="3.7-no"></a><a class="anchor" name="no (Global parameters)"></a><a class="anchor" name="no (Programs)"></a><a class="anchor" name="no option"></a><a class="anchor" name="3-no option"></a><a class="anchor" name="3.7-no option"></a><a class="anchor" name="no option (Global parameters)"></a><a class="anchor" name="no option (Programs)"></a><a class="anchor" name="no option start-on-reload"></a><a class="anchor" name="3-no option start-on-reload"></a><a class="anchor" name="3.7-no option start-on-reload"></a><a class="anchor" name="no option start-on-reload (Global parameters)"></a><a class="anchor" name="no option start-on-reload (Programs)"></a><div class="keyword"><b><a class="anchor" name="no option start-on-reload"></a><a href="#3.7-no%20option%20start-on-reload">no option start-on-reload</a></b></div><pre class="text">Start (or not) a new instance of the program upon a reload of the master.
 The default is to start a new instance. This option may only be used in a
 program section.
@@ -6401,7 +6411,7 @@ algorithm, mode nor option have been set. The algorithm may only be set once
 for each backend.
 
 With authentication schemes that require the same connection like NTLM, URI
-based alghoritms must not be used, as they would cause subsequent requests
+based algorithms must not be used, as they would cause subsequent requests
 to be routed to different backend servers, breaking the invalid assumptions
 NTLM relies on.
 </pre><div class="separator">
@@ -9813,7 +9823,7 @@ as &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot
 
 If &quot;<a href="#option%20httpclose">option httpclose</a>&quot; is set, HAProxy will close connections with the server
 and the client as soon as the request and the response are received. It will
-alos check if a &quot;Connection: close&quot; header is already set in each direction,
+also check if a &quot;Connection: close&quot; header is already set in each direction,
 and will add one if missing. Any &quot;Connection&quot; header different from &quot;close&quot;
 will also be removed.
 
@@ -12902,7 +12912,7 @@ Four types of actions are supported :
       rules do not stop evaluation and do not change default action. The
       number of counters that may be simultaneously tracked by the same
       connection is set in MAX_SESS_STKCTR at build time (reported in
-      haproxy -vv) whichs defaults to 3, so the track-sc number is between 0
+      haproxy -vv) which defaults to 3, so the track-sc number is between 0
       and (MAX_SESS_STCKTR-1). The first &quot;track-sc0&quot; rule executed enables
       tracking of the counters of the specified table as the first set. The
       first &quot;track-sc1&quot; rule executed enables tracking of the counters of the
@@ -13606,7 +13616,7 @@ This parameter is specific to frontends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
 forget about it. An unspecified timeout results in an infinite timeout, which
 is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of expired sessions in
+during startup because it may result in accumulation of expired sessions in
 the system if the system's timeouts are not configured either.
 
 This also applies to HTTP/2 connections, which will be closed with GOAWAY.
@@ -13657,7 +13667,7 @@ This parameter is specific to backends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
 forget about it. An unspecified timeout results in an infinite timeout, which
 is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of failed sessions in
+during startup because it may result in accumulation of failed sessions in
 the system if the system's timeouts are not configured either.
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#timeout%20check">timeout check</a>&quot;, &quot;<a href="#timeout%20queue">timeout queue</a>&quot;, &quot;<a href="#timeout%20server">timeout server</a>&quot;, &quot;<a href="#timeout%20tarpit">timeout tarpit</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout http-keep-alive"></a><a class="anchor" name="4-timeout http-keep-alive"></a><a class="anchor" name="4.2-timeout http-keep-alive"></a><a class="anchor" name="timeout http-keep-alive (Proxies)"></a><a class="anchor" name="timeout http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout http-keep-alive"></a><a href="#4.2-timeout%20http-keep-alive">timeout http-keep-alive</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the maximum allowed time to wait for a new HTTP request to appear
@@ -13801,7 +13811,7 @@ This parameter is specific to backends, but can be specified once for all in
 &quot;defaults&quot; sections. This is in fact one of the easiest solutions not to
 forget about it. An unspecified timeout results in an infinite timeout, which
 is not recommended. Such a usage is accepted and works but reports a warning
-during startup because it may results in accumulation of expired sessions in
+during startup because it may result in accumulation of expired sessions in
 the system if the system's timeouts are not configured either.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#timeout%20client">timeout client</a>&quot; and &quot;<a href="#timeout%20tunnel">timeout tunnel</a>&quot;.</div>
 <a class="anchor" name="timeout"></a><a class="anchor" name="4-timeout"></a><a class="anchor" name="4.2-timeout"></a><a class="anchor" name="timeout (Proxies)"></a><a class="anchor" name="timeout (Alphabetically sorted keywords reference)"></a><a class="anchor" name="timeout server-fin"></a><a class="anchor" name="4-timeout server-fin"></a><a class="anchor" name="4.2-timeout server-fin"></a><a class="anchor" name="timeout server-fin (Proxies)"></a><a class="anchor" name="timeout server-fin (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="timeout server-fin"></a><a href="#4.2-timeout%20server-fin">timeout server-fin</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Set the inactivity timeout on the server side for half-closed connections.
@@ -14125,13 +14135,13 @@ usable. See also &quot;tcp-request connection expect-proxy&quot; for a finer-gra
 setting of which client is allowed to use the protocol.
 </pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.1-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Bind options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.1-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow receiving early data when using TLSv1.3. This is disabled by default,
 due to security considerations. Because it is vulnerable to replay attacks,
-you should only allow if for requests that are safe to replay, ie requests
+you should only allow if for requests that are safe to replay, i.e. requests
 that are idempotent. You can use the &quot;wait-for-handshake&quot; action for any
 request that wouldn't be safe with early data.
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.1-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.1-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
-quotes). This requires that the SSL library is build with support for TLS
+quotes). This requires that the SSL library is built with support for TLS
 extensions enabled (check with haproxy -vv). The ALPN extension replaces the
 initial NPN extension. ALPN is required to enable HTTP/2 on an HTTP frontend.
 Versions of OpenSSL prior to 1.0.2 didn't support ALPN and only supposed the
@@ -14378,7 +14388,7 @@ increases the HAProxy's memory footprint to reduce latency when the same
 certificate is used many times.
 </pre><a class="anchor" name="gid"></a><a class="anchor" name="5-gid"></a><a class="anchor" name="5.1-gid"></a><a class="anchor" name="gid (Bind and server options)"></a><a class="anchor" name="gid (Bind options)"></a><div class="keyword"><b><a class="anchor" name="gid"></a><a href="#5.1-gid">gid</a></b> <span style="color: #080">&lt;gid&gt;</span></div><pre class="text">Sets the group of the UNIX sockets to the designated system gid. It can also
 be set by default in the global section's &quot;<a href="#unix-bind">unix-bind</a>&quot; statement. Note that
-some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
+some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">group<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#group%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#group%20%28Userlists%29">Userlists</a></li><li><a href="#group%20%28Programs%29">Programs</a></li><li><a href="#group%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
 setting except that the group ID is used instead of its name. This setting is
 ignored by non UNIX sockets.
 </pre><a class="anchor" name="group"></a><a class="anchor" name="5-group"></a><a class="anchor" name="5.1-group"></a><a class="anchor" name="group (Bind and server options)"></a><a class="anchor" name="group (Bind options)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#5.1-group">group</a></b> <span style="color: #080">&lt;group&gt;</span></div><pre class="text">Sets the group of the UNIX sockets to the designated system group. It can
@@ -14405,7 +14415,7 @@ interfaces.
 </pre><a class="anchor" name="level"></a><a class="anchor" name="5-level"></a><a class="anchor" name="5.1-level"></a><a class="anchor" name="level (Bind and server options)"></a><a class="anchor" name="level (Bind options)"></a><div class="keyword"><b><a class="anchor" name="level"></a><a href="#5.1-level">level</a></b> <span style="color: #080">&lt;level&gt;</span></div><pre class="text">This setting is used with the stats sockets only to restrict the nature of
 the commands that can be issued on the socket. It is ignored by other
 sockets. &lt;level&gt; can be one of :
-- &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; is the least privileged level; only non-sensitive stats can be
+- &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; is the least privileged level; only non-sensitive stats can be
   read, and no change is allowed. It would make sense on systems where it
   is not easy to restrict access to the socket.
 - &quot;operator&quot; is the default level and fits most common uses. All data can
@@ -14502,7 +14512,7 @@ and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdow
 </pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.1-npn"></a><a class="anchor" name="npn (Bind and server options)"></a><a class="anchor" name="npn (Bind options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.1-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
 as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
-This requires that the SSL library is build with support for TLS extensions
+This requires that the SSL library is built with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
 replaced with the ALPN extension (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword), though this one is
 only available starting with OpenSSL 1.0.2. If HTTP/2 is desired on an older
@@ -14620,7 +14630,7 @@ system-wide as it is per-listener. It has no effect on non-IPv6 sockets and
 has precedence over the &quot;<a href="#v4v6">v4v6</a>&quot; option.
 </pre><a class="anchor" name="uid"></a><a class="anchor" name="5-uid"></a><a class="anchor" name="5.1-uid"></a><a class="anchor" name="uid (Bind and server options)"></a><a class="anchor" name="uid (Bind options)"></a><div class="keyword"><b><a class="anchor" name="uid"></a><a href="#5.1-uid">uid</a></b> <span style="color: #080">&lt;uid&gt;</span></div><pre class="text">Sets the owner of the UNIX sockets to the designated system uid. It can also
 be set by default in the global section's &quot;<a href="#unix-bind">unix-bind</a>&quot; statement. Note that
-some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
+some platforms simply ignore this. This setting is equivalent to the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Programs%29">Programs</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;
 setting except that the user numeric ID is used instead of its name. This
 setting is ignored by non UNIX sockets.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="5-user"></a><a class="anchor" name="5.1-user"></a><a class="anchor" name="user (Bind and server options)"></a><a class="anchor" name="user (Bind options)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#5.1-user">user</a></b> <span style="color: #080">&lt;user&gt;</span></div><pre class="text">Sets the owner of the UNIX sockets to the designated system user. It can also
@@ -14754,7 +14764,7 @@ if the backend uses &quot;<a href="#retry-on">retry-on</a>&quot; with the &quot;
 </pre><a class="anchor" name="alpn"></a><a class="anchor" name="5-alpn"></a><a class="anchor" name="5.2-alpn"></a><a class="anchor" name="alpn (Bind and server options)"></a><a class="anchor" name="alpn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="alpn"></a><a href="#5.2-alpn">alpn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the TLS ALPN extension and advertises the specified protocol
 list as supported on top of ALPN. The protocol list consists in a comma-
 delimited list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without
-quotes). This requires that the SSL library is build with support for TLS
+quotes). This requires that the SSL library is built with support for TLS
 extensions enabled (check with haproxy -vv). The ALPN extension replaces the
 initial NPN extension. ALPN is required to connect to HTTP/2 servers.
 Versions of OpenSSL prior to 1.0.2 didn't support ALPN and only supposed the
@@ -14807,7 +14817,7 @@ common use is to send HTTPS checks by combining &quot;<a href="#option%20httpchk
 All SSL settings are common to health checks and traffic (e.g. ciphers).
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option for more information and &quot;<a href="#no-check-ssl">no-check-ssl</a>&quot; to disable
 this option.
-</pre><a class="anchor" name="check-via-socks4"></a><a class="anchor" name="5-check-via-socks4"></a><a class="anchor" name="5.2-check-via-socks4"></a><a class="anchor" name="check-via-socks4 (Bind and server options)"></a><a class="anchor" name="check-via-socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-via-socks4"></a><a href="#5.2-check-via-socks4">check-via-socks4</a></b></div><pre class="text">This option enables outgoinng health checks using upstream socks4 proxy. By
+</pre><a class="anchor" name="check-via-socks4"></a><a class="anchor" name="5-check-via-socks4"></a><a class="anchor" name="5.2-check-via-socks4"></a><a class="anchor" name="check-via-socks4 (Bind and server options)"></a><a class="anchor" name="check-via-socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="check-via-socks4"></a><a href="#5.2-check-via-socks4">check-via-socks4</a></b></div><pre class="text">This option enables outgoing health checks using upstream socks4 proxy. By
 default, the health checks won't go through socks tunnel even it was enabled
 for normal traffic.
 </pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.2-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.2-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. This
@@ -15055,13 +15065,18 @@ setting which would have been inherited from &quot;<span class="dropdown"><a cla
 default value.
 It may also be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any previous
 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; &quot;<a href="#verifyhost">verifyhost</a>&quot; setting.
+</pre><a class="anchor" name="no-tfo"></a><a class="anchor" name="5-no-tfo"></a><a class="anchor" name="5.2-no-tfo"></a><a class="anchor" name="no-tfo (Bind and server options)"></a><a class="anchor" name="no-tfo (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="no-tfo"></a><a href="#5.2-no-tfo">no-tfo</a></b></div><pre class="text">This option may be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#server%20%28Peers%29">Peers</a></li><li><a href="#server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">tfo<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#tfo%20%28Bind%20options%29">Bind options</a></li><li><a href="#tfo%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+setting which would have been inherited from &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; directive as
+default value.
+It may also be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any previous
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">tfo<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#tfo%20%28Bind%20options%29">Bind options</a></li><li><a href="#tfo%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
 </pre><a class="anchor" name="non-stick"></a><a class="anchor" name="5-non-stick"></a><a class="anchor" name="5.2-non-stick"></a><a class="anchor" name="non-stick (Bind and server options)"></a><a class="anchor" name="non-stick (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="non-stick"></a><a href="#5.2-non-stick">non-stick</a></b></div><pre class="text">Never add connections allocated to this sever to a stick-table.
 This may be used in conjunction with backup to ensure that
 stick-table persistence is disabled for backup servers.
 </pre><a class="anchor" name="npn"></a><a class="anchor" name="5-npn"></a><a class="anchor" name="5.2-npn"></a><a class="anchor" name="npn (Bind and server options)"></a><a class="anchor" name="npn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="npn"></a><a href="#5.2-npn">npn</a></b> <span style="color: #080">&lt;protocols&gt;</span></div><pre class="text">This enables the NPN TLS extension and advertises the specified protocol list
 as supported on top of NPN. The protocol list consists in a comma-delimited
 list of protocol names, for instance: &quot;http/1.1,http/1.0&quot; (without quotes).
-This requires that the SSL library is build with support for TLS extensions
+This requires that the SSL library is built with support for TLS extensions
 enabled (check with haproxy -vv). Note that the NPN extension has been
 replaced with the ALPN extension (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword), though this one is
 only available starting with OpenSSL 1.0.2.
@@ -15193,7 +15208,7 @@ Default value: ipv6
 <pre class="prettyprint">
 <code>server s1 app1.domain.com:80 resolvers mydns resolve-prefer ipv6
 </code></pre>
-</div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This options prioritize th choice of an ip address matching a network. This is
+</div><a class="anchor" name="resolve-net"></a><a class="anchor" name="5-resolve-net"></a><a class="anchor" name="5.2-resolve-net"></a><a class="anchor" name="resolve-net (Bind and server options)"></a><a class="anchor" name="resolve-net (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="resolve-net"></a><a href="#5.2-resolve-net">resolve-net</a></b> <span style="color: #080">&lt;network&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;network<span style="color: #008">[,...]</span></span>]</span></div><pre class="text">This option prioritizes the choice of an ip address matching a network. This is
 useful with clouds to prefer a local ip. In some cases, a cloud high
 availability service can be announced with many ip addresses on many
 different datacenters. The latency between datacenter is not negligible, so
@@ -15328,7 +15343,7 @@ setting which would have been inherited from &quot;<span class="dropdown"><a cla
 default value.
 It may also be used as &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; setting to reset any previous
 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; &quot;<a href="#non-stick">non-stick</a>&quot; setting.
-</pre><a class="anchor" name="socks4"></a><a class="anchor" name="5-socks4"></a><a class="anchor" name="5.2-socks4"></a><a class="anchor" name="socks4 (Bind and server options)"></a><a class="anchor" name="socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="socks4"></a><a href="#5.2-socks4">socks4</a></b> <span style="color: #080">&lt;addr&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">This option enables upstream socks4 tunnel for outgoinng connections to the
+</pre><a class="anchor" name="socks4"></a><a class="anchor" name="5-socks4"></a><a class="anchor" name="5.2-socks4"></a><a class="anchor" name="socks4 (Bind and server options)"></a><a class="anchor" name="socks4 (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="socks4"></a><a href="#5.2-socks4">socks4</a></b> <span style="color: #080">&lt;addr&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">This option enables upstream socks4 tunnel for outgoing connections to the
 server. Using this option won't force the health check to go via socks4 by
 default. You will have to use the keyword &quot;<a href="#check-via-socks4">check-via-socks4</a>&quot; to enable it.
 </pre><a class="anchor" name="tcp-ut"></a><a class="anchor" name="5-tcp-ut"></a><a class="anchor" name="5.2-tcp-ut"></a><a class="anchor" name="tcp-ut (Bind and server options)"></a><a class="anchor" name="tcp-ut (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="tcp-ut"></a><a href="#5.2-tcp-ut">tcp-ut</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Sets the TCP User Timeout for all outgoing connections to this server. This
@@ -15349,7 +15364,7 @@ systems that support it (currently only the Linux kernel &gt;= 4.11).
 See the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">tfo<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#tfo%20%28Bind%20options%29">Bind options</a></li><li><a href="#tfo%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; bind option for more information about TCP fast open.
 Please note that when using tfo, you should also use the &quot;conn-failure&quot;,
 &quot;empty-response&quot; and &quot;response-timeout&quot; keywords for &quot;<a href="#retry-on">retry-on</a>&quot;, or haproxy
-won't be able to retry the connection on failure.
+won't be able to retry the connection on failure. See also &quot;<a href="#no-tfo">no-tfo</a>&quot;.
 </pre><a class="anchor" name="track"></a><a class="anchor" name="5-track"></a><a class="anchor" name="5.2-track"></a><a class="anchor" name="track (Bind and server options)"></a><a class="anchor" name="track (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="track"></a><a href="#5.2-track">track</a></b> <span style="color: #008">[<span style="color: #080">&lt;proxy&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span></div><pre class="text">This option enables ability to set the current state of the server by tracking
 another one. It is possible to track a server which itself tracks another
 server, provided that at the end of the chain, a server has health checks
@@ -15430,7 +15445,7 @@ will be checked periodically, and if any server are added or removed, haproxy
 will automatically do the same.
 
 A few things important to notice:
-  - all the name servers are queried in the mean time. HAProxy will process the
+  - all the name servers are queried in the meantime. HAProxy will process the
     first valid response.
 
   - a resolution is considered as invalid (NX, timeout, refused), when all the
@@ -15788,7 +15803,7 @@ By default, if the parser cannot parse ip address it considers that the parsed
 string is maybe a domain name and try dns resolution. The flag &quot;-n&quot; disable this
 resolution. It is useful for detecting malformed ip lists. Note that if the DNS
 server is not reachable, the haproxy configuration parsing may last many minutes
-waiting fir the timeout. During this time no error messages are displayed. The
+waiting for the timeout. During this time no error messages are displayed. The
 flag &quot;-n&quot; disable this behavior. Note also that during the runtime, this
 function is disabled for the dynamic acl modifications.
 
@@ -16268,9 +16283,9 @@ omitted as well. The third field, &lt;end&gt; is a constant string that will be
 appended after the variable. It may also be omitted. Together, these elements
 allow to concatenate variables with delimiters to an existing set of
 variables. This can be used to build new variables made of a succession of
-other variables, such as colon-delimited varlues. Note that due to the config
+other variables, such as colon-delimited values. Note that due to the config
 parser, it is not possible to use a comma nor a closing parenthesis as
-delimitors.
+delimiters.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -16360,7 +16375,7 @@ input byte. It is used to log or transfer hex dumps of some binary input data
 in a way that can be reliably transferred (e.g. an SSL ID can be copied in a
 header).
 </pre><a class="anchor" name="hex2i"></a><a class="anchor" name="7-hex2i"></a><a class="anchor" name="7.3.1-hex2i"></a><a class="anchor" name="hex2i (Using ACLs and fetching samples)"></a><a class="anchor" name="hex2i (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex2i"></a><a href="#7.3.1-hex2i">hex2i</a></b></div><pre class="text">Converts a hex string containing two hex digits per input byte to an
-integer. If the input value can not be converted, then zero is returned.
+integer. If the input value cannot be converted, then zero is returned.
 </pre><a class="anchor" name="http_date"></a><a class="anchor" name="7-http_date"></a><a class="anchor" name="7.3.1-http_date"></a><a class="anchor" name="http_date (Using ACLs and fetching samples)"></a><a class="anchor" name="http_date (Converters)"></a><div class="keyword"><b><a class="anchor" name="http_date"></a><a href="#7.3.1-http_date">http_date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>)</div><pre class="text">Converts an integer supposed to contain a date since epoch to a string
 representing this date in a format suitable for use in HTTP header fields. If
 an offset value is specified, then it is a number of seconds that is added to
@@ -16824,14 +16839,14 @@ extracted with these &quot;<a href="#ungrpc">ungrpc</a>&quot; directives:
 
 req.body,ungrpc(48.59.1,int32) <span class="comment"># &quot;latitude&quot; of &quot;lo&quot; first PPoint</span>
 req.body,ungrpc(48.59.2,int32) <span class="comment"># &quot;longitude&quot; of &quot;lo&quot; first PPoint</span>
-req.body,ungrpc(49.59.1,int32) <span class="comment"># &quot;latidude&quot; of &quot;hi&quot; second PPoint</span>
+req.body,ungrpc(49.59.1,int32) <span class="comment"># &quot;latitude&quot; of &quot;hi&quot; second PPoint</span>
 req.body,ungrpc(49.59.2,int32) <span class="comment"># &quot;longitude&quot; of &quot;hi&quot; second PPoint</span>
 
 We could also extract the intermediary 48.59 field as a binary sample as follows:
 
 req.body,ungrpc(48.59)
 
-As a gRPC message is alway made of a gRPC header followed by protocol buffers
+As a gRPC message is always made of a gRPC header followed by protocol buffers
 messages, in the previous example the &quot;latitude&quot; of &quot;lo&quot; first PPoint
 could be extracted with these equivalent directives:
 
@@ -17890,7 +17905,7 @@ wait until the handshake happened.
 </pre><a class="anchor" name="ssl_fc_has_sni"></a><a class="anchor" name="7-ssl_fc_has_sni"></a><a class="anchor" name="7.3.4-ssl_fc_has_sni"></a><a class="anchor" name="ssl_fc_has_sni (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_has_sni (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_has_sni"></a><a href="#7.3.4-ssl_fc_has_sni">ssl_fc_has_sni</a></b> : boolean</div><pre class="text">This checks for the presence of a Server Name Indication TLS extension (SNI)
 in an incoming connection was made over an SSL/TLS transport layer. Returns
 true when the incoming connection presents a TLS SNI field. This requires
-that the SSL library is build with support for TLS extensions enabled (check
+that the SSL library is built with support for TLS extensions enabled (check
 haproxy -vv).
 </pre><a class="anchor" name="ssl_fc_is_resumed"></a><a class="anchor" name="7-ssl_fc_is_resumed"></a><a class="anchor" name="7.3.4-ssl_fc_is_resumed"></a><a class="anchor" name="ssl_fc_is_resumed (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_is_resumed (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_is_resumed"></a><a href="#7.3.4-ssl_fc_is_resumed">ssl_fc_is_resumed</a></b> : boolean</div><pre class="text">Returns true if the SSL/TLS session has been resumed through the use of
 SSL session cache or TLS tickets on an incoming connection over an SSL/TLS
@@ -17928,7 +17943,7 @@ been built with support for TLS extensions enabled (check haproxy -vv).
 This fetch is different from &quot;<a href="#req_ssl_sni">req_ssl_sni</a>&quot; above in that it applies to the
 connection being deciphered by haproxy and not to SSL contents being blindly
 forwarded. See also &quot;ssl_fc_sni_end&quot; and &quot;ssl_fc_sni_reg&quot; below. This
-requires that the SSL library is build with support for TLS extensions
+requires that the SSL library is built with support for TLS extensions
 enabled (check haproxy -vv).
 
 ACL derivatives :
@@ -19000,7 +19015,7 @@ Detailed fields description :
   - &quot;TR&quot; is the total time in milliseconds spent waiting for a full HTTP
     request from the client (not counting body) after the first byte was
     received. It can be &quot;-1&quot; if the connection was aborted before a complete
-    request could be received or the a bad request was received. It should
+    request could be received or a bad request was received. It should
     always be very small because a request generally fits in one single packet.
     Large times here generally indicate network issues between the client and
     haproxy or requests being typed by hand. See <a href="#8.4">section 8.4</a> &quot;Timing Events&quot;
@@ -19038,7 +19053,7 @@ Detailed fields description :
 
   - &quot;bytes_read&quot; is the total number of bytes transmitted to the client when
     the log is emitted. This does include HTTP headers. If &quot;<a href="#option%20logasap">option logasap</a>&quot; is
-    specified, the this value will be prefixed with a '+' sign indicating that
+    specified, this value will be prefixed with a '+' sign indicating that
     the final one may be larger. Please note that this value is a 64-bit
     counter, so log analysis tools must be able to handle it without
     overflowing.
@@ -20191,7 +20206,7 @@ Important note:
 </div>
 <pre class="text">The cache uses a filter to store cacheable responses. The HTTP rules
 &quot;cache-store&quot; and &quot;cache-use&quot; must be used to define how and when to use a
-cache. By default the correpsonding filter is implicitly defined. And when no
+cache. By default the corresponding filter is implicitly defined. And when no
 other filters than cache or compression are used, it is enough. In such case,
 the compression filter is always evaluated after the cache filter. But it is
 mandatory to explicitly use a filter line to use a cache when at least one
@@ -20291,8 +20306,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1-dev0-11 &ndash; Configuration Manual<br>
-							<small>2019/06/16, willy tarreau</small>
+							HAProxy 2.1-dev1 &ndash; Configuration Manual<br>
+							<small>2019/07/16, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20395,7 +20410,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev0-11', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
