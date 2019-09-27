@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0.5 - Management Guide</title>
+		<title>HAProxy version 2.0.7 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -414,6 +414,8 @@
 							
 							<a class="list-group-item" href="#show profiling">show profiling</a>
 							
+							<a class="list-group-item" href="#show resolvers">show resolvers</a>
+							
 							<a class="list-group-item" href="#show schema">show schema</a>
 							
 							<a class="list-group-item" href="#show schema json">show schema json</a>
@@ -425,8 +427,6 @@
 							<a class="list-group-item" href="#show sess">show sess</a>
 							
 							<a class="list-group-item" href="#show stat">show stat</a>
-							
-							<a class="list-group-item" href="#show stat resolvers">show stat resolvers</a>
 							
 							<a class="list-group-item" href="#show table">show table</a>
 							
@@ -464,7 +464,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/08/16</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/09/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -475,7 +475,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.0.5</strong></p>
+							<p><strong>version 2.0.7</strong></p>
 							<p>
 								<br>
 								
@@ -2114,8 +2114,8 @@ and stopping an auxiliary agent.
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
-</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.3-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie"></a><a class="anchor" name="9-enable dynamic-cookie"></a><a class="anchor" name="9.3-enable dynamic-cookie"></a><a class="anchor" name="enable dynamic-cookie (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie backend"></a><a class="anchor" name="9-enable dynamic-cookie backend"></a><a class="anchor" name="9.3-enable dynamic-cookie backend"></a><a class="anchor" name="enable dynamic-cookie backend (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable dynamic-cookie backend"></a><a href="#9.3-enable%20dynamic-cookie%20backend">enable dynamic-cookie backend</a></b> <span style="color: #080">&lt;backend&gt;</span></div><pre class="text">Enable the generation of dynamic cookies fot the backend &lt;backend&gt;
-A secret key must also be provided
+</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.3-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie"></a><a class="anchor" name="9-enable dynamic-cookie"></a><a class="anchor" name="9.3-enable dynamic-cookie"></a><a class="anchor" name="enable dynamic-cookie (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie backend"></a><a class="anchor" name="9-enable dynamic-cookie backend"></a><a class="anchor" name="9.3-enable dynamic-cookie backend"></a><a class="anchor" name="enable dynamic-cookie backend (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable dynamic-cookie backend"></a><a href="#9.3-enable%20dynamic-cookie%20backend">enable dynamic-cookie backend</a></b> <span style="color: #080">&lt;backend&gt;</span></div><pre class="text">Enable the generation of dynamic cookies for the backend &lt;backend&gt;.
+A secret key must also be provided.
 </pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.3-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable frontend"></a><a class="anchor" name="9-enable frontend"></a><a class="anchor" name="9.3-enable frontend"></a><a class="anchor" name="enable frontend (Statistics and monitoring)"></a><a class="anchor" name="enable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable frontend"></a><a href="#9.3-enable%20frontend">enable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Resume a frontend which was temporarily stopped. It is possible that some of
 the listening ports won't be able to bind anymore (eg: if another process
 took them since the 'disable frontend' operation). If this happens, an error
@@ -2890,7 +2890,7 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show stat json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><a class="anchor" name="show stat resolvers"></a><a class="anchor" name="9-show stat resolvers"></a><a class="anchor" name="9.3-show stat resolvers"></a><a class="anchor" name="show stat resolvers (Statistics and monitoring)"></a><a class="anchor" name="show stat resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat resolvers"></a><a href="#9.3-show%20stat%20resolvers">show stat resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
 if no section is supplied.
 
 For each name server, the following counters are reported:
@@ -3462,7 +3462,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0.5 &ndash; Management Guide<br>
+							HAProxy 2.0.7 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3566,7 +3566,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.5', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.7', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
