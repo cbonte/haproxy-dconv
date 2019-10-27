@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1-dev1-117 - Management Guide</title>
+		<title>HAProxy version 2.1-dev3-1 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -283,6 +283,8 @@
 							
 							<a class="list-group-item" href="#enable server">enable server</a>
 							
+							<a class="list-group-item" href="#expert-mode">expert-mode</a>
+							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-G"><h4>G</h4>
 								
@@ -402,6 +404,8 @@
 							
 							<a class="list-group-item" href="#show errors">show errors</a>
 							
+							<a class="list-group-item" href="#show events">show events</a>
+							
 							<a class="list-group-item" href="#show fd">show fd</a>
 							
 							<a class="list-group-item" href="#show info">show info</a>
@@ -413,6 +417,8 @@
 							<a class="list-group-item" href="#show pools">show pools</a>
 							
 							<a class="list-group-item" href="#show profiling">show profiling</a>
+							
+							<a class="list-group-item" href="#show resolvers">show resolvers</a>
 							
 							<a class="list-group-item" href="#show schema">show schema</a>
 							
@@ -426,13 +432,13 @@
 							
 							<a class="list-group-item" href="#show stat">show stat</a>
 							
-							<a class="list-group-item" href="#show stat resolvers">show stat resolvers</a>
-							
 							<a class="list-group-item" href="#show table">show table</a>
 							
 							<a class="list-group-item" href="#show threads">show threads</a>
 							
 							<a class="list-group-item" href="#show tls-keys">show tls-keys</a>
+							
+							<a class="list-group-item" href="#show trace">show trace</a>
 							
 							<a class="list-group-item" href="#shutdown">shutdown</a>
 							
@@ -443,6 +449,13 @@
 							<a class="list-group-item" href="#shutdown sessions">shutdown sessions</a>
 							
 							<a class="list-group-item" href="#shutdown sessions server">shutdown sessions server</a>
+							
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-T"><h4>T</h4>
+								
+							<a class="list-group-item" href="#trace">trace</a>
+							
+							<a class="list-group-item" href="#trace 0">trace 0</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-U"><h4>U</h4>
@@ -464,7 +477,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/07/25</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/10/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -475,7 +488,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.1-dev1-117</strong></p>
+							<p><strong>version 2.1-dev3-1</strong></p>
 							<p>
 								<br>
 								
@@ -2042,10 +2055,14 @@ string.
     $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
 &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
 </code></pre>
-</div><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported when haproxy is built with
-DEBUG_DEV defined. Supported commands are then listed in the help message.
-All of these commands require admin privileges, and must never appear on a
-production system as most of them are unsafe and dangerous.
+</div><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported on a CLI connection running
+in expert mode (see &quot;expert-mode on&quot;). Such commands are extremely dangerous
+and not forgiving, any misuse may result in a crash of the process. They are
+intended for experts only, and must really not be used unless told to do so.
+Some of them are only available when haproxy is built with DEBUG_DEV defined
+because they may have security implications. All of these commands require
+admin privileges, and are purposely not documented to avoid encouraging their
+use by people who are not at ease with the source code.
 </pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del acl"></a><a class="anchor" name="9-del acl"></a><a class="anchor" name="9.3-del acl"></a><a class="anchor" name="del acl (Statistics and monitoring)"></a><a class="anchor" name="del acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del acl"></a><a href="#9.3-del%20acl">del acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;key&gt;</span>|#<span style="color: #080">&lt;ref&gt;</span>]</span></div><pre class="text">Delete all the acl entries from the acl &lt;acl&gt; corresponding to the key &lt;key&gt;.
 &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20acl">show acl</a>&quot;. If the &lt;ref&gt; is used,
 this command delete only the listed reference. The reference can be found with
@@ -2118,8 +2135,8 @@ and stopping an auxiliary agent.
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
-</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.3-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie"></a><a class="anchor" name="9-enable dynamic-cookie"></a><a class="anchor" name="9.3-enable dynamic-cookie"></a><a class="anchor" name="enable dynamic-cookie (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie backend"></a><a class="anchor" name="9-enable dynamic-cookie backend"></a><a class="anchor" name="9.3-enable dynamic-cookie backend"></a><a class="anchor" name="enable dynamic-cookie backend (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable dynamic-cookie backend"></a><a href="#9.3-enable%20dynamic-cookie%20backend">enable dynamic-cookie backend</a></b> <span style="color: #080">&lt;backend&gt;</span></div><pre class="text">Enable the generation of dynamic cookies fot the backend &lt;backend&gt;
-A secret key must also be provided
+</pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.3-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie"></a><a class="anchor" name="9-enable dynamic-cookie"></a><a class="anchor" name="9.3-enable dynamic-cookie"></a><a class="anchor" name="enable dynamic-cookie (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie (Unix Socket commands)"></a><a class="anchor" name="enable dynamic-cookie backend"></a><a class="anchor" name="9-enable dynamic-cookie backend"></a><a class="anchor" name="9.3-enable dynamic-cookie backend"></a><a class="anchor" name="enable dynamic-cookie backend (Statistics and monitoring)"></a><a class="anchor" name="enable dynamic-cookie backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable dynamic-cookie backend"></a><a href="#9.3-enable%20dynamic-cookie%20backend">enable dynamic-cookie backend</a></b> <span style="color: #080">&lt;backend&gt;</span></div><pre class="text">Enable the generation of dynamic cookies for the backend &lt;backend&gt;.
+A secret key must also be provided.
 </pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.3-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable frontend"></a><a class="anchor" name="9-enable frontend"></a><a class="anchor" name="9.3-enable frontend"></a><a class="anchor" name="enable frontend (Statistics and monitoring)"></a><a class="anchor" name="enable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable frontend"></a><a href="#9.3-enable%20frontend">enable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Resume a frontend which was temporarily stopped. It is possible that some of
 the listening ports won't be able to bind anymore (eg: if another process
 took them since the 'disable frontend' operation). If this happens, an error
@@ -2144,6 +2161,16 @@ their numeric ID, prefixed with a sharp ('#').
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
+</pre><a class="anchor" name="expert-mode"></a><a class="anchor" name="9-expert-mode"></a><a class="anchor" name="9.3-expert-mode"></a><a class="anchor" name="expert-mode (Statistics and monitoring)"></a><a class="anchor" name="expert-mode (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="expert-mode"></a><a href="#9.3-expert-mode">expert-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">Without options, this indicates whether the expert mode is enabled or
+disabled on the current connection. When passed &quot;on&quot;, it turns the expert
+mode on for the current CLI connection only. With &quot;off&quot; it turns it off. The
+expert mode enables displaying of expert commands that can be extremely
+dangerous for the process and which may occasionally help developers collect
+important information about complex bugs. Any misuse of these features will
+likely lead to a process crash. Do not use this option without being invited
+to do so. Note that this command is purposely not listed in the help message.
+This command is only accessible in admin level. Changing to another level
+automatically resets the expert mode.
 </pre><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get map"></a><a class="anchor" name="9-get map"></a><a class="anchor" name="9.3-get map"></a><a class="anchor" name="get map (Statistics and monitoring)"></a><a class="anchor" name="get map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get map"></a><a href="#9.3-get%20map">get map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get acl"></a><a class="anchor" name="9-get acl"></a><a class="anchor" name="9.3-get acl"></a><a class="anchor" name="get acl (Statistics and monitoring)"></a><a class="anchor" name="get acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get acl"></a><a href="#9.3-get%20acl">get acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Lookup the value &lt;value&gt; in the map &lt;map&gt; or in the ACL &lt;acl&gt;. &lt;map&gt; or &lt;acl&gt;
 are the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot; or &quot;<a href="#show%20acl">show acl</a>&quot;. This command
 returns all the matching patterns associated with this map. This is useful for
@@ -2334,9 +2361,9 @@ user
 Permission denied
 </code></pre>
 </div><a class="anchor" name="operator"></a><a class="anchor" name="9-operator"></a><a class="anchor" name="9.3-operator"></a><a class="anchor" name="operator (Statistics and monitoring)"></a><a class="anchor" name="operator (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="operator"></a><a href="#9.3-operator">operator</a></b></div><pre class="text">Decrease the CLI level of the current CLI session to operator. It can't be
-increase. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;
+increased. It also drops expert mode. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="9-user"></a><a class="anchor" name="9.3-user"></a><a class="anchor" name="user (Statistics and monitoring)"></a><a class="anchor" name="user (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#9.3-user">user</a></b></div><pre class="text">Decrease the CLI level of the current CLI session to user. It can't be
-increase. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;
+increased. It also drops expert mode. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show activity"></a><a class="anchor" name="9-show activity"></a><a class="anchor" name="9.3-show activity"></a><a class="anchor" name="show activity (Statistics and monitoring)"></a><a class="anchor" name="show activity (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show activity"></a><a href="#9.3-show%20activity">show activity</a></b></div><pre class="text">Reports some counters about internal events that will help developers and
 more generally people who know haproxy well enough to narrow down the causes
 of reports of abnormal behaviours. A typical example would be a properly
@@ -2447,7 +2474,16 @@ received by frontend fe-eth0 whose ID is 1. The total response length was
 is the slash ('/') in header name &quot;header/bizarre&quot;, which is not a valid
 HTTP character for a header name.
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show fd"></a><a class="anchor" name="9-show fd"></a><a class="anchor" name="9.3-show fd"></a><a class="anchor" name="show fd (Statistics and monitoring)"></a><a class="anchor" name="show fd (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show fd"></a><a href="#9.3-show%20fd">show fd</a></b> <span style="color: #008">[<span style="color: #080">&lt;fd&gt;</span>]</span></div><pre class="text">Dump the list of either all open file descriptors or just the one number &lt;fd&gt;
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show events"></a><a class="anchor" name="9-show events"></a><a class="anchor" name="9.3-show events"></a><a class="anchor" name="show events (Statistics and monitoring)"></a><a class="anchor" name="show events (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show events"></a><a href="#9.3-show%20events">show events</a></b> <span style="color: #008">[<span style="color: #080">&lt;sink&gt;</span>]</span> <span style="color: #008">[-w]</span> <span style="color: #008">[-n]</span></div><pre class="text">With no option, this lists all known event sinks and their types. With an
+option, it will dump all available events in the designated sink if it is of
+type buffer. If option &quot;-w&quot; is passed after the sink name, then once the end
+of the buffer is reached, the command will wait for new events and display
+them. It is possible to stop the operation by entering any input (which will
+be discarded) or by closing the session. Finally, option &quot;-n&quot; is used to
+directly seek to the end of the buffer, which is often convenient when
+combined with &quot;-w&quot; to only report new events. For convenience, &quot;-wn&quot; or &quot;-nw&quot;
+may be used to enable both options at once.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show fd"></a><a class="anchor" name="9-show fd"></a><a class="anchor" name="9.3-show fd"></a><a class="anchor" name="show fd (Statistics and monitoring)"></a><a class="anchor" name="show fd (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show fd"></a><a href="#9.3-show%20fd">show fd</a></b> <span style="color: #008">[<span style="color: #080">&lt;fd&gt;</span>]</span></div><pre class="text">Dump the list of either all open file descriptors or just the one number &lt;fd&gt;
 if specified. This is only aimed at developers who need to observe internal
 states in order to debug complex issues such as abnormal CPU usages. One fd
 is reported per lines, and for each of them, its state in the poller using
@@ -2464,7 +2500,7 @@ listener's state and its frontend are reported. There is no point in using
 this command without a good knowledge of the internals. It's worth noting
 that the output format may evolve over time so this output must not be parsed
 by tools designed to be durable.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span> <span style="color: #008">[desc]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
 optional argument, field numbers, names and types are emitted as well so that
 external monitoring products can easily retrieve, possibly aggregate, then
 report information found in fields they don't know. Each field is dumped on
@@ -2494,6 +2530,10 @@ how to parse thanks to column 3 and how to process thanks to column 2.
 Thus the overall line format in typed mode is :
 
     &lt;field_pos&gt;.&lt;field_name&gt;.&lt;process_num&gt;:&lt;tags&gt;:&lt;type&gt;:&lt;value&gt;
+
+When &quot;desc&quot; is appended to the command, one extra colon followed by a quoted
+string is appended with a description for the metric. At the time of writing,
+this is only supported for the &quot;typed&quot; and default output formats.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -2740,7 +2780,7 @@ returned in src/dumpstats.c
 
 The special id &quot;all&quot; dumps the states of all sessions, which must be avoided
 as much as possible as it is highly CPU intensive and can take a lot of time.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.3-show%20stat">show stat</a></b> <span style="color: #008">[<span style="color: #800">{<span style="color: #080">&lt;iid&gt;</span>|<span style="color: #080">&lt;proxy&gt;</span>}</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span> <span style="color: #008">[typed|json]</span></div><pre class="text">Dump statistics using the CSV format; using the extended typed output
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.3-show%20stat">show stat</a></b> <span style="color: #008">[<span style="color: #800">{<span style="color: #080">&lt;iid&gt;</span>|<span style="color: #080">&lt;proxy&gt;</span>}</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span> <span style="color: #008">[typed|json]</span> <span style="color: #008">[desc]</span></div><pre class="text">Dump statistics using the CSV format; using the extended typed output
 format described in the section above if &quot;typed&quot; is passed after the
 other arguments; or in JSON if &quot;json&quot; is passed after the other arguments
 . By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is possible to dump only selected
@@ -2813,6 +2853,10 @@ first ':') indicates the origin, nature and scope of the variable. The third
 column indicates the type of the field, among &quot;s32&quot;, &quot;s64&quot;, &quot;u32&quot;, &quot;u64&quot; and
 &quot;str&quot;. Then the fourth column is the value itself, which the consumer knows
 how to parse thanks to column 3 and how to process thanks to column 2.
+
+When &quot;desc&quot; is appended to the command, one extra colon followed by a quoted
+string is appended with a description for the metric. At the time of writing,
+this is only supported for the &quot;typed&quot; output format.
 
 Thus the overall line format in typed mode is :
 
@@ -2894,7 +2938,7 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show stat json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><a class="anchor" name="show stat resolvers"></a><a class="anchor" name="9-show stat resolvers"></a><a class="anchor" name="9.3-show stat resolvers"></a><a class="anchor" name="show stat resolvers (Statistics and monitoring)"></a><a class="anchor" name="show stat resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat resolvers"></a><a href="#9.3-show%20stat%20resolvers">show stat resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
 if no section is supplied.
 
 For each name server, the following counters are reported:
@@ -3022,6 +3066,15 @@ $ echo &quot;<a href="#show%20schema%20json">show schema json</a>&quot; | socat 
 The schema follows &quot;JSON Schema&quot; (json-schema.org) and accordingly
 verifiers may be used to verify the output of &quot;show info json&quot; and &quot;show
 stat json&quot; against the schema.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show trace"></a><a class="anchor" name="9-show trace"></a><a class="anchor" name="9.3-show trace"></a><a class="anchor" name="show trace (Statistics and monitoring)"></a><a class="anchor" name="show trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show trace"></a><a href="#9.3-show%20trace">show trace</a></b> <span style="color: #008">[<span style="color: #080">&lt;source&gt;</span>]</span></div><pre class="text">Show the current trace status. For each source a line is displayed with a
+single-character status indicating if the trace is stopped, waiting, or
+running. The output sink used by the trace is indicated (or &quot;none&quot; if none
+was set), as well as the number of dropped events in this sink, followed by a
+brief description of the source. If a source name is specified, a detailed
+list of all events supported by the source, and their status for each action
+(report, start, pause, stop), indicated by a &quot;+&quot; if they are enabled, or a
+&quot;-&quot; otherwise. All these events are independent and an event might trigger
+a start without being reported and conversely.
 </pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.3-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.3-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
 be released. It will not be possible to enable the frontend anymore after
 this operation. This is intended to be used in environments where stopping a
@@ -3045,6 +3098,153 @@ flag in the logs.
 can be used to terminate long-running sessions after a server is put into
 maintenance mode, for instance. Such terminated sessions are reported with a
 'K' flag in the logs.
+</pre><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace"></a><a href="#9.3-trace">trace</a></b></div><pre class="text">The &quot;<a href="#trace">trace</a>&quot; command alone lists the trace sources, their current status, and
+their brief descriptions. It is only meant as a menu to enter next levels,
+see other &quot;<a href="#trace">trace</a>&quot; commands below.
+</pre><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><a class="anchor" name="trace 0"></a><a class="anchor" name="9-trace 0"></a><a class="anchor" name="9.3-trace 0"></a><a class="anchor" name="trace 0 (Statistics and monitoring)"></a><a class="anchor" name="trace 0 (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace 0"></a><a href="#9.3-trace%200">trace 0</a></b></div><pre class="text">Immediately stops all traces. This is made to be used as a quick solution
+to terminate a debugging session or as an emergency action to be used in case
+complex traces were enabled on multiple sources and impact the service.
+</pre><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace"></a><a href="#9.3-trace">trace</a></b> <span style="color: #080">&lt;source&gt;</span> event <span style="color: #008">[ <span style="color: #008">[+|-|!]</span><span style="color: #080">&lt;name&gt;</span> ]</span></div><pre class="text">Without argument, this will list all the events supported by the designated
+source. They are prefixed with a &quot;-&quot; if they are not enabled, or a &quot;+&quot; if
+they are enabled. It is important to note that a single trace may be labelled
+with multiple events, and as long as any of the enabled events matches one of
+the events labelled on the trace, the event will be passed to the trace
+subsystem. For example, receiving an HTTP/2 frame of type HEADERS may trigger
+a frame event and a stream event since the frame creates a new stream. If
+either the frame event or the stream event are enabled for this source, the
+frame will be passed to the trace framework.
+
+With an argument, it is possible to toggle the state of each event and
+individually enable or disable them. Two special keywords are supported,
+&quot;none&quot;, which matches no event, and is used to disable all events at once,
+and &quot;any&quot; which matches all events, and is used to enable all events at
+once. Other events are specific to the event source. It is possible to
+enable one event by specifying its name, optionally prefixed with '+' for
+better readability. It is possible to disable one event by specifying its
+name prefixed by a '-' or a '!'.
+
+One way to completely disable a trace source is to pass &quot;event none&quot;, and
+this source will instantly be totally ignored.
+</pre><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace"></a><a href="#9.3-trace">trace</a></b> <span style="color: #080">&lt;source&gt;</span> level <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span>]</span></div><pre class="text">Without argument, this will list all trace levels for this source, and the
+current one will be indicated by a star ('*') prepended in front of it. With
+an argument, this will change the trace level to the specified level. Detail
+levels are a form of filters that are applied before reporting the events.
+These filters are used to selectively include or exclude events depending on
+their level of importance. For example a developer might need to know
+precisely where in the code an HTTP header was considered invalid while the
+end user may not even care about this header's validity at all. There are
+currently 5 distinct levels for a trace :
+
+    user         this will report information that are suitable for use by a
+                 regular haproxy user who wants to observe his traffic.
+                 Typically some HTTP requests and responses will be reported
+                 without much detail. Most sources will set this as the
+                 default level to ease operations.
+
+    proto        in addition to what is reported at the &quot;<a href="#user">user</a>&quot; level, it also
+                 displays protocol-level updates. This can for example be the
+                 frame types or HTTP headers after decoding.
+
+    state        in addition to what is reported at the &quot;proto&quot; level, it
+                 will also display state transitions (or failed transitions)
+                 which happen in parsers, so this will show attempts to
+                 perform an operation while the &quot;proto&quot; level only shows
+                 the final operation.
+
+    data         in addition to what is reported at the &quot;state&quot; level, it
+                 will also include data transfers between the various layers.
+
+    developer    it reports everything available, which can include advanced
+                 information such as &quot;breaking out of this loop&quot; that are
+                 only relevant to a developer trying to understand a bug that
+                 only happens once in a while in field. Function names are
+                 only reported at this level.
+
+It is highly recommended to always use the &quot;<a href="#user">user</a>&quot; level only and switch to
+other levels only if instructed to do so by a developer. Also it is a good
+idea to first configure the events before switching to higher levels, as it
+may save from dumping many lines if no filter is applied.
+</pre><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace"></a><a href="#9.3-trace">trace</a></b> <span style="color: #080">&lt;source&gt;</span> lock <span style="color: #008">[criterion]</span></div><pre class="text">Without argument, this will list all the criteria supported by this source
+for lock-on processing, and display the current choice by a star ('*') in
+front of it. Lock-on means that the source will focus on the first matching
+event and only stick to the criterion which triggered this event, and ignore
+all other ones until the trace stops. This allows for example to take a trace
+on a single connection or on a single stream. The following criteria are
+supported by some traces, though not necessarily all, since some of them
+might not be available to the source :
+
+    backend      lock on the backend that started the trace
+    connection   lock on the connection that started the trace
+    frontend     lock on the frontend that started the trace
+    listener     lock on the listener that started the trace
+    nothing      do not lock on anything
+    server       lock on the server that started the trace
+    session      lock on the session that started the trace
+    thread       lock on the thread that started the trace
+
+In addition to this, each source may provide up to 4 specific criteria such
+as internal states or connection IDs. For example in HTTP/2 it is possible
+to lock on the H2 stream and ignore other streams once a strace starts.
+
+When a criterion is passed in argument, this one is used instead of the
+other ones and any existing tracking is immediately terminated so that it can
+restart with the new criterion. The special keyword &quot;nothing&quot; is supported by
+all sources to permanently disable tracking.
+</pre><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace"></a><a href="#9.3-trace">trace</a></b> <span style="color: #080">&lt;source&gt;</span> <span style="color: #800">{ pause | start | stop }</span> <span style="color: #008">[ <span style="color: #008">[+|-|!]</span>event]</span></div><pre class="text">Without argument, this will list the events enabled to automatically pause,
+start, or stop a trace for this source. These events are specific to each
+trace source. With an argument, this will either enable the event for the
+specified action (if optionally prefixed by a '+') or disable it (if
+prefixed by a '-' or '!'). The special keyword &quot;now&quot; is not an event and
+requests to take the action immediately. The keywords &quot;none&quot; and &quot;any&quot; are
+supported just like in &quot;trace event&quot;.
+
+The 3 supported actions are respectively &quot;pause&quot;, &quot;start&quot; and &quot;stop&quot;. The
+&quot;pause&quot; action enumerates events which will cause a running trace to stop and
+wait for a new start event to restart it. The &quot;start&quot; action enumerates the
+events which switch the trace into the waiting mode until one of the start
+events appears. And the &quot;stop&quot; action enumerates the events which definitely
+stop the trace until it is manually enabled again. In practice it makes sense
+to manually start a trace using &quot;start now&quot; without caring about events, and
+to stop it using &quot;stop now&quot;. In order to capture more subtle event sequences,
+setting &quot;start&quot; to a normal event (like receiving an HTTP request) and &quot;stop&quot;
+to a very rare event like emitting a certain error, will ensure that the last
+captured events will match the desired criteria. And the pause event is
+useful to detect the end of a sequence, disable the lock-on and wait for
+another opportunity to take a capture. In this case it can make sense to
+enable lock-on to spot only one specific criterion (e.g. a stream), and have
+&quot;start&quot; set to anything that starts this criterion (e.g. all events which
+create a stream), &quot;stop&quot; set to the expected anomaly, and &quot;pause&quot; to anything
+that ends that criterion (e.g. any end of stream event). In this case the
+trace log will contain complete sequences of perfectly clean series affecting
+a single object, until the last sequence containing everything from the
+beginning to the anomaly.
+</pre><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace"></a><a href="#9.3-trace">trace</a></b> <span style="color: #080">&lt;source&gt;</span> sink <span style="color: #008">[<span style="color: #080">&lt;sink&gt;</span>]</span>
+   Without argument, this will list all event sinks available for this source,
+   and the currently configured one will have a star ('*') prepended in front
+   of it. Sink &quot;none&quot; is always available and means that all events are simply
+   dropped, though their processing is not ignored (e.g. lock-on does occur).
+   Other sinks are available depending on configuration and build options, but
+   typically &quot;stdout&quot; and &quot;stderr&quot; will be usable in debug mode, and in-memory
+   ring buffers should be available as well. When a name is specified, the sink
+   instantly changes for the specified source. Events are not changed during a
+   sink change. In the worst case some may be lost if an invalid sink is used
+   (or &quot;none&quot;), but operations do continue to a different destination.</div><a class="anchor" name="trace"></a><a class="anchor" name="9-trace"></a><a class="anchor" name="9.3-trace"></a><a class="anchor" name="trace (Statistics and monitoring)"></a><a class="anchor" name="trace (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="trace"></a><a href="#9.3-trace">trace</a></b> <span style="color: #080">&lt;source&gt;</span> verbosity <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span>]</span></div><pre class="text">Without argument, this will list all verbosity levels for this source, and the
+current one will be indicated by a star ('*') prepended in front of it. With
+an argument, this will change the verbosity level to the specified one.
+
+Verbosity levels indicate how far the trace decoder should go to provide
+detailed information. It depends on the trace source, since some sources will
+not even provide a specific decoder. Level &quot;quiet&quot; is always available and
+disables any decoding. It can be useful when trying to figure what's
+happening before trying to understand the details, since it will have a very
+low impact on performance and trace size. When no verbosity levels are
+declared by a source, level &quot;default&quot; is available and will cause a decoder
+to be called when specified in the traces. It is an opportunistic decoding.
+When the source declares some verbosity levels, these ones are listed with
+a description of what they correspond to. In this case the trace decoder
+provided by the source will be as accurate as possible based on the
+information available at the trace point. The first level above &quot;quiet&quot; is
+set by default.
 </pre></div>
 <a class="anchor" id="9.4" name="9.4"></a>
 <h2 id="chapter-9.4" data-target="9.4"><small><a class="small" href="#9.4">9.4.</a></small> Master CLI</h2>
@@ -3466,7 +3666,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1-dev1-117 &ndash; Management Guide<br>
+							HAProxy 2.1-dev3-1 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3570,7 +3770,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev1-117', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev3-1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
