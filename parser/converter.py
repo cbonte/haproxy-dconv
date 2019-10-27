@@ -208,8 +208,8 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
             next = data[i + 1].rstrip()
         else:
             next = ""
-        if (line == "Summary" or re.match("^[0-9].*", line)) and (len(next) > 0) and (next[0] == '-') \
-                and ("-" * len(line)).startswith(next):  # Fuzzy underline length detection
+        if (line == "Summary" or re.match("^[0-9].*", line)) and (len(next) > 0) and (next[0] == '-'):
+            #    and ("-" * len(line)).startswith(next):  # Fuzzy underline length detection
             sections.append(currentSection)
             currentSection = {
                 "details": getTitleDetails(line),
