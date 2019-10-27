@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.21 - Configuration Manual</title>
+		<title>HAProxy version 1.8.22 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
@@ -2808,7 +2808,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/09/28</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/10/26</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2819,10 +2819,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.21</strong></p>
+							<p><strong>version 1.8.22</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/08/16
+								2019/10/25
 							</p>
 						</div>
 
@@ -5021,7 +5021,8 @@ to memorize the result of a lookup among all the patterns specified on a
 configuration line (including all those loaded from files). It automatically
 invalidates entries which are updated using HTTP actions or on the CLI. The
 default cache size is set to 10000 entries, which limits its footprint to
-about 5 MB on 32-bit systems and 8 MB on 64-bit systems. There is a very low
+about 5 MB per process/thread on 32-bit systems and 8 MB per process/thread
+on 64-bit systems, as caches are thread/process local. There is a very low
 risk of collision in this cache, which is in the order of the size of the
 cache divided by 2^64. Typically, at 10000 requests per second with the
 default cache size of 10000 entries, there's 1% chance that a brute force
@@ -8102,9 +8103,22 @@ remain available. This is particularly true with the &quot;always&quot; strategy
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;header&gt;  The header string to use to send the server name</pre>
 </div>
-<pre class="text">The &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; statement causes the name of the target
-server to be added to the headers of an HTTP request. The name
-is added with the header string proved.
+<pre class="text">The &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; statement causes the header field named &lt;header&gt;
+to be set to the name of the target server at the moment the request is about
+to be sent on the wire. Any existing occurrences of this header are removed.
+Upon retries and redispatches, the header field is updated to always reflect
+the server being attempted to connect to. Given that this header is modified
+very late in the connection setup, it may have unexpected effects on already
+modified headers. For example using it with transport-level header such as
+connection, content-length, transfer-encoding and so on will likely result in
+invalid requests being sent to the server. Additionally it has been reported
+that this directive is currently being used as a way to overwrite the Host
+header field in outgoing requests; while this trick has been known to work
+as a side effect of the feature for some time, it is not officially supported
+and might possibly not work anymore in a future version depending on the
+technical difficulties this feature induces. A long-term solution instead
+consists in fixing the application which required this trick so that it binds
+to the correct host name.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#server">server</a>&quot;</div>
 <a class="anchor" name="id"></a><a class="anchor" name="4-id"></a><a class="anchor" name="4.2-id"></a><a class="anchor" name="id (Proxies)"></a><a class="anchor" name="id (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="id"></a><a href="#4.2-id">id</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Set a persistent ID to a proxy.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -14124,6 +14138,8 @@ hostname, it will be resolved.
 </pre><a class="anchor" name="agent-port"></a><a class="anchor" name="5-agent-port"></a><a class="anchor" name="5.2-agent-port"></a><a class="anchor" name="agent-port (Bind and server options)"></a><a class="anchor" name="agent-port (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="agent-port"></a><a href="#5.2-agent-port">agent-port</a></b> <span style="color: #080">&lt;port&gt;</span></div><pre class="text">The &quot;<a href="#agent-port">agent-port</a>&quot; parameter sets the TCP port used for agent checks.
 
 See also the &quot;<a href="#agent-check">agent-check</a>&quot; and &quot;<a href="#agent-inter">agent-inter</a>&quot; parameters.
+</pre><a class="anchor" name="allow-0rtt"></a><a class="anchor" name="5-allow-0rtt"></a><a class="anchor" name="5.2-allow-0rtt"></a><a class="anchor" name="allow-0rtt (Bind and server options)"></a><a class="anchor" name="allow-0rtt (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="allow-0rtt"></a><a href="#5.2-allow-0rtt">allow-0rtt</a></b></div><pre class="text">Allow sending early data to the server when using TLS 1.3.
+Note that early data will be sent only if the client used early data.
 </pre><a class="anchor" name="backup"></a><a class="anchor" name="5-backup"></a><a class="anchor" name="5.2-backup"></a><a class="anchor" name="backup (Bind and server options)"></a><a class="anchor" name="backup (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="backup"></a><a href="#5.2-backup">backup</a></b></div><pre class="text">When &quot;<a href="#backup">backup</a>&quot; is present on a server line, the server is only used in load
 balancing when all other non-backup servers are unavailable. Requests coming
 with a persistence cookie referencing the server will always be served
@@ -16366,27 +16382,27 @@ client connection. &lt;unit&gt; is facultative, by default the unit is milliseco
 server connection is not established, if the connection is not TCP or if the
 operating system does not support TCP_INFO, for example Linux kernels before
 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_unacked"></a><a class="anchor" name="7-fc_unacked"></a><a class="anchor" name="7.3.3-fc_unacked"></a><a class="anchor" name="fc_unacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_unacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_unacked"></a><a href="#7.3.3-fc_unacked">fc_unacked</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the unacked counter measured by the kernel for the client connection.
+</pre><a class="anchor" name="fc_unacked"></a><a class="anchor" name="7-fc_unacked"></a><a class="anchor" name="7.3.3-fc_unacked"></a><a class="anchor" name="fc_unacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_unacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_unacked"></a><a href="#7.3.3-fc_unacked">fc_unacked</a></b> : integer</div><pre class="text">Returns the unacked counter measured by the kernel for the client connection.
 If the server connection is not established, if the connection is not TCP or
 if the operating system does not support TCP_INFO, for example Linux kernels
 before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_sacked"></a><a class="anchor" name="7-fc_sacked"></a><a class="anchor" name="7.3.3-fc_sacked"></a><a class="anchor" name="fc_sacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_sacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_sacked"></a><a href="#7.3.3-fc_sacked">fc_sacked</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the sacked counter measured by the kernel for the client connection.
+</pre><a class="anchor" name="fc_sacked"></a><a class="anchor" name="7-fc_sacked"></a><a class="anchor" name="7.3.3-fc_sacked"></a><a class="anchor" name="fc_sacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_sacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_sacked"></a><a href="#7.3.3-fc_sacked">fc_sacked</a></b> : integer</div><pre class="text">Returns the sacked counter measured by the kernel for the client connection.
 If the server connection is not established, if the connection is not TCP or
 if the operating system does not support TCP_INFO, for example Linux kernels
 before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_retrans"></a><a class="anchor" name="7-fc_retrans"></a><a class="anchor" name="7.3.3-fc_retrans"></a><a class="anchor" name="fc_retrans (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_retrans (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_retrans"></a><a href="#7.3.3-fc_retrans">fc_retrans</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the retransmits counter measured by the kernel for the client
+</pre><a class="anchor" name="fc_retrans"></a><a class="anchor" name="7-fc_retrans"></a><a class="anchor" name="7.3.3-fc_retrans"></a><a class="anchor" name="fc_retrans (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_retrans (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_retrans"></a><a href="#7.3.3-fc_retrans">fc_retrans</a></b> : integer</div><pre class="text">Returns the retransmits counter measured by the kernel for the client
 connection. If the server connection is not established, if the connection is
 not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_fackets"></a><a class="anchor" name="7-fc_fackets"></a><a class="anchor" name="7.3.3-fc_fackets"></a><a class="anchor" name="fc_fackets (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_fackets (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_fackets"></a><a href="#7.3.3-fc_fackets">fc_fackets</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the fack counter measured by the kernel for the client
+</pre><a class="anchor" name="fc_fackets"></a><a class="anchor" name="7-fc_fackets"></a><a class="anchor" name="7.3.3-fc_fackets"></a><a class="anchor" name="fc_fackets (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_fackets (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_fackets"></a><a href="#7.3.3-fc_fackets">fc_fackets</a></b> : integer</div><pre class="text">Returns the fack counter measured by the kernel for the client
 connection. If the server connection is not established, if the connection is
 not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_lost"></a><a class="anchor" name="7-fc_lost"></a><a class="anchor" name="7.3.3-fc_lost"></a><a class="anchor" name="fc_lost (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_lost (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_lost"></a><a href="#7.3.3-fc_lost">fc_lost</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the lost counter measured by the kernel for the client
+</pre><a class="anchor" name="fc_lost"></a><a class="anchor" name="7-fc_lost"></a><a class="anchor" name="7.3.3-fc_lost"></a><a class="anchor" name="fc_lost (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_lost (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_lost"></a><a href="#7.3.3-fc_lost">fc_lost</a></b> : integer</div><pre class="text">Returns the lost counter measured by the kernel for the client
 connection. If the server connection is not established, if the connection is
 not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_reordering"></a><a class="anchor" name="7-fc_reordering"></a><a class="anchor" name="7.3.3-fc_reordering"></a><a class="anchor" name="fc_reordering (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_reordering (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_reordering"></a><a href="#7.3.3-fc_reordering">fc_reordering</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the reordering counter measured by the kernel for the client
+</pre><a class="anchor" name="fc_reordering"></a><a class="anchor" name="7-fc_reordering"></a><a class="anchor" name="7.3.3-fc_reordering"></a><a class="anchor" name="fc_reordering (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_reordering (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_reordering"></a><a href="#7.3.3-fc_reordering">fc_reordering</a></b> : integer</div><pre class="text">Returns the reordering counter measured by the kernel for the client
 connection. If the server connection is not established, if the connection is
 not TCP or if the operating system does not support TCP_INFO, for example
 Linux kernels before 2.4, the sample fetch fails.
@@ -19209,8 +19225,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.21 &ndash; Configuration Manual<br>
-							<small>2019/08/16, willy tarreau</small>
+							HAProxy 1.8.22 &ndash; Configuration Manual<br>
+							<small>2019/10/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19313,7 +19329,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.21', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.22', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
