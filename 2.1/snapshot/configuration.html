@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1-dev3-3 - Configuration Manual</title>
+		<title>HAProxy version 2.1-dev3-6 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
+		<link href="../../css/page.css?0.4.2-4" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -3231,7 +3231,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/10/27</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/10/28</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3240,9 +3240,9 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="text-center">
-                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
+                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1-dev3-3</strong></p>
+							<p><strong>version 2.1-dev3-6</strong></p>
 							<p>
 								willy tarreau<br>
 								2019/10/25
@@ -15395,102 +15395,6 @@ type.
 </code></pre>
 </div></div>
 <a class="anchor" id="6" name="6"></a>
-<div class="page-header"><h1 id="chapter-6" data-target="6"><small><a class="small" href="#6">6.</a></small> HTTP header manipulation</h1>
-</div><div><pre class="text">In HTTP mode, it is possible to rewrite, add or delete some of the request and
-response headers based on regular expressions. It is also possible to block a
-request or a response if a particular header matches a regular expression,
-which is enough to stop most elementary protocol attacks, and to protect
-against information leak from the internal network.
-
-If HAProxy encounters an &quot;Informational Response&quot; (status code 1xx), it is able
-to process all rsp* rules which can allow, deny, rewrite or delete a header,
-but it will refuse to add a header to any such messages as this is not
-HTTP-compliant. The reason for still processing headers in such responses is to
-stop and/or fix any possible information leak which may happen, for instance
-because another downstream equipment would unconditionally add a header, or if
-a server name appears there. When such messages are seen, normal processing
-still occurs on the next non-informational messages.
-
-This section covers common usage of the following keywords, described in detail
-in <a href="#4.2">section 4.2</a> :
-
-  - reqadd     &lt;string&gt;
-  - reqallow   &lt;search&gt;
-  - reqiallow  &lt;search&gt;
-  - reqdel     &lt;search&gt;
-  - reqidel    &lt;search&gt;
-  - reqdeny    &lt;search&gt;
-  - reqideny   &lt;search&gt;
-  - reqpass    &lt;search&gt;
-  - reqipass   &lt;search&gt;
-  - reqrep     &lt;search&gt; &lt;replace&gt;
-  - reqirep    &lt;search&gt; &lt;replace&gt;
-  - reqtarpit  &lt;search&gt;
-  - reqitarpit &lt;search&gt;
-  - rspadd     &lt;string&gt;
-  - rspdel     &lt;search&gt;
-  - rspidel    &lt;search&gt;
-  - rspdeny    &lt;search&gt;
-  - rspideny   &lt;search&gt;
-  - rsprep     &lt;search&gt; &lt;replace&gt;
-  - rspirep    &lt;search&gt; &lt;replace&gt;
-
-With all these keywords, the same conventions are used. The &lt;search&gt; parameter
-is a POSIX extended regular expression (regex) which supports grouping through
-parenthesis (without the backslash). Spaces and other delimiters must be
-prefixed with a backslash ('\') to avoid confusion with a field delimiter.
-Other characters may be prefixed with a backslash to change their meaning :
-
-  \t   for a tab
-  \r   for a carriage return (CR)
-  \n   for a new line (LF)
-  \    to mark a space and differentiate it from a delimiter
-  \#   to mark a sharp and differentiate it from a comment
-  \\   to use a backslash in a regex
-  \\\\ to use a backslash in the text (*2 for regex, *2 for haproxy)
-  \xXX to write the ASCII hex code XX as in the C language
-
-The &lt;replace&gt; parameter contains the string to be used to replace the largest
-portion of text matching the regex. It can make use of the special characters
-above, and can reference a substring which is delimited by parenthesis in the
-regex, by writing a backslash ('\') immediately followed by one digit from 0 to
-9 indicating the group position (0 designating the entire line). This practice
-is very common to users of the &quot;sed&quot; program.
-
-The &lt;string&gt; parameter represents the string which will systematically be added
-after the last header line. It can also use special character sequences above.
-</pre><h5>Notes related to these keywords :</h5><pre class="text">- these keywords are not always convenient to allow/deny based on header
-  contents. It is strongly recommended to use ACLs with the &quot;block&quot; keyword
-  instead, resulting in far more flexible and manageable rules.
-
-- lines are always considered as a whole. It is not possible to reference
-  a header name only or a value only. This is important because of the way
-  headers are written (notably the number of spaces after the colon).
-
-- the first line is always considered as a header, which makes it possible to
-  rewrite or filter HTTP requests URIs or response codes, but in turn makes
-  it harder to distinguish between headers and request line. The regex prefix
-  ^[^\ \t]*[\ \t] matches any HTTP method followed by a space, and the prefix
-  ^[^ \t:]*: matches any header name followed by a colon.
-
-- for performances reasons, the number of characters added to a request or to
-  a response is limited at build time to values between 1 and 4 kB. This
-  should normally be far more than enough for most usages. If it is too short
-  on occasional usages, it is possible to gain some space by removing some
-  useless headers before adding new ones.
-
-- keywords beginning with &quot;reqi&quot; and &quot;rspi&quot; are the same as their counterpart
-  without the 'i' letter except that they ignore case when matching patterns.
-
-- when a request passes through a frontend then a backend, all req* rules
-  from the frontend will be evaluated, then all req* rules from the backend
-  will be evaluated. The reverse path is applied to responses.
-
-- req* statements are applied after &quot;block&quot; statements, so that &quot;block&quot; is
-  always the first one, but before &quot;<a href="#use_backend">use_backend</a>&quot; in order to permit rewriting
-  before switching.
-</pre></div>
-<a class="anchor" id="6" name="6"></a>
 <div class="page-header"><h1 id="chapter-6" data-target="6"><small><a class="small" href="#6">6.</a></small> Cache</h1>
 </div><div><pre class="text">HAProxy provides a cache, which was designed to perform cache on small objects
 (favicon, css...). This is a minimalist low-maintenance cache which runs in
@@ -20455,7 +20359,7 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1-dev3-3 &ndash; Configuration Manual<br>
+							HAProxy 2.1-dev3-6 &ndash; Configuration Manual<br>
 							<small>2019/10/25, willy tarreau</small>
 						</div>
 					</div>
@@ -20559,8 +20463,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev3-3', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev3-6', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
