@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1-dev3-6 - Configuration Manual</title>
+		<title>HAProxy version 2.1-dev5-2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-4" rel="stylesheet" />
@@ -1745,6 +1745,8 @@
 							
 							<a class="list-group-item" href="#log (Process management and security)">log (Process management and security)</a>
 							
+							<a class="list-group-item" href="#log (Peers)">log (Peers)</a>
+							
 							<a class="list-group-item" href="#log (Alphabetically sorted keywords reference)">log (Alphabetically sorted keywords reference)</a>
 							
 							<a class="list-group-item" href="#log global">log global</a>
@@ -2674,6 +2676,8 @@
 							
 							<a class="list-group-item" href="#srv_is_up">srv_is_up</a>
 							
+							<a class="list-group-item" href="#srv_name">srv_name</a>
+							
 							<a class="list-group-item" href="#srv_queue (Converters)">srv_queue (Converters)</a>
 							
 							<a class="list-group-item" href="#srv_queue (Fetching samples from internal states)">srv_queue (Fetching samples from internal states)</a>
@@ -2891,6 +2895,8 @@
 							<a class="list-group-item" href="#str">str</a>
 							
 							<a class="list-group-item" href="#strcmp">strcmp</a>
+							
+							<a class="list-group-item" href="#strict-limits">strict-limits</a>
 							
 							<a class="list-group-item" href="#strict-sni">strict-sni</a>
 							
@@ -3231,7 +3237,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/10/28</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/11/17</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3242,10 +3248,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1-dev3-6</strong></p>
+							<p><strong>version 2.1-dev5-2</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/10/25
+								2019/11/15
 							</p>
 						</div>
 
@@ -4736,8 +4742,10 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#wurfl-information-list">wurfl-information-list</a>
    - <a href="#wurfl-information-list-separator">wurfl-information-list-separator</a>
    - <a href="#wurfl-cache-size">wurfl-cache-size</a>
+   - <a href="#strict-limits">strict-limits</a>
 
  * Performance tuning
+   - <a href="#busy-polling">busy-polling</a>
    - <a href="#max-spread-checks">max-spread-checks</a>
    - <a href="#maxconn">maxconn</a>
    - <a href="#maxconnrate">maxconnrate</a>
@@ -5188,22 +5196,23 @@ is overwritten. The changes immediately take effect so that the next line in
 the configuration file sees the new value. See also &quot;<a href="#presetenv">presetenv</a>&quot;, &quot;<a href="#resetenv">resetenv</a>&quot;,
 and &quot;<a href="#unsetenv">unsetenv</a>&quot;.
 </pre><a class="anchor" name="set-dumpable"></a><a class="anchor" name="3-set-dumpable"></a><a class="anchor" name="3.1-set-dumpable"></a><a class="anchor" name="set-dumpable (Global parameters)"></a><a class="anchor" name="set-dumpable (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="set-dumpable"></a><a href="#3.1-set-dumpable">set-dumpable</a></b></div><pre class="text">This option is better left disabled by default and enabled only upon a
-developer's request. It has no impact on performance nor stability but will
-try hard to re-enable core dumps that were possibly disabled by file size
-limitations (ulimit -f), core size limitations (ulimit -c), or &quot;dumpability&quot;
-of a process after changing its UID/GID (such as /proc/sys/fs/suid_dumpable
-on Linux). Core dumps might still be limited by the current directory's
-permissions (check what directory the file is started from), the chroot
-directory's permission (it may be needed to temporarily disable the chroot
-directive or to move it to a dedicated writable location), or any other
-system-specific constraint. For example, some Linux flavours are notorious
-for replacing the default core file with a path to an executable not even
-installed on the system (check /proc/sys/kernel/core_pattern). Often, simply
-writing &quot;core&quot;, &quot;core.%p&quot; or &quot;/var/log/core/core.%p&quot; addresses the issue.
-When trying to enable this option waiting for a rare issue to re-appear, it's
-often a good idea to first try to obtain such a dump by issuing, for example,
-&quot;kill -11&quot; to the haproxy process and verify that it leaves a core where
-expected when dying.
+developer's request. If it has been enabled, it may still be forcibly
+disabled by prefixing it with the &quot;no&quot; keyword. It has no impact on
+performance nor stability but will try hard to re-enable core dumps that were
+possibly disabled by file size limitations (ulimit -f), core size limitations
+(ulimit -c), or &quot;dumpability&quot; of a process after changing its UID/GID (such
+as /proc/sys/fs/suid_dumpable on Linux). Core dumps might still be limited by
+the current directory's permissions (check what directory the file is started
+from), the chroot directory's permission (it may be needed to temporarily
+disable the chroot directive or to move it to a dedicated writable location),
+or any other system-specific constraint. For example, some Linux flavours are
+notorious for replacing the default core file with a path to an executable
+not even installed on the system (check /proc/sys/kernel/core_pattern). Often,
+simply writing &quot;core&quot;, &quot;core.%p&quot; or &quot;/var/log/core/core.%p&quot; addresses the
+issue. When trying to enable this option waiting for a rare issue to
+re-appear, it's often a good idea to first try to obtain such a dump by
+issuing, for example, &quot;kill -11&quot; to the haproxy process and verify that it
+leaves a core where expected when dying.
 </pre><a class="anchor" name="ssl-default-bind-ciphers"></a><a class="anchor" name="3-ssl-default-bind-ciphers"></a><a class="anchor" name="3.1-ssl-default-bind-ciphers"></a><a class="anchor" name="ssl-default-bind-ciphers (Global parameters)"></a><a class="anchor" name="ssl-default-bind-ciphers (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-default-bind-ciphers"></a><a href="#3.1-ssl-default-bind-ciphers">ssl-default-bind-ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the default string describing the list of cipher algorithms (&quot;cipher suite&quot;)
 that are negotiated during the SSL/TLS handshake up to TLSv1.2 for all
@@ -5397,6 +5406,12 @@ agents are kept in a LRU cache :
 
 Please note that this option is only available when haproxy has been compiled
 with USE_WURFL=1.
+</pre><a class="anchor" name="strict-limits"></a><a class="anchor" name="3-strict-limits"></a><a class="anchor" name="3.1-strict-limits"></a><a class="anchor" name="strict-limits (Global parameters)"></a><a class="anchor" name="strict-limits (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="strict-limits"></a><a href="#3.1-strict-limits">strict-limits</a></b></div><pre class="text">Makes process fail at startup when a setrlimit fails. Haproxy is tries to set
+the best setrlimit according to what has been calculated. If it fails, it
+will emit a warning. Use this option if you want an explicit failure of
+haproxy when those limits fail. This option is disabled by default. If it has
+been enabled, it may still be forcibly disabled by prefixing it with the &quot;no&quot;
+keyword.
 </pre></div>
 <a class="anchor" id="3.2" name="3.2"></a>
 <h2 id="chapter-3.2" data-target="3.2"><small><a class="small" href="#3.2">3.2.</a></small> Performance tuning</h2>
@@ -5964,6 +5979,10 @@ tables without having to comment out all &quot;<a href="#peers">peers</a>&quot; 
 </div>
 <div class="page-header"><b>See also:</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#server%20%28Peers%29">Peers</a></li><li><a href="#server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; and <a href="#5">section 5</a> about server options</div>
 <a class="anchor" name="enable"></a><a class="anchor" name="3-enable"></a><a class="anchor" name="3.5-enable"></a><a class="anchor" name="enable (Global parameters)"></a><a class="anchor" name="enable (Peers)"></a><div class="keyword"><b><a class="anchor" name="enable"></a><a href="#3.5-enable">enable</a></b></div><pre class="text">This re-enables a disabled peers section which was previously disabled.
+</pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.5-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Peers)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.5-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
+    <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><pre class="text">&quot;<a href="#peers">peers</a>&quot; sections support the same &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword as for the proxies to
+log information about the &quot;<a href="#peers">peers</a>&quot; listener. See &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; option for proxies for
+more details.
 </pre><a class="anchor" name="peer"></a><a class="anchor" name="3-peer"></a><a class="anchor" name="3.5-peer"></a><a class="anchor" name="peer (Global parameters)"></a><a class="anchor" name="peer (Peers)"></a><div class="keyword"><b><a class="anchor" name="peer"></a><a href="#3.5-peer">peer</a></b> <span style="color: #080">&lt;peername&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span> <span style="color: #008">[param*]</span></div><pre class="text">Defines a peer inside a peers section.
 If &lt;peername&gt; is set to the local peer name (by default hostname, or forced
 using &quot;-L&quot; command line option), haproxy will listen for incoming remote peer
@@ -8078,14 +8097,18 @@ without sending any response. It acts similarly to the
 &quot;tcp-request content reject&quot; rules. It can be useful to force an immediate
 connection closure on HTTP/2 connections.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-header"></a><a class="anchor" name="4-http-request replace-header"></a><a class="anchor" name="4.2-http-request replace-header"></a><a class="anchor" name="http-request replace-header (Proxies)"></a><a class="anchor" name="http-request replace-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-header"></a><a href="#4.2-http-request%20replace-header">http-request replace-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This  matches the regular expression in all occurrences of header field
-&lt;name&gt; according to &lt;match-regex&gt;, and replaces them with the
-&lt;replace-fmt&gt; argument. Format characters are allowed in replace-fmt and
-work like in &lt;fmt&gt; arguments in &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot;. The match is
-only case-sensitive. It is important to understand that this action only
-considers whole header lines, regardless of the number of values they may
-contain. This usage is suited to headers naturally containing commas in
-their value, such as If-Modified-Since and so on.
+                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the value of all occurences of header field &lt;name&gt; against
+&lt;match-regex&gt;. Matching is performed case-sensitively. Matching values are
+completely replaced by &lt;replace-fmt&gt;. Format characters are allowed in
+&lt;replace-fmt&gt; and work like &lt;fmt&gt; arguments in &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot;.
+Standard back-references using the backslash ('\') followed by a number are
+supported.
+
+This action acts on whole header lines, regardless of the number of values
+they may contain. Thus it is well-suited to process headers naturally
+containing commas in their value, such as If-Modified-Since. Headers that
+contain a comma-separated list of values, such as Accept, should be processed
+using &quot;<a href="#http-request%20replace-value">http-request replace-value</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -8098,19 +8121,24 @@ Cookie: foo=foobar; expires=Tue, 14-Jun-2016 01:40:45 GMT;
 Cookie: foo=foobar;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT;
 
 <span class="comment"># assuming the backend IP is 192.168.1.20</span>
+
+http-request replace-header User-Agent curl foo
+
+<span class="comment"># applied to:</span>
+User-Agent: curl/7.47.0
+
+<span class="comment"># outputs:</span>
+User-Agent: foo
 </code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-uri"></a><a class="anchor" name="4-http-request replace-uri"></a><a class="anchor" name="4.2-http-request replace-uri"></a><a class="anchor" name="http-request replace-uri (Proxies)"></a><a class="anchor" name="http-request replace-uri (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-uri"></a><a href="#4.2-http-request%20replace-uri">http-request replace-uri</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                           <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the regular expression in the URI part of the request
-according to &lt;match-regex&gt;, and replaces it with the &lt;replace-fmt&gt;
-argument. Standard back-references using the backslash ('\') followed by a
-number are supported. The &lt;fmt&gt; field is interpreted as a log-format string
-so it may contain special expressions just like the &lt;fmt&gt; argument passed
-to &quot;<a href="#http-request%20set-uri">http-request set-uri</a>&quot;. The match is exclusively case-sensitive. Any
-optional scheme, authority or query string are considered in the matching
-part of the URI. It is worth noting that regular expressions may be more
-expensive to evaluate than certain ACLs, so rare replacements may benefit
-from a condition to avoid performing the evaluation at all if it does not
-match.
+                           <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request's URI part
+instead of a header. The URI part may contain an optional scheme, authority or
+query string. These are considered to be part of the value that is matched
+against.
+
+It is worth noting that regular expressions may be more expensive to evaluate
+than certain ACLs, so rare replacements may benefit from a condition to avoid
+performing the evaluation at all if it does not match.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -8144,9 +8172,11 @@ X-Forwarded-For: 172.16.10.1, 172.16.13.24, 10.0.0.37
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request sc-inc-gpc0"></a><a class="anchor" name="4-http-request sc-inc-gpc0"></a><a class="anchor" name="4.2-http-request sc-inc-gpc0"></a><a class="anchor" name="http-request sc-inc-gpc0 (Proxies)"></a><a class="anchor" name="http-request sc-inc-gpc0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request sc-inc-gpc0"></a><a href="#4.2-http-request%20sc-inc-gpc0">http-request sc-inc-gpc0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request sc-inc-gpc1"></a><a class="anchor" name="4-http-request sc-inc-gpc1"></a><a class="anchor" name="4.2-http-request sc-inc-gpc1"></a><a class="anchor" name="http-request sc-inc-gpc1 (Proxies)"></a><a class="anchor" name="http-request sc-inc-gpc1 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request sc-inc-gpc1"></a><a href="#4.2-http-request%20sc-inc-gpc1">http-request sc-inc-gpc1</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This actions increments the GPC0 or GPC1 counter according with the sticky
 counter designated by &lt;sc-id&gt;. If an error occurs, this action silently fails
 and the actions evaluation continues.
-</pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request sc-set-gpt0"></a><a class="anchor" name="4-http-request sc-set-gpt0"></a><a class="anchor" name="4.2-http-request sc-set-gpt0"></a><a class="anchor" name="http-request sc-set-gpt0 (Proxies)"></a><a class="anchor" name="http-request sc-set-gpt0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request sc-set-gpt0"></a><a href="#4.2-http-request%20sc-set-gpt0">http-request sc-set-gpt0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action sets the GPT0 tag according to the sticky counter designated by
-&lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If an error
-occurs, this action silently fails and the actions evaluation continues.
+</pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request sc-set-gpt0"></a><a class="anchor" name="4-http-request sc-set-gpt0"></a><a class="anchor" name="4.2-http-request sc-set-gpt0"></a><a class="anchor" name="http-request sc-set-gpt0 (Proxies)"></a><a class="anchor" name="http-request sc-set-gpt0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request sc-set-gpt0"></a><a href="#4.2-http-request%20sc-set-gpt0">http-request sc-set-gpt0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #800">{ <span style="color: #080">&lt;int&gt;</span> | <span style="color: #080">&lt;expr&gt;</span> }</span>
+                                  <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action sets the 32-bit unsigned GPT0 tag according to the sticky counter
+designated by &lt;sc-id&gt; and the value of &lt;int&gt;/&lt;expr&gt;. The expected result is a
+boolean. If an error occurs, this action silently fails and the actions
+evaluation continues.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request set-dst"></a><a class="anchor" name="4-http-request set-dst"></a><a class="anchor" name="4.2-http-request set-dst"></a><a class="anchor" name="http-request set-dst (Proxies)"></a><a class="anchor" name="http-request set-dst (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request set-dst"></a><a href="#4.2-http-request%20set-dst">http-request set-dst</a></b> <span style="color: #080">&lt;expr&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to set the destination IP address to the value of specified
 expression. Useful when a proxy in front of HAProxy rewrites destination IP,
 but provides the correct IP in a HTTP header; or you want to mask the IP for
@@ -8199,7 +8229,7 @@ http-request set-header X-SSL-Client-NotBefore %{+Q}[ssl_c_notbefore]
 http-request set-header X-SSL-Client-NotAfter  %{+Q}[ssl_c_notafter]
 </code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request set-log-level"></a><a class="anchor" name="4-http-request set-log-level"></a><a class="anchor" name="4.2-http-request set-log-level"></a><a class="anchor" name="http-request set-log-level (Proxies)"></a><a class="anchor" name="http-request set-log-level (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request set-log-level"></a><a href="#4.2-http-request%20set-log-level">http-request set-log-level</a></b> <span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to change the log level of the current request when a certain
-condition is met. Valid levels are the 8 syslog levels (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;
+condition is met. Valid levels are the 8 syslog levels (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;
 keyword) plus the special level &quot;silent&quot; which disables logging for this
 request. This rule is not final so the last matching rule wins. This rule
 can be useful to disable health checks coming from another equipment.
@@ -8524,14 +8554,8 @@ the response. See the &quot;<a href="#redirect">redirect</a>&quot; keyword for t
 redirect rule is applied during a response, connections to the server are
 closed so that no data can be forwarded from the server to the client.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response replace-header"></a><a class="anchor" name="4-http-response replace-header"></a><a class="anchor" name="4.2-http-response replace-header"></a><a class="anchor" name="http-response replace-header (Proxies)"></a><a class="anchor" name="http-response replace-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response replace-header"></a><a href="#4.2-http-response%20replace-header">http-response replace-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                             <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the regular expression in all occurrences of header field &lt;name&gt;
-according to &lt;match-regex&gt;, and replaces them with the &lt;replace-fmt&gt; argument.
-Format characters are allowed in replace-fmt and work like in &lt;fmt&gt; arguments
-in &quot;add-header&quot;. The match is only case-sensitive. It is important to
-understand that this action only considers whole header lines, regardless of
-the number of values they may contain. This usage is suited to headers
-naturally containing commas in their value, such as Set-Cookie, Expires and
-so on.
+                             <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;<a href="#http-request%20replace-header">http-request replace-header</a>&quot; except that it works on the
+server's response instead of the client's request.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -8546,10 +8570,8 @@ Set-Cookie: C=1;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT
 <span class="comment"># assuming the backend IP is 192.168.1.20.</span>
 </code></pre>
 </div><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response replace-value"></a><a class="anchor" name="4-http-response replace-value"></a><a class="anchor" name="4.2-http-response replace-value"></a><a class="anchor" name="http-response replace-value (Proxies)"></a><a class="anchor" name="http-response replace-value (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response replace-value"></a><a href="#4.2-http-response%20replace-value">http-response replace-value</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it matches the regex against
-every comma-delimited value of the header field &lt;name&gt; instead of the entire
-header. This is suited for all headers which are allowed to carry more than
-one value. An example could be the Accept header.
+                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;<a href="#http-response%20replace-value">http-response replace-value</a>&quot; except that it works on the
+server's response instead of the client's request.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -8564,9 +8586,11 @@ Cache-Control: max-age=3600, private
 </div><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response sc-inc-gpc0"></a><a class="anchor" name="4-http-response sc-inc-gpc0"></a><a class="anchor" name="4.2-http-response sc-inc-gpc0"></a><a class="anchor" name="http-response sc-inc-gpc0 (Proxies)"></a><a class="anchor" name="http-response sc-inc-gpc0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response sc-inc-gpc0"></a><a href="#4.2-http-response%20sc-inc-gpc0">http-response sc-inc-gpc0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response sc-inc-gpc1"></a><a class="anchor" name="4-http-response sc-inc-gpc1"></a><a class="anchor" name="4.2-http-response sc-inc-gpc1"></a><a class="anchor" name="http-response sc-inc-gpc1 (Proxies)"></a><a class="anchor" name="http-response sc-inc-gpc1 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response sc-inc-gpc1"></a><a href="#4.2-http-response%20sc-inc-gpc1">http-response sc-inc-gpc1</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action increments the GPC0 or GPC1 counter according with the sticky
 counter designated by &lt;sc-id&gt;. If an error occurs, this action silently fails
 and the actions evaluation continues.
-</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response sc-set-gpt0"></a><a class="anchor" name="4-http-response sc-set-gpt0"></a><a class="anchor" name="4.2-http-response sc-set-gpt0"></a><a class="anchor" name="http-response sc-set-gpt0 (Proxies)"></a><a class="anchor" name="http-response sc-set-gpt0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response sc-set-gpt0"></a><a href="#4.2-http-response%20sc-set-gpt0">http-response sc-set-gpt0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action sets the GPT0 tag according to the sticky counter designated by
-&lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If an error
-occurs, this action silently fails and the actions evaluation continues.
+</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response sc-set-gpt0"></a><a class="anchor" name="4-http-response sc-set-gpt0"></a><a class="anchor" name="4.2-http-response sc-set-gpt0"></a><a class="anchor" name="http-response sc-set-gpt0 (Proxies)"></a><a class="anchor" name="http-response sc-set-gpt0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response sc-set-gpt0"></a><a href="#4.2-http-response%20sc-set-gpt0">http-response sc-set-gpt0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #800">{ <span style="color: #080">&lt;int&gt;</span> | <span style="color: #080">&lt;expr&gt;</span> }</span>
+                                   <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action sets the 32-bit unsigned GPT0 tag according to the sticky counter
+designated by &lt;sc-id&gt; and the value of &lt;int&gt;/&lt;expr&gt;. The expected result is a
+boolean. If an error occurs, this action silently fails and the actions
+evaluation continues.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response send-spoe-group"></a><a class="anchor" name="4-http-response send-spoe-group"></a><a class="anchor" name="4.2-http-response send-spoe-group"></a><a class="anchor" name="http-response send-spoe-group (Proxies)"></a><a class="anchor" name="http-response send-spoe-group (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response send-spoe-group"></a><a href="#4.2-http-response%20send-spoe-group">http-response send-spoe-group</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action is used to trigger sending of a group of SPOE messages. To do so,
 the SPOE engine used to send messages must be defined, as well as the SPOE
 group to send. Of course, the SPOE engine must refer to an existing SPOE
@@ -8582,7 +8606,7 @@ agent name must be used.
 removed if it existed. This is useful when passing security information to
 the server, where the header must not be manipulated by external users.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response set-log-level"></a><a class="anchor" name="4-http-response set-log-level"></a><a class="anchor" name="4.2-http-response set-log-level"></a><a class="anchor" name="http-response set-log-level (Proxies)"></a><a class="anchor" name="http-response set-log-level (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response set-log-level"></a><a href="#4.2-http-response%20set-log-level">http-response set-log-level</a></b> <span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to change the log level of the current request when a certain
-condition is met. Valid levels are the 8 syslog levels (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;
+condition is met. Valid levels are the 8 syslog levels (see the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;
 keyword) plus the special level &quot;silent&quot; which disables logging for this
 request. This rule is not final so the last matching rule wins. This rule can
 be useful to disable health checks coming from another equipment.
@@ -8753,9 +8777,7 @@ connection properties and compatibility. Specifically :
   - connections with certain bogus authentication schemes (relying on the
     connection) like NTLM are detected, marked private and are never shared;
 
-No connection pool is involved, once a session dies, the last idle connection
-it was attached to is deleted at the same time. This ensures that connections
-may not last after all sessions are closed.
+A connection pool is involved and configurable with &quot;<a href="#pool-max-conn">pool-max-conn</a>&quot;.
 
 Note: connection reuse improves the accuracy of the &quot;server maxconn&quot; setting,
 because almost no new connection will be established while idle connections
@@ -9567,7 +9589,7 @@ logged.
 It is strongly discouraged to use this option as most of the time, the key to
 complex issues is in the normal logs which will not be logged here. If you
 need to separate logs, see the &quot;<a href="#option%20log-separate-errors">log-separate-errors</a>&quot; option instead.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#option%20log-separate-errors">log-separate-errors</a>&quot; and <a href="#8">section 8</a> about logging.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#option%20log-separate-errors">log-separate-errors</a>&quot; and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option dontlognull"></a><a class="anchor" name="4-option dontlognull"></a><a class="anchor" name="4.2-option dontlognull"></a><a class="anchor" name="option dontlognull (Proxies)"></a><a class="anchor" name="option dontlognull (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option dontlognull"></a><a href="#4.2-option%20dontlognull">option dontlognull</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option dontlognull"></a><a class="anchor" name="4-no option dontlognull"></a><a class="anchor" name="4.2-no option dontlognull"></a><a class="anchor" name="no option dontlognull (Proxies)"></a><a class="anchor" name="no option dontlognull (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option dontlognull"></a><a href="#4.2-no%20option%20dontlognull">no option dontlognull</a></b></div><pre class="text">Enable or disable logging of null connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9592,7 +9614,7 @@ would not be logged.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20http-ignore-probes">http-ignore-probes</a>&quot;, &quot;<a href="#monitor-net">monitor-net</a>&quot;, &quot;<a href="#monitor-uri">monitor-uri</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option forwardfor"></a><a class="anchor" name="4-option forwardfor"></a><a class="anchor" name="4.2-option forwardfor"></a><a class="anchor" name="option forwardfor (Proxies)"></a><a class="anchor" name="option forwardfor (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option forwardfor"></a><a href="#4.2-option%20forwardfor">option forwardfor</a></b> <span style="color: #008">[ except <span style="color: #080">&lt;network&gt;</span> ]</span> <span style="color: #008">[ header <span style="color: #080">&lt;name&gt;</span> ]</span> <span style="color: #008">[ if-none ]</span></div><pre class="text">Enable insertion of the X-Forwarded-For header to requests sent to servers
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9770,7 +9792,7 @@ are often the only way to detect them.
 
 If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
 in a specific instance by prepending the &quot;no&quot; keyword before it.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#errorfile">errorfile</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#errorfile">errorfile</a>&quot;, and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-keep-alive"></a><a class="anchor" name="4-option http-keep-alive"></a><a class="anchor" name="4.2-option http-keep-alive"></a><a class="anchor" name="option http-keep-alive (Proxies)"></a><a class="anchor" name="option http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-keep-alive"></a><a href="#4.2-option%20http-keep-alive">option http-keep-alive</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-keep-alive"></a><a class="anchor" name="4-no option http-keep-alive"></a><a class="anchor" name="4.2-no option http-keep-alive"></a><a class="anchor" name="no option http-keep-alive (Proxies)"></a><a class="anchor" name="no option http-keep-alive (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-keep-alive"></a><a href="#4.2-no%20option%20http-keep-alive">no option http-keep-alive</a></b></div><pre class="text">Enable or disable HTTP keep-alive from client to server
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10184,7 +10206,7 @@ reject connections, then when the server stopped responding at all.
 
 Note that status changes not caused by health checks (e.g. enable/disable on
 the CLI) are intentionally not logged by this option.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#option%20ldap-check">option ldap-check</a>&quot;, &quot;<a href="#option%20mysql-check">option mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#option%20redis-check">option redis-check</a>&quot;, &quot;<a href="#option%20smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; and <a href="#8">section 8</a> about logging.</div>
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#option%20ldap-check">option ldap-check</a>&quot;, &quot;<a href="#option%20mysql-check">option mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#option%20redis-check">option redis-check</a>&quot;, &quot;<a href="#option%20smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option log-separate-errors"></a><a class="anchor" name="4-option log-separate-errors"></a><a class="anchor" name="4.2-option log-separate-errors"></a><a class="anchor" name="option log-separate-errors (Proxies)"></a><a class="anchor" name="option log-separate-errors (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option log-separate-errors"></a><a href="#4.2-option%20log-separate-errors">option log-separate-errors</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option log-separate-errors"></a><a class="anchor" name="4-no option log-separate-errors"></a><a class="anchor" name="4.2-no option log-separate-errors"></a><a class="anchor" name="no option log-separate-errors (Proxies)"></a><a class="anchor" name="no option log-separate-errors (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option log-separate-errors"></a><a href="#4.2-no%20option%20log-separate-errors">no option log-separate-errors</a></b></div><pre class="text">Change log level for non-completely successful connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -10204,7 +10226,7 @@ provides very important information.
 Using this option, large sites dealing with several thousand connections per
 second may log normal traffic to a rotating buffer and only archive smaller
 error logs.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#option%20dontlog-normal">dontlog-normal</a>&quot; and <a href="#8">section 8</a> about logging.</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#option%20dontlog-normal">dontlog-normal</a>&quot; and <a href="#8">section 8</a> about logging.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option logasap"></a><a class="anchor" name="4-option logasap"></a><a class="anchor" name="4.2-option logasap"></a><a class="anchor" name="option logasap (Proxies)"></a><a class="anchor" name="option logasap (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option logasap"></a><a href="#4.2-option%20logasap">option logasap</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option logasap"></a><a class="anchor" name="4-no option logasap"></a><a class="anchor" name="4.2-no option logasap"></a><a class="anchor" name="no option logasap (Proxies)"></a><a class="anchor" name="no option logasap (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option logasap"></a><a href="#4.2-no%20option%20logasap">no option logasap</a></b></div><pre class="text">Enable or disable early logging of HTTP requests
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -12789,11 +12811,11 @@ Four types of actions are supported :
       counter designated by &lt;sc-id&gt;. If an error occurs, this action silently
       fails and the actions evaluation continues.
 
-  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;:
-      This action sets the GPT0 tag according to the sticky counter designated
-      by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
-      an error occurs, this action silently fails and the actions evaluation
-      continues.
+  - sc-set-gpt0(&lt;sc-id&gt;) { &lt;int&gt; | &lt;expr&gt; }:
+      This action sets the 32-bit unsigned GPT0 tag according to the sticky
+      counter designated by &lt;sc-id&gt; and the value of &lt;int&gt;/&lt;expr&gt;. The
+      expected result is a boolean. If an error occurs, this action silently
+      fails and the actions evaluation continues.
 
   - set-src &lt;expr&gt; :
     Is used to set the source IP address to the value of specified
@@ -12949,7 +12971,7 @@ Several types of actions are supported :
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-inc-gpc1(&lt;sc-id&gt;)
-  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
+  - sc-set-gpt0(&lt;sc-id&gt;) { &lt;int&gt; | &lt;expr&gt; }
   - set-dst &lt;expr&gt;
   - set-dst-port &lt;expr&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
@@ -13215,11 +13237,11 @@ Several types of actions are supported :
       counter designated by &lt;sc-id&gt;. If an error occurs, this action fails
       silently and the actions evaluation continues.
 
-  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt; :
-      This action sets the GPT0 tag according to the sticky counter designated
-      by &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If
-      an error occurs, this action silently fails and the actions evaluation
-      continues.
+  - sc-set-gpt0(&lt;sc-id&gt;) { &lt;int&gt; | &lt;expr&gt; }
+      This action sets the 32-bit unsigned GPT0 tag according to the sticky
+      counter designated by &lt;sc-id&gt; and the value of &lt;int&gt;/&lt;expr&gt;. The
+      expected result is a boolean. If an error occurs, this action silently
+      fails and the actions evaluation continues.
 
   - &quot;silent-drop&quot; :
       This stops the evaluation of the rules and makes the client-facing
@@ -13338,7 +13360,7 @@ Several types of actions are supported :
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-inc-gpc1(&lt;sc-id&gt;)
-  - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
+  - sc-set-gpt0(&lt;sc-id&gt;) { &lt;int&gt; | &lt;expr&gt; }
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
   - unset-var(&lt;var-name&gt;)
   - silent-drop
@@ -16196,12 +16218,16 @@ in a way that can be reliably transferred (e.g. an SSL ID can be copied in a
 header).
 </pre><a class="anchor" name="hex2i"></a><a class="anchor" name="7-hex2i"></a><a class="anchor" name="7.3.1-hex2i"></a><a class="anchor" name="hex2i (Using ACLs and fetching samples)"></a><a class="anchor" name="hex2i (Converters)"></a><div class="keyword"><b><a class="anchor" name="hex2i"></a><a href="#7.3.1-hex2i">hex2i</a></b></div><pre class="text">Converts a hex string containing two hex digits per input byte to an
 integer. If the input value cannot be converted, then zero is returned.
-</pre><a class="anchor" name="http_date"></a><a class="anchor" name="7-http_date"></a><a class="anchor" name="7.3.1-http_date"></a><a class="anchor" name="http_date (Using ACLs and fetching samples)"></a><a class="anchor" name="http_date (Converters)"></a><div class="keyword"><b><a class="anchor" name="http_date"></a><a href="#7.3.1-http_date">http_date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>)</div><pre class="text">Converts an integer supposed to contain a date since epoch to a string
+</pre><a class="anchor" name="http_date"></a><a class="anchor" name="7-http_date"></a><a class="anchor" name="7.3.1-http_date"></a><a class="anchor" name="http_date (Using ACLs and fetching samples)"></a><a class="anchor" name="http_date (Converters)"></a><div class="keyword"><b><a class="anchor" name="http_date"></a><a href="#7.3.1-http_date">http_date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset</span>]</span>,<span style="color: #008">[<span style="color: #080">&lt;unit&gt;</span>]</span>)</div><pre class="text">Converts an integer supposed to contain a date since epoch to a string
 representing this date in a format suitable for use in HTTP header fields. If
-an offset value is specified, then it is a number of seconds that is added to
-the date before the conversion is operated. This is particularly useful to
-emit Date header fields, Expires values in responses when combined with a
-positive offset, or Last-Modified values when the offset is negative.
+an offset value is specified, then it is added to the date before the
+conversion is operated. This is particularly useful to emit Date header fields,
+Expires values in responses when combined with a positive offset, or
+Last-Modified values when the offset is negative.
+If a unit value is specified, then consider the timestamp as either
+&quot;s&quot; for seconds (default behavior), &quot;ms&quot; for milliseconds, or &quot;us&quot; for
+microseconds since epoch. Offset is assumed to have the same unit as
+input timestamp.
 </pre><a class="anchor" name="in_table"></a><a class="anchor" name="7-in_table"></a><a class="anchor" name="7.3.1-in_table"></a><a class="anchor" name="in_table (Using ACLs and fetching samples)"></a><a class="anchor" name="in_table (Converters)"></a><div class="keyword"><b><a class="anchor" name="in_table"></a><a href="#7.3.1-in_table">in_table</a></b>(<span style="color: #080">&lt;table&gt;</span>)</div><pre class="text">  Uses the string representation of the input sample to perform a look up in
   the specified table. If the key is not found in the table, a boolean false
   is returned. Otherwise a boolean true is returned. This can be used to verify
@@ -16870,16 +16896,27 @@ logs will make it easier to spot the faulty processing that needs to be fixed
 to recover decent performance. The value may be artificially high due to a
 high cpu_calls count, for example when processing many HTTP chunks, and for
 this reason it is often preferred to log cpu_ns_avg instead.
-</pre><a class="anchor" name="date"></a><a class="anchor" name="7-date"></a><a class="anchor" name="7.3.2-date"></a><a class="anchor" name="date (Using ACLs and fetching samples)"></a><a class="anchor" name="date (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="date"></a><a href="#7.3.2-date">date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>) : integer</div><pre class="text">Returns the current date as the epoch (number of seconds since 01/01/1970).
-If an offset value is specified, then it is a number of seconds that is added
-to the current date before returning the value. This is particularly useful
-to compute relative dates, as both positive and negative offsets are allowed.
+</pre><a class="anchor" name="date"></a><a class="anchor" name="7-date"></a><a class="anchor" name="7.3.2-date"></a><a class="anchor" name="date (Using ACLs and fetching samples)"></a><a class="anchor" name="date (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="date"></a><a href="#7.3.2-date">date</a></b>(<span style="color: #008">[<span style="color: #080">&lt;offset&gt;</span>]</span>,<span style="color: #008">[<span style="color: #080">&lt;unit&gt;</span>]</span>) : integer</div><pre class="text">Returns the current date as the epoch (number of seconds since 01/01/1970).
+
+If an offset value is specified, then it is added to the current date before
+returning the value. This is particularly useful to compute relative dates,
+as both positive and negative offsets are allowed.
 It is useful combined with the http_date converter.
+
+&lt;unit&gt; is facultative, and can be set to &quot;s&quot; for seconds (default behavior),
+&quot;ms&quot; for  milliseconds or &quot;us&quot; for microseconds.
+If unit is set, return value is an integer reflecting either seconds,
+milliseconds or microseconds since epoch, plus offset.
+It is useful when a time resolution of less than a second is needed.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># set an expires header to now+1 hour in every response</span>
 http-response set-header Expires %[date(3600),http_date]
+
+<span class="comment"># set an expires header to now+1 hour in every response, with</span>
+<span class="comment"># millisecond granularity</span>
+http-response set-header Expires %[date(3600000,ms),http_date(0,ms)]
 </code></pre>
 </div><a class="anchor" name="date_us"></a><a class="anchor" name="7-date_us"></a><a class="anchor" name="7.3.2-date_us"></a><a class="anchor" name="date_us (Using ACLs and fetching samples)"></a><a class="anchor" name="date_us (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="date_us"></a><a href="#7.3.2-date_us">date_us</a></b> : integer</div><pre class="text">Return the microseconds part of the date (the &quot;second&quot; part is returned by
 date sample). This sample is coherent with the date sample as it is comes
@@ -17502,6 +17539,9 @@ listen ssh
     server local 127.0.0.1:22
 </code></pre>
 </div><a class="anchor" name="srv_id"></a><a class="anchor" name="7-srv_id"></a><a class="anchor" name="7.3.3-srv_id"></a><a class="anchor" name="srv_id (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="srv_id"></a><a href="#7.3.3-srv_id">srv_id</a></b> : integer</div><pre class="text">Returns an integer containing the server's id when processing the response.
+While it's almost only used with ACLs, it may be used for logging or
+debugging.
+</pre><a class="anchor" name="srv_name"></a><a class="anchor" name="7-srv_name"></a><a class="anchor" name="7.3.3-srv_name"></a><a class="anchor" name="srv_name (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_name (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="srv_name"></a><a href="#7.3.3-srv_name">srv_name</a></b> : string</div><pre class="text">Returns a string containing the server's name when processing the response.
 While it's almost only used with ACLs, it may be used for logging or
 debugging.
 </pre></div>
@@ -18507,7 +18547,7 @@ source IP address, destination address, connection duration, response times,
 HTTP request, HTTP return code, number of bytes transmitted, conditions
 in which the session ended, and even exchanged cookies values. For example
 track a particular user's problems. All messages may be sent to up to two
-syslog servers. Check the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword in <a href="#4.2">section 4.2</a> for more information
+syslog servers. Check the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword in <a href="#4.2">section 4.2</a> for more information
 about log facilities.
 </pre></div>
 <a class="anchor" id="8.2" name="8.2"></a>
@@ -20112,7 +20152,7 @@ is an optional setting.
 </div><a class="anchor" name="log-stderr"></a><a class="anchor" name="10-log-stderr"></a><a class="anchor" name="10.1.1-log-stderr"></a><a class="anchor" name="log-stderr (FastCGI applications)"></a><a class="anchor" name="log-stderr (Fcgi-app section)"></a><a class="anchor" name="log-stderr global"></a><a class="anchor" name="10-log-stderr global"></a><a class="anchor" name="10.1.1-log-stderr global"></a><a class="anchor" name="log-stderr global (FastCGI applications)"></a><a class="anchor" name="log-stderr global (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="log-stderr global"></a><a href="#10.1.1-log-stderr%20global">log-stderr global</a></b></div><a class="anchor" name="log-stderr"></a><a class="anchor" name="10-log-stderr"></a><a class="anchor" name="10.1.1-log-stderr"></a><a class="anchor" name="log-stderr (FastCGI applications)"></a><a class="anchor" name="log-stderr (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="log-stderr"></a><a href="#10.1.1-log-stderr">log-stderr</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span>
     <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span> <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><pre class="text">Enable logging of STDERR messages reported by the FastCGI application.
 
-See &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword in <a href="#4.2">section 4.2</a> for details. It is an optional setting. By
+See &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword in <a href="#4.2">section 4.2</a> for details. It is an optional setting. By
 default STDERR messages are ignored.
 </pre><a class="anchor" name="pass-header"></a><a class="anchor" name="10-pass-header"></a><a class="anchor" name="10.1.1-pass-header"></a><a class="anchor" name="pass-header (FastCGI applications)"></a><a class="anchor" name="pass-header (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="pass-header"></a><a href="#10.1.1-pass-header">pass-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Specify the name of a request header which will be passed to the FastCGI
 application. It may optionally be followed by an ACL-based condition, in
@@ -20359,8 +20399,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1-dev3-6 &ndash; Configuration Manual<br>
-							<small>2019/10/25, willy tarreau</small>
+							HAProxy 2.1-dev5-2 &ndash; Configuration Manual<br>
+							<small>2019/11/15, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20463,7 +20503,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev3-6', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev5-2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
