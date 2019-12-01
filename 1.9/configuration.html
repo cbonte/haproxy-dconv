@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.12 - Configuration Manual</title>
+		<title>HAProxy version 1.9.13 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.4.2-1" rel="stylesheet" />
+		<link href="../css/page.css?0.4.2-4" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -1491,6 +1491,8 @@
 							<a class="list-group-item" href="#http-request track-sc2">http-request track-sc2</a>
 							
 							<a class="list-group-item" href="#http-request unset-var">http-request unset-var</a>
+							
+							<a class="list-group-item" href="#http-request use-service">http-request use-service</a>
 							
 							<a class="list-group-item" href="#http-request wait-for-handshake">http-request wait-for-handshake</a>
 							
@@ -3083,7 +3085,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/10/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/01</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3092,12 +3094,12 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="text-center">
-                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
+                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.9.12</strong></p>
+							<p><strong>version 1.9.13</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/10/24
+								2019/11/25
 							</p>
 						</div>
 
@@ -8047,6 +8049,20 @@ checks that make use of it.
 <pre class="prettyprint">
 <code>http-request unset-var(req.my_var)
 </code></pre>
+</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request use-service"></a><a class="anchor" name="4-http-request use-service"></a><a class="anchor" name="4.2-http-request use-service"></a><a class="anchor" name="http-request use-service (Proxies)"></a><a class="anchor" name="http-request use-service (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request use-service"></a><a href="#4.2-http-request%20use-service">http-request use-service</a></b> <span style="color: #080">&lt;service-name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This directive executes the configured HTTP service to reply to the request
+and stops the evaluation of the rules. An HTTP service may choose to reply by
+sending any valid HTTP response or it may immediately close the connection
+without sending any response. Outside natives services, for instance the
+Prometheus exporter, it is possible to write your own services in Lua. No
+further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated.
+</pre><div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;service-name&gt;  is mandatory. It is the service to call</pre>
+</div>
+<div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request use-service prometheus-exporter if { path /metrics }
+</code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request wait-for-handshake"></a><a class="anchor" name="4-http-request wait-for-handshake"></a><a class="anchor" name="4.2-http-request wait-for-handshake"></a><a class="anchor" name="http-request wait-for-handshake (Proxies)"></a><a class="anchor" name="http-request wait-for-handshake (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request wait-for-handshake"></a><a href="#4.2-http-request%20wait-for-handshake">http-request wait-for-handshake</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This will delay the processing of the request until the SSL handshake
 happened. This is mostly useful to delay processing early data until we're
 sure they are valid.
@@ -8381,9 +8397,7 @@ connection properties and compatibility. Specifically :
   - connections with certain bogus authentication schemes (relying on the
     connection) like NTLM are detected, marked private and are never shared;
 
-No connection pool is involved, once a session dies, the last idle connection
-it was attached to is deleted at the same time. This ensures that connections
-may not last after all sessions are closed.
+A connection pool is involved and configurable with &quot;<a href="#pool-max-conn">pool-max-conn</a>&quot;.
 
 Note: connection reuse improves the accuracy of the &quot;server maxconn&quot; setting,
 because almost no new connection will be established while idle connections
@@ -12920,6 +12934,7 @@ Several types of actions are supported :
   - unset-var(&lt;var-name&gt;)
   - silent-drop
   - send-spoe-group &lt;engine-name&gt; &lt;group-name&gt;
+  - use-service &lt;service-name&gt;
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
@@ -13000,7 +13015,19 @@ the SPOE agent name must be used.
   &lt;engine-name&gt; The SPOE engine name.
 
   &lt;group-name&gt;  The SPOE group name as specified in the engine configuration.
+
+The &quot;use-service&quot; is used to executes a TCP service which will reply to the
+request and stop the evaluation of the rules. This service may choose to
+reply by sending any valid response or it may immediately close the
+connection without sending anything. Outside natives services, it is possible
+to write your own services in Lua. No further &quot;<a href="#tcp-request">tcp-request</a>&quot; rules are
+evaluated.
 </pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request content use-service lua.deny { src -f /etc/haproxy/blacklist.lst }
+</code></pre>
+</div><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>tcp-request content set-var(sess.my_var) src
@@ -19988,8 +20015,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.12 &ndash; Configuration Manual<br>
-							<small>2019/10/24, willy tarreau</small>
+							HAProxy 1.9.13 &ndash; Configuration Manual<br>
+							<small>2019/11/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20092,8 +20119,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.12', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.13', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
