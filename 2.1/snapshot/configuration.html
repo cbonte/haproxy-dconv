@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1-dev5-2 - Configuration Manual</title>
+		<title>HAProxy version 2.1.0-4 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-4" rel="stylesheet" />
@@ -1613,6 +1613,8 @@
 							<a class="list-group-item" href="#http-request track-sc2">http-request track-sc2</a>
 							
 							<a class="list-group-item" href="#http-request unset-var">http-request unset-var</a>
+							
+							<a class="list-group-item" href="#http-request use-service">http-request use-service</a>
 							
 							<a class="list-group-item" href="#http-request wait-for-handshake">http-request wait-for-handshake</a>
 							
@@ -3237,7 +3239,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/11/17</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/01</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3248,10 +3250,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1-dev5-2</strong></p>
+							<p><strong>version 2.1.0-4</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/11/15
+								2019/11/25
 							</p>
 						</div>
 
@@ -8459,6 +8461,20 @@ checks that make use of it.
 <pre class="prettyprint">
 <code>http-request unset-var(req.my_var)
 </code></pre>
+</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request use-service"></a><a class="anchor" name="4-http-request use-service"></a><a class="anchor" name="4.2-http-request use-service"></a><a class="anchor" name="http-request use-service (Proxies)"></a><a class="anchor" name="http-request use-service (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request use-service"></a><a href="#4.2-http-request%20use-service">http-request use-service</a></b> <span style="color: #080">&lt;service-name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This directive executes the configured HTTP service to reply to the request
+and stops the evaluation of the rules. An HTTP service may choose to reply by
+sending any valid HTTP response or it may immediately close the connection
+without sending any response. Outside natives services, for instance the
+Prometheus exporter, it is possible to write your own services in Lua. No
+further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li></ul></span>&quot; rules are evaluated.
+</pre><div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;service-name&gt;  is mandatory. It is the service to call</pre>
+</div>
+<div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request use-service prometheus-exporter if { path /metrics }
+</code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request wait-for-handshake"></a><a class="anchor" name="4-http-request wait-for-handshake"></a><a class="anchor" name="4.2-http-request wait-for-handshake"></a><a class="anchor" name="http-request wait-for-handshake (Proxies)"></a><a class="anchor" name="http-request wait-for-handshake (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request wait-for-handshake"></a><a href="#4.2-http-request%20wait-for-handshake">http-request wait-for-handshake</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This will delay the processing of the request until the SSL handshake
 happened. This is mostly useful to delay processing early data until we're
 sure they are valid.
@@ -9755,11 +9771,10 @@ example. The first use case is to buffer requests from slow clients before
 connecting to the server. Another use case consists in taking the routing
 decision based on the request body's contents. This option placed in a
 frontend or backend forces the HTTP processing to wait until either the whole
-body is received, or the request buffer is full, or the first chunk is
-complete in case of chunked encoding. It can have undesired side effects with
-some applications abusing HTTP by expecting unbuffered transmissions between
-the frontend and the backend, so this should definitely not be used by
-default.
+body is received or the request buffer is full. It can have undesired side
+effects with some applications abusing HTTP by expecting unbuffered
+transmissions between the frontend and the backend, so this should definitely
+not be used by default.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20http-no-delay">option http-no-delay</a>&quot;, &quot;<a href="#timeout%20http-request">timeout http-request</a>&quot;</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-ignore-probes"></a><a class="anchor" name="4-option http-ignore-probes"></a><a class="anchor" name="4.2-option http-ignore-probes"></a><a class="anchor" name="option http-ignore-probes (Proxies)"></a><a class="anchor" name="option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-ignore-probes"></a><a href="#4.2-option%20http-ignore-probes">option http-ignore-probes</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-ignore-probes"></a><a class="anchor" name="4-no option http-ignore-probes"></a><a class="anchor" name="4.2-no option http-ignore-probes"></a><a class="anchor" name="no option http-ignore-probes (Proxies)"></a><a class="anchor" name="no option http-ignore-probes (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-ignore-probes"></a><a href="#4.2-no%20option%20http-ignore-probes">no option http-ignore-probes</a></b></div><pre class="text">Enable or disable logging of null connections and request timeouts
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -12978,6 +12993,7 @@ Several types of actions are supported :
   - unset-var(&lt;var-name&gt;)
   - silent-drop
   - send-spoe-group &lt;engine-name&gt; &lt;group-name&gt;
+  - use-service &lt;service-name&gt;
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
@@ -13063,7 +13079,19 @@ the SPOE agent name must be used.
   &lt;engine-name&gt; The SPOE engine name.
 
   &lt;group-name&gt;  The SPOE group name as specified in the engine configuration.
+
+The &quot;use-service&quot; is used to executes a TCP service which will reply to the
+request and stop the evaluation of the rules. This service may choose to
+reply by sending any valid response or it may immediately close the
+connection without sending anything. Outside natives services, it is possible
+to write your own services in Lua. No further &quot;<a href="#tcp-request">tcp-request</a>&quot; rules are
+evaluated.
 </pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request content use-service lua.deny { src -f /etc/haproxy/blacklist.lst }
+</code></pre>
+</div><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>tcp-request content set-var(sess.my_var) src
@@ -15034,6 +15062,11 @@ Available options:
   backend, being resolved by the same FQDN) have the same IP address.
   For such case, simply enable this option.
   This is the opposite of prevent-dup-ip.
+
+* ignore-weight
+  Ignore any weight that is set within an SRV record.  This is useful when
+  you would like to control the weights using an alternate method, such as
+  using an &quot;<a href="#agent-check">agent-check</a>&quot; or through the runtime api.
 
 * prevent-dup-ip
   Ensure HAProxy's default behavior is enforced on a server: prevent re-using
@@ -20399,8 +20432,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1-dev5-2 &ndash; Configuration Manual<br>
-							<small>2019/11/15, willy tarreau</small>
+							HAProxy 2.1.0-4 &ndash; Configuration Manual<br>
+							<small>2019/11/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20503,7 +20536,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1-dev5-2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.0-4', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
