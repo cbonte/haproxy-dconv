@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0.9 - Configuration Manual</title>
+		<title>HAProxy version 2.0.10 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-4" rel="stylesheet" />
@@ -1395,6 +1395,10 @@
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-H"><h4>H</h4>
 								
+							<a class="list-group-item" href="#h1-case-adjust">h1-case-adjust</a>
+							
+							<a class="list-group-item" href="#h1-case-adjust-file">h1-case-adjust-file</a>
+							
 							<a class="list-group-item" href="#hard-stop-after">hard-stop-after</a>
 							
 							<a class="list-group-item" href="#hash-balance-factor">hash-balance-factor</a>
@@ -1518,6 +1522,8 @@
 							<a class="list-group-item" href="#http-request track-sc2">http-request track-sc2</a>
 							
 							<a class="list-group-item" href="#http-request unset-var">http-request unset-var</a>
+							
+							<a class="list-group-item" href="#http-request use-service">http-request use-service</a>
 							
 							<a class="list-group-item" href="#http-request wait-for-handshake">http-request wait-for-handshake</a>
 							
@@ -1778,6 +1784,10 @@
 							
 							<a class="list-group-item" href="#no option dontlognull">no option dontlognull</a>
 							
+							<a class="list-group-item" href="#no option h1-case-adjust-bogus-client">no option h1-case-adjust-bogus-client</a>
+							
+							<a class="list-group-item" href="#no option h1-case-adjust-bogus-server">no option h1-case-adjust-bogus-server</a>
+							
 							<a class="list-group-item" href="#no option http-buffer-request">no option http-buffer-request</a>
 							
 							<a class="list-group-item" href="#no option http-ignore-probes">no option http-ignore-probes</a>
@@ -1934,6 +1944,10 @@
 							<a class="list-group-item" href="#option external-check">option external-check</a>
 							
 							<a class="list-group-item" href="#option forwardfor">option forwardfor</a>
+							
+							<a class="list-group-item" href="#option h1-case-adjust-bogus-client">option h1-case-adjust-bogus-client</a>
+							
+							<a class="list-group-item" href="#option h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a>
 							
 							<a class="list-group-item" href="#option http-buffer-request">option http-buffer-request</a>
 							
@@ -3146,7 +3160,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/11/18</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/01</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3157,10 +3171,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0.9</strong></p>
+							<p><strong>version 2.0.10</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/11/15
+								2019/11/25
 							</p>
 						</div>
 
@@ -4531,6 +4545,8 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#gid">gid</a>
    - <a href="#group">group</a>
    - <a href="#hard-stop-after">hard-stop-after</a>
+   - <a href="#h1-case-adjust">h1-case-adjust</a>
+   - <a href="#h1-case-adjust-file">h1-case-adjust-file</a>
    - <a href="#log">log</a>
    - <a href="#log-tag">log-tag</a>
    - <a href="#log-send-hostname">log-send-hostname</a>
@@ -4762,7 +4778,53 @@ in tcp mode). It applies both in TCP and HTTP mode.
 <code>global
   hard-stop-after 30s
 </code></pre>
-</div><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.1-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.1-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
+</div><a class="anchor" name="h1-case-adjust"></a><a class="anchor" name="3-h1-case-adjust"></a><a class="anchor" name="3.1-h1-case-adjust"></a><a class="anchor" name="h1-case-adjust (Global parameters)"></a><a class="anchor" name="h1-case-adjust (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="h1-case-adjust"></a><a href="#3.1-h1-case-adjust">h1-case-adjust</a></b> <span style="color: #080">&lt;from&gt;</span> <span style="color: #080">&lt;to&gt;</span></div><pre class="text">Defines the case adjustment to apply, when enabled, to the header name
+&lt;from&gt;, to change it to &lt;to&gt; before sending it to HTTP/1 clients or
+servers. &lt;from&gt; must be in lower case, and &lt;from&gt; and &lt;to&gt; must not differ
+except for their case. It may be repeated if several header names need to be
+ajusted. Duplicate entries are not allowed. If a lot of header names have to
+be adjusted, it might be more convenient to use &quot;<a href="#h1-case-adjust-file">h1-case-adjust-file</a>&quot;.
+Please note that no transformation will be applied unless &quot;option
+h1-case-adjust-bogus-client&quot; or &quot;<a href="#option%20h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a>&quot; is
+specified in a proxy.
+
+There is no standard case for header names because, as stated in RFC7230,
+they are case-insensitive. So applications must handle them in a case-
+insensitive manner. But some bogus applications violate the standards and
+erroneously rely on the cases most commonly used by browsers. This problem
+becomes critical with HTTP/2 because all header names must be exchanged in
+lower case, and HAProxy follows the same convention. All header names are
+sent in lower case to clients and servers, regardless of the HTTP version.
+
+Applications which fail to properly process requests or responses may require
+to temporarily use such workarounds to adjust header names sent to them for
+the time it takes the application to be fixed. Please note that an
+application which requires such workarounds might be vulnerable to content
+smuggling attacks and must absolutely be fixed.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>global
+  h1-case-adjust content-length Content-Length
+</code></pre>
+</div><pre class="text">See &quot;<a href="#h1-case-adjust-file">h1-case-adjust-file</a>&quot;, &quot;<a href="#option%20h1-case-adjust-bogus-client">option h1-case-adjust-bogus-client</a>&quot; and
+&quot;<a href="#option%20h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a>&quot;.
+</pre><a class="anchor" name="h1-case-adjust-file"></a><a class="anchor" name="3-h1-case-adjust-file"></a><a class="anchor" name="3.1-h1-case-adjust-file"></a><a class="anchor" name="h1-case-adjust-file (Global parameters)"></a><a class="anchor" name="h1-case-adjust-file (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="h1-case-adjust-file"></a><a href="#3.1-h1-case-adjust-file">h1-case-adjust-file</a></b> <span style="color: #080">&lt;hdrs-file&gt;</span></div><pre class="text">Defines a file containing a list of key/value pairs used to adjust the case
+of some header names before sending them to HTTP/1 clients or servers. The
+file &lt;hdrs-file&gt; must contain 2 header names per line. The first one must be
+in lower case and both must not differ except for their case. Lines which
+start with '#' are ignored, just like empty lines. Leading and trailing tabs
+and spaces are stripped. Duplicate entries are not allowed. Please note that
+no transformation will be applied unless &quot;<a href="#option%20h1-case-adjust-bogus-client">option h1-case-adjust-bogus-client</a>&quot;
+or &quot;<a href="#option%20h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a>&quot; is specified in a proxy.
+
+If this directive is repeated, only the last one will be processed.  It is an
+alternative to the directive &quot;<a href="#h1-case-adjust">h1-case-adjust</a>&quot; if a lot of header names need
+to be adjusted. Please read the risks associated with using this.
+
+See &quot;<a href="#h1-case-adjust">h1-case-adjust</a>&quot;, &quot;<a href="#option%20h1-case-adjust-bogus-client">option h1-case-adjust-bogus-client</a>&quot; and
+&quot;<a href="#option%20h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a>&quot;.
+</pre><a class="anchor" name="group"></a><a class="anchor" name="3-group"></a><a class="anchor" name="3.1-group"></a><a class="anchor" name="group (Global parameters)"></a><a class="anchor" name="group (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="group"></a><a href="#3.1-group">group</a></b> <span style="color: #080">&lt;group name&gt;</span></div><pre class="text">Similar to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; but uses the GID of group name &lt;group name&gt; from /etc/group.
 See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">gid<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#gid%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#gid%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">user<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#user%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#user%20%28Userlists%29">Userlists</a></li><li><a href="#user%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot;.
 </pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
     <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Several global servers can be defined. They
@@ -6063,6 +6125,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20dontlog-normal"><span class="pull-right"><span>(*)</span></span>option dontlog-normal</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlognull"><span class="pull-right"><span>(*)</span></span>option dontlognull</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20forwardfor">option forwardfor</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td ><a href="#4-option%20h1-case-adjust-bogus-client"><span class="pull-right"><span>(*)</span></span>option h1-case-adjust-bogus-client</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<tr><td ><a href="#4-option%20h1-case-adjust-bogus-server"><span class="pull-right"><span>(*)</span></span>option h1-case-adjust-bogus-server</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-buffer-request"><span class="pull-right"><span>(*)</span></span>option http-buffer-request</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20http-ignore-probes"><span class="pull-right"><span>(*)</span></span>option http-ignore-probes</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http-keep-alive"><span class="pull-right"><span>(*)</span></span>option http-keep-alive</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6077,9 +6141,9 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20httplog">option httplog</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http_proxy"><span class="pull-right"><span>(*)</span></span>option http_proxy</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20independent-streams"><span class="pull-right"><span>(*)</span></span>option independent-streams</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20ldap-check">option ldap-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20external-check">option external-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20log-health-checks"><span class="pull-right"><span>(*)</span></span>option log-health-checks</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20log-separate-errors"><span class="pull-right"><span>(*)</span></span>option log-separate-errors</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20logasap"><span class="pull-right"><span>(*)</span></span>option logasap</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -6098,9 +6162,9 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20spop-check">option spop-check</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcp-check">option tcp-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20tcp-smart-accept"><span class="pull-right"><span>(*)</span></span>option tcp-smart-accept</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20tcp-smart-connect"><span class="pull-right"><span>(*)</span></span>option tcp-smart-connect</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcpka">option tcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6119,9 +6183,9 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-reqdeny"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqdeny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqiallow"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqidel"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-reqideny"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqipass"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-reqirep"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqitarpit"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqitarpit</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqpass"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqpass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6140,9 +6204,9 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-server-state-file-name">server-state-file-name</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-server-template">server-template</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-source">source</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20hide-version">stats hide-version</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6161,9 +6225,9 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-stick-table">stick-table</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20connect">tcp-check connect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-tcp-check%20send">tcp-check send</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20send-binary">tcp-check send-binary</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-request%20inspect-delay">tcp-request inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6182,9 +6246,9 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-timeout%20server">timeout server</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20server-fin">timeout server-fin</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
+<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-unique-id-format">unique-id-format</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-unique-id-header">unique-id-header</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -8341,6 +8405,20 @@ checks that make use of it.
 <pre class="prettyprint">
 <code>http-request unset-var(req.my_var)
 </code></pre>
+</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request use-service"></a><a class="anchor" name="4-http-request use-service"></a><a class="anchor" name="4.2-http-request use-service"></a><a class="anchor" name="http-request use-service (Proxies)"></a><a class="anchor" name="http-request use-service (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request use-service"></a><a href="#4.2-http-request%20use-service">http-request use-service</a></b> <span style="color: #080">&lt;service-name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This directive executes the configured HTTP service to reply to the request
+and stops the evaluation of the rules. An HTTP service may choose to reply by
+sending any valid HTTP response or it may immediately close the connection
+without sending any response. Outside natives services, for instance the
+Prometheus exporter, it is possible to write your own services in Lua. No
+further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; rules are evaluated.
+</pre><div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;service-name&gt;  is mandatory. It is the service to call</pre>
+</div>
+<div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request use-service prometheus-exporter if { path /metrics }
+</code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request wait-for-handshake"></a><a class="anchor" name="4-http-request wait-for-handshake"></a><a class="anchor" name="4.2-http-request wait-for-handshake"></a><a class="anchor" name="http-request wait-for-handshake (Proxies)"></a><a class="anchor" name="http-request wait-for-handshake (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request wait-for-handshake"></a><a href="#4.2-http-request%20wait-for-handshake">http-request wait-for-handshake</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This will delay the processing of the request until the SSL handshake
 happened. This is mostly useful to delay processing early data until we're
 sure they are valid.
@@ -9569,6 +9647,70 @@ backend www
     option forwardfor header X-Client
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpclose">option httpclose</a>&quot;, &quot;<a href="#option%20http-server-close">option http-server-close</a>&quot;, &quot;<a href="#option%20http-keep-alive">option http-keep-alive</a>&quot;</div>
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option h1-case-adjust-bogus-client"></a><a class="anchor" name="4-option h1-case-adjust-bogus-client"></a><a class="anchor" name="4.2-option h1-case-adjust-bogus-client"></a><a class="anchor" name="option h1-case-adjust-bogus-client (Proxies)"></a><a class="anchor" name="option h1-case-adjust-bogus-client (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option h1-case-adjust-bogus-client"></a><a href="#4.2-option%20h1-case-adjust-bogus-client">option h1-case-adjust-bogus-client</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option h1-case-adjust-bogus-client"></a><a class="anchor" name="4-no option h1-case-adjust-bogus-client"></a><a class="anchor" name="4.2-no option h1-case-adjust-bogus-client"></a><a class="anchor" name="no option h1-case-adjust-bogus-client (Proxies)"></a><a class="anchor" name="no option h1-case-adjust-bogus-client (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option h1-case-adjust-bogus-client"></a><a href="#4.2-no%20option%20h1-case-adjust-bogus-client">no option h1-case-adjust-bogus-client</a></b></div><pre class="text">Enable or disable the case adjustment of HTTP/1 headers sent to bogus clients
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span> none
+</div>
+<pre class="text">There is no standard case for header names because, as stated in RFC7230,
+they are case-insensitive. So applications must handle them in a case-
+insensitive manner. But some bogus applications violate the standards and
+erroneously rely on the cases most commonly used by browsers. This problem
+becomes critical with HTTP/2 because all header names must be exchanged in
+lower case, and HAProxy follows the same convention. All header names are
+sent in lower case to clients and servers, regardless of the HTTP version.
+
+When HAProxy receives an HTTP/1 response, its header names are converted to
+lower case and manipulated and sent this way to the clients. If a client is
+known to violate the HTTP standards and to fail to process a response coming
+from HAProxy, it is possible to transform the lower case header names to a
+different format when the response is formatted and sent to the client, by
+enabling this option and specifying the list of headers to be reformatted
+using the global directives &quot;<a href="#h1-case-adjust">h1-case-adjust</a>&quot; or &quot;<a href="#h1-case-adjust-file">h1-case-adjust-file</a>&quot;. This
+must only be a temporary workaround for the time it takes the client to be
+fixed, because clients which require such workarounds might be vulnerable to
+content smuggling attacks and must absolutely be fixed.
+
+Please note that this option will not affect standards-compliant clients.
+
+If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+in a specific instance by prepending the &quot;no&quot; keyword before it.
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#option%20h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a>&quot;, &quot;<a href="#h1-case-adjust">h1-case-adjust</a>&quot;, &quot;<a href="#h1-case-adjust-file">h1-case-adjust-file</a>&quot;.</div>
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option h1-case-adjust-bogus-server"></a><a class="anchor" name="4-option h1-case-adjust-bogus-server"></a><a class="anchor" name="4.2-option h1-case-adjust-bogus-server"></a><a class="anchor" name="option h1-case-adjust-bogus-server (Proxies)"></a><a class="anchor" name="option h1-case-adjust-bogus-server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option h1-case-adjust-bogus-server"></a><a href="#4.2-option%20h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option h1-case-adjust-bogus-server"></a><a class="anchor" name="4-no option h1-case-adjust-bogus-server"></a><a class="anchor" name="4.2-no option h1-case-adjust-bogus-server"></a><a class="anchor" name="no option h1-case-adjust-bogus-server (Proxies)"></a><a class="anchor" name="no option h1-case-adjust-bogus-server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option h1-case-adjust-bogus-server"></a><a href="#4.2-no%20option%20h1-case-adjust-bogus-server">no option h1-case-adjust-bogus-server</a></b></div><pre class="text">Enable or disable the case adjustment of HTTP/1 headers sent to bogus servers
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span> none
+</div>
+<pre class="text">There is no standard case for header names because, as stated in RFC7230,
+they are case-insensitive. So applications must handle them in a case-
+insensitive manner. But some bogus applications violate the standards and
+erroneously rely on the cases most commonly used by browsers. This problem
+becomes critical with HTTP/2 because all header names must be exchanged in
+lower case, and HAProxy follows the same convention. All header names are
+sent in lower case to clients and servers, regardless of the HTTP version.
+
+When HAProxy receives an HTTP/1 request, its header names are converted to
+lower case and manipulated and sent this way to the servers. If a server is
+known to violate the HTTP standards and to fail to process a request coming
+from HAProxy, it is possible to transform the lower case header names to a
+different format when the request is formatted and sent to the server, by
+enabling this option and specifying the list of headers to be reformatted
+using the global directives &quot;<a href="#h1-case-adjust">h1-case-adjust</a>&quot; or &quot;<a href="#h1-case-adjust-file">h1-case-adjust-file</a>&quot;. This
+must only be a temporary workaround for the time it takes the server to be
+fixed, because servers which require such workarounds might be vulnerable to
+content smuggling attacks and must absolutely be fixed.
+
+Please note that this option will not affect standards-compliant servers.
+
+If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+in a specific instance by prepending the &quot;no&quot; keyword before it.
+</pre><div class="page-header"><b>See also:</b> &quot;<a href="#option%20h1-case-adjust-bogus-client">option h1-case-adjust-bogus-client</a>&quot;, &quot;<a href="#h1-case-adjust">h1-case-adjust</a>&quot;, &quot;<a href="#h1-case-adjust-file">h1-case-adjust-file</a>&quot;.</div>
 <a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option http-buffer-request"></a><a class="anchor" name="4-option http-buffer-request"></a><a class="anchor" name="4.2-option http-buffer-request"></a><a class="anchor" name="option http-buffer-request (Proxies)"></a><a class="anchor" name="option http-buffer-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option http-buffer-request"></a><a href="#4.2-option%20http-buffer-request">option http-buffer-request</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option http-buffer-request"></a><a class="anchor" name="4-no option http-buffer-request"></a><a class="anchor" name="4.2-no option http-buffer-request"></a><a class="anchor" name="no option http-buffer-request (Proxies)"></a><a class="anchor" name="no option http-buffer-request (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option http-buffer-request"></a><a href="#4.2-no%20option%20http-buffer-request">no option http-buffer-request</a></b></div><pre class="text">Enable or disable waiting for whole HTTP request body before proceeding
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13311,6 +13453,7 @@ Several types of actions are supported :
   - unset-var(&lt;var-name&gt;)
   - silent-drop
   - send-spoe-group &lt;engine-name&gt; &lt;group-name&gt;
+  - use-service &lt;service-name&gt;
 
 They have the same meaning as their counter-parts in &quot;<a href="#tcp-request%20connection">tcp-request connection</a>&quot;
 so please refer to that section for a complete description.
@@ -13396,7 +13539,19 @@ the SPOE agent name must be used.
   &lt;engine-name&gt; The SPOE engine name.
 
   &lt;group-name&gt;  The SPOE group name as specified in the engine configuration.
+
+The &quot;use-service&quot; is used to executes a TCP service which will reply to the
+request and stop the evaluation of the rules. This service may choose to
+reply by sending any valid response or it may immediately close the
+connection without sending anything. Outside natives services, it is possible
+to write your own services in Lua. No further &quot;<a href="#tcp-request">tcp-request</a>&quot; rules are
+evaluated.
 </pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request content use-service lua.deny { src -f /etc/haproxy/blacklist.lst }
+</code></pre>
+</div><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>tcp-request content set-var(sess.my_var) src
@@ -20496,8 +20651,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0.9 &ndash; Configuration Manual<br>
-							<small>2019/11/15, willy tarreau</small>
+							HAProxy 2.0.10 &ndash; Configuration Manual<br>
+							<small>2019/11/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20600,7 +20755,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.9', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.10', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
