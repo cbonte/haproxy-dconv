@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1.0-4 - Management Guide</title>
+		<title>HAProxy version 2.1.1 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-4" rel="stylesheet" />
@@ -218,6 +218,12 @@
 							
 								<div class="letter" id="letter-A"><h4>A</h4>
 								
+							<a class="list-group-item" href="#abort">abort</a>
+							
+							<a class="list-group-item" href="#abort ssl">abort ssl</a>
+							
+							<a class="list-group-item" href="#abort ssl cert">abort ssl cert</a>
+							
 							<a class="list-group-item" href="#add">add</a>
 							
 							<a class="list-group-item" href="#add acl">add acl</a>
@@ -238,6 +244,12 @@
 							<a class="list-group-item" href="#clear map">clear map</a>
 							
 							<a class="list-group-item" href="#clear table">clear table</a>
+							
+							<a class="list-group-item" href="#commit">commit</a>
+							
+							<a class="list-group-item" href="#commit ssl">commit ssl</a>
+							
+							<a class="list-group-item" href="#commit ssl cert">commit ssl cert</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-D"><h4>D</h4>
@@ -372,6 +384,8 @@
 							
 							<a class="list-group-item" href="#set ssl">set ssl</a>
 							
+							<a class="list-group-item" href="#set ssl cert">set ssl cert</a>
+							
 							<a class="list-group-item" href="#set ssl ocsp-response">set ssl ocsp-response</a>
 							
 							<a class="list-group-item" href="#set ssl tls-key">set ssl tls-key</a>
@@ -477,7 +491,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/01</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/11</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -488,7 +502,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.1.0-4</strong></p>
+							<p><strong>version 2.1.1</strong></p>
 							<p>
 								<br>
 								
@@ -1972,6 +1986,9 @@ Some commands require a higher level of privilege to work. If you do not have
 enough privilege, you will get an error &quot;Permission denied&quot;. Please check
 the &quot;level&quot; option of the &quot;bind&quot; keyword lines in the configuration manual
 for more information.
+</pre><a class="anchor" name="abort"></a><a class="anchor" name="9-abort"></a><a class="anchor" name="9.3-abort"></a><a class="anchor" name="abort (Statistics and monitoring)"></a><a class="anchor" name="abort (Unix Socket commands)"></a><a class="anchor" name="abort ssl"></a><a class="anchor" name="9-abort ssl"></a><a class="anchor" name="9.3-abort ssl"></a><a class="anchor" name="abort ssl (Statistics and monitoring)"></a><a class="anchor" name="abort ssl (Unix Socket commands)"></a><a class="anchor" name="abort ssl cert"></a><a class="anchor" name="9-abort ssl cert"></a><a class="anchor" name="9.3-abort ssl cert"></a><a class="anchor" name="abort ssl cert (Statistics and monitoring)"></a><a class="anchor" name="abort ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="abort ssl cert"></a><a href="#9.3-abort%20ssl%20cert">abort ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Abort and destroy a temporary SSL certificate update transaction.
+
+See also &quot;<a href="#set%20ssl%20cert">set ssl cert</a>&quot; and &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot;.
 </pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add acl"></a><a class="anchor" name="9-add acl"></a><a class="anchor" name="9.3-add acl"></a><a class="anchor" name="add acl (Statistics and monitoring)"></a><a class="anchor" name="add acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add acl"></a><a href="#9.3-add%20acl">add acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;pattern&gt;</span></div><pre class="text">Add an entry into the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by
 &quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. This
 command cannot be used if the reference &lt;acl&gt; is a file also used with a map.
@@ -2061,7 +2078,15 @@ string.
     $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
 &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
 </code></pre>
-</div><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported on a CLI connection running
+</div><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl cert"></a><a class="anchor" name="9-commit ssl cert"></a><a class="anchor" name="9.3-commit ssl cert"></a><a class="anchor" name="commit ssl cert (Statistics and monitoring)"></a><a class="anchor" name="commit ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl cert"></a><a href="#9.3-commit%20ssl%20cert">commit ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Commit and apply a temporary SSL certificate update transaction.
+Generate every SSL contextes and SNIs it needs, insert them, and remove
+the previous ones. Replace in memory the previous SSL certificates
+everywhere the &lt;filename&gt; was used in the configuration.
+Upon failure it doesn't remove or insert anything. Once the temporary
+transaction is commited, it is destroyed.
+
+See also &quot;ssl set cert&quot; and &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot;.
+</pre><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported on a CLI connection running
 in expert mode (see &quot;expert-mode on&quot;). Such commands are extremely dangerous
 and not forgiving, any misuse may result in a crash of the process. They are
 intended for experts only, and must really not be used unless told to do so.
@@ -2297,7 +2322,29 @@ equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command bel
 internal run-time DNS resolver to be configured and enabled for this server.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set severity-output"></a><a class="anchor" name="9-set severity-output"></a><a class="anchor" name="9.3-set severity-output"></a><a class="anchor" name="set severity-output (Statistics and monitoring)"></a><a class="anchor" name="set severity-output (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set severity-output"></a><a href="#9.3-set%20severity-output">set severity-output</a></b> <span style="color: #008">[ none | number | string ]</span></div><pre class="text">Change the severity output format of the stats socket connected to for the
 duration of the current session.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response | payload&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl cert"></a><a class="anchor" name="9-set ssl cert"></a><a class="anchor" name="9.3-set ssl cert"></a><a class="anchor" name="set ssl cert (Statistics and monitoring)"></a><a class="anchor" name="set ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl cert"></a><a href="#9.3-set%20ssl%20cert">set ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">This command is part of a transaction system, the &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; and
+&quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot; commands could be required.
+If there is no on-going transaction, it will duplicate the certificate
+&lt;filename&gt; in memory to a temporary transaction, then update this
+transaction with the PEM file in the payload. If a transaction exists with
+the same filename, it will update this transaction. It's also possible to
+update the files linked to a certificate (.issuer, .sctl, .oscp etc.)
+Once the modification are done, you have to &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; the
+transaction.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(cat 127.0.0.1.pem)\n&quot; | \
+socat /var/run/haproxy.stat -
+echo -e \
+&quot;set ssl cert localhost.pem.issuer &lt;&lt;\n $(cat 127.0.0.1.pem.issuer)\n&quot; | \
+socat /var/run/haproxy.stat -
+echo -e \
+&quot;set ssl cert localhost.pem.ocsp &lt;&lt;\n$(base64 -w 1000 127.0.0.1.pem.ocsp)\n&quot; | \
+socat /var/run/haproxy.stat -
+echo &quot;commit ssl cert localhost.pem&quot; | socat /var/run/haproxy.stat -
+</code></pre>
+</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response | payload&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
 the response. The &lt;response&gt; must be passed as a base64 encoded string of the
 DER encoded response from the OCSP server. This command is not supported with
@@ -3672,7 +3719,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1.0-4 &ndash; Management Guide<br>
+							HAProxy 2.1.1 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3776,7 +3823,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.0-4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
