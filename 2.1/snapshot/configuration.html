@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1.1 - Configuration Manual</title>
+		<title>HAProxy version 2.1.2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-4" rel="stylesheet" />
@@ -1555,6 +1555,8 @@
 							<a class="list-group-item" href="#http-request reject">http-request reject</a>
 							
 							<a class="list-group-item" href="#http-request replace-header">http-request replace-header</a>
+							
+							<a class="list-group-item" href="#http-request replace-path">http-request replace-path</a>
 							
 							<a class="list-group-item" href="#http-request replace-uri">http-request replace-uri</a>
 							
@@ -3239,7 +3241,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/11</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3250,10 +3252,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1.1</strong></p>
+							<p><strong>version 2.1.2</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/12/11
+								2019/12/21
 							</p>
 						</div>
 
@@ -8132,6 +8134,29 @@ User-Agent: curl/7.47.0
 <span class="comment"># outputs:</span>
 User-Agent: foo
 </code></pre>
+</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-path"></a><a class="anchor" name="4-http-request replace-path"></a><a class="anchor" name="4.2-http-request replace-path"></a><a class="anchor" name="http-request replace-path (Proxies)"></a><a class="anchor" name="http-request replace-path (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-path"></a><a href="#4.2-http-request%20replace-path">http-request replace-path</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
+                           <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request's path
+component instead of a header. The path component starts at the first '/'
+after an optional scheme+authority. It does contain the query string if any
+is present. The replacement does not modify the scheme nor authority.
+
+It is worth noting that regular expressions may be more expensive to evaluate
+than certain ACLs, so rare replacements may benefit from a condition to avoid
+performing the evaluation at all if it does not match.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
+http-request replace-path (.*) /foo\1
+
+<span class="comment"># suffix /foo : turn /bar?q=1 into /bar/foo?q=1 :</span>
+http-request replace-path ([^?]*)(\?(.*))? \1/foo\2
+
+<span class="comment"># strip /foo : turn /foo/bar?q=1 into /bar?q=1</span>
+http-request replace-path /foo/(.*) /\1
+<span class="comment"># or more efficient if only some requests match :</span>
+http-request replace-path /foo/(.*) /\1 if { url_beg /foo/ }
+</code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-uri"></a><a class="anchor" name="4-http-request replace-uri"></a><a class="anchor" name="4.2-http-request replace-uri"></a><a class="anchor" name="http-request replace-uri (Proxies)"></a><a class="anchor" name="http-request replace-uri (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-uri"></a><a href="#4.2-http-request%20replace-uri">http-request replace-uri</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request's URI part
 instead of a header. The URI part may contain an optional scheme, authority or
@@ -8141,19 +8166,26 @@ against.
 It is worth noting that regular expressions may be more expensive to evaluate
 than certain ACLs, so rare replacements may benefit from a condition to avoid
 performing the evaluation at all if it does not match.
+
+IMPORTANT NOTE: historically in HTTP/1.x, the vast majority of requests sent
+by browsers use the &quot;origin form&quot;, which differs from the &quot;absolute form&quot; in
+that they do not contain a scheme nor authority in the URI portion. Mostly
+only requests sent to proxies, those forged by hand and some emitted by
+certain applications use the absolute form. As such, &quot;replace-uri&quot; usually
+works fine most of the time in HTTP/1.x with rules starting with a &quot;/&quot;. But
+with HTTP/2, clients are encouraged to send absolute URIs only, which look
+like the ones HTTP/1 clients use to talk to proxies. Such partial replace-uri
+rules may then fail in HTTP/2 when they work in HTTP/1. Either the rules need
+to be adapted to optionally match a scheme and authority, or replace-path
+should be used.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code><span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
-http-request replace-uri (.*) /foo\1
+<code><span class="comment"># rewrite all &quot;http&quot; absolute requests to &quot;https&quot;:</span>
+http-request replace-uri ^http://(.*) https://\1
 
-<span class="comment"># suffix /foo : turn /bar?q=1 into /bar/foo?q=1 :</span>
-http-request replace-uri ([^?]*)(\?(.*))? \1/foo\2
-
-<span class="comment"># strip /foo : turn /foo/bar?q=1 into /bar?q=1</span>
-http-request replace-uri /foo/(.*) /\1
-<span class="comment"># or more efficient if only some requests match :</span>
-http-request replace-uri /foo/(.*) /\1 if { url_beg /foo/ }
+<span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
+http-request replace-uri ([^/:]*://[^/]*)?(.*) \1/foo\2
 </code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-value"></a><a class="anchor" name="4-http-request replace-value"></a><a class="anchor" name="4.2-http-request replace-value"></a><a class="anchor" name="http-request replace-value (Proxies)"></a><a class="anchor" name="http-request replace-value (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-value"></a><a href="#4.2-http-request%20replace-value">http-request replace-value</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it matches the regex against
@@ -16220,10 +16252,22 @@ configuration language.
   default_backend servers
   http-request set-header X-DeviceAtlas-Data %[req.fhdr(User-Agent),da-csv(primaryHardwareType,osName,osVersion,browserName,browserVersion,browserRenderingEngine)]
 </code></pre>
-</div><a class="anchor" name="debug"></a><a class="anchor" name="7-debug"></a><a class="anchor" name="7.3.1-debug"></a><a class="anchor" name="debug (Using ACLs and fetching samples)"></a><a class="anchor" name="debug (Converters)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#7.3.1-debug">debug</a></b></div><pre class="text">This converter is used as debug tool. It dumps on screen the content and the
-type of the input sample. The sample is returned as is on its output. This
-converter only exists when haproxy was built with debugging enabled.
-</pre><a class="anchor" name="div"></a><a class="anchor" name="7-div"></a><a class="anchor" name="7.3.1-div"></a><a class="anchor" name="div (Using ACLs and fetching samples)"></a><a class="anchor" name="div (Converters)"></a><div class="keyword"><b><a class="anchor" name="div"></a><a href="#7.3.1-div">div</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type signed integer by &lt;value&gt;, and returns the
+</div><a class="anchor" name="debug"></a><a class="anchor" name="7-debug"></a><a class="anchor" name="7.3.1-debug"></a><a class="anchor" name="debug (Using ACLs and fetching samples)"></a><a class="anchor" name="debug (Converters)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#7.3.1-debug">debug</a></b>(<span style="color: #008">[<span style="color: #080">&lt;prefix</span>]</span><span style="color: #008">[,<span style="color: #080">&lt;destination&gt;</span>]</span>)</div><pre class="text">This converter is used as debug tool. It takes a capture of the input sample
+and sends it to event sink &lt;destination&gt;, which may designate a ring buffer
+such as &quot;buf0&quot;, as well as &quot;stdout&quot;, or &quot;stderr&quot;. Available sinks may be
+checked at run time by issuing &quot;show events&quot; on the CLI. When not specified,
+the output will be &quot;buf0&quot;, which may be consulted via the CLI's &quot;show events&quot;
+command. An optional prefix &lt;prefix&gt; may be passed to help distinguish
+outputs from multiple expressions. It will then appear before the colon in
+the output message. The input sample is passed as-is on the output, so that
+it is safe to insert the debug converter anywhere in a chain, even with non-
+printable sample types.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>tcp-request connection track-sc0 src,debug(track-sc)
+</code></pre>
+</div><a class="anchor" name="div"></a><a class="anchor" name="7-div"></a><a class="anchor" name="7.3.1-div"></a><a class="anchor" name="div (Using ACLs and fetching samples)"></a><a class="anchor" name="div (Converters)"></a><div class="keyword"><b><a class="anchor" name="div"></a><a href="#7.3.1-div">div</a></b>(<span style="color: #080">&lt;value&gt;</span>)</div><pre class="text">Divides the input value of type signed integer by &lt;value&gt;, and returns the
 result as an signed integer. If &lt;value&gt; is null, the largest unsigned
 integer is returned (typically 2^63-1). &lt;value&gt; can be a numeric value or a
 variable name. The name of the variable starts with an indication about its
@@ -20448,8 +20492,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1.1 &ndash; Configuration Manual<br>
-							<small>2019/12/11, willy tarreau</small>
+							HAProxy 2.1.2 &ndash; Configuration Manual<br>
+							<small>2019/12/21, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20552,7 +20596,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
