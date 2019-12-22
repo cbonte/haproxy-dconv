@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0.11 - Configuration Manual</title>
+		<title>HAProxy version 2.0.12 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-4" rel="stylesheet" />
@@ -3160,7 +3160,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/11</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3171,10 +3171,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0.11</strong></p>
+							<p><strong>version 2.0.12</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/12/11
+								2019/12/21
 							</p>
 						</div>
 
@@ -8054,14 +8054,18 @@ without sending any response. It acts similarly to the
 &quot;tcp-request content reject&quot; rules. It can be useful to force an immediate
 connection closure on HTTP/2 connections.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-header"></a><a class="anchor" name="4-http-request replace-header"></a><a class="anchor" name="4.2-http-request replace-header"></a><a class="anchor" name="http-request replace-header (Proxies)"></a><a class="anchor" name="http-request replace-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-header"></a><a href="#4.2-http-request%20replace-header">http-request replace-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This  matches the regular expression in all occurrences of header field
-&lt;name&gt; according to &lt;match-regex&gt;, and replaces them with the
-&lt;replace-fmt&gt; argument. Format characters are allowed in replace-fmt and
-work like in &lt;fmt&gt; arguments in &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot;. The match is
-only case-sensitive. It is important to understand that this action only
-considers whole header lines, regardless of the number of values they may
-contain. This usage is suited to headers naturally containing commas in
-their value, such as If-Modified-Since and so on.
+                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the value of all occurences of header field &lt;name&gt; against
+&lt;match-regex&gt;. Matching is performed case-sensitively. Matching values are
+completely replaced by &lt;replace-fmt&gt;. Format characters are allowed in
+&lt;replace-fmt&gt; and work like &lt;fmt&gt; arguments in &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot;.
+Standard back-references using the backslash ('\') followed by a number are
+supported.
+
+This action acts on whole header lines, regardless of the number of values
+they may contain. Thus it is well-suited to process headers naturally
+containing commas in their value, such as If-Modified-Since. Headers that
+contain a comma-separated list of values, such as Accept, should be processed
+using &quot;<a href="#http-request%20replace-value">http-request replace-value</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -8074,32 +8078,43 @@ Cookie: foo=foobar; expires=Tue, 14-Jun-2016 01:40:45 GMT;
 Cookie: foo=foobar;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT;
 
 <span class="comment"># assuming the backend IP is 192.168.1.20</span>
+
+http-request replace-header User-Agent curl foo
+
+<span class="comment"># applied to:</span>
+User-Agent: curl/7.47.0
+
+<span class="comment"># outputs:</span>
+User-Agent: foo
 </code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-uri"></a><a class="anchor" name="4-http-request replace-uri"></a><a class="anchor" name="4.2-http-request replace-uri"></a><a class="anchor" name="http-request replace-uri (Proxies)"></a><a class="anchor" name="http-request replace-uri (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-uri"></a><a href="#4.2-http-request%20replace-uri">http-request replace-uri</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                           <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the regular expression in the URI part of the request
-according to &lt;match-regex&gt;, and replaces it with the &lt;replace-fmt&gt;
-argument. Standard back-references using the backslash ('\') followed by a
-number are supported. The &lt;fmt&gt; field is interpreted as a log-format string
-so it may contain special expressions just like the &lt;fmt&gt; argument passed
-to &quot;<a href="#http-request%20set-uri">http-request set-uri</a>&quot;. The match is exclusively case-sensitive. Any
-optional scheme, authority or query string are considered in the matching
-part of the URI. It is worth noting that regular expressions may be more
-expensive to evaluate than certain ACLs, so rare replacements may benefit
-from a condition to avoid performing the evaluation at all if it does not
-match.
+                           <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request's URI part
+instead of a header. The URI part may contain an optional scheme, authority or
+query string. These are considered to be part of the value that is matched
+against.
+
+It is worth noting that regular expressions may be more expensive to evaluate
+than certain ACLs, so rare replacements may benefit from a condition to avoid
+performing the evaluation at all if it does not match.
+
+IMPORTANT NOTE: historically in HTTP/1.x, the vast majority of requests sent
+by browsers use the &quot;origin form&quot;, which differs from the &quot;absolute form&quot; in
+that they do not contain a scheme nor authority in the URI portion. Mostly
+only requests sent to proxies, those forged by hand and some emitted by
+certain applications use the absolute form. As such, &quot;replace-uri&quot; usually
+works fine most of the time in HTTP/1.x with rules starting with a &quot;/&quot;. But
+with HTTP/2, clients are encouraged to send absolute URIs only, which look
+like the ones HTTP/1 clients use to talk to proxies. Such partial replace-uri
+rules may then fail in HTTP/2 when they work in HTTP/1. Either the rules need
+to be adapted to optionally match a scheme and authority.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code><span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
-http-request replace-uri (.*) /foo\1
+<code><span class="comment"># rewrite all &quot;http&quot; absolute requests to &quot;https&quot;:</span>
+http-request replace-uri ^http://(.*) https://\1
 
-<span class="comment"># suffix /foo : turn /bar?q=1 into /bar/foo?q=1 :</span>
-http-request replace-uri ([^?]*)(\?(.*))? \1/foo\2
-
-<span class="comment"># strip /foo : turn /foo/bar?q=1 into /bar?q=1</span>
-http-request replace-uri /foo/(.*) /\1
-<span class="comment"># or more efficient if only some requests match :</span>
-http-request replace-uri /foo/(.*) /\1 if { url_beg /foo/ }
+<span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
+http-request replace-uri ([^/:]*://[^/]*)?(.*) \1/foo\2
 </code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-value"></a><a class="anchor" name="4-http-request replace-value"></a><a class="anchor" name="4.2-http-request replace-value"></a><a class="anchor" name="http-request replace-value (Proxies)"></a><a class="anchor" name="http-request replace-value (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-value"></a><a href="#4.2-http-request%20replace-value">http-request replace-value</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it matches the regex against
@@ -8524,14 +8539,8 @@ the response. See the &quot;<a href="#redirect">redirect</a>&quot; keyword for t
 redirect rule is applied during a response, connections to the server are
 closed so that no data can be forwarded from the server to the client.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response replace-header"></a><a class="anchor" name="4-http-response replace-header"></a><a class="anchor" name="4.2-http-response replace-header"></a><a class="anchor" name="http-response replace-header (Proxies)"></a><a class="anchor" name="http-response replace-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response replace-header"></a><a href="#4.2-http-response%20replace-header">http-response replace-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                             <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the regular expression in all occurrences of header field &lt;name&gt;
-according to &lt;match-regex&gt;, and replaces them with the &lt;replace-fmt&gt; argument.
-Format characters are allowed in replace-fmt and work like in &lt;fmt&gt; arguments
-in &quot;add-header&quot;. The match is only case-sensitive. It is important to
-understand that this action only considers whole header lines, regardless of
-the number of values they may contain. This usage is suited to headers
-naturally containing commas in their value, such as Set-Cookie, Expires and
-so on.
+                             <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;<a href="#http-request%20replace-header">http-request replace-header</a>&quot; except that it works on the
+server's response instead of the client's request.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -8546,10 +8555,8 @@ Set-Cookie: C=1;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT
 <span class="comment"># assuming the backend IP is 192.168.1.20.</span>
 </code></pre>
 </div><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response replace-value"></a><a class="anchor" name="4-http-response replace-value"></a><a class="anchor" name="4.2-http-response replace-value"></a><a class="anchor" name="http-response replace-value (Proxies)"></a><a class="anchor" name="http-response replace-value (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response replace-value"></a><a href="#4.2-http-response%20replace-value">http-response replace-value</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it matches the regex against
-every comma-delimited value of the header field &lt;name&gt; instead of the entire
-header. This is suited for all headers which are allowed to carry more than
-one value. An example could be the Accept header.
+                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;<a href="#http-response%20replace-value">http-response replace-value</a>&quot; except that it works on the
+server's response instead of the client's request.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -20667,8 +20674,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0.11 &ndash; Configuration Manual<br>
-							<small>2019/12/11, willy tarreau</small>
+							HAProxy 2.0.12 &ndash; Configuration Manual<br>
+							<small>2019/12/21, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20771,7 +20778,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.11', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.12', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
