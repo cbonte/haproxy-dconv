@@ -38,7 +38,7 @@ class KeyWordParser(parser.Parser):
             else:
                 keyword = False
 
-            if keyword and (len(splitKeyword) <= 3):
+            if keyword and (len(splitKeyword) <= 4):
                 toplevel = pctxt.details["toplevel"]
                 for j in range(0, len(splitKeyword)):
                     subKeyword = " ".join(splitKeyword[0:j + 1])
