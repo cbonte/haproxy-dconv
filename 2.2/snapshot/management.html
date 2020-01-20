@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2-dev0-62 - Management Guide</title>
+		<title>HAProxy version 2.2-dev0-226 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../../css/page.css?0.4.2-4" rel="stylesheet" />
+		<link href="../../css/page.css?0.4.2-8" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -444,6 +444,10 @@
 							
 							<a class="list-group-item" href="#show sess">show sess</a>
 							
+							<a class="list-group-item" href="#show ssl">show ssl</a>
+							
+							<a class="list-group-item" href="#show ssl cert">show ssl cert</a>
+							
 							<a class="list-group-item" href="#show stat">show stat</a>
 							
 							<a class="list-group-item" href="#show table">show table</a>
@@ -491,7 +495,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-4</b> on <b>2019/12/11</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-8</b> on <b>2020/01/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -500,9 +504,9 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="text-center">
-                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-4" /></a></h1>
+                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-8" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.2-dev0-62</strong></p>
+							<p><strong>version 2.2-dev0-226</strong></p>
 							<p>
 								<br>
 								
@@ -1737,6 +1741,7 @@ S (Servers).
  91. ctime_max [..BS]: the maximum observed connect time in ms
  92. rtime_max [..BS]: the maximum observed response time in ms (0 for TCP)
  93. ttime_max [..BS]: the maximum observed total session time in ms
+ 94. eint [LFBS]: cumulative number of internal errors
 </pre></div>
 <a class="anchor" id="9" name="9"></a>
 <div class="page-header"><h1 id="chapter-9" data-target="9"><small><a class="small" href="#9">9.</a></small> 2) Typed output format</h1>
@@ -2991,7 +2996,37 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show stat json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl cert"></a><a class="anchor" name="9-show ssl cert"></a><a class="anchor" name="9.3-show ssl cert"></a><a class="anchor" name="show ssl cert (Statistics and monitoring)"></a><a class="anchor" name="show ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl cert"></a><a href="#9.3-show%20ssl%20cert">show ssl cert</a></b> <span style="color: #008">[<span style="color: #080">&lt;filename&gt;</span>]</span></div><pre class="text">Display the list of certicates used on frontends. If a filename is prefixed
+by an asterisk, it is a transaction which is not commited yet.  If a
+filename is specified, it will show details about the certificate. This
+command can be useful to check if a certificate was well updated. You can
+also display details on a transaction by prefixing the filename by an
+asterisk.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>$ echo &quot;@1 show ssl cert&quot; | socat /var/run/haproxy.master -
+<span class="comment"># transaction</span>
+*test.local.pem
+<span class="comment"># filename</span>
+test.local.pem
+
+$ echo &quot;@1 show ssl cert test.local.pem&quot; | socat /var/run/haproxy.master -
+Filename: test.local.pem
+Serial: 03ECC19BA54B25E85ABA46EE561B9A10D26F
+notBefore: Sep 13 21:20:24 2019 GMT
+notAfter: Dec 12 21:20:24 2019 GMT
+Issuer: /C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
+Subject: /CN=test.local
+Subject Alternative Name: DNS:test.local, DNS:imap.test.local
+Algorithm: RSA2048
+SHA1 FingerPrint: 417A11CAE25F607B24F638B4A8AEE51D1E211477
+
+$ echo &quot;@1 show ssl cert *test.local.pem&quot; | socat /var/run/haproxy.master -
+Filename: *test.local.pem
+[...]
+</code></pre>
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
 if no section is supplied.
 
 For each name server, the following counters are reported:
@@ -3719,7 +3754,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2-dev0-62 &ndash; Management Guide<br>
+							HAProxy 2.2-dev0-226 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3823,8 +3858,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev0-62', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-4', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev0-226', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-8', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
