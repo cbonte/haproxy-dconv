@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.15 - Configuration Manual</title>
+		<title>HAProxy version 1.6.15-9 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../../css/page.css?0.4.2-1" rel="stylesheet" />
+		<link href="../../css/page.css?0.4.2-10" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -2469,7 +2469,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-1</b> on <b>2019/10/26</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/01/21</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2478,9 +2478,9 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="text-center">
-                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-1" /></a></h1>
+                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.15</strong></p>
+							<p><strong>version 1.6.15-9</strong></p>
 							<p>
 								willy tarreau<br>
 								2019/10/25
@@ -13760,7 +13760,17 @@ characters such as the space. If the &quot;-i&quot; flag is passed before the fi
 string, then the matching will be performed ignoring the case. In order
 to match the string &quot;-i&quot;, either set it second, or pass the &quot;--&quot; flag
 before the first string. Same applies of course to match the string &quot;--&quot;.
-</pre></div>
+
+Do not use string matches for binary fetches which might contain null bytes
+(0x00), as the comparison stops at the occurrence of the first null byte.
+Instead, convert the binary fetch to a hex string with the hex converter first.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># matches if the string &lt;tag&gt; is present in the binary sample</span>
+acl tag_found req.payload(0,0),hex -m sub 3C7461673E
+</code></pre>
+</div></div>
 <a class="anchor" id="7.1.4" name="7.1.4"></a>
 <h3 id="chapter-7.1.4" data-target="7.1.4"><small><a class="small" href="#7.1.4">7.1.4.</a></small> Matching regular expressions (regexes)</h3>
 <div><pre class="text">Just like with string matching, regex matching applies to verbatim strings as
@@ -17212,7 +17222,7 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.15 &ndash; Configuration Manual<br>
+							HAProxy 1.6.15-9 &ndash; Configuration Manual<br>
 							<small>2019/10/25, willy tarreau</small>
 						</div>
 					</div>
@@ -17316,8 +17326,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.15', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.15-9', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
