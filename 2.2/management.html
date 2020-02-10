@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2-dev0 - Management Guide</title>
+		<title>HAProxy version 2.2-dev2 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-10" rel="stylesheet" />
@@ -218,6 +218,12 @@
 							
 								<div class="letter" id="letter-A"><h4>A</h4>
 								
+							<a class="list-group-item" href="#abort">abort</a>
+							
+							<a class="list-group-item" href="#abort ssl">abort ssl</a>
+							
+							<a class="list-group-item" href="#abort ssl cert">abort ssl cert</a>
+							
 							<a class="list-group-item" href="#add">add</a>
 							
 							<a class="list-group-item" href="#add acl">add acl</a>
@@ -238,6 +244,12 @@
 							<a class="list-group-item" href="#clear map">clear map</a>
 							
 							<a class="list-group-item" href="#clear table">clear table</a>
+							
+							<a class="list-group-item" href="#commit">commit</a>
+							
+							<a class="list-group-item" href="#commit ssl">commit ssl</a>
+							
+							<a class="list-group-item" href="#commit ssl cert">commit ssl cert</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-D"><h4>D</h4>
@@ -361,6 +373,8 @@
 							
 							<a class="list-group-item" href="#set ssl">set ssl</a>
 							
+							<a class="list-group-item" href="#set ssl cert">set ssl cert</a>
+							
 							<a class="list-group-item" href="#set ssl ocsp-response">set ssl ocsp-response</a>
 							
 							<a class="list-group-item" href="#set ssl tls-key">set ssl tls-key</a>
@@ -419,6 +433,10 @@
 							
 							<a class="list-group-item" href="#show sess">show sess</a>
 							
+							<a class="list-group-item" href="#show ssl">show ssl</a>
+							
+							<a class="list-group-item" href="#show ssl cert">show ssl cert</a>
+							
 							<a class="list-group-item" href="#show stat">show stat</a>
 							
 							<a class="list-group-item" href="#show table">show table</a>
@@ -466,7 +484,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/01/21</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/02/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -477,7 +495,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.2-dev0</strong></p>
+							<p><strong>version 2.2-dev2</strong></p>
 							<p>
 								<br>
 								
@@ -1713,6 +1731,7 @@ S (Servers).
  91. ctime_max [..BS]: the maximum observed connect time in ms
  92. rtime_max [..BS]: the maximum observed response time in ms (0 for TCP)
  93. ttime_max [..BS]: the maximum observed total session time in ms
+ 94. eint [LFBS]: cumulative number of internal errors
 </pre></div>
 <a class="anchor" id="9" name="9"></a>
 <div class="page-header"><h1 id="chapter-9" data-target="9"><small><a class="small" href="#9">9.</a></small> 2) Typed output format</h1>
@@ -1962,6 +1981,9 @@ Some commands require a higher level of privilege to work. If you do not have
 enough privilege, you will get an error &quot;Permission denied&quot;. Please check
 the &quot;level&quot; option of the &quot;bind&quot; keyword lines in the configuration manual
 for more information.
+</pre><a class="anchor" name="abort"></a><a class="anchor" name="9-abort"></a><a class="anchor" name="9.3-abort"></a><a class="anchor" name="abort (Statistics and monitoring)"></a><a class="anchor" name="abort (Unix Socket commands)"></a><a class="anchor" name="abort ssl"></a><a class="anchor" name="9-abort ssl"></a><a class="anchor" name="9.3-abort ssl"></a><a class="anchor" name="abort ssl (Statistics and monitoring)"></a><a class="anchor" name="abort ssl (Unix Socket commands)"></a><a class="anchor" name="abort ssl cert"></a><a class="anchor" name="9-abort ssl cert"></a><a class="anchor" name="9.3-abort ssl cert"></a><a class="anchor" name="abort ssl cert (Statistics and monitoring)"></a><a class="anchor" name="abort ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="abort ssl cert"></a><a href="#9.3-abort%20ssl%20cert">abort ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Abort and destroy a temporary SSL certificate update transaction.
+
+See also &quot;<a href="#set%20ssl%20cert">set ssl cert</a>&quot; and &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot;.
 </pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add acl"></a><a class="anchor" name="9-add acl"></a><a class="anchor" name="9.3-add acl"></a><a class="anchor" name="add acl (Statistics and monitoring)"></a><a class="anchor" name="add acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add acl"></a><a href="#9.3-add%20acl">add acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;pattern&gt;</span></div><pre class="text">Add an entry into the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by
 &quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. This
 command cannot be used if the reference &lt;acl&gt; is a file also used with a map.
@@ -2051,7 +2073,15 @@ string.
     $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
 &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
 </code></pre>
-</div><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported on a CLI connection running
+</div><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl cert"></a><a class="anchor" name="9-commit ssl cert"></a><a class="anchor" name="9.3-commit ssl cert"></a><a class="anchor" name="commit ssl cert (Statistics and monitoring)"></a><a class="anchor" name="commit ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl cert"></a><a href="#9.3-commit%20ssl%20cert">commit ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Commit and apply a temporary SSL certificate update transaction.
+Generate every SSL contextes and SNIs it needs, insert them, and remove
+the previous ones. Replace in memory the previous SSL certificates
+everywhere the &lt;filename&gt; was used in the configuration.
+Upon failure it doesn't remove or insert anything. Once the temporary
+transaction is commited, it is destroyed.
+
+See also &quot;ssl set cert&quot; and &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot;.
+</pre><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported on a CLI connection running
 in expert mode (see &quot;expert-mode on&quot;). Such commands are extremely dangerous
 and not forgiving, any misuse may result in a crash of the process. They are
 intended for experts only, and must really not be used unless told to do so.
@@ -2287,7 +2317,29 @@ equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command bel
 internal run-time DNS resolver to be configured and enabled for this server.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set severity-output"></a><a class="anchor" name="9-set severity-output"></a><a class="anchor" name="9.3-set severity-output"></a><a class="anchor" name="set severity-output (Statistics and monitoring)"></a><a class="anchor" name="set severity-output (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set severity-output"></a><a href="#9.3-set%20severity-output">set severity-output</a></b> <span style="color: #008">[ none | number | string ]</span></div><pre class="text">Change the severity output format of the stats socket connected to for the
 duration of the current session.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response | payload&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl cert"></a><a class="anchor" name="9-set ssl cert"></a><a class="anchor" name="9.3-set ssl cert"></a><a class="anchor" name="set ssl cert (Statistics and monitoring)"></a><a class="anchor" name="set ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl cert"></a><a href="#9.3-set%20ssl%20cert">set ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">This command is part of a transaction system, the &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; and
+&quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot; commands could be required.
+If there is no on-going transaction, it will duplicate the certificate
+&lt;filename&gt; in memory to a temporary transaction, then update this
+transaction with the PEM file in the payload. If a transaction exists with
+the same filename, it will update this transaction. It's also possible to
+update the files linked to a certificate (.issuer, .sctl, .oscp etc.)
+Once the modification are done, you have to &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; the
+transaction.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(cat 127.0.0.1.pem)\n&quot; | \
+socat /var/run/haproxy.stat -
+echo -e \
+&quot;set ssl cert localhost.pem.issuer &lt;&lt;\n $(cat 127.0.0.1.pem.issuer)\n&quot; | \
+socat /var/run/haproxy.stat -
+echo -e \
+&quot;set ssl cert localhost.pem.ocsp &lt;&lt;\n$(base64 -w 1000 127.0.0.1.pem.ocsp)\n&quot; | \
+socat /var/run/haproxy.stat -
+echo &quot;commit ssl cert localhost.pem&quot; | socat /var/run/haproxy.stat -
+</code></pre>
+</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response | payload&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
 the response. The &lt;response&gt; must be passed as a base64 encoded string of the
 DER encoded response from the OCSP server. This command is not supported with
@@ -2934,7 +2986,37 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show stat json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl cert"></a><a class="anchor" name="9-show ssl cert"></a><a class="anchor" name="9.3-show ssl cert"></a><a class="anchor" name="show ssl cert (Statistics and monitoring)"></a><a class="anchor" name="show ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl cert"></a><a href="#9.3-show%20ssl%20cert">show ssl cert</a></b> <span style="color: #008">[<span style="color: #080">&lt;filename&gt;</span>]</span></div><pre class="text">Display the list of certicates used on frontends. If a filename is prefixed
+by an asterisk, it is a transaction which is not commited yet.  If a
+filename is specified, it will show details about the certificate. This
+command can be useful to check if a certificate was well updated. You can
+also display details on a transaction by prefixing the filename by an
+asterisk.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>$ echo &quot;@1 show ssl cert&quot; | socat /var/run/haproxy.master -
+<span class="comment"># transaction</span>
+*test.local.pem
+<span class="comment"># filename</span>
+test.local.pem
+
+$ echo &quot;@1 show ssl cert test.local.pem&quot; | socat /var/run/haproxy.master -
+Filename: test.local.pem
+Serial: 03ECC19BA54B25E85ABA46EE561B9A10D26F
+notBefore: Sep 13 21:20:24 2019 GMT
+notAfter: Dec 12 21:20:24 2019 GMT
+Issuer: /C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
+Subject: /CN=test.local
+Subject Alternative Name: DNS:test.local, DNS:imap.test.local
+Algorithm: RSA2048
+SHA1 FingerPrint: 417A11CAE25F607B24F638B4A8AEE51D1E211477
+
+$ echo &quot;@1 show ssl cert *test.local.pem&quot; | socat /var/run/haproxy.master -
+Filename: *test.local.pem
+[...]
+</code></pre>
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
 if no section is supplied.
 
 For each name server, the following counters are reported:
@@ -2962,7 +3044,7 @@ entries currently in use.
 &gt;&gt;&gt; <span class="comment"># table: front_pub, type: ip, size:204800, used:171454</span>
 &gt;&gt;&gt; <span class="comment"># table: back_rdp, type: ip, size:204800, used:0</span>
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.3-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.3-show%20table">show table</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div><pre class="text">Dump contents of stick-table &lt;name&gt;. In this mode, a first line of generic
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.3-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.3-show%20table">show table</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> <span style="color: #008">[data.<span style="color: #080">&lt;type&gt;</span> ...]</span>]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div><pre class="text">Dump contents of stick-table &lt;name&gt;. In this mode, a first line of generic
 information about the table is reported as with &quot;<a href="#show%20table">show table</a>&quot;, then all
 entries are dumped. Since this can be quite heavy, it is possible to specify
 a filter in order to specify what entries to display.
@@ -2980,6 +3062,8 @@ error is reported. The data is compared according to &lt;operator&gt; with the
   - lt : match entries whose data is less than this value
   - gt : match entries whose data is greater than this value
 
+In this form, you can use multiple data filter entries, up to a maximum
+defined during build time (4 by default).
 
 When the key form is used the entry &lt;key&gt; is shown.  The key must be of the
 same type as the table, which currently is limited to IPv4, IPv6, integer,
@@ -3662,7 +3746,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2-dev0 &ndash; Management Guide<br>
+							HAProxy 2.2-dev2 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3766,7 +3850,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2-dev0-226 - Configuration Manual</title>
+		<title>HAProxy version 2.2-dev2-8 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-10" rel="stylesheet" />
@@ -1540,6 +1540,28 @@
 							
 							<a class="list-group-item" href="#hostname">hostname</a>
 							
+							<a class="list-group-item" href="#http-after-response">http-after-response</a>
+							
+							<a class="list-group-item" href="#http-after-response add-header">http-after-response add-header</a>
+							
+							<a class="list-group-item" href="#http-after-response allow">http-after-response allow</a>
+							
+							<a class="list-group-item" href="#http-after-response del-header">http-after-response del-header</a>
+							
+							<a class="list-group-item" href="#http-after-response replace-header">http-after-response replace-header</a>
+							
+							<a class="list-group-item" href="#http-after-response replace-value">http-after-response replace-value</a>
+							
+							<a class="list-group-item" href="#http-after-response set-header">http-after-response set-header</a>
+							
+							<a class="list-group-item" href="#http-after-response set-status">http-after-response set-status</a>
+							
+							<a class="list-group-item" href="#http-after-response set-var">http-after-response set-var</a>
+							
+							<a class="list-group-item" href="#http-after-response strict-mode">http-after-response strict-mode</a>
+							
+							<a class="list-group-item" href="#http-after-response unset-var">http-after-response unset-var</a>
+							
 							<a class="list-group-item" href="#http-check">http-check</a>
 							
 							<a class="list-group-item" href="#http-check disable-on-404">http-check disable-on-404</a>
@@ -1591,6 +1613,8 @@
 							<a class="list-group-item" href="#http-request replace-uri">http-request replace-uri</a>
 							
 							<a class="list-group-item" href="#http-request replace-value">http-request replace-value</a>
+							
+							<a class="list-group-item" href="#http-request return">http-request return</a>
 							
 							<a class="list-group-item" href="#http-request sc-inc-gpc0">http-request sc-inc-gpc0</a>
 							
@@ -1679,6 +1703,8 @@
 							<a class="list-group-item" href="#http-response replace-header">http-response replace-header</a>
 							
 							<a class="list-group-item" href="#http-response replace-value">http-response replace-value</a>
+							
+							<a class="list-group-item" href="#http-response return">http-response return</a>
 							
 							<a class="list-group-item" href="#http-response sc-inc-gpc0">http-response sc-inc-gpc0</a>
 							
@@ -1840,6 +1866,8 @@
 							<a class="list-group-item" href="#ltime">ltime</a>
 							
 							<a class="list-group-item" href="#lua-load">lua-load</a>
+							
+							<a class="list-group-item" href="#lua-prepend-path">lua-prepend-path</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-M"><h4>M</h4>
@@ -2774,6 +2802,8 @@
 							
 							<a class="list-group-item" href="#ssl-engine">ssl-engine</a>
 							
+							<a class="list-group-item" href="#ssl-load-extra-files">ssl-load-extra-files</a>
+							
 							<a class="list-group-item" href="#ssl-max-ver (Bind options)">ssl-max-ver (Bind options)</a>
 							
 							<a class="list-group-item" href="#ssl-max-ver (Server and default-server options)">ssl-max-ver (Server and default-server options)</a>
@@ -3307,7 +3337,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/01/21</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/02/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3318,10 +3348,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.2-dev0-226</strong></p>
+							<p><strong>version 2.2-dev2-8</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/11/25
+								2020/02/07
 							</p>
 						</div>
 
@@ -4810,6 +4840,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#log-tag">log-tag</a>
    - <a href="#log-send-hostname">log-send-hostname</a>
    - <a href="#lua-load">lua-load</a>
+   - <a href="#lua-prepend-path">lua-prepend-path</a>
    - <a href="#mworker-max-reloads">mworker-max-reloads</a>
    - <a href="#nbproc">nbproc</a>
    - <a href="#nbthread">nbthread</a>
@@ -5247,6 +5278,29 @@ Sometimes it can be useful to differentiate between multiple processes
 running on the same host. See also the per-proxy &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log-tag<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log-tag%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log-tag%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; directive.
 </pre><a class="anchor" name="lua-load"></a><a class="anchor" name="3-lua-load"></a><a class="anchor" name="3.1-lua-load"></a><a class="anchor" name="lua-load (Global parameters)"></a><a class="anchor" name="lua-load (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="lua-load"></a><a href="#3.1-lua-load">lua-load</a></b> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">This global directive loads and executes a Lua file. This directive can be
 used multiple times.
+</pre><a class="anchor" name="lua-prepend-path"></a><a class="anchor" name="3-lua-prepend-path"></a><a class="anchor" name="3.1-lua-prepend-path"></a><a class="anchor" name="lua-prepend-path (Global parameters)"></a><a class="anchor" name="lua-prepend-path (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="lua-prepend-path"></a><a href="#3.1-lua-prepend-path">lua-prepend-path</a></b> <span style="color: #080">&lt;string&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;type&gt;</span>]</span></div><pre class="text">Prepends the given string followed by a semicolon to Lua's package.&lt;type&gt;
+variable.
+&lt;type&gt; must either be &quot;<a href="#path">path</a>&quot; or &quot;cpath&quot;. If &lt;type&gt; is not given it defaults
+to &quot;<a href="#path">path</a>&quot;.
+
+Lua's paths are semicolon delimited lists of patterns that specify how the
+`require` function attempts to find the source file of a library. Question
+marks (?) within a pattern will be replaced by module name. The path is
+evaluated left to right. This implies that paths that are prepended later
+will be checked earlier.
+
+As an example by specifying the following path:
+
+  lua-prepend-path /usr/share/haproxy-lua/?/init.lua
+  lua-prepend-path /usr/share/haproxy-lua/?.lua
+
+When `require &quot;example&quot;` is being called Lua will first attempt to load the
+/usr/share/haproxy-lua/example.lua script, if that does not exist the
+/usr/share/haproxy-lua/example/init.lua will be attempted and the default
+paths if that does not exist either.
+
+See https://www.lua.org/pil/8.1.html for the details within the Lua
+documentation.
 </pre><a class="anchor" name="master-worker"></a><a class="anchor" name="3-master-worker"></a><a class="anchor" name="3.1-master-worker"></a><a class="anchor" name="master-worker (Global parameters)"></a><a class="anchor" name="master-worker (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="master-worker"></a><a href="#3.1-master-worker">master-worker</a></b> <span style="color: #008">[no-exit-on-failure]</span></div><pre class="text">Master-worker mode. It is equivalent to the command line &quot;-W&quot; argument.
 This mode will launch a &quot;master&quot; which will monitor the &quot;workers&quot;. Using
 this mode, you can reload HAProxy directly by sending a SIGUSR2 signal to
@@ -5409,7 +5463,46 @@ known to be more secure and therefore their use is recommended.
 Custom DH parameters may be generated by using the OpenSSL command
 &quot;openssl dhparam &lt;size&gt;&quot;, where size should be at least 2048, as 1024-bit DH
 parameters should not be considered secure anymore.
-</pre><a class="anchor" name="ssl-server-verify"></a><a class="anchor" name="3-ssl-server-verify"></a><a class="anchor" name="3.1-ssl-server-verify"></a><a class="anchor" name="ssl-server-verify (Global parameters)"></a><a class="anchor" name="ssl-server-verify (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-server-verify"></a><a href="#3.1-ssl-server-verify">ssl-server-verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">The default behavior for SSL verify on servers side. If specified to 'none',
+</pre><a class="anchor" name="ssl-load-extra-files"></a><a class="anchor" name="3-ssl-load-extra-files"></a><a class="anchor" name="3.1-ssl-load-extra-files"></a><a class="anchor" name="ssl-load-extra-files (Global parameters)"></a><a class="anchor" name="ssl-load-extra-files (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-load-extra-files"></a><a href="#3.1-ssl-load-extra-files">ssl-load-extra-files</a></b> <span style="color: #080">&lt;none|all|bundle|sctl|ocsp|issuer&gt;</span>*</div><pre class="text">This setting alters the way HAProxy will look for unspecified files during
+the loading of the SSL certificates.
+
+By default, HAProxy discovers automatically a lot of files not specified in
+the configuration, and you may want to disable this behavior if you want to
+optimize the startup time.
+
+&quot;none&quot;: Only load the files specified in the configuration. Don't try to load
+a certificate bundle if the file does not exist. In the case of a directory,
+it won't try to bundle the certificates if they have the same basename.
+
+&quot;all&quot;: This is the default behavior, it will try to load everything,
+bundles, sctl, ocsp, issuer.
+
+&quot;bundle&quot;: When a file specified in the configuration does not exist, HAProxy
+will try to load a certificate bundle. This is done by looking for
+&lt;basename&gt;.rsa, .ecdsa and .dsa. In the case of directories, HAProxy will
+try to gather the files with the same basename in a multi-certificate bundle.
+The bundles were introduced with OpenSSL 1.0.2 and were the only way back
+then to load an ECDSA certificate and a RSA one, with the same SNI. Since
+OpenSSL 1.1.1 it is not recommended anymore, you can specifiy both the ECDSA
+and the RSA file on the bind line.
+
+&quot;sctl&quot;: Try to load &quot;&lt;basename&gt;.sctl&quot; for each crt keyword.
+
+&quot;ocsp&quot;: Try to load &quot;&lt;basename&gt;.ocsp&quot; for each crt keyword.
+
+&quot;issuer&quot;: Try to load &quot;&lt;basename&gt;.issuer&quot; if the issuer of the OCSP file is
+not provided in the PEM file.
+
+The default behavior is &quot;all&quot;.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>ssl-load-extra-files bundle sctl
+ssl-load-extra-files sctl ocsp issuer
+ssl-load-extra-files none
+</code></pre>
+</div><div class="page-header"><b>See also:</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, <a href="#5.1">section 5.1</a> about bind options.</div>
+<a class="anchor" name="ssl-server-verify"></a><a class="anchor" name="3-ssl-server-verify"></a><a class="anchor" name="3.1-ssl-server-verify"></a><a class="anchor" name="ssl-server-verify (Global parameters)"></a><a class="anchor" name="ssl-server-verify (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-server-verify"></a><a href="#3.1-ssl-server-verify">ssl-server-verify</a></b> <span style="color: #008">[none|required]</span></div><pre class="text">The default behavior for SSL verify on servers side. If specified to 'none',
 servers certificates are not verified. The default is 'required' except if
 forced using cmdline option '-dV'.
 </pre><a class="anchor" name="stats"></a><a class="anchor" name="3-stats"></a><a class="anchor" name="3.1-stats"></a><a class="anchor" name="stats (Global parameters)"></a><a class="anchor" name="stats (Process management and security)"></a><a class="anchor" name="stats socket"></a><a class="anchor" name="3-stats socket"></a><a class="anchor" name="3.1-stats socket"></a><a class="anchor" name="stats socket (Global parameters)"></a><a class="anchor" name="stats socket (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="stats socket"></a><a href="#3.1-stats%20socket">stats socket</a></b> <span style="color: #008">[<span style="color: #080">&lt;address:port&gt;</span>|<span style="color: #080">&lt;path&gt;</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Binds a UNIX socket to &lt;path&gt; or a TCPv4/v6 address to &lt;address:port&gt;.
@@ -6435,6 +6528,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-fullconn">fullconn</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-grace">grace</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-hash-type">hash-type</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
+<tr><td ><a href="#4-http-after-response">http-after-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-check%20disable-on-404">http-check disable-on-404</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-check%20expect">http-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-check%20send-state">http-check send-state</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6442,8 +6536,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-http-response">http-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-reuse">http-reuse</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-http-send-name-header">http-send-name-header</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-id">id</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-id">id</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-ignore-persist">ignore-persist</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-load-server-state-from-file">load-server-state-from-file</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-log"><span class="pull-right"><span>(*)</span></span>log</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6463,8 +6557,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20checkcache"><span class="pull-right"><span>(*)</span></span>option checkcache</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20clitcpka"><span class="pull-right"><span>(*)</span></span>option clitcpka</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20contstats"><span class="pull-right"><span>(*)</span></span>option contstats</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td ><a href="#4-option%20dontlog-normal"><span class="pull-right"><span>(*)</span></span>option dontlog-normal</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-option%20dontlog-normal"><span class="pull-right"><span>(*)</span></span>option dontlog-normal</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlognull"><span class="pull-right"><span>(*)</span></span>option dontlognull</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20forwardfor">option forwardfor</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20h1-case-adjust-bogus-client"><span class="pull-right"><span>(*)</span></span>option h1-case-adjust-bogus-client</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -6484,8 +6578,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20ldap-check">option ldap-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20external-check">option external-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20log-health-checks"><span class="pull-right"><span>(*)</span></span>option log-health-checks</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-option%20log-separate-errors"><span class="pull-right"><span>(*)</span></span>option log-separate-errors</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-option%20log-separate-errors"><span class="pull-right"><span>(*)</span></span>option log-separate-errors</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20logasap"><span class="pull-right"><span>(*)</span></span>option logasap</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20mysql-check">option mysql-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20nolinger"><span class="pull-right"><span>(*)</span></span>option nolinger</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6505,8 +6599,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcp-check">option tcp-check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcp-smart-accept"><span class="pull-right"><span>(*)</span></span>option tcp-smart-accept</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td ><a href="#4-option%20tcp-smart-connect"><span class="pull-right"><span>(*)</span></span>option tcp-smart-connect</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-option%20tcp-smart-connect"><span class="pull-right"><span>(*)</span></span>option tcp-smart-connect</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcpka">option tcpka</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcplog">option tcplog</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20transparent"><span class="pull-right"><span>(*)</span></span>option transparent</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6526,8 +6620,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-stats%20enable">stats enable</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20hide-version">stats hide-version</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20http-request">stats http-request</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-stats%20realm">stats realm</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-stats%20realm">stats realm</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20refresh">stats refresh</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20scope">stats scope</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20show-desc">stats show-desc</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6547,8 +6641,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-tcp-request%20content">tcp-request content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-request%20inspect-delay">tcp-request inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-request%20session">tcp-request session</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
-<tr><td ><a href="#4-tcp-response%20content">tcp-response content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-tcp-response%20content">tcp-response content</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-response%20inspect-delay">tcp-response inspect-delay</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20check">timeout check</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20client">timeout client</a></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -7222,7 +7316,7 @@ compression type text/html text/plain
 </div><a class="anchor" name="cookie"></a><a class="anchor" name="4-cookie"></a><a class="anchor" name="4.2-cookie"></a><a class="anchor" name="cookie (Proxies)"></a><a class="anchor" name="cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="cookie"></a><a href="#4.2-cookie">cookie</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ rewrite | insert | prefix ]</span> <span style="color: #008">[ indirect ]</span> <span style="color: #008">[ nocache ]</span>
               <span style="color: #008">[ postonly ]</span> <span style="color: #008">[ preserve ]</span> <span style="color: #008">[ httponly ]</span> <span style="color: #008">[ secure ]</span>
               <span style="color: #008">[ domain <span style="color: #080">&lt;domain&gt;</span> ]</span>* <span style="color: #008">[ maxidle <span style="color: #080">&lt;idle&gt;</span> ]</span> <span style="color: #008">[ maxlife <span style="color: #080">&lt;life&gt;</span> ]</span>
-              <span style="color: #008">[ dynamic ]</span></div><pre class="text">Enable cookie-based persistence in a backend.
+              <span style="color: #008">[ dynamic ]</span> <span style="color: #008">[ attr <span style="color: #080">&lt;value&gt;</span> ]</span>*</div><pre class="text">Enable cookie-based persistence in a backend.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -7380,7 +7474,12 @@ dynamic   Activate dynamic cookies. When used, a session cookie is
           of the server, and a secret key, specified in the
           &quot;<a href="#dynamic-cookie-key">dynamic-cookie-key</a>&quot; backend directive.
           The cookie will be regenerated each time the IP address change,
-          and is only generated for IPv4/IPv6.</pre>
+          and is only generated for IPv4/IPv6.
+
+attr      This option tells haproxy to add an extra attribute when a
+          cookie is inserted. The attribute value can contain any
+          characters except control ones or &quot;;&quot;. This option may be
+          repeated.</pre>
 </div>
 <pre class="text">There can be only one persistence cookie per HTTP backend, and it can be
 declared in a defaults section. The value of the cookie will be the value
@@ -7950,7 +8049,134 @@ consistent hashing mechanism.
 default function is &quot;<a href="#sdbm">sdbm</a>&quot;, the selection of a function should be based on
 the range of the values being hashed.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#balance">balance</a>&quot;, &quot;<a href="#hash-balance-factor">hash-balance-factor</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#server%20%28Peers%29">Peers</a></li><li><a href="#server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;</div>
-<a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check disable-on-404"></a><a class="anchor" name="4-http-check disable-on-404"></a><a class="anchor" name="4.2-http-check disable-on-404"></a><a class="anchor" name="http-check disable-on-404 (Proxies)"></a><a class="anchor" name="http-check disable-on-404 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check disable-on-404"></a><a href="#4.2-http-check%20disable-on-404">http-check disable-on-404</a></b></div><pre class="text">Enable a maintenance mode upon HTTP/404 response to health-checks
+<a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response"></a><a href="#4.2-http-after-response">http-after-response</a></b> <span style="color: #080">&lt;action&gt;</span> <span style="color: #080">&lt;options...&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">Access control for all Layer 7 responses (server, applet/service and internal
+ones).
+</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<pre class="text">The http-after-response statement defines a set of rules which apply to layer
+7 processing. The rules are evaluated in their declaration order when they
+are met in a frontend, listen or backend section. Any rule may optionally be
+followed by an ACL-based condition, in which case it will only be evaluated
+if the condition is true. Since these rules apply on responses, the backend
+rules are applied first, followed by the frontend's rules.
+
+Unlike http-response rules, these ones are applied on all responses, the
+server ones but also to all responses generated by HAProxy. These rules are
+evaluated at the end of the responses analysis, before the data forwarding.
+
+The first keyword is the rule's action. The supported actions are described
+below.
+
+There is no limit to the number of http-after-response statements per
+instance.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-after-response set-header Strict-Transport-Security &quot;max-age=31536000&quot;
+http-after-response set-header Cache-Control &quot;no-store,no-cache,private&quot;
+http-after-response set-header Pragma &quot;no-cache&quot;
+</code></pre>
+</div><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response add-header"></a><a class="anchor" name="4-http-after-response add-header"></a><a class="anchor" name="4.2-http-after-response add-header"></a><a class="anchor" name="http-after-response add-header (Proxies)"></a><a class="anchor" name="http-after-response add-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response add-header"></a><a href="#4.2-http-after-response%20add-header">http-after-response add-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This appends an HTTP header field whose name is specified in &lt;name&gt; and whose
+value is defined by &lt;fmt&gt; which follows the log-format rules (see Custom Log
+Format in <a href="#8.2.4">section 8.2.4</a>). This may be used to send a cookie to a client for
+example, or to pass some internal information.
+This rule is not final, so it is possible to add other similar rules.
+Note that header addition is performed immediately, so one rule might reuse
+the resulting header from a previous rule.
+</pre><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response allow"></a><a class="anchor" name="4-http-after-response allow"></a><a class="anchor" name="4.2-http-after-response allow"></a><a class="anchor" name="http-after-response allow (Proxies)"></a><a class="anchor" name="http-after-response allow (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response allow"></a><a href="#4.2-http-after-response%20allow">http-after-response allow</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and lets the response pass the check.
+No further &quot;<a href="#http-after-response">http-after-response</a>&quot; rules are evaluated.
+</pre><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response del-header"></a><a class="anchor" name="4-http-after-response del-header"></a><a class="anchor" name="4.2-http-after-response del-header"></a><a class="anchor" name="http-after-response del-header (Proxies)"></a><a class="anchor" name="http-after-response del-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response del-header"></a><a href="#4.2-http-after-response%20del-header">http-after-response del-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This removes all HTTP header fields whose name is specified in &lt;name&gt;.
+</pre><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response replace-header"></a><a class="anchor" name="4-http-after-response replace-header"></a><a class="anchor" name="4.2-http-after-response replace-header"></a><a class="anchor" name="http-after-response replace-header (Proxies)"></a><a class="anchor" name="http-after-response replace-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response replace-header"></a><a href="#4.2-http-after-response%20replace-header">http-after-response replace-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
+                                   <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;<a href="#http-response%20replace-header">http-response replace-header</a>&quot;.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-after-response replace-header Set-Cookie (C=[^;]*);(.*) \1;ip=%bi;\2
+
+<span class="comment"># applied to:</span>
+Set-Cookie: C=1; expires=Tue, 14-Jun-2016 01:40:45 GMT
+
+<span class="comment"># outputs:</span>
+Set-Cookie: C=1;ip=192.168.1.20; expires=Tue, 14-Jun-2016 01:40:45 GMT
+
+<span class="comment"># assuming the backend IP is 192.168.1.20.</span>
+</code></pre>
+</div><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response replace-value"></a><a class="anchor" name="4-http-after-response replace-value"></a><a class="anchor" name="4.2-http-after-response replace-value"></a><a class="anchor" name="http-after-response replace-value (Proxies)"></a><a class="anchor" name="http-after-response replace-value (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response replace-value"></a><a href="#4.2-http-after-response%20replace-value">http-after-response replace-value</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;regex-match&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
+                                 <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;<a href="#http-response%20replace-value">http-response replace-value</a>&quot;.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-after-response replace-value Cache-control ^public$ private
+
+<span class="comment"># applied to:</span>
+Cache-Control: max-age=3600, public
+
+<span class="comment"># outputs:</span>
+Cache-Control: max-age=3600, private
+</code></pre>
+</div><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response set-header"></a><a class="anchor" name="4-http-after-response set-header"></a><a class="anchor" name="4.2-http-after-response set-header"></a><a class="anchor" name="http-after-response set-header (Proxies)"></a><a class="anchor" name="http-after-response set-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response set-header"></a><a href="#4.2-http-after-response%20set-header">http-after-response set-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This does the same as &quot;add-header&quot; except that the header name is first
+removed if it existed. This is useful when passing security information to
+the server, where the header must not be manipulated by external users.
+</pre><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response set-status"></a><a class="anchor" name="4-http-after-response set-status"></a><a class="anchor" name="4.2-http-after-response set-status"></a><a class="anchor" name="http-after-response set-status (Proxies)"></a><a class="anchor" name="http-after-response set-status (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response set-status"></a><a href="#4.2-http-after-response%20set-status">http-after-response set-status</a></b> <span style="color: #080">&lt;status&gt;</span> <span style="color: #008">[reason <span style="color: #080">&lt;str&gt;</span>]</span>
+                               <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This replaces the response status code with &lt;status&gt; which must be an integer
+between 100 and 999. Optionally, a custom reason text can be provided defined
+by &lt;str&gt;, or the default reason for the specified code will be used as a
+fallback.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># return &quot;431 Request Header Fields Too Large&quot;</span>
+http-response set-status 431
+<span class="comment"># return &quot;503 Slow Down&quot;, custom reason</span>
+http-response set-status 503 reason &quot;Slow Down&quot;
+</code></pre>
+</div><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response set-var"></a><a class="anchor" name="4-http-after-response set-var"></a><a class="anchor" name="4.2-http-after-response set-var"></a><a class="anchor" name="http-after-response set-var (Proxies)"></a><a class="anchor" name="http-after-response set-var (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response set-var"></a><a href="#4.2-http-after-response%20set-var">http-after-response set-var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to set the contents of a variable. The variable is declared
+inline.
+</pre><div class="separator">
+<span class="label label-info">Arguments:</span><pre class="prettyprint arguments">&lt;var-name&gt;  The name of the variable starts with an indication about its
+            scope. The scopes allowed are:
+              &quot;<a href="#proc">proc</a>&quot; : the variable is shared with the whole process
+              &quot;sess&quot; : the variable is shared with the whole session
+              &quot;txn&quot;  : the variable is shared with the transaction
+                       (request and response)
+              &quot;req&quot;  : the variable is shared only during request
+                       processing
+              &quot;res&quot;  : the variable is shared only during response
+                       processing
+            This prefix is followed by a name. The separator is a '.'.
+            The name may only contain characters 'a-z', 'A-Z', '0-9', '.'
+            and '_'.
+
+&lt;expr&gt;      Is a standard HAProxy expression formed by a sample-fetch
+            followed by some converters.</pre>
+</div>
+<div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-after-response set-var(sess.last_redir) res.hdr(location)
+</code></pre>
+</div><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response strict-mode"></a><a class="anchor" name="4-http-after-response strict-mode"></a><a class="anchor" name="4.2-http-after-response strict-mode"></a><a class="anchor" name="http-after-response strict-mode (Proxies)"></a><a class="anchor" name="http-after-response strict-mode (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response strict-mode"></a><a href="#4.2-http-after-response%20strict-mode">http-after-response strict-mode</a></b> <span style="color: #800">{ on | off }</span></div><pre class="text">This enables or disables the strict rewriting mode for following rules. It
+does not affect rules declared before it and it is only applicable on rules
+performing a rewrite on the responses. When the strict mode is enabled, any
+rewrite failure triggers an internal error. Otherwise, such errors are
+silently ignored. The purpose of the strict rewriting mode is to make some
+rewrites optionnal while others must be performed to continue the response
+processing.
+
+By default, the strict rewriting mode is enabled. Its value is also reset
+when a ruleset evaluation ends. So, for instance, if you change the mode on
+the bacnkend, the default mode is restored when HAProxy starts the frontend
+rules evaluation.
+</pre><a class="anchor" name="http-after-response"></a><a class="anchor" name="4-http-after-response"></a><a class="anchor" name="4.2-http-after-response"></a><a class="anchor" name="http-after-response (Proxies)"></a><a class="anchor" name="http-after-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-after-response unset-var"></a><a class="anchor" name="4-http-after-response unset-var"></a><a class="anchor" name="4.2-http-after-response unset-var"></a><a class="anchor" name="http-after-response unset-var (Proxies)"></a><a class="anchor" name="http-after-response unset-var (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-after-response unset-var"></a><a href="#4.2-http-after-response%20unset-var">http-after-response unset-var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to unset a variable. See &quot;<a href="#http-after-response%20set-var">http-after-response set-var</a>&quot; for
+details about &lt;var-name&gt;.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-after-response unset-var(sess.last_redir)
+</code></pre>
+</div><a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check disable-on-404"></a><a class="anchor" name="4-http-check disable-on-404"></a><a class="anchor" name="4.2-http-check disable-on-404"></a><a class="anchor" name="http-check disable-on-404 (Proxies)"></a><a class="anchor" name="http-check disable-on-404 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check disable-on-404"></a><a href="#4.2-http-check%20disable-on-404">http-check disable-on-404</a></b></div><pre class="text">Enable a maintenance mode upon HTTP/404 response to health-checks
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -8202,9 +8428,12 @@ more information.
 If the keyword &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">id<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#id%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#id%20%28Bind%20options%29">Bind options</a></li><li><a href="#id%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; is used instead of &quot;len&quot;, the action tries to store the
 captured string in a previously declared capture slot. This is useful to run
 captures in backends. The slot id can be declared by a previous directive
-&quot;<a href="#http-request%20capture">http-request capture</a>&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot; keyword. If the slot
-&lt;id&gt; doesn't exist, then HAProxy fails parsing the configuration to prevent
-unexpected behavior at run time.
+&quot;<a href="#http-request%20capture">http-request capture</a>&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot; keyword.
+
+When using this action in a backend, double check that the relevant
+frontend(s) have the required capture slots otherwise, this rule will be
+ignored at run time. This can't be detected at configuration parsing time
+due to HAProxy's ability to dynamically resolve backend name at runtime.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request del-acl"></a><a class="anchor" name="4-http-request del-acl"></a><a class="anchor" name="4.2-http-request del-acl"></a><a class="anchor" name="http-request del-acl (Proxies)"></a><a class="anchor" name="http-request del-acl (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request del-acl"></a><a href="#4.2-http-request%20del-acl">http-request del-acl</a></b>(<span style="color: #080">&lt;file-name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to delete an entry from an ACL. The ACL must be loaded from a
 file (even a dummy empty file). The file name of the ACL to be updated is
 passed between parentheses. It takes one argument: &lt;key fmt&gt;, which follows
@@ -8402,6 +8631,78 @@ X-Forwarded-For: 192.168.10.1, 192.168.13.24, 10.0.0.37
 
 <span class="comment"># outputs:</span>
 X-Forwarded-For: 172.16.10.1, 172.16.13.24, 10.0.0.37
+</code></pre>
+</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request return"></a><a class="anchor" name="4-http-request return"></a><a class="anchor" name="4.2-http-request return"></a><a class="anchor" name="http-request return (Proxies)"></a><a class="anchor" name="http-request return (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request return"></a><a href="#4.2-http-request%20return">http-request return</a></b> <span style="color: #008">[status <span style="color: #080">&lt;code&gt;</span>]</span> <span style="color: #008">[content-type <span style="color: #080">&lt;type&gt;</span>]</span>
+          <span style="color: #008">[ <span style="color: #800">{ default-errorfiles | errorfile <span style="color: #080">&lt;file&gt;</span> | errorfiles <span style="color: #080">&lt;name&gt;</span> |
+              file <span style="color: #080">&lt;file&gt;</span> | lf-file <span style="color: #080">&lt;file&gt;</span> | string <span style="color: #080">&lt;str&gt;</span> | lf-string <span style="color: #080">&lt;fmt&gt;</span> }</span> ]</span>
+          <span style="color: #008">[ hdr <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> ]</span>*
+          <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and immediatly returns a response. The
+default status code used for the response is 200. It can be optionally
+specified as an arguments to &quot;<a href="#status">status</a>&quot;. The response content-type may also be
+specified as an argument to &quot;content-type&quot;. Finally the response itselft may
+be defined. If can be a full HTTP response specifying the errorfile to use,
+or the response payload specifing the file or the string to use. These rules
+are followed to create the response :
+
+* If neither the errorfile nor the payload to use is defined, a dummy
+  response is returned. Only the &quot;<a href="#status">status</a>&quot; argument is considered. It can be
+  any code in the range [200, 599]. The &quot;content-type&quot; argument, if any, is
+  ignored.
+
+* If &quot;default-errorfiles&quot; argument is set, the proxy's errorfiles are
+  considered.  If the &quot;<a href="#status">status</a>&quot; argument is defined, it must be one of the
+  status code handled by hparoxy (200, 400, 403, 404, 405, 408, 410, 425,
+  429, 500, 502, 503, and 504). The &quot;content-type&quot; argument, if any, is
+  ignored.
+
+* If a specific errorfile is defined, with an &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">errorfile<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#errorfile%20%28HTTP-errors%29">HTTP-errors</a></li><li><a href="#errorfile%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; argument, the
+  corresponding file, containing a full HTTP response, is returned. Only the
+  &quot;<a href="#status">status</a>&quot; argument is considered. It must be one of the status code handled
+  by hparoxy (200, 400, 403, 404, 405, 408, 410, 425, 429, 500, 502, 503, and
+  504). The &quot;content-type&quot; argument, if any, is ignored.
+
+* If an http-errors section is defined, with an &quot;<a href="#errorfiles">errorfiles</a>&quot; argument, the
+  corresponding file in the specified http-errors section, containing a full
+  HTTP response, is returned. Only the &quot;<a href="#status">status</a>&quot; argument is considered. It
+  must be one of the status code handled by hparoxy (200, 400, 403, 404, 405,
+  408, 410, 425, 429, 500, 502, 503, and 504). The &quot;content-type&quot; argument,
+  if any, is ignored.
+
+* If a &quot;file&quot; or a &quot;lf-file&quot; argument is specified, the file's content is
+  used as the response payload. If the file is not empty, its content-type
+  must be set as argument to &quot;content-type&quot;. Otherwise, any &quot;content-type&quot;
+  argument is ignored. With a &quot;lf-file&quot; argument, the file's content is
+  evaluated as a log-format string. With a &quot;file&quot; argument, it is considered
+  as a raw content.
+
+* If a &quot;string&quot; or &quot;lf-string&quot; argument is specified, the defined string is
+  used as the response payload. The content-type must always be set as
+  argument to &quot;content-type&quot;. With a &quot;lf-string&quot; argument, the string is
+  evaluated as a log-format string. With a &quot;string&quot; argument, it is
+  considered as a raw string.
+
+When the response is not based an errorfile, it is possible to appends HTTP
+header fields to the response using &quot;<a href="#hdr">hdr</a>&quot; arguments. Otherwise, all &quot;<a href="#hdr">hdr</a>&quot;
+arguments are ignored. For each one, the header name is specified in &lt;name&gt;
+and its value is defined by &lt;fmt&gt; which follows the log-format rules.
+
+Note that the generated response must be smaller than a buffer. And to avoid
+any warning, when an errorfile or a raw file is loaded, the buffer space
+reserved to the headers rewritting should also be free.
+
+No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li></ul></span>&quot; rules are evaluated.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-request return errorfile /etc/haproy/errorfiles/200.http \
+    if { path /ping }
+
+http-request return content-type image/x-icon file /var/www/favicon.ico  \
+    if { path /favicon.ico }
+
+http-request return status 403 content-type text/plain    \
+    lf-string &quot;Access denied. IP %[src] is blacklisted.&quot;  \
+    if { src -f /etc/haproxy/blacklist.lst }
 </code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request sc-inc-gpc0"></a><a class="anchor" name="4-http-request sc-inc-gpc0"></a><a class="anchor" name="4.2-http-request sc-inc-gpc0"></a><a class="anchor" name="http-request sc-inc-gpc0 (Proxies)"></a><a class="anchor" name="http-request sc-inc-gpc0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request sc-inc-gpc0"></a><a href="#4.2-http-request%20sc-inc-gpc0">http-request sc-inc-gpc0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request sc-inc-gpc1"></a><a class="anchor" name="4-http-request sc-inc-gpc1"></a><a class="anchor" name="4.2-http-request sc-inc-gpc1"></a><a class="anchor" name="http-request sc-inc-gpc1 (Proxies)"></a><a class="anchor" name="http-request sc-inc-gpc1 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request sc-inc-gpc1"></a><a href="#4.2-http-request%20sc-inc-gpc1">http-request sc-inc-gpc1</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This actions increments the GPC0 or GPC1 counter according with the sticky
 counter designated by &lt;sc-id&gt;. If an error occurs, this action silently fails
@@ -8795,8 +9096,11 @@ string. The capture slot must be defined in an associated frontend.
 This is useful to run captures in backends. The slot id can be declared by a
 previous directive &quot;<a href="#http-response%20capture">http-response capture</a>&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot;
 keyword.
-If the slot &lt;id&gt; doesn't exist, then HAProxy fails parsing the configuration
-to prevent unexpected behavior at run time.
+
+When using this action in a backend, double check that the relevant
+frontend(s) have the required capture slots otherwise, this rule will be
+ignored at run time. This can't be detected at configuration parsing time
+due to HAProxy's ability to dynamically resolve backend name at runtime.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response del-acl"></a><a class="anchor" name="4-http-response del-acl"></a><a class="anchor" name="4.2-http-response del-acl"></a><a class="anchor" name="http-response del-acl (Proxies)"></a><a class="anchor" name="http-response del-acl (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response del-acl"></a><a href="#4.2-http-response%20del-acl">http-response del-acl</a></b>(<span style="color: #080">&lt;file-name&gt;</span>) <span style="color: #080">&lt;key fmt&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This is used to delete an entry from an ACL. The ACL must be loaded from a
 file (even a dummy empty file). The file name of the ACL to be updated is
 passed between parentheses. It takes one argument: &lt;key fmt&gt;, which follows
@@ -8855,6 +9159,75 @@ Cache-Control: max-age=3600, public
 
 <span class="comment"># outputs:</span>
 Cache-Control: max-age=3600, private
+</code></pre>
+</div><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response return"></a><a class="anchor" name="4-http-response return"></a><a class="anchor" name="4.2-http-response return"></a><a class="anchor" name="http-response return (Proxies)"></a><a class="anchor" name="http-response return (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response return"></a><a href="#4.2-http-response%20return">http-response return</a></b> <span style="color: #008">[status <span style="color: #080">&lt;code&gt;</span>]</span> <span style="color: #008">[content-type <span style="color: #080">&lt;type&gt;</span>]</span>
+          <span style="color: #008">[ <span style="color: #800">{ default-errorfiles | errorfile <span style="color: #080">&lt;file&gt;</span> | errorfiles <span style="color: #080">&lt;name&gt;</span> |
+              file <span style="color: #080">&lt;file&gt;</span> | lf-file <span style="color: #080">&lt;file&gt;</span> | string <span style="color: #080">&lt;str&gt;</span> | lf-string <span style="color: #080">&lt;fmt&gt;</span> }</span> ]</span>
+          <span style="color: #008">[ hdr <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span>*
+          <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and immediatly returns a response. The
+default status code used for the response is 200. It can be optionally
+specified as an arguments to &quot;<a href="#status">status</a>&quot;. The response content-type may also be
+specified as an argument to &quot;content-type&quot;. Finally the response itselft may
+be defined. If can be a full HTTP response specifying the errorfile to use,
+or the response payload specifing the file or the string to use. These rules
+are followed to create the response :
+
+* If neither the errorfile nor the payload to use is defined, a dummy
+  response is returned. Only the &quot;<a href="#status">status</a>&quot; argument is considered. It can be
+  any code in the range [200, 599]. The &quot;content-type&quot; argument, if any, is
+  ignored.
+
+* If &quot;default-errorfiles&quot; argument is set, the proxy's errorfiles are
+  considered.  If the &quot;<a href="#status">status</a>&quot; argument is defined, it must be one of the
+  status code handled by hparoxy (200, 400, 403, 404, 405, 408, 410, 425,
+  429, 500, 502, 503, and 504). The &quot;content-type&quot; argument, if any, is
+  ignored.
+
+* If a specific errorfile is defined, with an &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">errorfile<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#errorfile%20%28HTTP-errors%29">HTTP-errors</a></li><li><a href="#errorfile%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; argument, the
+  corresponding file, containing a full HTTP response, is returned. Only the
+  &quot;<a href="#status">status</a>&quot; argument is considered. It must be one of the status code handled
+  by hparoxy (200, 400, 403, 404, 405, 408, 410, 425, 429, 500, 502, 503, and
+  504). The &quot;content-type&quot; argument, if any, is ignored.
+
+* If an http-errors section is defined, with an &quot;<a href="#errorfiles">errorfiles</a>&quot; argument, the
+  corresponding file in the specified http-errors section, containing a full
+  HTTP response, is returned. Only the &quot;<a href="#status">status</a>&quot; argument is considered. It
+  must be one of the status code handled by hparoxy (200, 400, 403, 404, 405,
+  408, 410, 425, 429, 500, 502, 503, and 504). The &quot;content-type&quot; argument,
+  if any, is ignored.
+
+* If a &quot;file&quot; or a &quot;lf-file&quot; argument is specified, the file's content is
+  used as the response payload. If the file is not empty, its content-type
+  must be set as argument to &quot;content-type&quot;. Otherwise, any &quot;content-type&quot;
+  argument is ignored. With a &quot;lf-file&quot; argument, the file's content is
+  evaluated as a log-format string. With a &quot;file&quot; argument, it is considered
+  as a raw content.
+
+* If a &quot;string&quot; or &quot;lf-string&quot; argument is specified, the defined string is
+  used as the response payload. The content-type must always be set as
+  argument to &quot;content-type&quot;. With a &quot;lf-string&quot; argument, the string is
+  evaluated as a log-format string. With a &quot;string&quot; argument, it is
+  considered as a raw string.
+
+When the response is not based an errorfile, it is possible to appends HTTP
+header fields to the response using &quot;<a href="#hdr">hdr</a>&quot; arguments. Otherwise, all &quot;<a href="#hdr">hdr</a>&quot;
+arguments are ignored. For each one, the header name is specified in &lt;name&gt;
+and its value is defined by &lt;fmt&gt; which follows the log-format rules.
+
+Note that the generated response must be smaller than a buffer. And to avoid
+any warning, when an errorfile or a raw file is loaded, the buffer space
+reserved to the headers rewritting should also be free.
+
+No further &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-response<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-response%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#http-response%20%28Proxy%20section%29">Proxy section</a></li></ul></span>&quot; rules are evaluated.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>http-response return errorfile /etc/haproy/errorfiles/200.http \
+    if { status eq 404 }
+
+http-response return content-type text/plain  \
+    string &quot;This is the end !&quot;                \
+    if { status eq 500 }
 </code></pre>
 </div><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response sc-inc-gpc0"></a><a class="anchor" name="4-http-response sc-inc-gpc0"></a><a class="anchor" name="4.2-http-response sc-inc-gpc0"></a><a class="anchor" name="http-response sc-inc-gpc0 (Proxies)"></a><a class="anchor" name="http-response sc-inc-gpc0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response sc-inc-gpc0"></a><a href="#4.2-http-response%20sc-inc-gpc0">http-response sc-inc-gpc0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response sc-inc-gpc1"></a><a class="anchor" name="4-http-response sc-inc-gpc1"></a><a class="anchor" name="4.2-http-response sc-inc-gpc1"></a><a class="anchor" name="http-response sc-inc-gpc1 (Proxies)"></a><a class="anchor" name="http-response sc-inc-gpc1 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response sc-inc-gpc1"></a><a href="#4.2-http-response%20sc-inc-gpc1">http-response sc-inc-gpc1</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action increments the GPC0 or GPC1 counter according with the sticky
 counter designated by &lt;sc-id&gt;. If an error occurs, this action silently fails
@@ -17066,6 +17439,7 @@ log-format %[date,utime(%Y%m%d%H%M%S)]\ %ci:%cp
 </div><a class="anchor" name="word"></a><a class="anchor" name="7-word"></a><a class="anchor" name="7.3.1-word"></a><a class="anchor" name="word (Using ACLs and fetching samples)"></a><a class="anchor" name="word (Converters)"></a><div class="keyword"><b><a class="anchor" name="word"></a><a href="#7.3.1-word">word</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;count&gt;</span>]</span>)</div><pre class="text">Extracts the nth word counting from the beginning (positive index) or from
 the end (negative index) considering given delimiters from an input string.
 Indexes start at 1 or -1 and delimiters are a string formatted list of chars.
+Delimiters at the beginning or end of the input string are ignored.
 Optionally you can specify &lt;count&gt; of words to extract (default: 1).
 Value of 0 indicates extraction of all remaining words.
 </pre><div class="separator">
@@ -17076,6 +17450,7 @@ str(f1_f2_f3__f5),word(2,_,0)  <span class="comment"># f2_f3__f5</span>
 str(f1_f2_f3__f5),word(3,_,2)  <span class="comment"># f3__f5</span>
 str(f1_f2_f3__f5),word(-2,_,3) <span class="comment"># f1_f2_f3</span>
 str(f1_f2_f3__f5),word(-3,_,0) <span class="comment"># f1_f2</span>
+str(/f1/f2/f3/f4),word(1,/)    <span class="comment"># f1</span>
 </code></pre>
 </div><a class="anchor" name="wt6"></a><a class="anchor" name="7-wt6"></a><a class="anchor" name="7.3.1-wt6"></a><a class="anchor" name="wt6 (Using ACLs and fetching samples)"></a><a class="anchor" name="wt6 (Converters)"></a><div class="keyword"><b><a class="anchor" name="wt6"></a><a href="#7.3.1-wt6">wt6</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the WT6
 hash function. Optionally, it is possible to apply a full avalanche hash
@@ -20824,8 +21199,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2-dev0-226 &ndash; Configuration Manual<br>
-							<small>2019/11/25, willy tarreau</small>
+							HAProxy 2.2-dev2-8 &ndash; Configuration Manual<br>
+							<small>2020/02/07, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20928,7 +21303,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev0-226', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev2-8', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
