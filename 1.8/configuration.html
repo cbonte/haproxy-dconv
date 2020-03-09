@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.23 - Configuration Manual</title>
+		<title>HAProxy version 1.8.24 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-10" rel="stylesheet" />
@@ -2808,7 +2808,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/02/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/03/09</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2819,10 +2819,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.23</strong></p>
+							<p><strong>version 1.8.24</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/11/25
+								2020/02/15
 							</p>
 						</div>
 
@@ -6337,7 +6337,7 @@ instead.
 <a class="anchor" name="cookie"></a><a class="anchor" name="4-cookie"></a><a class="anchor" name="4.2-cookie"></a><a class="anchor" name="cookie (Proxies)"></a><a class="anchor" name="cookie (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="cookie"></a><a href="#4.2-cookie">cookie</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #008">[ rewrite | insert | prefix ]</span> <span style="color: #008">[ indirect ]</span> <span style="color: #008">[ nocache ]</span>
               <span style="color: #008">[ postonly ]</span> <span style="color: #008">[ preserve ]</span> <span style="color: #008">[ httponly ]</span> <span style="color: #008">[ secure ]</span>
               <span style="color: #008">[ domain <span style="color: #080">&lt;domain&gt;</span> ]</span>* <span style="color: #008">[ maxidle <span style="color: #080">&lt;idle&gt;</span> ]</span> <span style="color: #008">[ maxlife <span style="color: #080">&lt;life&gt;</span> ]</span>
-              <span style="color: #008">[ dynamic ]</span></div><pre class="text">Enable cookie-based persistence in a backend.
+              <span style="color: #008">[ dynamic ]</span> <span style="color: #008">[ attr <span style="color: #080">&lt;value&gt;</span> ]</span>*</div><pre class="text">Enable cookie-based persistence in a backend.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
@@ -6495,7 +6495,12 @@ dynamic   Activate dynamic cookies. When used, a session cookie is
           of the server, and a secret key, specified in the
           &quot;<a href="#dynamic-cookie-key">dynamic-cookie-key</a>&quot; backend directive.
           The cookie will be regenerated each time the IP address change,
-          and is only generated for IPv4/IPv6.</pre>
+          and is only generated for IPv4/IPv6.
+
+attr      This option tells haproxy to add an extra attribute when a
+          cookie is inserted. The attribute value can contain any
+          characters except control ones or &quot;;&quot;. This option may be
+          repeated.</pre>
 </div>
 <pre class="text">There can be only one persistence cookie per HTTP backend, and it can be
 declared in a defaults section. The value of the cookie will be the value
@@ -7444,8 +7449,11 @@ http-request set-query %[query,regsub(%3D,=,g)]
   the captured string in a previously declared capture slot. This is useful
   to run captures in backends. The slot id can be declared by a previous
   directive &quot;http-request capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot; keyword.
-  If the slot &lt;id&gt; doesn't exist, then HAProxy fails parsing the
-  configuration to prevent unexpected behavior at run time.
+
+  When using this action in a backend, double check that the relevant
+  frontend(s) have the required capture slots otherwise, this rule will be
+  ignored at run time. This can't be detected at configuration parsing time
+  due to HAProxy's ability to dynamically resolve backend name at runtime.
 
 - cache-use &lt;name&gt; :
   See <a href="#10.2">section 10.2</a> about cache setup.
@@ -7894,8 +7902,11 @@ http-response set-status 503 reason &quot;Slow Down&quot;.
   This is useful to run captures in backends. The slot id can be declared by
   a previous directive &quot;http-response capture&quot; or with the &quot;<a href="#declare%20capture">declare capture</a>&quot;
   keyword.
-  If the slot &lt;id&gt; doesn't exist, then HAProxy fails parsing the
-  configuration to prevent unexpected behavior at run time.
+
+  When using this action in a backend, double check that the relevant
+  frontend(s) have the required capture slots otherwise, this rule will be
+  ignored at run time. This can't be detected at configuration parsing time
+  due to HAProxy's ability to dynamically resolve backend name at runtime.
 
 - cache-store &lt;name&gt; :
   See <a href="#10.2">section 10.2</a> about cache setup.
@@ -15319,7 +15330,17 @@ characters such as the space. If the &quot;-i&quot; flag is passed before the fi
 string, then the matching will be performed ignoring the case. In order
 to match the string &quot;-i&quot;, either set it second, or pass the &quot;--&quot; flag
 before the first string. Same applies of course to match the string &quot;--&quot;.
-</pre></div>
+
+Do not use string matches for binary fetches which might contain null bytes
+(0x00), as the comparison stops at the occurrence of the first null byte.
+Instead, convert the binary fetch to a hex string with the hex converter first.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># matches if the string &lt;tag&gt; is present in the binary sample</span>
+acl tag_found req.payload(0,0),hex -m sub 3C7461673E
+</code></pre>
+</div></div>
 <a class="anchor" id="7.1.4" name="7.1.4"></a>
 <h3 id="chapter-7.1.4" data-target="7.1.4"><small><a class="small" href="#7.1.4">7.1.4.</a></small> Matching regular expressions (regexes)</h3>
 <div><pre class="text">Just like with string matching, regex matching applies to verbatim strings as
@@ -19225,8 +19246,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.23 &ndash; Configuration Manual<br>
-							<small>2019/11/25, willy tarreau</small>
+							HAProxy 1.8.24 &ndash; Configuration Manual<br>
+							<small>2020/02/15, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19329,7 +19350,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.23', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.24', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
