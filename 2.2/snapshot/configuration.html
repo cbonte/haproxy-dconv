@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2-dev2-8 - Configuration Manual</title>
+		<title>HAProxy version 2.2-dev3-120 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-10" rel="stylesheet" />
@@ -1181,6 +1181,8 @@
 							
 							<a class="list-group-item" href="#ca-sign-pass">ca-sign-pass</a>
 							
+							<a class="list-group-item" href="#ca-verify-file">ca-verify-file</a>
+							
 							<a class="list-group-item" href="#cache">cache</a>
 							
 							<a class="list-group-item" href="#capture">capture</a>
@@ -1818,6 +1820,8 @@
 							<a class="list-group-item" href="#ipv4">ipv4</a>
 							
 							<a class="list-group-item" href="#ipv6">ipv6</a>
+							
+							<a class="list-group-item" href="#issuers-chain-path">issuers-chain-path</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-J"><h4>J</h4>
@@ -3337,7 +3341,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/02/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/03/09</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3348,10 +3352,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.2-dev2-8</strong></p>
+							<p><strong>version 2.2-dev3-120</strong></p>
 							<p>
 								willy tarreau<br>
-								2020/02/07
+								2020/02/25
 							</p>
 						</div>
 
@@ -4836,6 +4840,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#h1-case-adjust-file">h1-case-adjust-file</a>
    - <a href="#insecure-fork-wanted">insecure-fork-wanted</a>
    - <a href="#insecure-setuid-wanted">insecure-setuid-wanted</a>
+   - <a href="#issuers-chain-path">issuers-chain-path</a>
    - <a href="#log">log</a>
    - <a href="#log-tag">log-tag</a>
    - <a href="#log-send-hostname">log-send-hostname</a>
@@ -4949,8 +4954,9 @@ The following keywords are supported in the &quot;global&quot; section :
 <a class="anchor" id="3.1" name="3.1"></a>
 <h2 id="chapter-3.1" data-target="3.1"><small><a class="small" href="#3.1">3.1.</a></small> Process management and security</h2>
 <div><a class="anchor" name="ca-base"></a><a class="anchor" name="3-ca-base"></a><a class="anchor" name="3.1-ca-base"></a><a class="anchor" name="ca-base (Global parameters)"></a><a class="anchor" name="ca-base (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ca-base"></a><a href="#3.1-ca-base">ca-base</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a default directory to fetch SSL CA certificates and CRLs from when a
-relative path is used with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; or &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crl-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crl-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#crl-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; directives. Absolute
-locations specified in &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crl-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crl-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#crl-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; prevail and ignore &quot;<a href="#ca-base">ca-base</a>&quot;.
+relative path is used with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#ca-verify-file">ca-verify-file</a>&quot; or &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crl-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crl-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#crl-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
+directives. Absolute locations specified in &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#ca-verify-file">ca-verify-file</a>&quot; and
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crl-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crl-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#crl-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; prevail and ignore &quot;<a href="#ca-base">ca-base</a>&quot;.
 </pre><a class="anchor" name="chroot"></a><a class="anchor" name="3-chroot"></a><a class="anchor" name="3.1-chroot"></a><a class="anchor" name="chroot (Global parameters)"></a><a class="anchor" name="chroot (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="chroot"></a><a href="#3.1-chroot">chroot</a></b> <span style="color: #080">&lt;jail dir&gt;</span></div><pre class="text">Changes current directory to &lt;jail dir&gt; and performs a chroot() there before
 dropping privileges. This increases the security level in case an unknown
 vulnerability would be exploited, since it would make it very hard for the
@@ -5080,7 +5086,7 @@ in tcp mode). It applies both in TCP and HTTP mode.
 &lt;from&gt;, to change it to &lt;to&gt; before sending it to HTTP/1 clients or
 servers. &lt;from&gt; must be in lower case, and &lt;from&gt; and &lt;to&gt; must not differ
 except for their case. It may be repeated if several header names need to be
-ajusted. Duplicate entries are not allowed. If a lot of header names have to
+adjusted. Duplicate entries are not allowed. If a lot of header names have to
 be adjusted, it might be more convenient to use &quot;<a href="#h1-case-adjust-file">h1-case-adjust-file</a>&quot;.
 Please note that no transformation will be applied unless &quot;option
 h1-case-adjust-bogus-client&quot; or &quot;<a href="#option%20h1-case-adjust-bogus-server">option h1-case-adjust-bogus-server</a>&quot; is
@@ -5152,6 +5158,17 @@ this causes a problem to an external check (for example one which would need
 the &quot;ping&quot; command), then it is possible to disable this protection by
 explicitly adding this directive in the global section. If enabled, it is
 possible to turn it back off by prefixing it with the &quot;no&quot; keyword.
+</pre><a class="anchor" name="issuers-chain-path"></a><a class="anchor" name="3-issuers-chain-path"></a><a class="anchor" name="3.1-issuers-chain-path"></a><a class="anchor" name="issuers-chain-path (Global parameters)"></a><a class="anchor" name="issuers-chain-path (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="issuers-chain-path"></a><a href="#3.1-issuers-chain-path">issuers-chain-path</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a directory to load certificate chain for issuer completion. All
+files must be in PEM format. For certificates loaded with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; or &quot;<a href="#crt-list">crt-list</a>&quot;,
+if certificate chain is not included in PEM (also commonly known as
+intermediate certificate), haproxy will complete chain if the issuer of the
+certificate corresponds to the first certificate of the chain loaded with
+&quot;<a href="#issuers-chain-path">issuers-chain-path</a>&quot;.
+A &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; file with PrivateKey+Certificate+IntermediateCA2+IntermediateCA1
+could be replaced with PrivateKey+Certificate. HAProxy will complete the
+chain if a file with IntermediateCA2+IntermediateCA1 is present in
+&quot;<a href="#issuers-chain-path">issuers-chain-path</a>&quot; directory. All other certificates with the same issuer
+will share the chain in memory.
 </pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
     <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Several global servers can be defined. They
 will receive logs for starts and exits, as well as all logs from proxies
@@ -5463,7 +5480,7 @@ known to be more secure and therefore their use is recommended.
 Custom DH parameters may be generated by using the OpenSSL command
 &quot;openssl dhparam &lt;size&gt;&quot;, where size should be at least 2048, as 1024-bit DH
 parameters should not be considered secure anymore.
-</pre><a class="anchor" name="ssl-load-extra-files"></a><a class="anchor" name="3-ssl-load-extra-files"></a><a class="anchor" name="3.1-ssl-load-extra-files"></a><a class="anchor" name="ssl-load-extra-files (Global parameters)"></a><a class="anchor" name="ssl-load-extra-files (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-load-extra-files"></a><a href="#3.1-ssl-load-extra-files">ssl-load-extra-files</a></b> <span style="color: #080">&lt;none|all|bundle|sctl|ocsp|issuer&gt;</span>*</div><pre class="text">This setting alters the way HAProxy will look for unspecified files during
+</pre><a class="anchor" name="ssl-load-extra-files"></a><a class="anchor" name="3-ssl-load-extra-files"></a><a class="anchor" name="3.1-ssl-load-extra-files"></a><a class="anchor" name="ssl-load-extra-files (Global parameters)"></a><a class="anchor" name="ssl-load-extra-files (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-load-extra-files"></a><a href="#3.1-ssl-load-extra-files">ssl-load-extra-files</a></b> <span style="color: #080">&lt;none|all|bundle|sctl|ocsp|issuer|key&gt;</span>*</div><pre class="text">This setting alters the way HAProxy will look for unspecified files during
 the loading of the SSL certificates.
 
 By default, HAProxy discovers automatically a lot of files not specified in
@@ -5475,7 +5492,7 @@ a certificate bundle if the file does not exist. In the case of a directory,
 it won't try to bundle the certificates if they have the same basename.
 
 &quot;all&quot;: This is the default behavior, it will try to load everything,
-bundles, sctl, ocsp, issuer.
+bundles, sctl, ocsp, issuer, key.
 
 &quot;bundle&quot;: When a file specified in the configuration does not exist, HAProxy
 will try to load a certificate bundle. This is done by looking for
@@ -5483,7 +5500,7 @@ will try to load a certificate bundle. This is done by looking for
 try to gather the files with the same basename in a multi-certificate bundle.
 The bundles were introduced with OpenSSL 1.0.2 and were the only way back
 then to load an ECDSA certificate and a RSA one, with the same SNI. Since
-OpenSSL 1.1.1 it is not recommended anymore, you can specifiy both the ECDSA
+OpenSSL 1.1.1 it is not recommended anymore, you can specify both the ECDSA
 and the RSA file on the bind line.
 
 &quot;sctl&quot;: Try to load &quot;&lt;basename&gt;.sctl&quot; for each crt keyword.
@@ -5492,6 +5509,9 @@ and the RSA file on the bind line.
 
 &quot;issuer&quot;: Try to load &quot;&lt;basename&gt;.issuer&quot; if the issuer of the OCSP file is
 not provided in the PEM file.
+
+&quot;key&quot;: If the private key was not provided by the PEM file, try to load a
+file &quot;&lt;basename&gt;.key&quot; containing a private key.
 
 The default behavior is &quot;all&quot;.
 </pre><div class="separator">
@@ -6123,7 +6143,7 @@ in better compression at the expense of memory usage. Can be a value between
 </pre></div>
 <a class="anchor" id="3.3" name="3.3"></a>
 <h2 id="chapter-3.3" data-target="3.3"><small><a class="small" href="#3.3">3.3.</a></small> Debugging</h2>
-<div><a class="anchor" name="debug"></a><a class="anchor" name="3-debug"></a><a class="anchor" name="3.3-debug"></a><a class="anchor" name="debug (Global parameters)"></a><a class="anchor" name="debug (Debugging)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#3.3-debug">debug</a></b></div><pre class="text">Enables debug mode which dumps to stdout all exchanges, and disables forking
+<div><a class="anchor" name="debug"></a><a class="anchor" name="3-debug"></a><a class="anchor" name="3.3-debug"></a><a class="anchor" name="debug (Global parameters)"></a><a class="anchor" name="debug (Debugging)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#3.3-debug">debug</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">Enables debug mode which dumps to stdout all exchanges, and disables forking
 into background. It is the equivalent of the command-line argument &quot;-d&quot;. It
 should never be used in a production configuration since it may prevent full
 system startup.
@@ -8162,7 +8182,7 @@ does not affect rules declared before it and it is only applicable on rules
 performing a rewrite on the responses. When the strict mode is enabled, any
 rewrite failure triggers an internal error. Otherwise, such errors are
 silently ignored. The purpose of the strict rewriting mode is to make some
-rewrites optionnal while others must be performed to continue the response
+rewrites optional while others must be performed to continue the response
 processing.
 
 By default, the strict rewriting mode is enabled. Its value is also reset
@@ -8530,7 +8550,7 @@ without sending any response. It acts similarly to the
 &quot;tcp-request content reject&quot; rules. It can be useful to force an immediate
 connection closure on HTTP/2 connections.
 </pre><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-header"></a><a class="anchor" name="4-http-request replace-header"></a><a class="anchor" name="4.2-http-request replace-header"></a><a class="anchor" name="http-request replace-header (Proxies)"></a><a class="anchor" name="http-request replace-header (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-header"></a><a href="#4.2-http-request%20replace-header">http-request replace-header</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
-                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the value of all occurences of header field &lt;name&gt; against
+                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This matches the value of all occurrences of header field &lt;name&gt; against
 &lt;match-regex&gt;. Matching is performed case-sensitively. Matching values are
 completely replaced by &lt;replace-fmt&gt;. Format characters are allowed in
 &lt;replace-fmt&gt; and work like &lt;fmt&gt; arguments in &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot;.
@@ -8636,12 +8656,12 @@ X-Forwarded-For: 172.16.10.1, 172.16.13.24, 10.0.0.37
           <span style="color: #008">[ <span style="color: #800">{ default-errorfiles | errorfile <span style="color: #080">&lt;file&gt;</span> | errorfiles <span style="color: #080">&lt;name&gt;</span> |
               file <span style="color: #080">&lt;file&gt;</span> | lf-file <span style="color: #080">&lt;file&gt;</span> | string <span style="color: #080">&lt;str&gt;</span> | lf-string <span style="color: #080">&lt;fmt&gt;</span> }</span> ]</span>
           <span style="color: #008">[ hdr <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;fmt&gt;</span> ]</span>*
-          <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and immediatly returns a response. The
+          <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and immediately returns a response. The
 default status code used for the response is 200. It can be optionally
 specified as an arguments to &quot;<a href="#status">status</a>&quot;. The response content-type may also be
 specified as an argument to &quot;content-type&quot;. Finally the response itselft may
 be defined. If can be a full HTTP response specifying the errorfile to use,
-or the response payload specifing the file or the string to use. These rules
+or the response payload specifying the file or the string to use. These rules
 are followed to create the response :
 
 * If neither the errorfile nor the payload to use is defined, a dummy
@@ -8943,7 +8963,7 @@ does not affect rules declared before it and it is only applicable on rules
 performing a rewrite on the requests. When the strict mode is enabled, any
 rewrite failure triggers an internal error. Otherwise, such errors are
 silently ignored. The purpose of the strict rewriting mode is to make some
-rewrites optionnal while others must be performed to continue the request
+rewrites optional while others must be performed to continue the request
 processing.
 
 By default, the strict rewriting mode is enabled. Its value is also reset
@@ -9164,12 +9184,12 @@ Cache-Control: max-age=3600, private
           <span style="color: #008">[ <span style="color: #800">{ default-errorfiles | errorfile <span style="color: #080">&lt;file&gt;</span> | errorfiles <span style="color: #080">&lt;name&gt;</span> |
               file <span style="color: #080">&lt;file&gt;</span> | lf-file <span style="color: #080">&lt;file&gt;</span> | string <span style="color: #080">&lt;str&gt;</span> | lf-string <span style="color: #080">&lt;fmt&gt;</span> }</span> ]</span>
           <span style="color: #008">[ hdr <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span>*
-          <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and immediatly returns a response. The
+          <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This stops the evaluation of the rules and immediately returns a response. The
 default status code used for the response is 200. It can be optionally
 specified as an arguments to &quot;<a href="#status">status</a>&quot;. The response content-type may also be
 specified as an argument to &quot;content-type&quot;. Finally the response itselft may
 be defined. If can be a full HTTP response specifying the errorfile to use,
-or the response payload specifing the file or the string to use. These rules
+or the response payload specifying the file or the string to use. These rules
 are followed to create the response :
 
 * If neither the errorfile nor the payload to use is defined, a dummy
@@ -9348,7 +9368,7 @@ does not affect rules declared before it and it is only applicable on rules
 performing a rewrite on the responses. When the strict mode is enabled, any
 rewrite failure triggers an internal error. Otherwise, such errors are
 silently ignored. The purpose of the strict rewriting mode is to make some
-rewrites optionnal while others must be performed to continue the response
+rewrites optional while others must be performed to continue the response
 processing.
 
 By default, the strict rewriting mode is enabled. Its value is also reset
@@ -9983,6 +10003,11 @@ purpose. They are only used to report HAProxy's health to an upper component,
 nothing more. However, it is possible to add any number of conditions using
 &quot;<a href="#monitor%20fail">monitor fail</a>&quot; and ACLs so that the result can be adjusted to whatever check
 can be imagined (most often the number of available servers in a backend).
+
+Note: if &lt;uri&gt; starts by a slash ('/'), the matching is performed against the
+      request's path instead of the request's uri. It is a workaround to let
+      the HTTP/2 requests match the monitor-uri. Indeed, in HTTP/2, clients
+      are encouraged to send absolute URIs only.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -12010,11 +12035,11 @@ global directive &quot;server-state-file-base&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">The minimal configuration below would make HAProxy look for the state server file '/etc/haproxy/states/bk':</div><code> global
-   server-state-file-base /etc/haproxy/states
+<div class="example-desc">The minimal configuration below would make HAProxy look for the state server file '/etc/haproxy/states/bk':</div><code>global
+  server-state-file-base /etc/haproxy/states
 
 backend bk
-   load-server-state-from-file
+  load-server-state-from-file
 </code></pre>
 </div><div class="page-header"><b>See also:</b> &quot;server-state-file-base&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
 <a class="anchor" name="server-template"></a><a class="anchor" name="4-server-template"></a><a class="anchor" name="4.2-server-template"></a><a class="anchor" name="server-template (Proxies)"></a><a class="anchor" name="server-template (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-template"></a><a href="#4.2-server-template">server-template</a></b> <span style="color: #080">&lt;prefix&gt;</span> <span style="color: #080">&lt;num | range&gt;</span> <span style="color: #080">&lt;fqdn&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[params*]</span></div><pre class="text">Set a template to initialize servers with shared parameters.
@@ -14710,6 +14735,11 @@ setting when the dynamic generation of certificates is enabled. See
 the CA private key passphrase. This setting is optional and used only when
 the dynamic generation of certificates is enabled. See
 'generate-certificates' for details.
+</pre><a class="anchor" name="ca-verify-file"></a><a class="anchor" name="5-ca-verify-file"></a><a class="anchor" name="5.1-ca-verify-file"></a><a class="anchor" name="ca-verify-file (Bind and server options)"></a><a class="anchor" name="ca-verify-file (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ca-verify-file"></a><a href="#5.1-ca-verify-file">ca-verify-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">This setting designates a PEM file from which to load CA certificates used to
+verify client's certificate. It designates CA certificates which must not be
+included in CA names sent in server hello message. Typically, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; must
+be defined with intermediate certificates, and &quot;<a href="#ca-verify-file">ca-verify-file</a>&quot; with
+certificates to ending the chain, like root CA.
 </pre><a class="anchor" name="ciphers"></a><a class="anchor" name="5-ciphers"></a><a class="anchor" name="5.1-ciphers"></a><a class="anchor" name="ciphers (Bind and server options)"></a><a class="anchor" name="ciphers (Bind options)"></a><div class="keyword"><b><a class="anchor" name="ciphers"></a><a href="#5.1-ciphers">ciphers</a></b> <span style="color: #080">&lt;ciphers&gt;</span></div><pre class="text">This setting is only available when support for OpenSSL was built in. It sets
 the string describing the list of cipher algorithms (&quot;cipher suite&quot;) that are
 negotiated during the SSL/TLS handshake up to TLSv1.2. The format of the
@@ -14732,19 +14762,23 @@ designates a PEM file containing both the required certificates and any
 associated private keys. This file can be built by concatenating multiple
 PEM files into one (e.g. cat cert.pem key.pem &gt; combined.pem). If your CA
 requires an intermediate certificate, this can also be concatenated into this
-file.
+file. Intermediate certificate can also be shared in a directory via
+&quot;<a href="#issuers-chain-path">issuers-chain-path</a>&quot; directive.
+
+If the file does not contain a private key, HAProxy will try to load
+the key at the same path suffixed by a &quot;.key&quot;.
 
 If the OpenSSL used supports Diffie-Hellman, parameters present in this file
 are loaded.
 
 If a directory name is used instead of a PEM file, then all files found in
-that directory will be loaded in alphabetic order unless their name ends with
-'.issuer', '.ocsp' or '.sctl' (reserved extensions). This directive may be
-specified multiple times in order to load certificates from multiple files or
-directories. The certificates will be presented to clients who provide a
-valid TLS Server Name Indication field matching one of their CN or alt
-subjects. Wildcards are supported, where a wildcard character '*' is used
-instead of the first hostname component (e.g. *.example.org matches
+that directory will be loaded in alphabetic order unless their name ends
+with '.key', '.issuer', '.ocsp' or '.sctl' (reserved extensions). This
+directive may be specified multiple times in order to load certificates from
+multiple files or directories. The certificates will be presented to clients
+who provide a valid TLS Server Name Indication field matching one of their
+CN or alt subjects. Wildcards are supported, where a wildcard character '*'
+is used instead of the first hostname component (e.g. *.example.org matches
 www.example.org but not www.sub.example.org).
 
 If no SNI is provided by the client or if the SSL library does not support
@@ -14841,10 +14875,10 @@ filter per certificate, with the following format for each line :
 
       &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
 
-sslbindconf support &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">npn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#npn%20%28Bind%20options%29">Bind options</a></li><li><a href="#npn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
-crl-file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL
-and Openssl &gt;= 1.1.1 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
-It override the configuration set in bind line for the certificate.
+sslbindconf support &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">npn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#npn%20%28Bind%20options%29">Bind options</a></li><li><a href="#npn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#ca-verify-file">ca-verify-file</a>&quot;,
+&quot;<a href="#no-ca-names">no-ca-names</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crl-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crl-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#crl-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With
+BoringSSL and Openssl &gt;= 1.1.1 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also
+supported. It override the configuration set in bind line for the certificate.
 
 Wildcards are supported in the SNI filter. Negative filter are also supported,
 only useful in combination with a wildcard filter to exclude a particular SNI.
@@ -15002,6 +15036,7 @@ it may make sense to use a positive value for an SMTP socket and a negative
 one for an RDP socket.
 </pre><a class="anchor" name="no-ca-names"></a><a class="anchor" name="5-no-ca-names"></a><a class="anchor" name="5.1-no-ca-names"></a><a class="anchor" name="no-ca-names (Bind and server options)"></a><a class="anchor" name="no-ca-names (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-ca-names"></a><a href="#5.1-no-ca-names">no-ca-names</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 prevents from send CA names in server hello message when ca-file is used.
+Use &quot;<a href="#ca-verify-file">ca-verify-file</a>&quot; instead of &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; with &quot;<a href="#no-ca-names">no-ca-names</a>&quot;.
 </pre><a class="anchor" name="no-sslv3"></a><a class="anchor" name="5-no-sslv3"></a><a class="anchor" name="5.1-no-sslv3"></a><a class="anchor" name="no-sslv3 (Bind and server options)"></a><a class="anchor" name="no-sslv3 (Bind options)"></a><div class="keyword"><b><a class="anchor" name="no-sslv3"></a><a href="#5.1-no-sslv3">no-sslv3</a></b></div><pre class="text">This setting is only available when support for OpenSSL was built in. It
 disables support for SSLv3 on any sockets instantiated from the listener when
 SSL is supported. Note that SSLv2 is forced disabled in the code and cannot
@@ -16816,15 +16851,17 @@ omitted as well. The third field, &lt;end&gt; is a constant string that will be
 appended after the variable. It may also be omitted. Together, these elements
 allow to concatenate variables with delimiters to an existing set of
 variables. This can be used to build new variables made of a succession of
-other variables, such as colon-delimited values. Note that due to the config
-parser, it is not possible to use a comma nor a closing parenthesis as
-delimiters.
+other variables, such as colon-delimited values. If commas or closing
+parethesis are needed as delimiters, they must be protected by quotes or
+backslashes, themselves protected so that they are not stripped by the first
+level parser. See examples below.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>tcp-request session set-var(sess.src) src
 tcp-request session set-var(sess.dn)  ssl_c_s_dn
 tcp-request session set-var(txn.sig) str(),concat(&lt;ip=,sess.ip,&gt;),concat(&lt;dn=,sess.dn,&gt;)
+tcp-request session set-var(txn.ipport) &quot;str(),concat('addr=(',sess.ip),concat(',',sess.port,')')&quot;
 http-request set-header x-hap-sig %[var(txn.sig)]
 </code></pre>
 </div><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type signed integer, applies a ones-complement
@@ -17147,18 +17184,30 @@ the flag &quot;g&quot; in the third argument &lt;flags&gt;. It is also possible 
 regex case insensitive by adding the flag &quot;i&quot; in &lt;flags&gt;. Since &lt;flags&gt; is a
 string, it is made up from the concatenation of all desired flags. Thus if
 both &quot;i&quot; and &quot;g&quot; are desired, using &quot;gi&quot; or &quot;ig&quot; will have the same effect.
-It is important to note that due to the current limitations of the
-configuration parser, some characters such as closing parenthesis, closing
-square brackets or comma are not possible to use in the arguments. The first
-use of this converter is to replace certain characters or sequence of
-characters with other ones.
+The first use of this converter is to replace certain characters or sequence
+of characters with other ones.
+
+It is highly recommended to enclose the regex part using protected quotes to
+improve clarity and never have a closing parenthesis from the regex mixed up
+with the parenthesis from the function. Just like in Bourne shell, the first
+level of quotes is processed when delimiting word groups on the line, a
+second level is usable for argument. It is recommended to use single quotes
+outside since these ones do not try to resolve backslashes nor dollar signs.
 </pre><div class="separator">
-<span class="label label-success">Example :</span>
+<span class="label label-success">Examples:</span>
 <pre class="prettyprint">
 <code><span class="comment"># de-duplicate &quot;/&quot; in header &quot;x-path&quot;.</span>
 <span class="comment"># input:  x-path: /////a///b/c/xzxyz/</span>
 <span class="comment"># output: x-path: /a/b/c/xzxyz/</span>
-http-request set-header x-path %[hdr(x-path),regsub(/+,/,g)]
+http-request set-header x-path &quot;%[hdr(x-path),regsub('/+','/','g')]&quot;
+
+<span class="comment"># copy query string to x-query and drop all leading '?', ';' and '&amp;'</span>
+http-request set-header x-query &quot;%[query,regsub([?;&amp;]*,'')]&quot;
+
+<span class="comment"># capture groups and backreferences</span>
+<span class="comment"># both lines do the same.</span>
+http-request redirect location %[url,'regsub(&quot;(foo|bar)([0-9]+)?&quot;,&quot;\2\1&quot;,i)]'
+http-request redirect location %[url,regsub(\&quot;(foo|bar)([0-9]+)?\&quot;,\&quot;\2\1\&quot;,i)]
 </code></pre>
 </div><a class="anchor" name="capture-req"></a><a class="anchor" name="7-capture-req"></a><a class="anchor" name="7.3.1-capture-req"></a><a class="anchor" name="capture-req (Using ACLs and fetching samples)"></a><a class="anchor" name="capture-req (Converters)"></a><div class="keyword"><b><a class="anchor" name="capture-req"></a><a href="#7.3.1-capture-req">capture-req</a></b>(<span style="color: #080">&lt;id&gt;</span>)</div><pre class="text">Capture the string entry in the request slot &lt;id&gt; and returns the entry as
 is. If the slot doesn't exist, the capture fails silently.
@@ -18984,16 +19033,16 @@ ACL derivatives :
   Returns true when the user extracted from the request and whose password is
   valid according to the specified userlist belongs to at least one of the
   groups.
-</pre><a class="anchor" name="http_auth_pass"></a><a class="anchor" name="7-http_auth_pass"></a><a class="anchor" name="7.3.6-http_auth_pass"></a><a class="anchor" name="http_auth_pass (Using ACLs and fetching samples)"></a><a class="anchor" name="http_auth_pass (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_auth_pass"></a><a href="#7.3.6-http_auth_pass">http_auth_pass</a></b> : string
-   Returns the user's password found in the authentication data received from
-   the client, as supplied in the Authorization header. Not checks are
-   performed by this sample fetch. Only Basic authentication is supported.</div><a class="anchor" name="http_auth_type"></a><a class="anchor" name="7-http_auth_type"></a><a class="anchor" name="7.3.6-http_auth_type"></a><a class="anchor" name="http_auth_type (Using ACLs and fetching samples)"></a><a class="anchor" name="http_auth_type (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_auth_type"></a><a href="#7.3.6-http_auth_type">http_auth_type</a></b> : string
-   Returns the authentication method found in the authentication data received from
-   the client, as supplied in the Authorization header. Not checks are
-   performed by this sample fetch. Only Basic authentication is supported.</div><a class="anchor" name="http_auth_user"></a><a class="anchor" name="7-http_auth_user"></a><a class="anchor" name="7.3.6-http_auth_user"></a><a class="anchor" name="http_auth_user (Using ACLs and fetching samples)"></a><a class="anchor" name="http_auth_user (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_auth_user"></a><a href="#7.3.6-http_auth_user">http_auth_user</a></b> : string
-   Returns the user name found in the authentication data received from the
-   client, as supplied in the Authorization header. Not checks are performed by
-   this sample fetch. Only Basic authentication is supported.</div><a class="anchor" name="http_first_req"></a><a class="anchor" name="7-http_first_req"></a><a class="anchor" name="7.3.6-http_first_req"></a><a class="anchor" name="http_first_req (Using ACLs and fetching samples)"></a><a class="anchor" name="http_first_req (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_first_req"></a><a href="#7.3.6-http_first_req">http_first_req</a></b> : boolean</div><pre class="text">Returns true when the request being processed is the first one of the
+</pre><a class="anchor" name="http_auth_pass"></a><a class="anchor" name="7-http_auth_pass"></a><a class="anchor" name="7.3.6-http_auth_pass"></a><a class="anchor" name="http_auth_pass (Using ACLs and fetching samples)"></a><a class="anchor" name="http_auth_pass (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_auth_pass"></a><a href="#7.3.6-http_auth_pass">http_auth_pass</a></b> : string</div><pre class="text">Returns the user's password found in the authentication data received from
+the client, as supplied in the Authorization header. Not checks are
+performed by this sample fetch. Only Basic authentication is supported.
+</pre><a class="anchor" name="http_auth_type"></a><a class="anchor" name="7-http_auth_type"></a><a class="anchor" name="7.3.6-http_auth_type"></a><a class="anchor" name="http_auth_type (Using ACLs and fetching samples)"></a><a class="anchor" name="http_auth_type (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_auth_type"></a><a href="#7.3.6-http_auth_type">http_auth_type</a></b> : string</div><pre class="text">Returns the authentication method found in the authentication data received from
+the client, as supplied in the Authorization header. Not checks are
+performed by this sample fetch. Only Basic authentication is supported.
+</pre><a class="anchor" name="http_auth_user"></a><a class="anchor" name="7-http_auth_user"></a><a class="anchor" name="7.3.6-http_auth_user"></a><a class="anchor" name="http_auth_user (Using ACLs and fetching samples)"></a><a class="anchor" name="http_auth_user (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_auth_user"></a><a href="#7.3.6-http_auth_user">http_auth_user</a></b> : string</div><pre class="text">Returns the user name found in the authentication data received from the
+client, as supplied in the Authorization header. Not checks are performed by
+this sample fetch. Only Basic authentication is supported.
+</pre><a class="anchor" name="http_first_req"></a><a class="anchor" name="7-http_first_req"></a><a class="anchor" name="7.3.6-http_first_req"></a><a class="anchor" name="http_first_req (Using ACLs and fetching samples)"></a><a class="anchor" name="http_first_req (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="http_first_req"></a><a href="#7.3.6-http_first_req">http_first_req</a></b> : boolean</div><pre class="text">Returns true when the request being processed is the first one of the
 connection. This can be used to add or remove headers that may be missing
 from some requests when a request is not the first one, or to help grouping
 requests in the logs.
@@ -19238,14 +19287,14 @@ depending on the sample direction. &lt;idx&gt; may be any positive integer or on
 of the special value :
   * head  : The oldest inserted block
   * tail  : The newest inserted block
-  * fisrt : The first block where to (re)start the analysis
+  * first : The first block where to (re)start the analysis
 </pre><a class="anchor" name="internal.htx_blk.type"></a><a class="anchor" name="7-internal.htx_blk.type"></a><a class="anchor" name="7.3.7-internal.htx_blk.type"></a><a class="anchor" name="internal.htx_blk.type (Using ACLs and fetching samples)"></a><a class="anchor" name="internal.htx_blk.type (Fetching samples for developers)"></a><div class="keyword"><b><a class="anchor" name="internal.htx_blk.type"></a><a href="#7.3.7-internal.htx_blk.type">internal.htx_blk.type</a></b>(<span style="color: #080">&lt;idx&gt;</span>) : string</div><pre class="text">Returns the type of the block at the position &lt;idx&gt; in the HTX message
 associated to a channel or &quot;HTX_BLK_UNUSED&quot; if it does not exist. The channel
 is chosen depending on the sample direction. &lt;idx&gt; may be any positive
 integer or one of the special value :
   * head  : The oldest inserted block
   * tail  : The newest inserted block
-  * fisrt : The first block where to (re)start the analysis
+  * first : The first block where to (re)start the analysis
 </pre><a class="anchor" name="internal.htx_blk.data"></a><a class="anchor" name="7-internal.htx_blk.data"></a><a class="anchor" name="7.3.7-internal.htx_blk.data"></a><a class="anchor" name="internal.htx_blk.data (Using ACLs and fetching samples)"></a><a class="anchor" name="internal.htx_blk.data (Fetching samples for developers)"></a><div class="keyword"><b><a class="anchor" name="internal.htx_blk.data"></a><a href="#7.3.7-internal.htx_blk.data">internal.htx_blk.data</a></b>(<span style="color: #080">&lt;idx&gt;</span>) : binary</div><pre class="text">Returns the value of the DATA block at the position &lt;idx&gt; in the HTX message
 associated to a channel or an empty string if it does not exist or if it is
 not a DATA block. The channel is chosen depending on the sample direction.
@@ -19253,7 +19302,7 @@ not a DATA block. The channel is chosen depending on the sample direction.
 
   * head  : The oldest inserted block
   * tail  : The newest inserted block
-  * fisrt : The first block where to (re)start the analysis
+  * first : The first block where to (re)start the analysis
 </pre><a class="anchor" name="internal.htx_blk.hdrname"></a><a class="anchor" name="7-internal.htx_blk.hdrname"></a><a class="anchor" name="7.3.7-internal.htx_blk.hdrname"></a><a class="anchor" name="internal.htx_blk.hdrname (Using ACLs and fetching samples)"></a><a class="anchor" name="internal.htx_blk.hdrname (Fetching samples for developers)"></a><div class="keyword"><b><a class="anchor" name="internal.htx_blk.hdrname"></a><a href="#7.3.7-internal.htx_blk.hdrname">internal.htx_blk.hdrname</a></b>(<span style="color: #080">&lt;idx&gt;</span>) : string</div><pre class="text">Returns the header name of the HEADER block at the position &lt;idx&gt; in the HTX
 message associated to a channel or an empty string if it does not exist or if
 it is not an HEADER block. The channel is chosen depending on the sample
@@ -19261,7 +19310,7 @@ direction.  &lt;idx&gt; may be any positive integer or one of the special value 
 
   * head  : The oldest inserted block
   * tail  : The newest inserted block
-  * fisrt : The first block where to (re)start the analysis
+  * first : The first block where to (re)start the analysis
 </pre><a class="anchor" name="internal.htx_blk.hdrval"></a><a class="anchor" name="7-internal.htx_blk.hdrval"></a><a class="anchor" name="7.3.7-internal.htx_blk.hdrval"></a><a class="anchor" name="internal.htx_blk.hdrval (Using ACLs and fetching samples)"></a><a class="anchor" name="internal.htx_blk.hdrval (Fetching samples for developers)"></a><div class="keyword"><b><a class="anchor" name="internal.htx_blk.hdrval"></a><a href="#7.3.7-internal.htx_blk.hdrval">internal.htx_blk.hdrval</a></b>(<span style="color: #080">&lt;idx&gt;</span>) : string</div><pre class="text">Returns the header value of the HEADER block at the position &lt;idx&gt; in the HTX
 message associated to a channel or an empty string if it does not exist or if
 it is not an HEADER block. The channel is chosen depending on the sample
@@ -19269,7 +19318,7 @@ direction.  &lt;idx&gt; may be any positive integer or one of the special value 
 
   * head  : The oldest inserted block
   * tail  : The newest inserted block
-  * fisrt : The first block where to (re)start the analysis
+  * first : The first block where to (re)start the analysis
 </pre><a class="anchor" name="internal.htx_blk.start_line"></a><a class="anchor" name="7-internal.htx_blk.start_line"></a><a class="anchor" name="7.3.7-internal.htx_blk.start_line"></a><a class="anchor" name="internal.htx_blk.start_line (Using ACLs and fetching samples)"></a><a class="anchor" name="internal.htx_blk.start_line (Fetching samples for developers)"></a><div class="keyword"><b><a class="anchor" name="internal.htx_blk.start_line"></a><a href="#7.3.7-internal.htx_blk.start_line">internal.htx_blk.start_line</a></b>(<span style="color: #080">&lt;idx&gt;</span>) : string</div><pre class="text">Returns the value of the REQ_SL or RES_SL block at the position &lt;idx&gt; in the
 HTX message associated to a channel or an empty string if it does not exist
 or if it is not a SL block. The channel is chosen depending on the sample
@@ -19277,7 +19326,7 @@ direction.  &lt;idx&gt; may be any positive integer or one of the special value 
 
   * head  : The oldest inserted block
   * tail  : The newest inserted block
-  * fisrt : The first block where to (re)start the analysis
+  * first : The first block where to (re)start the analysis
 </pre><a class="anchor" name="internal.strm.is_htx"></a><a class="anchor" name="7-internal.strm.is_htx"></a><a class="anchor" name="7.3.7-internal.strm.is_htx"></a><a class="anchor" name="internal.strm.is_htx (Using ACLs and fetching samples)"></a><a class="anchor" name="internal.strm.is_htx (Fetching samples for developers)"></a><div class="keyword"><b><a class="anchor" name="internal.strm.is_htx"></a><a href="#7.3.7-internal.strm.is_htx">internal.strm.is_htx</a></b> : boolean</div><pre class="text">Returns true if the current stream is an HTX stream. It means the data in the
 channels buffers are stored using the internal HTX representation. Otherwise,
 it returns false.
@@ -20965,15 +21014,26 @@ that are purposefully omitted. Currently, the headers &quot;Authorization&quot;,
 
 Note that the headers &quot;Content-type&quot; and &quot;Content-length&quot; are never passed to
 the FastCGI application because they are already converted into parameters.
-</pre><a class="anchor" name="path-info"></a><a class="anchor" name="10-path-info"></a><a class="anchor" name="10.1.1-path-info"></a><a class="anchor" name="path-info (FastCGI applications)"></a><a class="anchor" name="path-info (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="path-info"></a><a href="#10.1.1-path-info">path-info</a></b> <span style="color: #080">&lt;regex&gt;</span></div><pre class="text">Define a regular expression to extract the script-name and the path-info
-from the URI. Thus, &lt;regex&gt; should have two captures: the first one to
-capture the script name and the second one to capture the path-info. It is an
+</pre><a class="anchor" name="path-info"></a><a class="anchor" name="10-path-info"></a><a class="anchor" name="10.1.1-path-info"></a><a class="anchor" name="path-info (FastCGI applications)"></a><a class="anchor" name="path-info (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="path-info"></a><a href="#10.1.1-path-info">path-info</a></b> <span style="color: #080">&lt;regex&gt;</span></div><pre class="text">Define a regular expression to extract the script-name and the path-info from
+the URL-decoded path. Thus, &lt;regex&gt; may have two captures: the first one to
+capture the script name and the second one to capture the path-info. The
+first one is mandatory, the second one is optional. This way, it is possible
+to extract the script-name from the path ignoring the path-info. It is an
 optional setting. If it is not defined, no matching is performed on the
-URI. and the FastCGI parameters PATH_INFO and PATH_TRANSLATED are not filled.
+path. and the FastCGI parameters PATH_INFO and PATH_TRANSLATED are not
+filled.
+
+For security reason, when this regular expression is defined, the newline and
+the null characters are forbidden from the path, once URL-decoded. The reason
+to such limitation is because otherwise the matching always fails (due to a
+limitation one the way regular expression are executed in HAProxy). So if one
+of these two characters is found in the URL-decoded path, an error is
+returned to the client. The principle of least astonishment is applied here.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
-<code>path-info ^(/.+\.php)(/.*)?$
+<code>path-info ^(/.+\.php)(/.*)?$ <span class="comment"># both script-name and path-info may be set</span>
+path-info ^(/.+\.php)        <span class="comment"># the path-info is ignored</span>
 </code></pre>
 </div><a class="anchor" name="option"></a><a class="anchor" name="10-option"></a><a class="anchor" name="10.1.1-option"></a><a class="anchor" name="option (FastCGI applications)"></a><a class="anchor" name="option (Fcgi-app section)"></a><a class="anchor" name="option get-values"></a><a class="anchor" name="10-option get-values"></a><a class="anchor" name="10.1.1-option get-values"></a><a class="anchor" name="option get-values (FastCGI applications)"></a><a class="anchor" name="option get-values (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="option get-values"></a><a href="#10.1.1-option%20get-values">option get-values</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="10-no"></a><a class="anchor" name="10.1.1-no"></a><a class="anchor" name="no (FastCGI applications)"></a><a class="anchor" name="no (Fcgi-app section)"></a><a class="anchor" name="no option"></a><a class="anchor" name="10-no option"></a><a class="anchor" name="10.1.1-no option"></a><a class="anchor" name="no option (FastCGI applications)"></a><a class="anchor" name="no option (Fcgi-app section)"></a><a class="anchor" name="no option get-values"></a><a class="anchor" name="10-no option get-values"></a><a class="anchor" name="10.1.1-no option get-values"></a><a class="anchor" name="no option get-values (FastCGI applications)"></a><a class="anchor" name="no option get-values (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="no option get-values"></a><a href="#10.1.1-no%20option%20get-values">no option get-values</a></b></div><pre class="text">Enable or disable the retrieve of variables about connection management.
 
@@ -21077,7 +21137,7 @@ fcgi-app php-fpm
 <h2 id="chapter-10.2" data-target="10.2"><small><a class="small" href="#10.2">10.2.</a></small> Default parameters</h2>
 <div><pre class="text">A Responder FastCGI application has the same purpose as a CGI/1.1 program. In
 the CGI/1.1 specification (RFC3875), several variables must be passed to the
-scipt. So HAProxy set them and some others commonly used by FastCGI
+script. So HAProxy set them and some others commonly used by FastCGI
 applications. All these variables may be overwritten, with caution though.
 
   +-------------------+-----------------------------------------------------+
@@ -21199,8 +21259,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2-dev2-8 &ndash; Configuration Manual<br>
-							<small>2020/02/07, willy tarreau</small>
+							HAProxy 2.2-dev3-120 &ndash; Configuration Manual<br>
+							<small>2020/02/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -21303,7 +21363,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev2-8', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev3-120', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

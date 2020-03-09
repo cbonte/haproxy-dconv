@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2-dev2 - Configuration Manual</title>
+		<title>HAProxy version 2.2-dev3 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-10" rel="stylesheet" />
@@ -1819,6 +1819,8 @@
 							
 							<a class="list-group-item" href="#ipv6">ipv6</a>
 							
+							<a class="list-group-item" href="#issuers-chain-path">issuers-chain-path</a>
+							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-J"><h4>J</h4>
 								
@@ -3337,7 +3339,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/02/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/03/09</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3348,10 +3350,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.2-dev2</strong></p>
+							<p><strong>version 2.2-dev3</strong></p>
 							<p>
 								willy tarreau<br>
-								2020/02/07
+								2020/02/25
 							</p>
 						</div>
 
@@ -4836,6 +4838,7 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#h1-case-adjust-file">h1-case-adjust-file</a>
    - <a href="#insecure-fork-wanted">insecure-fork-wanted</a>
    - <a href="#insecure-setuid-wanted">insecure-setuid-wanted</a>
+   - <a href="#issuers-chain-path">issuers-chain-path</a>
    - <a href="#log">log</a>
    - <a href="#log-tag">log-tag</a>
    - <a href="#log-send-hostname">log-send-hostname</a>
@@ -5152,6 +5155,17 @@ this causes a problem to an external check (for example one which would need
 the &quot;ping&quot; command), then it is possible to disable this protection by
 explicitly adding this directive in the global section. If enabled, it is
 possible to turn it back off by prefixing it with the &quot;no&quot; keyword.
+</pre><a class="anchor" name="issuers-chain-path"></a><a class="anchor" name="3-issuers-chain-path"></a><a class="anchor" name="3.1-issuers-chain-path"></a><a class="anchor" name="issuers-chain-path (Global parameters)"></a><a class="anchor" name="issuers-chain-path (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="issuers-chain-path"></a><a href="#3.1-issuers-chain-path">issuers-chain-path</a></b> <span style="color: #080">&lt;dir&gt;</span></div><pre class="text">Assigns a directory to load certificate chain for issuer completion. All
+files must be in PEM format. For certificates loaded with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; or &quot;<a href="#crt-list">crt-list</a>&quot;,
+if certificate chain is not included in PEM (also commonly known as
+intermediate certificate), haproxy will complete chain if the issuer of the
+certificate corresponds to the first certificate of the chain loaded with
+&quot;<a href="#issuers-chain-path">issuers-chain-path</a>&quot;.
+A &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crt%20%28Bind%20options%29">Bind options</a></li><li><a href="#crt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; file with PrivateKey+Certificate+IntermediateCA2+IntermediateCA1
+could be replaced with PrivateKey+Certificate. HAProxy will complete the
+chain if a file with IntermediateCA2+IntermediateCA1 is present in
+&quot;<a href="#issuers-chain-path">issuers-chain-path</a>&quot; directory. All other certificates with the same issuer
+will share the chain in memory.
 </pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.1-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.1-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;smp_size&gt;</span>]</span>
     <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[max level <span style="color: #008">[min level]</span>]</span></div><pre class="text">Adds a global syslog server. Several global servers can be defined. They
 will receive logs for starts and exits, as well as all logs from proxies
@@ -5463,7 +5477,7 @@ known to be more secure and therefore their use is recommended.
 Custom DH parameters may be generated by using the OpenSSL command
 &quot;openssl dhparam &lt;size&gt;&quot;, where size should be at least 2048, as 1024-bit DH
 parameters should not be considered secure anymore.
-</pre><a class="anchor" name="ssl-load-extra-files"></a><a class="anchor" name="3-ssl-load-extra-files"></a><a class="anchor" name="3.1-ssl-load-extra-files"></a><a class="anchor" name="ssl-load-extra-files (Global parameters)"></a><a class="anchor" name="ssl-load-extra-files (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-load-extra-files"></a><a href="#3.1-ssl-load-extra-files">ssl-load-extra-files</a></b> <span style="color: #080">&lt;none|all|bundle|sctl|ocsp|issuer&gt;</span>*</div><pre class="text">This setting alters the way HAProxy will look for unspecified files during
+</pre><a class="anchor" name="ssl-load-extra-files"></a><a class="anchor" name="3-ssl-load-extra-files"></a><a class="anchor" name="3.1-ssl-load-extra-files"></a><a class="anchor" name="ssl-load-extra-files (Global parameters)"></a><a class="anchor" name="ssl-load-extra-files (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="ssl-load-extra-files"></a><a href="#3.1-ssl-load-extra-files">ssl-load-extra-files</a></b> <span style="color: #080">&lt;none|all|bundle|sctl|ocsp|issuer|key&gt;</span>*</div><pre class="text">This setting alters the way HAProxy will look for unspecified files during
 the loading of the SSL certificates.
 
 By default, HAProxy discovers automatically a lot of files not specified in
@@ -5475,7 +5489,7 @@ a certificate bundle if the file does not exist. In the case of a directory,
 it won't try to bundle the certificates if they have the same basename.
 
 &quot;all&quot;: This is the default behavior, it will try to load everything,
-bundles, sctl, ocsp, issuer.
+bundles, sctl, ocsp, issuer, key.
 
 &quot;bundle&quot;: When a file specified in the configuration does not exist, HAProxy
 will try to load a certificate bundle. This is done by looking for
@@ -5492,6 +5506,9 @@ and the RSA file on the bind line.
 
 &quot;issuer&quot;: Try to load &quot;&lt;basename&gt;.issuer&quot; if the issuer of the OCSP file is
 not provided in the PEM file.
+
+&quot;key&quot;: If the private key was not provided by the PEM file, try to load a
+file &quot;&lt;basename&gt;.key&quot; containing a private key.
 
 The default behavior is &quot;all&quot;.
 </pre><div class="separator">
@@ -6123,7 +6140,7 @@ in better compression at the expense of memory usage. Can be a value between
 </pre></div>
 <a class="anchor" id="3.3" name="3.3"></a>
 <h2 id="chapter-3.3" data-target="3.3"><small><a class="small" href="#3.3">3.3.</a></small> Debugging</h2>
-<div><a class="anchor" name="debug"></a><a class="anchor" name="3-debug"></a><a class="anchor" name="3.3-debug"></a><a class="anchor" name="debug (Global parameters)"></a><a class="anchor" name="debug (Debugging)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#3.3-debug">debug</a></b></div><pre class="text">Enables debug mode which dumps to stdout all exchanges, and disables forking
+<div><a class="anchor" name="debug"></a><a class="anchor" name="3-debug"></a><a class="anchor" name="3.3-debug"></a><a class="anchor" name="debug (Global parameters)"></a><a class="anchor" name="debug (Debugging)"></a><div class="keyword"><b><a class="anchor" name="debug"></a><a href="#3.3-debug">debug</a></b> <span class="label label-warning">(deprecated)</span></div><pre class="text">Enables debug mode which dumps to stdout all exchanges, and disables forking
 into background. It is the equivalent of the command-line argument &quot;-d&quot;. It
 should never be used in a production configuration since it may prevent full
 system startup.
@@ -9983,6 +10000,11 @@ purpose. They are only used to report HAProxy's health to an upper component,
 nothing more. However, it is possible to add any number of conditions using
 &quot;<a href="#monitor%20fail">monitor fail</a>&quot; and ACLs so that the result can be adjusted to whatever check
 can be imagined (most often the number of available servers in a backend).
+
+Note: if &lt;uri&gt; starts by a slash ('/'), the matching is performed against the
+      request's path instead of the request's uri. It is a workaround to let
+      the HTTP/2 requests match the monitor-uri. Indeed, in HTTP/2, clients
+      are encouraged to send absolute URIs only.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -14732,19 +14754,23 @@ designates a PEM file containing both the required certificates and any
 associated private keys. This file can be built by concatenating multiple
 PEM files into one (e.g. cat cert.pem key.pem &gt; combined.pem). If your CA
 requires an intermediate certificate, this can also be concatenated into this
-file.
+file. Intermediate certificate can also be shared in a directory via
+&quot;<a href="#issuers-chain-path">issuers-chain-path</a>&quot; directive.
+
+If the file does not contain a private key, HAProxy will try to load
+the key at the same path suffixed by a &quot;.key&quot;.
 
 If the OpenSSL used supports Diffie-Hellman, parameters present in this file
 are loaded.
 
 If a directory name is used instead of a PEM file, then all files found in
-that directory will be loaded in alphabetic order unless their name ends with
-'.issuer', '.ocsp' or '.sctl' (reserved extensions). This directive may be
-specified multiple times in order to load certificates from multiple files or
-directories. The certificates will be presented to clients who provide a
-valid TLS Server Name Indication field matching one of their CN or alt
-subjects. Wildcards are supported, where a wildcard character '*' is used
-instead of the first hostname component (e.g. *.example.org matches
+that directory will be loaded in alphabetic order unless their name ends
+with '.key', '.issuer', '.ocsp' or '.sctl' (reserved extensions). This
+directive may be specified multiple times in order to load certificates from
+multiple files or directories. The certificates will be presented to clients
+who provide a valid TLS Server Name Indication field matching one of their
+CN or alt subjects. Wildcards are supported, where a wildcard character '*'
+is used instead of the first hostname component (e.g. *.example.org matches
 www.example.org but not www.sub.example.org).
 
 If no SNI is provided by the client or if the SSL library does not support
@@ -16816,15 +16842,17 @@ omitted as well. The third field, &lt;end&gt; is a constant string that will be
 appended after the variable. It may also be omitted. Together, these elements
 allow to concatenate variables with delimiters to an existing set of
 variables. This can be used to build new variables made of a succession of
-other variables, such as colon-delimited values. Note that due to the config
-parser, it is not possible to use a comma nor a closing parenthesis as
-delimiters.
+other variables, such as colon-delimited values. If commas or closing
+parethesis are needed as delimiters, they must be protected by quotes or
+backslashes, themselves protected so that they are not stripped by the first
+level parser. See examples below.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>tcp-request session set-var(sess.src) src
 tcp-request session set-var(sess.dn)  ssl_c_s_dn
 tcp-request session set-var(txn.sig) str(),concat(&lt;ip=,sess.ip,&gt;),concat(&lt;dn=,sess.dn,&gt;)
+tcp-request session set-var(txn.ipport) &quot;str(),concat('addr=(',sess.ip),concat(',',sess.port,')')&quot;
 http-request set-header x-hap-sig %[var(txn.sig)]
 </code></pre>
 </div><a class="anchor" name="cpl"></a><a class="anchor" name="7-cpl"></a><a class="anchor" name="7.3.1-cpl"></a><a class="anchor" name="cpl (Using ACLs and fetching samples)"></a><a class="anchor" name="cpl (Converters)"></a><div class="keyword"><b><a class="anchor" name="cpl"></a><a href="#7.3.1-cpl">cpl</a></b></div><pre class="text">Takes the input value of type signed integer, applies a ones-complement
@@ -17147,18 +17175,30 @@ the flag &quot;g&quot; in the third argument &lt;flags&gt;. It is also possible 
 regex case insensitive by adding the flag &quot;i&quot; in &lt;flags&gt;. Since &lt;flags&gt; is a
 string, it is made up from the concatenation of all desired flags. Thus if
 both &quot;i&quot; and &quot;g&quot; are desired, using &quot;gi&quot; or &quot;ig&quot; will have the same effect.
-It is important to note that due to the current limitations of the
-configuration parser, some characters such as closing parenthesis, closing
-square brackets or comma are not possible to use in the arguments. The first
-use of this converter is to replace certain characters or sequence of
-characters with other ones.
+The first use of this converter is to replace certain characters or sequence
+of characters with other ones.
+
+It is highly recommended to enclose the regex part using protected quotes to
+improve clarity and never have a closing parenthesis from the regex mixed up
+with the parenthesis from the function. Just like in Bourne shell, the first
+level of quotes is processed when delimiting word groups on the line, a
+second level is usable for argument. It is recommended to use single quotes
+outside since these ones do not try to resolve backslashes nor dollar signs.
 </pre><div class="separator">
-<span class="label label-success">Example :</span>
+<span class="label label-success">Examples:</span>
 <pre class="prettyprint">
 <code><span class="comment"># de-duplicate &quot;/&quot; in header &quot;x-path&quot;.</span>
 <span class="comment"># input:  x-path: /////a///b/c/xzxyz/</span>
 <span class="comment"># output: x-path: /a/b/c/xzxyz/</span>
-http-request set-header x-path %[hdr(x-path),regsub(/+,/,g)]
+http-request set-header x-path &quot;%[hdr(x-path),regsub('/+','/','g')]&quot;
+
+<span class="comment"># copy query string to x-query and drop all leading '?', ';' and '&amp;'</span>
+http-request set-header x-query &quot;%[query,regsub([?;&amp;]*,'')]&quot;
+
+<span class="comment"># capture groups and backreferences</span>
+<span class="comment"># both lines do the same.</span>
+http-request redirect location %[url,'regsub(&quot;(foo|bar)([0-9]+)?&quot;,&quot;\2\1&quot;,i)]'
+http-request redirect location %[url,regsub(\&quot;(foo|bar)([0-9]+)?\&quot;,\&quot;\2\1\&quot;,i)]
 </code></pre>
 </div><a class="anchor" name="capture-req"></a><a class="anchor" name="7-capture-req"></a><a class="anchor" name="7.3.1-capture-req"></a><a class="anchor" name="capture-req (Using ACLs and fetching samples)"></a><a class="anchor" name="capture-req (Converters)"></a><div class="keyword"><b><a class="anchor" name="capture-req"></a><a href="#7.3.1-capture-req">capture-req</a></b>(<span style="color: #080">&lt;id&gt;</span>)</div><pre class="text">Capture the string entry in the request slot &lt;id&gt; and returns the entry as
 is. If the slot doesn't exist, the capture fails silently.
@@ -20965,15 +21005,26 @@ that are purposefully omitted. Currently, the headers &quot;Authorization&quot;,
 
 Note that the headers &quot;Content-type&quot; and &quot;Content-length&quot; are never passed to
 the FastCGI application because they are already converted into parameters.
-</pre><a class="anchor" name="path-info"></a><a class="anchor" name="10-path-info"></a><a class="anchor" name="10.1.1-path-info"></a><a class="anchor" name="path-info (FastCGI applications)"></a><a class="anchor" name="path-info (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="path-info"></a><a href="#10.1.1-path-info">path-info</a></b> <span style="color: #080">&lt;regex&gt;</span></div><pre class="text">Define a regular expression to extract the script-name and the path-info
-from the URI. Thus, &lt;regex&gt; should have two captures: the first one to
-capture the script name and the second one to capture the path-info. It is an
+</pre><a class="anchor" name="path-info"></a><a class="anchor" name="10-path-info"></a><a class="anchor" name="10.1.1-path-info"></a><a class="anchor" name="path-info (FastCGI applications)"></a><a class="anchor" name="path-info (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="path-info"></a><a href="#10.1.1-path-info">path-info</a></b> <span style="color: #080">&lt;regex&gt;</span></div><pre class="text">Define a regular expression to extract the script-name and the path-info from
+the URL-decoded path. Thus, &lt;regex&gt; may have two captures: the first one to
+capture the script name and the second one to capture the path-info. The
+first one is mandatory, the second one is optional. This way, it is possible
+to extract the script-name from the path ignoring the path-info. It is an
 optional setting. If it is not defined, no matching is performed on the
-URI. and the FastCGI parameters PATH_INFO and PATH_TRANSLATED are not filled.
+path. and the FastCGI parameters PATH_INFO and PATH_TRANSLATED are not
+filled.
+
+For security reason, when this regular expression is defined, the newline and
+the null characters are forbiden from the path, once URL-decoded. The reason
+to such limitation is because otherwise the matching always fails (due to a
+limitation one the way regular expression are executed in HAProxy). So if one
+of these two characters is found in the URL-decoded path, an error is
+returned to the client. The principle of least astonishment is applied here.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
-<code>path-info ^(/.+\.php)(/.*)?$
+<code>path-info ^(/.+\.php)(/.*)?$ <span class="comment"># both script-name and path-info may be set</span>
+path-info ^(/.+\.php)        <span class="comment"># the path-info is ignored</span>
 </code></pre>
 </div><a class="anchor" name="option"></a><a class="anchor" name="10-option"></a><a class="anchor" name="10.1.1-option"></a><a class="anchor" name="option (FastCGI applications)"></a><a class="anchor" name="option (Fcgi-app section)"></a><a class="anchor" name="option get-values"></a><a class="anchor" name="10-option get-values"></a><a class="anchor" name="10.1.1-option get-values"></a><a class="anchor" name="option get-values (FastCGI applications)"></a><a class="anchor" name="option get-values (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="option get-values"></a><a href="#10.1.1-option%20get-values">option get-values</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="10-no"></a><a class="anchor" name="10.1.1-no"></a><a class="anchor" name="no (FastCGI applications)"></a><a class="anchor" name="no (Fcgi-app section)"></a><a class="anchor" name="no option"></a><a class="anchor" name="10-no option"></a><a class="anchor" name="10.1.1-no option"></a><a class="anchor" name="no option (FastCGI applications)"></a><a class="anchor" name="no option (Fcgi-app section)"></a><a class="anchor" name="no option get-values"></a><a class="anchor" name="10-no option get-values"></a><a class="anchor" name="10.1.1-no option get-values"></a><a class="anchor" name="no option get-values (FastCGI applications)"></a><a class="anchor" name="no option get-values (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="no option get-values"></a><a href="#10.1.1-no%20option%20get-values">no option get-values</a></b></div><pre class="text">Enable or disable the retrieve of variables about connection management.
 
@@ -21199,8 +21250,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2-dev2 &ndash; Configuration Manual<br>
-							<small>2020/02/07, willy tarreau</small>
+							HAProxy 2.2-dev3 &ndash; Configuration Manual<br>
+							<small>2020/02/25, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -21303,7 +21354,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev2', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev3', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
