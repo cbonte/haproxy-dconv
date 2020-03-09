@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1.2-73 - Configuration Manual</title>
+		<title>HAProxy version 2.1.3-31 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-10" rel="stylesheet" />
@@ -3243,7 +3243,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/02/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/03/09</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3254,10 +3254,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1.2-73</strong></p>
+							<p><strong>version 2.1.3-31</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/12/21
+								2020/02/12
 							</p>
 						</div>
 
@@ -9414,6 +9414,11 @@ purpose. They are only used to report HAProxy's health to an upper component,
 nothing more. However, it is possible to add any number of conditions using
 &quot;<a href="#monitor%20fail">monitor fail</a>&quot; and ACLs so that the result can be adjusted to whatever check
 can be imagined (most often the number of available servers in a backend).
+
+Note: if &lt;uri&gt; starts by a slash ('/'), the matching is performed against the
+      request's path instead of the request's uri. It is a workaround to let
+      the HTTP/2 requests match the monitor-uri. Indeed, in HTTP/2, clients
+      are encouraged to send absolute URIs only.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -16870,6 +16875,7 @@ log-format %[date,utime(%Y%m%d%H%M%S)]\ %ci:%cp
 </div><a class="anchor" name="word"></a><a class="anchor" name="7-word"></a><a class="anchor" name="7.3.1-word"></a><a class="anchor" name="word (Using ACLs and fetching samples)"></a><a class="anchor" name="word (Converters)"></a><div class="keyword"><b><a class="anchor" name="word"></a><a href="#7.3.1-word">word</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;count&gt;</span>]</span>)</div><pre class="text">Extracts the nth word counting from the beginning (positive index) or from
 the end (negative index) considering given delimiters from an input string.
 Indexes start at 1 or -1 and delimiters are a string formatted list of chars.
+Delimiters at the beginning or end of the input string are ignored.
 Optionally you can specify &lt;count&gt; of words to extract (default: 1).
 Value of 0 indicates extraction of all remaining words.
 </pre><div class="separator">
@@ -16880,6 +16886,7 @@ str(f1_f2_f3__f5),word(2,_,0)  <span class="comment"># f2_f3__f5</span>
 str(f1_f2_f3__f5),word(3,_,2)  <span class="comment"># f3__f5</span>
 str(f1_f2_f3__f5),word(-2,_,3) <span class="comment"># f1_f2_f3</span>
 str(f1_f2_f3__f5),word(-3,_,0) <span class="comment"># f1_f2</span>
+str(/f1/f2/f3/f4),word(1,/)    <span class="comment"># f1</span>
 </code></pre>
 </div><a class="anchor" name="wt6"></a><a class="anchor" name="7-wt6"></a><a class="anchor" name="7.3.1-wt6"></a><a class="anchor" name="wt6 (Using ACLs and fetching samples)"></a><a class="anchor" name="wt6 (Converters)"></a><div class="keyword"><b><a class="anchor" name="wt6"></a><a href="#7.3.1-wt6">wt6</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the WT6
 hash function. Optionally, it is possible to apply a full avalanche hash
@@ -20299,15 +20306,26 @@ that are purposefully omitted. Currently, the headers &quot;Authorization&quot;,
 
 Note that the headers &quot;Content-type&quot; and &quot;Content-length&quot; are never passed to
 the FastCGI application because they are already converted into parameters.
-</pre><a class="anchor" name="path-info"></a><a class="anchor" name="10-path-info"></a><a class="anchor" name="10.1.1-path-info"></a><a class="anchor" name="path-info (FastCGI applications)"></a><a class="anchor" name="path-info (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="path-info"></a><a href="#10.1.1-path-info">path-info</a></b> <span style="color: #080">&lt;regex&gt;</span></div><pre class="text">Define a regular expression to extract the script-name and the path-info
-from the URI. Thus, &lt;regex&gt; should have two captures: the first one to
-capture the script name and the second one to capture the path-info. It is an
+</pre><a class="anchor" name="path-info"></a><a class="anchor" name="10-path-info"></a><a class="anchor" name="10.1.1-path-info"></a><a class="anchor" name="path-info (FastCGI applications)"></a><a class="anchor" name="path-info (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="path-info"></a><a href="#10.1.1-path-info">path-info</a></b> <span style="color: #080">&lt;regex&gt;</span></div><pre class="text">Define a regular expression to extract the script-name and the path-info from
+the URL-decoded path. Thus, &lt;regex&gt; may have two captures: the first one to
+capture the script name and the second one to capture the path-info. The
+first one is mandatory, the second one is optional. This way, it is possible
+to extract the script-name from the path ignoring the path-info. It is an
 optional setting. If it is not defined, no matching is performed on the
-URI. and the FastCGI parameters PATH_INFO and PATH_TRANSLATED are not filled.
+path. and the FastCGI parameters PATH_INFO and PATH_TRANSLATED are not
+filled.
+
+For security reason, when this regular expression is defined, the newline and
+the null characters are forbiden from the path, once URL-decoded. The reason
+to such limitation is because otherwise the matching always fails (due to a
+limitation one the way regular expression are executed in HAProxy). So if one
+of these two characters is found in the URL-decoded path, an error is
+returned to the client. The principle of least astonishment is applied here.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
-<code>path-info ^(/.+\.php)(/.*)?$
+<code>path-info ^(/.+\.php)(/.*)?$ <span class="comment"># both script-name and path-info may be set</span>
+path-info ^(/.+\.php)        <span class="comment"># the path-info is ignored</span>
 </code></pre>
 </div><a class="anchor" name="option"></a><a class="anchor" name="10-option"></a><a class="anchor" name="10.1.1-option"></a><a class="anchor" name="option (FastCGI applications)"></a><a class="anchor" name="option (Fcgi-app section)"></a><a class="anchor" name="option get-values"></a><a class="anchor" name="10-option get-values"></a><a class="anchor" name="10.1.1-option get-values"></a><a class="anchor" name="option get-values (FastCGI applications)"></a><a class="anchor" name="option get-values (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="option get-values"></a><a href="#10.1.1-option%20get-values">option get-values</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="10-no"></a><a class="anchor" name="10.1.1-no"></a><a class="anchor" name="no (FastCGI applications)"></a><a class="anchor" name="no (Fcgi-app section)"></a><a class="anchor" name="no option"></a><a class="anchor" name="10-no option"></a><a class="anchor" name="10.1.1-no option"></a><a class="anchor" name="no option (FastCGI applications)"></a><a class="anchor" name="no option (Fcgi-app section)"></a><a class="anchor" name="no option get-values"></a><a class="anchor" name="10-no option get-values"></a><a class="anchor" name="10.1.1-no option get-values"></a><a class="anchor" name="no option get-values (FastCGI applications)"></a><a class="anchor" name="no option get-values (Fcgi-app section)"></a><div class="keyword"><b><a class="anchor" name="no option get-values"></a><a href="#10.1.1-no%20option%20get-values">no option get-values</a></b></div><pre class="text">Enable or disable the retrieve of variables about connection management.
 
@@ -20533,8 +20551,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1.2-73 &ndash; Configuration Manual<br>
-							<small>2019/12/21, willy tarreau</small>
+							HAProxy 2.1.3-31 &ndash; Configuration Manual<br>
+							<small>2020/02/12, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20637,7 +20655,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.2-73', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.3-31', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
