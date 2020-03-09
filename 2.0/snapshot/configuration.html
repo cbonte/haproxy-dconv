@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0.12-57 - Configuration Manual</title>
+		<title>HAProxy version 2.0.13-24 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-10" rel="stylesheet" />
@@ -1464,6 +1464,8 @@
 							<a class="list-group-item" href="#http-request reject">http-request reject</a>
 							
 							<a class="list-group-item" href="#http-request replace-header">http-request replace-header</a>
+							
+							<a class="list-group-item" href="#http-request replace-path">http-request replace-path</a>
 							
 							<a class="list-group-item" href="#http-request replace-uri">http-request replace-uri</a>
 							
@@ -3160,7 +3162,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/02/10</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/03/09</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3171,10 +3173,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0.12-57</strong></p>
+							<p><strong>version 2.0.13-24</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/12/21
+								2020/02/13
 							</p>
 						</div>
 
@@ -8099,6 +8101,29 @@ User-Agent: curl/7.47.0
 <span class="comment"># outputs:</span>
 User-Agent: foo
 </code></pre>
+</div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-path"></a><a class="anchor" name="4-http-request replace-path"></a><a class="anchor" name="4.2-http-request replace-path"></a><a class="anchor" name="http-request replace-path (Proxies)"></a><a class="anchor" name="http-request replace-path (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-path"></a><a href="#4.2-http-request%20replace-path">http-request replace-path</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
+                           <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request's path
+component instead of a header. The path component starts at the first '/'
+after an optional scheme+authority. It does contain the query string if any
+is present. The replacement does not modify the scheme nor authority.
+
+It is worth noting that regular expressions may be more expensive to evaluate
+than certain ACLs, so rare replacements may benefit from a condition to avoid
+performing the evaluation at all if it does not match.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code><span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
+http-request replace-path (.*) /foo\1
+
+<span class="comment"># suffix /foo : turn /bar?q=1 into /bar/foo?q=1 :</span>
+http-request replace-path ([^?]*)(\?(.*))? \1/foo\2
+
+<span class="comment"># strip /foo : turn /foo/bar?q=1 into /bar?q=1</span>
+http-request replace-path /foo/(.*) /\1
+<span class="comment"># or more efficient if only some requests match :</span>
+http-request replace-path /foo/(.*) /\1 if { url_beg /foo/ }
+</code></pre>
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-uri"></a><a class="anchor" name="4-http-request replace-uri"></a><a class="anchor" name="4.2-http-request replace-uri"></a><a class="anchor" name="http-request replace-uri (Proxies)"></a><a class="anchor" name="http-request replace-uri (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-uri"></a><a href="#4.2-http-request%20replace-uri">http-request replace-uri</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request's URI part
 instead of a header. The URI part may contain an optional scheme, authority or
@@ -8118,7 +8143,8 @@ works fine most of the time in HTTP/1.x with rules starting with a &quot;/&quot;
 with HTTP/2, clients are encouraged to send absolute URIs only, which look
 like the ones HTTP/1 clients use to talk to proxies. Such partial replace-uri
 rules may then fail in HTTP/2 when they work in HTTP/1. Either the rules need
-to be adapted to optionally match a scheme and authority.
+to be adapted to optionally match a scheme and authority, or replace-path
+should be used.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -17265,6 +17291,7 @@ log-format %[date,utime(%Y%m%d%H%M%S)]\ %ci:%cp
 </div><a class="anchor" name="word"></a><a class="anchor" name="7-word"></a><a class="anchor" name="7.3.1-word"></a><a class="anchor" name="word (Using ACLs and fetching samples)"></a><a class="anchor" name="word (Converters)"></a><div class="keyword"><b><a class="anchor" name="word"></a><a href="#7.3.1-word">word</a></b>(<span style="color: #080">&lt;index&gt;</span>,<span style="color: #080">&lt;delimiters&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;count&gt;</span>]</span>)</div><pre class="text">Extracts the nth word counting from the beginning (positive index) or from
 the end (negative index) considering given delimiters from an input string.
 Indexes start at 1 or -1 and delimiters are a string formatted list of chars.
+Delimiters at the beginning or end of the input string are ignored.
 Optionally you can specify &lt;count&gt; of words to extract (default: 1).
 Value of 0 indicates extraction of all remaining words.
 </pre><div class="separator">
@@ -17275,6 +17302,7 @@ str(f1_f2_f3__f5),word(2,_,0)  <span class="comment"># f2_f3__f5</span>
 str(f1_f2_f3__f5),word(3,_,2)  <span class="comment"># f3__f5</span>
 str(f1_f2_f3__f5),word(-2,_,3) <span class="comment"># f1_f2_f3</span>
 str(f1_f2_f3__f5),word(-3,_,0) <span class="comment"># f1_f2</span>
+str(/f1/f2/f3/f4),word(1,/)    <span class="comment"># f1</span>
 </code></pre>
 </div><a class="anchor" name="wt6"></a><a class="anchor" name="7-wt6"></a><a class="anchor" name="7.3.1-wt6"></a><a class="anchor" name="wt6 (Using ACLs and fetching samples)"></a><a class="anchor" name="wt6 (Converters)"></a><div class="keyword"><b><a class="anchor" name="wt6"></a><a href="#7.3.1-wt6">wt6</a></b>(<span style="color: #008">[<span style="color: #080">&lt;avalanche&gt;</span>]</span>)</div><pre class="text">Hashes a binary input sample into an unsigned 32-bit quantity using the WT6
 hash function. Optionally, it is possible to apply a full avalanche hash
@@ -20689,8 +20717,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0.12-57 &ndash; Configuration Manual<br>
-							<small>2019/12/21, willy tarreau</small>
+							HAProxy 2.0.13-24 &ndash; Configuration Manual<br>
+							<small>2020/02/13, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20793,7 +20821,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.12-57', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.13-24', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
