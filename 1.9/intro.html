@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.9.14 - Starter Guide</title>
+		<title>HAProxy version 1.9.15 - Starter Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.4.2-10" rel="stylesheet" />
+		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -451,7 +451,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/03/09</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/04/17</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -460,16 +460,16 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="text-center">
-                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
+                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Starter Guide</h2>
-							<p><strong>version 1.9.14</strong></p>
+							<p><strong>version 1.9.15</strong></p>
 							<p>
 								<br>
 								
 							</p>
 						</div>
 
-						<div><pre class="text">This document doesn't provide any configuration help or hints, but it explains
+						<div><pre class="text">This document doesn&#x27;t provide any configuration help or hints, but it explains
 where to find the relevant documents. The summary below is meant to help you
 search sections by name and navigate through the document.
 
@@ -891,9 +891,9 @@ most accurate response to your needs. Also please refrain from sending questions
 to the mailing list whose responses are present in these documents.
 
   - intro.txt (this document) : it presents the basics of load balancing,
-    HAProxy as a product, what it does, what it doesn't do, some known traps to
+    HAProxy as a product, what it does, what it doesn&#x27;t do, some known traps to
     avoid, some OS-specific limitations, how to get it, how it evolves, how to
-    ensure you're running with all known fixes, how to update it, complements
+    ensure you&#x27;re running with all known fixes, how to update it, complements
     and alternatives.
 
   - management.txt : it explains how to start haproxy, how to manage it at
@@ -917,7 +917,7 @@ to the mailing list whose responses are present in these documents.
 <a class="anchor" id="2" name="2"></a>
 <div class="page-header"><h1 id="chapter-2" data-target="2"><small><a class="small" href="#2">2.</a></small> Quick introduction to load balancing and load balancers</h1>
 </div><div><pre class="text">Load balancing consists in aggregating multiple components in order to achieve
-a total processing capacity above each component's individual capacity, without
+a total processing capacity above each component&#x27;s individual capacity, without
 any intervention from the end user and in a scalable way. This results in more
 operations being performed simultaneously by the time it takes a component to
 perform only one. A single operation however will still be performed on a single
@@ -972,34 +972,34 @@ for very basic server load balancing at high speed.
 The second one acts on session contents. It requires that the input streams is
 reassembled and processed as a whole. The contents may be modified, and the
 output stream is segmented into new packets. For this reason it is generally
-performed by proxies and they're often called layer 7 load balancers or L7.
+performed by proxies and they&#x27;re often called layer 7 load balancers or L7.
 This implies that there are two distinct connections on each side, and that
 there is no relation between input and output packets sizes nor counts. Clients
 and servers are not required to use the same protocol (for example IPv4 vs
 IPv6, clear vs SSL). The operations are always stateful, and the return traffic
 must pass through the load balancer. The extra processing comes with a cost so
-it's not always possible to achieve line rate, especially with small packets.
+it&#x27;s not always possible to achieve line rate, especially with small packets.
 On the other hand, it offers wide possibilities and is generally achieved by
 pure software, even if embedded into hardware appliances. This technology is
 very well suited for server load balancing.
 
 Packet-based load balancers are generally deployed in cut-through mode, so they
 are installed on the normal path of the traffic and divert it according to the
-configuration. The return traffic doesn't necessarily pass through the load
+configuration. The return traffic doesn&#x27;t necessarily pass through the load
 balancer. Some modifications may be applied to the network destination address
 in order to direct the traffic to the proper destination. In this case, it is
 mandatory that the return traffic passes through the load balancer. If the
-routes doesn't make this possible, the load balancer may also replace the
-packets' source address with its own in order to force the return traffic to
+routes doesn&#x27;t make this possible, the load balancer may also replace the
+packets&#x27; source address with its own in order to force the return traffic to
 pass through it.
 
 Proxy-based load balancers are deployed as a server with their own IP addresses
 and ports, without architecture changes. Sometimes this requires to perform some
 adaptations to the applications so that clients are properly directed to the
-load balancer's IP address and not directly to the server's. Some load balancers
-may have to adjust some servers' responses to make this possible (e.g. the HTTP
+load balancer&#x27;s IP address and not directly to the server&#x27;s. Some load balancers
+may have to adjust some servers&#x27; responses to make this possible (e.g. the HTTP
 Location header field used in HTTP redirects). Some proxy-based load balancers
-may intercept traffic for an address they don't own, and spoof the client's
+may intercept traffic for an address they don&#x27;t own, and spoof the client&#x27;s
 address when connecting to the server. This allows them to be deployed as if
 they were a regular router or firewall, in a cut-through mode very similar to
 the packet based load balancers. This is particularly appreciated for products
@@ -1017,7 +1017,7 @@ what server will ultimately receive the traffic.
 The number of components and possible paths for the traffic increases the risk
 of failure; in very large environments, it is even normal to permanently have
 a few faulty components being fixed or replaced. Load balancing done without
-awareness of the whole stack's health significantly degrades availability. For
+awareness of the whole stack&#x27;s health significantly degrades availability. For
 this reason, any sane load balancer will verify that the components it intends
 to deliver the traffic to are still alive and reachable, and it will stop
 delivering traffic to faulty ones. This can be achieved using various methods.
@@ -1025,7 +1025,7 @@ delivering traffic to faulty ones. This can be achieved using various methods.
 The most common one consists in periodically sending probes to ensure the
 component is still operational. These probes are called &quot;health checks&quot;. They
 must be representative of the type of failure to address. For example a ping-
-based check will not detect that a web server has crashed and doesn't listen to
+based check will not detect that a web server has crashed and doesn&#x27;t listen to
 a port anymore, while a connection to the port will verify this, and a more
 advanced request may even validate that the server still works and that the
 database it relies on is still accessible. Health checks often involve a few
@@ -1040,9 +1040,9 @@ of the production traffic and this is not always acceptable. A combination of
 these two mechanisms provides the best of both worlds, with both of them being
 used to detect a fault, and only health checks to detect the end of the fault.
 A last method involves centralized reporting : a central monitoring agent
-periodically updates all load balancers about all components' state. This gives
+periodically updates all load balancers about all components&#x27; state. This gives
 a global view of the infrastructure to all components, though sometimes with
-less accuracy or responsiveness. It's best suited for environments with many
+less accuracy or responsiveness. It&#x27;s best suited for environments with many
 load balancers and many servers.
 
 Layer 7 load balancers also face another challenge known as stickiness or
@@ -1052,17 +1052,17 @@ the same target. The best known example is the shopping cart on an online
 store. If each click leads to a new connection, the user must always be sent
 to the server which holds his shopping cart. Content-awareness makes it easier
 to spot some elements in the request to identify the server to deliver it to,
-but that's not always enough. For example if the source address is used as a
+but that&#x27;s not always enough. For example if the source address is used as a
 key to pick a server, it can be decided that a hash-based algorithm will be
 used and that a given IP address will always be sent to the same server based
 on a divide of the address by the number of available servers. But if one
 server fails, the result changes and all users are suddenly sent to a different
 server and lose their shopping cart. The solution against this issue consists
 in memorizing the chosen target so that each time the same visitor is seen,
-he's directed to the same server regardless of the number of available servers.
-The information may be stored in the load balancer's memory, in which case it
-may have to be replicated to other load balancers if it's not alone, or it may
-be stored in the client's memory using various methods provided that the client
+he&#x27;s directed to the same server regardless of the number of available servers.
+The information may be stored in the load balancer&#x27;s memory, in which case it
+may have to be replicated to other load balancers if it&#x27;s not alone, or it may
+be stored in the client&#x27;s memory using various methods provided that the client
 is able to present this information back with every request (cookie insertion,
 redirection to a sub-domain, etc). This mechanism provides the extra benefit of
 not having to rely on unstable or unevenly distributed information (such as the
@@ -1083,9 +1083,9 @@ discovered that servers are unstable and periodically go up and down, or for
 web servers, that they deliver pages with some hard-coded links forcing the
 clients to connect directly to one specific server without passing via the load
 balancer, or that they take ages to respond under high load causing timeouts.
-That's why logging is an extremely important aspect of layer 7 load balancing.
+That&#x27;s why logging is an extremely important aspect of layer 7 load balancing.
 Once a trouble is reported, it is important to figure if the load balancer took
-a wrong decision and if so why so that it doesn't happen anymore.
+a wrong decision and if so why so that it doesn&#x27;t happen anymore.
 </pre></div>
 <a class="anchor" id="3" name="3"></a>
 <div class="page-header"><h1 id="chapter-3" data-target="3"><small><a class="small" href="#3">3.</a></small> Introduction to HAProxy</h1>
@@ -1096,7 +1096,7 @@ are commonly used for both purposes, and are pronounced H-A-Proxy. Very early,
 in two separate words, though by now it means nothing else than &quot;HAProxy&quot;.
 </pre></div>
 <a class="anchor" id="3.1" name="3.1"></a>
-<h2 id="chapter-3.1" data-target="3.1"><small><a class="small" href="#3.1">3.1.</a></small> What HAProxy is and isn't</h2>
+<h2 id="chapter-3.1" data-target="3.1"><small><a class="small" href="#3.1">3.1.</a></small> What HAProxy is and isn&#x27;t</h2>
 <div><pre class="text">HAProxy is :
 
   - a TCP proxy : it can accept a TCP connection from a listening socket,
@@ -1118,12 +1118,12 @@ in two separate words, though by now it means nothing else than &quot;HAProxy&qu
     incomplete connections (SYN floods), or so will not be passed to the other
     side. This protects fragile TCP stacks from protocol attacks, and also
     allows to optimize the connection parameters with the client without having
-    to modify the servers' TCP stack settings.
+    to modify the servers&#x27; TCP stack settings.
 
   - an HTTP normalizer : when configured to process HTTP traffic, only valid
     complete requests are passed. This protects against a lot of protocol-based
     attacks. Additionally, protocol deviations for which there is a tolerance
-    in the specification are fixed so that they don't cause problem on the
+    in the specification are fixed so that they don&#x27;t cause problem on the
     servers (e.g. multiple-line headers).
 
   - an HTTP fixing tool : it can modify / fix / add / remove / rewrite the URL
@@ -1189,7 +1189,7 @@ HAProxy is not :
 fast I/O layer with a priority-based scheduler. As it is designed with a data
 forwarding goal in mind, its architecture is optimized to move data as fast as
 possible with the least possible operations. As such it implements a layered
-model offering bypass mechanisms at each level ensuring data doesn't reach
+model offering bypass mechanisms at each level ensuring data doesn&#x27;t reach
 higher levels unless needed. Most of the processing is performed in the kernel,
 and HAProxy does its best to help the kernel do the work as fast as possible by
 giving some hints or by avoiding certain operation when it guesses they could
@@ -1202,8 +1202,8 @@ A single process can run many proxy instances; configurations as large as
 there is usually no need to start more than one process for all instances.
 
 It is possible to make HAProxy run over multiple processes, but it comes with
-a few limitations. In general it doesn't make sense in HTTP close or TCP modes
-because the kernel-side doesn't scale very well with some operations such as
+a few limitations. In general it doesn&#x27;t make sense in HTTP close or TCP modes
+because the kernel-side doesn&#x27;t scale very well with some operations such as
 connect(). It scales pretty well for HTTP keep-alive mode but the performance
 that can be achieved out of a single process generally outperforms common needs
 by an order of magnitude. It does however make sense when used as an SSL
@@ -1221,7 +1221,7 @@ Once HAProxy is started, it does exactly 3 things :
 
   - process incoming connections;
 
-  - periodically check the servers' status (known as health checks);
+  - periodically check the servers&#x27; status (known as health checks);
 
   - exchange information with other haproxy nodes.
 
@@ -1269,7 +1269,7 @@ proxies.
 <h2 id="chapter-3.3" data-target="3.3"><small><a class="small" href="#3.3">3.3.</a></small> Basic features</h2>
 <div><pre class="text">This section will enumerate a number of features that HAProxy implements, some
 of which are generally expected from any modern load balancer, and some of
-which are a direct benefit of HAProxy's architecture. More advanced features
+which are a direct benefit of HAProxy&#x27;s architecture. More advanced features
 will be detailed in the next section.
 </pre></div>
 <a class="anchor" id="3.3.1" name="3.3.1"></a>
@@ -1284,12 +1284,12 @@ HAProxy regarding proxying and connection management :
   - Listen to multiple IP addresses and/or ports, even port ranges;
 
   - Transparent accept : intercept traffic targeting any arbitrary IP address
-    that doesn't even belong to the local system;
+    that doesn&#x27;t even belong to the local system;
 
-  - Server port doesn't need to be related to listening port, and may even be
+  - Server port doesn&#x27;t need to be related to listening port, and may even be
     translated by a fixed offset (useful with ranges);
 
-  - Transparent connect : spoof the client's (or any) IP address if needed
+  - Transparent connect : spoof the client&#x27;s (or any) IP address if needed
     when connecting to the server;
 
   - Provide a reliable return IP address to the servers in multi-site LBs;
@@ -1314,7 +1314,7 @@ HAProxy regarding proxying and connection management :
     namespaces (Linux only), making it easy to build a cross-container,
     multi-tenant load balancer;
 
-  - PROXY protocol presents the client's IP address to the server even for
+  - PROXY protocol presents the client&#x27;s IP address to the server even for
     non-HTTP traffic. This is an HAProxy extension that was adopted by a number
     of third-party products by now, at least these ones at the time of writing :
       - client : haproxy, stud, stunnel, exaproxy, ELB, squid
@@ -1322,8 +1322,8 @@ HAProxy regarding proxying and connection management :
 </pre></div>
 <a class="anchor" id="3.3.2" name="3.3.2"></a>
 <h3 id="chapter-3.3.2" data-target="3.3.2"><small><a class="small" href="#3.3.2">3.3.2.</a></small> Basic features : SSL</h3>
-<div><pre class="text">HAProxy's SSL stack is recognized as one of the most featureful according to
-Google's engineers (http://istlsfastyet.com/). The most commonly used features
+<div><pre class="text">HAProxy&#x27;s SSL stack is recognized as one of the most featureful according to
+Google&#x27;s engineers (http://istlsfastyet.com/). The most commonly used features
 making it quite complete are :
 
   - SNI-based multi-hosting with no limit on sites count and focus on
@@ -1339,7 +1339,7 @@ making it quite complete are :
   - authentication of the backend server ensures the backend server is the real
     one and not a man in the middle;
 
-  - authentication with the backend server lets the backend server know it's
+  - authentication with the backend server lets the backend server know it&#x27;s
     really the expected haproxy node that is connecting to it;
 
   - TLS NPN and ALPN extensions make it possible to reliably offload SPDY/HTTP2
@@ -1370,7 +1370,7 @@ making it quite complete are :
 <div><pre class="text">HAProxy focuses a lot on availability. As such it cares about servers state,
 and about reporting its own state to other network components :
 
-  - Servers' state is continuously monitored using per-server parameters. This
+  - Servers&#x27; state is continuously monitored using per-server parameters. This
     ensures the path to the server is operational for regular traffic;
 
   - Health checks support two hysteresis for up and down transitions in order
@@ -1387,7 +1387,7 @@ and about reporting its own state to other network components :
   - Agents may be deployed on the server to monitor load and health : a server
     may be interested in reporting its load, operational status, administrative
     status independently from what health checks can see. By running a simple
-    agent on the server, it's possible to consider the server's view of its own
+    agent on the server, it&#x27;s possible to consider the server&#x27;s view of its own
     health in addition to the health checks validating the whole path;
 
   - Various check methods are available : TCP connect, HTTP request, SMTP hello,
@@ -1441,7 +1441,7 @@ ensure the best global service continuity :
   - Integrates well with standard VRRP daemon keepalived : HAProxy easily tells
     keepalived about its state and copes very well with floating virtual IP
     addresses. Note: only use IP redundancy protocols (VRRP/CARP) over cluster-
-    based solutions (Heartbeat, ...) as they're the ones offering the fastest,
+    based solutions (Heartbeat, ...) as they&#x27;re the ones offering the fastest,
     most seamless, and most reliable switchover.
 </pre></div>
 <a class="anchor" id="3.3.5" name="3.3.5"></a>
@@ -1454,7 +1454,7 @@ are unfortunately not available in a number of other load balancing products :
     ones are round-robin (for short connections, pick each server in turn),
     leastconn (for long connections, pick the least recently used of the servers
     with the lowest connection count), source (for SSL farms or terminal server
-    farms, the server directly depends on the client's source address), URI (for
+    farms, the server directly depends on the client&#x27;s source address), URI (for
     HTTP caches, the server directly depends on the HTTP URI), hdr (the server
     directly depends on the contents of a specific HTTP header field), first
     (for short-lived virtual machines, all connections are packed on the
@@ -1476,12 +1476,12 @@ are unfortunately not available in a number of other load balancing products :
     as well as cold caches which need to fill up before being run at full
     throttle;
 
-  - hashing can apply to various elements such as client's source address, URL
+  - hashing can apply to various elements such as client&#x27;s source address, URL
     components, query string element, header field values, POST parameter, RDP
     cookie;
 
   - consistent hashing protects server farms against massive redistribution when
-    adding or removing servers in a farm. That's very important in large cache
+    adding or removing servers in a farm. That&#x27;s very important in large cache
     farms and it allows slow-start to be used to refill cold caches;
 
   - a number of internal metrics such as the number of connections per server,
@@ -1494,7 +1494,7 @@ are unfortunately not available in a number of other load balancing products :
 a fairly comprehensive set of possibilities to maintain a visitor on the same
 server even across various events such as server addition/removal, down/up
 cycles, and some methods are designed to be resistant to the distance between
-multiple load balancing nodes in that they don't require any replication :
+multiple load balancing nodes in that they don&#x27;t require any replication :
 
   - stickiness information can be individually matched and learned from
     different places if desired. For example a JSESSIONID cookie may be matched
@@ -1518,7 +1518,7 @@ multiple load balancing nodes in that they don't require any replication :
     the load back. This is often used in multi-path environments;
 
   - in HTTP it is often preferred not to learn anything and instead manipulate
-    a cookie dedicated to stickiness. For this, it's possible to detect,
+    a cookie dedicated to stickiness. For this, it&#x27;s possible to detect,
     rewrite, insert or prefix such a cookie to let the client remember what
     server was assigned;
 
@@ -1526,8 +1526,8 @@ multiple load balancing nodes in that they don't require any replication :
     so that leaving visitors are automatically unbound from the server;
 
   - using ACL-based rules it is also possible to selectively ignore or enforce
-    stickiness regardless of the server's state; combined with advanced health
-    checks, that helps admins verify that the server they're installing is up
+    stickiness regardless of the server&#x27;s state; combined with advanced health
+    checks, that helps admins verify that the server they&#x27;re installing is up
     and running before presenting it to the whole world;
 
   - an innovative mechanism to set a maximum idle time and duration on cookies
@@ -1539,7 +1539,7 @@ multiple load balancing nodes in that they don't require any replication :
     stickiness is not lost in multi-path environments when one path goes down;
 
   - soft-stop ensures that only users with stickiness information will continue
-    to reach the server they've been assigned to but no new users will go there.
+    to reach the server they&#x27;ve been assigned to but no new users will go there.
 </pre></div>
 <a class="anchor" id="3.3.7" name="3.3.7"></a>
 <h3 id="chapter-3.3.7" data-target="3.3.7"><small><a class="small" href="#3.3.7">3.3.7.</a></small> Basic features : Sampling and converting information</h3>
@@ -1606,7 +1606,7 @@ into memory at boot time, then looking up each input sample from the first
 column and either returning the corresponding pattern on the second column if
 the entry was found, or returning a default value. The output information also
 being a sample, it can in turn experience other transformations including other
-map lookups. Maps are most commonly used to translate the client's IP address
+map lookups. Maps are most commonly used to translate the client&#x27;s IP address
 to an AS number or country code since they support a longest match for network
 addresses but they can be used for various other purposes.
 
@@ -1663,7 +1663,7 @@ is that a connection or request arrives on a frontend, then the information
 carried with this request or connection are processed, and at this point it is
 possible to write ACLs-based conditions making use of these information to
 decide what backend will process the request. Thus the traffic is directed to
-one backend or another based on the request's contents. The most common example
+one backend or another based on the request&#x27;s contents. The most common example
 consists in using the Host header and/or elements from the path (sub-directories
 or file-name extensions) to decide whether an HTTP request targets a static
 object or the application, and to route static objects traffic to a backend made
@@ -1691,7 +1691,7 @@ been reported to work fine at least with 300000 backends in production.
 a reference to the server a certain visitor was directed to. The key is then the
 identifier associated with the visitor (its source address, the SSL ID of the
 connection, an HTTP or RDP cookie, the customer number extracted from the URL or
-from the payload, ...) and the stored value is then the server's identifier.
+from the payload, ...) and the stored value is then the server&#x27;s identifier.
 
 Stick tables may use 3 different types of samples for their keys : integers,
 strings and addresses. Only one stick-table may be referenced in a proxy, and it
@@ -1702,7 +1702,7 @@ processing once both the key and the server are known.
 Stick-table contents may be replicated in active-active mode with other HAProxy
 nodes known as &quot;peers&quot; as well as with the new process during a reload operation
 so that all load balancing nodes share the same information and take the same
-routing decision if client's requests are spread over multiple nodes.
+routing decision if client&#x27;s requests are spread over multiple nodes.
 
 Since stick-tables are indexed on what allows to recognize a client, they are
 often also used to store extra information such as per-client statistics. The
@@ -1727,7 +1727,7 @@ speed.
 <div><pre class="text">There are many places where HAProxy needs to manipulate character strings, such
 as logs, redirects, header additions, and so on. In order to provide the
 greatest flexibility, the notion of Formatted strings was introduced, initially
-for logging purposes, which explains why it's still called &quot;log-format&quot;. These
+for logging purposes, which explains why it&#x27;s still called &quot;log-format&quot;. These
 strings contain escape characters allowing to introduce various dynamic data
 including variables and sample fetch expressions into strings, and even to
 adjust the encoding while the result is being turned into a string (for example,
@@ -1747,8 +1747,8 @@ strongly advised against), modifying Host header field, modifying the Location
 response header field for redirects, modifying the path and domain attribute
 for cookies, and so on. It also happens that a number of servers are somewhat
 verbose and tend to leak too much information in the response, making them more
-vulnerable to targeted attacks. While it's theoretically not the role of a load
-balancer to clean this up, in practice it's located at the best place in the
+vulnerable to targeted attacks. While it&#x27;s theoretically not the role of a load
+balancer to clean this up, in practice it&#x27;s located at the best place in the
 infrastructure to guarantee that everything is cleaned up.
 
 Similarly, sometimes the load balancer will have to intercept some requests and
@@ -1762,7 +1762,7 @@ In order to do this, HAProxy supports various possibilities for rewriting and
 redirects, among which :
 
   - regex-based URL and header rewriting in requests and responses. Regex are
-    the most commonly used tool to modify header values since they're easy to
+    the most commonly used tool to modify header values since they&#x27;re easy to
     manipulate and well understood;
 
   - headers may also be appended, deleted or replaced based on formatted strings
@@ -1791,7 +1791,7 @@ are not exposed to invalid or incomplete requests. This is a very effective
 protection against slowloris attacks, which have almost no impact on HAProxy.
 
 Another important point is that HAProxy contains buffers to store requests and
-responses, and that by only sending a request to a server when it's complete and
+responses, and that by only sending a request to a server when it&#x27;s complete and
 by reading the whole response very quickly from the local network, the server
 side connection is used for a very short time and this preserves server
 resources as much as possible.
@@ -1809,7 +1809,7 @@ by a visitor on a slow-loading page usually induces a new request and maintains
 the server in an overloaded state.
 
 The slow-start mechanism also protects restarting servers against high traffic
-levels while they're still finalizing their startup or compiling some classes.
+levels while they&#x27;re still finalizing their startup or compiling some classes.
 
 Regarding the protocol-level protection, it is possible to relax the HTTP parser
 to accept non standard-compliant but harmless requests or responses and even to
@@ -1832,7 +1832,7 @@ becomes very expensive to maintain.
 HAProxy also proposes some more advanced options to protect against accidental
 data leaks and session crossing. Not only it can log suspicious server responses
 but it will also log and optionally block a response which might affect a given
-visitors' confidentiality. One such example is a cacheable cookie appearing in a
+visitors&#x27; confidentiality. One such example is a cacheable cookie appearing in a
 cacheable response and which may result in an intermediary cache to deliver it
 to another visitor, causing an accidental session sharing.
 </pre></div>
@@ -1887,12 +1887,12 @@ server state to ease maintenance operations.
 <a class="anchor" id="3.4.1" name="3.4.1"></a>
 <h3 id="chapter-3.4.1" data-target="3.4.1"><small><a class="small" href="#3.4.1">3.4.1.</a></small> Advanced features : Management</h3>
 <div><pre class="text">HAProxy is designed to remain extremely stable and safe to manage in a regular
-production environment. It is provided as a single executable file which doesn't
+production environment. It is provided as a single executable file which doesn&#x27;t
 require any installation process. Multiple versions can easily coexist, meaning
-that it's possible (and recommended) to upgrade instances progressively by
+that it&#x27;s possible (and recommended) to upgrade instances progressively by
 order of importance instead of migrating all of them at once. Configuration
 files are easily versioned. Configuration checking is done off-line so it
-doesn't require to restart a service that will possibly fail. During
+doesn&#x27;t require to restart a service that will possibly fail. During
 configuration checks, a number of advanced mistakes may be detected (e.g. a rule
 hiding another one, or stickiness that will not work) and detailed warnings and
 configuration hints are proposed to fix them. Backwards configuration file
@@ -1905,8 +1905,8 @@ each handling its own connections. System status, build options, and library
 compatibility are reported on startup.
 
 Some advanced features allow an application administrator to smoothly stop a
-server, detect when there's no activity on it anymore, then take it off-line,
-stop it, upgrade it and ensure it doesn't take any traffic while being upgraded,
+server, detect when there&#x27;s no activity on it anymore, then take it off-line,
+stop it, upgrade it and ensure it doesn&#x27;t take any traffic while being upgraded,
 then test it again through the normal path without opening it to the public, and
 all of this without touching HAProxy at all. This ensures that even complicated
 production operations may be done during opening hours with all technical
@@ -1921,8 +1921,8 @@ strict environments.
 
 A command line interface (CLI) is available as a UNIX or TCP socket, to perform
 a number of operations and to retrieve troubleshooting information. Everything
-done on this socket doesn't require a configuration change, so it is mostly used
-for temporary changes. Using this interface it is possible to change a server's
+done on this socket doesn&#x27;t require a configuration change, so it is mostly used
+for temporary changes. Using this interface it is possible to change a server&#x27;s
 address, weight and status, to consult statistics and clear counters, dump and
 clear stickiness tables, possibly selectively by key criteria, dump and kill
 client-side and server-side connections, dump captured errors with a detailed
@@ -1934,7 +1934,7 @@ environments), and disable a specific frontend to release a listening port
 
 For environments where SNMP is mandatory, at least two agents exist, one is
 provided with the HAProxy sources and relies on the Net-SNMP Perl module.
-Another one is provided with the commercial packages and doesn't require Perl.
+Another one is provided with the commercial packages and doesn&#x27;t require Perl.
 Both are roughly equivalent in terms of coverage.
 
 It is often recommended to install 4 utilities on the machine where HAProxy is
@@ -1952,11 +1952,11 @@ deployed :
 
   - tcpdump : this is highly recommended to take the network traces needed to
     troubleshoot an issue that was made visible in the logs. There is a moment
-    where application and haproxy's analysis will diverge and the network traces
-    are the only way to say who's right and who's wrong. It's also fairly common
+    where application and haproxy&#x27;s analysis will diverge and the network traces
+    are the only way to say who&#x27;s right and who&#x27;s wrong. It&#x27;s also fairly common
     to detect bugs in network stacks and hypervisors thanks to tcpdump;
 
-  - strace : it is tcpdump's companion. It will report what HAProxy really sees
+  - strace : it is tcpdump&#x27;s companion. It will report what HAProxy really sees
     and will help sort out the issues the operating system is responsible for
     from the ones HAProxy is responsible for. Strace is often requested when a
     bug in HAProxy is suspected;
@@ -1991,12 +1991,12 @@ network.
 
 Some systems have an unreliable clock which jumps back and forth in the past
 and in the future. This used to happen with some NUMA systems where multiple
-processors didn't see the exact same time of day, and recently it became more
+processors didn&#x27;t see the exact same time of day, and recently it became more
 common in virtualized environments where the virtual clock has no relation with
 the real clock, resulting in huge time jumps (sometimes up to 30 seconds have
 been observed). This causes a lot of trouble with respect to timeout enforcement
 in general. Due to this flaw of these systems, HAProxy maintains its own
-monotonic clock which is based on the system's clock but where drift is measured
+monotonic clock which is based on the system&#x27;s clock but where drift is measured
 and compensated for. This ensures that even with a very bad system clock, timers
 remain reasonably accurate and timeouts continue to work. Note that this problem
 affects all the software running on such systems and is not specific to HAProxy.
@@ -2052,14 +2052,14 @@ explains why maximum bandwidth is always measured with large objects, while
 request rate or connection rates are measured with small objects.
 
 Some operations scale well on multiple processes spread over multiple CPUs,
-and others don't scale as well. Network bandwidth doesn't scale very far because
-the CPU is rarely the bottleneck for large objects, it's mostly the network
+and others don&#x27;t scale as well. Network bandwidth doesn&#x27;t scale very far because
+the CPU is rarely the bottleneck for large objects, it&#x27;s mostly the network
 bandwidth and data buses to reach the network interfaces. The connection rate
-doesn't scale well over multiple processors due to a few locks in the system
+doesn&#x27;t scale well over multiple processors due to a few locks in the system
 when dealing with the local ports table. The request rate over persistent
-connections scales very well as it doesn't involve much memory nor network
-bandwidth and doesn't require to access locked structures. TLS key computation
-scales very well as it's totally CPU-bound. TLS resume scales moderately well,
+connections scales very well as it doesn&#x27;t involve much memory nor network
+bandwidth and doesn&#x27;t require to access locked structures. TLS key computation
+scales very well as it&#x27;s totally CPU-bound. TLS resume scales moderately well,
 but reaches its limits around 4 processes where the overhead of accessing the
 shared table offsets the small gains expected from more power.
 
@@ -2109,7 +2109,7 @@ and two extra cores were dedicated to network interrupts :
 
 Thus a good rule of thumb to keep in mind is that the request rate is divided
 by 10 between TLS keep-alive and TLS resume, and between TLS resume and TLS
-renegotiation, while it's only divided by 3 between HTTP keep-alive and HTTP
+renegotiation, while it&#x27;s only divided by 3 between HTTP keep-alive and HTTP
 close. Another good rule of thumb is to remember that a high frequency core
 with AES instructions can do around 5 Gbps of AES-GCM per core.
 
@@ -2141,9 +2141,9 @@ stability of the version being developed.
 
 The new branches that are created when the code is stable enough constitute a
 stable version and are generally maintained for several years, so that there is
-no emergency to migrate to a newer branch even when you're not on the latest.
+no emergency to migrate to a newer branch even when you&#x27;re not on the latest.
 Once a stable branch is issued, it may only receive bug fixes, and very rarely
-minor feature updates when that makes users' life easier. All fixes that go into
+minor feature updates when that makes users&#x27; life easier. All fixes that go into
 a stable branch necessarily come from the master branch. This guarantees that no
 fix will be lost after an upgrade. For this reason, if you fix a bug, please
 make the patch against the master branch, not the stable branch. You may even
@@ -2185,15 +2185,15 @@ HAProxy is available from multiple sources, at different release rhythms :
     or simply support contracts on top of an open source product;
 
 
-In order to ensure that the version you're using is the latest one in your
+In order to ensure that the version you&#x27;re using is the latest one in your
 branch, you need to proceed this way :
 
-  - verify which HAProxy executable you're running : some systems ship it by
+  - verify which HAProxy executable you&#x27;re running : some systems ship it by
     default and administrators install their versions somewhere else on the
     system, so it is important to verify in the startup scripts which one is
     used;
 
-  - determine which source your HAProxy version comes from. For this, it's
+  - determine which source your HAProxy version comes from. For this, it&#x27;s
     generally sufficient to type &quot;haproxy -v&quot;. A development version will
     appear like this, with the &quot;dev&quot; word after the branch number :
 
@@ -2216,17 +2216,17 @@ branch, you need to proceed this way :
 
       HA-Proxy version 1.5.0-994126-357 2015/07/02
 
-  - for system-specific packages, you have to check with your vendor's package
+  - for system-specific packages, you have to check with your vendor&#x27;s package
     repository or update system to ensure that your system is still supported,
     and that fixes are still provided for your branch. For community versions
     coming from haproxy.org, just visit the site, verify the status of your
-    branch and compare the latest version with yours to see if you're on the
+    branch and compare the latest version with yours to see if you&#x27;re on the
     latest one. If not you can upgrade. If your branch is not maintained
-    anymore, you're definitely very late and will have to consider an upgrade
+    anymore, you&#x27;re definitely very late and will have to consider an upgrade
     to a more recent branch (carefully read the README when doing so).
 
 HAProxy will have to be updated according to the source it came from. Usually it
-follows the system vendor's way of upgrading a package. If it was taken from
+follows the system vendor&#x27;s way of upgrading a package. If it was taken from
 sources, please read the README file in the sources directory after extracting
 the sources and follow the instructions for your operating system.
 </pre></div>
@@ -2237,7 +2237,7 @@ they are mentioned here even if not directly related to HAProxy.
 </pre></div>
 <a class="anchor" id="4.1" name="4.1"></a>
 <h2 id="chapter-4.1" data-target="4.1"><small><a class="small" href="#4.1">4.1.</a></small> Apache HTTP server</h2>
-<div><pre class="text">Apache is the de-facto standard HTTP server. It's a very complete and modular
+<div><pre class="text">Apache is the de-facto standard HTTP server. It&#x27;s a very complete and modular
 project supporting both file serving and dynamic contents. It can serve as a
 frontend for some application servers. It can even proxy requests and cache
 responses. In all of these use cases, a front load balancer is commonly needed.
@@ -2248,7 +2248,7 @@ a tremendous help by enforcing the per-server connection limits to a safe value
 and will significantly speed up the server and preserve its resources that will
 be better used by the application.
 
-Apache can extract the client's address from the X-Forwarded-For header by using
+Apache can extract the client&#x27;s address from the X-Forwarded-For header by using
 the &quot;mod_rpaf&quot; extension. HAProxy will automatically feed this header when
 &quot;option forwardfor&quot; is specified in its configuration. HAProxy may also offer a
 nice protection to Apache when exposed to the internet, where it will better
@@ -2264,25 +2264,25 @@ be beneficial to set up some frontend connection limiting to reduce the load
 on the PHP application. HAProxy will clearly be useful there both as a regular
 load balancer and as the traffic regulator to speed up PHP by decongesting
 it. Also since both products use very little CPU thanks to their event-driven
-architecture, it's often easy to install both of them on the same system. NGINX
-implements HAProxy's PROXY protocol, thus it is easy for HAProxy to pass the
-client's connection information to NGINX so that the application gets all the
+architecture, it&#x27;s often easy to install both of them on the same system. NGINX
+implements HAProxy&#x27;s PROXY protocol, thus it is easy for HAProxy to pass the
+client&#x27;s connection information to NGINX so that the application gets all the
 relevant information. Some benchmarks have also shown that for large static
 file serving, implementing consistent hash on HAProxy in front of NGINX can be
-beneficial by optimizing the OS' cache hit ratio, which is basically multiplied
+beneficial by optimizing the OS&#x27; cache hit ratio, which is basically multiplied
 by the number of server nodes.
 </pre></div>
 <a class="anchor" id="4.3" name="4.3"></a>
 <h2 id="chapter-4.3" data-target="4.3"><small><a class="small" href="#4.3">4.3.</a></small> Varnish</h2>
 <div><pre class="text">Varnish is a smart caching reverse-proxy, probably best described as a web
-application accelerator. Varnish doesn't implement SSL/TLS and wants to dedicate
-all of its CPU cycles to what it does best. Varnish also implements HAProxy's
+application accelerator. Varnish doesn&#x27;t implement SSL/TLS and wants to dedicate
+all of its CPU cycles to what it does best. Varnish also implements HAProxy&#x27;s
 PROXY protocol so that HAProxy can very easily be deployed in front of Varnish
 as an SSL offloader as well as a load balancer and pass it all relevant client
 information. Also, Varnish naturally supports decompression from the cache when
-a server has provided a compressed object, but doesn't compress however. HAProxy
+a server has provided a compressed object, but doesn&#x27;t compress however. HAProxy
 can then be used to compress outgoing data when backend servers do not implement
-compression, though it's rarely a good idea to compress on the load balancer
+compression, though it&#x27;s rarely a good idea to compress on the load balancer
 unless the traffic is low.
 
 When building large caching farms across multiple nodes, HAProxy can make use of
@@ -2294,39 +2294,39 @@ all caching nodes.
 <h2 id="chapter-4.4" data-target="4.4"><small><a class="small" href="#4.4">4.4.</a></small> Alternatives</h2>
 <div><pre class="text">Linux Virtual Server (LVS or IPVS) is the layer 4 load balancer included within
 the Linux kernel. It works at the packet level and handles TCP and UDP. In most
-cases it's more a complement than an alternative since it doesn't have layer 7
+cases it&#x27;s more a complement than an alternative since it doesn&#x27;t have layer 7
 knowledge at all.
 
-Pound is another well-known load balancer. It's much simpler and has much less
+Pound is another well-known load balancer. It&#x27;s much simpler and has much less
 features than HAProxy but for many very basic setups both can be used. Its
 author has always focused on code auditability first and wants to maintain the
 set of features low. Its thread-based architecture scales less well with high
-connection counts, but it's a good product.
+connection counts, but it&#x27;s a good product.
 
 Pen is a quite light load balancer. It supports SSL, maintains persistence using
-a fixed-size table of its clients' IP addresses. It supports a packet-oriented
+a fixed-size table of its clients&#x27; IP addresses. It supports a packet-oriented
 mode allowing it to support direct server return and UDP to some extents. It is
 meant for small loads (the persistence table only has 2048 entries).
 
-NGINX can do some load balancing to some extents, though it's clearly not its
+NGINX can do some load balancing to some extents, though it&#x27;s clearly not its
 primary function. Production traffic is used to detect server failures, the
 load balancing algorithms are more limited, and the stickiness is very limited.
 But it can make sense in some simple deployment scenarios where it is already
 present. The good thing is that since it integrates very well with HAProxy,
-there's nothing wrong with adding HAProxy later when its limits have been
+there&#x27;s nothing wrong with adding HAProxy later when its limits have been
 reached.
 
 Varnish also does some load balancing of its backend servers and does support
-real health checks. It doesn't implement stickiness however, so just like with
+real health checks. It doesn&#x27;t implement stickiness however, so just like with
 NGINX, as long as stickiness is not needed that can be enough to start with.
-And similarly, since HAProxy and Varnish integrate so well together, it's easy
+And similarly, since HAProxy and Varnish integrate so well together, it&#x27;s easy
 to add it later into the mix to complement the feature set.
 </pre></div>
 
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.9.14 &ndash; Starter Guide<br>
+							HAProxy 1.9.15 &ndash; Starter Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -2430,8 +2430,8 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.14', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.9.15', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
