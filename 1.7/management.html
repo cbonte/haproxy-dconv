@@ -5,7 +5,7 @@
 		<title>HAProxy version 1.7.12 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
-		<link href="../css/page.css?0.4.2-10" rel="stylesheet" />
+		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -390,7 +390,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-10</b> on <b>2020/03/09</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/04/17</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -399,7 +399,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="text-center">
-                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-10" /></a></h1>
+                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
 							<p><strong>version 1.7.12</strong></p>
 							<p>
@@ -582,7 +582,7 @@ skills on a UNIX-like operating system, uses the shell on a daily basis and is
 familiar with troubleshooting utilities such as strace and tcpdump.
 </pre></div>
 <a class="anchor" id="2" name="2"></a>
-<div class="page-header"><h1 id="chapter-2" data-target="2"><small><a class="small" href="#2">2.</a></small> Quick reminder about HAProxy's architecture</h1>
+<div class="page-header"><h1 id="chapter-2" data-target="2"><small><a class="small" href="#2">2.</a></small> Quick reminder about HAProxy&#x27;s architecture</h1>
 </div><div><pre class="text">HAProxy is a single-threaded, event-driven, non-blocking daemon. This means is
 uses event multiplexing to schedule all of its activities instead of relying on
 the system to schedule between multiple activities. Most of the time it runs as
@@ -598,22 +598,22 @@ a running process will not be able to reload a configuration file to apply
 changes, instead a new process will be started using the updated configuration
 file. Some other less obvious effects are that some timezone files or resolver
 files the libc might attempt to access at run time will not be found, though
-this should generally not happen as they're not needed after startup. A nice
+this should generally not happen as they&#x27;re not needed after startup. A nice
 consequence of this principle is that the HAProxy process is totally stateless,
-and no cleanup is needed after it's killed, so any killing method that works
+and no cleanup is needed after it&#x27;s killed, so any killing method that works
 will do the right thing.
 
-HAProxy doesn't write log files, but it relies on the standard syslog protocol
+HAProxy doesn&#x27;t write log files, but it relies on the standard syslog protocol
 to send logs to a remote server (which is often located on the same system).
 
 HAProxy uses its internal clock to enforce timeouts, that is derived from the
-system's time but where unexpected drift is corrected. This is done by limiting
+system&#x27;s time but where unexpected drift is corrected. This is done by limiting
 the time spent waiting in poll() for an event, and measuring the time it really
 took. In practice it never waits more than one second. This explains why, when
 running strace over a completely idle process, periodic calls to poll() (or any
 of its variants) surrounded by two gettimeofday() calls are noticed. They are
 normal, completely harmless and so cheap that the load they imply is totally
-undetectable at the system scale, so there's nothing abnormal there. Example :
+undetectable at the system scale, so there&#x27;s nothing abnormal there. Example :
 
   16:35:40.002320 gettimeofday({1442759740, 2605}, NULL) = 0
   16:35:40.002942 epoll_wait(0, {}, 200, 1000) = 0
@@ -646,7 +646,7 @@ to show listening sockets. Example :
 passed on the command line. The actual syntax is :
 
   $ haproxy [&lt;options&gt;]*
-</pre><a class="anchor" name="where"></a><a class="anchor" name="3-where"></a><a class="anchor" name="3-where"></a><a class="anchor" name="where (Starting HAProxy)"></a><a class="anchor" name="where (Starting HAProxy)"></a><div class="keyword"><b><a class="anchor" name="where"></a><a href="#3-where">where</a></b> <span style="color: #008">[<span style="color: #080">&lt;options&gt;</span>]</span>* is any number of options. An option always starts with '-'</div><pre class="text">followed by one of more letters, and possibly followed by one or multiple extra
+</pre><a class="anchor" name="where"></a><a class="anchor" name="3-where"></a><a class="anchor" name="3-where"></a><a class="anchor" name="where (Starting HAProxy)"></a><a class="anchor" name="where (Starting HAProxy)"></a><div class="keyword"><b><a class="anchor" name="where"></a><a href="#3-where">where</a></b> <span style="color: #008">[<span style="color: #080">&lt;options&gt;</span>]</span>* is any number of options. An option always starts with &#x27;-&#x27;</div><pre class="text">followed by one of more letters, and possibly followed by one or multiple extra
 arguments. Without any option, HAProxy displays the help page with a reminder
 about supported options. Available options may vary slightly based on the
 operating system. A fair number of these options overlap with an equivalent one
@@ -690,7 +690,7 @@ list of options is :
     forking, and errors are not reported anymore in the terminal. It is
     equivalent to the &quot;daemon&quot; keyword in the &quot;global&quot; section of the
     configuration. It is recommended to always force it in any init script so
-    that a faulty configuration doesn't prevent the system from booting.
+    that a faulty configuration doesn&#x27;t prevent the system from booting.
 
   -Ds : work in systemd mode. Only used by the systemd wrapper.
 
@@ -709,11 +709,11 @@ list of options is :
 
   -d : enable debug mode. This disables daemon mode, forces the process to stay
     in foreground and to show incoming and outgoing events. It is equivalent to
-    the &quot;global&quot; section's &quot;debug&quot; keyword. It must never be used in an init
+    the &quot;global&quot; section&#x27;s &quot;debug&quot; keyword. It must never be used in an init
     script.
 
   -dG : disable use of getaddrinfo() to resolve host names into addresses. It
-    can be used when suspecting that getaddrinfo() doesn't work as expected.
+    can be used when suspecting that getaddrinfo() doesn&#x27;t work as expected.
     This option was made available because many bogus implementations of
     getaddrinfo() exist on various systems and cause anomalies that are
     difficult to troubleshoot.
@@ -721,7 +721,7 @@ list of options is :
   -dM[&lt;byte&gt;] : forces memory poisoning, which means that each and every
     memory region allocated with malloc() or pool_alloc2() will be filled with
     &lt;byte&gt; before being passed to the caller. When &lt;byte&gt; is not specified, it
-    defaults to 0x50 ('P'). While this slightly slows down operations, it is
+    defaults to 0x50 (&#x27;P&#x27;). While this slightly slows down operations, it is
     useful to reliably trigger issues resulting from missing initializations in
     the code that cause random crashes. Note that -dM0 has the effect of
     turning any malloc() into a calloc(). In any case if a bug appears or
@@ -729,7 +729,7 @@ list of options is :
     please report it.
 
   -dS : disable use of the splice() system call. It is equivalent to the
-    &quot;global&quot; section's &quot;nosplice&quot; keyword. This may be used when splice() is
+    &quot;global&quot; section&#x27;s &quot;nosplice&quot; keyword. This may be used when splice() is
     suspected to behave improperly or to cause performance issues, or when
     using strace to see the forwarded data (which do not appear when using
     splice()).
@@ -745,17 +745,17 @@ list of options is :
     Ctrl-C is enough to stop the process. Never use it in an init script.
 
   -de : disable the use of the &quot;epoll&quot; poller. It is equivalent to the &quot;global&quot;
-    section's keyword &quot;noepoll&quot;. It is mostly useful when suspecting a bug
+    section&#x27;s keyword &quot;noepoll&quot;. It is mostly useful when suspecting a bug
     related to this poller. On systems supporting epoll, the fallback will
     generally be the &quot;poll&quot; poller.
 
   -dk : disable the use of the &quot;kqueue&quot; poller. It is equivalent to the
-    &quot;global&quot; section's keyword &quot;nokqueue&quot;. It is mostly useful when suspecting
+    &quot;global&quot; section&#x27;s keyword &quot;nokqueue&quot;. It is mostly useful when suspecting
     a bug related to this poller. On systems supporting kqueue, the fallback
     will generally be the &quot;poll&quot; poller.
 
   -dp : disable the use of the &quot;poll&quot; poller. It is equivalent to the &quot;global&quot;
-    section's keyword &quot;nopoll&quot;. It is mostly useful when suspecting a bug
+    section&#x27;s keyword &quot;nopoll&quot;. It is mostly useful when suspecting a bug
     related to this poller. On systems supporting poll, the fallback will
     generally be the &quot;select&quot; poller, which cannot be disabled and is limited
     to 1024 file descriptors.
@@ -777,12 +777,12 @@ list of options is :
     global.nbproc before forking.
 
   -n &lt;limit&gt; : limits the per-process connection limit to &lt;limit&gt;. This is
-    equivalent to the global section's keyword &quot;maxconn&quot;. It has precedence
+    equivalent to the global section&#x27;s keyword &quot;maxconn&quot;. It has precedence
     over this keyword. This may be used to quickly force lower limits to avoid
     a service outage on systems where resource limits are too low.
 
-  -p &lt;file&gt; : write all processes' pids into &lt;file&gt; during startup. This is
-    equivalent to the &quot;global&quot; section's keyword &quot;pidfile&quot;. The file is opened
+  -p &lt;file&gt; : write all processes&#x27; pids into &lt;file&gt; during startup. This is
+    equivalent to the &quot;global&quot; section&#x27;s keyword &quot;pidfile&quot;. The file is opened
     before entering the chroot jail, and after doing the chdir() implied by
     &quot;-C&quot;. Each pid appears on its own line.
 
@@ -890,8 +890,8 @@ The relevant information that many non-developer users can verify here are :
   - the release date : 2015/10/08. It is represented in the universal
     year/month/day format. Here this means August 8th, 2015. Given that stable
     releases are issued every few months (1-2 months at the beginning, sometimes
-    6 months once the product becomes very stable), if you're seeing an old date
-    here, it means you're probably affected by a number of bugs or security
+    6 months once the product becomes very stable), if you&#x27;re seeing an old date
+    here, it means you&#x27;re probably affected by a number of bugs or security
     issues that have since been fixed and that it might be worth checking on the
     official site.
 
@@ -917,7 +917,7 @@ The relevant information that many non-developer users can verify here are :
     it was released a little time before HAProxy 1.6. It is important to check
     on the Lua web site if some fixes are proposed for this branch.
 
-  - Available polling systems will affect the process's scalability when
+  - Available polling systems will affect the process&#x27;s scalability when
     dealing with more than about one thousand of concurrent connections. These
     ones are only available when the correct system was indicated in the TARGET
     variable during the build. The &quot;epoll&quot; mechanism is highly recommended on
@@ -996,7 +996,7 @@ where this happens are :
     (less likely).
 
   - when the old processes close the listening ports, the kernel may not always
-    redistribute any pending connection that was remaining in the socket's
+    redistribute any pending connection that was remaining in the socket&#x27;s
     backlog. Under high loads, a SYN packet may happen just before the socket
     is closed, and will lead to an RST packet being sent to the client. In some
     critical environments where even one drop is not acceptable, these ones are
@@ -1010,7 +1010,7 @@ where this happens are :
     will work well if applied one second or so before restarting the process.
 
 For the vast majority of users, such drops will never ever happen since they
-don't have enough load to trigger the race conditions. And for most high traffic
+don&#x27;t have enough load to trigger the race conditions. And for most high traffic
 users, the failure rate is still fairly within the noise margin provided that at
 least SO_REUSEPORT is properly supported on their systems.
 </pre></div>
@@ -1018,7 +1018,7 @@ least SO_REUSEPORT is properly supported on their systems.
 <div class="page-header"><h1 id="chapter-5" data-target="5"><small><a class="small" href="#5">5.</a></small> File-descriptor limitations</h1>
 </div><div><pre class="text">In order to ensure that all incoming connections will successfully be served,
 HAProxy computes at load time the total number of file descriptors that will be
-needed during the process's life. A regular Unix process is generally granted
+needed during the process&#x27;s life. A regular Unix process is generally granted
 1024 file descriptors by default, and a privileged process can raise this limit
 itself. This is one reason for starting HAProxy as root and letting it adjust
 the limit. The default limit of 1024 file descriptors roughly allow about 500
@@ -1046,14 +1046,14 @@ restrictive SELinux policies forbidding the use of select() with more than
 1024 file descriptors, HAProxy now refuses to start in this case in order to
 avoid any issue at run time. On all supported operating systems, poll() is
 available and will not suffer from this limitation. It is automatically picked
-so there is nothing to do to get a working configuration. But poll's becomes
+so there is nothing to do to get a working configuration. But poll&#x27;s becomes
 very slow when the number of file descriptors increases. While HAProxy does its
 best to limit this performance impact (eg: via the use of the internal file
 descriptor cache and batched processing), a good rule of thumb is that using
 poll() with more than a thousand concurrent connections will use a lot of CPU.
 
 For Linux systems base on kernels 2.6 and above, the epoll() system call will
-be used. It's a much more scalable mechanism relying on callbacks in the kernel
+be used. It&#x27;s a much more scalable mechanism relying on callbacks in the kernel
 that guarantee a constant wake up time regardless of the number of registered
 monitored file descriptors. It is automatically used where detected, provided
 that HAProxy had been built for one of the Linux flavors. Its presence and
@@ -1062,11 +1062,11 @@ support can be verified using &quot;haproxy -vv&quot;.
 For BSD systems which support it, kqueue() is available as an alternative. It
 is much faster than poll() and even slightly faster than epoll() thanks to its
 batched handling of changes. At least FreeBSD and OpenBSD support it. Just like
-with Linux's epoll(), its support and availability are reported in the output
+with Linux&#x27;s epoll(), its support and availability are reported in the output
 of &quot;haproxy -vv&quot;.
 
 Having a good poller is one thing, but it is mandatory that the process can
-reach the limits. When HAProxy starts, it immediately sets the new process's
+reach the limits. When HAProxy starts, it immediately sets the new process&#x27;s
 file descriptor limits and verifies if it succeeds. In case of failure, it
 reports it before forking so that the administrator can see the problem. As
 long as the process is started by as root, there should be no reason for this
@@ -1075,9 +1075,9 @@ unprivileged user. If there is a compelling reason for *not* starting haproxy
 as root (eg: started by end users, or by a per-application account), then the
 file descriptor limit can be raised by the system administrator for this
 specific user. The effectiveness of the setting can be verified by issuing
-&quot;ulimit -n&quot; from the user's command line. It should reflect the new limit.
+&quot;ulimit -n&quot; from the user&#x27;s command line. It should reflect the new limit.
 
-Warning: when an unprivileged user's limits are changed in this user's account,
+Warning: when an unprivileged user&#x27;s limits are changed in this user&#x27;s account,
 it is fairly common that these values are only considered when the user logs in
 and not at all in some scripts run at system boot time nor in crontabs. This is
 totally dependent on the operating system, keep in mind to check &quot;ulimit -n&quot;
@@ -1099,9 +1099,9 @@ changed using the &quot;fs.nr_open&quot; sysctl.
 
 File descriptor limitations may be observed on a running process when they are
 set too low. The strace utility will report that accept() and socket() return
-&quot;-1 EMFILE&quot; when the process's limits have been reached. In this case, simply
+&quot;-1 EMFILE&quot; when the process&#x27;s limits have been reached. In this case, simply
 raising the &quot;ulimit-n&quot; value (or removing it) will solve the problem. If these
-system calls return &quot;-1 ENFILE&quot; then it means that the kernel's limits have
+system calls return &quot;-1 ENFILE&quot; then it means that the kernel&#x27;s limits have
 been reached and that something must be done on a system-wide parameter. These
 trouble must absolutely be addressed, as they result in high CPU usage (when
 accept() fails) and failed connections that are generally visible to the user.
@@ -1112,7 +1112,7 @@ to be released and reused faster.
 <a class="anchor" id="6" name="6"></a>
 <div class="page-header"><h1 id="chapter-6" data-target="6"><small><a class="small" href="#6">6.</a></small> Memory management</h1>
 </div><div><pre class="text">HAProxy uses a simple and fast pool-based memory management. Since it relies on
-a small number of different object types, it's much more efficient to pick new
+a small number of different object types, it&#x27;s much more efficient to pick new
 objects from a pool which already contains objects of the appropriate size than
 to call malloc() for each different size. The pools are organized as a stack or
 LIFO, so that newly allocated objects are taken from recently released objects
@@ -1141,7 +1141,7 @@ the &quot;<a href="#show%20pools">show pools</a>&quot; command :
     - Pool buffer (8064 bytes) : 3 allocated (24192 bytes), 2 used, 1 users [SHARED]
   Total: 11 pools, 26608 bytes allocated, 18544 used.
 
-The pool name is only indicative, it's the name of the first object type using
+The pool name is only indicative, it&#x27;s the name of the first object type using
 this pool. The size in parenthesis is the object size for objects in this pool.
 Object sizes are always rounded up to the closest multiple of 16 bytes. The
 number of objects currently allocated and the equivalent number of bytes is
@@ -1152,13 +1152,13 @@ objects that have been freed and are available for immediate use.
 
 It is possible to limit the amount of memory allocated per process using the
 &quot;-m&quot; command line option, followed by a number of megabytes. It covers all of
-the process's addressable space, so that includes memory used by some libraries
+the process&#x27;s addressable space, so that includes memory used by some libraries
 as well as the stack, but it is a reliable limit when building a resource
 constrained system. It works the same way as &quot;ulimit -v&quot; on systems which have
 it, or &quot;ulimit -d&quot; for the other ones.
 
 If a memory allocation fails due to the memory limit being reached or because
-the system doesn't have any enough memory, then haproxy will first start to
+the system doesn&#x27;t have any enough memory, then haproxy will first start to
 free all available objects from all pools before attempting to allocate memory
 again. This mechanism of releasing unused memory can be triggered by sending
 the signal SIGQUIT to the haproxy process. When doing so, the pools state prior
@@ -1193,7 +1193,7 @@ parts :
     and the thread is called ksoftirqd/0 (for CPU 0). The CPU taking care of
     this load is generally defined by the hardware settings, though in the case
     of softirq it is often possible to remap the processing to another CPU.
-    This interrupt part will often be perceived as parasitic since it's not
+    This interrupt part will often be perceived as parasitic since it&#x27;s not
     associated with any process, but it actually is some processing being done
     to prepare the work for the process.
 
@@ -1214,7 +1214,7 @@ parts :
     leave, meaning the system is waiting for an ACK from the client to push
     these data.
 
-In practice regarding HAProxy's activity, it is in general reasonably accurate
+In practice regarding HAProxy&#x27;s activity, it is in general reasonably accurate
 (but totally inexact) to consider that interrupt/softirq are caused by Rx
 processing in kernel drivers, that user-land is caused by layer 7 processing
 in HAProxy, and that system time is caused by network processing on the Tx
@@ -1224,10 +1224,10 @@ Since HAProxy runs around an event loop, it waits for new events using poll()
 (or any alternative) and processes all these events as fast as possible before
 going back to poll() waiting for new events. It measures the time spent waiting
 in poll() compared to the time spent doing processing events. The ratio of
-polling time vs total time is called the &quot;idle&quot; time, it's the amount of time
+polling time vs total time is called the &quot;idle&quot; time, it&#x27;s the amount of time
 spent waiting for something to happen. This ratio is reported in the stats page
-on the &quot;idle&quot; line, or &quot;Idle_pct&quot; on the CLI. When it's close to 100%, it means
-the load is extremely low. When it's close to 0%, it means that there is
+on the &quot;idle&quot; line, or &quot;Idle_pct&quot; on the CLI. When it&#x27;s close to 100%, it means
+the load is extremely low. When it&#x27;s close to 0%, it means that there is
 constantly some activity. While it cannot be very accurate on an overloaded
 system due to other processes possibly preempting the CPU from the haproxy
 process, it still provides a good estimate about how HAProxy considers it is
@@ -1245,17 +1245,17 @@ When the idle ratio starts to become very low, it is important to tune the
 system and place processes and interrupts correctly to save the most possible
 CPU resources for all tasks. If a firewall is present, it may be worth trying
 to disable it or to tune it to ensure it is not responsible for a large part
-of the performance limitation. It's worth noting that unloading a stateful
+of the performance limitation. It&#x27;s worth noting that unloading a stateful
 firewall generally reduces both the amount of interrupt/softirq and of system
 usage since such firewalls act both on the Rx and the Tx paths. On Linux,
 unloading the nf_conntrack and ip_conntrack modules will show whether there is
-anything to gain. If so, then the module runs with default settings and you'll
+anything to gain. If so, then the module runs with default settings and you&#x27;ll
 have to figure how to tune it for better performance. In general this consists
 in considerably increasing the hash table size. On FreeBSD, &quot;pfctl -d&quot; will
 disable the &quot;pf&quot; firewall and its stateful engine at the same time.
 
 If it is observed that a lot of time is spent in interrupt/softirq, it is
-important to ensure that they don't run on the same CPU. Most systems tend to
+important to ensure that they don&#x27;t run on the same CPU. Most systems tend to
 pin the tasks on the CPU where they receive the network traffic because for
 certain workloads it improves things. But with heavily network-bound workloads
 it is the opposite as the haproxy process will have to fight against its kernel
@@ -1309,7 +1309,7 @@ the &quot;bind&quot; keyword lines in the configuration manual for more informat
 </div><div><pre class="text">For logging, HAProxy always relies on a syslog server since it does not perform
 any file-system access. The standard way of using it is to send logs over UDP
 to the log server (by default on port 514). Very commonly this is configured to
-127.0.0.1 where the local syslog daemon is running, but it's also used over the
+127.0.0.1 where the local syslog daemon is running, but it&#x27;s also used over the
 network to log to a central server. The central server provides additional
 benefits especially in active-active scenarios where it is desirable to keep
 the logs merged in arrival order. HAProxy may also make use of a UNIX socket to
@@ -1337,7 +1337,7 @@ the log server is.
 Some syslog daemons do not listen to UDP traffic by default, so depending on
 the daemon being used, the syntax to enable this will vary :
 
-  - on sysklogd, you need to pass argument &quot;-r&quot; on the daemon's command line
+  - on sysklogd, you need to pass argument &quot;-r&quot; on the daemon&#x27;s command line
     so that it listens to a UDP socket for &quot;remote&quot; logs ; note that there is
     no way to limit it to address 127.0.0.1 so it will also receive logs from
     remote systems ;
@@ -1355,37 +1355,37 @@ the daemon being used, the syntax to enable this will vary :
         udp(ip(127.0.0.1) port(514));
       };
 
-Please consult your syslog daemon's manual for more information. If no logs are
-seen in the system's log files, please consider the following tests :
+Please consult your syslog daemon&#x27;s manual for more information. If no logs are
+seen in the system&#x27;s log files, please consider the following tests :
 
-  - restart haproxy. Each frontend and backend logs one line indicating it's
+  - restart haproxy. Each frontend and backend logs one line indicating it&#x27;s
     starting. If these logs are received, it means logs are working.
 
-  - run &quot;strace -tt -s100 -etrace=sendmsg -p &lt;haproxy's pid&gt;&quot; and perform some
+  - run &quot;strace -tt -s100 -etrace=sendmsg -p &lt;haproxy&#x27;s pid&gt;&quot; and perform some
     activity that you expect to be logged. You should see the log messages
-    being sent using sendmsg() there. If they don't appear, restart using
+    being sent using sendmsg() there. If they don&#x27;t appear, restart using
     strace on top of haproxy. If you still see no logs, it definitely means
     that something is wrong in your configuration.
 
   - run tcpdump to watch for port 514, for example on the loopback interface if
     the traffic is being sent locally : &quot;tcpdump -As0 -ni lo port 514&quot;. If the
-    packets are seen there, it's the proof they're sent then the syslogd daemon
+    packets are seen there, it&#x27;s the proof they&#x27;re sent then the syslogd daemon
     needs to be troubleshooted.
 
 While traffic logs are sent from the frontends (where the incoming connections
 are accepted), backends also need to be able to send logs in order to report a
-server state change consecutive to a health check. Please consult HAProxy's
+server state change consecutive to a health check. Please consult HAProxy&#x27;s
 configuration manual for more information regarding all possible log settings.
 
 It is convenient to chose a facility that is not used by other daemons. HAProxy
 examples often suggest &quot;local0&quot; for traffic logs and &quot;local1&quot; for admin logs
-because they're never seen in field. A single facility would be enough as well.
-Having separate logs is convenient for log analysis, but it's also important to
+because they&#x27;re never seen in field. A single facility would be enough as well.
+Having separate logs is convenient for log analysis, but it&#x27;s also important to
 remember that logs may sometimes convey confidential information, and as such
 they must not be mixed with other logs that may accidentally be handed out to
 unauthorized people.
 
-For in-field troubleshooting without impacting the server's capacity too much,
+For in-field troubleshooting without impacting the server&#x27;s capacity too much,
 it is recommended to make use of the &quot;halog&quot; utility provided with HAProxy.
 This is sort of a grep-like utility designed to process HAProxy log files at
 a very fast data rate. Typical figures range between 1 and 2 GB of logs per
@@ -1408,12 +1408,12 @@ Unix socket.
 <h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> CSV format</h2>
 <div><pre class="text">The statistics may be consulted either from the unix socket or from the HTTP
 page. Both means provide a CSV format whose fields follow. The first line
-begins with a sharp ('#') and has one word per comma-delimited field which
+begins with a sharp (&#x27;#&#x27;) and has one word per comma-delimited field which
 represents the title of the column. All other lines starting at the second one
 use a classical CSV format using a comma as the delimiter, and the double quote
-('&quot;') as an optional text delimiter, but only if the enclosed text is ambiguous
-(if it contains a quote or a comma). The double-quote character ('&quot;') in the
-text is doubled ('&quot;&quot;'), which is the format that most tools recognize. Please
+(&#x27;&quot;&#x27;) as an optional text delimiter, but only if the enclosed text is ambiguous
+(if it contains a quote or a comma). The double-quote character (&#x27;&quot;&#x27;) in the
+text is doubled (&#x27;&quot;&quot;&#x27;), which is the format that most tools recognize. Please
 do not insert any column before these ones in order not to break tools which
 use hard-coded column positions.
 
@@ -1453,7 +1453,7 @@ S (Servers).
      active servers).
  14. eresp [..BS]: response errors. srv_abrt will be counted here also.
      Some other errors are:
-     - write error on the client socket (won't be counted for the server stat)
+     - write error on the client socket (won&#x27;t be counted for the server stat)
      - failure applying filters to the response.
  15. wretr [..BS]: number of times a connection to a server was retried.
  16. wredis [..BS]: number of times a request was redispatched to another
@@ -1547,14 +1547,14 @@ S (Servers).
  64. agent_duration [...S]: time in ms taken to finish last check
  65. check_desc [...S]: short human-readable description of check_status
  66. agent_desc [...S]: short human-readable description of agent_status
- 67. check_rise [...S]: server's &quot;rise&quot; parameter used by checks
- 68. check_fall [...S]: server's &quot;fall&quot; parameter used by checks
- 69. check_health [...S]: server's health check value between 0 and rise+fall-1
- 70. agent_rise [...S]: agent's &quot;rise&quot; parameter, normally 1
- 71. agent_fall [...S]: agent's &quot;fall&quot; parameter, normally 1
- 72. agent_health [...S]: agent's health parameter, between 0 and rise+fall-1
+ 67. check_rise [...S]: server&#x27;s &quot;rise&quot; parameter used by checks
+ 68. check_fall [...S]: server&#x27;s &quot;fall&quot; parameter used by checks
+ 69. check_health [...S]: server&#x27;s health check value between 0 and rise+fall-1
+ 70. agent_rise [...S]: agent&#x27;s &quot;rise&quot; parameter, normally 1
+ 71. agent_fall [...S]: agent&#x27;s &quot;fall&quot; parameter, normally 1
+ 72. agent_health [...S]: agent&#x27;s health parameter, between 0 and rise+fall-1
  73. addr [L..S]: address:port or &quot;unix&quot;. IPv6 has brackets around the address.
- 74: cookie [..BS]: server's cookie value or backend's cookie name
+ 74: cookie [..BS]: server&#x27;s cookie value or backend&#x27;s cookie name
  75: mode [LFBS]: proxy mode (tcp, http, health, unknown)
  76: algo [..B.]: load balancing algorithm
  77: conn_rate [.F..]: number of connections over the last elapsed second
@@ -1571,7 +1571,7 @@ with its type and sufficient information to know how the value is supposed to
 be aggregated between processes and how it evolves.
 
 In all cases, the output consists in having a single value per line with all
-the information split into fields delimited by colons (':').
+the information split into fields delimited by colons (&#x27;:&#x27;).
 
 The first column designates the object or metric being dumped. Its format is
 specific to the command producing this output and will not be described in this
@@ -1630,7 +1630,7 @@ use to aggregate multiple values. Possible characters are :
       the time a server has spent down. Durations are generally not summed,
       most of the time the maximum will be retained to compute an SLA.
 
-  G   The value represents a gauge. It's a measure at one instant. The memory
+  G   The value represents a gauge. It&#x27;s a measure at one instant. The memory
       usage or the current number of active connections are of this nature.
       Metrics of this type are typically summed during aggregation.
 
@@ -1642,14 +1642,14 @@ use to aggregate multiple values. Possible characters are :
   M   The value represents a maximum. In general it will apply to a gauge and
       keep the highest known value. An example of such a metric could be the
       maximum amount of concurrent connections that was encountered in the
-      product's life time. To correctly aggregate maxima, you are supposed to
+      product&#x27;s life time. To correctly aggregate maxima, you are supposed to
       output a range going from the maximum of all maxima and the sum of all
       of them. There is indeed no way to know if they were encountered
       simultaneously or not.
 
   m   The value represents a minimum. In general it will apply to a gauge and
       keep the lowest known value. An example of such a metric could be the
-      minimum amount of free memory pools that was encountered in the product's
+      minimum amount of free memory pools that was encountered in the product&#x27;s
       life time. To correctly aggregate minima, you are supposed to output a
       range going from the minimum of all minima and the sum of all of them.
       There is indeed no way to know if they were encountered simultaneously
@@ -1662,7 +1662,7 @@ use to aggregate multiple values. Possible characters are :
   O   The value represents a free text output. Outputs from various commands,
       returns from health checks, node descriptions are of such nature.
 
-  R   The value represents an event rate. It's a measure at one instant. It is
+  R   The value represents an event rate. It&#x27;s a measure at one instant. It is
       quite similar to a gauge except that the recipient knows that this measure
       moves slowly and may decide not to keep all values. An example of such a
       metric is the measured amount of connections per second. Metrics of this
@@ -1691,7 +1691,7 @@ characters are currently supported :
       from the configuration use this scope. Some other metrics may use it as
       well for some shared resources (eg: shared SSL cache statistics).
 
-  s   The value is valid for the whole system, such as the system's hostname,
+  s   The value is valid for the whole system, such as the system&#x27;s hostname,
       current date or resource usage. At the moment this scope is not used by
       any metric.
 
@@ -1736,13 +1736,13 @@ situations :
 To access the socket, an external utility such as &quot;socat&quot; is required. Socat is
 a swiss-army knife to connect anything to anything. We use it to connect
 terminals to the socket, or a couple of stdin/stdout pipes to it for scripts.
-The two main syntaxes we'll use are the following :
+The two main syntaxes we&#x27;ll use are the following :
 
     # socat /var/run/haproxy.sock stdio
     # socat /var/run/haproxy.sock readline
 
 The first one is used with scripts. It is possible to send the output of a
-script to haproxy, and pass haproxy's output to another script. That's useful
+script to haproxy, and pass haproxy&#x27;s output to another script. That&#x27;s useful
 for retrieving counters or attack traces for example.
 
 The second one is only useful for issuing commands by hand. It has the benefit
@@ -1758,22 +1758,22 @@ The non-interactive mode is the default when socat connects to the socket. In
 this mode, a single line may be sent. It is processed as a whole, responses are
 sent back, and the connection closes after the end of the response. This is the
 mode that scripts and monitoring tools use. It is possible to send multiple
-commands in this mode, they need to be delimited by a semi-colon (';'). For
+commands in this mode, they need to be delimited by a semi-colon (&#x27;;&#x27;). For
 example :
 
     # echo &quot;show info;show stat;show table&quot; | socat /var/run/haproxy stdio
 
 If a command needs to use a semi-colon or a backslash (eg: in a value), it
-must be preceeded by a backslash ('\').
+must be preceeded by a backslash (&#x27;\&#x27;).
 
-The interactive mode displays a prompt ('&gt;') and waits for commands to be
+The interactive mode displays a prompt (&#x27;&gt;&#x27;) and waits for commands to be
 entered on the line, then processes them, and displays the prompt again to wait
 for a new command. This mode is entered via the &quot;<a href="#prompt">prompt</a>&quot; command which must be
 sent on the first line in non-interactive mode. The mode is a flip switch, if
 &quot;<a href="#prompt">prompt</a>&quot; is sent in interactive mode, it is disabled and the connection closes
 after processing the last command of the same line.
 
-For this reason, when debugging by hand, it's quite common to start with the
+For this reason, when debugging by hand, it&#x27;s quite common to start with the
 &quot;<a href="#prompt">prompt</a>&quot; command :
 
    # socat /var/run/haproxy readline
@@ -1901,12 +1901,12 @@ is used during a soft restart : the frontend releases the port but can be
 enabled again if needed. This should be used with care as some non-Linux OSes
 are unable to enable it back. This is intended to be used in environments
 where stopping a proxy is not even imaginable but a misconfigured proxy must
-be fixed. That way it's possible to release the port and bind it into another
+be fixed. That way it&#x27;s possible to release the port and bind it into another
 process to restore operations. The frontend will appear with status &quot;STOP&quot;
 on the stats page.
 
 The frontend may be specified either by its name or by its numeric ID,
-prefixed with a sharp ('#').
+prefixed with a sharp (&#x27;#&#x27;).
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
@@ -1926,7 +1926,7 @@ In the statistics page, a server DOWN for maintenance will appear with a
 &quot;MAINT&quot; status, its tracking servers with the &quot;MAINT(via)&quot; one.
 
 Both the backend and the server may be specified either by their name or by
-their numeric ID, prefixed with a sharp ('#').
+their numeric ID, prefixed with a sharp (&#x27;#&#x27;).
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
@@ -1938,13 +1938,13 @@ and stopping an auxiliary agent.
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
 </pre><a class="anchor" name="enable"></a><a class="anchor" name="9-enable"></a><a class="anchor" name="9.3-enable"></a><a class="anchor" name="enable (Statistics and monitoring)"></a><a class="anchor" name="enable (Unix Socket commands)"></a><a class="anchor" name="enable frontend"></a><a class="anchor" name="9-enable frontend"></a><a class="anchor" name="9.3-enable frontend"></a><a class="anchor" name="enable frontend (Statistics and monitoring)"></a><a class="anchor" name="enable frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="enable frontend"></a><a href="#9.3-enable%20frontend">enable frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Resume a frontend which was temporarily stopped. It is possible that some of
-the listening ports won't be able to bind anymore (eg: if another process
-took them since the 'disable frontend' operation). If this happens, an error
+the listening ports won&#x27;t be able to bind anymore (eg: if another process
+took them since the &#x27;disable frontend&#x27; operation). If this happens, an error
 is displayed. Some operating systems might not be able to resume a frontend
 which was disabled.
 
 The frontend may be specified either by its name or by its numeric ID,
-prefixed with a sharp ('#').
+prefixed with a sharp (&#x27;#&#x27;).
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
@@ -1957,7 +1957,7 @@ level &quot;admin&quot;.
 server UP and checks are re-enabled.
 
 Both the backend and the server may be specified either by their name or by
-their numeric ID, prefixed with a sharp ('#').
+their numeric ID, prefixed with a sharp (&#x27;#&#x27;).
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
@@ -1986,7 +1986,7 @@ The following words are returned only if the pattern matches an entry.
                      useful with regular expressions.
 
 The two last word are used to show the returned value and its type. With the
-&quot;acl&quot; case, the pattern doesn't exist.
+&quot;acl&quot; case, the pattern doesn&#x27;t exist.
 
    return=nothing:        No return because there are no &quot;map&quot;.
    return=&quot;&lt;value&gt;&quot;:      The value returned in the string format.
@@ -1994,11 +1994,11 @@ The two last word are used to show the returned value and its type. With the
 
    type=&quot;&lt;type&gt;&quot;:         The type of the returned sample.
 </pre><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get weight"></a><a class="anchor" name="9-get weight"></a><a class="anchor" name="9.3-get weight"></a><a class="anchor" name="get weight (Statistics and monitoring)"></a><a class="anchor" name="get weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get weight"></a><a href="#9.3-get%20weight">get weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Report the current weight and the initial weight of server &lt;server&gt; in
-backend &lt;backend&gt; or an error if either doesn't exist. The initial weight is
+backend &lt;backend&gt; or an error if either doesn&#x27;t exist. The initial weight is
 the one that appears in the configuration file. Both are normally equal
 unless the current weight has been changed. Both the backend and the server
 may be specified either by their name or by their numeric ID, prefixed with a
-sharp ('#').
+sharp (&#x27;#&#x27;).
 </pre><a class="anchor" name="help"></a><a class="anchor" name="9-help"></a><a class="anchor" name="9.3-help"></a><a class="anchor" name="help (Statistics and monitoring)"></a><a class="anchor" name="help (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="help"></a><a href="#9.3-help">help</a></b></div><pre class="text">Print the list of known keywords and their basic usage. The same help screen
 is also displayed for unknown commands.
 </pre><a class="anchor" name="prompt"></a><a class="anchor" name="9-prompt"></a><a class="anchor" name="9.3-prompt"></a><a class="anchor" name="prompt (Statistics and monitoring)"></a><a class="anchor" name="prompt (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="prompt"></a><a href="#9.3-prompt">prompt</a></b></div><pre class="text">Toggle the prompt at the beginning of the line and enter or leave interactive
@@ -2013,14 +2013,14 @@ command.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set map"></a><a class="anchor" name="9-set map"></a><a class="anchor" name="9.3-set map"></a><a class="anchor" name="set map (Statistics and monitoring)"></a><a class="anchor" name="set map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set map"></a><a href="#9.3-set%20map">set map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;key&gt;</span>|#<span style="color: #080">&lt;ref&gt;</span>]</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Modify the value corresponding to each key &lt;key&gt; in a map &lt;map&gt;. &lt;map&gt; is the
 #&lt;id&gt; or &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot;. If the &lt;ref&gt; is used in place of
 &lt;key&gt;, only the entry pointed by &lt;ref&gt; is changed. The new value is &lt;value&gt;.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.3-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn frontend"></a><a class="anchor" name="9-set maxconn frontend"></a><a class="anchor" name="9.3-set maxconn frontend"></a><a class="anchor" name="set maxconn frontend (Statistics and monitoring)"></a><a class="anchor" name="set maxconn frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn frontend"></a><a href="#9.3-set%20maxconn%20frontend">set maxconn frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Dynamically change the specified frontend's maxconn setting. Any positive
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.3-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn frontend"></a><a class="anchor" name="9-set maxconn frontend"></a><a class="anchor" name="9.3-set maxconn frontend"></a><a class="anchor" name="set maxconn frontend (Statistics and monitoring)"></a><a class="anchor" name="set maxconn frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn frontend"></a><a href="#9.3-set%20maxconn%20frontend">set maxconn frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Dynamically change the specified frontend&#x27;s maxconn setting. Any positive
 value is allowed including zero, but setting values larger than the global
 maxconn does not make much sense. If the limit is increased and connections
 were pending, they will immediately be accepted. If it is lowered to a value
 below the current number of connections, new connections acceptation will be
 delayed until the threshold is reached. The frontend might be specified by
-either its name or its numeric ID prefixed with a sharp ('#').
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.3-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn server"></a><a class="anchor" name="9-set maxconn server"></a><a class="anchor" name="9.3-set maxconn server"></a><a class="anchor" name="set maxconn server (Statistics and monitoring)"></a><a class="anchor" name="set maxconn server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn server"></a><a href="#9.3-set%20maxconn%20server">set maxconn server</a></b> <span style="color: #080">&lt;backend/server&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Dynamically change the specified server's maxconn setting. Any positive
+either its name or its numeric ID prefixed with a sharp (&#x27;#&#x27;).
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.3-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn server"></a><a class="anchor" name="9-set maxconn server"></a><a class="anchor" name="9.3-set maxconn server"></a><a class="anchor" name="set maxconn server (Statistics and monitoring)"></a><a class="anchor" name="set maxconn server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn server"></a><a href="#9.3-set%20maxconn%20server">set maxconn server</a></b> <span style="color: #080">&lt;backend/server&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Dynamically change the specified server&#x27;s maxconn setting. Any positive
 value is allowed including zero, but setting values larger than the global
 maxconn does not make much sense.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set maxconn"></a><a class="anchor" name="9-set maxconn"></a><a class="anchor" name="9.3-set maxconn"></a><a class="anchor" name="set maxconn (Statistics and monitoring)"></a><a class="anchor" name="set maxconn (Unix Socket commands)"></a><a class="anchor" name="set maxconn global"></a><a class="anchor" name="9-set maxconn global"></a><a class="anchor" name="9.3-set maxconn global"></a><a class="anchor" name="set maxconn global (Statistics and monitoring)"></a><a class="anchor" name="set maxconn global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set maxconn global"></a><a href="#9.3-set%20maxconn%20global">set maxconn global</a></b> <span style="color: #080">&lt;maxconn&gt;</span></div><pre class="text">Dynamically change the global maxconn setting within the range defined by the
@@ -2030,34 +2030,34 @@ the current number of connections, new connections acceptation will be
 delayed until the threshold is reached. A value of zero restores the initial
 setting.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.3-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections"></a><a class="anchor" name="9-set rate-limit connections"></a><a class="anchor" name="9.3-set rate-limit connections"></a><a class="anchor" name="set rate-limit connections (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections global"></a><a class="anchor" name="9-set rate-limit connections global"></a><a class="anchor" name="9.3-set rate-limit connections global"></a><a class="anchor" name="set rate-limit connections global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit connections global"></a><a href="#9.3-set%20rate-limit%20connections%20global">set rate-limit connections global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide connection rate limit, which is set by the global
-'maxconnrate' setting. A value of zero disables the limitation. This limit
+&#x27;maxconnrate&#x27; setting. A value of zero disables the limitation. This limit
 applies to all frontends and the change has an immediate effect. The value
 is passed in number of connections per second.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.3-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression"></a><a class="anchor" name="9-set rate-limit http-compression"></a><a class="anchor" name="9.3-set rate-limit http-compression"></a><a class="anchor" name="set rate-limit http-compression (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression (Unix Socket commands)"></a><a class="anchor" name="set rate-limit http-compression global"></a><a class="anchor" name="9-set rate-limit http-compression global"></a><a class="anchor" name="9.3-set rate-limit http-compression global"></a><a class="anchor" name="set rate-limit http-compression global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit http-compression global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit http-compression global"></a><a href="#9.3-set%20rate-limit%20http-compression%20global">set rate-limit http-compression global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the maximum input compression rate, which is set by the global
-'maxcomprate' setting. A value of zero disables the limitation. The value is
+&#x27;maxcomprate&#x27; setting. A value of zero disables the limitation. The value is
 passed in number of kilobytes per second. The value is available in the &quot;show
 info&quot; on the line &quot;CompressBpsRateLim&quot; in bytes.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.3-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit sessions"></a><a class="anchor" name="9-set rate-limit sessions"></a><a class="anchor" name="9.3-set rate-limit sessions"></a><a class="anchor" name="set rate-limit sessions (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit sessions (Unix Socket commands)"></a><a class="anchor" name="set rate-limit sessions global"></a><a class="anchor" name="9-set rate-limit sessions global"></a><a class="anchor" name="9.3-set rate-limit sessions global"></a><a class="anchor" name="set rate-limit sessions global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit sessions global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit sessions global"></a><a href="#9.3-set%20rate-limit%20sessions%20global">set rate-limit sessions global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide session rate limit, which is set by the global
-'maxsessrate' setting. A value of zero disables the limitation. This limit
+&#x27;maxsessrate&#x27; setting. A value of zero disables the limitation. This limit
 applies to all frontends and the change has an immediate effect. The value
 is passed in number of sessions per second.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.3-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit ssl-sessions"></a><a class="anchor" name="9-set rate-limit ssl-sessions"></a><a class="anchor" name="9.3-set rate-limit ssl-sessions"></a><a class="anchor" name="set rate-limit ssl-sessions (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit ssl-sessions (Unix Socket commands)"></a><a class="anchor" name="set rate-limit ssl-sessions global"></a><a class="anchor" name="9-set rate-limit ssl-sessions global"></a><a class="anchor" name="9.3-set rate-limit ssl-sessions global"></a><a class="anchor" name="set rate-limit ssl-sessions global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit ssl-sessions global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit ssl-sessions global"></a><a href="#9.3-set%20rate-limit%20ssl-sessions%20global">set rate-limit ssl-sessions global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide SSL session rate limit, which is set by the global
-'maxsslrate' setting. A value of zero disables the limitation. This limit
+&#x27;maxsslrate&#x27; setting. A value of zero disables the limitation. This limit
 applies to all frontends and the change has an immediate effect. The value
 is passed in number of sessions per second sent to the SSL stack. It applies
 before the handshake in order to protect the stack against handshake abuses.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> addr <span style="color: #080">&lt;ip4 or ip6 address&gt;</span> <span style="color: #008">[port <span style="color: #080">&lt;port&gt;</span>]</span></div><pre class="text">Replace the current IP address of a server by the one provided.
-Optionnaly, the port can be changed using the 'port' parameter.
+Optionnaly, the port can be changed using the &#x27;port&#x27; parameter.
 Note that changing the port also support switching from/to port mapping
 (notation with +X or -Y), only if a port is configured for the health check.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent <span style="color: #008">[ up | down ]</span></div><pre class="text">Force a server's agent to a new state. This can be useful to immediately
-switch a server's state regardless of some slow agent checks for example.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent <span style="color: #008">[ up | down ]</span></div><pre class="text">Force a server&#x27;s agent to a new state. This can be useful to immediately
+switch a server&#x27;s state regardless of some slow agent checks for example.
 Note that the change is propagated to tracking servers if any.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> health <span style="color: #008">[ up | stopping | down ]</span></div><pre class="text">Force a server's health to a new state. This can be useful to immediately
-switch a server's state regardless of some slow health checks for example.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> health <span style="color: #008">[ up | stopping | down ]</span></div><pre class="text">Force a server&#x27;s health to a new state. This can be useful to immediately
+switch a server&#x27;s state regardless of some slow health checks for example.
 Note that the change is propagated to tracking servers if any.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> check-port <span style="color: #080">&lt;port&gt;</span></div><pre class="text">Change the port used for health checking to &lt;port&gt;
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> state <span style="color: #008">[ ready | drain | maint ]</span></div><pre class="text">Force a server's administrative state to a new state. This can be useful to
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> state <span style="color: #008">[ ready | drain | maint ]</span></div><pre class="text">Force a server&#x27;s administrative state to a new state. This can be useful to
 disable load balancing and/or any traffic to a server. Setting the state to
 &quot;ready&quot; puts the server in normal mode, and the command is the equivalent of
 the &quot;<a href="#enable%20server">enable server</a>&quot; command. Setting the state to &quot;maint&quot; disables any traffic
@@ -2065,7 +2065,7 @@ to the server as well as any health checks. This is the equivalent of the
 &quot;<a href="#disable%20server">disable server</a>&quot; command. Setting the mode to &quot;drain&quot; only removes the server
 from load balancing but still allows it to be checked and to accept new
 persistent connections. Changes are propagated to tracking servers if any.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> weight <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. This is the exact
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> weight <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server&#x27;s weight to the value passed in argument. This is the exact
 equivalent of the &quot;<a href="#set%20weight">set weight</a>&quot; command below.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
@@ -2093,8 +2093,8 @@ data_types in a single call.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set timeout"></a><a class="anchor" name="9-set timeout"></a><a class="anchor" name="9.3-set timeout"></a><a class="anchor" name="set timeout (Statistics and monitoring)"></a><a class="anchor" name="set timeout (Unix Socket commands)"></a><a class="anchor" name="set timeout cli"></a><a class="anchor" name="9-set timeout cli"></a><a class="anchor" name="9.3-set timeout cli"></a><a class="anchor" name="set timeout cli (Statistics and monitoring)"></a><a class="anchor" name="set timeout cli (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set timeout cli"></a><a href="#9.3-set%20timeout%20cli">set timeout cli</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Change the CLI interface timeout for current connection. This can be useful
 during long debugging sessions where the user needs to constantly inspect
 some indicators without being disconnected. The delay is passed in seconds.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set weight"></a><a class="anchor" name="9-set weight"></a><a class="anchor" name="9.3-set weight"></a><a class="anchor" name="set weight (Statistics and monitoring)"></a><a class="anchor" name="set weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set weight"></a><a href="#9.3-set%20weight">set weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server's weight to the value passed in argument. If the value ends
-with the '%' sign, then the new weight will be relative to the initially
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set weight"></a><a class="anchor" name="9-set weight"></a><a class="anchor" name="9.3-set weight"></a><a class="anchor" name="set weight (Statistics and monitoring)"></a><a class="anchor" name="set weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set weight"></a><a href="#9.3-set%20weight">set weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server&#x27;s weight to the value passed in argument. If the value ends
+with the &#x27;%&#x27; sign, then the new weight will be relative to the initially
 configured weight.  Absolute weights are permitted between 0 and 256.
 Relative weights must be positive with the resulting absolute weight is
 capped at 256.  Servers which are part of a farm running a static
@@ -2107,7 +2107,7 @@ disable a server during an update by setting its weight to zero, then to
 enable it again after the update by setting it back to 100%. This command
 is restricted and can only be issued on sockets configured for level
 &quot;admin&quot;. Both the backend and the server may be specified either by their
-name or by their numeric ID, prefixed with a sharp ('#').
+name or by their numeric ID, prefixed with a sharp (&#x27;#&#x27;).
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show env"></a><a class="anchor" name="9-show env"></a><a class="anchor" name="9.3-show env"></a><a class="anchor" name="show env (Statistics and monitoring)"></a><a class="anchor" name="show env (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show env"></a><a href="#9.3-show%20env">show env</a></b> <span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Dump one or all environment variables known by the process. Without any
 argument, all variables are dumped. With an argument, only the specified
 variable is dumped if it exists. Otherwise &quot;Variable not found&quot; is emitted.
@@ -2135,17 +2135,17 @@ are reported too.
 
 All characters are returned, and non-printable characters are encoded. The
 most common ones (\t = 9, \n = 10, \r = 13 and \e = 27) are encoded as one
-letter following a backslash. The backslash itself is encoded as '\\' to
-avoid confusion. Other non-printable characters are encoded '\xNN' where
-NN is the two-digits hexadecimal representation of the character's ASCII
+letter following a backslash. The backslash itself is encoded as &#x27;\\&#x27; to
+avoid confusion. Other non-printable characters are encoded &#x27;\xNN&#x27; where
+NN is the two-digits hexadecimal representation of the character&#x27;s ASCII
 code.
 
 Lines are prefixed with the position of their first character, starting at 0
 for the beginning of the buffer. At most one input line is printed per line,
 and large lines will be broken into multiple consecutive output lines so that
 the output never goes beyond 79 characters wide. It is easy to detect if a
-line was broken, because it will not end with '\n' and the next line's offset
-will be followed by a '+' sign, indicating it is a continuation of previous
+line was broken, because it will not end with &#x27;\n&#x27; and the next line&#x27;s offset
+will be followed by a &#x27;+&#x27; sign, indicating it is a continuation of previous
 line.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
@@ -2169,22 +2169,22 @@ ID 2 has blocked an invalid response from its server s2 which has internal
 ID 1. The request was on session 54 initiated by source 127.0.0.1 and
 received by frontend fe-eth0 whose ID is 1. The total response length was
 213 bytes when the error was detected, and the error was at byte 23. This
-is the slash ('/') in header name &quot;header/bizarre&quot;, which is not a valid
+is the slash (&<span class="comment">#x27;/&#x27;) in header name &quot;header/bizarre&quot;, which is not a valid</span>
 HTTP character for a header name.
 </code></pre>
 </div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show backend"></a><a class="anchor" name="9-show backend"></a><a class="anchor" name="9.3-show backend"></a><a class="anchor" name="show backend (Statistics and monitoring)"></a><a class="anchor" name="show backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show backend"></a><a href="#9.3-show%20backend">show backend</a></b></div><pre class="text">Dump the list of backends available in the running process
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
 optional argument, field numbers, names and types are emitted as well so that
 external monitoring products can easily retrieve, possibly aggregate, then
-report information found in fields they don't know. Each field is dumped on
+report information found in fields they don&#x27;t know. Each field is dumped on
 its own line. By default, the format contains only two columns delimited by a
-colon (':'). The left one is the field name and the right one is the value.
+colon (&#x27;:&#x27;). The left one is the field name and the right one is the value.
 It is very important to note that in typed output format, the dump for a
 single object is contiguous so that there is no need for a consumer to store
 everything at once.
 
 When using the typed output format, each line is made of 4 columns delimited
-by colons (':'). The first column is a dot-delimited series of 3 elements. The
+by colons (&#x27;:&#x27;). The first column is a dot-delimited series of 3 elements. The
 first element is the numeric position of the field in the list (starting at
 zero). This position shall not change over time, but holes are to be expected,
 depending on build options or if some fields are deleted in the future. The
@@ -2193,7 +2193,7 @@ output. The third element is the relative process number starting at 1.
 
 The rest of the line starting after the first colon follows the &quot;typed output
 format&quot; described in the section above. In short, the second column (after the
-first ':') indicates the origin, nature and scope of the variable. The third
+first &#x27;:&#x27;) indicates the origin, nature and scope of the variable. The third
 column indicates the type of the field, among &quot;s32&quot;, &quot;s64&quot;, &quot;u32&quot;, &quot;u64&quot; and
 &quot;str&quot;. Then the fourth column is the value itself, which the consumer knows
 how to parse thanks to column 3 and how to process thanks to column 2.
@@ -2281,9 +2281,9 @@ name or identifier may be provided to limit the output to this backend only.
 
 The dump has the following format:
  - first line contains the format version (1 in this specification);
- - second line contains the column headers, prefixed by a sharp ('#');
+ - second line contains the column headers, prefixed by a sharp (&#x27;#&#x27;);
  - third line and next ones contain data;
- - each line starting by a sharp ('#') is considered as a comment.
+ - each line starting by a sharp (&#x27;#&#x27;) is considered as a comment.
 
 Since multiple versions of the output may co-exist, below is the list of
 fields and their order per file format version :
@@ -2324,8 +2324,8 @@ fields and their order per file format version :
                                   0x20 = SRV_ADMF_RMAINT
                                     The server is in maintenance because of an
                                     IP address resolution failure.
-   srv_uweight:                 User visible server's weight.
-   srv_iweight:                 Server's initial weight.
+   srv_uweight:                 User visible server&#x27;s weight.
+   srv_iweight:                 Server&#x27;s initial weight.
    srv_time_since_last_change:  Time since last operational change.
    srv_check_status:            Last health check status.
    srv_check_result:            Last check result (FAILED/PASSED/...).
@@ -2339,7 +2339,7 @@ fields and their order per file format version :
                                     Check succeeded and server is fully up
                                     again.
                                   4 = CHK_RES_CONDPASS
-                                    Check reports the server doesn't want new
+                                    Check reports the server doesn&#x27;t want new
                                     sessions.
    srv_check_health:            Checks rise / fall current counter.
    srv_check_state:             State of the check (ENABLED/PAUSED/...).
@@ -2359,11 +2359,11 @@ fields and their order per file format version :
                                 This state uses the same mask values as
                                 &quot;srv_check_state&quot;, adding this specific one :
                                   0x10 = CHK_ST_AGENT
-                                    Check is an agent check (otherwise it's a
+                                    Check is an agent check (otherwise it&#x27;s a
                                     health check).
    bk_f_forced_id:              Flag to know if the backend ID is forced by
                                 configuration.
-   srv_f_forced_id:             Flag to know if the server's ID is forced by
+   srv_f_forced_id:             Flag to know if the server&#x27;s ID is forced by
                                 configuration.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
@@ -2383,7 +2383,7 @@ format described in the section above if &quot;typed&quot; is passed after the o
 arguments. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is possible to dump only
 selected items :
   - &lt;iid&gt; is a proxy ID, -1 to dump everything. Alternatively, a proxy name
-    &lt;proxy&gt; may be specified. In this case, this proxy's ID will be used as
+    &lt;proxy&gt; may be specified. In this case, this proxy&#x27;s ID will be used as
     the ID selector.
   - &lt;type&gt; selects the type of dumpable objects : 1 for frontends, 2 for
      backends, 4 for servers, -1 for everything. These values can be ORed,
@@ -2410,7 +2410,7 @@ selected items :
 
     $
 </code></pre>
-</div><pre class="text">In this example, two commands have been issued at once. That way it's easy to
+</div><pre class="text">In this example, two commands have been issued at once. That way it&#x27;s easy to
 find which process the stats apply to in multi-process mode. This is not
 needed in the typed output format as the process number is reported on each
 line.  Notice the empty line after the information output which marks the end
@@ -2426,10 +2426,10 @@ typed output format, the dump for a single object is contiguous so that there
 is no need for a consumer to store everything at once.
 
 When using the typed output format, each line is made of 4 columns delimited
-by colons (':'). The first column is a dot-delimited series of 5 elements. The
+by colons (&#x27;:&#x27;). The first column is a dot-delimited series of 5 elements. The
 first element is a letter indicating the type of the object being described.
-At the moment the following object types are known : 'F' for a frontend, 'B'
-for a backend, 'L' for a listener, and 'S' for a server. The second element
+At the moment the following object types are known : &#x27;F&#x27; for a frontend, &#x27;B&#x27;
+for a backend, &#x27;L&#x27; for a listener, and &#x27;S&#x27; for a server. The second element
 The second element is a positive integer representing the unique identifier of
 the proxy the object belongs to. It is equivalent to the &quot;iid&quot; column of the
 CSV output and matches the value in front of the optional &quot;id&quot; directive found
@@ -2446,7 +2446,7 @@ process number starting at 1.
 
 The rest of the line starting after the first colon follows the &quot;typed output
 format&quot; described in the section above. In short, the second column (after the
-first ':') indicates the origin, nature and scope of the variable. The third
+first &#x27;:&#x27;) indicates the origin, nature and scope of the variable. The third
 column indicates the type of the field, among &quot;s32&quot;, &quot;s64&quot;, &quot;u32&quot;, &quot;u64&quot; and
 &quot;str&quot;. Then the fourth column is the value itself, which the consumer knows
 how to parse thanks to column 3 and how to process thanks to column 2.
@@ -2455,7 +2455,7 @@ Thus the overall line format in typed mode is :
 
     &lt;obj&gt;.&lt;px_id&gt;.&lt;id&gt;.&lt;fpos&gt;.&lt;fname&gt;.&lt;process_num&gt;:&lt;tags&gt;:&lt;type&gt;:&lt;value&gt;
 
-Here's an example of typed output format :
+Here&#x27;s an example of typed output format :
 
       $ echo &quot;show stat typed&quot; | socat stdio unix-connect:/tmp/sock1
       F.2.0.0.pxname.1:MGP:str:private-frontend
@@ -2520,7 +2520,7 @@ if no section is supplied.
 For each name server, the following counters are reported:
   sent: number of DNS requests sent to this server
   valid: number of DNS valid responses received from this server
-  update: number of DNS responses used to update the server's IP address
+  update: number of DNS responses used to update the server&#x27;s IP address
   cname: number of CNAME responses
   cname_error: CNAME errors encountered with this server
   any_err: number of empty response (IE: server does not support ANY type)
@@ -2604,8 +2604,8 @@ service, in order to monitor them or even blacklist them in a firewall.
 <pre class="prettyprint">
 <code>$ echo &quot;show table http_proxy data.gpc0 gt 0&quot; \
   | socat stdio /tmp/sock1 \
-  | fgrep 'key=' | cut -d' ' -f2 | cut -d= -f2 &gt; abusers-ip.txt
-  ( or | awk '/key/{ print a[split($2,a,&quot;=&quot;)]; }' )
+  | fgrep &<span class="comment">#x27;key=&#x27; | cut -d&#x27; &#x27; -f2 | cut -d= -f2 &gt; abusers-ip.txt</span>
+  ( or | awk &<span class="comment">#x27;/key/{ print a[split($2,a,&quot;=&quot;)]; }&#x27; )</span>
 </code></pre>
 </div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tls-keys"></a><a class="anchor" name="9-show tls-keys"></a><a class="anchor" name="9.3-show tls-keys"></a><a class="anchor" name="show tls-keys (Statistics and monitoring)"></a><a class="anchor" name="show tls-keys (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tls-keys"></a><a href="#9.3-show%20tls-keys">show tls-keys</a></b> <span style="color: #008">[id|*]</span></div><pre class="text">Dump all loaded TLS ticket keys references. The TLS ticket key reference ID
 and the file from which the keys have been loaded is shown. Both of those
@@ -2616,12 +2616,12 @@ keys from every references.
 be released. It will not be possible to enable the frontend anymore after
 this operation. This is intended to be used in environments where stopping a
 proxy is not even imaginable but a misconfigured proxy must be fixed. That
-way it's possible to release the port and bind it into another process to
+way it&#x27;s possible to release the port and bind it into another process to
 restore operations. The frontend will not appear at all on the stats page
 once it is terminated.
 
 The frontend may be specified either by its name or by its numeric ID,
-prefixed with a sharp ('#').
+prefixed with a sharp (&#x27;#&#x27;).
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
@@ -2629,12 +2629,12 @@ level &quot;admin&quot;.
 This identifier is the first field at the beginning of the lines in the dumps
 of &quot;<a href="#show%20sess">show sess</a>&quot; (it corresponds to the session pointer). This can be used to
 terminate a long-running session without waiting for a timeout or when an
-endless transfer is ongoing. Such terminated sessions are reported with a 'K'
+endless transfer is ongoing. Such terminated sessions are reported with a &#x27;K&#x27;
 flag in the logs.
 </pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown sessions"></a><a class="anchor" name="9-shutdown sessions"></a><a class="anchor" name="9.3-shutdown sessions"></a><a class="anchor" name="shutdown sessions (Statistics and monitoring)"></a><a class="anchor" name="shutdown sessions (Unix Socket commands)"></a><a class="anchor" name="shutdown sessions server"></a><a class="anchor" name="9-shutdown sessions server"></a><a class="anchor" name="9.3-shutdown sessions server"></a><a class="anchor" name="shutdown sessions server (Statistics and monitoring)"></a><a class="anchor" name="shutdown sessions server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown sessions server"></a><a href="#9.3-shutdown%20sessions%20server">shutdown sessions server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Immediately terminate all the sessions attached to the specified server. This
 can be used to terminate long-running sessions after a server is put into
 maintenance mode, for instance. Such terminated sessions are reported with a
-'K' flag in the logs.
+&#x27;K&#x27; flag in the logs.
 </pre></div>
 <a class="anchor" id="10" name="10"></a>
 <div class="page-header"><h1 id="chapter-10" data-target="10"><small><a class="small" href="#10">10.</a></small> Tricks for easier configuration management</h1>
@@ -2646,8 +2646,8 @@ configuration may share the exact same file with only a few different system
 wide environment variables. This started in version 1.5 where only addresses
 were allowed to include environment variables, and 1.6 goes further by
 supporting environment variables everywhere. The syntax is the same as in the
-UNIX shell, a variable starts with a dollar sign ('$'), followed by an opening
-curly brace ('{'), then the variable name followed by the closing brace ('}').
+UNIX shell, a variable starts with a dollar sign (&#x27;$&#x27;), followed by an opening
+curly brace (&#x27;{&#x27;), then the variable name followed by the closing brace (&#x27;}&#x27;).
 Except for addresses, environment variables are only interpreted in arguments
 surrounded with double quotes (this was necessary not to break existing setups
 using regular expressions involving the dollar symbol).
@@ -2695,15 +2695,15 @@ permit to remove passwords from some configs. Example below where the the file
 <a class="anchor" id="11" name="11"></a>
 <div class="page-header"><h1 id="chapter-11" data-target="11"><small><a class="small" href="#11">11.</a></small> Well-known traps to avoid</h1>
 </div><div><pre class="text">Once in a while, someone reports that after a system reboot, the haproxy
-service wasn't started, and that once they start it by hand it works. Most
+service wasn&#x27;t started, and that once they start it by hand it works. Most
 often, these people are running a clustered IP address mechanism such as
 keepalived, to assign the service IP address to the master node only, and while
 it used to work when they used to bind haproxy to address 0.0.0.0, it stopped
 working after they bound it to the virtual IP address. What happens here is
 that when the service starts, the virtual IP address is not yet owned by the
 local node, so when HAProxy wants to bind to it, the system rejects this
-because it is not a local IP address. The fix doesn't consist in delaying the
-haproxy service startup (since it wouldn't stand a restart), but instead to
+because it is not a local IP address. The fix doesn&#x27;t consist in delaying the
+haproxy service startup (since it wouldn&#x27;t stand a restart), but instead to
 properly configure the system to allow binding to non-local addresses. This is
 easily done on Linux by setting the net.ipv4.ip_nonlocal_bind sysctl to 1. This
 is also needed in order to transparently intercept the IP traffic that passes
@@ -2726,7 +2726,7 @@ is ignored. The reason is that in fact even the new process is restarted with a
 new configuration, the old one also gets some incoming connections and
 processes them, returning unexpected results. When in doubt, just stop the new
 process and try again. If it still works, it very likely means that an old
-process remains alive and has to be stopped. Linux's &quot;netstat -lntp&quot; is of good
+process remains alive and has to be stopped. Linux&#x27;s &quot;netstat -lntp&quot; is of good
 help here.
 
 When adding entries to an ACL from the command line (eg: when blacklisting a
@@ -2741,7 +2741,7 @@ a problem. See the &quot;<a href="#add%20acl">add acl</a>&quot; action of the CL
 </div><div><pre class="text">When HAProxy is started with the &quot;-d&quot; option, it will stay in the foreground
 and will print one line per event, such as an incoming connection, the end of a
 connection, and for each request or response header line seen. This debug
-output is emitted before the contents are processed, so they don't consider the
+output is emitted before the contents are processed, so they don&#x27;t consider the
 local modifications. The main use is to show the request and response without
 having to run a network sniffer. The output is less readable when multiple
 connections are handled in parallel, though the &quot;debug2ansi&quot; and &quot;debug2html&quot;
@@ -2833,13 +2833,13 @@ When an issue seems to randomly appear on a new version of HAProxy (eg: every
 second request is aborted, occasional crash, etc), it is worth trying to enable
 memory poisoning so that each call to malloc() is immediately followed by the
 filling of the memory area with a configurable byte. By default this byte is
-0x50 (ASCII for 'P'), but any other byte can be used, including zero (which
+0x50 (ASCII for &#x27;P&#x27;), but any other byte can be used, including zero (which
 will have the same effect as a calloc() and which may make issues disappear).
 Memory poisoning is enabled on the command line using the &quot;-dM&quot; option. It
 slightly hurts performance and is not recommended for use in production. If
 an issue happens all the time with it or never happens when poisoning uses
-byte zero, it clearly means you've found a bug and you definitely need to
-report it. Otherwise if there's no clear change, the problem it is not related.
+byte zero, it clearly means you&#x27;ve found a bug and you definitely need to
+report it. Otherwise if there&#x27;s no clear change, the problem it is not related.
 
 When debugging some latency issues, it is important to use both strace and
 tcpdump on the local machine, and another tcpdump on the remote system. The
@@ -2860,16 +2860,16 @@ numbers and complete timestamps.
 In practice, received data are almost always immediately received by haproxy
 (unless the machine has a saturated CPU or these data are invalid and not
 delivered). If these data are received but not sent, it generally is because
-the output buffer is saturated (ie: recipient doesn't consume the data fast
-enough). This can be confirmed by seeing that the polling doesn't notify of
-the ability to write on the output file descriptor for some time (it's often
+the output buffer is saturated (ie: recipient doesn&#x27;t consume the data fast
+enough). This can be confirmed by seeing that the polling doesn&#x27;t notify of
+the ability to write on the output file descriptor for some time (it&#x27;s often
 easier to spot in the strace output when the data finally leave and then roll
 back to see when the write event was notified). It generally matches an ACK
 received from the recipient, and detected by tcpdump. Once the data are sent,
 they may spend some time in the system doing nothing. Here again, the TCP
 congestion window may be limited and not allow these data to leave, waiting for
 an ACK to open the window. If the traffic is idle and the data take 40 ms or
-200 ms to leave, it's a different issue (which is not an issue), it's the fact
+200 ms to leave, it&#x27;s a different issue (which is not an issue), it&#x27;s the fact
 that the Nagle algorithm prevents empty packets from leaving immediately, in
 hope that they will be merged with subsequent data. HAProxy automatically
 disables Nagle in pure TCP mode and in tunnels. However it definitely remains
@@ -2879,29 +2879,29 @@ applications may be sensitive to the latency when delivering incomplete HTTP
 response messages. In this case you will have to enable &quot;option http-no-delay&quot;
 to disable Nagle in order to work around their design, keeping in mind that any
 other proxy in the chain may similarly be impacted. If tcpdump reports that data
-leave immediately but the other end doesn't see them quickly, it can mean there
+leave immediately but the other end doesn&#x27;t see them quickly, it can mean there
 is a congested WAN link, a congested LAN with flow control enabled and
 preventing the data from leaving, or more commonly that HAProxy is in fact
 running in a virtual machine and that for whatever reason the hypervisor has
-decided that the data didn't need to be sent immediately. In virtualized
+decided that the data didn&#x27;t need to be sent immediately. In virtualized
 environments, latency issues are almost always caused by the virtualization
-layer, so in order to save time, it's worth first comparing tcpdump in the VM
+layer, so in order to save time, it&#x27;s worth first comparing tcpdump in the VM
 and on the external components. Any difference has to be credited to the
 hypervisor and its accompanying drivers.
 
 When some TCP SACK segments are seen in tcpdump traces (using -vv), it always
 means that the side sending them has got the proof of a lost packet. While not
-seeing them doesn't mean there are no losses, seeing them definitely means the
+seeing them doesn&#x27;t mean there are no losses, seeing them definitely means the
 network is lossy. Losses are normal on a network, but at a rate where SACKs are
 not noticeable at the naked eye. If they appear a lot in the traces, it is
 worth investigating exactly what happens and where the packets are lost. HTTP
-doesn't cope well with TCP losses, which introduce huge latencies.
+doesn&#x27;t cope well with TCP losses, which introduce huge latencies.
 
 The &quot;netstat -i&quot; command will report statistics per interface. An interface
-where the Rx-Ovr counter grows indicates that the system doesn't have enough
-resources to receive all incoming packets and that they're lost before being
+where the Rx-Ovr counter grows indicates that the system doesn&#x27;t have enough
+resources to receive all incoming packets and that they&#x27;re lost before being
 processed by the network driver. Rx-Drp indicates that some received packets
-were lost in the network stack because the application doesn't process them
+were lost in the network stack because the application doesn&#x27;t process them
 fast enough. This can happen during some attacks as well. Tx-Drp means that
 the output queues were full and packets had to be dropped. When using TCP it
 should be very rare, but will possibly indicate a saturated outgoing link.
@@ -2945,7 +2945,7 @@ A safe configuration will have :
 
       # mkdir /var/empty &amp;&amp; chmod 0 /var/empty || echo &quot;Failed&quot;
 
-    and referenced like this in the HAProxy configuration's global section :
+    and referenced like this in the HAProxy configuration&#x27;s global section :
 
       chroot /var/empty
 
@@ -3068,7 +3068,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
 piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.7.12', 'page');
-piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-10', 'page');
+piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
