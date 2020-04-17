@@ -7,7 +7,7 @@ convert the Haproxy documentation into a suitable form
 import os
 import re
 import sys
-import cgi
+import html
 import datetime
 
 
@@ -278,7 +278,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
             documentAppend('<a class="anchor" id="%s" name="%s"></a>' % (details["chapter"], details["chapter"]))
             if level == 1:
                 documentAppend("<div class=\"page-header\">", False)
-            documentAppend('<h%d id="chapter-%s" data-target="%s"><small><a class="small" href="#%s">%s.</a></small> %s</h%d>' % (level, details["chapter"], details["chapter"], details["chapter"], details["chapter"], cgi.escape(title, True), level))
+            documentAppend('<h%d id="chapter-%s" data-target="%s"><small><a class="small" href="#%s">%s.</a></small> %s</h%d>' % (level, details["chapter"], details["chapter"], details["chapter"], details["chapter"], html.escape(title, True), level))
             if level == 1:
                 documentAppend("</div>", False)
 
@@ -293,7 +293,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                 if index < len(chapterIndexes) - 1:
                     documentAppend('<li class="next"><a href="#%s">Next</a></li>' % chapterIndexes[index + 1], False)
                 documentAppend('</ul>', False)
-            content = cgi.escape(content, True)
+            content = html.escape(content, True)
             content = re.sub(r'section ([0-9]+(.[0-9]+)*)', r'<a href="#\1">section \1</a>', content)
 
             pctxt.set_content(content)
