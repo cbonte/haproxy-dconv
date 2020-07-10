@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2-dev10 - Management Guide</title>
+		<title>HAProxy version 2.2.0 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -448,6 +448,8 @@
 							
 							<a class="list-group-item" href="#show servers">show servers</a>
 							
+							<a class="list-group-item" href="#show servers conn">show servers conn</a>
+							
 							<a class="list-group-item" href="#show servers state">show servers state</a>
 							
 							<a class="list-group-item" href="#show sess">show sess</a>
@@ -505,7 +507,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/06/20</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/07/10</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -516,7 +518,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.2-dev10</strong></p>
+							<p><strong>version 2.2.0</strong></p>
 							<p>
 								<br>
 								
@@ -2122,14 +2124,23 @@ string.
     $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
 &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
 </code></pre>
-</div><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl cert"></a><a class="anchor" name="9-commit ssl cert"></a><a class="anchor" name="9.3-commit ssl cert"></a><a class="anchor" name="commit ssl cert (Statistics and monitoring)"></a><a class="anchor" name="commit ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl cert"></a><a href="#9.3-commit%20ssl%20cert">commit ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Commit and apply a temporary SSL certificate update transaction.
-Generate every SSL contextes and SNIs it needs, insert them, and remove
-the previous ones. Replace in memory the previous SSL certificates
-everywhere the &lt;filename&gt; was used in the configuration.
-Upon failure it doesn&#x27;t remove or insert anything. Once the temporary
-transaction is committed, it is destroyed.
+</div><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl cert"></a><a class="anchor" name="9-commit ssl cert"></a><a class="anchor" name="9.3-commit ssl cert"></a><a class="anchor" name="commit ssl cert (Statistics and monitoring)"></a><a class="anchor" name="commit ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl cert"></a><a href="#9.3-commit%20ssl%20cert">commit ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Commit a temporary SSL certificate update transaction.
 
-See also &quot;ssl set cert&quot; and &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot;.
+In the case of an existing certificate (in a &quot;Used&quot; state in &quot;show ssl
+cert&quot;), generate every SSL contextes and SNIs it need, insert them, and
+remove the previous ones. Replace in memory the previous SSL certificates
+everywhere the &lt;filename&gt; was used in the configuration. Upon failure it
+doesn&#x27;t remove or insert anything. Once the temporary transaction is
+committed, it is destroyed.
+
+In the case of a new certificate (after a &quot;<a href="#new%20ssl%20cert">new ssl cert</a>&quot; and in a &quot;Unused&quot;
+state in &quot;<a href="#show%20ssl%20cert">show ssl cert</a>&quot;), the certificate will be commited in a certificate
+storage, but it won&#x27;t be used anywhere in haproxy. To use it and generate
+its SNIs you will need to add it to a crt-list or a directory with &quot;add ssl
+crt-list&quot;.
+
+See also &quot;<a href="#new%20ssl%20cert">new ssl cert</a>&quot;, &quot;ssl set cert&quot;, &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot; and
+&quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
 </pre><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported on a CLI connection running
 in expert mode (see &quot;expert-mode on&quot;). Such commands are extremely dangerous
 and not forgiving, any misuse may result in a crash of the process. They are
@@ -2780,6 +2791,19 @@ as the SIGQUIT when running in foreground except that it does not flush
 the pools.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show profiling"></a><a class="anchor" name="9-show profiling"></a><a class="anchor" name="9.3-show profiling"></a><a class="anchor" name="show profiling (Statistics and monitoring)"></a><a class="anchor" name="show profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show profiling"></a><a href="#9.3-show%20profiling">show profiling</a></b></div><pre class="text">Dumps the current profiling settings, one per line, as well as the command
 needed to change them.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show servers"></a><a class="anchor" name="9-show servers"></a><a class="anchor" name="9.3-show servers"></a><a class="anchor" name="show servers (Statistics and monitoring)"></a><a class="anchor" name="show servers (Unix Socket commands)"></a><a class="anchor" name="show servers conn"></a><a class="anchor" name="9-show servers conn"></a><a class="anchor" name="9.3-show servers conn"></a><a class="anchor" name="show servers conn (Statistics and monitoring)"></a><a class="anchor" name="show servers conn (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show servers conn"></a><a href="#9.3-show%20servers%20conn">show servers conn</a></b> <span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span></div><pre class="text">Dump the current and idle connections state of the servers belonging to the
+designated backend (or all backends if none specified). A backend name or
+identifier may be used.
+
+The output consists in a header line showing the fields titles, then one
+server per line with for each, the backend name and ID, server name and ID,
+the address, port and a series or values. The number of fields varies
+depending on thread count.
+
+Given the threaded nature of idle connections, it&#x27;s important to understand
+that some values may change once read, and that as such, consistency within a
+line isn&#x27;t granted. This output is mostly provided as a debugging tool and is
+not relevant to be routinely monitored nor graphed.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show servers"></a><a class="anchor" name="9-show servers"></a><a class="anchor" name="9.3-show servers"></a><a class="anchor" name="show servers (Statistics and monitoring)"></a><a class="anchor" name="show servers (Unix Socket commands)"></a><a class="anchor" name="show servers state"></a><a class="anchor" name="9-show servers state"></a><a class="anchor" name="9.3-show servers state"></a><a class="anchor" name="show servers state (Statistics and monitoring)"></a><a class="anchor" name="show servers state (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show servers state"></a><a href="#9.3-show%20servers%20state">show servers state</a></b> <span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span></div><pre class="text">Dump the state of the servers found in the running configuration. A backend
 name or identifier may be provided to limit the output to this backend only.
 
@@ -2877,7 +2901,11 @@ fields and their order per file format version :
    srvrecord:                   DNS SRV record associated to this SRV.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
-configured for levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;.
+configured for levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;. Note that on machines with
+quickly recycled connections, it is possible that this output reports less
+entries than really exist because it will dump all existing sessions up to
+the last one that was created before the command was entered; those which
+die in the mean time will not appear.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b> <span style="color: #080">&lt;id&gt;</span></div><pre class="text">Display a lot of internal information about the specified session identifier.
 This identifier is the first field at the beginning of the lines in the dumps
 of &quot;<a href="#show%20sess">show sess</a>&quot; (it corresponds to the session pointer). Those information are
@@ -3823,7 +3851,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2-dev10 &ndash; Management Guide<br>
+							HAProxy 2.2.0 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3927,7 +3955,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2-dev10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2.0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
