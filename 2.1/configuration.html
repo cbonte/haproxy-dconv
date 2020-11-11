@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1.7 - Configuration Manual</title>
+		<title>HAProxy version 2.1.10 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -1077,7 +1077,9 @@
 							
 							<a class="list-group-item" href="#agent-send">agent-send</a>
 							
-							<a class="list-group-item" href="#allow-0rtt">allow-0rtt</a>
+							<a class="list-group-item" href="#allow-0rtt (Bind options)">allow-0rtt (Bind options)</a>
+							
+							<a class="list-group-item" href="#allow-0rtt (Server and default-server options)">allow-0rtt (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#alpn (Bind options)">alpn (Bind options)</a>
 							
@@ -3249,7 +3251,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/07/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/11/11</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3260,10 +3262,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1.7</strong></p>
+							<p><strong>version 2.1.10</strong></p>
 							<p>
 								willy tarreau<br>
-								2020/06/09
+								2020/11/05
 							</p>
 						</div>
 
@@ -4344,12 +4346,6 @@ HAProxy supports 4 connection modes :
                     everything else is forwarded with no analysis (deprecated).
   - server close  : the server-facing connection is closed after the response.
   - close         : the connection is actively closed after end of response.
-
-For HTTP/2, the connection mode resembles more the &quot;server close&quot; mode : given
-the independence of all streams, there is currently no place to hook the idle
-server connection after a response, so it is closed after the response. HTTP/2
-is only supported for incoming connections, not on connections going to
-servers.
 </pre></div>
 <a class="anchor" id="1.2" name="1.2"></a>
 <h2 id="chapter-1.2" data-target="1.2"><small><a class="small" href="#1.2">1.2.</a></small> HTTP request</h2>
@@ -4414,10 +4410,6 @@ specific to the language, framework or application in use.
 
 HTTP/2 doesn&#x27;t convey a version information with the request, so the version is
 assumed to be the same as the one of the underlying protocol (i.e. &quot;HTTP/2&quot;).
-However, haproxy natively processes HTTP/1.x requests and headers, so requests
-received over an HTTP/2 connection are transcoded to HTTP/1.1 before being
-processed. This explains why they still appear as &quot;HTTP/1.1&quot; in haproxy&#x27;s logs
-as well as in server logs.
 </pre></div>
 <a class="anchor" id="1.2.2" name="1.2.2"></a>
 <h3 id="chapter-1.2.2" data-target="1.2.2"><small><a class="small" href="#1.2.2">1.2.2.</a></small> The request headers</h3>
@@ -4433,7 +4425,10 @@ define a total of 3 values for the &quot;Accept:&quot; header.
 Contrary to a common misconception, header names are not case-sensitive, and
 their values are not either if they refer to other header names (such as the
 &quot;Connection:&quot; header). In HTTP/2, header names are always sent in lower case,
-as can be seen when running in debug mode.
+as can be seen when running in debug mode. Internally, all header names are
+normalized to lower case so that HTTP/1.x and HTTP/2 use the exact same
+representation, and they are sent as-is on the other side. This explains why an
+HTTP/1.x request typed with camel case is delivered in lower case.
 
 The end of the headers is indicated by the first empty line. People often say
 that it&#x27;s a double line feed, which is not exact, even if a double line feed
@@ -4510,7 +4505,10 @@ HAProxy may emit the following status codes by itself :
    401  when an authentication is required to perform the action (when
         accessing the stats page)
    403  when a request is forbidden by a &quot;<a href="#http-request%20deny">http-request deny</a>&quot; rule
+   404  when the requested resource could not be found
    408  when the request timeout strikes before the request is complete
+   410  when the requested resource is no longer available and will not
+        be available again
    500  when haproxy encounters an unrecoverable internal error, such as a
         memory allocation failure, which should never happen
    502  when the server returns an empty, invalid or incomplete response, or
@@ -4804,6 +4802,8 @@ The following keywords are supported in the &quot;global&quot; section :
    - <a href="#tune.maxrewrite">tune.maxrewrite</a>
    - <a href="#tune.pattern.cache-size">tune.pattern.cache-size</a>
    - <a href="#tune.pipesize">tune.pipesize</a>
+   - <a href="#tune.pool-high-fd-ratio">tune.pool-high-fd-ratio</a>
+   - <a href="#tune.pool-low-fd-ratio">tune.pool-low-fd-ratio</a>
    - <a href="#tune.rcvbuf.client">tune.rcvbuf.client</a>
    - <a href="#tune.rcvbuf.server">tune.rcvbuf.server</a>
    - <a href="#tune.recv_enough">tune.recv_enough</a>
@@ -5818,10 +5818,6 @@ it can improve performance to increase pipe sizes, especially if it is
 suspected that pipes are not filled and that many calls to splice() are
 performed. This has an impact on the kernel&#x27;s memory footprint, so this must
 not be changed if impacts are not understood.
-</pre><a class="anchor" name="tune.pool-low-fd-ratio"></a><a class="anchor" name="3-tune.pool-low-fd-ratio"></a><a class="anchor" name="3.2-tune.pool-low-fd-ratio"></a><a class="anchor" name="tune.pool-low-fd-ratio (Global parameters)"></a><a class="anchor" name="tune.pool-low-fd-ratio (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pool-low-fd-ratio"></a><a href="#3.2-tune.pool-low-fd-ratio">tune.pool-low-fd-ratio</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting sets the max number of file descriptors (in percentage) used by
-haproxy globally against the maximum number of file descriptors haproxy can
-use before we stop putting connection into the idle pool for reuse. The
-default is 20.
 </pre><a class="anchor" name="tune.pool-high-fd-ratio"></a><a class="anchor" name="3-tune.pool-high-fd-ratio"></a><a class="anchor" name="3.2-tune.pool-high-fd-ratio"></a><a class="anchor" name="tune.pool-high-fd-ratio (Global parameters)"></a><a class="anchor" name="tune.pool-high-fd-ratio (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pool-high-fd-ratio"></a><a href="#3.2-tune.pool-high-fd-ratio">tune.pool-high-fd-ratio</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting sets the max number of file descriptors (in percentage) used by
 haproxy globally against the maximum number of file descriptors haproxy can
 use before we start killing idle connections when we can&#x27;t reuse a connection
@@ -5829,6 +5825,10 @@ and we have to create a new one. The default is 25 (one quarter of the file
 descriptor will mean that roughly half of the maximum front connections can
 keep an idle connection behind, anything beyond this probably doesn&#x27;t make
 much sense in the general case when targeting connection reuse).
+</pre><a class="anchor" name="tune.pool-low-fd-ratio"></a><a class="anchor" name="3-tune.pool-low-fd-ratio"></a><a class="anchor" name="3.2-tune.pool-low-fd-ratio"></a><a class="anchor" name="tune.pool-low-fd-ratio (Global parameters)"></a><a class="anchor" name="tune.pool-low-fd-ratio (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.pool-low-fd-ratio"></a><a href="#3.2-tune.pool-low-fd-ratio">tune.pool-low-fd-ratio</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">This setting sets the max number of file descriptors (in percentage) used by
+haproxy globally against the maximum number of file descriptors haproxy can
+use before we stop putting connection into the idle pool for reuse. The
+default is 20.
 </pre><a class="anchor" name="tune.rcvbuf.client"></a><a class="anchor" name="3-tune.rcvbuf.client"></a><a class="anchor" name="3.2-tune.rcvbuf.client"></a><a class="anchor" name="tune.rcvbuf.client (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.client (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.client"></a><a href="#3.2-tune.rcvbuf.client">tune.rcvbuf.client</a></b> <span style="color: #080">&lt;number&gt;</span></div><a class="anchor" name="tune.rcvbuf.server"></a><a class="anchor" name="3-tune.rcvbuf.server"></a><a class="anchor" name="3.2-tune.rcvbuf.server"></a><a class="anchor" name="tune.rcvbuf.server (Global parameters)"></a><a class="anchor" name="tune.rcvbuf.server (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.rcvbuf.server"></a><a href="#3.2-tune.rcvbuf.server">tune.rcvbuf.server</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Forces the kernel socket receive buffer size on the client or the server side
 to the specified value in bytes. This value applies to all TCP/HTTP frontends
 and backends. It should normally never be set, and the default size (0) lets
@@ -6574,6 +6574,11 @@ two, and never more than some limits (usually 32768).
               to be used to compute the hash. One level is counted for each
               slash in the request. If both parameters are specified, the
               evaluation stops when either is reached.
+
+              A &quot;path-only&quot; parameter indicates that the hashing key starts
+              at the first &#x27;/&#x27; of the path. This can be used to ignore the
+              authority part of absolute URIs, and to make sure that HTTP/1
+              and HTTP/2 URIs will provide the same hash.
 
   url_param   The URL parameter specified in argument will be looked up in
               the query string of each HTTP GET request.
@@ -7398,8 +7403,8 @@ defaults has been set to &quot;<span class="dropdown"><a class="dropdown-toggle"
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 200, 400, 403, 405, 408, 425, 429, 500, 502,
-          503, and 504.
+          generating codes 200, 400, 403, 404, 405, 408, 410, 413, 425, 429,
+          500, 502, 503, and 504.
 
 &lt;file&gt;    designates a file containing the full HTTP response. It is
           recommended to follow the common practice of appending &quot;.http&quot; to
@@ -7446,8 +7451,8 @@ errorfile 503 /etc/haproxy/errorfiles/503sorry.http
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 200, 400, 403, 405, 408, 425, 429, 500, 502,
-          503, and 504.
+          generating codes 200, 400, 403, 404, 405, 408, 410, 413, 425, 429,
+          500, 502, 503, and 504.
 
 &lt;url&gt;     it is the exact contents of the &quot;Location&quot; header. It may contain
           either a relative URI to an error page hosted on the same site,
@@ -7476,8 +7481,8 @@ request.
 </table></div>
 <div class="separator">
 <span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;code&gt;    is the HTTP status code. Currently, HAProxy is capable of
-          generating codes 200, 400, 403, 405, 408, 425, 429, 500, 502,
-          503, and 504.
+          generating codes 200, 400, 403, 404, 405, 408, 410, 413, 425, 429,
+          500, 502, 503, and 504.
 
 &lt;url&gt;     it is the exact contents of the &quot;Location&quot; header. It may contain
           either a relative URI to an error page hosted on the same site,
@@ -8206,8 +8211,9 @@ User-Agent: foo
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-path"></a><a class="anchor" name="4-http-request replace-path"></a><a class="anchor" name="4.2-http-request replace-path"></a><a class="anchor" name="http-request replace-path (Proxies)"></a><a class="anchor" name="http-request replace-path (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-path"></a><a href="#4.2-http-request%20replace-path">http-request replace-path</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request&#x27;s path
 component instead of a header. The path component starts at the first &#x27;/&#x27;
-after an optional scheme+authority. It does contain the query string if any
-is present. The replacement does not modify the scheme nor authority.
+after an optional scheme+authority and ends before the question mark. Thus,
+the replacement does not modify the scheme, the authority and the
+query-string.
 
 It is worth noting that regular expressions may be more expensive to evaluate
 than certain ACLs, so rare replacements may benefit from a condition to avoid
@@ -8217,9 +8223,6 @@ performing the evaluation at all if it does not match.
 <pre class="prettyprint">
 <code><span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
 http-request replace-path (.*) /foo\1
-
-<span class="comment"># suffix /foo : turn /bar?q=1 into /bar/foo?q=1 :</span>
-http-request replace-path ([^?]*)(\?(.*))? \1/foo\2
 
 <span class="comment"># strip /foo : turn /foo/bar?q=1 into /bar?q=1</span>
 http-request replace-path /foo/(.*) /\1
@@ -13140,13 +13143,16 @@ the action, it is simply performed unconditionally. That can be useful for
 &quot;track-sc*&quot; actions as well as for changing the default action to a reject.
 
 It is perfectly possible to match layer 7 contents with &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;
-rules, since HTTP-specific ACL matches are able to preliminarily parse the
-contents of a buffer before extracting the required data. If the buffered
-contents do not parse as a valid HTTP message, then the ACL does not match.
-The parser which is involved there is exactly the same as for all other HTTP
-processing, so there is no risk of parsing something differently. In an HTTP
-backend connected to from an HTTP frontend, it is guaranteed that HTTP
-contents will always be immediately present when the rule is evaluated first.
+rules from a TCP proxy, since HTTP-specific ACL matches are able to
+preliminarily parse the contents of a buffer before extracting the required
+data. If the buffered contents do not parse as a valid HTTP message, then the
+ACL does not match.  The parser which is involved there is exactly the same
+as for all other HTTP processing, so there is no risk of parsing something
+differently. In an HTTP frontend or an HTTP backend, it is guaranteed that
+HTTP contents will always be immediately present when the rule is evaluated
+first because the HTTP parsing is performed in the early stages of the
+connection processing, at the session level. But for such proxies, using
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li></ul></span>&quot; rules is much more natural and recommended.
 
 Tracking layer7 information is also possible provided that the information
 are present when the rule is processed. The rule processing engine is able to
@@ -14327,10 +14333,11 @@ filter per certificate, with the following format for each line :
 
       &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
 
-sslbindconf support &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">npn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#npn%20%28Bind%20options%29">Bind options</a></li><li><a href="#npn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
-crl-file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL
-and Openssl &gt;= 1.1.1 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
-It override the configuration set in bind line for the certificate.
+sslbindconf supports &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">allow-0rtt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#allow-0rtt%20%28Bind%20options%29">Bind options</a></li><li><a href="#allow-0rtt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">alpn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#alpn%20%28Bind%20options%29">Bind options</a></li><li><a href="#alpn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;,
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crl-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crl-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#crl-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">npn<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#npn%20%28Bind%20options%29">Bind options</a></li><li><a href="#npn%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;,
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL and Openssl &gt;= 1.1.1
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported. It overrides the
+configuration set in bind line for the certificate.
 
 Wildcards are supported in the SNI filter. Negative filter are also supported,
 only useful in combination with a wildcard filter to exclude a particular SNI.
@@ -14717,7 +14724,7 @@ words delimited by spaces, tabs or commas in any order, each consisting of :
   MAINT mode, thus it will not accept any new connections at all, and health
   checks will be stopped.
 
-- The words &quot;down&quot;, &quot;failed&quot;, or &quot;stopped&quot;, optionally followed by a
+- The words &quot;down&quot;, &quot;fail&quot;, or &quot;stopped&quot;, optionally followed by a
   description string after a sharp (&#x27;#&#x27;). All of these mark the server&#x27;s
   operating state as DOWN, but since the word itself is reported on the stats
   page, the difference allows an administrator to know if the situation was
@@ -20613,8 +20620,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1.7 &ndash; Configuration Manual<br>
-							<small>2020/06/09, willy tarreau</small>
+							HAProxy 2.1.10 &ndash; Configuration Manual<br>
+							<small>2020/11/05, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20717,7 +20724,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.7', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.10', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

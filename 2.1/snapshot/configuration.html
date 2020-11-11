@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1.7-61 - Configuration Manual</title>
+		<title>HAProxy version 2.1.10-2 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -3251,7 +3251,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/07/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/11/11</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3262,10 +3262,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1.7-61</strong></p>
+							<p><strong>version 2.1.10-2</strong></p>
 							<p>
 								willy tarreau<br>
-								2020/06/09
+								2020/11/05
 							</p>
 						</div>
 
@@ -6575,6 +6575,11 @@ two, and never more than some limits (usually 32768).
               slash in the request. If both parameters are specified, the
               evaluation stops when either is reached.
 
+              A &quot;path-only&quot; parameter indicates that the hashing key starts
+              at the first &#x27;/&#x27; of the path. This can be used to ignore the
+              authority part of absolute URIs, and to make sure that HTTP/1
+              and HTTP/2 URIs will provide the same hash.
+
   url_param   The URL parameter specified in argument will be looked up in
               the query string of each HTTP GET request.
 
@@ -8206,8 +8211,9 @@ User-Agent: foo
 </div><a class="anchor" name="http-request"></a><a class="anchor" name="4-http-request"></a><a class="anchor" name="4.2-http-request"></a><a class="anchor" name="http-request (Proxies)"></a><a class="anchor" name="http-request (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-request replace-path"></a><a class="anchor" name="4-http-request replace-path"></a><a class="anchor" name="4.2-http-request replace-path"></a><a class="anchor" name="http-request replace-path (Proxies)"></a><a class="anchor" name="http-request replace-path (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-request replace-path"></a><a href="#4.2-http-request%20replace-path">http-request replace-path</a></b> <span style="color: #080">&lt;match-regex&gt;</span> <span style="color: #080">&lt;replace-fmt&gt;</span>
                            <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This works like &quot;replace-header&quot; except that it works on the request&#x27;s path
 component instead of a header. The path component starts at the first &#x27;/&#x27;
-after an optional scheme+authority. It does contain the query string if any
-is present. The replacement does not modify the scheme nor authority.
+after an optional scheme+authority and ends before the question mark. Thus,
+the replacement does not modify the scheme, the authority and the
+query-string.
 
 It is worth noting that regular expressions may be more expensive to evaluate
 than certain ACLs, so rare replacements may benefit from a condition to avoid
@@ -8217,9 +8223,6 @@ performing the evaluation at all if it does not match.
 <pre class="prettyprint">
 <code><span class="comment"># prefix /foo : turn /bar?q=1 into /foo/bar?q=1 :</span>
 http-request replace-path (.*) /foo\1
-
-<span class="comment"># suffix /foo : turn /bar?q=1 into /bar/foo?q=1 :</span>
-http-request replace-path ([^?]*)(\?(.*))? \1/foo\2
 
 <span class="comment"># strip /foo : turn /foo/bar?q=1 into /bar?q=1</span>
 http-request replace-path /foo/(.*) /\1
@@ -13140,13 +13143,16 @@ the action, it is simply performed unconditionally. That can be useful for
 &quot;track-sc*&quot; actions as well as for changing the default action to a reject.
 
 It is perfectly possible to match layer 7 contents with &quot;<a href="#tcp-request%20content">tcp-request content</a>&quot;
-rules, since HTTP-specific ACL matches are able to preliminarily parse the
-contents of a buffer before extracting the required data. If the buffered
-contents do not parse as a valid HTTP message, then the ACL does not match.
-The parser which is involved there is exactly the same as for all other HTTP
-processing, so there is no risk of parsing something differently. In an HTTP
-backend connected to from an HTTP frontend, it is guaranteed that HTTP
-contents will always be immediately present when the rule is evaluated first.
+rules from a TCP proxy, since HTTP-specific ACL matches are able to
+preliminarily parse the contents of a buffer before extracting the required
+data. If the buffered contents do not parse as a valid HTTP message, then the
+ACL does not match.  The parser which is involved there is exactly the same
+as for all other HTTP processing, so there is no risk of parsing something
+differently. In an HTTP frontend or an HTTP backend, it is guaranteed that
+HTTP contents will always be immediately present when the rule is evaluated
+first because the HTTP parsing is performed in the early stages of the
+connection processing, at the session level. But for such proxies, using
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">http-request<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#http-request%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#http-request%20%28Proxy%20section%29">Proxy section</a></li></ul></span>&quot; rules is much more natural and recommended.
 
 Tracking layer7 information is also possible provided that the information
 are present when the rule is processed. The rule processing engine is able to
@@ -14718,7 +14724,7 @@ words delimited by spaces, tabs or commas in any order, each consisting of :
   MAINT mode, thus it will not accept any new connections at all, and health
   checks will be stopped.
 
-- The words &quot;down&quot;, &quot;failed&quot;, or &quot;stopped&quot;, optionally followed by a
+- The words &quot;down&quot;, &quot;fail&quot;, or &quot;stopped&quot;, optionally followed by a
   description string after a sharp (&#x27;#&#x27;). All of these mark the server&#x27;s
   operating state as DOWN, but since the word itself is reported on the stats
   page, the difference allows an administrator to know if the situation was
@@ -20614,8 +20620,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1.7-61 &ndash; Configuration Manual<br>
-							<small>2020/06/09, willy tarreau</small>
+							HAProxy 2.1.10-2 &ndash; Configuration Manual<br>
+							<small>2020/11/05, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20718,7 +20724,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.7-61', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.10-2', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
