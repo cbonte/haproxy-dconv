@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.3-dev1 - Management Guide</title>
+		<title>HAProxy version 2.3.0 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -507,7 +507,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/07/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/11/11</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -518,7 +518,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.3-dev1</strong></p>
+							<p><strong>version 2.3.0</strong></p>
 							<p>
 								<br>
 								
@@ -855,9 +855,8 @@ list of options is :
     error is encountered. Presence of warnings will be reported if any.
 
   -d : enable debug mode. This disables daemon mode, forces the process to stay
-    in foreground and to show incoming and outgoing events. It is equivalent to
-    the &quot;global&quot; section&#x27;s &quot;<a href="#debug">debug</a>&quot; keyword. It must never be used in an init
-    script.
+    in foreground and to show incoming and outgoing events. It must never be
+    used in an init script.
 
   -dG : disable use of getaddrinfo() to resolve host names into addresses. It
     can be used when suspecting that getaddrinfo() doesn&#x27;t work as expected.
@@ -1124,7 +1123,7 @@ To understand better how these signals are used, it is important to understand
 the whole restart mechanism.
 
 First, an existing haproxy process is running. The administrator uses a system
-specific command such as &quot;/etc/init.d/haproxy reload&quot; to indicate he wants to
+specific command such as &quot;/etc/init.d/haproxy reload&quot; to indicate they want to
 take the new configuration file into effect. What happens then is the following.
 First, the service script (/etc/init.d/haproxy or equivalent) will verify that
 the configuration file parses correctly using &quot;haproxy -c&quot;. After that it will
@@ -1590,6 +1589,11 @@ anomalies such as a bot looping on the site, and block them.
 mechanism is the HTTP statistics page. This page also exposes an alternative
 CSV output format for monitoring tools. The same format is provided on the
 Unix socket.
+
+Statistics are regroup in categories labelled as domains, corresponding to the
+multiple components of HAProxy. There are two domains avaiable: proxy and dns.
+If not specified, the proxy domain is selected. Note that only the proxy
+statistics are printed on the HTTP page.
 </pre></div>
 <a class="anchor" id="9.1" name="9.1"></a>
 <h2 id="chapter-9.1" data-target="9.1"><small><a class="small" href="#9.1">9.1.</a></small> CSV format</h2>
@@ -1604,10 +1608,14 @@ text is doubled (&#x27;&quot;&quot;&#x27;), which is the format that most tools 
 do not insert any column before these ones in order not to break tools which
 use hard-coded column positions.
 
-In brackets after each field name are the types which may have a value for
-that field. The types are L (Listeners), F (Frontends), B (Backends), and
-S (Servers).
+For proxy statistics, after each field name, the types which may have a value
+for that field are specified in brackets. The types are L (Listeners), F
+(Frontends), B (Backends), and S (Servers). There is a fixed set of static
+fields that are always available in the same order. A column containing the
+character &#x27;-&#x27; delimits the end of the static fields, after which presence or
+order of the fields are not guaranteed.
 
+Here is the list of static fields using the proxy statistics domain:
   0. pxname [LFBS]: proxy name
   1. svname [LFBS]: service name (FRONTEND for frontend, BACKEND for backend,
      any name for server/listener)
@@ -1647,7 +1655,7 @@ S (Servers).
      server. The server value counts the number of times that server was
      switched away from.
  17. status [LFBS]: status (UP/DOWN/NOLB/MAINT/MAINT(via)/MAINT(resolution)...)
- 18. weight [..BS]: total weight (backend), server weight (server)
+ 18. weight [..BS]: total effective weight (backend), effective weight (server)
  19. act [..BS]: number of active servers (backend), server is active (server)
  20. bck [..BS]: number of backup servers (backend), server is backup (server)
  21. chkfail [...S]: number of failed checks. (Only counts checks failed when
@@ -1764,6 +1772,15 @@ S (Servers).
  92. rtime_max [..BS]: the maximum observed response time in ms (0 for TCP)
  93. ttime_max [..BS]: the maximum observed total session time in ms
  94. eint [LFBS]: cumulative number of internal errors
+ 95. idle_conn_cur [...S]: current number of unsafe idle connections
+ 96. safe_conn_cur [...S]: current number of safe idle connections
+ 97. used_conn_cur [...S]: current number of connections in use
+ 98. need_conn_est [...S]: estimated needed number of connections
+ 99. uweight [..BS]: total user weight (backend), server user weight (server)
+
+For all other statistics domains, the presence or the order of the fields are
+not guaranteed. In this case, the header line should always be used to parse
+the CSV data.
 </pre></div>
 <a class="anchor" id="9" name="9"></a>
 <div class="page-header"><h1 id="chapter-9" data-target="9"><small><a class="small" href="#9">9.</a></small> 2) Typed output format</h1>
@@ -2916,11 +2933,13 @@ returned in src/dumpstats.c
 
 The special id &quot;all&quot; dumps the states of all sessions, which must be avoided
 as much as possible as it is highly CPU intensive and can take a lot of time.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.3-show%20stat">show stat</a></b> <span style="color: #008">[<span style="color: #800">{<span style="color: #080">&lt;iid&gt;</span>|<span style="color: #080">&lt;proxy&gt;</span>}</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span> <span style="color: #008">[typed|json]</span> <span style="color: #008">[desc]</span></div><pre class="text">Dump statistics using the CSV format; using the extended typed output
-format described in the section above if &quot;typed&quot; is passed after the
-other arguments; or in JSON if &quot;json&quot; is passed after the other arguments
-. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is possible to dump only selected
-items :
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show stat"></a><a class="anchor" name="9-show stat"></a><a class="anchor" name="9.3-show stat"></a><a class="anchor" name="show stat (Statistics and monitoring)"></a><a class="anchor" name="show stat (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show stat"></a><a href="#9.3-show%20stat">show stat</a></b> <span style="color: #008">[domain <span style="color: #080">&lt;dns|proxy&gt;</span>]</span> <span style="color: #008">[<span style="color: #800">{<span style="color: #080">&lt;iid&gt;</span>|<span style="color: #080">&lt;proxy&gt;</span>}</span> <span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;sid&gt;</span>]</span> <span style="color: #008">[typed|json]</span> \
+          <span style="color: #008">[desc]</span> <span style="color: #008">[up|no-maint]</span></div><pre class="text">Dump statistics. The domain is used to select which statistics to print; dns
+and proxy are available for now. By default, the CSV format is used; you can
+activate the extended typed output format described in the section above if
+&quot;typed&quot; is passed after the other arguments; or in JSON if &quot;json&quot; is passed
+after the other arguments. By passing &lt;id&gt;, &lt;type&gt; and &lt;sid&gt;, it is possible
+to dump only selected items :
   - &lt;iid&gt; is a proxy ID, -1 to dump everything. Alternatively, a proxy name
     &lt;proxy&gt; may be specified. In this case, this proxy&#x27;s ID will be used as
     the ID selector.
@@ -2963,6 +2982,13 @@ number, nature, origin and scope. This same format is available via the HTTP
 stats by passing &quot;;typed&quot; after the URI. It is very important to note that in
 typed output format, the dump for a single object is contiguous so that there
 is no need for a consumer to store everything at once.
+
+The &quot;up&quot; modifier will result in listing only servers which reportedly up or
+not checked. Those down, unresolved, or in maintenance will not be listed.
+This is analogous to the &quot;;up&quot; option on the HTTP stats. Similarly, the
+&quot;no-maint&quot; modifier will act like the &quot;;no-maint&quot; HTTP modifier and will
+result in disabled servers not to be listed. The difference is that those
+which are enabled but down will not be evicted.
 
 When using the typed output format, each line is made of 4 columns delimited
 by colons (&#x27;:&#x27;). The first column is a dot-delimited series of 5 elements. The
@@ -3851,7 +3877,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.3-dev1 &ndash; Management Guide<br>
+							HAProxy 2.3.0 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3955,7 +3981,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3-dev1', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3.0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
