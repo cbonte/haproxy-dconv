@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.25 - Configuration Manual</title>
+		<title>HAProxy version 1.8.27 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -968,7 +968,9 @@
 							
 							<a class="list-group-item" href="#agent-send">agent-send</a>
 							
-							<a class="list-group-item" href="#allow-0rtt">allow-0rtt</a>
+							<a class="list-group-item" href="#allow-0rtt (Bind options)">allow-0rtt (Bind options)</a>
+							
+							<a class="list-group-item" href="#allow-0rtt (Server and default-server options)">allow-0rtt (Server and default-server options)</a>
 							
 							<a class="list-group-item" href="#alpn">alpn</a>
 							
@@ -1362,6 +1364,8 @@
 							<a class="list-group-item" href="#http-check disable-on-404">http-check disable-on-404</a>
 							
 							<a class="list-group-item" href="#http-check expect">http-check expect</a>
+							
+							<a class="list-group-item" href="#http-check send">http-check send</a>
 							
 							<a class="list-group-item" href="#http-check send-state">http-check send-state</a>
 							
@@ -2808,7 +2812,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/04/17</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/11/11</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2819,10 +2823,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.25</strong></p>
+							<p><strong>version 1.8.27</strong></p>
 							<p>
 								willy tarreau<br>
-								2020/04/02
+								2020/11/06
 							</p>
 						</div>
 
@@ -7146,6 +7150,31 @@ http-check expect ! rstatus ^5
 http-check expect rstring &lt;!--tag:[0-9a-f]*--&gt;&lt;/html&gt;
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20disable-on-404">http-check disable-on-404</a>&quot;</div>
+<a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check send"></a><a class="anchor" name="4-http-check send"></a><a class="anchor" name="4.2-http-check send"></a><a class="anchor" name="http-check send (Proxies)"></a><a class="anchor" name="http-check send (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check send"></a><a href="#4.2-http-check%20send">http-check send</a></b> <span style="color: #008">[hdr <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;value&gt;</span>]</span>* <span style="color: #008">[body <span style="color: #080">&lt;string&gt;</span>]</span></div><pre class="text">Add a possible list of headers and/or a body to the request sent during HTTP
+health checks.
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">hdr &lt;name&gt; &lt;value&gt;   adds the HTTP header field whose name is specified in
+                     &lt;name&gt; and whose value is defined by &lt;value&gt; to the
+                     request sent during HTTP health checks.
+
+body &lt;string&gt;        add the body defined by &lt;string&gt; to the request sent
+                     sent during HTTP health checks. If defined, the
+                     &quot;Content-Length&quot; header is thus automatically added
+                     to the request.</pre>
+</div>
+<pre class="text">In addition to the request line defined by the &quot;<a href="#option%20httpchk">option httpchk</a>&quot; directive,
+this one is the valid way to add some headers and optionally a body to the
+request sent during HTTP health checks. If a body is defined, the associate
+&quot;Content-Length&quot; header is automatically added. The old trick consisting to
+add headers after the version string on the &quot;<a href="#option%20httpchk">option httpchk</a>&quot; line is now
+deprecated. Note also the &quot;Connection: close&quot; header is still added if a
+&quot;<a href="#http-check%20expect">http-check expect</a>&quot; direcive is defined independently of this directive, just
+like the state header if the directive &quot;<a href="#http-check%20send-state">http-check send-state</a>&quot; is defined.
+</pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20httpchk">option httpchk</a>&quot;, &quot;<a href="#http-check%20send-state">http-check send-state</a>&quot; and &quot;<a href="#http-check%20expect">http-check expect</a>&quot;</div>
 <a class="anchor" name="http-check"></a><a class="anchor" name="4-http-check"></a><a class="anchor" name="4.2-http-check"></a><a class="anchor" name="http-check (Proxies)"></a><a class="anchor" name="http-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-check send-state"></a><a class="anchor" name="4-http-check send-state"></a><a class="anchor" name="4.2-http-check send-state"></a><a class="anchor" name="http-check send-state (Proxies)"></a><a class="anchor" name="http-check send-state (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-check send-state"></a><a href="#4.2-http-check%20send-state">http-check send-state</a></b></div><pre class="text">Enable emission of a state header with HTTP health checks
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7546,15 +7575,23 @@ http-request set-query %[query,regsub(%3D,=,g)]
   Is used to set the source IP address to the value of specified
   expression. Useful when a proxy in front of HAProxy rewrites source IP,
   but provides the correct IP in a HTTP header; or you want to mask
-  source IP for privacy.
+  source IP for privacy. All subsequent calls to &quot;<a href="#src">src</a>&quot; fetch will return
+  this value (see example).
+
 
      &lt;expr&gt;    Is a standard HAProxy expression formed by a sample-fetch
                followed by some converters.
+
+  See also &quot;<a href="#option%20forwardfor">option forwardfor</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code>http-request set-src hdr(x-forwarded-for)
-http-request set-src src,ipmask(24)
+<code> http-request set-src hdr(x-forwarded-for)
+ http-request set-src src,ipmask(24)
+
+<span class="comment"># After the masking this will track connections</span>
+<span class="comment"># based on the IP address with the last byte zeroed out.</span>
+http-request track-sc0 src
 </code></pre>
 </div><pre class="text">  When possible, set-src preserves the original source port as long as the
   address family allows it, otherwise the source port is set to 0.
@@ -9248,8 +9285,7 @@ This option should normally never be used, except in front of a proxy.
 &lt;version&gt; is the optional HTTP version string. It defaults to &quot;HTTP/1.0&quot;
           but some servers might behave incorrectly in HTTP 1.0, so turning
           it to HTTP/1.1 may sometimes help. Note that the Host field is
-          mandatory in HTTP/1.1, and as a trick, it is possible to pass it
-          after &quot;\r\n&quot; following the version string.</pre>
+          mandatory in HTTP/1.1, use &quot;<a href="#http-check%20send">http-check send</a>&quot; directive to add it.</pre>
 </div>
 <pre class="text">By default, server health checks only consist in trying to establish a TCP
 connection. When &quot;<a href="#option%20httpchk">option httpchk</a>&quot; is specified, a complete HTTP request is
@@ -9262,6 +9298,11 @@ The port and interval are specified in the server configuration.
 This option does not necessarily require an HTTP backend, it also works with
 plain TCP backends. This is particularly useful to check simple scripts bound
 to some dedicated ports using the inetd daemon.
+
+Note : For a while, there was no way to add headers or body in the request
+       used for HTTP health checks. So a workaround was to hide it at the end
+       of the version string with a &quot;\r\n&quot; after the version. It is now
+       deprecated. The directive &quot;<a href="#http-check%20send">http-check send</a>&quot; must be used instead.
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
@@ -9269,7 +9310,8 @@ to some dedicated ports using the inetd daemon.
 <span class="comment"># using HTTP request &quot;OPTIONS * HTTP/1.1&quot; on port 80.</span>
 backend https_relay
     mode tcp
-    option httpchk OPTIONS * HTTP/1.1\r\nHost:\ www
+    option httpchk OPTIONS * HTTP/1.1
+    http-check send hdr Host www
     server apache1 192.168.1.1:443 check port 80
 </code></pre>
 </div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20ssl-hello-chk">option ssl-hello-chk</a>&quot;, &quot;<a href="#option%20smtpchk">option smtpchk</a>&quot;, &quot;<a href="#option%20mysql-check">option mysql-check</a>&quot;, &quot;<a href="#option%20pgsql-check">option pgsql-check</a>&quot;, &quot;<a href="#http-check">http-check</a>&quot; and the &quot;<a href="#check">check</a>&quot;, &quot;<a href="#port">port</a>&quot; and &quot;<a href="#inter">inter</a>&quot; server options.</div>
@@ -9481,7 +9523,7 @@ Using this option, large sites dealing with several thousand connections per
 second may log normal traffic to a rotating buffer and only archive smaller
 error logs.
 </pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#option%20dontlognull">dontlognull</a>&quot;, &quot;<a href="#option%20dontlog-normal">dontlog-normal</a>&quot; and <a href="#8">section 8</a> about logging.</div>
-<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option logasap"></a><a class="anchor" name="4-option logasap"></a><a class="anchor" name="4.2-option logasap"></a><a class="anchor" name="option logasap (Proxies)"></a><a class="anchor" name="option logasap (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option logasap"></a><a href="#4.2-option%20logasap">option logasap</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option logasap"></a><a class="anchor" name="4-no option logasap"></a><a class="anchor" name="4.2-no option logasap"></a><a class="anchor" name="no option logasap (Proxies)"></a><a class="anchor" name="no option logasap (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option logasap"></a><a href="#4.2-no%20option%20logasap">no option logasap</a></b></div><pre class="text">Enable or disable early logging of HTTP requests
+<a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option logasap"></a><a class="anchor" name="4-option logasap"></a><a class="anchor" name="4.2-option logasap"></a><a class="anchor" name="option logasap (Proxies)"></a><a class="anchor" name="option logasap (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option logasap"></a><a href="#4.2-option%20logasap">option logasap</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option logasap"></a><a class="anchor" name="4-no option logasap"></a><a class="anchor" name="4.2-no option logasap"></a><a class="anchor" name="no option logasap (Proxies)"></a><a class="anchor" name="no option logasap (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option logasap"></a><a href="#4.2-no%20option%20logasap">no option logasap</a></b></div><pre class="text">Enable or disable early logging.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td></tr>
@@ -9489,16 +9531,22 @@ error logs.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">By default, HTTP requests are logged upon termination so that the total
-transfer time and the number of bytes appear in the logs. When large objects
-are being transferred, it may take a while before the request appears in the
-logs. Using &quot;<a href="#option%20logasap">option logasap</a>&quot;, the request gets logged as soon as the server
-sends the complete headers. The only missing information in the logs will be
-the total number of bytes which will indicate everything except the amount
-of data transferred, and the total time which will not take the transfer
-time into account. In such a situation, it&#x27;s a good practice to capture the
-&quot;Content-Length&quot; response header so that the logs at least indicate how many
-bytes are expected to be transferred.
+<pre class="text">By default, logs are emitted when all the log format variables and sample
+fetches used in the definition of the log-format string return a value, or
+when the session is terminated. This allows the built in log-format strings
+to account for the transfer time, or the number of bytes in log messages.
+
+When handling long lived connections such as large file transfers or RDP,
+it may take a while for the request or connection to appear in the logs.
+Using &quot;<a href="#option%20logasap">option logasap</a>&quot;, the log message is created as soon as the server
+connection is established in mode tcp, or as soon as the server sends the
+complete headers in mode http. Missing information in the logs will be the
+total number of bytes which will only indicate the amount of data transfered
+before the message was created and the total time which will not take the
+remainder of the connection life or transfer time into account. For the case
+of HTTP, it is good practice to capture the Content-Length response header
+so that the logs at least indicate how many bytes are expected to be
+transfered.
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
@@ -13720,13 +13768,17 @@ filter per certificate, with the following format for each line :
 
       &lt;crtfile&gt; [\[&lt;sslbindconf&gt; ...\]] [[!]&lt;snifilter&gt; ...]
 
-sslbindconf support &quot;<a href="#npn">npn</a>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;,
-crl-file&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL
-and Openssl &gt;= 1.1.1 &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported.
-It override the configuration set in bind line for the certificate.
+sslbindconf supports &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">allow-0rtt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#allow-0rtt%20%28Bind%20options%29">Bind options</a></li><li><a href="#allow-0rtt%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#alpn">alpn</a>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ca-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ca-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#ca-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphers<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphers%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphers%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;,
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ciphersuites<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ciphersuites%20%28Bind%20options%29">Bind options</a></li><li><a href="#ciphersuites%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">crl-file<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#crl-file%20%28Bind%20options%29">Bind options</a></li><li><a href="#crl-file%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;, &quot;<a href="#curves">curves</a>&quot;, &quot;<a href="#ecdhe">ecdhe</a>&quot;, &quot;<a href="#no-ca-names">no-ca-names</a>&quot;, &quot;<a href="#npn">npn</a>&quot;,
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">verify<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#verify%20%28Bind%20options%29">Bind options</a></li><li><a href="#verify%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; configuration. With BoringSSL and Openssl &gt;= 1.1.1
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-min-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-min-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-min-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; and &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl-max-ver<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl-max-ver%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl-max-ver%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; are also supported. It overrides the
+configuration set in bind line for the certificate.
 
-Wildcards are supported in the SNI filter. Negative filter are also supported,
-only useful in combination with a wildcard filter to exclude a particular SNI.
+Wildcards are supported in the SNI filter. Negative filters can be specified
+in the configuration, but they are only used as a hint, they don&#x27;t do
+anything.  (this changes in newer haproxy versions) If you want to exclude a
+SNI from a wildcard, use this positive SNI on another line. (like in the
+example).
 The certificates will be presented to clients who provide a valid TLS Server
 Name Indication field matching one of the SNI filters. If no SNI filter is
 specified, the CN and alt subjects are used. This directive may be specified
@@ -14094,7 +14146,7 @@ in any order, optionally terminated by &#x27;\r&#x27; and/or &#x27;\n&#x27;, eac
   MAINT mode, thus it will not accept any new connections at all, and health
   checks will be stopped.
 
-- The words &quot;down&quot;, &quot;failed&quot;, or &quot;stopped&quot;, optionally followed by a
+- The words &quot;down&quot;, &quot;fail&quot;, or &quot;stopped&quot;, optionally followed by a
   description string after a sharp (&#x27;#&#x27;). All of these mark the server&#x27;s
   operating state as DOWN, but since the word itself is reported on the stats
   page, the difference allows an administrator to know if the situation was
@@ -16033,8 +16085,12 @@ sc_trackers sample fetch keyword.
 </pre><a class="anchor" name="upper"></a><a class="anchor" name="7-upper"></a><a class="anchor" name="7.3.1-upper"></a><a class="anchor" name="upper (Using ACLs and fetching samples)"></a><a class="anchor" name="upper (Converters)"></a><div class="keyword"><b><a class="anchor" name="upper"></a><a href="#7.3.1-upper">upper</a></b></div><pre class="text">Convert a string sample to upper case. This can only be placed after a string
 sample fetch function or after a transformation keyword returning a string
 type. The result is of type string.
-</pre><a class="anchor" name="url_dec"></a><a class="anchor" name="7-url_dec"></a><a class="anchor" name="7.3.1-url_dec"></a><a class="anchor" name="url_dec (Using ACLs and fetching samples)"></a><a class="anchor" name="url_dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="url_dec"></a><a href="#7.3.1-url_dec">url_dec</a></b></div><pre class="text">  Takes an url-encoded string provided as input and returns the decoded
-  version as output. The input and the output are of type string.
+</pre><a class="anchor" name="url_dec"></a><a class="anchor" name="7-url_dec"></a><a class="anchor" name="7.3.1-url_dec"></a><a class="anchor" name="url_dec (Using ACLs and fetching samples)"></a><a class="anchor" name="url_dec (Converters)"></a><div class="keyword"><b><a class="anchor" name="url_dec"></a><a href="#7.3.1-url_dec">url_dec</a></b>(<span style="color: #008">[<span style="color: #080">&lt;in_form&gt;</span>]</span>)</div><pre class="text">  Takes an url-encoded string provided as input and returns the decoded version
+  as output. The input and the output are of type string. If the &lt;in_form&gt;
+  argument is set to a non-zero integer value, the input string is assumed to
+  be part of a form or query string and the &#x27;+&#x27; character will be turned into a
+  space (&#x27; &#x27;). Otherwise this will only happen after a question mark indicating
+  a query string (&#x27;?&#x27;).
 
 unset-var(&lt;var name&gt;)
   Unsets a variable if the input content is defined. The name of the variable
@@ -19255,8 +19311,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.25 &ndash; Configuration Manual<br>
-							<small>2020/04/02, willy tarreau</small>
+							HAProxy 1.8.27 &ndash; Configuration Manual<br>
+							<small>2020/11/06, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -19359,7 +19415,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.25', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.27', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
