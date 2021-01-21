@@ -8,7 +8,7 @@ class KeyWordParser(parser.Parser):
         self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (
             '([a-z0-9\-\+_\.]*[a-z0-9\-\+_)])', # keyword
             '( [a-z0-9\-_]+)*',                  # subkeywords
-            '(\([^ ]*\))?',   # arg (ex: (<backend>), (<frontend>/<backend>), (<offset1>,<length>[,<offset2>]) ...
+            '(\([^)]*\))?',   # arg (ex: (<backend>), (<frontend>/<backend>), (<offset1>,<length>[,<offset2>]) ...
         ))
 
     def parse(self, line):
