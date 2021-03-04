@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.3.3 - Configuration Manual</title>
+		<title>HAProxy version 2.3.6 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -3552,7 +3552,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/01/09</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/03/05</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3563,10 +3563,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.3.3</strong></p>
+							<p><strong>version 2.3.6</strong></p>
 							<p>
 								willy tarreau<br>
-								2021/01/08
+								2021/03/03
 							</p>
 						</div>
 
@@ -6313,11 +6313,7 @@ return HTTP 400 (Bad Request) error. Similarly if an HTTP response is larger
 than this size, haproxy will return HTTP 502 (Bad Gateway). Note that the
 value set using this parameter will automatically be rounded up to the next
 multiple of 8 on 32-bit machines and 16 on 64-bit machines.
-</pre><a class="anchor" name="tune.chksize"></a><a class="anchor" name="3-tune.chksize"></a><a class="anchor" name="3.2-tune.chksize"></a><a class="anchor" name="tune.chksize (Global parameters)"></a><a class="anchor" name="tune.chksize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.chksize"></a><a href="#3.2-tune.chksize">tune.chksize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the check buffer size to this size (in bytes). Higher values may help
-find string or regex patterns in very large pages, though doing so may imply
-more memory and CPU usage. The default value is 16384 and can be changed at
-build time. It is not recommended to change this value, but to use better
-checks whenever possible.
+</pre><a class="anchor" name="tune.chksize"></a><a class="anchor" name="3-tune.chksize"></a><a class="anchor" name="3.2-tune.chksize"></a><a class="anchor" name="tune.chksize (Global parameters)"></a><a class="anchor" name="tune.chksize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.chksize"></a><a href="#3.2-tune.chksize">tune.chksize</a></b> <span style="color: #080">&lt;number&gt;</span> <span class="label label-warning">(deprecated)</span></div><pre class="text">This option is deprecated and ignored.
 </pre><a class="anchor" name="tune.comp.maxlevel"></a><a class="anchor" name="3-tune.comp.maxlevel"></a><a class="anchor" name="3.2-tune.comp.maxlevel"></a><a class="anchor" name="tune.comp.maxlevel (Global parameters)"></a><a class="anchor" name="tune.comp.maxlevel (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.comp.maxlevel"></a><a href="#3.2-tune.comp.maxlevel">tune.comp.maxlevel</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum compression level. The compression level affects CPU
 usage during compression. This value affects CPU usage during compression.
 Each session using compression initializes the compression algorithm with
@@ -6387,7 +6383,11 @@ order to minimize the number of persistent connections to a server, and to
 optimize the connection reuse rate. But to help with debugging or when
 suspecting a bug in HAProxy around connection reuse, it can be convenient to
 forcefully disable this idle pool sharing between multiple threads, and force
-this option to &quot;off&quot;. The default is on.
+this option to &quot;off&quot;. The default is on. It is strongly recommended against
+disabling this option without setting a conservative value on &quot;<a href="#pool-low-conn">pool-low-conn</a>&quot;
+for all servers relying on connection reuse to achieve a high performance
+level, otherwise connections might be closed very often as the thread count
+increases.
 </pre><a class="anchor" name="tune.idletimer"></a><a class="anchor" name="3-tune.idletimer"></a><a class="anchor" name="3.2-tune.idletimer"></a><a class="anchor" name="tune.idletimer (Global parameters)"></a><a class="anchor" name="tune.idletimer (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.idletimer"></a><a href="#3.2-tune.idletimer">tune.idletimer</a></b> <span style="color: #080">&lt;timeout&gt;</span></div><pre class="text">Sets the duration after which haproxy will consider that an empty buffer is
 probably associated with an idle stream. This is used to optimally adjust
 some packet sizes while forwarding large and small data alternatively. The
@@ -6526,16 +6526,17 @@ Another use case is to prevent write timeouts with extremely slow clients due
 to the kernel waiting for a large part of the buffer to be read before
 notifying haproxy again.
 </pre><a class="anchor" name="tune.ssl.cachesize"></a><a class="anchor" name="3-tune.ssl.cachesize"></a><a class="anchor" name="3.2-tune.ssl.cachesize"></a><a class="anchor" name="tune.ssl.cachesize (Global parameters)"></a><a class="anchor" name="tune.ssl.cachesize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.cachesize"></a><a href="#3.2-tune.ssl.cachesize">tune.ssl.cachesize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the global SSL session cache, in a number of blocks. A block
-is large enough to contain an encoded session without peer certificate.
-An encoded session with peer certificate is stored in multiple blocks
-depending on the size of the peer certificate. A block uses approximately
-200 bytes of memory. The default value may be forced at build time, otherwise
-defaults to 20000. When the cache is full, the most idle entries are purged
-and reassigned. Higher values reduce the occurrence of such a purge, hence
-the number of CPU-intensive SSL handshakes by ensuring that all users keep
-their session as long as possible. All entries are pre-allocated upon startup
-and are shared between all processes if &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; is greater than 1. Setting
-this value to 0 disables the SSL session cache.
+is large enough to contain an encoded session without peer certificate.  An
+encoded session with peer certificate is stored in multiple blocks depending
+on the size of the peer certificate. A block uses approximately 200 bytes of
+memory (based on `sizeof(struct sh_ssl_sess_hdr) + SHSESS_BLOCK_MIN_SIZE`
+calculation used for `shctx_init` function). The default value may be forced
+at build time, otherwise defaults to 20000. When the cache is full, the most
+idle entries are purged and reassigned. Higher values reduce the occurrence
+of such a purge, hence the number of CPU-intensive SSL handshakes by ensuring
+that all users keep their session as long as possible. All entries are
+pre-allocated upon startup and are shared between all processes if &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;
+is greater than 1. Setting this value to 0 disables the SSL session cache.
 </pre><a class="anchor" name="tune.ssl.force-private-cache"></a><a class="anchor" name="3-tune.ssl.force-private-cache"></a><a class="anchor" name="3.2-tune.ssl.force-private-cache"></a><a class="anchor" name="tune.ssl.force-private-cache (Global parameters)"></a><a class="anchor" name="tune.ssl.force-private-cache (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.force-private-cache"></a><a href="#3.2-tune.ssl.force-private-cache">tune.ssl.force-private-cache</a></b></div><pre class="text">This option disables SSL session cache sharing between all processes. It
 should normally not be used since it will force many renegotiations due to
 clients hitting a random process. But it may be required on some operating
@@ -9183,7 +9184,7 @@ out, the check obviously fails. The available matches are :
                     considered invalid if the body contains the string.
 
 It is important to note that the responses will be limited to a certain size
-defined by the global &quot;<a href="#tune.chksize">tune.chksize</a>&quot; option, which defaults to 16384 bytes.
+defined by the global &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot; option, which defaults to 16384 bytes.
 Thus, too large responses may not contain the mandatory pattern when using
 &quot;string&quot; or &quot;rstring&quot;. If a large response is absolutely required, it is
 possible to change the default max size by setting the global variable.
@@ -9271,14 +9272,11 @@ request sent during HTTP health checks. If a body is defined, the associate
 &quot;Transfer-encoding&quot; header should not be present in the request provided by
 &quot;<a href="#http-check%20send">http-check send</a>&quot;. If so, it will be ignored. The old trick consisting to add
 headers after the version string on the &quot;<a href="#option%20httpchk">option httpchk</a>&quot; line is now
-deprecated. Note also the &quot;Connection: close&quot; header is still added if a
-&quot;<a href="#http-check%20expect">http-check expect</a>&quot; directive is defined independently of this directive, just
-like the state header if the directive &quot;<a href="#http-check%20send-state">http-check send-state</a>&quot; is defined.
+deprecated.
 
 Also &quot;<a href="#http-check%20send">http-check send</a>&quot; doesn&#x27;t support HTTP keep-alive. Keep in mind that it
-will automatically append a &quot;Connection: close&quot; header, meaning that this
-header should not be present in the request provided by &quot;<a href="#http-check%20send">http-check send</a>&quot;. If
-so, it will be ignored.
+will automatically append a &quot;Connection: close&quot; header, unless a Connection
+header has already already been configured via a hdr entry.
 
 Note that the Host header and the request authority, when both defined, are
 automatically synchronized. It means when the HTTP request is sent, when a
@@ -13227,12 +13225,17 @@ server www1_dc2 &quot;${LAN_DC2}.101:80&quot;
       &quot;,unix-tightsocklen=0&quot; to any abstract socket definition in socat to
       make it compatible with HAProxy&#x27;s.
 </pre><div class="page-header"><b>See also:</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about server options</div>
-<a class="anchor" name="server-state-file-name"></a><a class="anchor" name="4-server-state-file-name"></a><a class="anchor" name="4.2-server-state-file-name"></a><a class="anchor" name="server-state-file-name (Proxies)"></a><a class="anchor" name="server-state-file-name (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-state-file-name"></a><a href="#4.2-server-state-file-name">server-state-file-name</a></b> <span style="color: #008">[<span style="color: #080">&lt;file&gt;</span>]</span></div><pre class="text">Set the server state file to read, load and apply to servers available in
-this backend. It only applies when the directive &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;
-is set to &quot;local&quot;. When &lt;file&gt; is not provided or if this directive is not
-set, then backend name is used. If &lt;file&gt; starts with a slash &#x27;/&#x27;, then it is
-considered as an absolute path. Otherwise, &lt;file&gt; is concatenated to the
-global directive &quot;server-state-file-base&quot;.
+<a class="anchor" name="server-state-file-name"></a><a class="anchor" name="4-server-state-file-name"></a><a class="anchor" name="4.2-server-state-file-name"></a><a class="anchor" name="server-state-file-name (Proxies)"></a><a class="anchor" name="server-state-file-name (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-state-file-name"></a><a href="#4.2-server-state-file-name">server-state-file-name</a></b> <span style="color: #008">[ <span style="color: #800">{ use-backend-name | <span style="color: #080">&lt;file&gt;</span> }</span> ]</span></div><pre class="text">Set the server state file to read, load and apply to servers available in
+this backend.
+</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<pre class="text">It only applies when the directive &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; is set to
+&quot;local&quot;. When &lt;file&gt; is not provided, if &quot;use-backend-name&quot; is used or if
+this directive is not set, then backend name is used. If &lt;file&gt; starts with a
+slash &#x27;/&#x27;, then it is considered as an absolute path. Otherwise, &lt;file&gt; is
+concatenated to the global directive &quot;<a href="#server-state-base">server-state-base</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -13242,7 +13245,7 @@ global directive &quot;server-state-file-base&quot;.
 backend bk
   load-server-state-from-file
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;server-state-file-base&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#server-state-base">server-state-base</a>&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
 <a class="anchor" name="server-template"></a><a class="anchor" name="4-server-template"></a><a class="anchor" name="4.2-server-template"></a><a class="anchor" name="server-template (Proxies)"></a><a class="anchor" name="server-template (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-template"></a><a href="#4.2-server-template">server-template</a></b> <span style="color: #080">&lt;prefix&gt;</span> <span style="color: #080">&lt;num | range&gt;</span> <span style="color: #080">&lt;fqdn&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[params*]</span></div><pre class="text">Set a template to initialize servers with shared parameters.
 The names of these servers are built from &lt;prefix&gt; and &lt;num | range&gt; parameters.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -14684,7 +14687,7 @@ status-code &lt;expr&gt; is optional and can be used to set the check status cod
                        buffer.
 
 It is important to note that the responses will be limited to a certain size
-defined by the global &quot;<a href="#tune.chksize">tune.chksize</a>&quot; option, which defaults to 16384 bytes.
+defined by the global &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot; option, which defaults to 16384 bytes.
 Thus, too large responses may not contain the mandatory pattern when using
 &quot;string&quot;, &quot;rstring&quot; or binary. If a large response is absolutely required, it
 is possible to change the default max size by setting the global variable.
@@ -14714,7 +14717,7 @@ tcp-check expect string role:master
 tcp-check send QUIT\r\n
 tcp-check expect string +OK
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<a href="#tcp-check%20connect">tcp-check connect</a>&quot;, &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot;, &quot;<a href="#tcp-check%20send-binary">tcp-check send-binary</a>&quot;, &quot;<a href="#http-check%20expect">http-check expect</a>&quot;, tune.chksize</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<a href="#tcp-check%20connect">tcp-check connect</a>&quot;, &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot;, &quot;<a href="#tcp-check%20send-binary">tcp-check send-binary</a>&quot;, &quot;<a href="#http-check%20expect">http-check expect</a>&quot;, tune.bufsize</div>
 <a class="anchor" name="tcp-check"></a><a class="anchor" name="4-tcp-check"></a><a class="anchor" name="4.2-tcp-check"></a><a class="anchor" name="tcp-check (Proxies)"></a><a class="anchor" name="tcp-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-check send"></a><a class="anchor" name="4-tcp-check send"></a><a class="anchor" name="4.2-tcp-check send"></a><a class="anchor" name="tcp-check send (Proxies)"></a><a class="anchor" name="tcp-check send (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-check send"></a><a href="#4.2-tcp-check%20send">tcp-check send</a></b> <span style="color: #080">&lt;data&gt;</span> <span style="color: #008">[comment <span style="color: #080">&lt;msg&gt;</span>]</span></div><a class="anchor" name="tcp-check"></a><a class="anchor" name="4-tcp-check"></a><a class="anchor" name="4.2-tcp-check"></a><a class="anchor" name="tcp-check (Proxies)"></a><a class="anchor" name="tcp-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-check send-lf"></a><a class="anchor" name="4-tcp-check send-lf"></a><a class="anchor" name="4.2-tcp-check send-lf"></a><a class="anchor" name="tcp-check send-lf (Proxies)"></a><a class="anchor" name="tcp-check send-lf (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-check send-lf"></a><a href="#4.2-tcp-check%20send-lf">tcp-check send-lf</a></b> <span style="color: #080">&lt;fmt&gt;</span> <span style="color: #008">[comment <span style="color: #080">&lt;msg&gt;</span>]</span></div><pre class="text">Specify a string or a log-format string to be sent as a question during a
 generic health check
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -14738,7 +14741,7 @@ option tcp-check
 tcp-check send info\ replication\r\n
 tcp-check expect string role:master
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<a href="#tcp-check%20connect">tcp-check connect</a>&quot;, &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot;, &quot;<a href="#tcp-check%20send-binary">tcp-check send-binary</a>&quot;, tune.chksize</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<a href="#tcp-check%20connect">tcp-check connect</a>&quot;, &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot;, &quot;<a href="#tcp-check%20send-binary">tcp-check send-binary</a>&quot;, tune.bufsize</div>
 <a class="anchor" name="tcp-check"></a><a class="anchor" name="4-tcp-check"></a><a class="anchor" name="4.2-tcp-check"></a><a class="anchor" name="tcp-check (Proxies)"></a><a class="anchor" name="tcp-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-check send-binary"></a><a class="anchor" name="4-tcp-check send-binary"></a><a class="anchor" name="4.2-tcp-check send-binary"></a><a class="anchor" name="tcp-check send-binary (Proxies)"></a><a class="anchor" name="tcp-check send-binary (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-check send-binary"></a><a href="#4.2-tcp-check%20send-binary">tcp-check send-binary</a></b> <span style="color: #080">&lt;hexstring&gt;</span> <span style="color: #008">[comment <span style="color: #080">&lt;msg&gt;</span>]</span></div><a class="anchor" name="tcp-check"></a><a class="anchor" name="4-tcp-check"></a><a class="anchor" name="4.2-tcp-check"></a><a class="anchor" name="tcp-check (Proxies)"></a><a class="anchor" name="tcp-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-check send-binary-lf"></a><a class="anchor" name="4-tcp-check send-binary-lf"></a><a class="anchor" name="4.2-tcp-check send-binary-lf"></a><a class="anchor" name="tcp-check send-binary-lf (Proxies)"></a><a class="anchor" name="tcp-check send-binary-lf (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-check send-binary-lf"></a><a href="#4.2-tcp-check%20send-binary-lf">tcp-check send-binary-lf</a></b> <span style="color: #080">&lt;hexfmt&gt;</span> <span style="color: #008">[comment <span style="color: #080">&lt;msg&gt;</span>]</span></div><pre class="text">Specify an hex digits string or an hex digits log-format string to be sent as
 a binary question during a raw tcp health check
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -14763,7 +14766,7 @@ option tcp-check
 tcp-check send-binary 50494e470d0a <span class="comment"># PING\r\n</span>
 tcp-check expect binary 2b504F4e47 <span class="comment"># +PONG</span>
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<a href="#tcp-check%20connect">tcp-check connect</a>&quot;, &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot;, &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot;, tune.chksize</div>
+</div><div class="page-header"><b>See also :</b> &quot;<a href="#option%20tcp-check">option tcp-check</a>&quot;, &quot;<a href="#tcp-check%20connect">tcp-check connect</a>&quot;, &quot;<a href="#tcp-check%20expect">tcp-check expect</a>&quot;, &quot;<a href="#tcp-check%20send">tcp-check send</a>&quot;, tune.bufsize</div>
 <a class="anchor" name="tcp-check"></a><a class="anchor" name="4-tcp-check"></a><a class="anchor" name="4.2-tcp-check"></a><a class="anchor" name="tcp-check (Proxies)"></a><a class="anchor" name="tcp-check (Alphabetically sorted keywords reference)"></a><a class="anchor" name="tcp-check set-var"></a><a class="anchor" name="4-tcp-check set-var"></a><a class="anchor" name="4.2-tcp-check set-var"></a><a class="anchor" name="tcp-check set-var (Proxies)"></a><a class="anchor" name="tcp-check set-var (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="tcp-check set-var"></a><a href="#4.2-tcp-check%20set-var">tcp-check set-var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) <span style="color: #080">&lt;expr&gt;</span></div><pre class="text">This operation sets the content of a variable. The variable is declared inline.
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -17196,7 +17199,10 @@ seem to show very good performance already with sub-millisecond response
 times. The default is zero, indicating that any idle connection can be used
 at any time. It is the recommended setting for normal use. This only applies
 to connections that can be shared according to the same principles as those
-applying to &quot;<a href="#http-reuse">http-reuse</a>&quot;.
+applying to &quot;<a href="#http-reuse">http-reuse</a>&quot;. In case connection sharing between threads would
+be disabled via &quot;<a href="#tune.idle-pool.shared">tune.idle-pool.shared</a>&quot;, it can become very important to use
+this setting to make sure each thread always has a few connections, or the
+connection reuse rate will decrease as thread count increases.
 </pre><a class="anchor" name="pool-max-conn"></a><a class="anchor" name="5-pool-max-conn"></a><a class="anchor" name="5.2-pool-max-conn"></a><a class="anchor" name="pool-max-conn (Bind and server options)"></a><a class="anchor" name="pool-max-conn (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="pool-max-conn"></a><a href="#5.2-pool-max-conn">pool-max-conn</a></b> <span style="color: #080">&lt;max&gt;</span></div><pre class="text">Set the maximum number of idling connections for a server. -1 means unlimited
 connections, 0 means no idle connections. The default is -1. When idle
 connections are enabled, orphaned idle connections which do not belong to any
@@ -20670,29 +20676,40 @@ used on responses. Please refer to these respective fetches for more details.
 In case of doubt about the fetch direction, please use the explicit ones.
 Note that contrary to the hdr() sample fetch method, the hdr_* ACL keywords
 unambiguously apply to the request headers.
-</pre><a class="anchor" name="req.fhdr"></a><a class="anchor" name="7-req.fhdr"></a><a class="anchor" name="7.3.6-req.fhdr"></a><a class="anchor" name="req.fhdr (Using ACLs and fetching samples)"></a><a class="anchor" name="req.fhdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.fhdr"></a><a href="#7.3.6-req.fhdr">req.fhdr</a></b>(<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) : string</div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP request. When
-used from an ACL, all occurrences are iterated over until a match is found.
+</pre><a class="anchor" name="req.fhdr"></a><a class="anchor" name="7-req.fhdr"></a><a class="anchor" name="7.3.6-req.fhdr"></a><a class="anchor" name="req.fhdr (Using ACLs and fetching samples)"></a><a class="anchor" name="req.fhdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.fhdr"></a><a href="#7.3.6-req.fhdr">req.fhdr</a></b>(<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) : string</div><pre class="text">This returns the full value of the last occurrence of header &lt;name&gt; in an
+HTTP request. It differs from req.hdr() in that any commas present in the
+value are returned and are not used as delimiters. This is sometimes useful
+with headers such as User-Agent.
+
+When used from an ACL, all occurrences are iterated over until a match is
+found.
+
 Optionally, a specific occurrence might be specified as a position number.
 Positive values indicate a position from the first occurrence, with 1 being
 the first one. Negative values indicate positions relative to the last one,
-with -1 being the last one. It differs from req.hdr() in that any commas
-present in the value are returned and are not used as delimiters. This is
-sometimes useful with headers such as User-Agent.
+with -1 being the last one.
 </pre><a class="anchor" name="req.fhdr_cnt"></a><a class="anchor" name="7-req.fhdr_cnt"></a><a class="anchor" name="7.3.6-req.fhdr_cnt"></a><a class="anchor" name="req.fhdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="req.fhdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.fhdr_cnt"></a><a href="#7.3.6-req.fhdr_cnt">req.fhdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value representing the number of occurrences of request
 header field name &lt;name&gt;, or the total number of header fields if &lt;name&gt; is
-not specified. Contrary to its req.hdr_cnt() cousin, this function returns
-the number of full line headers and does not stop on commas.
-</pre><a class="anchor" name="req.hdr"></a><a class="anchor" name="7-req.hdr"></a><a class="anchor" name="7.3.6-req.hdr"></a><a class="anchor" name="req.hdr (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr"></a><a href="#7.3.6-req.hdr">req.hdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP request. When
-used from an ACL, all occurrences are iterated over until a match is found.
+not specified. Like req.fhdr() it differs from res.hdr_cnt() by not splitting
+headers at commas.
+</pre><a class="anchor" name="req.hdr"></a><a class="anchor" name="7-req.hdr"></a><a class="anchor" name="7.3.6-req.hdr"></a><a class="anchor" name="req.hdr (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr"></a><a href="#7.3.6-req.hdr">req.hdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">This returns the last comma-separated value of the header &lt;name&gt; in an HTTP
+request. The fetch considers any comma as a delimiter for distinct values.
+This is useful if you need to process headers that are defined to be a list
+of values, such as Accept, or X-Forwarded-For. If full-line headers are
+desired instead, use req.fhdr(). Please carefully check RFC 7231 to know how
+certain headers are supposed to be parsed. Also, some of them are case
+insensitive (e.g. Connection).
+
+When used from an ACL, all occurrences are iterated over until a match is
+found.
+
 Optionally, a specific occurrence might be specified as a position number.
 Positive values indicate a position from the first occurrence, with 1 being
 the first one. Negative values indicate positions relative to the last one,
-with -1 being the last one. A typical use is with the X-Forwarded-For header
-once converted to IP, associated with an IP stick-table. The function
-considers any comma as a delimiter for distinct values. If full-line headers
-are desired instead, use req.fhdr(). Please carefully check RFC7231 to know
-how certain headers are supposed to be parsed. Also, some of them are case
-insensitive (e.g. Connection).
+with -1 being the last one.
+
+A typical use is with the X-Forwarded-For header once converted to IP,
+associated with an IP stick-table.
 
 ACL derivatives :
   hdr([&lt;name&gt;[,&lt;occ&gt;]])     : exact string match
@@ -20705,28 +20722,30 @@ ACL derivatives :
   hdr_sub([&lt;name&gt;[,&lt;occ&gt;]]) : substring match
 </pre><a class="anchor" name="req.hdr_cnt"></a><a class="anchor" name="7-req.hdr_cnt"></a><a class="anchor" name="7.3.6-req.hdr_cnt"></a><a class="anchor" name="req.hdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_cnt"></a><a href="#7.3.6-req.hdr_cnt">req.hdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="hdr_cnt"></a><a class="anchor" name="7-hdr_cnt"></a><a class="anchor" name="7.3.6-hdr_cnt"></a><a class="anchor" name="hdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr_cnt"></a><a href="#7.3.6-hdr_cnt">hdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;header&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value representing the number of occurrences of request
 header field name &lt;name&gt;, or the total number of header field values if
-&lt;name&gt; is not specified. It is important to remember that one header line may
-count as several headers if it has several values. The function considers any
-comma as a delimiter for distinct values. If full-line headers are desired
-instead, req.fhdr_cnt() should be used instead. With ACLs, it can be used to
-detect presence, absence or abuse of a specific header, as well as to block
-request smuggling attacks by rejecting requests which contain more than one
-of certain headers. See &quot;<a href="#req.hdr">req.hdr</a>&quot; for more information on header matching.
+&lt;name&gt; is not specified. Like req.hdr() it counts each comma separated
+part of the header&#x27;s value. If counting of full-line headers is desired,
+then req.fhdr_cnt() should be used instead.
+
+With ACLs, it can be used to detect presence, absence or abuse of a specific
+header, as well as to block request smuggling attacks by rejecting requests
+which contain more than one of certain headers.
+
+Refer to req.hdr() for more information on header matching.
 </pre><a class="anchor" name="req.hdr_ip"></a><a class="anchor" name="7-req.hdr_ip"></a><a class="anchor" name="7.3.6-req.hdr_ip"></a><a class="anchor" name="req.hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_ip"></a><a href="#7.3.6-req.hdr_ip">req.hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip</div><a class="anchor" name="hdr_ip"></a><a class="anchor" name="7-hdr_ip"></a><a class="anchor" name="7.3.6-hdr_ip"></a><a class="anchor" name="hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr_ip"></a><a href="#7.3.6-hdr_ip">hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP request,
 converts it to an IPv4 or IPv6 address and returns this address. When used
 with ACLs, all occurrences are checked, and if &lt;name&gt; is omitted, every value
-of every header is checked. Optionally, a specific occurrence might be
-specified as a position number. Positive values indicate a position from the
-first occurrence, with 1 being the first one. Negative values indicate
-positions relative to the last one, with -1 being the last one. A typical use
-is with the X-Forwarded-For and X-Client-IP headers.
+of every header is checked.
+
+The &lt;occ&gt; parameter is processed as with req.hdr().
+
+A typical use is with the X-Forwarded-For and X-Client-IP headers.
 </pre><a class="anchor" name="req.hdr_val"></a><a class="anchor" name="7-req.hdr_val"></a><a class="anchor" name="7.3.6-req.hdr_val"></a><a class="anchor" name="req.hdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_val"></a><a href="#7.3.6-req.hdr_val">req.hdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer</div><a class="anchor" name="hdr_val"></a><a class="anchor" name="7-hdr_val"></a><a class="anchor" name="7.3.6-hdr_val"></a><a class="anchor" name="hdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr_val"></a><a href="#7.3.6-hdr_val">hdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP request, and
 converts it to an integer value. When used with ACLs, all occurrences are
 checked, and if &lt;name&gt; is omitted, every value of every header is checked.
-Optionally, a specific occurrence might be specified as a position number.
-Positive values indicate a position from the first occurrence, with 1 being
-the first one. Negative values indicate positions relative to the last one,
-with -1 being the last one. A typical use is with the X-Forwarded-For header.
+
+The &lt;occ&gt; parameter is processed as with req.hdr().
+
+A typical use is with the X-Forwarded-For header.
 </pre><a class="anchor" name="req.hdrs"></a><a class="anchor" name="7-req.hdrs"></a><a class="anchor" name="7.3.6-req.hdrs"></a><a class="anchor" name="req.hdrs (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdrs (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdrs"></a><a href="#7.3.6-req.hdrs">req.hdrs</a></b> : string</div><pre class="text">Returns the current request headers as string including the last empty line
 separating headers from the request body. The last empty line can be used to
 detect a truncated header block. This sample fetch is useful for some SPOE
@@ -20829,18 +20848,21 @@ ACL derivatives :
   req_ver : exact string match
 </pre><a class="anchor" name="res.body"></a><a class="anchor" name="7-res.body"></a><a class="anchor" name="7.3.6-res.body"></a><a class="anchor" name="res.body (Using ACLs and fetching samples)"></a><a class="anchor" name="res.body (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.body"></a><a href="#7.3.6-res.body">res.body</a></b> : binary</div><pre class="text">This returns the HTTP response&#x27;s available body as a block of data. Unlike
 the request side, there is no directive to wait for the response&#x27;s body. This
-sample fetch is really useful (and usable) in the health-check context. It
-may be used in tcp-check based expect rules.
+sample fetch is really useful (and usable) in the health-check context.
+
+It may be used in tcp-check based expect rules.
 </pre><a class="anchor" name="res.body_len"></a><a class="anchor" name="7-res.body_len"></a><a class="anchor" name="7.3.6-res.body_len"></a><a class="anchor" name="res.body_len (Using ACLs and fetching samples)"></a><a class="anchor" name="res.body_len (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.body_len"></a><a href="#7.3.6-res.body_len">res.body_len</a></b> : integer</div><pre class="text">This returns the length of the HTTP response available body in bytes. Unlike
 the request side, there is no directive to wait for the response&#x27;s body. This
-sample fetch is really useful (and usable) in the health-check context. It
-may be used in tcp-check based expect rules.
+sample fetch is really useful (and usable) in the health-check context.
+
+It may be used in tcp-check based expect rules.
 </pre><a class="anchor" name="res.body_size"></a><a class="anchor" name="7-res.body_size"></a><a class="anchor" name="7.3.6-res.body_size"></a><a class="anchor" name="res.body_size (Using ACLs and fetching samples)"></a><a class="anchor" name="res.body_size (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.body_size"></a><a href="#7.3.6-res.body_size">res.body_size</a></b> : integer</div><pre class="text">This returns the advertised length of the HTTP response body in bytes. It
 will represent the advertised Content-Length header, or the size of the
 available data in case of chunked encoding. Unlike the request side, there is
 no directive to wait for the response body. This sample fetch is really
-useful (and usable) in the health-check context. It may be used in tcp-check
-based expect rules.
+useful (and usable) in the health-check context.
+
+It may be used in tcp-check based expect rules.
 </pre><a class="anchor" name="res.cache_hit"></a><a class="anchor" name="7-res.cache_hit"></a><a class="anchor" name="7.3.6-res.cache_hit"></a><a class="anchor" name="res.cache_hit (Using ACLs and fetching samples)"></a><a class="anchor" name="res.cache_hit (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.cache_hit"></a><a href="#7.3.6-res.cache_hit">res.cache_hit</a></b> : boolean</div><pre class="text">Returns the boolean &quot;true&quot; value if the response has been built out of an
 HTTP cache entry, otherwise returns boolean &quot;false&quot;.
 </pre><a class="anchor" name="res.cache_name"></a><a class="anchor" name="7-res.cache_name"></a><a class="anchor" name="7.3.6-res.cache_name"></a><a class="anchor" name="res.cache_name (Using ACLs and fetching samples)"></a><a class="anchor" name="res.cache_name (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.cache_name"></a><a href="#7.3.6-res.cache_name">res.cache_name</a></b> : string</div><pre class="text">Returns a string containing the name of the HTTP cache that was used to
@@ -20854,43 +20876,45 @@ was compressed by HAProxy, for example : &quot;deflate&quot;. This may be used t
 some information in the logs.
 </pre><a class="anchor" name="res.cook"></a><a class="anchor" name="7-res.cook"></a><a class="anchor" name="7.3.6-res.cook"></a><a class="anchor" name="res.cook (Using ACLs and fetching samples)"></a><a class="anchor" name="res.cook (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.cook"></a><a href="#7.3.6-res.cook">res.cook</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : string</div><a class="anchor" name="scook"></a><a class="anchor" name="7-scook"></a><a class="anchor" name="7.3.6-scook"></a><a class="anchor" name="scook (Using ACLs and fetching samples)"></a><a class="anchor" name="scook (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="scook"></a><a href="#7.3.6-scook">scook</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : string <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of the cookie name &lt;name&gt; on a &quot;Set-Cookie&quot;
 header line from the response, and returns its value as string. If no name is
-specified, the first cookie value is returned. It may be used in tcp-check
-based expect rules.
+specified, the first cookie value is returned.
+
+It may be used in tcp-check based expect rules.
 
 ACL derivatives :
   scook([&lt;name&gt;] : exact string match
 </pre><a class="anchor" name="res.cook_cnt"></a><a class="anchor" name="7-res.cook_cnt"></a><a class="anchor" name="7.3.6-res.cook_cnt"></a><a class="anchor" name="res.cook_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="res.cook_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.cook_cnt"></a><a href="#7.3.6-res.cook_cnt">res.cook_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="scook_cnt"></a><a class="anchor" name="7-scook_cnt"></a><a class="anchor" name="7.3.6-scook_cnt"></a><a class="anchor" name="scook_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="scook_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="scook_cnt"></a><a href="#7.3.6-scook_cnt">scook_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value representing the number of occurrences of the cookie
 &lt;name&gt; in the response, or all cookies if &lt;name&gt; is not specified. This is
-mostly useful when combined with ACLs to detect suspicious responses. It may
-be used in tcp-check based expect rules.
+mostly useful when combined with ACLs to detect suspicious responses.
+
+It may be used in tcp-check based expect rules.
 </pre><a class="anchor" name="res.cook_val"></a><a class="anchor" name="7-res.cook_val"></a><a class="anchor" name="7.3.6-res.cook_val"></a><a class="anchor" name="res.cook_val (Using ACLs and fetching samples)"></a><a class="anchor" name="res.cook_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.cook_val"></a><a href="#7.3.6-res.cook_val">res.cook_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="scook_val"></a><a class="anchor" name="7-scook_val"></a><a class="anchor" name="7.3.6-scook_val"></a><a class="anchor" name="scook_val (Using ACLs and fetching samples)"></a><a class="anchor" name="scook_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="scook_val"></a><a href="#7.3.6-scook_val">scook_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of the cookie name &lt;name&gt; on a &quot;Set-Cookie&quot;
 header line from the response, and converts its value to an integer which is
-returned. If no name is specified, the first cookie value is returned. It may
-be used in tcp-check based expect rules.
-</pre><a class="anchor" name="res.fhdr"></a><a class="anchor" name="7-res.fhdr"></a><a class="anchor" name="7.3.6-res.fhdr"></a><a class="anchor" name="res.fhdr (Using ACLs and fetching samples)"></a><a class="anchor" name="res.fhdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.fhdr"></a><a href="#7.3.6-res.fhdr">res.fhdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP response, or of
-the last header if no &lt;name&gt; is specified. Optionally, a specific occurrence
-might be specified as a position number. Positive values indicate a position
-from the first occurrence, with 1 being the first one. Negative values
-indicate positions relative to the last one, with -1 being the last one. It
-differs from res.hdr() in that any commas present in the value are returned
-and are not used as delimiters. If this is not desired, the res.hdr() fetch
-should be used instead. This is sometimes useful with headers such as Date or
-Expires. It may be used in tcp-check based expect rules.
-</pre><a class="anchor" name="res.fhdr_cnt"></a><a class="anchor" name="7-res.fhdr_cnt"></a><a class="anchor" name="7.3.6-res.fhdr_cnt"></a><a class="anchor" name="res.fhdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="res.fhdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.fhdr_cnt"></a><a href="#7.3.6-res.fhdr_cnt">res.fhdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><pre class="text">Returns an integer value representing the number of occurrences of response
-header field name &lt;name&gt;, or the total number of header fields if &lt;name&gt; is
-not specified. Contrary to its res.hdr_cnt() cousin, this function returns
-the number of full line headers and does not stop on commas. If this is not
-desired, the res.hdr_cnt() fetch should be used instead. It may be used in
-tcp-check based expect rules.
-</pre><a class="anchor" name="res.hdr"></a><a class="anchor" name="7-res.hdr"></a><a class="anchor" name="7.3.6-res.hdr"></a><a class="anchor" name="res.hdr (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr"></a><a href="#7.3.6-res.hdr">res.hdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><a class="anchor" name="shdr"></a><a class="anchor" name="7-shdr"></a><a class="anchor" name="7.3.6-shdr"></a><a class="anchor" name="shdr (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr"></a><a href="#7.3.6-shdr">shdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP response, or of
-the last header if no &lt;name&gt; is specified. Optionally, a specific occurrence
-might be specified as a position number. Positive values indicate a position
-from the first occurrence, with 1 being the first one. Negative values
-indicate positions relative to the last one, with -1 being the last one. This
-can be useful to learn some data into a stick-table. The function considers
-any comma as a delimiter for distinct values. If this is not desired, the
-res.fhdr() fetch should be used instead. It may be used in tcp-check based
-expect rules.
+returned. If no name is specified, the first cookie value is returned.
+
+It may be used in tcp-check based expect rules.
+</pre><a class="anchor" name="res.fhdr"></a><a class="anchor" name="7-res.fhdr"></a><a class="anchor" name="7.3.6-res.fhdr"></a><a class="anchor" name="res.fhdr (Using ACLs and fetching samples)"></a><a class="anchor" name="res.fhdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.fhdr"></a><a href="#7.3.6-res.fhdr">res.fhdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><pre class="text">This fetch works like the req.fhdr() fetch with the difference that it acts
+on the headers within an HTTP response.
+
+Like req.fhdr() the res.fhdr() fetch returns full values. If the header is
+defined to be a list you should use res.hdr().
+
+This fetch is sometimes useful with headers such as Date or Expires.
+
+It may be used in tcp-check based expect rules.
+</pre><a class="anchor" name="res.fhdr_cnt"></a><a class="anchor" name="7-res.fhdr_cnt"></a><a class="anchor" name="7.3.6-res.fhdr_cnt"></a><a class="anchor" name="res.fhdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="res.fhdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.fhdr_cnt"></a><a href="#7.3.6-res.fhdr_cnt">res.fhdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><pre class="text">This fetch works like the req.fhdr_cnt() fetch with the difference that it
+acts on the headers within an HTTP response.
+
+Like req.fhdr_cnt() the res.fhdr_cnt() fetch acts on full values. If the
+header is defined to be a list you should use res.hdr_cnt().
+
+It may be used in tcp-check based expect rules.
+</pre><a class="anchor" name="res.hdr"></a><a class="anchor" name="7-res.hdr"></a><a class="anchor" name="7.3.6-res.hdr"></a><a class="anchor" name="res.hdr (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr"></a><a href="#7.3.6-res.hdr">res.hdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string</div><a class="anchor" name="shdr"></a><a class="anchor" name="7-shdr"></a><a class="anchor" name="7.3.6-shdr"></a><a class="anchor" name="shdr (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr"></a><a href="#7.3.6-shdr">shdr</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : string <span class="label label-warning">(deprecated)</span></div><pre class="text">This fetch works like the req.hdr() fetch with the difference that it acts
+on the headers within an HTTP response.
+
+Like req.hdr() the res.hdr() fetch considers the comma to be a delimeter. If
+this is not desired res.fhdr() should be used.
+
+It may be used in tcp-check based expect rules.
 
 ACL derivatives :
   shdr([&lt;name&gt;[,&lt;occ&gt;]])     : exact string match
@@ -20901,35 +20925,37 @@ ACL derivatives :
   shdr_len([&lt;name&gt;[,&lt;occ&gt;]]) : length match
   shdr_reg([&lt;name&gt;[,&lt;occ&gt;]]) : regex match
   shdr_sub([&lt;name&gt;[,&lt;occ&gt;]]) : substring match
-</pre><a class="anchor" name="res.hdr_cnt"></a><a class="anchor" name="7-res.hdr_cnt"></a><a class="anchor" name="7.3.6-res.hdr_cnt"></a><a class="anchor" name="res.hdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_cnt"></a><a href="#7.3.6-res.hdr_cnt">res.hdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="shdr_cnt"></a><a class="anchor" name="7-shdr_cnt"></a><a class="anchor" name="7.3.6-shdr_cnt"></a><a class="anchor" name="shdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_cnt"></a><a href="#7.3.6-shdr_cnt">shdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value representing the number of occurrences of response
-header field name &lt;name&gt;, or the total number of header fields if &lt;name&gt; is
-not specified. The function considers any comma as a delimiter for distinct
-values. If this is not desired, the res.fhdr_cnt() fetch should be used
-instead. It may be used in tcp-check based expect rules.
-</pre><a class="anchor" name="res.hdr_ip"></a><a class="anchor" name="7-res.hdr_ip"></a><a class="anchor" name="7.3.6-res.hdr_ip"></a><a class="anchor" name="res.hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_ip"></a><a href="#7.3.6-res.hdr_ip">res.hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip</div><a class="anchor" name="shdr_ip"></a><a class="anchor" name="7-shdr_ip"></a><a class="anchor" name="7.3.6-shdr_ip"></a><a class="anchor" name="shdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_ip"></a><a href="#7.3.6-shdr_ip">shdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP response,
-convert it to an IPv4 or IPv6 address and returns this address. Optionally, a
-specific occurrence might be specified as a position number. Positive values
-indicate a position from the first occurrence, with 1 being the first one.
-Negative values indicate positions relative to the last one, with -1 being
-the last one. This can be useful to learn some data into a stick table. It
-may be used in tcp-check based expect rules.
+</pre><a class="anchor" name="res.hdr_cnt"></a><a class="anchor" name="7-res.hdr_cnt"></a><a class="anchor" name="7.3.6-res.hdr_cnt"></a><a class="anchor" name="res.hdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_cnt"></a><a href="#7.3.6-res.hdr_cnt">res.hdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="shdr_cnt"></a><a class="anchor" name="7-shdr_cnt"></a><a class="anchor" name="7.3.6-shdr_cnt"></a><a class="anchor" name="shdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_cnt"></a><a href="#7.3.6-shdr_cnt">shdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">This fetch works like the req.hdr_cnt() fetch with the difference that it
+acts on the headers within an HTTP response.
+
+Like req.hdr_cnt() the res.hdr_cnt() fetch considers the comma to be a
+delimeter. If this is not desired res.fhdr_cnt() should be used.
+
+It may be used in tcp-check based expect rules.
+</pre><a class="anchor" name="res.hdr_ip"></a><a class="anchor" name="7-res.hdr_ip"></a><a class="anchor" name="7.3.6-res.hdr_ip"></a><a class="anchor" name="res.hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_ip"></a><a href="#7.3.6-res.hdr_ip">res.hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip</div><a class="anchor" name="shdr_ip"></a><a class="anchor" name="7-shdr_ip"></a><a class="anchor" name="7.3.6-shdr_ip"></a><a class="anchor" name="shdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_ip"></a><a href="#7.3.6-shdr_ip">shdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip <span class="label label-warning">(deprecated)</span></div><pre class="text">This fetch works like the req.hdr_ip() fetch with the difference that it
+acts on the headers within an HTTP response.
+
+This can be useful to learn some data into a stick table.
+
+It may be used in tcp-check based expect rules.
 </pre><a class="anchor" name="res.hdr_names"></a><a class="anchor" name="7-res.hdr_names"></a><a class="anchor" name="7.3.6-res.hdr_names"></a><a class="anchor" name="res.hdr_names (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_names (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_names"></a><a href="#7.3.6-res.hdr_names">res.hdr_names</a></b>(<span style="color: #008">[<span style="color: #080">&lt;delim&gt;</span>]</span>) : string</div><pre class="text">This builds a string made from the concatenation of all header names as they
 appear in the response when the rule is evaluated. The default delimiter is
 the comma (&#x27;,&#x27;) but it may be overridden as an optional argument &lt;delim&gt;. In
-this case, only the first character of &lt;delim&gt; is considered. It may be used
-in tcp-check based expect rules.
-</pre><a class="anchor" name="res.hdr_val"></a><a class="anchor" name="7-res.hdr_val"></a><a class="anchor" name="7.3.6-res.hdr_val"></a><a class="anchor" name="res.hdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_val"></a><a href="#7.3.6-res.hdr_val">res.hdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer</div><a class="anchor" name="shdr_val"></a><a class="anchor" name="7-shdr_val"></a><a class="anchor" name="7.3.6-shdr_val"></a><a class="anchor" name="shdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_val"></a><a href="#7.3.6-shdr_val">shdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP response, and
-converts it to an integer value. Optionally, a specific occurrence might be
-specified as a position number. Positive values indicate a position from the
-first occurrence, with 1 being the first one. Negative values indicate
-positions relative to the last one, with -1 being the last one. This can be
-useful to learn some data into a stick table. It may be used in tcp-check
-based expect rules.
+this case, only the first character of &lt;delim&gt; is considered.
+
+It may be used in tcp-check based expect rules.
+</pre><a class="anchor" name="res.hdr_val"></a><a class="anchor" name="7-res.hdr_val"></a><a class="anchor" name="7.3.6-res.hdr_val"></a><a class="anchor" name="res.hdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_val"></a><a href="#7.3.6-res.hdr_val">res.hdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer</div><a class="anchor" name="shdr_val"></a><a class="anchor" name="7-shdr_val"></a><a class="anchor" name="7.3.6-shdr_val"></a><a class="anchor" name="shdr_val (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_val"></a><a href="#7.3.6-shdr_val">shdr_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">This fetch works like the req.hdr_val() fetch with the difference that it
+acts on the headers within an HTTP response.
+
+This can be useful to learn some data into a stick table.
+
+It may be used in tcp-check based expect rules.
 </pre><a class="anchor" name="res.hdrs"></a><a class="anchor" name="7-res.hdrs"></a><a class="anchor" name="7.3.6-res.hdrs"></a><a class="anchor" name="res.hdrs (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdrs (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdrs"></a><a href="#7.3.6-res.hdrs">res.hdrs</a></b> : string</div><pre class="text">Returns the current response headers as string including the last empty line
 separating headers from the request body. The last empty line can be used to
 detect a truncated header block. This sample fetch is useful for some SPOE
-headers analyzers and for advanced logging. It may also be used in tcp-check
-based expect rules.
+headers analyzers and for advanced logging.
+
+It may also be used in tcp-check based expect rules.
 </pre><a class="anchor" name="res.hdrs_bin"></a><a class="anchor" name="7-res.hdrs_bin"></a><a class="anchor" name="7.3.6-res.hdrs_bin"></a><a class="anchor" name="res.hdrs_bin (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdrs_bin (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdrs_bin"></a><a href="#7.3.6-res.hdrs_bin">res.hdrs_bin</a></b> : binary</div><pre class="text">Returns the current response headers contained in preparsed binary form. This
 is useful for offloading some processing with SPOE. It may be used in
 tcp-check based expect rules. Each string is described by a length followed
@@ -20943,8 +20969,9 @@ end of the list is marked by a couple of empty header names and values
 int:  refer to the SPOE documentation for the encoding
 str:  &lt;int:length&gt;&lt;bytes&gt;
 </pre><a class="anchor" name="res.ver"></a><a class="anchor" name="7-res.ver"></a><a class="anchor" name="7.3.6-res.ver"></a><a class="anchor" name="res.ver (Using ACLs and fetching samples)"></a><a class="anchor" name="res.ver (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.ver"></a><a href="#7.3.6-res.ver">res.ver</a></b> : string</div><a class="anchor" name="resp_ver"></a><a class="anchor" name="7-resp_ver"></a><a class="anchor" name="7.3.6-resp_ver"></a><a class="anchor" name="resp_ver (Using ACLs and fetching samples)"></a><a class="anchor" name="resp_ver (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="resp_ver"></a><a href="#7.3.6-resp_ver">resp_ver</a></b> : string <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns the version string from the HTTP response, for example &quot;1.1&quot;. This
-can be useful for logs, but is mostly there for ACL. It may be used in
-tcp-check based expect rules.
+can be useful for logs, but is mostly there for ACL.
+
+It may be used in tcp-check based expect rules.
 
 ACL derivatives :
   resp_ver : exact string match
@@ -20957,8 +20984,9 @@ This fetch function is deprecated and has been superseded by the &quot;<a href="
 fetch. This keyword will disappear soon.
 </pre><a class="anchor" name="status"></a><a class="anchor" name="7-status"></a><a class="anchor" name="7.3.6-status"></a><a class="anchor" name="status (Using ACLs and fetching samples)"></a><a class="anchor" name="status (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="status"></a><a href="#7.3.6-status">status</a></b> : integer</div><pre class="text">Returns an integer containing the HTTP status code in the HTTP response, for
 example, 302. It is mostly used within ACLs and integer ranges, for example,
-to remove any Location header if the response is not a 3xx. It may be used in
-tcp-check based expect rules.
+to remove any Location header if the response is not a 3xx.
+
+It may be used in tcp-check based expect rules.
 </pre><a class="anchor" name="unique-id"></a><a class="anchor" name="7-unique-id"></a><a class="anchor" name="7.3.6-unique-id"></a><a class="anchor" name="unique-id (Using ACLs and fetching samples)"></a><a class="anchor" name="unique-id (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="unique-id"></a><a href="#7.3.6-unique-id">unique-id</a></b> : string</div><pre class="text">Returns the unique-id attached to the request. The directive
 &quot;<a href="#unique-id-format">unique-id-format</a>&quot; must be set. If it is not set, the unique-id sample fetch
 fails. Note that the unique-id is usually used with HTTP requests, however this
@@ -23041,8 +23069,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.3.3 &ndash; Configuration Manual<br>
-							<small>2021/01/08, willy tarreau</small>
+							HAProxy 2.3.6 &ndash; Configuration Manual<br>
+							<small>2021/03/03, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -23145,7 +23173,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3.3', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3.6', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
