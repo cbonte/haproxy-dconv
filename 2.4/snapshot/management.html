@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.4-dev5-14 - Management Guide</title>
+		<title>HAProxy version 2.4-dev10-26 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -464,6 +464,8 @@
 							
 							<a class="list-group-item" href="#show table">show table</a>
 							
+							<a class="list-group-item" href="#show tasks">show tasks</a>
+							
 							<a class="list-group-item" href="#show threads">show threads</a>
 							
 							<a class="list-group-item" href="#show tls-keys">show tls-keys</a>
@@ -507,7 +509,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/01/09</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/03/05</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -518,7 +520,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.4-dev5-14</strong></p>
+							<p><strong>version 2.4-dev10-26</strong></p>
 							<p>
 								<br>
 								
@@ -2357,7 +2359,9 @@ delayed until the threshold is reached. A value of zero restores the initial
 setting.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set profiling"></a><a class="anchor" name="9-set profiling"></a><a class="anchor" name="9.3-set profiling"></a><a class="anchor" name="set profiling (Statistics and monitoring)"></a><a class="anchor" name="set profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set profiling"></a><a href="#9.3-set%20profiling">set profiling</a></b> <span style="color: #800">{ tasks }</span> <span style="color: #800">{ auto | on | off }</span></div><pre class="text">Enables or disables CPU profiling for the indicated subsystem. This is
 equivalent to setting or clearing the &quot;profiling&quot; settings in the &quot;global&quot;
-section of the configuration file. Please also see &quot;<a href="#show%20profiling">show profiling</a>&quot;.
+section of the configuration file. Please also see &quot;<a href="#show%20profiling">show profiling</a>&quot;. Note
+that manually setting the tasks profiling to &quot;on&quot; automatically resets the
+scheduler statistics, thus allows to check activity over a given interval.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.3-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections"></a><a class="anchor" name="9-set rate-limit connections"></a><a class="anchor" name="9.3-set rate-limit connections"></a><a class="anchor" name="set rate-limit connections (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections global"></a><a class="anchor" name="9-set rate-limit connections global"></a><a class="anchor" name="9.3-set rate-limit connections global"></a><a class="anchor" name="set rate-limit connections global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit connections global"></a><a href="#9.3-set%20rate-limit%20connections%20global">set rate-limit connections global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide connection rate limit, which is set by the global
 &#x27;maxconnrate&#x27; setting. A value of zero disables the limitation. This limit
 applies to all frontends and the change has an immediate effect. The value
@@ -2382,14 +2386,18 @@ Note that changing the port also support switching from/to port mapping
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent <span style="color: #008">[ up | down ]</span></div><pre class="text">Force a server&#x27;s agent to a new state. This can be useful to immediately
 switch a server&#x27;s state regardless of some slow agent checks for example.
 Note that the change is propagated to tracking servers if any.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent-addr <span style="color: #080">&lt;addr&gt;</span></div><pre class="text">Change addr for servers agent checks. Allows to migrate agent-checks to
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent-addr <span style="color: #080">&lt;addr&gt;</span> <span style="color: #008">[port <span style="color: #080">&lt;port&gt;</span>]</span></div><pre class="text">Change addr for servers agent checks. Allows to migrate agent-checks to
 another address at runtime. You can specify both IP and hostname, it will be
 resolved.
+Optionally, change the port agent.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent-port <span style="color: #080">&lt;port&gt;</span></div><pre class="text">Change the port used for agent checks.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> agent-send <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change agent string sent to agent check target. Allows to update string while
 changing server address to keep those two matching.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> health <span style="color: #008">[ up | stopping | down ]</span></div><pre class="text">Force a server&#x27;s health to a new state. This can be useful to immediately
 switch a server&#x27;s state regardless of some slow health checks for example.
 Note that the change is propagated to tracking servers if any.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> check-addr <span style="color: #080">&lt;ip4 | ip6&gt;</span> <span style="color: #008">[port <span style="color: #080">&lt;port&gt;</span>]</span></div><pre class="text">Change the IP address used for server health checks.
+Optionally, change the port used for server health checks.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> check-port <span style="color: #080">&lt;port&gt;</span></div><pre class="text">Change the port used for health checking to &lt;port&gt;
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> state <span style="color: #008">[ ready | drain | maint ]</span></div><pre class="text">Force a server&#x27;s administrative state to a new state. This can be useful to
 disable load balancing and/or any traffic to a server. Setting the state to
@@ -2637,7 +2645,10 @@ are reported (frontend, proxy or server). When the owner is a listener, the
 listener&#x27;s state and its frontend are reported. There is no point in using
 this command without a good knowledge of the internals. It&#x27;s worth noting
 that the output format may evolve over time so this output must not be parsed
-by tools designed to be durable.
+by tools designed to be durable. Some internal structure states may look
+suspicious to the function listing them, in this case the output line will be
+suffixed with an exclamation mark (&#x27;!&#x27;). This may help find a starting point
+when trying to diagnose an incident.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span> <span style="color: #008">[desc]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
 optional argument, field numbers, names and types are emitted as well so that
 external monitoring products can easily retrieve, possibly aggregate, then
@@ -2753,10 +2764,12 @@ as reference for the operation &quot;<a href="#del%20map">del map</a>&quot; and 
 the pattern and the third column is the sample if available. The data returned
 are not directly a list of available maps, but are the list of all patterns
 composing any map. Many of these patterns can be shared with ACL.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show peers"></a><a class="anchor" name="9-show peers"></a><a class="anchor" name="9.3-show peers"></a><a class="anchor" name="show peers (Statistics and monitoring)"></a><a class="anchor" name="show peers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show peers"></a><a href="#9.3-show%20peers">show peers</a></b> <span style="color: #008">[<span style="color: #080">&lt;peers section&gt;</span>]</span></div><pre class="text">Dump info about the peers configured in &quot;peers&quot; sections. Without argument,
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show peers"></a><a class="anchor" name="9-show peers"></a><a class="anchor" name="9.3-show peers"></a><a class="anchor" name="show peers (Statistics and monitoring)"></a><a class="anchor" name="show peers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show peers"></a><a href="#9.3-show%20peers">show peers</a></b> <span style="color: #008">[dict|-]</span> <span style="color: #008">[<span style="color: #080">&lt;peers section&gt;</span>]</span></div><pre class="text">Dump info about the peers configured in &quot;peers&quot; sections. Without argument,
 the list of the peers belonging to all the &quot;peers&quot; sections are listed. If
 &lt;peers section&gt; is specified, only the information about the peers belonging
-to this &quot;peers&quot; section are dumped.
+to this &quot;peers&quot; section are dumped. When &quot;dict&quot; is specified before the peers
+section name, the entire Tx/Rx dictionary caches will also be dumped (very
+large). Passing &quot;-&quot; may be required to dump a peers section called &quot;dict&quot;.
 
 Here are two examples of outputs where hostA, hostB and hostC peers belong to
 &quot;sharedlb&quot; peers sections. Only hostA and hostB are connected. Only hostA has
@@ -2809,7 +2822,26 @@ usage when suspecting a memory leak for example. It does exactly the same
 as the SIGQUIT when running in foreground except that it does not flush
 the pools.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show profiling"></a><a class="anchor" name="9-show profiling"></a><a class="anchor" name="9.3-show profiling"></a><a class="anchor" name="show profiling (Statistics and monitoring)"></a><a class="anchor" name="show profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show profiling"></a><a href="#9.3-show%20profiling">show profiling</a></b></div><pre class="text">Dumps the current profiling settings, one per line, as well as the command
-needed to change them.
+needed to change them. When tasks profiling is enabled, some per-function
+statistics collected by the scheduler will also be emitted, with a summary
+covering the number of calls, total/avg CPU time and total/avg latency.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
+if no section is supplied.
+
+For each name server, the following counters are reported:
+  sent: number of DNS requests sent to this server
+  valid: number of DNS valid responses received from this server
+  update: number of DNS responses used to update the server&#x27;s IP address
+  cname: number of CNAME responses
+  cname_error: CNAME errors encountered with this server
+  any_err: number of empty response (IE: server does not support ANY type)
+  nx: non existent domain response received from this server
+  timeout: how many time this server did not answer in time
+  refused: number of requests refused by this server
+  other: any other DNS errors
+  invalid: invalid DNS response (from a protocol point of view)
+  too_big: too big response
+  outdated: number of response arrived too late (after an other name server)
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show servers"></a><a class="anchor" name="9-show servers"></a><a class="anchor" name="9.3-show servers"></a><a class="anchor" name="show servers (Statistics and monitoring)"></a><a class="anchor" name="show servers (Unix Socket commands)"></a><a class="anchor" name="show servers conn"></a><a class="anchor" name="9-show servers conn"></a><a class="anchor" name="9.3-show servers conn"></a><a class="anchor" name="show servers conn (Statistics and monitoring)"></a><a class="anchor" name="show servers conn (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show servers conn"></a><a href="#9.3-show%20servers%20conn">show servers conn</a></b> <span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span></div><pre class="text">Dump the current and idle connections state of the servers belonging to the
 designated backend (or all backends if none specified). A backend name or
 identifier may be used.
@@ -2919,6 +2951,10 @@ fields and their order per file format version :
    srv_port:                    Server port.
    srvrecord:                   DNS SRV record associated to this SRV.
    srv_use_ssl:                 use ssl for server connections.
+   srv_check_port:              Server health check port.
+   srv_check_addr:              Server health check address.
+   srv_agent_addr:              Server health agent address.
+   srv_agent_port:              Server health agent port.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show sess"></a><a class="anchor" name="9-show sess"></a><a class="anchor" name="9.3-show sess"></a><a class="anchor" name="show sess (Statistics and monitoring)"></a><a class="anchor" name="show sess (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show sess"></a><a href="#9.3-show%20sess">show sess</a></b></div><pre class="text">Dump all known sessions. Avoid doing this on slow connections as this can
 be huge. This command is restricted and can only be issued on sockets
 configured for levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;. Note that on machines with
@@ -3150,24 +3186,7 @@ common.pem:2
 ecdsa.pem:3 [verify none allow-0rtt ssl-min-ver TLSv1.0 ssl-max-ver TLSv1.3] localhost !www.test1.com
 ecdsa.pem:4 [verify none allow-0rtt ssl-min-ver TLSv1.0 ssl-max-ver TLSv1.3]
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
-if no section is supplied.
-
-For each name server, the following counters are reported:
-  sent: number of DNS requests sent to this server
-  valid: number of DNS valid responses received from this server
-  update: number of DNS responses used to update the server&#x27;s IP address
-  cname: number of CNAME responses
-  cname_error: CNAME errors encountered with this server
-  any_err: number of empty response (IE: server does not support ANY type)
-  nx: non existent domain response received from this server
-  timeout: how many time this server did not answer in time
-  refused: number of requests refused by this server
-  other: any other DNS errors
-  invalid: invalid DNS response (from a protocol point of view)
-  too_big: too big response
-  outdated: number of response arrived too late (after an other name server)
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.3-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.3-show%20table">show table</a></b></div><pre class="text">Dump general information on all known stick-tables. Their name is returned
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.3-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.3-show%20table">show table</a></b></div><pre class="text">Dump general information on all known stick-tables. Their name is returned
 (the name of the proxy which holds them), their type (currently zero, always
 IP), their size in maximum possible number of entries, and the number of
 entries currently in use.
@@ -3245,7 +3264,16 @@ service, in order to monitor them or even blacklist them in a firewall.
   | fgrep &<span class="comment">#x27;key=&#x27; | cut -d&#x27; &#x27; -f2 | cut -d= -f2 &gt; abusers-ip.txt</span>
   ( or | awk &<span class="comment">#x27;/key/{ print a[split($2,a,&quot;=&quot;)]; }&#x27; )</span>
 </code></pre>
-</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show threads"></a><a class="anchor" name="9-show threads"></a><a class="anchor" name="9.3-show threads"></a><a class="anchor" name="show threads (Statistics and monitoring)"></a><a class="anchor" name="show threads (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show threads"></a><a href="#9.3-show%20threads">show threads</a></b></div><pre class="text">Dumps some internal states and structures for each thread, that may be useful
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show tasks"></a><a class="anchor" name="9-show tasks"></a><a class="anchor" name="9.3-show tasks"></a><a class="anchor" name="show tasks (Statistics and monitoring)"></a><a class="anchor" name="show tasks (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show tasks"></a><a href="#9.3-show%20tasks">show tasks</a></b></div><pre class="text">Dumps the number of tasks currently in the run queue, with the number of
+occurrences for each function, and their average latency when it&#x27;s known
+(for pure tasks with task profiling enabled). The dump is a snapshot of the
+instant it&#x27;s done, and there may be variations depending on what tasks are
+left in the queue at the moment it happens, especially in mono-thread mode
+as there&#x27;s less chance that I/Os can refill the queue (unless the queue is
+full). This command takes exclusive access to the process and can cause
+minor but measurable latencies when issued on a highly loaded process, so
+it must not be abused by monitoring bots.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show threads"></a><a class="anchor" name="9-show threads"></a><a class="anchor" name="9.3-show threads"></a><a class="anchor" name="show threads (Statistics and monitoring)"></a><a class="anchor" name="show threads (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show threads"></a><a href="#9.3-show%20threads">show threads</a></b></div><pre class="text">Dumps some internal states and structures for each thread, that may be useful
 to help developers understand a problem. The output tries to be readable by
 showing one block per thread. When haproxy is built with USE_THREAD_DUMP=1,
 an advanced dump mechanism involving thread signals is used so that each
@@ -3880,7 +3908,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.4-dev5-14 &ndash; Management Guide<br>
+							HAProxy 2.4-dev10-26 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3984,7 +4012,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.4-dev5-14', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.4-dev10-26', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
