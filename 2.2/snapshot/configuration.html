@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2.10 - Configuration Manual</title>
+		<title>HAProxy version 2.2.14-12 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -3501,7 +3501,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/03/05</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3512,10 +3512,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.2.10</strong></p>
+							<p><strong>version 2.2.14-12</strong></p>
 							<p>
 								willy tarreau<br>
-								2021/03/03
+								2021/04/29
 							</p>
 						</div>
 
@@ -7793,7 +7793,7 @@ ignored when set in a defaults section.
 Compression is disabled when:
   * the request does not advertise a supported compression algorithm in the
     &quot;Accept-Encoding&quot; header
-  * the response message is not HTTP/1.1
+  * the response message is not HTTP/1.1 or above
   * HTTP status code is not one of 200, 201, 202, or 203
   * response contain neither a &quot;Content-Length&quot; header nor a
     &quot;Transfer-Encoding&quot; whose last value is &quot;chunked&quot;
@@ -11251,6 +11251,9 @@ added if it is not present. This should only be used in perfectly trusted
 environment, as this might cause a security issue if headers reaching haproxy
 are under the control of the end-user.
 
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
+
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
 setting of the header subargument takes precedence over the frontend&#x27;s if
@@ -11983,6 +11986,9 @@ header for a known source address or network by adding the &quot;except&quot; ke
 followed by the network address. In this case, any source IP matching the
 network will not cause an addition of this header. Most common uses are with
 private networks or 127.0.0.1.
+
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
 
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
@@ -20436,7 +20442,11 @@ Refer to req.hdr() for more information on header matching.
 </pre><a class="anchor" name="req.hdr_ip"></a><a class="anchor" name="7-req.hdr_ip"></a><a class="anchor" name="7.3.6-req.hdr_ip"></a><a class="anchor" name="req.hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_ip"></a><a href="#7.3.6-req.hdr_ip">req.hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip</div><a class="anchor" name="hdr_ip"></a><a class="anchor" name="7-hdr_ip"></a><a class="anchor" name="7.3.6-hdr_ip"></a><a class="anchor" name="hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr_ip"></a><a href="#7.3.6-hdr_ip">hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP request,
 converts it to an IPv4 or IPv6 address and returns this address. When used
 with ACLs, all occurrences are checked, and if &lt;name&gt; is omitted, every value
-of every header is checked.
+of every header is checked. The parser strictly adheres to the format
+described in RFC7239, with the extension that IPv4 addresses may optionally
+be followed by a colon (&#x27;:&#x27;) and a valid decimal port number (0 to 65535),
+which will be silently dropped. All other forms will not match and will
+cause the address to be ignored.
 
 The &lt;occ&gt; parameter is processed as with req.hdr().
 
@@ -20839,12 +20849,12 @@ it returns false.
 every frontend which needs them. They all have their names in upper case in
 order to avoid confusion. Their equivalence is provided below.
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>ACL name</th><th>Equivalent to</th><th>Usage</th></tr></thead>
+<thead><tr><th>ACL name</th><th>Equivalent to                Usage</th><th></th></tr></thead>
 <tr><td >FALSE</td><td >always_false</td><td >never match</td></tr>
-<tr><td >HTTP</td><td >req_proto_http</td><td >match if protocol is valid HTTP</td></tr>
-<tr><td >HTTP_1.0</td><td >req_ver 1.0</td><td >match HTTP version 1.0</td></tr>
-<tr><td >HTTP_1.1</td><td >req_ver 1.1</td><td >match HTTP version 1.1</td></tr>
-<tr><td >HTTP_CONTENT</td><td >hdr_val(content-length) gt 0</td><td >match an existing content-length</td></tr>
+<tr><td >HTTP</td><td >req.proto_http</td><td >match if request protocol is valid HTTP</td></tr>
+<tr><td >HTTP_1.0</td><td >req.ver 1.0</td><td >match if HTTP request version is 1.0</td></tr>
+<tr><td >HTTP_1.1</td><td >req.ver 1.1</td><td >match if HTTP request version is 1.1</td></tr>
+<tr><td >HTTP_CONTENT</td><td >req.hdr_val(content-length) gt 0</td><td >match an existing content-length in the HTTP request</td></tr>
 <tr><td >HTTP_URL_ABS</td><td >url_reg ^[^/:]*://</td><td >match absolute URL with scheme</td></tr>
 <tr><td >HTTP_URL_SLASH</td><td >url_beg /</td><td >match URL beginning with &quot;/&quot;</td></tr>
 <tr><td >HTTP_URL_STAR</td><td >url     *</td><td >match URL equal to &quot;*&quot;</td></tr>
@@ -20857,8 +20867,8 @@ order to avoid confusion. Their equivalence is provided below.
 <tr><td >METH_POST</td><td >method  POST</td><td >match HTTP POST method</td></tr>
 <tr><td >METH_PUT</td><td >method  PUT</td><td >match HTTP PUT method</td></tr>
 <tr><td >METH_TRACE</td><td >method  TRACE</td><td >match HTTP TRACE method</td></tr>
-<tr><td >RDP_COOKIE</td><td >req_rdp_cookie_cnt gt 0</td><td >match presence of an RDP cookie</td></tr>
-<tr><td >REQ_CONTENT</td><td >req_len gt 0</td><td >match data in the request buffer</td></tr>
+<tr><td >RDP_COOKIE</td><td >req.rdp_cookie_cnt gt 0</td><td >match presence of an RDP cookie in the request buffer</td></tr>
+<tr><td >REQ_CONTENT</td><td >req.len gt 0</td><td >match data in the request buffer</td></tr>
 <tr><td >TRUE</td><td >always_true</td><td >always match</td></tr>
 <tr><td >WAIT_END</td><td >wait_end</td><td >wait for end of content analysis</td></tr>
 </table></div>
@@ -22769,8 +22779,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2.10 &ndash; Configuration Manual<br>
-							<small>2021/03/03, willy tarreau</small>
+							HAProxy 2.2.14-12 &ndash; Configuration Manual<br>
+							<small>2021/04/29, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -22873,7 +22883,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2.10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2.14-12', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
