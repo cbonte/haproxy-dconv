@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.3.6 - Configuration Manual</title>
+		<title>HAProxy version 2.3.10-26 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -3552,7 +3552,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/03/05</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3563,10 +3563,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.3.6</strong></p>
+							<p><strong>version 2.3.10-26</strong></p>
 							<p>
 								willy tarreau<br>
-								2021/03/03
+								2021/04/23
 							</p>
 						</div>
 
@@ -6431,14 +6431,15 @@ counts only the pure Lua runtime. If the Lua does a sleep, the sleep is
 not taken in account. The default timeout is 4s.
 </pre><a class="anchor" name="tune.maxaccept"></a><a class="anchor" name="3-tune.maxaccept"></a><a class="anchor" name="3.2-tune.maxaccept"></a><a class="anchor" name="tune.maxaccept (Global parameters)"></a><a class="anchor" name="tune.maxaccept (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.maxaccept"></a><a href="#3.2-tune.maxaccept">tune.maxaccept</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum number of consecutive connections a process may accept in a
 row before switching to other work. In single process mode, higher numbers
-give better performance at high connection rates. However in multi-process
-modes, keeping a bit of fairness between processes generally is better to
-increase performance. This value applies individually to each listener, so
-that the number of processes a listener is bound to is taken into account.
-This value defaults to 64. In multi-process mode, it is divided by twice
-the number of processes the listener is bound to. Setting this value to -1
-completely disables the limitation. It should normally not be needed to tweak
-this value.
+used to give better performance at high connection rates, though this is not
+the case anymore with the multi-queue. This value applies individually to
+each listener, so that the number of processes a listener is bound to is
+taken into account. This value defaults to 4 which showed best results. If a
+significantly higher value was inherited from an ancient config, it might be
+worth removing it as it will both increase performance and lower response
+time. In multi-process mode, it is divided by twice the number of processes
+the listener is bound to. Setting this value to -1 completely disables the
+limitation. It should normally not be needed to tweak this value.
 </pre><a class="anchor" name="tune.maxpollevents"></a><a class="anchor" name="3-tune.maxpollevents"></a><a class="anchor" name="3.2-tune.maxpollevents"></a><a class="anchor" name="tune.maxpollevents (Global parameters)"></a><a class="anchor" name="tune.maxpollevents (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.maxpollevents"></a><a href="#3.2-tune.maxpollevents">tune.maxpollevents</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of events that can be processed at once in a call to
 the polling system. The default value is adapted to the operating system. It
 has been noticed that reducing it below 200 tends to slightly decrease
@@ -6502,10 +6503,13 @@ bytes, which defaults to 10136 (7 segments of 1448 each). This default value
 may be changed by this setting to better deal with workloads involving lots
 of short messages such as telnet or SSH sessions.
 </pre><a class="anchor" name="tune.runqueue-depth"></a><a class="anchor" name="3-tune.runqueue-depth"></a><a class="anchor" name="3.2-tune.runqueue-depth"></a><a class="anchor" name="tune.runqueue-depth (Global parameters)"></a><a class="anchor" name="tune.runqueue-depth (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.runqueue-depth"></a><a href="#3.2-tune.runqueue-depth">tune.runqueue-depth</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the maximum amount of task that can be processed at once when running
-tasks. The default value is 200. Increasing it may incur latency when
-dealing with I/Os, making it too small can incur extra overhead. When
-experimenting with much larger values, it may be useful to also enable
-tune.sched.low-latency to limit the maximum latency to the lowest possible.
+tasks. The default value depends on the number of threads but sits between 35
+and 280, which tend to show the highest request rates and lowest latencies.
+Increasing it may incur latency when dealing with I/Os, making it too small
+can incur extra overhead. Higher thread counts benefit from lower values.
+When experimenting with much larger values, it may be useful to also enable
+tune.sched.low-latency and possibly tune.fd.edge-triggered to limit the
+maximum latency to the lowest possible.
 </pre><a class="anchor" name="tune.sched.low-latency"></a><a class="anchor" name="3-tune.sched.low-latency"></a><a class="anchor" name="3.2-tune.sched.low-latency"></a><a class="anchor" name="tune.sched.low-latency (Global parameters)"></a><a class="anchor" name="tune.sched.low-latency (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.sched.low-latency"></a><a href="#3.2-tune.sched.low-latency">tune.sched.low-latency</a></b> <span style="color: #800">{ on | off }</span></div><pre class="text">Enables (&#x27;on&#x27;) or disables (&#x27;off&#x27;) the low-latency task scheduler. By default
 haproxy processes tasks from several classes one class at a time as this is
 the most efficient. But when running with large values of tune.runqueue-depth
@@ -8047,7 +8051,7 @@ ignored when set in a defaults section.
 Compression is disabled when:
   * the request does not advertise a supported compression algorithm in the
     &quot;Accept-Encoding&quot; header
-  * the response message is not HTTP/1.1
+  * the response message is not HTTP/1.1 or above
   * HTTP status code is not one of 200, 201, 202, or 203
   * response contain neither a &quot;Content-Length&quot; header nor a
     &quot;Transfer-Encoding&quot; whose last value is &quot;chunked&quot;
@@ -11479,6 +11483,9 @@ added if it is not present. This should only be used in perfectly trusted
 environment, as this might cause a security issue if headers reaching haproxy
 are under the control of the end-user.
 
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
+
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
 setting of the header subargument takes precedence over the frontend&#x27;s if
@@ -12225,6 +12232,9 @@ header for a known source address or network by adding the &quot;except&quot; ke
 followed by the network address. In this case, any source IP matching the
 network will not cause an addition of this header. Most common uses are with
 private networks or 127.0.0.1.
+
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
 
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
@@ -20734,7 +20744,11 @@ Refer to req.hdr() for more information on header matching.
 </pre><a class="anchor" name="req.hdr_ip"></a><a class="anchor" name="7-req.hdr_ip"></a><a class="anchor" name="7.3.6-req.hdr_ip"></a><a class="anchor" name="req.hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_ip"></a><a href="#7.3.6-req.hdr_ip">req.hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip</div><a class="anchor" name="hdr_ip"></a><a class="anchor" name="7-hdr_ip"></a><a class="anchor" name="7.3.6-hdr_ip"></a><a class="anchor" name="hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr_ip"></a><a href="#7.3.6-hdr_ip">hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP request,
 converts it to an IPv4 or IPv6 address and returns this address. When used
 with ACLs, all occurrences are checked, and if &lt;name&gt; is omitted, every value
-of every header is checked.
+of every header is checked. The parser strictly adheres to the format
+described in RFC7239, with the extension that IPv4 addresses may optionally
+be followed by a colon (&#x27;:&#x27;) and a valid decimal port number (0 to 65535),
+which will be silently dropped. All other forms will not match and will
+cause the address to be ignored.
 
 The &lt;occ&gt; parameter is processed as with req.hdr().
 
@@ -21142,12 +21156,12 @@ it returns false.
 every frontend which needs them. They all have their names in upper case in
 order to avoid confusion. Their equivalence is provided below.
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>ACL name</th><th>Equivalent to</th><th>Usage</th></tr></thead>
+<thead><tr><th>ACL name</th><th>Equivalent to                Usage</th><th></th></tr></thead>
 <tr><td >FALSE</td><td >always_false</td><td >never match</td></tr>
-<tr><td >HTTP</td><td >req_proto_http</td><td >match if protocol is valid HTTP</td></tr>
-<tr><td >HTTP_1.0</td><td >req_ver 1.0</td><td >match HTTP version 1.0</td></tr>
-<tr><td >HTTP_1.1</td><td >req_ver 1.1</td><td >match HTTP version 1.1</td></tr>
-<tr><td >HTTP_CONTENT</td><td >hdr_val(content-length) gt 0</td><td >match an existing content-length</td></tr>
+<tr><td >HTTP</td><td >req.proto_http</td><td >match if request protocol is valid HTTP</td></tr>
+<tr><td >HTTP_1.0</td><td >req.ver 1.0</td><td >match if HTTP request version is 1.0</td></tr>
+<tr><td >HTTP_1.1</td><td >req.ver 1.1</td><td >match if HTTP request version is 1.1</td></tr>
+<tr><td >HTTP_CONTENT</td><td >req.hdr_val(content-length) gt 0</td><td >match an existing content-length in the HTTP request</td></tr>
 <tr><td >HTTP_URL_ABS</td><td >url_reg ^[^/:]*://</td><td >match absolute URL with scheme</td></tr>
 <tr><td >HTTP_URL_SLASH</td><td >url_beg /</td><td >match URL beginning with &quot;/&quot;</td></tr>
 <tr><td >HTTP_URL_STAR</td><td >url     *</td><td >match URL equal to &quot;*&quot;</td></tr>
@@ -21160,8 +21174,8 @@ order to avoid confusion. Their equivalence is provided below.
 <tr><td >METH_POST</td><td >method  POST</td><td >match HTTP POST method</td></tr>
 <tr><td >METH_PUT</td><td >method  PUT</td><td >match HTTP PUT method</td></tr>
 <tr><td >METH_TRACE</td><td >method  TRACE</td><td >match HTTP TRACE method</td></tr>
-<tr><td >RDP_COOKIE</td><td >req_rdp_cookie_cnt gt 0</td><td >match presence of an RDP cookie</td></tr>
-<tr><td >REQ_CONTENT</td><td >req_len gt 0</td><td >match data in the request buffer</td></tr>
+<tr><td >RDP_COOKIE</td><td >req.rdp_cookie_cnt gt 0</td><td >match presence of an RDP cookie in the request buffer</td></tr>
+<tr><td >REQ_CONTENT</td><td >req.len gt 0</td><td >match data in the request buffer</td></tr>
 <tr><td >TRUE</td><td >always_true</td><td >always match</td></tr>
 <tr><td >WAIT_END</td><td >wait_end</td><td >wait for end of content analysis</td></tr>
 </table></div>
@@ -23069,8 +23083,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.3.6 &ndash; Configuration Manual<br>
-							<small>2021/03/03, willy tarreau</small>
+							HAProxy 2.3.10-26 &ndash; Configuration Manual<br>
+							<small>2021/04/23, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -23173,7 +23187,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3.6', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3.10-26', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
