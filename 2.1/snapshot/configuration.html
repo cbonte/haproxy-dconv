@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.1.11 - Configuration Manual</title>
+		<title>HAProxy version 2.1.12-59 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -3251,7 +3251,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/01/09</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3262,10 +3262,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.1.11</strong></p>
+							<p><strong>version 2.1.12-59</strong></p>
 							<p>
 								willy tarreau<br>
-								2021/01/08
+								2021/03/18
 							</p>
 						</div>
 
@@ -5855,16 +5855,17 @@ Another use case is to prevent write timeouts with extremely slow clients due
 to the kernel waiting for a large part of the buffer to be read before
 notifying haproxy again.
 </pre><a class="anchor" name="tune.ssl.cachesize"></a><a class="anchor" name="3-tune.ssl.cachesize"></a><a class="anchor" name="3.2-tune.ssl.cachesize"></a><a class="anchor" name="tune.ssl.cachesize (Global parameters)"></a><a class="anchor" name="tune.ssl.cachesize (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.cachesize"></a><a href="#3.2-tune.ssl.cachesize">tune.ssl.cachesize</a></b> <span style="color: #080">&lt;number&gt;</span></div><pre class="text">Sets the size of the global SSL session cache, in a number of blocks. A block
-is large enough to contain an encoded session without peer certificate.
-An encoded session with peer certificate is stored in multiple blocks
-depending on the size of the peer certificate. A block uses approximately
-200 bytes of memory. The default value may be forced at build time, otherwise
-defaults to 20000. When the cache is full, the most idle entries are purged
-and reassigned. Higher values reduce the occurrence of such a purge, hence
-the number of CPU-intensive SSL handshakes by ensuring that all users keep
-their session as long as possible. All entries are pre-allocated upon startup
-and are shared between all processes if &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot; is greater than 1. Setting
-this value to 0 disables the SSL session cache.
+is large enough to contain an encoded session without peer certificate.  An
+encoded session with peer certificate is stored in multiple blocks depending
+on the size of the peer certificate. A block uses approximately 200 bytes of
+memory (based on `sizeof(struct sh_ssl_sess_hdr) + SHSESS_BLOCK_MIN_SIZE`
+calculation used for `shctx_init` function). The default value may be forced
+at build time, otherwise defaults to 20000. When the cache is full, the most
+idle entries are purged and reassigned. Higher values reduce the occurrence
+of such a purge, hence the number of CPU-intensive SSL handshakes by ensuring
+that all users keep their session as long as possible. All entries are
+pre-allocated upon startup and are shared between all processes if &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">nbproc<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#nbproc%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#nbproc%20%28Fetching%20samples%20from%20internal%20states%29">Fetching samples from internal states</a></li></ul></span>&quot;
+is greater than 1. Setting this value to 0 disables the SSL session cache.
 </pre><a class="anchor" name="tune.ssl.force-private-cache"></a><a class="anchor" name="3-tune.ssl.force-private-cache"></a><a class="anchor" name="3.2-tune.ssl.force-private-cache"></a><a class="anchor" name="tune.ssl.force-private-cache (Global parameters)"></a><a class="anchor" name="tune.ssl.force-private-cache (Performance tuning)"></a><div class="keyword"><b><a class="anchor" name="tune.ssl.force-private-cache"></a><a href="#3.2-tune.ssl.force-private-cache">tune.ssl.force-private-cache</a></b></div><pre class="text">This option disables SSL session cache sharing between all processes. It
 should normally not be used since it will force many renegotiations due to
 clients hitting a random process. But it may be required on some operating
@@ -7071,7 +7072,7 @@ ignored when set in a defaults section.
 Compression is disabled when:
   * the request does not advertise a supported compression algorithm in the
     &quot;Accept-Encoding&quot; header
-  * the response message is not HTTP/1.1
+  * the response message is not HTTP/1.1 or above
   * HTTP status code is not one of 200, 201, 202, or 203
   * response contain neither a &quot;Content-Length&quot; header nor a
     &quot;Transfer-Encoding&quot; whose last value is &quot;chunked&quot;
@@ -9791,6 +9792,9 @@ added if it is not present. This should only be used in perfectly trusted
 environment, as this might cause a security issue if headers reaching haproxy
 are under the control of the end-user.
 
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
+
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
 setting of the header subargument takes precedence over the frontend&#x27;s if
@@ -10513,6 +10517,9 @@ header for a known source address or network by adding the &quot;except&quot; ke
 followed by the network address. In this case, any source IP matching the
 network will not cause an addition of this header. Most common uses are with
 private networks or 127.0.0.1.
+
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
 
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
@@ -11490,12 +11497,17 @@ server www1_dc2 &quot;${LAN_DC2}.101:80&quot;
       &quot;,unix-tightsocklen=0&quot; to any abstract socket definition in socat to
       make it compatible with HAProxy&#x27;s.
 </pre><div class="page-header"><b>See also:</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">default-server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#default-server%20%28Peers%29">Peers</a></li><li><a href="#default-server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about server options</div>
-<a class="anchor" name="server-state-file-name"></a><a class="anchor" name="4-server-state-file-name"></a><a class="anchor" name="4.2-server-state-file-name"></a><a class="anchor" name="server-state-file-name (Proxies)"></a><a class="anchor" name="server-state-file-name (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-state-file-name"></a><a href="#4.2-server-state-file-name">server-state-file-name</a></b> <span style="color: #008">[<span style="color: #080">&lt;file&gt;</span>]</span></div><pre class="text">Set the server state file to read, load and apply to servers available in
-this backend. It only applies when the directive &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;
-is set to &quot;local&quot;. When &lt;file&gt; is not provided or if this directive is not
-set, then backend name is used. If &lt;file&gt; starts with a slash &#x27;/&#x27;, then it is
-considered as an absolute path. Otherwise, &lt;file&gt; is concatenated to the
-global directive &quot;server-state-file-base&quot;.
+<a class="anchor" name="server-state-file-name"></a><a class="anchor" name="4-server-state-file-name"></a><a class="anchor" name="4.2-server-state-file-name"></a><a class="anchor" name="server-state-file-name (Proxies)"></a><a class="anchor" name="server-state-file-name (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-state-file-name"></a><a href="#4.2-server-state-file-name">server-state-file-name</a></b> <span style="color: #008">[ <span style="color: #800">{ use-backend-name | <span style="color: #080">&lt;file&gt;</span> }</span> ]</span></div><pre class="text">Set the server state file to read, load and apply to servers available in
+this backend.
+</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<pre class="text">It only applies when the directive &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; is set to
+&quot;local&quot;. When &lt;file&gt; is not provided, if &quot;use-backend-name&quot; is used or if
+this directive is not set, then backend name is used. If &lt;file&gt; starts with a
+slash &#x27;/&#x27;, then it is considered as an absolute path. Otherwise, &lt;file&gt; is
+concatenated to the global directive &quot;<a href="#server-state-base">server-state-base</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -11505,7 +11517,7 @@ global directive &quot;server-state-file-base&quot;.
 backend bk
   load-server-state-from-file
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;server-state-file-base&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#server-state-base">server-state-base</a>&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
 <a class="anchor" name="server-template"></a><a class="anchor" name="4-server-template"></a><a class="anchor" name="4.2-server-template"></a><a class="anchor" name="server-template (Proxies)"></a><a class="anchor" name="server-template (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-template"></a><a href="#4.2-server-template">server-template</a></b> <span style="color: #080">&lt;prefix&gt;</span> <span style="color: #080">&lt;num | range&gt;</span> <span style="color: #080">&lt;fqdn&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[params*]</span></div><pre class="text">Set a template to initialize servers with shared parameters.
 The names of these servers are built from &lt;prefix&gt; and &lt;num | range&gt; parameters.
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -18430,7 +18442,11 @@ of certain headers. See &quot;<a href="#req.hdr">req.hdr</a>&quot; for more info
 </pre><a class="anchor" name="req.hdr_ip"></a><a class="anchor" name="7-req.hdr_ip"></a><a class="anchor" name="7.3.6-req.hdr_ip"></a><a class="anchor" name="req.hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="req.hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.hdr_ip"></a><a href="#7.3.6-req.hdr_ip">req.hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip</div><a class="anchor" name="hdr_ip"></a><a class="anchor" name="7-hdr_ip"></a><a class="anchor" name="7.3.6-hdr_ip"></a><a class="anchor" name="hdr_ip (Using ACLs and fetching samples)"></a><a class="anchor" name="hdr_ip (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="hdr_ip"></a><a href="#7.3.6-hdr_ip">hdr_ip</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>]</span>) : ip <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of header &lt;name&gt; in an HTTP request,
 converts it to an IPv4 or IPv6 address and returns this address. When used
 with ACLs, all occurrences are checked, and if &lt;name&gt; is omitted, every value
-of every header is checked. Optionally, a specific occurrence might be
+of every header is checked. The parser strictly adheres to the format
+described in RFC7239, with the extension that IPv4 addresses may optionally
+be followed by a colon (&#x27;:&#x27;) and a valid decimal port number (0 to 65535),
+which will be silently dropped. All other forms will not match and will
+cause the address to be ignored. Optionally, a specific occurrence might be
 specified as a position number. Positive values indicate a position from the
 first occurrence, with 1 being the first one. Negative values indicate
 positions relative to the last one, with -1 being the last one. A typical use
@@ -18702,12 +18718,12 @@ the source address family. This can be used to track per-IP, per-URL counters.
 every frontend which needs them. They all have their names in upper case in
 order to avoid confusion. Their equivalence is provided below.
 </pre><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
-<thead><tr><th>ACL name</th><th>Equivalent to</th><th>Usage</th></tr></thead>
+<thead><tr><th>ACL name</th><th>Equivalent to                Usage</th><th></th></tr></thead>
 <tr><td >FALSE</td><td >always_false</td><td >never match</td></tr>
-<tr><td >HTTP</td><td >req_proto_http</td><td >match if protocol is valid HTTP</td></tr>
-<tr><td >HTTP_1.0</td><td >req_ver 1.0</td><td >match HTTP version 1.0</td></tr>
-<tr><td >HTTP_1.1</td><td >req_ver 1.1</td><td >match HTTP version 1.1</td></tr>
-<tr><td >HTTP_CONTENT</td><td >hdr_val(content-length) gt 0</td><td >match an existing content-length</td></tr>
+<tr><td >HTTP</td><td >req.proto_http</td><td >match if request protocol is valid HTTP</td></tr>
+<tr><td >HTTP_1.0</td><td >req.ver 1.0</td><td >match if HTTP request version is 1.0</td></tr>
+<tr><td >HTTP_1.1</td><td >req.ver 1.1</td><td >match if HTTP request version is 1.1</td></tr>
+<tr><td >HTTP_CONTENT</td><td >req.hdr_val(content-length) gt 0</td><td >match an existing content-length in the HTTP request</td></tr>
 <tr><td >HTTP_URL_ABS</td><td >url_reg ^[^/:]*://</td><td >match absolute URL with scheme</td></tr>
 <tr><td >HTTP_URL_SLASH</td><td >url_beg /</td><td >match URL beginning with &quot;/&quot;</td></tr>
 <tr><td >HTTP_URL_STAR</td><td >url     *</td><td >match URL equal to &quot;*&quot;</td></tr>
@@ -18720,8 +18736,8 @@ order to avoid confusion. Their equivalence is provided below.
 <tr><td >METH_POST</td><td >method  POST</td><td >match HTTP POST method</td></tr>
 <tr><td >METH_PUT</td><td >method  PUT</td><td >match HTTP PUT method</td></tr>
 <tr><td >METH_TRACE</td><td >method  TRACE</td><td >match HTTP TRACE method</td></tr>
-<tr><td >RDP_COOKIE</td><td >req_rdp_cookie_cnt gt 0</td><td >match presence of an RDP cookie</td></tr>
-<tr><td >REQ_CONTENT</td><td >req_len gt 0</td><td >match data in the request buffer</td></tr>
+<tr><td >RDP_COOKIE</td><td >req.rdp_cookie_cnt gt 0</td><td >match presence of an RDP cookie in the request buffer</td></tr>
+<tr><td >REQ_CONTENT</td><td >req.len gt 0</td><td >match data in the request buffer</td></tr>
 <tr><td >TRUE</td><td >always_true</td><td >always match</td></tr>
 <tr><td >WAIT_END</td><td >wait_end</td><td >wait for end of content analysis</td></tr>
 </table></div>
@@ -20620,8 +20636,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.1.11 &ndash; Configuration Manual<br>
-							<small>2021/01/08, willy tarreau</small>
+							HAProxy 2.1.12-59 &ndash; Configuration Manual<br>
+							<small>2021/03/18, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20724,7 +20740,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.11', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.1.12-59', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
