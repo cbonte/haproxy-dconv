@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.4-dev10 - Management Guide</title>
+		<title>HAProxy version 2.4.0 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -230,6 +230,8 @@
 							
 							<a class="list-group-item" href="#add map">add map</a>
 							
+							<a class="list-group-item" href="#add server">add server</a>
+							
 							<a class="list-group-item" href="#add ssl">add ssl</a>
 							
 							<a class="list-group-item" href="#add ssl crt-list">add ssl crt-list</a>
@@ -268,6 +270,8 @@
 							
 							<a class="list-group-item" href="#del map">del map</a>
 							
+							<a class="list-group-item" href="#del server">del server</a>
+							
 							<a class="list-group-item" href="#del ssl">del ssl</a>
 							
 							<a class="list-group-item" href="#del ssl cert">del ssl cert</a>
@@ -305,6 +309,8 @@
 							
 							<a class="list-group-item" href="#enable server">enable server</a>
 							
+							<a class="list-group-item" href="#experimental-mode">experimental-mode</a>
+							
 							<a class="list-group-item" href="#expert-mode">expert-mode</a>
 							
                                                                 </div> <!-- /letter -->
@@ -315,6 +321,8 @@
 							<a class="list-group-item" href="#get acl">get acl</a>
 							
 							<a class="list-group-item" href="#get map">get map</a>
+							
+							<a class="list-group-item" href="#get var">get var</a>
 							
 							<a class="list-group-item" href="#get weight">get weight</a>
 							
@@ -340,6 +348,12 @@
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-P"><h4>P</h4>
 								
+							<a class="list-group-item" href="#prepare">prepare</a>
+							
+							<a class="list-group-item" href="#prepare acl">prepare acl</a>
+							
+							<a class="list-group-item" href="#prepare map">prepare map</a>
+							
 							<a class="list-group-item" href="#prompt">prompt</a>
 							
                                                                 </div> <!-- /letter -->
@@ -403,6 +417,8 @@
 							<a class="list-group-item" href="#set timeout">set timeout</a>
 							
 							<a class="list-group-item" href="#set timeout cli">set timeout cli</a>
+							
+							<a class="list-group-item" href="#set var">set var</a>
 							
 							<a class="list-group-item" href="#set weight">set weight</a>
 							
@@ -509,7 +525,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/03/05</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -520,7 +536,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.4-dev10</strong></p>
+							<p><strong>version 2.4.0</strong></p>
 							<p>
 								<br>
 								
@@ -860,6 +876,10 @@ list of options is :
     in foreground and to show incoming and outgoing events. It must never be
     used in an init script.
 
+  -dD : enable diagnostic mode. This mode will output extra warnings about
+    suspicious configuration statements. This will never prevent startup even in
+    &quot;zero-warning&quot; mode nor change the exit status code.
+
   -dG : disable use of getaddrinfo() to resolve host names into addresses. It
     can be used when suspecting that getaddrinfo() doesn&#x27;t work as expected.
     This option was made available because many bogus implementations of
@@ -1015,7 +1035,7 @@ the versions of the libraries being used are reported there. It is also what
 you will systematically be asked for when posting a bug report :
 
   $ haproxy -vv
-  HA-Proxy version 1.6-dev7-a088d3-4 2015/10/08
+  HAProxy version 1.6-dev7-a088d3-4 2015/10/08
   Copyright 2000-2015 Willy Tarreau &lt;willy@haproxy.org&gt;
 
   Build options :
@@ -2035,18 +2055,32 @@ for more information.
 </pre><a class="anchor" name="abort"></a><a class="anchor" name="9-abort"></a><a class="anchor" name="9.3-abort"></a><a class="anchor" name="abort (Statistics and monitoring)"></a><a class="anchor" name="abort (Unix Socket commands)"></a><a class="anchor" name="abort ssl"></a><a class="anchor" name="9-abort ssl"></a><a class="anchor" name="9.3-abort ssl"></a><a class="anchor" name="abort ssl (Statistics and monitoring)"></a><a class="anchor" name="abort ssl (Unix Socket commands)"></a><a class="anchor" name="abort ssl cert"></a><a class="anchor" name="9-abort ssl cert"></a><a class="anchor" name="9.3-abort ssl cert"></a><a class="anchor" name="abort ssl cert (Statistics and monitoring)"></a><a class="anchor" name="abort ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="abort ssl cert"></a><a href="#9.3-abort%20ssl%20cert">abort ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Abort and destroy a temporary SSL certificate update transaction.
 
 See also &quot;<a href="#set%20ssl%20cert">set ssl cert</a>&quot; and &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot;.
-</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add acl"></a><a class="anchor" name="9-add acl"></a><a class="anchor" name="9.3-add acl"></a><a class="anchor" name="add acl (Statistics and monitoring)"></a><a class="anchor" name="add acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add acl"></a><a href="#9.3-add%20acl">add acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;pattern&gt;</span></div><pre class="text">Add an entry into the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by
-&quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. This
-command cannot be used if the reference &lt;acl&gt; is a file also used with a map.
-In this case, you must use the command &quot;<a href="#add%20map">add map</a>&quot; in place of &quot;<a href="#add%20acl">add acl</a>&quot;.
-</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.3-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.3-add%20map">add map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.3-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.3-add%20map">add map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">Add an entry into the map &lt;map&gt; to associate the value &lt;value&gt; to the key
+</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add acl"></a><a class="anchor" name="9-add acl"></a><a class="anchor" name="9.3-add acl"></a><a class="anchor" name="add acl (Statistics and monitoring)"></a><a class="anchor" name="add acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add acl"></a><a href="#9.3-add%20acl">add acl</a></b> <span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;pattern&gt;</span></div><pre class="text">Add an entry into the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by
+&quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. Entries
+are added to the current version of the ACL, unless a specific version is
+specified with &quot;@&lt;ver&gt;&quot;. This version number must have preliminary been
+allocated by &quot;<a href="#prepare%20acl">prepare acl</a>&quot;, and it will be comprised between the versions
+reported in &quot;curr_ver&quot; and &quot;next_ver&quot; on the output of &quot;<a href="#show%20acl">show acl</a>&quot;. Entries
+added with a specific version number will not match until a &quot;commit acl&quot;
+operation is performed on them. They may however be consulted using the
+&quot;show acl @&lt;ver&gt;&quot; command, and cleared using a &quot;clear acl @&lt;ver&gt;&quot; command.
+This command cannot be used if the reference &lt;acl&gt; is a file also used with
+a map. In this case, the &quot;<a href="#add%20map">add map</a>&quot; command must be used instead.
+</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.3-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.3-add%20map">add map</a></b> <span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;key&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add map"></a><a class="anchor" name="9-add map"></a><a class="anchor" name="9.3-add map"></a><a class="anchor" name="add map (Statistics and monitoring)"></a><a class="anchor" name="add map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add map"></a><a href="#9.3-add%20map">add map</a></b> <span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">Add an entry into the map &lt;map&gt; to associate the value &lt;value&gt; to the key
 &lt;key&gt;. This command does not verify if the entry already exists. It is
-mainly used to fill a map after a clear operation. Note that if the reference
-&lt;map&gt; is a file and is shared with a map, this map will contain also a new
-pattern entry. Using the payload syntax it is possible to add multiple
-key/value pairs by entering them on separate lines. On each new line, the
-first word is the key and the rest of the line is considered to be the value
-which can even contains spaces.
+mainly used to fill a map after a &quot;<a href="#clear">clear</a>&quot; or &quot;<a href="#prepare">prepare</a>&quot; operation. Entries
+are added to the current version of the ACL, unless a specific version is
+specified with &quot;@&lt;ver&gt;&quot;. This version number must have preliminary been
+allocated by &quot;<a href="#prepare%20acl">prepare acl</a>&quot;, and it will be comprised between the versions
+reported in &quot;curr_ver&quot; and &quot;next_ver&quot; on the output of &quot;<a href="#show%20acl">show acl</a>&quot;. Entries
+added with a specific version number will not match until a &quot;commit map&quot;
+operation is performed on them. They may however be consulted using the
+&quot;show map @&lt;ver&gt;&quot; command, and cleared using a &quot;clear acl @&lt;ver&gt;&quot; command.
+If the designated map is also used as an ACL, the ACL will only match the
+&lt;key&gt; part and will ignore the &lt;value&gt; part. Using the payload syntax it is
+possible to add multiple key/value pairs by entering them on separate lines.
+On each new line, the first word is the key and the rest of the line is
+considered to be the value which can even contains spaces.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
@@ -2061,7 +2095,40 @@ prompt
 
 &gt;
 </code></pre>
-</div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add ssl"></a><a class="anchor" name="9-add ssl"></a><a class="anchor" name="9.3-add ssl"></a><a class="anchor" name="add ssl (Statistics and monitoring)"></a><a class="anchor" name="add ssl (Unix Socket commands)"></a><a class="anchor" name="add ssl crt-list"></a><a class="anchor" name="9-add ssl crt-list"></a><a class="anchor" name="9.3-add ssl crt-list"></a><a class="anchor" name="add ssl crt-list (Statistics and monitoring)"></a><a class="anchor" name="add ssl crt-list (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add ssl crt-list"></a><a href="#9.3-add%20ssl%20crt-list">add ssl crt-list</a></b> <span style="color: #080">&lt;crtlist&gt;</span> <span style="color: #080">&lt;certificate&gt;</span></div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add ssl"></a><a class="anchor" name="9-add ssl"></a><a class="anchor" name="9.3-add ssl"></a><a class="anchor" name="add ssl (Statistics and monitoring)"></a><a class="anchor" name="add ssl (Unix Socket commands)"></a><a class="anchor" name="add ssl crt-list"></a><a class="anchor" name="9-add ssl crt-list"></a><a class="anchor" name="9.3-add ssl crt-list"></a><a class="anchor" name="add ssl crt-list (Statistics and monitoring)"></a><a class="anchor" name="add ssl crt-list (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add ssl crt-list"></a><a href="#9.3-add%20ssl%20crt-list">add ssl crt-list</a></b> <span style="color: #080">&lt;crtlist&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">Add an certificate in a crt-list. It can also be used for directories since
+</div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add server"></a><a class="anchor" name="9-add server"></a><a class="anchor" name="9.3-add server"></a><a class="anchor" name="add server (Statistics and monitoring)"></a><a class="anchor" name="add server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add server"></a><a href="#9.3-add%20server">add server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Instantiate a new server attached to the backend &lt;backend&gt;. Only supported on
+a CLI connection running in experimental mode (see &quot;experimental-mode on&quot;).
+This method is still in development and may change in the future.
+
+The &lt;server&gt; name must not be already used in the backend. A special
+restriction is put on the backend which must used a dynamic load-balancing
+algorithm. A subset of keywords from the server config file statement can be
+used to configure the server behavior. Also note that no settings will be
+reused from an hypothetical &#x27;default-server&#x27; statement in the same backend.
+
+Here is the list of the currently supported keywords :
+
+- backup
+- disabled
+- enabled
+- id
+- maxconn
+- maxqueue
+- minconn
+- pool-low-conn
+- pool-max-conn
+- pool-purge-delay
+- proto
+- proxy-v2-options
+- send-proxy
+- send-proxy-v2
+- source
+- tfo
+- usesrc
+- weight
+
+Their syntax is similar to the server line from the configuration file,
+please refer to their individual documentation for details.
+</pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add ssl"></a><a class="anchor" name="9-add ssl"></a><a class="anchor" name="9.3-add ssl"></a><a class="anchor" name="add ssl (Statistics and monitoring)"></a><a class="anchor" name="add ssl (Unix Socket commands)"></a><a class="anchor" name="add ssl crt-list"></a><a class="anchor" name="9-add ssl crt-list"></a><a class="anchor" name="9.3-add ssl crt-list"></a><a class="anchor" name="add ssl crt-list (Statistics and monitoring)"></a><a class="anchor" name="add ssl crt-list (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add ssl crt-list"></a><a href="#9.3-add%20ssl%20crt-list">add ssl crt-list</a></b> <span style="color: #080">&lt;crtlist&gt;</span> <span style="color: #080">&lt;certificate&gt;</span></div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add ssl"></a><a class="anchor" name="9-add ssl"></a><a class="anchor" name="9.3-add ssl"></a><a class="anchor" name="add ssl (Statistics and monitoring)"></a><a class="anchor" name="add ssl (Unix Socket commands)"></a><a class="anchor" name="add ssl crt-list"></a><a class="anchor" name="9-add ssl crt-list"></a><a class="anchor" name="9.3-add ssl crt-list"></a><a class="anchor" name="add ssl crt-list (Statistics and monitoring)"></a><a class="anchor" name="add ssl crt-list (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add ssl crt-list"></a><a href="#9.3-add%20ssl%20crt-list">add ssl crt-list</a></b> <span style="color: #080">&lt;crtlist&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">Add an certificate in a crt-list. It can also be used for directories since
 directories are now loaded the same way as the crt-lists. This command allow
 you to use a certificate name in parameter, to use SSL options or filters a
 crt-list line must sent as a payload instead. Only one crt-list line is
@@ -2089,12 +2156,16 @@ only be issued on sockets configured for levels &quot;<a href="#operator">operat
 </pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear counters"></a><a class="anchor" name="9-clear counters"></a><a class="anchor" name="9.3-clear counters"></a><a class="anchor" name="clear counters (Statistics and monitoring)"></a><a class="anchor" name="clear counters (Unix Socket commands)"></a><a class="anchor" name="clear counters all"></a><a class="anchor" name="9-clear counters all"></a><a class="anchor" name="9.3-clear counters all"></a><a class="anchor" name="clear counters all (Statistics and monitoring)"></a><a class="anchor" name="clear counters all (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear counters all"></a><a href="#9.3-clear%20counters%20all">clear counters all</a></b></div><pre class="text">Clear all statistics counters in each proxy (frontend &amp; backend) and in each
 server. This has the same effect as restarting. This command is restricted
 and can only be issued on sockets configured for level &quot;admin&quot;.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear acl"></a><a class="anchor" name="9-clear acl"></a><a class="anchor" name="9.3-clear acl"></a><a class="anchor" name="clear acl (Statistics and monitoring)"></a><a class="anchor" name="clear acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear acl"></a><a href="#9.3-clear%20acl">clear acl</a></b> <span style="color: #080">&lt;acl&gt;</span></div><pre class="text">Remove all entries from the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt;
+</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear acl"></a><a class="anchor" name="9-clear acl"></a><a class="anchor" name="9.3-clear acl"></a><a class="anchor" name="clear acl (Statistics and monitoring)"></a><a class="anchor" name="clear acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear acl"></a><a href="#9.3-clear%20acl">clear acl</a></b> <span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;acl&gt;</span></div><pre class="text">Remove all entries from the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt;
 returned by &quot;<a href="#show%20acl">show acl</a>&quot;. Note that if the reference &lt;acl&gt; is a file and is
-shared with a map, this map will be also cleared.
-</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear map"></a><a class="anchor" name="9-clear map"></a><a class="anchor" name="9.3-clear map"></a><a class="anchor" name="clear map (Statistics and monitoring)"></a><a class="anchor" name="clear map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear map"></a><a href="#9.3-clear%20map">clear map</a></b> <span style="color: #080">&lt;map&gt;</span></div><pre class="text">Remove all entries from the map &lt;map&gt;. &lt;map&gt; is the #&lt;id&gt; or the &lt;file&gt;
+shared with a map, this map will be also cleared. By default only the current
+version of the ACL is cleared (the one being matched against). However it is
+possible to specify another version using &#x27;@&#x27; followed by this version.
+</pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear map"></a><a class="anchor" name="9-clear map"></a><a class="anchor" name="9.3-clear map"></a><a class="anchor" name="clear map (Statistics and monitoring)"></a><a class="anchor" name="clear map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear map"></a><a href="#9.3-clear%20map">clear map</a></b> <span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;map&gt;</span></div><pre class="text">Remove all entries from the map &lt;map&gt;. &lt;map&gt; is the #&lt;id&gt; or the &lt;file&gt;
 returned by &quot;<a href="#show%20map">show map</a>&quot;. Note that if the reference &lt;map&gt; is a file and is
-shared with a acl, this acl will be also cleared.
+shared with a acl, this acl will be also cleared. By default only the current
+version of the map is cleared (the one being matched against). However it is
+possible to specify another version using &#x27;@&#x27; followed by this version.
 </pre><a class="anchor" name="clear"></a><a class="anchor" name="9-clear"></a><a class="anchor" name="9.3-clear"></a><a class="anchor" name="clear (Statistics and monitoring)"></a><a class="anchor" name="clear (Unix Socket commands)"></a><a class="anchor" name="clear table"></a><a class="anchor" name="9-clear table"></a><a class="anchor" name="9.3-clear table"></a><a class="anchor" name="clear table (Statistics and monitoring)"></a><a class="anchor" name="clear table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="clear table"></a><a href="#9.3-clear%20table">clear table</a></b> <span style="color: #080">&lt;table&gt;</span> <span style="color: #008">[ data.<span style="color: #080">&lt;type&gt;</span> <span style="color: #080">&lt;operator&gt;</span> <span style="color: #080">&lt;value&gt;</span> ]</span> | <span style="color: #008">[ key <span style="color: #080">&lt;key&gt;</span> ]</span></div><pre class="text">Remove entries from the stick-table &lt;table&gt;.
 
 This is typically used to unblock some users complaining they have been
@@ -2143,7 +2214,35 @@ string.
     $ echo &quot;show table http_proxy&quot; | socat stdio /tmp/sock1
 &gt;&gt;&gt; <span class="comment"># table: http_proxy, type: ip, size:204800, used:1</span>
 </code></pre>
-</div><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl cert"></a><a class="anchor" name="9-commit ssl cert"></a><a class="anchor" name="9.3-commit ssl cert"></a><a class="anchor" name="commit ssl cert (Statistics and monitoring)"></a><a class="anchor" name="commit ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl cert"></a><a href="#9.3-commit%20ssl%20cert">commit ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Commit a temporary SSL certificate update transaction.
+</div><pre class="text">commit acl @&lt;ver&gt; &lt;acl&gt;
+  Commit all changes made to version &lt;ver&gt; of ACL &lt;acl&gt;, and deletes all past
+  versions. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20acl">show acl</a>&quot;. The
+  version number must be between &quot;curr_ver&quot;+1 and &quot;next_ver&quot; as reported in
+  &quot;<a href="#show%20acl">show acl</a>&quot;. The contents to be committed to the ACL can be consulted with
+  &quot;show acl @&lt;ver&gt; &lt;acl&gt;&quot; if desired. The specified version number has normally
+  been created with the &quot;<a href="#prepare%20acl">prepare acl</a>&quot; command. The replacement is atomic. It
+  consists in atomically updating the current version to the specified version,
+  which will instantly cause all entries in other versions to become invisible,
+  and all entries in the new version to become visible. It is also possible to
+  use this command to perform an atomic removal of all visible entries of an
+  ACL by calling &quot;<a href="#prepare%20acl">prepare acl</a>&quot; first then committing without adding any
+  entries. This command cannot be used if the reference &lt;acl&gt; is a file also
+  used as a map. In this case, the &quot;commit map&quot; command must be used instead.
+
+commit map @&lt;ver&gt; &lt;map&gt;
+  Commit all changes made to version &lt;ver&gt; of map &lt;map&gt;, and deletes all past
+  versions. &lt;map&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot;. The
+  version number must be between &quot;curr_ver&quot;+1 and &quot;next_ver&quot; as reported in
+  &quot;<a href="#show%20map">show map</a>&quot;. The contents to be committed to the map can be consulted with
+  &quot;show map @&lt;ver&gt; &lt;map&gt;&quot; if desired. The specified version number has normally
+  been created with the &quot;<a href="#prepare%20map">prepare map</a>&quot; command. The replacement is atomic. It
+  consists in atomically updating the current version to the specified version,
+  which will instantly cause all entries in other versions to become invisible,
+  and all entries in the new version to become visible. It is also possible to
+  use this command to perform an atomic removal of all visible entries of an
+  map by calling &quot;<a href="#prepare%20map">prepare map</a>&quot; first then committing without adding any
+  entries.
+</pre><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl cert"></a><a class="anchor" name="9-commit ssl cert"></a><a class="anchor" name="9.3-commit ssl cert"></a><a class="anchor" name="commit ssl cert (Statistics and monitoring)"></a><a class="anchor" name="commit ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl cert"></a><a href="#9.3-commit%20ssl%20cert">commit ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Commit a temporary SSL certificate update transaction.
 
 In the case of an existing certificate (in a &quot;Used&quot; state in &quot;show ssl
 cert&quot;), generate every SSL contextes and SNIs it need, insert them, and
@@ -2186,6 +2285,10 @@ directly with the &quot;crt&quot; directive in the configuration.
 entry in the frontends. If a certificate is used several time in a crt-list,
 you will need to provide which line you want to delete. To display the line
 numbers, use &quot;show ssl crt-list -n &lt;crtlist&gt;&quot;.
+</pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del server"></a><a class="anchor" name="9-del server"></a><a class="anchor" name="9.3-del server"></a><a class="anchor" name="del server (Statistics and monitoring)"></a><a class="anchor" name="del server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del server"></a><a href="#9.3-del%20server">del server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Remove a server attached to the backend &lt;backend&gt;. Only valid on a server
+added at runtime. The server must be put in maintenance mode prior to its
+deletion. The operation is cancelled if the serveur still has active
+or idle connection or its connection queue is not empty.
 </pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.3-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable agent"></a><a class="anchor" name="9-disable agent"></a><a class="anchor" name="9.3-disable agent"></a><a class="anchor" name="disable agent (Statistics and monitoring)"></a><a class="anchor" name="disable agent (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable agent"></a><a href="#9.3-disable%20agent">disable agent</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the auxiliary agent check as temporarily stopped.
 
 In the case where an agent check is being run as a auxiliary check, due
@@ -2274,10 +2377,18 @@ their numeric ID, prefixed with a sharp (&#x27;#&#x27;).
 
 This command is restricted and can only be issued on sockets configured for
 level &quot;admin&quot;.
-</pre><a class="anchor" name="expert-mode"></a><a class="anchor" name="9-expert-mode"></a><a class="anchor" name="9.3-expert-mode"></a><a class="anchor" name="expert-mode (Statistics and monitoring)"></a><a class="anchor" name="expert-mode (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="expert-mode"></a><a href="#9.3-expert-mode">expert-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">Without options, this indicates whether the expert mode is enabled or
-disabled on the current connection. When passed &quot;on&quot;, it turns the expert
-mode on for the current CLI connection only. With &quot;off&quot; it turns it off. The
-expert mode enables displaying of expert commands that can be extremely
+</pre><a class="anchor" name="experimental-mode"></a><a class="anchor" name="9-experimental-mode"></a><a class="anchor" name="9.3-experimental-mode"></a><a class="anchor" name="experimental-mode (Statistics and monitoring)"></a><a class="anchor" name="experimental-mode (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="experimental-mode"></a><a href="#9.3-experimental-mode">experimental-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">Without options, this indicates whether the experimental mode is enabled or
+disabled on the current connection. When passed &quot;on&quot;, it turns the
+experimental mode on for the current CLI connection only. With &quot;off&quot; it turns
+it off.
+
+The experimental mode is used to access to extra features still in
+development. These features are currently not stable and should be used with
+care. They may be subject to breaking changes across versions.
+</pre><a class="anchor" name="expert-mode"></a><a class="anchor" name="9-expert-mode"></a><a class="anchor" name="9.3-expert-mode"></a><a class="anchor" name="expert-mode (Statistics and monitoring)"></a><a class="anchor" name="expert-mode (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="expert-mode"></a><a href="#9.3-expert-mode">expert-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">This command is similar to experimental-mode but is used to toggle the
+expert mode.
+
+The expert mode enables displaying of expert commands that can be extremely
 dangerous for the process and which may occasionally help developers collect
 important information about complex bugs. Any misuse of these features will
 likely lead to a process crash. Do not use this option without being invited
@@ -2316,17 +2427,42 @@ The two last word are used to show the returned value and its type. With the
    return=cannot-display: The value cannot be converted as string.
 
    type=&quot;&lt;type&gt;&quot;:         The type of the returned sample.
+</pre><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get var"></a><a class="anchor" name="9-get var"></a><a class="anchor" name="9.3-get var"></a><a class="anchor" name="get var (Statistics and monitoring)"></a><a class="anchor" name="get var (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get var"></a><a href="#9.3-get%20var">get var</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Show the existence, type and contents of the process-wide variable &#x27;name&#x27;.
+Only process-wide variables are readable, so the name must begin with
+&#x27;proc.&#x27; otherwise no variable will be found. This command requires levels
+&quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;.
 </pre><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get weight"></a><a class="anchor" name="9-get weight"></a><a class="anchor" name="9.3-get weight"></a><a class="anchor" name="get weight (Statistics and monitoring)"></a><a class="anchor" name="get weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get weight"></a><a href="#9.3-get%20weight">get weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Report the current weight and the initial weight of server &lt;server&gt; in
 backend &lt;backend&gt; or an error if either doesn&#x27;t exist. The initial weight is
 the one that appears in the configuration file. Both are normally equal
 unless the current weight has been changed. Both the backend and the server
 may be specified either by their name or by their numeric ID, prefixed with a
 sharp (&#x27;#&#x27;).
-</pre><a class="anchor" name="help"></a><a class="anchor" name="9-help"></a><a class="anchor" name="9.3-help"></a><a class="anchor" name="help (Statistics and monitoring)"></a><a class="anchor" name="help (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="help"></a><a href="#9.3-help">help</a></b></div><pre class="text">Print the list of known keywords and their basic usage. The same help screen
-is also displayed for unknown commands.
+</pre><a class="anchor" name="help"></a><a class="anchor" name="9-help"></a><a class="anchor" name="9.3-help"></a><a class="anchor" name="help (Statistics and monitoring)"></a><a class="anchor" name="help (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="help"></a><a href="#9.3-help">help</a></b> <span style="color: #008">[<span style="color: #080">&lt;command&gt;</span>]</span></div><pre class="text">Print the list of known keywords and their basic usage, or commands matching
+the requested one. The same help screen is also displayed for unknown
+commands.
 </pre><a class="anchor" name="new"></a><a class="anchor" name="9-new"></a><a class="anchor" name="9.3-new"></a><a class="anchor" name="new (Statistics and monitoring)"></a><a class="anchor" name="new (Unix Socket commands)"></a><a class="anchor" name="new ssl"></a><a class="anchor" name="9-new ssl"></a><a class="anchor" name="9.3-new ssl"></a><a class="anchor" name="new ssl (Statistics and monitoring)"></a><a class="anchor" name="new ssl (Unix Socket commands)"></a><a class="anchor" name="new ssl cert"></a><a class="anchor" name="9-new ssl cert"></a><a class="anchor" name="9.3-new ssl cert"></a><a class="anchor" name="new ssl cert (Statistics and monitoring)"></a><a class="anchor" name="new ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="new ssl cert"></a><a href="#9.3-new%20ssl%20cert">new ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Create a new empty SSL certificate store to be filled with a certificate and
 added to a directory or a crt-list. This command should be used in
 combination with &quot;<a href="#set%20ssl%20cert">set ssl cert</a>&quot; and &quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
+</pre><a class="anchor" name="prepare"></a><a class="anchor" name="9-prepare"></a><a class="anchor" name="9.3-prepare"></a><a class="anchor" name="prepare (Statistics and monitoring)"></a><a class="anchor" name="prepare (Unix Socket commands)"></a><a class="anchor" name="prepare acl"></a><a class="anchor" name="9-prepare acl"></a><a class="anchor" name="9.3-prepare acl"></a><a class="anchor" name="prepare acl (Statistics and monitoring)"></a><a class="anchor" name="prepare acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="prepare acl"></a><a href="#9.3-prepare%20acl">prepare acl</a></b> <span style="color: #080">&lt;acl&gt;</span></div><pre class="text">Allocate a new version number in ACL &lt;acl&gt; for atomic replacement. &lt;acl&gt; is
+the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20acl">show acl</a>&quot;. The new version number is
+shown in response after &quot;New version created:&quot;. This number will then be
+usable to prepare additions of new entries into the ACL which will then
+atomically replace the current ones once committed. It is reported as
+&quot;next_ver&quot; in &quot;<a href="#show%20acl">show acl</a>&quot;. There is no impact of allocating new versions, as
+unused versions will automatically be removed once a more recent version is
+committed. Version numbers are unsigned 32-bit values which wrap at the end,
+so care must be taken when comparing them in an external program. This
+command cannot be used if the reference &lt;acl&gt; is a file also used as a map.
+In this case, the &quot;<a href="#prepare%20map">prepare map</a>&quot; command must be used instead.
+</pre><a class="anchor" name="prepare"></a><a class="anchor" name="9-prepare"></a><a class="anchor" name="9.3-prepare"></a><a class="anchor" name="prepare (Statistics and monitoring)"></a><a class="anchor" name="prepare (Unix Socket commands)"></a><a class="anchor" name="prepare map"></a><a class="anchor" name="9-prepare map"></a><a class="anchor" name="9.3-prepare map"></a><a class="anchor" name="prepare map (Statistics and monitoring)"></a><a class="anchor" name="prepare map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="prepare map"></a><a href="#9.3-prepare%20map">prepare map</a></b> <span style="color: #080">&lt;map&gt;</span></div><pre class="text">Allocate a new version number in map &lt;map&gt; for atomic replacement. &lt;map&gt; is
+the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot;. The new version number is
+shown in response after &quot;New version created:&quot;. This number will then be
+usable to prepare additions of new entries into the map which will then
+atomically replace the current ones once committed. It is reported as
+&quot;next_ver&quot; in &quot;<a href="#show%20map">show map</a>&quot;. There is no impact of allocating new versions, as
+unused versions will automatically be removed once a more recent version is
+committed. Version numbers are unsigned 32-bit values which wrap at the end,
+so care must be taken when comparing them in an external program.
 </pre><a class="anchor" name="prompt"></a><a class="anchor" name="9-prompt"></a><a class="anchor" name="9.3-prompt"></a><a class="anchor" name="prompt (Statistics and monitoring)"></a><a class="anchor" name="prompt (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="prompt"></a><a href="#9.3-prompt">prompt</a></b></div><pre class="text">Toggle the prompt at the beginning of the line and enter or leave interactive
 mode. In interactive mode, the connection is not closed after a command
 completes. Instead, the prompt will appear again, indicating the user that
@@ -2357,11 +2493,14 @@ pending, they will immediately be accepted. If it is lowered to a value below
 the current number of connections, new connections acceptation will be
 delayed until the threshold is reached. A value of zero restores the initial
 setting.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set profiling"></a><a class="anchor" name="9-set profiling"></a><a class="anchor" name="9.3-set profiling"></a><a class="anchor" name="set profiling (Statistics and monitoring)"></a><a class="anchor" name="set profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set profiling"></a><a href="#9.3-set%20profiling">set profiling</a></b> <span style="color: #800">{ tasks }</span> <span style="color: #800">{ auto | on | off }</span></div><pre class="text">Enables or disables CPU profiling for the indicated subsystem. This is
-equivalent to setting or clearing the &quot;profiling&quot; settings in the &quot;global&quot;
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set profiling"></a><a class="anchor" name="9-set profiling"></a><a class="anchor" name="9.3-set profiling"></a><a class="anchor" name="set profiling (Statistics and monitoring)"></a><a class="anchor" name="set profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set profiling"></a><a href="#9.3-set%20profiling">set profiling</a></b> <span style="color: #800">{ tasks | memory }</span> <span style="color: #800">{ auto | on | off }</span></div><pre class="text">Enables or disables CPU or memory profiling for the indicated subsystem. This
+is equivalent to setting or clearing the &quot;profiling&quot; settings in the &quot;global&quot;
 section of the configuration file. Please also see &quot;<a href="#show%20profiling">show profiling</a>&quot;. Note
 that manually setting the tasks profiling to &quot;on&quot; automatically resets the
 scheduler statistics, thus allows to check activity over a given interval.
+The memory profiling is limited to certain operating systems (known to work
+on the linux-glibc target), and requires USE_MEMORY_PROFILING to be set at
+compile time.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set rate-limit"></a><a class="anchor" name="9-set rate-limit"></a><a class="anchor" name="9.3-set rate-limit"></a><a class="anchor" name="set rate-limit (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections"></a><a class="anchor" name="9-set rate-limit connections"></a><a class="anchor" name="9.3-set rate-limit connections"></a><a class="anchor" name="set rate-limit connections (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections (Unix Socket commands)"></a><a class="anchor" name="set rate-limit connections global"></a><a class="anchor" name="9-set rate-limit connections global"></a><a class="anchor" name="9.3-set rate-limit connections global"></a><a class="anchor" name="set rate-limit connections global (Statistics and monitoring)"></a><a class="anchor" name="set rate-limit connections global (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set rate-limit connections global"></a><a href="#9.3-set%20rate-limit%20connections%20global">set rate-limit connections global</a></b> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Change the process-wide connection rate limit, which is set by the global
 &#x27;maxconnrate&#x27; setting. A value of zero disables the limitation. This limit
 applies to all frontends and the change has an immediate effect. The value
@@ -2416,6 +2555,8 @@ internal run-time DNS resolver to be configured and enabled for this server.
 duration of the current session.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl cert"></a><a class="anchor" name="9-set ssl cert"></a><a class="anchor" name="9.3-set ssl cert"></a><a class="anchor" name="set ssl cert (Statistics and monitoring)"></a><a class="anchor" name="set ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl cert"></a><a href="#9.3-set%20ssl%20cert">set ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">This command is part of a transaction system, the &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; and
 &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot; commands could be required.
+This whole transaction system works on any certificate displayed by the
+&quot;<a href="#show%20ssl%20cert">show ssl cert</a>&quot; command, so on any frontend or backend certificate.
 If there is no on-going transaction, it will duplicate the certificate
 &lt;filename&gt; in memory to a temporary transaction, then update this
 transaction with the PEM file in the payload. If a transaction exists with
@@ -2467,6 +2608,15 @@ data_types in a single call.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set timeout"></a><a class="anchor" name="9-set timeout"></a><a class="anchor" name="9.3-set timeout"></a><a class="anchor" name="set timeout (Statistics and monitoring)"></a><a class="anchor" name="set timeout (Unix Socket commands)"></a><a class="anchor" name="set timeout cli"></a><a class="anchor" name="9-set timeout cli"></a><a class="anchor" name="9.3-set timeout cli"></a><a class="anchor" name="set timeout cli (Statistics and monitoring)"></a><a class="anchor" name="set timeout cli (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set timeout cli"></a><a href="#9.3-set%20timeout%20cli">set timeout cli</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Change the CLI interface timeout for current connection. This can be useful
 during long debugging sessions where the user needs to constantly inspect
 some indicators without being disconnected. The delay is passed in seconds.
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set var"></a><a class="anchor" name="9-set var"></a><a class="anchor" name="9.3-set var"></a><a class="anchor" name="set var (Statistics and monitoring)"></a><a class="anchor" name="set var (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set var"></a><a href="#9.3-set%20var">set var</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;expression&gt;</span></div><pre class="text">Allows to set or overwrite the process-wide variable &#x27;name&#x27; with the result
+of expression &lt;expression&gt;. Only process-wide variables may be used, so the
+name must begin with &#x27;proc.&#x27; otherwise no variable will be set. The
+&lt;expression&gt; may only involve &quot;internal&quot; sample fetch keywords and converters
+even though the most likely useful ones will be str(&#x27;something&#x27;) or int().
+Note that the command line parser doesn&#x27;t know about quotes, so any space in
+the expression must be preceded by a backslash. This command requires levels
+&quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;. This command is only supported on a CLI connection
+running in experimental mode (see &quot;experimental-mode on&quot;).
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set weight"></a><a class="anchor" name="9-set weight"></a><a class="anchor" name="9.3-set weight"></a><a class="anchor" name="set weight (Statistics and monitoring)"></a><a class="anchor" name="set weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set weight"></a><a href="#9.3-set%20weight">set weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server&#x27;s weight to the value passed in argument. If the value ends
 with the &#x27;%&#x27; sign, then the new weight will be relative to the initially
 configured weight.  Absolute weights are permitted between 0 and 256.
@@ -2482,12 +2632,16 @@ enable it again after the update by setting it back to 100%. This command
 is restricted and can only be issued on sockets configured for level
 &quot;admin&quot;. Both the backend and the server may be specified either by their
 name or by their numeric ID, prefixed with a sharp (&#x27;#&#x27;).
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show acl"></a><a class="anchor" name="9-show acl"></a><a class="anchor" name="9.3-show acl"></a><a class="anchor" name="show acl (Statistics and monitoring)"></a><a class="anchor" name="show acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show acl"></a><a href="#9.3-show%20acl">show acl</a></b> <span style="color: #008">[<span style="color: #080">&lt;acl&gt;</span>]</span></div><pre class="text">Dump info about acl converters. Without argument, the list of all available
-acls is returned. If a &lt;acl&gt; is specified, its contents are dumped. &lt;acl&gt; if
-the #&lt;id&gt; or &lt;file&gt;. The dump format is the same than the map even for the
-sample value. The data returned are not a list of available ACL, but are the
-list of all patterns composing any ACL. Many of these patterns can be shared
-with maps.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show acl"></a><a class="anchor" name="9-show acl"></a><a class="anchor" name="9.3-show acl"></a><a class="anchor" name="show acl (Statistics and monitoring)"></a><a class="anchor" name="show acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show acl"></a><a href="#9.3-show%20acl">show acl</a></b> <span style="color: #008">[<span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;acl&gt;</span>]</span></div><pre class="text">Dump info about acl converters. Without argument, the list of all available
+acls is returned. If a &lt;acl&gt; is specified, its contents are dumped. &lt;acl&gt; is
+the #&lt;id&gt; or &lt;file&gt;. By  default the current version of the ACL is shown (the
+version currently being matched against and reported as &#x27;curr_ver&#x27; in the ACL
+list). It is possible to instead dump other versions by prepending &#x27;@&lt;ver&gt;&#x27;
+before the ACL&#x27;s identifier. The version works as a filter and non-existing
+versions will simply report no result. The dump format is the same as for the
+maps even for the sample values. The data returned are not a list of
+available ACL, but are the list of all patterns composing any ACL. Many of
+these patterns can be shared with maps.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show backend"></a><a class="anchor" name="9-show backend"></a><a class="anchor" name="9.3-show backend"></a><a class="anchor" name="show backend (Statistics and monitoring)"></a><a class="anchor" name="show backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show backend"></a><a href="#9.3-show%20backend">show backend</a></b></div><pre class="text">Dump the list of backends available in the running process
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cli"></a><a class="anchor" name="9-show cli"></a><a class="anchor" name="9.3-show cli"></a><a class="anchor" name="show cli (Statistics and monitoring)"></a><a class="anchor" name="show cli (Unix Socket commands)"></a><a class="anchor" name="show cli level"></a><a class="anchor" name="9-show cli level"></a><a class="anchor" name="9.3-show cli level"></a><a class="anchor" name="show cli level (Statistics and monitoring)"></a><a class="anchor" name="show cli level (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cli level"></a><a href="#9.3-show%20cli%20level">show cli level</a></b></div><pre class="text">Display the CLI level of the current CLI session. The result could be
 &#x27;admin&#x27;, &#x27;operator&#x27; or &#x27;user&#x27;. See also the &#x27;operator&#x27; and &#x27;user&#x27; commands.
@@ -2506,9 +2660,11 @@ user
 Permission denied
 </code></pre>
 </div><a class="anchor" name="operator"></a><a class="anchor" name="9-operator"></a><a class="anchor" name="9.3-operator"></a><a class="anchor" name="operator (Statistics and monitoring)"></a><a class="anchor" name="operator (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="operator"></a><a href="#9.3-operator">operator</a></b></div><pre class="text">Decrease the CLI level of the current CLI session to operator. It can&#x27;t be
-increased. It also drops expert mode. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;.
+increased. It also drops expert and experimental mode. See also &quot;show cli
+level&quot;.
 </pre><a class="anchor" name="user"></a><a class="anchor" name="9-user"></a><a class="anchor" name="9.3-user"></a><a class="anchor" name="user (Statistics and monitoring)"></a><a class="anchor" name="user (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="user"></a><a href="#9.3-user">user</a></b></div><pre class="text">Decrease the CLI level of the current CLI session to user. It can&#x27;t be
-increased. It also drops expert mode. See also &quot;<a href="#show%20cli%20level">show cli level</a>&quot;.
+increased. It also drops expert and experimental mode. See also &quot;show cli
+level&quot;.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show activity"></a><a class="anchor" name="9-show activity"></a><a class="anchor" name="9.3-show activity"></a><a class="anchor" name="show activity (Statistics and monitoring)"></a><a class="anchor" name="show activity (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show activity"></a><a href="#9.3-show%20activity">show activity</a></b></div><pre class="text">Reports some counters about internal events that will help developers and
 more generally people who know haproxy well enough to narrow down the causes
 of reports of abnormal behaviours. A typical example would be a properly
@@ -2649,7 +2805,7 @@ by tools designed to be durable. Some internal structure states may look
 suspicious to the function listing them, in this case the output line will be
 suffixed with an exclamation mark (&#x27;!&#x27;). This may help find a starting point
 when trying to diagnose an incident.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span> <span style="color: #008">[desc]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show info"></a><a class="anchor" name="9-show info"></a><a class="anchor" name="9.3-show info"></a><a class="anchor" name="show info (Statistics and monitoring)"></a><a class="anchor" name="show info (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show info"></a><a href="#9.3-show%20info">show info</a></b> <span style="color: #008">[typed|json]</span> <span style="color: #008">[desc]</span> <span style="color: #008">[float]</span></div><pre class="text">Dump info about haproxy status on current process. If &quot;typed&quot; is passed as an
 optional argument, field numbers, names and types are emitted as well so that
 external monitoring products can easily retrieve, possibly aggregate, then
 report information found in fields they don&#x27;t know. Each field is dumped on
@@ -2659,7 +2815,11 @@ list of JSON objects. By default, the format contains only two columns
 delimited by a colon (&#x27;:&#x27;). The left one is the field name and the right
 one is the value.  It is very important to note that in typed output
 format, the dump for a single object is contiguous so that there is no
-need for a consumer to store everything at once.
+need for a consumer to store everything at once. If &quot;float&quot; is passed as an
+optional argument, some fields usually emitted as integers may switch to
+floats for higher accuracy. It is purposely unspecified which ones are
+concerned as this might evolve over time. Using this option implies that the
+consumer is able to process floats. The output format used is sprintf(&quot;%f&quot;).
 
 When using the typed output format, each line is made of 4 columns delimited
 by colons (&#x27;:&#x27;). The first column is a dot-delimited series of 3 elements. The
@@ -2757,10 +2917,16 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show info json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show map"></a><a class="anchor" name="9-show map"></a><a class="anchor" name="9.3-show map"></a><a class="anchor" name="show map (Statistics and monitoring)"></a><a class="anchor" name="show map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show map"></a><a href="#9.3-show%20map">show map</a></b> <span style="color: #008">[<span style="color: #080">&lt;map&gt;</span>]</span></div><pre class="text">Dump info about map converters. Without argument, the list of all available
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show map"></a><a class="anchor" name="9-show map"></a><a class="anchor" name="9.3-show map"></a><a class="anchor" name="show map (Statistics and monitoring)"></a><a class="anchor" name="show map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show map"></a><a href="#9.3-show%20map">show map</a></b> <span style="color: #008">[<span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;map&gt;</span>]</span></div><pre class="text">Dump info about map converters. Without argument, the list of all available
 maps is returned. If a &lt;map&gt; is specified, its contents are dumped. &lt;map&gt; is
-the #&lt;id&gt; or &lt;file&gt;. The first column is a unique identifier. It can be used
-as reference for the operation &quot;<a href="#del%20map">del map</a>&quot; and &quot;<a href="#set%20map">set map</a>&quot;. The second column is
+the #&lt;id&gt; or &lt;file&gt;. By  default the current version of the map is shown (the
+version currently being matched against and reported as &#x27;curr_ver&#x27; in the map
+list). It is possible to instead dump other versions by prepending &#x27;@&lt;ver&gt;&#x27;
+before the map&#x27;s identifier. The version works as a filter and non-existing
+versions will simply report no result.
+
+In the output, the first column is a unique entry identifier, which is usable
+as a reference for operations &quot;<a href="#del%20map">del map</a>&quot; and &quot;<a href="#set%20map">set map</a>&quot;. The second column is
 the pattern and the third column is the sample if available. The data returned
 are not directly a list of available maps, but are the list of all patterns
 composing any map. Many of these patterns can be shared with ACL.
@@ -2821,10 +2987,20 @@ $ echo &quot;<a href="#show%20peers">show peers</a>&quot; | socat - /tmp/hostB
 usage when suspecting a memory leak for example. It does exactly the same
 as the SIGQUIT when running in foreground except that it does not flush
 the pools.
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show profiling"></a><a class="anchor" name="9-show profiling"></a><a class="anchor" name="9.3-show profiling"></a><a class="anchor" name="show profiling (Statistics and monitoring)"></a><a class="anchor" name="show profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show profiling"></a><a href="#9.3-show%20profiling">show profiling</a></b></div><pre class="text">Dumps the current profiling settings, one per line, as well as the command
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show profiling"></a><a class="anchor" name="9-show profiling"></a><a class="anchor" name="9.3-show profiling"></a><a class="anchor" name="show profiling (Statistics and monitoring)"></a><a class="anchor" name="show profiling (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show profiling"></a><a href="#9.3-show%20profiling">show profiling</a></b> <span style="color: #008">[<span style="color: #800">{all | status | tasks | memory}</span>]</span> <span style="color: #008">[byaddr]</span> <span style="color: #008">[<span style="color: #080">&lt;max_lines&gt;</span>]</span></div><pre class="text">Dumps the current profiling settings, one per line, as well as the command
 needed to change them. When tasks profiling is enabled, some per-function
 statistics collected by the scheduler will also be emitted, with a summary
-covering the number of calls, total/avg CPU time and total/avg latency.
+covering the number of calls, total/avg CPU time and total/avg latency. When
+memory profiling is enabled, some information such as the number of
+allocations/releases and their sizes will be reported. It is possible to
+limit the dump to only the profiling status, the tasks, or the memory
+profiling by specifying the respective keywords; by default all profiling
+information are dumped. It is also possible to limit the number of lines
+of output of each category by specifying a numeric limit. If is possible to
+request that the output is sorted by address instead of usage, e.g. to ease
+comparisons between subsequent calls. Please note that profiling is
+essentially aimed at developers since it gives hints about where CPU cycles
+or memory are wasted in the code. There is nothing useful to monitor there.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
 if no section is supplied.
 
@@ -3051,7 +3227,7 @@ process number starting at 1.
 The rest of the line starting after the first colon follows the &quot;typed output
 format&quot; described in the section above. In short, the second column (after the
 first &#x27;:&#x27;) indicates the origin, nature and scope of the variable. The third
-column indicates the type of the field, among &quot;s32&quot;, &quot;s64&quot;, &quot;u32&quot;, &quot;u64&quot; and
+column indicates the field type, among &quot;s32&quot;, &quot;s64&quot;, &quot;u32&quot;, &quot;u64&quot;, &quot;flt&#x27; and
 &quot;str&quot;. Then the fourth column is the value itself, which the consumer knows
 how to parse thanks to column 3 and how to process thanks to column 2.
 
@@ -3139,12 +3315,12 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show stat json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl cert"></a><a class="anchor" name="9-show ssl cert"></a><a class="anchor" name="9.3-show ssl cert"></a><a class="anchor" name="show ssl cert (Statistics and monitoring)"></a><a class="anchor" name="show ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl cert"></a><a href="#9.3-show%20ssl%20cert">show ssl cert</a></b> <span style="color: #008">[<span style="color: #080">&lt;filename&gt;</span>]</span></div><pre class="text">Display the list of certificates used on frontends. If a filename is prefixed
-by an asterisk, it is a transaction which is not committed yet.  If a
-filename is specified, it will show details about the certificate. This
-command can be useful to check if a certificate was well updated. You can
-also display details on a transaction by prefixing the filename by an
-asterisk.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl cert"></a><a class="anchor" name="9-show ssl cert"></a><a class="anchor" name="9.3-show ssl cert"></a><a class="anchor" name="show ssl cert (Statistics and monitoring)"></a><a class="anchor" name="show ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl cert"></a><a href="#9.3-show%20ssl%20cert">show ssl cert</a></b> <span style="color: #008">[<span style="color: #080">&lt;filename&gt;</span>]</span></div><pre class="text">Display the list of certificates used on frontends and backends.
+If a filename is prefixed by an asterisk, it is a transaction which is not
+committed yet. If a filename is specified, it will show details about the
+certificate. This command can be useful to check if a certificate was well
+updated. You can also display details on a transaction by prefixing the
+filename by an asterisk.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -3577,7 +3753,7 @@ has at least &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot; p
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code>$ echo &quot;reload&quot; | socat /var/run/haproxy-master.sock
+<code>$ echo &quot;reload&quot; | socat /var/run/haproxy-master.sock stdin
 </code></pre>
 </div><pre class="text">Note that a reload will close the connection to the master CLI.
 </pre></div>
@@ -3908,7 +4084,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.4-dev10 &ndash; Management Guide<br>
+							HAProxy 2.4.0 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -4012,7 +4188,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.4-dev10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.4.0', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
