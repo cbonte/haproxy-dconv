@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.27 - Management Guide</title>
+		<title>HAProxy version 1.8.30 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -418,7 +418,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/11/11</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -429,7 +429,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 1.8.27</strong></p>
+							<p><strong>version 1.8.30</strong></p>
 							<p>
 								<br>
 								
@@ -1615,9 +1615,9 @@ S (Servers).
  81: dcon [LF..]: requests denied by &quot;tcp-request connection&quot; rules
  82: dses [LF..]: requests denied by &quot;tcp-request session&quot; rules
 </pre></div>
-<a class="anchor" id="9" name="9"></a>
-<div class="page-header"><h1 id="chapter-9" data-target="9"><small><a class="small" href="#9">9.</a></small> 2) Typed output format</h1>
-</div><div><pre class="text">Both &quot;<a href="#show%20info">show info</a>&quot; and &quot;<a href="#show%20stat">show stat</a>&quot; support a mode where each output value comes
+<a class="anchor" id="9.2" name="9.2"></a>
+<h2 id="chapter-9.2" data-target="9.2"><small><a class="small" href="#9.2">9.2.</a></small> Typed output format</h2>
+<div><pre class="text">Both &quot;<a href="#show%20info">show info</a>&quot; and &quot;<a href="#show%20stat">show stat</a>&quot; support a mode where each output value comes
 with its type and sufficient information to know how the value is supposed to
 be aggregated between processes and how it evolves.
 
@@ -2429,6 +2429,23 @@ composing any map. Many of these patterns can be shared with ACL.
 usage when suspecting a memory leak for example. It does exactly the same
 as the SIGQUIT when running in foreground except that it does not flush
 the pools.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
+if no section is supplied.
+
+For each name server, the following counters are reported:
+  sent: number of DNS requests sent to this server
+  valid: number of DNS valid responses received from this server
+  update: number of DNS responses used to update the server&#x27;s IP address
+  cname: number of CNAME responses
+  cname_error: CNAME errors encountered with this server
+  any_err: number of empty response (IE: server does not support ANY type)
+  nx: non existent domain response received from this server
+  timeout: how many time this server did not answer in time
+  refused: number of requests refused by this server
+  other: any other DNS errors
+  invalid: invalid DNS response (from a protocol point of view)
+  too_big: too big response
+  outdated: number of response arrived too late (after an other name server)
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show servers"></a><a class="anchor" name="9-show servers"></a><a class="anchor" name="9.3-show servers"></a><a class="anchor" name="show servers (Statistics and monitoring)"></a><a class="anchor" name="show servers (Unix Socket commands)"></a><a class="anchor" name="show servers state"></a><a class="anchor" name="9-show servers state"></a><a class="anchor" name="9.3-show servers state"></a><a class="anchor" name="show servers state (Statistics and monitoring)"></a><a class="anchor" name="show servers state (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show servers state"></a><a href="#9.3-show%20servers%20state">show servers state</a></b> <span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>]</span></div><pre class="text">Dump the state of the servers found in the running configuration. A backend
 name or identifier may be provided to limit the output to this backend only.
 
@@ -2695,23 +2712,6 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show stat json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show resolvers"></a><a class="anchor" name="9-show resolvers"></a><a class="anchor" name="9.3-show resolvers"></a><a class="anchor" name="show resolvers (Statistics and monitoring)"></a><a class="anchor" name="show resolvers (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show resolvers"></a><a href="#9.3-show%20resolvers">show resolvers</a></b> <span style="color: #008">[<span style="color: #080">&lt;resolvers section id&gt;</span>]</span></div><pre class="text">Dump statistics for the given resolvers section, or all resolvers sections
-if no section is supplied.
-
-For each name server, the following counters are reported:
-  sent: number of DNS requests sent to this server
-  valid: number of DNS valid responses received from this server
-  update: number of DNS responses used to update the server&#x27;s IP address
-  cname: number of CNAME responses
-  cname_error: CNAME errors encountered with this server
-  any_err: number of empty response (IE: server does not support ANY type)
-  nx: non existent domain response received from this server
-  timeout: how many time this server did not answer in time
-  refused: number of requests refused by this server
-  other: any other DNS errors
-  invalid: invalid DNS response (from a protocol point of view)
-  too_big: too big response
-  outdated: number of response arrived too late (after an other name server)
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.3-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.3-show%20table">show table</a></b></div><pre class="text">Dump general information on all known stick-tables. Their name is returned
 (the name of the proxy which holds them), their type (currently zero, always
 IP), their size in maximum possible number of entries, and the number of
@@ -3156,7 +3156,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.27 &ndash; Management Guide<br>
+							HAProxy 1.8.30 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3260,7 +3260,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.27', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.30', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
