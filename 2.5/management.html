@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.5-dev0 - Management Guide</title>
+		<title>HAProxy version 2.5.1 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -222,7 +222,11 @@
 							
 							<a class="list-group-item" href="#abort ssl">abort ssl</a>
 							
+							<a class="list-group-item" href="#abort ssl ca-file">abort ssl ca-file</a>
+							
 							<a class="list-group-item" href="#abort ssl cert">abort ssl cert</a>
+							
+							<a class="list-group-item" href="#abort ssl crl-file">abort ssl crl-file</a>
 							
 							<a class="list-group-item" href="#add">add</a>
 							
@@ -255,7 +259,11 @@
 							
 							<a class="list-group-item" href="#commit ssl">commit ssl</a>
 							
+							<a class="list-group-item" href="#commit ssl ca-file">commit ssl ca-file</a>
+							
 							<a class="list-group-item" href="#commit ssl cert">commit ssl cert</a>
+							
+							<a class="list-group-item" href="#commit ssl crl-file">commit ssl crl-file</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-D"><h4>D</h4>
@@ -274,7 +282,11 @@
 							
 							<a class="list-group-item" href="#del ssl">del ssl</a>
 							
+							<a class="list-group-item" href="#del ssl ca-file">del ssl ca-file</a>
+							
 							<a class="list-group-item" href="#del ssl cert">del ssl cert</a>
+							
+							<a class="list-group-item" href="#del ssl crl-file">del ssl crl-file</a>
 							
 							<a class="list-group-item" href="#del ssl crt-list">del ssl crt-list</a>
 							
@@ -331,6 +343,8 @@
 								
 							<a class="list-group-item" href="#help">help</a>
 							
+							<a class="list-group-item" href="#httpclient">httpclient</a>
+							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-N"><h4>N</h4>
 								
@@ -338,7 +352,11 @@
 							
 							<a class="list-group-item" href="#new ssl">new ssl</a>
 							
+							<a class="list-group-item" href="#new ssl ca-file">new ssl ca-file</a>
+							
 							<a class="list-group-item" href="#new ssl cert">new ssl cert</a>
+							
+							<a class="list-group-item" href="#new ssl crl-file">new ssl crl-file</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-O"><h4>O</h4>
@@ -406,7 +424,11 @@
 							
 							<a class="list-group-item" href="#set ssl">set ssl</a>
 							
+							<a class="list-group-item" href="#set ssl ca-file">set ssl ca-file</a>
+							
 							<a class="list-group-item" href="#set ssl cert">set ssl cert</a>
+							
+							<a class="list-group-item" href="#set ssl crl-file">set ssl crl-file</a>
 							
 							<a class="list-group-item" href="#set ssl ocsp-response">set ssl ocsp-response</a>
 							
@@ -448,6 +470,8 @@
 							
 							<a class="list-group-item" href="#show info">show info</a>
 							
+							<a class="list-group-item" href="#show libs">show libs</a>
+							
 							<a class="list-group-item" href="#show map">show map</a>
 							
 							<a class="list-group-item" href="#show peers">show peers</a>
@@ -472,9 +496,15 @@
 							
 							<a class="list-group-item" href="#show ssl">show ssl</a>
 							
+							<a class="list-group-item" href="#show ssl ca-file">show ssl ca-file</a>
+							
 							<a class="list-group-item" href="#show ssl cert">show ssl cert</a>
 							
+							<a class="list-group-item" href="#show ssl crl-file">show ssl crl-file</a>
+							
 							<a class="list-group-item" href="#show ssl crt-list">show ssl crt-list</a>
+							
+							<a class="list-group-item" href="#show ssl ocsp-response">show ssl ocsp-response</a>
 							
 							<a class="list-group-item" href="#show stat">show stat</a>
 							
@@ -487,6 +517,8 @@
 							<a class="list-group-item" href="#show tls-keys">show tls-keys</a>
 							
 							<a class="list-group-item" href="#show trace">show trace</a>
+							
+							<a class="list-group-item" href="#show version">show version</a>
 							
 							<a class="list-group-item" href="#shutdown">shutdown</a>
 							
@@ -525,7 +557,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -536,7 +568,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.5-dev0</strong></p>
+							<p><strong>version 2.5.1</strong></p>
 							<p>
 								<br>
 								
@@ -872,6 +904,10 @@ list of options is :
     to bind. The exit status is zero if everything is OK, or non-zero if an
     error is encountered. Presence of warnings will be reported if any.
 
+  -cc : evaluates a condition as used within a conditional block of the
+    configuration. The exit status is zero if the condition is true, 1 if the
+    condition is false or 2 if an error is encountered.
+
   -d : enable debug mode. This disables daemon mode, forces the process to stay
     in foreground and to show incoming and outgoing events. It must never be
     used in an init script.
@@ -885,6 +921,19 @@ list of options is :
     This option was made available because many bogus implementations of
     getaddrinfo() exist on various systems and cause anomalies that are
     difficult to troubleshoot.
+
+  -dL : dumps the list of dynamic shared libraries that are loaded at the end
+   of the config processing. This will generally also include deep dependencies
+   such as anything loaded from Lua code for example, as well as the executable
+   itself. The list is printed in a format that ought to be easy enough to
+   sanitize to directly produce a tarball of all dependencies. Since it doesn&#x27;t
+   stop the program&#x27;s startup, it is recommended to only use it in combination
+   with &quot;-c&quot; and &quot;-q&quot; where only the list of loaded objects will be displayed
+   (or nothing in case of error). In addition, keep in mind that when providing
+   such a package to help with a core file analysis, most libraries are in fact
+   symbolic links that need to be dereferenced when creating the archive:
+
+       ./haproxy -W -q -c -dL -f foo.cfg | tar -T - -hzcf archive.tgz
 
   -dM[&lt;byte&gt;] : forces memory poisoning, which means that each and every
     memory region allocated with malloc() or pool_alloc() will be filled with
@@ -1162,7 +1211,7 @@ continues to process existing connections. If the binding still fails (because
 for example a port is shared with another daemon), then the new process sends a
 SIGTTIN signal to the old processes to instruct them to resume operations just
 as if nothing happened. The old processes will then restart listening to the
-ports and continue to accept connections. Not that this mechanism is system
+ports and continue to accept connections. Note that this mechanism is system
 dependent and some operating systems may not support it in multi-process mode.
 
 If the new process manages to bind correctly to all ports, then it sends either
@@ -2052,9 +2101,15 @@ Some commands require a higher level of privilege to work. If you do not have
 enough privilege, you will get an error &quot;Permission denied&quot;. Please check
 the &quot;level&quot; option of the &quot;bind&quot; keyword lines in the configuration manual
 for more information.
+</pre><a class="anchor" name="abort"></a><a class="anchor" name="9-abort"></a><a class="anchor" name="9.3-abort"></a><a class="anchor" name="abort (Statistics and monitoring)"></a><a class="anchor" name="abort (Unix Socket commands)"></a><a class="anchor" name="abort ssl"></a><a class="anchor" name="9-abort ssl"></a><a class="anchor" name="9.3-abort ssl"></a><a class="anchor" name="abort ssl (Statistics and monitoring)"></a><a class="anchor" name="abort ssl (Unix Socket commands)"></a><a class="anchor" name="abort ssl ca-file"></a><a class="anchor" name="9-abort ssl ca-file"></a><a class="anchor" name="9.3-abort ssl ca-file"></a><a class="anchor" name="abort ssl ca-file (Statistics and monitoring)"></a><a class="anchor" name="abort ssl ca-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="abort ssl ca-file"></a><a href="#9.3-abort%20ssl%20ca-file">abort ssl ca-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">Abort and destroy a temporary CA file update transaction.
+
+See also &quot;<a href="#set%20ssl%20ca-file">set ssl ca-file</a>&quot; and &quot;<a href="#commit%20ssl%20ca-file">commit ssl ca-file</a>&quot;.
 </pre><a class="anchor" name="abort"></a><a class="anchor" name="9-abort"></a><a class="anchor" name="9.3-abort"></a><a class="anchor" name="abort (Statistics and monitoring)"></a><a class="anchor" name="abort (Unix Socket commands)"></a><a class="anchor" name="abort ssl"></a><a class="anchor" name="9-abort ssl"></a><a class="anchor" name="9.3-abort ssl"></a><a class="anchor" name="abort ssl (Statistics and monitoring)"></a><a class="anchor" name="abort ssl (Unix Socket commands)"></a><a class="anchor" name="abort ssl cert"></a><a class="anchor" name="9-abort ssl cert"></a><a class="anchor" name="9.3-abort ssl cert"></a><a class="anchor" name="abort ssl cert (Statistics and monitoring)"></a><a class="anchor" name="abort ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="abort ssl cert"></a><a href="#9.3-abort%20ssl%20cert">abort ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Abort and destroy a temporary SSL certificate update transaction.
 
 See also &quot;<a href="#set%20ssl%20cert">set ssl cert</a>&quot; and &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot;.
+</pre><a class="anchor" name="abort"></a><a class="anchor" name="9-abort"></a><a class="anchor" name="9.3-abort"></a><a class="anchor" name="abort (Statistics and monitoring)"></a><a class="anchor" name="abort (Unix Socket commands)"></a><a class="anchor" name="abort ssl"></a><a class="anchor" name="9-abort ssl"></a><a class="anchor" name="9.3-abort ssl"></a><a class="anchor" name="abort ssl (Statistics and monitoring)"></a><a class="anchor" name="abort ssl (Unix Socket commands)"></a><a class="anchor" name="abort ssl crl-file"></a><a class="anchor" name="9-abort ssl crl-file"></a><a class="anchor" name="9.3-abort ssl crl-file"></a><a class="anchor" name="abort ssl crl-file (Statistics and monitoring)"></a><a class="anchor" name="abort ssl crl-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="abort ssl crl-file"></a><a href="#9.3-abort%20ssl%20crl-file">abort ssl crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">Abort and destroy a temporary CRL file update transaction.
+
+See also &quot;<a href="#set%20ssl%20crl-file">set ssl crl-file</a>&quot; and &quot;<a href="#commit%20ssl%20crl-file">commit ssl crl-file</a>&quot;.
 </pre><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add acl"></a><a class="anchor" name="9-add acl"></a><a class="anchor" name="9.3-add acl"></a><a class="anchor" name="add acl (Statistics and monitoring)"></a><a class="anchor" name="add acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add acl"></a><a href="#9.3-add%20acl">add acl</a></b> <span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;pattern&gt;</span></div><pre class="text">Add an entry into the acl &lt;acl&gt;. &lt;acl&gt; is the #&lt;id&gt; or the &lt;file&gt; returned by
 &quot;<a href="#show%20acl">show acl</a>&quot;. This command does not verify if the entry already exists. Entries
 are added to the current version of the ACL, unless a specific version is
@@ -2105,26 +2160,102 @@ algorithm. A subset of keywords from the server config file statement can be
 used to configure the server behavior. Also note that no settings will be
 reused from an hypothetical &#x27;default-server&#x27; statement in the same backend.
 
+Currently a dynamic server is statically initialized with the &quot;none&quot;
+init-addr method. This means that no resolution will be undertaken if a FQDN
+is specified as an address, even if the server creation will be validated.
+
+To support the reload operations, it is expected that the server created via
+the CLI is also manually inserted in the relevant haproxy configuration file.
+A dynamic server not present in the configuration won&#x27;t be restored after a
+reload operation.
+
+A dynamic server may use the &quot;track&quot; keyword to follow the check status of
+another server from the configuration. However, it is not possible to track
+another dynamic server. This is to ensure that the tracking chain is kept
+consistent even in the case of dynamic servers deletion.
+
+Use the &quot;check&quot; keyword to enable health-check support. Note that the
+health-check is disabled by default and must be enabled independently from
+the server using the &quot;<a href="#enable%20health">enable health</a>&quot; command. For agent checks, use the
+&quot;agent-check&quot; keyword and the &quot;<a href="#enable%20agent">enable agent</a>&quot; command. Note that in this case
+the server may be activated via the agent depending on the status reported,
+without an explicit &quot;<a href="#enable%20server">enable server</a>&quot; command. This also means that extra care
+is required when removing a dynamic server with agent check. The agent should
+be first deactivated via &quot;<a href="#disable%20agent">disable agent</a>&quot; to be able to put the server in the
+required maintenance mode before removal.
+
+It may be possible to reach the fd limit when using a large number of dynamic
+servers. Please refer to the &quot;u-limit&quot; global keyword documentation in this
+case.
+
 Here is the list of the currently supported keywords :
 
+- agent-addr
+- agent-check
+- agent-inter
+- agent-port
+- agent-send
+- allow-0rtt
+- alpn
+- addr
 - backup
+- ca-file
+- check
+- check-alpn
+- check-proto
+- check-send-proxy
+- check-sni
+- check-ssl
+- check-via-socks4
+- ciphers
+- ciphersuites
+- crl-file
+- crt
 - disabled
+- downinter
 - enabled
+- error-limit
+- fall
+- fastinter
+- force-sslv3/tlsv10/tlsv11/tlsv12/tlsv13
 - id
+- inter
 - maxconn
 - maxqueue
 - minconn
+- no-ssl-reuse
+- no-sslv3/tlsv10/tlsv11/tlsv12/tlsv13
+- no-tls-tickets
+- npn
+- observe
+- on-error
+- on-marked-down
+- on-marked-up
 - pool-low-conn
 - pool-max-conn
 - pool-purge-delay
+- port
 - proto
 - proxy-v2-options
+- rise
 - send-proxy
 - send-proxy-v2
+- send-proxy-v2-ssl
+- send-proxy-v2-ssl-cn
+- slowstart
+- sni
 - source
+- ssl
+- ssl-max-ver
+- ssl-min-ver
 - tfo
+- tls-tickets
+- track
 - usesrc
+- verify
+- verifyhost
 - weight
+- ws
 
 Their syntax is similar to the server line from the configuration file,
 please refer to their individual documentation for details.
@@ -2242,6 +2373,25 @@ commit map @&lt;ver&gt; &lt;map&gt;
   use this command to perform an atomic removal of all visible entries of an
   map by calling &quot;<a href="#prepare%20map">prepare map</a>&quot; first then committing without adding any
   entries.
+</pre><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl ca-file"></a><a class="anchor" name="9-commit ssl ca-file"></a><a class="anchor" name="9.3-commit ssl ca-file"></a><a class="anchor" name="commit ssl ca-file (Statistics and monitoring)"></a><a class="anchor" name="commit ssl ca-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl ca-file"></a><a href="#9.3-commit%20ssl%20ca-file">commit ssl ca-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">Commit a temporary SSL CA file update transaction.
+
+In the case of an existing CA file (in a &quot;Used&quot; state in &quot;<a href="#show%20ssl%20ca-file">show ssl ca-file</a>&quot;),
+the new CA file tree entry is inserted in the CA file tree and every instance
+that used the CA file entry is rebuilt, along with the SSL contexts it needs.
+All the contexts previously used by the rebuilt instances are removed.
+Upon success, the previous CA file entry is removed from the tree.
+Upon failure, nothing is removed or deleted, and all the original SSL
+contexts are kept and used.
+Once the temporary transaction is committed, it is destroyed.
+
+In the case of a new CA file (after a &quot;<a href="#new%20ssl%20ca-file">new ssl ca-file</a>&quot; and in a &quot;Unused&quot;
+state in &quot;<a href="#show%20ssl%20ca-file">show ssl ca-file</a>&quot;), the CA file will be inserted in the CA file
+tree but it won&#x27;t be used anywhere in HAProxy. To use it and generate SSL
+contexts that use it, you will need to add it to a crt-list with &quot;add ssl
+crt-list&quot;.
+
+See also &quot;<a href="#new%20ssl%20ca-file">new ssl ca-file</a>&quot;, &quot;<a href="#set%20ssl%20ca-file">set ssl ca-file</a>&quot;, &quot;<a href="#abort%20ssl%20ca-file">abort ssl ca-file</a>&quot; and
+&quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
 </pre><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl cert"></a><a class="anchor" name="9-commit ssl cert"></a><a class="anchor" name="9.3-commit ssl cert"></a><a class="anchor" name="commit ssl cert (Statistics and monitoring)"></a><a class="anchor" name="commit ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl cert"></a><a href="#9.3-commit%20ssl%20cert">commit ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Commit a temporary SSL certificate update transaction.
 
 In the case of an existing certificate (in a &quot;Used&quot; state in &quot;show ssl
@@ -2257,7 +2407,27 @@ storage, but it won&#x27;t be used anywhere in haproxy. To use it and generate
 its SNIs you will need to add it to a crt-list or a directory with &quot;add ssl
 crt-list&quot;.
 
-See also &quot;<a href="#new%20ssl%20cert">new ssl cert</a>&quot;, &quot;ssl set cert&quot;, &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot; and
+See also &quot;<a href="#new%20ssl%20cert">new ssl cert</a>&quot;, &quot;<a href="#set%20ssl%20cert">set ssl cert</a>&quot;, &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot; and
+&quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
+</pre><a class="anchor" name="commit"></a><a class="anchor" name="9-commit"></a><a class="anchor" name="9.3-commit"></a><a class="anchor" name="commit (Statistics and monitoring)"></a><a class="anchor" name="commit (Unix Socket commands)"></a><a class="anchor" name="commit ssl"></a><a class="anchor" name="9-commit ssl"></a><a class="anchor" name="9.3-commit ssl"></a><a class="anchor" name="commit ssl (Statistics and monitoring)"></a><a class="anchor" name="commit ssl (Unix Socket commands)"></a><a class="anchor" name="commit ssl crl-file"></a><a class="anchor" name="9-commit ssl crl-file"></a><a class="anchor" name="9.3-commit ssl crl-file"></a><a class="anchor" name="commit ssl crl-file (Statistics and monitoring)"></a><a class="anchor" name="commit ssl crl-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="commit ssl crl-file"></a><a href="#9.3-commit%20ssl%20crl-file">commit ssl crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">Commit a temporary SSL CRL file update transaction.
+
+In the case of an existing CRL file (in a &quot;Used&quot; state in &quot;show ssl
+crl-file&quot;), the new CRL file entry is inserted in the CA file tree (which
+holds both the CA files and the CRL files) and every instance that used the
+CRL file entry is rebuilt, along with the SSL contexts it needs.
+All the contexts previously used by the rebuilt instances are removed.
+Upon success, the previous CRL file entry is removed from the tree.
+Upon failure, nothing is removed or deleted, and all the original SSL
+contexts are kept and used.
+Once the temporary transaction is committed, it is destroyed.
+
+In the case of a new CRL file (after a &quot;<a href="#new%20ssl%20crl-file">new ssl crl-file</a>&quot; and in a &quot;Unused&quot;
+state in &quot;<a href="#show%20ssl%20crl-file">show ssl crl-file</a>&quot;), the CRL file will be inserted in the CRL file
+tree but it won&#x27;t be used anywhere in HAProxy. To use it and generate SSL
+contexts that use it, you will need to add it to a crt-list with &quot;add ssl
+crt-list&quot;.
+
+See also &quot;<a href="#new%20ssl%20crl-file">new ssl crl-file</a>&quot;, &quot;<a href="#set%20ssl%20crl-file">set ssl crl-file</a>&quot;, &quot;<a href="#abort%20ssl%20crl-file">abort ssl crl-file</a>&quot; and
 &quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
 </pre><a class="anchor" name="debug"></a><a class="anchor" name="9-debug"></a><a class="anchor" name="9.3-debug"></a><a class="anchor" name="debug (Statistics and monitoring)"></a><a class="anchor" name="debug (Unix Socket commands)"></a><a class="anchor" name="debug dev"></a><a class="anchor" name="9-debug dev"></a><a class="anchor" name="9.3-debug dev"></a><a class="anchor" name="debug dev (Statistics and monitoring)"></a><a class="anchor" name="debug dev (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="debug dev"></a><a href="#9.3-debug%20dev">debug dev</a></b> <span style="color: #080">&lt;command&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Call a developer-specific command. Only supported on a CLI connection running
 in expert mode (see &quot;expert-mode on&quot;). Such commands are extremely dangerous
@@ -2277,18 +2447,27 @@ is shared with a map, the entry will be also deleted in the map.
 this command delete only the listed reference. The reference can be found with
 listing the content of the map. Note that if the reference &lt;map&gt; is a file and
 is shared with a acl, the entry will be also deleted in the map.
+</pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del ssl"></a><a class="anchor" name="9-del ssl"></a><a class="anchor" name="9.3-del ssl"></a><a class="anchor" name="del ssl (Statistics and monitoring)"></a><a class="anchor" name="del ssl (Unix Socket commands)"></a><a class="anchor" name="del ssl ca-file"></a><a class="anchor" name="9-del ssl ca-file"></a><a class="anchor" name="9.3-del ssl ca-file"></a><a class="anchor" name="del ssl ca-file (Statistics and monitoring)"></a><a class="anchor" name="del ssl ca-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del ssl ca-file"></a><a href="#9.3-del%20ssl%20ca-file">del ssl ca-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">Delete a CA file tree entry from HAProxy. The CA file must be unused and
+removed from any crt-list. &quot;<a href="#show%20ssl%20ca-file">show ssl ca-file</a>&quot; displays the status of the CA
+files. The deletion doesn&#x27;t work with a certificate referenced directly with
+the &quot;ca-file&quot; or &quot;ca-verify-file&quot; directives in the configuration.
 </pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del ssl"></a><a class="anchor" name="9-del ssl"></a><a class="anchor" name="9.3-del ssl"></a><a class="anchor" name="del ssl (Statistics and monitoring)"></a><a class="anchor" name="del ssl (Unix Socket commands)"></a><a class="anchor" name="del ssl cert"></a><a class="anchor" name="9-del ssl cert"></a><a class="anchor" name="9.3-del ssl cert"></a><a class="anchor" name="del ssl cert (Statistics and monitoring)"></a><a class="anchor" name="del ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del ssl cert"></a><a href="#9.3-del%20ssl%20cert">del ssl cert</a></b> <span style="color: #080">&lt;certfile&gt;</span></div><pre class="text">Delete a certificate store from HAProxy. The certificate must be unused and
 removed from any crt-list or directory. &quot;<a href="#show%20ssl%20cert">show ssl cert</a>&quot; displays the status
 of the certificate. The deletion doesn&#x27;t work with a certificate referenced
 directly with the &quot;crt&quot; directive in the configuration.
+</pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del ssl"></a><a class="anchor" name="9-del ssl"></a><a class="anchor" name="9.3-del ssl"></a><a class="anchor" name="del ssl (Statistics and monitoring)"></a><a class="anchor" name="del ssl (Unix Socket commands)"></a><a class="anchor" name="del ssl crl-file"></a><a class="anchor" name="9-del ssl crl-file"></a><a class="anchor" name="9.3-del ssl crl-file"></a><a class="anchor" name="del ssl crl-file (Statistics and monitoring)"></a><a class="anchor" name="del ssl crl-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del ssl crl-file"></a><a href="#9.3-del%20ssl%20crl-file">del ssl crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">Delete a CRL file tree entry from HAProxy. The CRL file must be unused and
+removed from any crt-list. &quot;<a href="#show%20ssl%20crl-file">show ssl crl-file</a>&quot; displays the status of the CRL
+files. The deletion doesn&#x27;t work with a certificate referenced directly with
+the &quot;crl-file&quot; directive in the configuration.
 </pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del ssl"></a><a class="anchor" name="9-del ssl"></a><a class="anchor" name="9.3-del ssl"></a><a class="anchor" name="del ssl (Statistics and monitoring)"></a><a class="anchor" name="del ssl (Unix Socket commands)"></a><a class="anchor" name="del ssl crt-list"></a><a class="anchor" name="9-del ssl crt-list"></a><a class="anchor" name="9.3-del ssl crt-list"></a><a class="anchor" name="del ssl crt-list (Statistics and monitoring)"></a><a class="anchor" name="del ssl crt-list (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del ssl crt-list"></a><a href="#9.3-del%20ssl%20crt-list">del ssl crt-list</a></b> <span style="color: #080">&lt;filename&gt;</span> <span style="color: #080">&lt;certfile<span style="color: #008">[:line]</span>&gt;</span></div><pre class="text">Delete an entry in a crt-list. This will delete every SNIs used for this
 entry in the frontends. If a certificate is used several time in a crt-list,
 you will need to provide which line you want to delete. To display the line
 numbers, use &quot;show ssl crt-list -n &lt;crtlist&gt;&quot;.
-</pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del server"></a><a class="anchor" name="9-del server"></a><a class="anchor" name="9.3-del server"></a><a class="anchor" name="del server (Statistics and monitoring)"></a><a class="anchor" name="del server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del server"></a><a href="#9.3-del%20server">del server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Remove a server attached to the backend &lt;backend&gt;. Only valid on a server
-added at runtime. The server must be put in maintenance mode prior to its
-deletion. The operation is cancelled if the serveur still has active
-or idle connection or its connection queue is not empty.
+</pre><a class="anchor" name="del"></a><a class="anchor" name="9-del"></a><a class="anchor" name="9.3-del"></a><a class="anchor" name="del (Statistics and monitoring)"></a><a class="anchor" name="del (Unix Socket commands)"></a><a class="anchor" name="del server"></a><a class="anchor" name="9-del server"></a><a class="anchor" name="9.3-del server"></a><a class="anchor" name="del server (Statistics and monitoring)"></a><a class="anchor" name="del server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="del server"></a><a href="#9.3-del%20server">del server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Remove a server attached to the backend &lt;backend&gt;. All servers are eligible,
+except servers which are referenced by other configuration elements. The
+server must be put in maintenance mode prior to its deletion.  The operation
+is cancelled if the serveur still has active or idle connection or its
+connection queue is not empty.
 </pre><a class="anchor" name="disable"></a><a class="anchor" name="9-disable"></a><a class="anchor" name="9.3-disable"></a><a class="anchor" name="disable (Statistics and monitoring)"></a><a class="anchor" name="disable (Unix Socket commands)"></a><a class="anchor" name="disable agent"></a><a class="anchor" name="9-disable agent"></a><a class="anchor" name="9.3-disable agent"></a><a class="anchor" name="disable agent (Statistics and monitoring)"></a><a class="anchor" name="disable agent (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="disable agent"></a><a href="#9.3-disable%20agent">disable agent</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span></div><pre class="text">Mark the auxiliary agent check as temporarily stopped.
 
 In the case where an agent check is being run as a auxiliary check, due
@@ -2440,9 +2619,19 @@ sharp (&#x27;#&#x27;).
 </pre><a class="anchor" name="help"></a><a class="anchor" name="9-help"></a><a class="anchor" name="9.3-help"></a><a class="anchor" name="help (Statistics and monitoring)"></a><a class="anchor" name="help (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="help"></a><a href="#9.3-help">help</a></b> <span style="color: #008">[<span style="color: #080">&lt;command&gt;</span>]</span></div><pre class="text">Print the list of known keywords and their basic usage, or commands matching
 the requested one. The same help screen is also displayed for unknown
 commands.
+</pre><a class="anchor" name="httpclient"></a><a class="anchor" name="9-httpclient"></a><a class="anchor" name="9.3-httpclient"></a><a class="anchor" name="httpclient (Statistics and monitoring)"></a><a class="anchor" name="httpclient (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="httpclient"></a><a href="#9.3-httpclient">httpclient</a></b> <span style="color: #080">&lt;method&gt;</span> <span style="color: #080">&lt;URI&gt;</span></div><pre class="text">Launch an HTTP client request and print the response on the CLI. Only
+supported on a CLI connection running in expert mode (see &quot;expert-mode on&quot;).
+It&#x27;s only meant for debugging. It currently can&#x27;t resolve FQDN so your URI must
+contains an IP.
+</pre><a class="anchor" name="new"></a><a class="anchor" name="9-new"></a><a class="anchor" name="9.3-new"></a><a class="anchor" name="new (Statistics and monitoring)"></a><a class="anchor" name="new (Unix Socket commands)"></a><a class="anchor" name="new ssl"></a><a class="anchor" name="9-new ssl"></a><a class="anchor" name="9.3-new ssl"></a><a class="anchor" name="new ssl (Statistics and monitoring)"></a><a class="anchor" name="new ssl (Unix Socket commands)"></a><a class="anchor" name="new ssl ca-file"></a><a class="anchor" name="9-new ssl ca-file"></a><a class="anchor" name="9.3-new ssl ca-file"></a><a class="anchor" name="new ssl ca-file (Statistics and monitoring)"></a><a class="anchor" name="new ssl ca-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="new ssl ca-file"></a><a href="#9.3-new%20ssl%20ca-file">new ssl ca-file</a></b> <span style="color: #080">&lt;cafile&gt;</span></div><pre class="text">Create a new empty CA file tree entry to be filled with a set of CA
+certificates and added to a crt-list. This command should be used in
+combination with &quot;<a href="#set%20ssl%20ca-file">set ssl ca-file</a>&quot; and &quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
 </pre><a class="anchor" name="new"></a><a class="anchor" name="9-new"></a><a class="anchor" name="9.3-new"></a><a class="anchor" name="new (Statistics and monitoring)"></a><a class="anchor" name="new (Unix Socket commands)"></a><a class="anchor" name="new ssl"></a><a class="anchor" name="9-new ssl"></a><a class="anchor" name="9.3-new ssl"></a><a class="anchor" name="new ssl (Statistics and monitoring)"></a><a class="anchor" name="new ssl (Unix Socket commands)"></a><a class="anchor" name="new ssl cert"></a><a class="anchor" name="9-new ssl cert"></a><a class="anchor" name="9.3-new ssl cert"></a><a class="anchor" name="new ssl cert (Statistics and monitoring)"></a><a class="anchor" name="new ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="new ssl cert"></a><a href="#9.3-new%20ssl%20cert">new ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span></div><pre class="text">Create a new empty SSL certificate store to be filled with a certificate and
 added to a directory or a crt-list. This command should be used in
 combination with &quot;<a href="#set%20ssl%20cert">set ssl cert</a>&quot; and &quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
+</pre><a class="anchor" name="new"></a><a class="anchor" name="9-new"></a><a class="anchor" name="9.3-new"></a><a class="anchor" name="new (Statistics and monitoring)"></a><a class="anchor" name="new (Unix Socket commands)"></a><a class="anchor" name="new ssl"></a><a class="anchor" name="9-new ssl"></a><a class="anchor" name="9.3-new ssl"></a><a class="anchor" name="new ssl (Statistics and monitoring)"></a><a class="anchor" name="new ssl (Unix Socket commands)"></a><a class="anchor" name="new ssl crl-file"></a><a class="anchor" name="9-new ssl crl-file"></a><a class="anchor" name="9.3-new ssl crl-file"></a><a class="anchor" name="new ssl crl-file (Statistics and monitoring)"></a><a class="anchor" name="new ssl crl-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="new ssl crl-file"></a><a href="#9.3-new%20ssl%20crl-file">new ssl crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span></div><pre class="text">Create a new empty CRL file tree entry to be filled with a set of CRLs
+and added to a crt-list. This command should be used in combination with &quot;set
+ssl crl-file&quot; and &quot;<a href="#add%20ssl%20crt-list">add ssl crt-list</a>&quot;.
 </pre><a class="anchor" name="prepare"></a><a class="anchor" name="9-prepare"></a><a class="anchor" name="9.3-prepare"></a><a class="anchor" name="prepare (Statistics and monitoring)"></a><a class="anchor" name="prepare (Unix Socket commands)"></a><a class="anchor" name="prepare acl"></a><a class="anchor" name="9-prepare acl"></a><a class="anchor" name="9.3-prepare acl"></a><a class="anchor" name="prepare acl (Statistics and monitoring)"></a><a class="anchor" name="prepare acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="prepare acl"></a><a href="#9.3-prepare%20acl">prepare acl</a></b> <span style="color: #080">&lt;acl&gt;</span></div><pre class="text">Allocate a new version number in ACL &lt;acl&gt; for atomic replacement. &lt;acl&gt; is
 the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20acl">show acl</a>&quot;. The new version number is
 shown in response after &quot;New version created:&quot;. This number will then be
@@ -2553,7 +2742,23 @@ internal run-time DNS resolver to be configured and enabled for this server.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set server"></a><a class="anchor" name="9-set server"></a><a class="anchor" name="9.3-set server"></a><a class="anchor" name="set server (Statistics and monitoring)"></a><a class="anchor" name="set server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set server"></a><a href="#9.3-set%20server">set server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> ssl <span style="color: #008">[ on | off ]</span></div><pre class="text">This option configures SSL ciphering on outgoing connections to the server.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set severity-output"></a><a class="anchor" name="9-set severity-output"></a><a class="anchor" name="9.3-set severity-output"></a><a class="anchor" name="set severity-output (Statistics and monitoring)"></a><a class="anchor" name="set severity-output (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set severity-output"></a><a href="#9.3-set%20severity-output">set severity-output</a></b> <span style="color: #008">[ none | number | string ]</span></div><pre class="text">Change the severity output format of the stats socket connected to for the
 duration of the current session.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl cert"></a><a class="anchor" name="9-set ssl cert"></a><a class="anchor" name="9.3-set ssl cert"></a><a class="anchor" name="set ssl cert (Statistics and monitoring)"></a><a class="anchor" name="set ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl cert"></a><a href="#9.3-set%20ssl%20cert">set ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">This command is part of a transaction system, the &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; and
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ca-file"></a><a class="anchor" name="9-set ssl ca-file"></a><a class="anchor" name="9.3-set ssl ca-file"></a><a class="anchor" name="set ssl ca-file (Statistics and monitoring)"></a><a class="anchor" name="set ssl ca-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ca-file"></a><a href="#9.3-set%20ssl%20ca-file">set ssl ca-file</a></b> <span style="color: #080">&lt;cafile&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">This command is part of a transaction system, the &quot;<a href="#commit%20ssl%20ca-file">commit ssl ca-file</a>&quot; and
+&quot;<a href="#abort%20ssl%20ca-file">abort ssl ca-file</a>&quot; commands could be required.
+If there is no on-going transaction, it will create a CA file tree entry into
+which the certificates contained in the payload will be stored. The CA file
+entry will not be stored in the CA file tree and will only be kept in a
+temporary transaction. If a transaction with the same filename already exists,
+the previous CA file entry will be deleted and replaced by the new one.
+Once the modifications are done, you have to commit the transaction through
+a &quot;<a href="#commit%20ssl%20ca-file">commit ssl ca-file</a>&quot; call.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>echo -e &quot;set ssl ca-file cafile.pem &lt;&lt;\n$(cat rootCA.crt)\n&quot; | \
+socat /var/run/haproxy.stat -
+echo &quot;commit ssl ca-file cafile.pem&quot; | socat /var/run/haproxy.stat -
+</code></pre>
+</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl cert"></a><a class="anchor" name="9-set ssl cert"></a><a class="anchor" name="9.3-set ssl cert"></a><a class="anchor" name="set ssl cert (Statistics and monitoring)"></a><a class="anchor" name="set ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl cert"></a><a href="#9.3-set%20ssl%20cert">set ssl cert</a></b> <span style="color: #080">&lt;filename&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">This command is part of a transaction system, the &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; and
 &quot;<a href="#abort%20ssl%20cert">abort ssl cert</a>&quot; commands could be required.
 This whole transaction system works on any certificate displayed by the
 &quot;<a href="#show%20ssl%20cert">show ssl cert</a>&quot; command, so on any frontend or backend certificate.
@@ -2564,18 +2769,45 @@ the same filename, it will update this transaction. It&#x27;s also possible to
 update the files linked to a certificate (.issuer, .sctl, .oscp etc.)
 Once the modification are done, you have to &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; the
 transaction.
+
+Injection of files over the CLI must be done with caution since an empty line
+is used to notify the end of the payload. It is recommended to inject a PEM
+file which has been sanitized. A simple method would be to remove every empty
+line and only leave what are in the PEM sections. It could be achieved with a
+sed command.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code>echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(cat 127.0.0.1.pem)\n&quot; | \
+<code><span class="comment"># With some simple sanitizing</span>
+ echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(sed -n &<span class="comment">#x27;/^$/d;/-BEGIN/,/-END/p&#x27; 127.0.0.1.pem)\n&quot; | \</span>
+ socat /var/run/haproxy.stat -
+
+ <span class="comment"># Complete example with commit</span>
+ echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(cat 127.0.0.1.pem)\n&quot; | \
+ socat /var/run/haproxy.stat -
+ echo -e \
+ &quot;set ssl cert localhost.pem.issuer &lt;&lt;\n $(cat 127.0.0.1.pem.issuer)\n&quot; | \
+ socat /var/run/haproxy.stat -
+ echo -e \
+ &quot;set ssl cert localhost.pem.ocsp &lt;&lt;\n$(base64 -w 1000 127.0.0.1.pem.ocsp)\n&quot; | \
+ socat /var/run/haproxy.stat -
+ echo &quot;commit ssl cert localhost.pem&quot; | socat /var/run/haproxy.stat -
+</code></pre>
+</div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl crl-file"></a><a class="anchor" name="9-set ssl crl-file"></a><a class="anchor" name="9.3-set ssl crl-file"></a><a class="anchor" name="set ssl crl-file (Statistics and monitoring)"></a><a class="anchor" name="set ssl crl-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl crl-file"></a><a href="#9.3-set%20ssl%20crl-file">set ssl crl-file</a></b> <span style="color: #080">&lt;crlfile&gt;</span> <span style="color: #080">&lt;payload&gt;</span></div><pre class="text">This command is part of a transaction system, the &quot;<a href="#commit%20ssl%20crl-file">commit ssl crl-file</a>&quot; and
+&quot;<a href="#abort%20ssl%20crl-file">abort ssl crl-file</a>&quot; commands could be required.
+If there is no on-going transaction, it will create a CRL file tree entry into
+which the Revocation Lists contained in the payload will be stored. The CRL
+file entry will not be stored in the CRL file tree and will only be kept in a
+temporary transaction. If a transaction with the same filename already exists,
+the previous CRL file entry will be deleted and replaced by the new one.
+Once the modifications are done, you have to commit the transaction through
+a &quot;<a href="#commit%20ssl%20crl-file">commit ssl crl-file</a>&quot; call.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>echo -e &quot;set ssl crl-file crlfile.pem &lt;&lt;\n$(cat rootCRL.pem)\n&quot; | \
 socat /var/run/haproxy.stat -
-echo -e \
-&quot;set ssl cert localhost.pem.issuer &lt;&lt;\n $(cat 127.0.0.1.pem.issuer)\n&quot; | \
-socat /var/run/haproxy.stat -
-echo -e \
-&quot;set ssl cert localhost.pem.ocsp &lt;&lt;\n$(base64 -w 1000 127.0.0.1.pem.ocsp)\n&quot; | \
-socat /var/run/haproxy.stat -
-echo &quot;commit ssl cert localhost.pem&quot; | socat /var/run/haproxy.stat -
+echo &quot;commit ssl crl-file crlfile.pem&quot; | socat /var/run/haproxy.stat -
 </code></pre>
 </div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response | payload&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
@@ -2608,15 +2840,16 @@ data_types in a single call.
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set timeout"></a><a class="anchor" name="9-set timeout"></a><a class="anchor" name="9.3-set timeout"></a><a class="anchor" name="set timeout (Statistics and monitoring)"></a><a class="anchor" name="set timeout (Unix Socket commands)"></a><a class="anchor" name="set timeout cli"></a><a class="anchor" name="9-set timeout cli"></a><a class="anchor" name="9.3-set timeout cli"></a><a class="anchor" name="set timeout cli (Statistics and monitoring)"></a><a class="anchor" name="set timeout cli (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set timeout cli"></a><a href="#9.3-set%20timeout%20cli">set timeout cli</a></b> <span style="color: #080">&lt;delay&gt;</span></div><pre class="text">Change the CLI interface timeout for current connection. This can be useful
 during long debugging sessions where the user needs to constantly inspect
 some indicators without being disconnected. The delay is passed in seconds.
-</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set var"></a><a class="anchor" name="9-set var"></a><a class="anchor" name="9.3-set var"></a><a class="anchor" name="set var (Statistics and monitoring)"></a><a class="anchor" name="set var (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set var"></a><a href="#9.3-set%20var">set var</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;expression&gt;</span></div><pre class="text">Allows to set or overwrite the process-wide variable &#x27;name&#x27; with the result
-of expression &lt;expression&gt;. Only process-wide variables may be used, so the
-name must begin with &#x27;proc.&#x27; otherwise no variable will be set. The
-&lt;expression&gt; may only involve &quot;internal&quot; sample fetch keywords and converters
-even though the most likely useful ones will be str(&#x27;something&#x27;) or int().
-Note that the command line parser doesn&#x27;t know about quotes, so any space in
-the expression must be preceded by a backslash. This command requires levels
-&quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;. This command is only supported on a CLI connection
-running in experimental mode (see &quot;experimental-mode on&quot;).
+</pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set var"></a><a class="anchor" name="9-set var"></a><a class="anchor" name="9.3-set var"></a><a class="anchor" name="set var (Statistics and monitoring)"></a><a class="anchor" name="set var (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set var"></a><a href="#9.3-set%20var">set var</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;expression&gt;</span></div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set var"></a><a class="anchor" name="9-set var"></a><a class="anchor" name="9.3-set var"></a><a class="anchor" name="set var (Statistics and monitoring)"></a><a class="anchor" name="set var (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set var"></a><a href="#9.3-set%20var">set var</a></b> <span style="color: #080">&lt;name&gt;</span> expr <span style="color: #080">&lt;expression&gt;</span></div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set var"></a><a class="anchor" name="9-set var"></a><a class="anchor" name="9.3-set var"></a><a class="anchor" name="set var (Statistics and monitoring)"></a><a class="anchor" name="set var (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set var"></a><a href="#9.3-set%20var">set var</a></b> <span style="color: #080">&lt;name&gt;</span> fmt <span style="color: #080">&lt;format&gt;</span></div><pre class="text">Allows to set or overwrite the process-wide variable &#x27;name&#x27; with the result
+of expression &lt;expression&gt; or format string &lt;format&gt;. Only process-wide
+variables may be used, so the name must begin with &#x27;proc.&#x27; otherwise no
+variable will be set. The &lt;expression&gt; and &lt;format&gt; may only involve
+&quot;internal&quot; sample fetch keywords and converters even though the most likely
+useful ones will be str(&#x27;something&#x27;), int(), simple strings or references to
+other variables. Note that the command line parser doesn&#x27;t know about quotes,
+so any space in the expression must be preceded by a backslash. This command
+requires levels &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot;. This command is only supported on a
+CLI connection running in experimental mode (see &quot;experimental-mode on&quot;).
 </pre><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set weight"></a><a class="anchor" name="9-set weight"></a><a class="anchor" name="9.3-set weight"></a><a class="anchor" name="set weight (Statistics and monitoring)"></a><a class="anchor" name="set weight (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set weight"></a><a href="#9.3-set%20weight">set weight</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #080">&lt;weight&gt;</span><span style="color: #008">[%]</span></div><pre class="text">Change a server&#x27;s weight to the value passed in argument. If the value ends
 with the &#x27;%&#x27; sign, then the new weight will be relative to the initially
 configured weight.  Absolute weights are permitted between 0 and 256.
@@ -2641,7 +2874,9 @@ before the ACL&#x27;s identifier. The version works as a filter and non-existing
 versions will simply report no result. The dump format is the same as for the
 maps even for the sample values. The data returned are not a list of
 available ACL, but are the list of all patterns composing any ACL. Many of
-these patterns can be shared with maps.
+these patterns can be shared with maps. The &#x27;entry_cnt&#x27; value represents the
+count of all the ACL entries, not just the active ones, which means that it
+also includes entries currently being added.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show backend"></a><a class="anchor" name="9-show backend"></a><a class="anchor" name="9.3-show backend"></a><a class="anchor" name="show backend (Statistics and monitoring)"></a><a class="anchor" name="show backend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show backend"></a><a href="#9.3-show%20backend">show backend</a></b></div><pre class="text">Dump the list of backends available in the running process
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show cli"></a><a class="anchor" name="9-show cli"></a><a class="anchor" name="9.3-show cli"></a><a class="anchor" name="show cli (Statistics and monitoring)"></a><a class="anchor" name="show cli (Unix Socket commands)"></a><a class="anchor" name="show cli level"></a><a class="anchor" name="9-show cli level"></a><a class="anchor" name="9.3-show cli level"></a><a class="anchor" name="show cli level (Statistics and monitoring)"></a><a class="anchor" name="show cli level (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show cli level"></a><a href="#9.3-show%20cli%20level">show cli level</a></b></div><pre class="text">Display the CLI level of the current CLI session. The result could be
 &#x27;admin&#x27;, &#x27;operator&#x27; or &#x27;user&#x27;. See also the &#x27;operator&#x27; and &#x27;user&#x27; commands.
@@ -2917,13 +3152,26 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show info json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show libs"></a><a class="anchor" name="9-show libs"></a><a class="anchor" name="9.3-show libs"></a><a class="anchor" name="show libs (Statistics and monitoring)"></a><a class="anchor" name="show libs (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show libs"></a><a href="#9.3-show%20libs">show libs</a></b></div><pre class="text">Dump the list of loaded shared dynamic libraries and object files, on systems
+that support it. When available, for each shared object the range of virtual
+addresses will be indicated, the size and the path to the object. This can be
+used for example to try to estimate what library provides a function that
+appears in a dump. Note that on many systems, addresses will change upon each
+restart (address space randomization), so that this list would need to be
+retrieved upon startup if it is expected to be used to analyse a core file.
+This command may only be issued on sockets configured for levels &quot;<a href="#operator">operator</a>&quot;
+or &quot;admin&quot;. Note that the output format may vary between operating systems,
+architectures and even haproxy versions, and ought not to be relied on in
+scripts.
 </pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show map"></a><a class="anchor" name="9-show map"></a><a class="anchor" name="9.3-show map"></a><a class="anchor" name="show map (Statistics and monitoring)"></a><a class="anchor" name="show map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show map"></a><a href="#9.3-show%20map">show map</a></b> <span style="color: #008">[<span style="color: #008">[@<span style="color: #080">&lt;ver&gt;</span>]</span> <span style="color: #080">&lt;map&gt;</span>]</span></div><pre class="text">Dump info about map converters. Without argument, the list of all available
 maps is returned. If a &lt;map&gt; is specified, its contents are dumped. &lt;map&gt; is
 the #&lt;id&gt; or &lt;file&gt;. By  default the current version of the map is shown (the
 version currently being matched against and reported as &#x27;curr_ver&#x27; in the map
 list). It is possible to instead dump other versions by prepending &#x27;@&lt;ver&gt;&#x27;
 before the map&#x27;s identifier. The version works as a filter and non-existing
-versions will simply report no result.
+versions will simply report no result. The &#x27;entry_cnt&#x27; value represents the
+count of all the map entries, not just the active ones, which means that it
+also includes entries currently being added.
 
 In the output, the first column is a unique entry identifier, which is usable
 as a reference for operations &quot;<a href="#del%20map">del map</a>&quot; and &quot;<a href="#set%20map">set map</a>&quot;. The second column is
@@ -3315,12 +3563,60 @@ pretty printer may be helpful. Example :
 
 $ echo &quot;show stat json&quot; | socat /var/run/haproxy.sock stdio | \
   python -m json.tool
-</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl cert"></a><a class="anchor" name="9-show ssl cert"></a><a class="anchor" name="9.3-show ssl cert"></a><a class="anchor" name="show ssl cert (Statistics and monitoring)"></a><a class="anchor" name="show ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl cert"></a><a href="#9.3-show%20ssl%20cert">show ssl cert</a></b> <span style="color: #008">[<span style="color: #080">&lt;filename&gt;</span>]</span></div><pre class="text">Display the list of certificates used on frontends and backends.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl ca-file"></a><a class="anchor" name="9-show ssl ca-file"></a><a class="anchor" name="9.3-show ssl ca-file"></a><a class="anchor" name="show ssl ca-file (Statistics and monitoring)"></a><a class="anchor" name="show ssl ca-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl ca-file"></a><a href="#9.3-show%20ssl%20ca-file">show ssl ca-file</a></b> <span style="color: #008">[<span style="color: #080">&lt;cafile&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;index&gt;</span>]</span>]</span></div><pre class="text">Display the list of CA files used by HAProxy and their respective certificate
+counts. If a filename is prefixed by an asterisk, it is a transaction which
+is not committed yet. If a &lt;cafile&gt; is specified without &lt;index&gt;, it will show
+the status of the CA file (&quot;Used&quot;/&quot;Unused&quot;) followed by details about all the
+certificates contained in the CA file. The details displayed for every
+certificate are the same as the ones displayed by a &quot;<a href="#show%20ssl%20cert">show ssl cert</a>&quot; command.
+If a &lt;cafile&gt; is specified followed by an &lt;index&gt;, it will only display the
+details of the certificate having the specified index. Indexes start from 1.
+If the index is invalid (too big for instance), nothing will be displayed.
+This command can be useful to check if a CA file was properly updated.
+You can also display the details of an ongoing transaction by prefixing the
+filename by an asterisk.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>$ echo &quot;<a href="#show%20ssl%20ca-file">show ssl ca-file</a>&quot; | socat /var/run/haproxy.master -
+<span class="comment"># transaction</span>
+*cafile.crt - 2 certificate(s)
+<span class="comment"># filename</span>
+cafile.crt - 1 certificate(s)
+
+$ echo &quot;show ssl ca-file cafile.crt&quot; | socat /var/run/haproxy.master -
+Filename: /home/tricot/work/haproxy/reg-tests/ssl/set_cafile_ca2.crt
+Status: Used
+
+Certificate <span class="comment">#1:</span>
+Serial: 11A4D2200DC84376E7D233CAFF39DF44BF8D1211
+notBefore: Apr  1 07:40:53 2021 GMT
+notAfter: Aug 17 07:40:53 2048 GMT
+Subject Alternative Name:
+Algorithm: RSA4096
+SHA1 FingerPrint: A111EF0FEFCDE11D47FE3F33ADCA8435EBEA4864
+Subject: /C=FR/ST=Some-State/O=HAProxy Technologies/CN=HAProxy Technologies CA
+Issuer: /C=FR/ST=Some-State/O=HAProxy Technologies/CN=HAProxy Technologies CA
+
+$ echo &quot;show ssl ca-file *cafile.crt:2&quot; | socat /var/run/haproxy.master -
+Filename: */home/tricot/work/haproxy/reg-tests/ssl/set_cafile_ca2.crt
+Status: Unused
+
+Certificate <span class="comment">#2:</span>
+Serial: 587A1CE5ED855040A0C82BF255FF300ADB7C8136
+[...]
+</code></pre>
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl cert"></a><a class="anchor" name="9-show ssl cert"></a><a class="anchor" name="9.3-show ssl cert"></a><a class="anchor" name="show ssl cert (Statistics and monitoring)"></a><a class="anchor" name="show ssl cert (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl cert"></a><a href="#9.3-show%20ssl%20cert">show ssl cert</a></b> <span style="color: #008">[<span style="color: #080">&lt;filename&gt;</span>]</span></div><pre class="text">Display the list of certificates used on frontends and backends.
 If a filename is prefixed by an asterisk, it is a transaction which is not
 committed yet. If a filename is specified, it will show details about the
 certificate. This command can be useful to check if a certificate was well
 updated. You can also display details on a transaction by prefixing the
 filename by an asterisk.
+This command can also be used to display the details of a certificate&#x27;s OCSP
+response by suffixing the filename with a &quot;.ocsp&quot; extension. It works for
+committed certificates as well as for ongoing transactions. On a committed
+certificate, this command is equivalent to calling &quot;<a href="#show%20ssl%20ocsp-response">show ssl ocsp-response</a>&quot;
+with the certificate&#x27;s corresponding OCSP response ID.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -3345,6 +3641,49 @@ $ echo &quot;@1 show ssl cert *test.local.pem&quot; | socat /var/run/haproxy.mas
 Filename: *test.local.pem
 [...]
 </code></pre>
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl crl-file"></a><a class="anchor" name="9-show ssl crl-file"></a><a class="anchor" name="9.3-show ssl crl-file"></a><a class="anchor" name="show ssl crl-file (Statistics and monitoring)"></a><a class="anchor" name="show ssl crl-file (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl crl-file"></a><a href="#9.3-show%20ssl%20crl-file">show ssl crl-file</a></b> <span style="color: #008">[<span style="color: #080">&lt;crlfile&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;index&gt;</span>]</span>]</span></div><pre class="text">Display the list of CRL files used by HAProxy.
+If a filename is prefixed by an asterisk, it is a transaction which is not
+committed yet. If a &lt;crlfile&gt; is specified without &lt;index&gt;, it will show the
+status of the CRL file (&quot;Used&quot;/&quot;Unused&quot;) followed by details about all the
+Revocation Lists contained in the CRL file. The details displayed for every
+list are based on the output of &quot;openssl crl -text -noout -in &lt;file&gt;&quot;.
+If a &lt;crlfile&gt; is specified followed by an &lt;index&gt;, it will only display the
+details of the list having the specified index. Indexes start from 1.
+If the index is invalid (too big for instance), nothing will be displayed.
+This command can be useful to check if a CRL file was properly updated.
+You can also display the details of an ongoing transaction by prefixing the
+filename by an asterisk.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>$ echo &quot;<a href="#show%20ssl%20crl-file">show ssl crl-file</a>&quot; | socat /var/run/haproxy.master -
+<span class="comment"># transaction</span>
+*crlfile.pem
+<span class="comment"># filename</span>
+crlfile.pem
+
+$ echo &quot;show ssl crl-file crlfile.pem&quot; | socat /var/run/haproxy.master -
+Filename: /home/tricot/work/haproxy/reg-tests/ssl/crlfile.pem
+Status: Used
+
+Certificate Revocation List <span class="comment">#1:</span>
+Version 1
+Signature Algorithm: sha256WithRSAEncryption
+Issuer: /C=FR/O=HAProxy Technologies/CN=Intermediate CA2
+Last Update: Apr 23 14:45:39 2021 GMT
+Next Update: Sep  8 14:45:39 2048 GMT
+Revoked Certificates:
+    Serial Number: 1008
+        Revocation Date: Apr 23 14:45:36 2021 GMT
+
+Certificate Revocation List <span class="comment">#2:</span>
+Version 1
+Signature Algorithm: sha256WithRSAEncryption
+Issuer: /C=FR/O=HAProxy Technologies/CN=Root CA
+Last Update: Apr 23 14:30:44 2021 GMT
+Next Update: Sep  8 14:30:44 2048 GMT
+No Revoked Certificates.
+</code></pre>
 </div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl crt-list"></a><a class="anchor" name="9-show ssl crt-list"></a><a class="anchor" name="9.3-show ssl crt-list"></a><a class="anchor" name="show ssl crt-list (Statistics and monitoring)"></a><a class="anchor" name="show ssl crt-list (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl crt-list"></a><a href="#9.3-show%20ssl%20crt-list">show ssl crt-list</a></b> <span style="color: #008">[-n]</span> <span style="color: #008">[<span style="color: #080">&lt;filename&gt;</span>]</span></div><pre class="text">Display the list of crt-list and directories used in the HAProxy
 configuration. If a filename is specified, dump the content of a crt-list or
 a directory. Once dumped the output can be used as a crt-list file.
@@ -3361,6 +3700,41 @@ common.pem:1 !not.test1.com *.test1.com !localhost
 common.pem:2
 ecdsa.pem:3 [verify none allow-0rtt ssl-min-ver TLSv1.0 ssl-max-ver TLSv1.3] localhost !www.test1.com
 ecdsa.pem:4 [verify none allow-0rtt ssl-min-ver TLSv1.0 ssl-max-ver TLSv1.3]
+</code></pre>
+</div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show ssl"></a><a class="anchor" name="9-show ssl"></a><a class="anchor" name="9.3-show ssl"></a><a class="anchor" name="show ssl (Statistics and monitoring)"></a><a class="anchor" name="show ssl (Unix Socket commands)"></a><a class="anchor" name="show ssl ocsp-response"></a><a class="anchor" name="9-show ssl ocsp-response"></a><a class="anchor" name="9.3-show ssl ocsp-response"></a><a class="anchor" name="show ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="show ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show ssl ocsp-response"></a><a href="#9.3-show%20ssl%20ocsp-response">show ssl ocsp-response</a></b> <span style="color: #008">[<span style="color: #080">&lt;id&gt;</span>]</span></div><pre class="text">Display the IDs of the OCSP tree entries corresponding to all the OCSP
+responses used in HAProxy, as well as the issuer&#x27;s name and key hash and the
+serial number of the certificate for which the OCSP response was built.
+If a valid &lt;id&gt; is provided, display the contents of the corresponding OCSP
+response. The information displayed is the same as in an &quot;openssl ocsp -respin
+&lt;ocsp-response&gt; -text&quot; call.
+</pre><div class="separator">
+<span class="label label-success">Example :</span>
+<pre class="prettyprint">
+<code>$ echo &quot;<a href="#show%20ssl%20ocsp-response">show ssl ocsp-response</a>&quot; | socat /var/run/haproxy.master -
+<span class="comment"># Certificate IDs</span>
+  Certificate ID key : 303b300906052b0e03021a050004148a83e0060faff709ca7e9b95522a2e81635fda0a0414f652b0e435d5ea923851508f0adbe92d85de007a0202100a
+    Certificate ID:
+      Issuer Name Hash: 8A83E0060FAFF709CA7E9B95522A2E81635FDA0A
+      Issuer Key Hash: F652B0E435D5EA923851508F0ADBE92D85DE007A
+      Serial Number: 100A
+
+$ echo &quot;show ssl ocsp-response 303b300906052b0e03021a050004148a83e0060faff709ca7e9b95522a2e81635fda0a0414f652b0e435d5ea923851508f0adbe92d85de007a0202100a&quot; | socat /var/run/haproxy.master -
+OCSP Response Data:
+  OCSP Response Status: successful (0x0)
+  Response Type: Basic OCSP Response
+  Version: 1 (0x0)
+  Responder Id: C = FR, O = HAProxy Technologies, CN = ocsp.haproxy.com
+  Produced At: May 27 15:43:38 2021 GMT
+  Responses:
+  Certificate ID:
+    Hash Algorithm: sha1
+    Issuer Name Hash: 8A83E0060FAFF709CA7E9B95522A2E81635FDA0A
+    Issuer Key Hash: F652B0E435D5EA923851508F0ADBE92D85DE007A
+    Serial Number: 100A
+  Cert Status: good
+  This Update: May 27 15:43:38 2021 GMT
+  Next Update: Oct 12 15:43:38 2048 GMT
+  [...]
 </code></pre>
 </div><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show table"></a><a class="anchor" name="9-show table"></a><a class="anchor" name="9.3-show table"></a><a class="anchor" name="show table (Statistics and monitoring)"></a><a class="anchor" name="show table (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show table"></a><a href="#9.3-show%20table">show table</a></b></div><pre class="text">Dump general information on all known stick-tables. Their name is returned
 (the name of the proxy which holds them), their type (currently zero, always
@@ -3493,7 +3867,18 @@ list of all events supported by the source, and their status for each action
 (report, start, pause, stop), indicated by a &quot;+&quot; if they are enabled, or a
 &quot;-&quot; otherwise. All these events are independent and an event might trigger
 a start without being reported and conversely.
-</pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.3-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.3-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show version"></a><a class="anchor" name="9-show version"></a><a class="anchor" name="9.3-show version"></a><a class="anchor" name="show version (Statistics and monitoring)"></a><a class="anchor" name="show version (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show version"></a><a href="#9.3-show%20version">show version</a></b></div><pre class="text">Show the version of the current HAProxy process. This is available from
+master and workers CLI.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>$ echo &quot;<a href="#show%20version">show version</a>&quot; | socat /var/run/haproxy.sock stdio
+2.4.9
+
+$ echo &quot;<a href="#show%20version">show version</a>&quot; | socat /var/run/haproxy-master.sock stdio
+2.5.0
+</code></pre>
+</div><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.3-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.3-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
 be released. It will not be possible to enable the frontend anymore after
 this operation. This is intended to be used in environments where stopping a
 proxy is not even imaginable but a misconfigured proxy must be fixed. That
@@ -3679,19 +4064,21 @@ the -S option. This option also takes bind options separated by commas.
 <span class="comment"># haproxy -Ws -S /tmp/master-socket,uid,1000,gid,1000,mode,600 -f test1.cfg</span>
 <span class="comment"># haproxy -W -S /tmp/master-socket,level,user -f test1.cfg</span>
 </code></pre>
-</div><pre class="text">The master CLI introduces a new &#x27;show proc&#x27; command to surpervise the
+</div><pre class="text">The master CLI introduces a &#x27;show proc&#x27; command to surpervise the
 processes:
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
 <code>$ echo &<span class="comment">#x27;show proc&#x27; | socat /var/run/haproxy-master.sock -</span>
-<span class="comment">#&lt;PID&gt;          &lt;type&gt;          &lt;relative PID&gt;  &lt;reloads&gt;       &lt;uptime&gt;        &lt;version&gt;</span>
-1162            master          0               5               0d00h02m07s     2.0-dev7-0124c9-7
+<span class="comment">#&lt;PID&gt;          &lt;type&gt;          &lt;reloads&gt;       &lt;uptime&gt;        &lt;version&gt;</span>
+1162            master          5 [failed: 0]   0d00h02m07s     2.5-dev13
 <span class="comment"># workers</span>
-1271            worker          1               0               0d00h00m00s     2.0-dev7-0124c9-7
-1272            worker          2               0               0d00h00m00s     2.0-dev7-0124c9-7
+1271            worker          1               0d00h00m00s     2.5-dev13
 <span class="comment"># old workers</span>
-1233            worker          [was: 1]        3               0d00h00m43s     2.0-dev3-6019f6-289
+1233            worker          3               0d00h00m43s     2.0-dev3-6019f6-289
+<span class="comment"># programs</span>
+1244            foo             0               0d00h00m00s     -
+1255            bar             0               0d00h00m00s     -
 </code></pre>
 </div><pre class="text">In this example, the master has been reloaded 5 times but one of the old
 worker is still running and survived 3 reloads. You could access the CLI of
@@ -4084,7 +4471,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.5-dev0 &ndash; Management Guide<br>
+							HAProxy 2.5.1 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -4188,7 +4575,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.5-dev0', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.5.1', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
