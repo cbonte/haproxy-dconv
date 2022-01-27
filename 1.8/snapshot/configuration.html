@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.8.30 - Configuration Manual</title>
+		<title>HAProxy version 1.8.30-32 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -2812,7 +2812,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2823,7 +2823,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.8.30</strong></p>
+							<p><strong>version 1.8.30-32</strong></p>
 							<p>
 								willy tarreau<br>
 								2021/04/12
@@ -11944,6 +11944,11 @@ backend smtp
     incremented. Most of the time it will be used to measure the frequency of
     occurrence of certain events (e.g. requests to a specific URL).
 
+  - gpt0 : first General Purpose Tag. It is a positive 32-bit integer
+    integer which may be used for anything. Most of the time it will be used
+    to put a special tag on some entries, for instance to note that a
+    specific behavior was detected and must be known for future matches
+
   - conn_cnt : Connection Count. It is a positive 32-bit integer which counts
     the absolute number of connections received from clients which matched
     this entry. It does not mean the connections were accepted, just that
@@ -12959,6 +12964,10 @@ Several types of actions are supported :
   - { track-sc0 | track-sc1 | track-sc2 } &lt;key&gt; [table &lt;table&gt;]
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
+  - set-dst &lt;expr&gt;
+  - set-dst-port &lt;expr&gt;
+  - set-src &lt;expr&gt;
+  - set-src-port &lt;expr&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
   - unset-var(&lt;var-name&gt;)
   - silent-drop
@@ -19320,7 +19329,7 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.8.30 &ndash; Configuration Manual<br>
+							HAProxy 1.8.30-32 &ndash; Configuration Manual<br>
 							<small>2021/04/12, willy tarreau</small>
 						</div>
 					</div>
@@ -19424,7 +19433,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.30', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.8.30-32', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
