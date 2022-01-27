@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0.22 - Configuration Manual</title>
+		<title>HAProxy version 2.0.27 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -1274,7 +1274,7 @@
 							
 							<a class="list-group-item" href="#email-alert to">email-alert to</a>
 							
-							<a class="list-group-item" href="#enable">enable</a>
+							<a class="list-group-item" href="#enabled (Peers)">enabled (Peers)</a>
 							
 							<a class="list-group-item" href="#enabled (Alphabetically sorted keywords reference)">enabled (Alphabetically sorted keywords reference)</a>
 							
@@ -1786,6 +1786,8 @@
 							
 							<a class="list-group-item" href="#no option clitcpka">no option clitcpka</a>
 							
+							<a class="list-group-item" href="#no option disable-h2-upgrade">no option disable-h2-upgrade</a>
+							
 							<a class="list-group-item" href="#no option dontlog-normal">no option dontlog-normal</a>
 							
 							<a class="list-group-item" href="#no option dontlognull">no option dontlognull</a>
@@ -1942,6 +1944,8 @@
 							<a class="list-group-item" href="#option clitcpka">option clitcpka</a>
 							
 							<a class="list-group-item" href="#option contstats">option contstats</a>
+							
+							<a class="list-group-item" href="#option disable-h2-upgrade">option disable-h2-upgrade</a>
 							
 							<a class="list-group-item" href="#option dontlog-normal">option dontlog-normal</a>
 							
@@ -3168,7 +3172,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3179,10 +3183,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0.22</strong></p>
+							<p><strong>version 2.0.27</strong></p>
 							<p>
 								willy tarreau<br>
-								2021/04/12
+								2022/01/26
 							</p>
 						</div>
 
@@ -5813,7 +5817,8 @@ tables without having to comment out all &quot;<a href="#peers">peers</a>&quot; 
           details.</pre>
 </div>
 <div class="page-header"><b>See also:</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#server%20%28Peers%29">Peers</a></li><li><a href="#server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; and <a href="#5">section 5</a> about server options</div>
-<a class="anchor" name="enable"></a><a class="anchor" name="3-enable"></a><a class="anchor" name="3.5-enable"></a><a class="anchor" name="enable (Global parameters)"></a><a class="anchor" name="enable (Peers)"></a><div class="keyword"><b><a class="anchor" name="enable"></a><a href="#3.5-enable">enable</a></b></div><pre class="text">This re-enables a disabled peers section which was previously disabled.
+<a class="anchor" name="enabled"></a><a class="anchor" name="3-enabled"></a><a class="anchor" name="3.5-enabled"></a><a class="anchor" name="enabled (Global parameters)"></a><a class="anchor" name="enabled (Peers)"></a><div class="keyword"><b><a class="anchor" name="enabled"></a><a href="#3.5-enabled">enabled</a></b></div><pre class="text">This re-enables a peers section which was previously disabled via the
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword.
 </pre><a class="anchor" name="peer"></a><a class="anchor" name="3-peer"></a><a class="anchor" name="3.5-peer"></a><a class="anchor" name="peer (Global parameters)"></a><a class="anchor" name="peer (Peers)"></a><div class="keyword"><b><a class="anchor" name="peer"></a><a href="#3.5-peer">peer</a></b> <span style="color: #080">&lt;peername&gt;</span> <span style="color: #080">&lt;ip&gt;</span>:<span style="color: #080">&lt;port&gt;</span> <span style="color: #008">[param*]</span></div><pre class="text">Defines a peer inside a peers section.
 If &lt;peername&gt; is set to the local peer name (by default hostname, or forced
 using &quot;-L&quot; command line option), haproxy will listen for incoming remote peer
@@ -6132,6 +6137,7 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20clitcpka"><span class="pull-right"><span>(*)</span></span>option clitcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
 <tr><td ><a href="#4-option%20contstats"><span class="pull-right"><span>(*)</span></span>option contstats</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
+<tr><td ><a href="#4-option%20disable-h2-upgrade"><span class="pull-right"><span>(*)</span></span>option disable-h2-upgrade</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlog-normal"><span class="pull-right"><span>(*)</span></span>option dontlog-normal</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20dontlognull"><span class="pull-right"><span>(*)</span></span>option dontlognull</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20forwardfor">option forwardfor</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6150,8 +6156,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20httpclose"><span class="pull-right"><span>(*)</span></span>option httpclose</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20httplog">option httplog</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
 <tr><td ><a href="#4-option%20http_proxy"><span class="pull-right"><span>(*)</span></span>option http_proxy</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-option%20independent-streams"><span class="pull-right"><span>(*)</span></span>option independent-streams</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-option%20independent-streams"><span class="pull-right"><span>(*)</span></span>option independent-streams</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20ldap-check">option ldap-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20external-check">option external-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20log-health-checks"><span class="pull-right"><span>(*)</span></span>option log-health-checks</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6171,8 +6177,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-option%20splice-request"><span class="pull-right"><span>(*)</span></span>option splice-request</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20splice-response"><span class="pull-right"><span>(*)</span></span>option splice-response</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20spop-check">option spop-check</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-option%20srvtcpka"><span class="pull-right"><span>(*)</span></span>option srvtcpka</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20ssl-hello-chk">option ssl-hello-chk</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcp-check">option tcp-check</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-option%20tcp-smart-accept"><span class="pull-right"><span>(*)</span></span>option tcp-smart-accept</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -6192,8 +6198,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-reqdel"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqdel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqdeny"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqdeny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqiallow"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqiallow</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-reqidel"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-reqidel"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqidel</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqideny"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqideny</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqipass"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqipass</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-reqirep"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>reqirep</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6213,8 +6219,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-server">server</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-server-state-file-name">server-state-file-name</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-server-template">server-template</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-source">source</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-source">source</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>srvtimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20admin">stats admin</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stats%20auth">stats auth</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6234,8 +6240,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-stick%20store-response">stick store-response</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-stick-table">stick-table</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20connect">tcp-check connect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-tcp-check%20expect">tcp-check expect</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20send">tcp-check send</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-check%20send-binary">tcp-check send-binary</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-tcp-request%20connection">tcp-request connection</a></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td></tr>
@@ -6255,8 +6261,8 @@ specified in a previous &quot;defaults&quot; section.
 <tr><td ><a href="#4-timeout%20queue">timeout queue</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20server">timeout server</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20server-fin">timeout server-fin</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
-<tr><td ><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <thead><tr><th>keyword</th><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td ><a href="#4-timeout%20srvtimeout"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>timeout srvtimeout</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20tarpit">timeout tarpit</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-timeout%20tunnel">timeout tunnel</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
 <tr><td ><a href="#4-transparent"><span class="pull-right"><span class="label label-warning">(deprecated)</span></span>transparent</a></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered">&nbsp;</td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td><td class="pagination-centered"><img src="../css/check.png" alt="X" title="yes" /></td></tr>
@@ -6954,7 +6960,7 @@ ignored when set in a defaults section.
 Compression is disabled when:
   * the request does not advertise a supported compression algorithm in the
     &quot;Accept-Encoding&quot; header
-  * the response message is not HTTP/1.1
+  * the response message is not HTTP/1.1 or above
   * HTTP status code is not one of 200, 201, 202, or 203
   * response contain neither a &quot;Content-Length&quot; header nor a
     &quot;Transfer-Encoding&quot; whose last value is &quot;chunked&quot;
@@ -7262,7 +7268,7 @@ created in the &quot;stopped&quot; state and will appear as such in the statisti
 will not receive any traffic nor will it send any health-checks or logs. It
 is possible to disable many instances at once by adding the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
 keyword in a &quot;defaults&quot; section.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Peers%29">Peers</a></li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
 <a class="anchor" name="dispatch"></a><a class="anchor" name="4-dispatch"></a><a class="anchor" name="4.2-dispatch"></a><a class="anchor" name="dispatch (Proxies)"></a><a class="anchor" name="dispatch (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="dispatch"></a><a href="#4.2-dispatch">dispatch</a></b> <span style="color: #080">&lt;address&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">Set a default server address
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -7305,7 +7311,7 @@ even if servers are dynamically added or removed.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword is used to explicitly enable an instance, when the
+<pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Peers%29">Peers</a></li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword is used to explicitly enable an instance, when the
 defaults has been set to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;. This is very rarely used.
 </pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
 <a class="anchor" name="errorfile"></a><a class="anchor" name="4-errorfile"></a><a class="anchor" name="4.2-errorfile"></a><a class="anchor" name="errorfile (Proxies)"></a><a class="anchor" name="errorfile (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="errorfile"></a><a href="#4.2-errorfile">errorfile</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">Return a file contents instead of errors generated by HAProxy
@@ -8648,7 +8654,8 @@ and the actions evaluation continues.
 </pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response sc-set-gpt0"></a><a class="anchor" name="4-http-response sc-set-gpt0"></a><a class="anchor" name="4.2-http-response sc-set-gpt0"></a><a class="anchor" name="http-response sc-set-gpt0 (Proxies)"></a><a class="anchor" name="http-response sc-set-gpt0 (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response sc-set-gpt0"></a><a href="#4.2-http-response%20sc-set-gpt0">http-response sc-set-gpt0</a></b>(<span style="color: #080">&lt;sc-id&gt;</span>) <span style="color: #080">&lt;int&gt;</span> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action sets the GPT0 tag according to the sticky counter designated by
 &lt;sc-id&gt; and the value of &lt;int&gt;. The expected result is a boolean. If an error
 occurs, this action silently fails and the actions evaluation continues.
-</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response send-spoe-group"></a><a class="anchor" name="4-http-response send-spoe-group"></a><a class="anchor" name="4.2-http-response send-spoe-group"></a><a class="anchor" name="http-response send-spoe-group (Proxies)"></a><a class="anchor" name="http-response send-spoe-group (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response send-spoe-group"></a><a href="#4.2-http-response%20send-spoe-group">http-response send-spoe-group</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action is used to trigger sending of a group of SPOE messages. To do so,
+</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response send-spoe-group"></a><a class="anchor" name="4-http-response send-spoe-group"></a><a class="anchor" name="4.2-http-response send-spoe-group"></a><a class="anchor" name="http-response send-spoe-group (Proxies)"></a><a class="anchor" name="http-response send-spoe-group (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response send-spoe-group"></a><a href="#4.2-http-response%20send-spoe-group">http-response send-spoe-group</a></b> <span style="color: #080">&lt;engine-name&gt;</span> <span style="color: #080">&lt;group-name&gt;</span>
+                              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action is used to trigger sending of a group of SPOE messages. To do so,
 the SPOE engine used to send messages must be defined, as well as the SPOE
 group to send. Of course, the SPOE engine must refer to an existing SPOE
 filter. If not engine name is provided on the SPOE filter line, the SPOE
@@ -9621,6 +9628,26 @@ along the session, typically every 5 seconds, which is often enough to
 produce clean graphs. Recounting touches a hotpath directly so it is not
 not enabled by default, as it can cause a lot of wakeups for very large
 session counts and cause a small performance drop.
+</pre><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option disable-h2-upgrade"></a><a class="anchor" name="4-option disable-h2-upgrade"></a><a class="anchor" name="4.2-option disable-h2-upgrade"></a><a class="anchor" name="option disable-h2-upgrade (Proxies)"></a><a class="anchor" name="option disable-h2-upgrade (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option disable-h2-upgrade"></a><a href="#4.2-option%20disable-h2-upgrade">option disable-h2-upgrade</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option disable-h2-upgrade"></a><a class="anchor" name="4-no option disable-h2-upgrade"></a><a class="anchor" name="4.2-no option disable-h2-upgrade"></a><a class="anchor" name="no option disable-h2-upgrade (Proxies)"></a><a class="anchor" name="no option disable-h2-upgrade (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option disable-h2-upgrade"></a><a href="#4.2-no%20option%20disable-h2-upgrade">no option disable-h2-upgrade</a></b></div><pre class="text">Enable or disable the implicit HTTP/2 upgrade from an HTTP/1.x client
+connection.
+</pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td></tr>
+</table></div>
+<div class="separator">
+<span class="label label-info">Arguments :</span> none
+</div>
+<pre class="text">By default, HAProxy is able to implicitly upgrade an HTTP/1.x client
+connection to an HTTP/2 connection if the first request it receives from a
+given HTTP connection matches the HTTP/2 connection preface (i.e. the string
+&quot;PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n&quot;). This way, it is possible to support
+HTTP/1.x and HTTP/2 clients on a non-SSL connections. This option must be used to
+disable the implicit upgrade. Note this implicit upgrade is only supported
+for HTTP proxies, thus this option too. Note also it is possible to force the
+HTTP/2 on clear connections by specifying &quot;proto h2&quot; on the bind line.
+
+If this option has been enabled in a &quot;defaults&quot; section, it can be disabled
+in a specific instance by prepending the &quot;no&quot; keyword before it.
 </pre><a class="anchor" name="option"></a><a class="anchor" name="4-option"></a><a class="anchor" name="4.2-option"></a><a class="anchor" name="option (Proxies)"></a><a class="anchor" name="option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="option dontlog-normal"></a><a class="anchor" name="4-option dontlog-normal"></a><a class="anchor" name="4.2-option dontlog-normal"></a><a class="anchor" name="option dontlog-normal (Proxies)"></a><a class="anchor" name="option dontlog-normal (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="option dontlog-normal"></a><a href="#4.2-option%20dontlog-normal">option dontlog-normal</a></b></div><a class="anchor" name="no"></a><a class="anchor" name="4-no"></a><a class="anchor" name="4.2-no"></a><a class="anchor" name="no (Proxies)"></a><a class="anchor" name="no (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option"></a><a class="anchor" name="4-no option"></a><a class="anchor" name="4.2-no option"></a><a class="anchor" name="no option (Proxies)"></a><a class="anchor" name="no option (Alphabetically sorted keywords reference)"></a><a class="anchor" name="no option dontlog-normal"></a><a class="anchor" name="4-no option dontlog-normal"></a><a class="anchor" name="4.2-no option dontlog-normal"></a><a class="anchor" name="no option dontlog-normal (Proxies)"></a><a class="anchor" name="no option dontlog-normal (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="no option dontlog-normal"></a><a href="#4.2-no%20option%20dontlog-normal">no option dontlog-normal</a></b></div><pre class="text">Enable or disable logging of normal, successful connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -9707,6 +9734,9 @@ Alternatively, the keyword &quot;if-none&quot; states that the header will only 
 added if it is not present. This should only be used in perfectly trusted
 environment, as this might cause a security issue if headers reaching haproxy
 are under the control of the end-user.
+
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
 
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
@@ -10408,12 +10438,13 @@ post-41    Send post v4.1 client compatible checks</pre>
 one Client Authentication packet, and one QUIT packet, to correctly close
 MySQL session. We then parse the MySQL Handshake Initialization packet and/or
 Error packet. It is a basic but useful test which does not produce error nor
-aborted connect on the server. However, it requires adding an authorization
-in the MySQL table, like this :
+aborted connect on the server. However, it requires an unlocked authorised
+user without a password. To create a basic limited user in MySQL with
+optional resource limits:
 
-    USE mysql;
-    INSERT INTO user (Host,User) values (&#x27;&lt;ip_of_haproxy&gt;&#x27;,&#x27;&lt;username&gt;&#x27;);
-    FLUSH PRIVILEGES;
+    CREATE USER &#x27;&lt;username&gt;&#x27;@&#x27;&lt;ip_of_haproxy|network_of_haproxy/netmask&gt;&#x27;
+    /*!50701 WITH MAX_QUERIES_PER_HOUR 1 MAX_UPDATES_PER_HOUR 0 */
+    /*M!100201 MAX_STATEMENT_TIME 0.0001 */;
 
 If you don&#x27;t specify a username (it is deprecated and not recommended), the
 check only consists in parsing the Mysql Handshake Initialization packet or
@@ -10503,6 +10534,9 @@ header for a known source address or network by adding the &quot;except&quot; ke
 followed by the network address. In this case, any source IP matching the
 network will not cause an addition of this header. Most common uses are with
 private networks or 127.0.0.1.
+
+Only IPv4 addresses are supported. &quot;<a href="#http-request%20add-header">http-request add-header</a>&quot; or &quot;http-request
+set-header&quot; rules may be used to work around this limitation.
 
 This option may be specified either in the frontend or in the backend. If at
 least one of them uses it, the header will be added. Note that the backend&#x27;s
@@ -12877,6 +12911,11 @@ backend smtp
     incremented. Most of the time it will be used to measure the frequency of
     occurrence of certain events (e.g. requests to a specific URL).
 
+  - gpt0 : first General Purpose Tag. It is a positive 32-bit integer
+    integer which may be used for anything. Most of the time it will be used
+    to put a special tag on some entries, for instance to note that a
+    specific behavior was detected and must be known for future matches
+
   - conn_cnt : Connection Count. It is a positive 32-bit integer which counts
     the absolute number of connections received from clients which matched
     this entry. It does not mean the connections were accepted, just that
@@ -13807,7 +13846,7 @@ Several types of actions are supported :
       the rules evaluation. Rejected session are immediately closed.
 
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
-      Sets a variable.
+      Sets a variable from an expression.
 
   - unset-var(&lt;var-name&gt;)
       Unsets a variable.
@@ -13878,19 +13917,11 @@ declared inline.
 
   &lt;expr&gt;     Is a standard HAProxy expression formed by a sample-fetch
              followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request content set-var(sess.my_var) src
-</code></pre>
-</div><pre class="text">The &quot;unset-var&quot; is used to unset a variable. See above for details about
+
+The &quot;unset-var&quot; is used to unset a variable. See above for details about
 &lt;var-name&gt;.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request content unset-var(sess.my_var)
-</code></pre>
-</div><pre class="text">The &quot;send-spoe-group&quot; is used to trigger sending of a group of SPOE
+
+The &quot;send-spoe-group&quot; is used to trigger sending of a group of SPOE
 messages. To do so, the SPOE engine used to send messages must be defined, as
 well as the SPOE group to send. Of course, the SPOE engine must refer to an
 existing SPOE filter. If not engine name is provided on the SPOE filter line,
@@ -13946,6 +13977,10 @@ Several types of actions are supported :
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-inc-gpc1(&lt;sc-id&gt;)
   - sc-set-gpt0(&lt;sc-id&gt;) &lt;int&gt;
+  - set-dst &lt;expr&gt;
+  - set-dst-port &lt;expr&gt;
+  - set-src &lt;expr&gt;
+  - set-src-port &lt;expr&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
   - unset-var(&lt;var-name&gt;)
   - silent-drop
@@ -15309,7 +15344,7 @@ that it is marked down in maintenance mode, and no connection other than the
 ones allowed by persist mode will reach it. It is very well suited to setup
 new servers, because normal traffic will never reach them, while it is still
 possible to test the service by making use of the force-persist mechanism.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Peers%29">Peers</a></li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
 </pre><a class="anchor" name="enabled"></a><a class="anchor" name="5-enabled"></a><a class="anchor" name="5.2-enabled"></a><a class="anchor" name="enabled (Bind and server options)"></a><a class="anchor" name="enabled (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="enabled"></a><a href="#5.2-enabled">enabled</a></b></div><pre class="text">This option may be used as &#x27;server&#x27; setting to reset any &#x27;disabled&#x27;
 setting which would have been inherited from &#x27;default-server&#x27; directive as
 default value.
@@ -15938,7 +15973,7 @@ used by HAProxy. The following processing is applied on this error:
   2. When the fallback on the query type was done (or not applicable), HAProxy
      retries the original DNS query, with the preferred query type.
 
-  3. HAProxy retries previous steps &lt;resolve_retires&gt; times. If no valid
+  3. HAProxy retries previous steps &lt;resolve_retries&gt; times. If no valid
      response is received after that, it stops the DNS resolution and reports
      the error.
 
@@ -17803,11 +17838,27 @@ This might be used when running in transparent mode, when assigning dynamic
 ports to some clients for a whole application session, to stick all users to
 a same server, or to pass the destination port information to a server using
 an HTTP header.
+</pre><a class="anchor" name="fc_fackets"></a><a class="anchor" name="7-fc_fackets"></a><a class="anchor" name="7.3.3-fc_fackets"></a><a class="anchor" name="fc_fackets (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_fackets (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_fackets"></a><a href="#7.3.3-fc_fackets">fc_fackets</a></b> : integer</div><pre class="text">Returns the fack counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_http_major"></a><a class="anchor" name="7-fc_http_major"></a><a class="anchor" name="7.3.3-fc_http_major"></a><a class="anchor" name="fc_http_major (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_http_major (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_http_major"></a><a href="#7.3.3-fc_http_major">fc_http_major</a></b> : integer</div><pre class="text">Reports the front connection&#x27;s HTTP major version encoding, which may be 1
 for HTTP/0.9 to HTTP/1.1 or 2 for HTTP/2. Note, this is based on the on-wire
 encoding and not on the version present in the request header.
+</pre><a class="anchor" name="fc_lost"></a><a class="anchor" name="7-fc_lost"></a><a class="anchor" name="7.3.3-fc_lost"></a><a class="anchor" name="fc_lost (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_lost (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_lost"></a><a href="#7.3.3-fc_lost">fc_lost</a></b> : integer</div><pre class="text">Returns the lost counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_rcvd_proxy"></a><a class="anchor" name="7-fc_rcvd_proxy"></a><a class="anchor" name="7.3.3-fc_rcvd_proxy"></a><a class="anchor" name="fc_rcvd_proxy (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rcvd_proxy (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rcvd_proxy"></a><a href="#7.3.3-fc_rcvd_proxy">fc_rcvd_proxy</a></b> : boolean</div><pre class="text">Returns true if the client initiated the connection with a PROXY protocol
 header.
+</pre><a class="anchor" name="fc_reordering"></a><a class="anchor" name="7-fc_reordering"></a><a class="anchor" name="7.3.3-fc_reordering"></a><a class="anchor" name="fc_reordering (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_reordering (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_reordering"></a><a href="#7.3.3-fc_reordering">fc_reordering</a></b> : integer</div><pre class="text">Returns the reordering counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_retrans"></a><a class="anchor" name="7-fc_retrans"></a><a class="anchor" name="7.3.3-fc_retrans"></a><a class="anchor" name="fc_retrans (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_retrans (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_retrans"></a><a href="#7.3.3-fc_retrans">fc_retrans</a></b> : integer</div><pre class="text">Returns the retransmits counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_rtt"></a><a class="anchor" name="7-fc_rtt"></a><a class="anchor" name="7.3.3-fc_rtt"></a><a class="anchor" name="fc_rtt (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rtt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rtt"></a><a href="#7.3.3-fc_rtt">fc_rtt</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the Round Trip Time (RTT) measured by the kernel for the client
 connection. &lt;unit&gt; is facultative, by default the unit is milliseconds. &lt;unit&gt;
 can be set to &quot;ms&quot; for milliseconds or &quot;us&quot; for microseconds. If the server
@@ -17820,30 +17871,14 @@ client connection. &lt;unit&gt; is facultative, by default the unit is milliseco
 server connection is not established, if the connection is not TCP or if the
 operating system does not support TCP_INFO, for example Linux kernels before
 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_unacked"></a><a class="anchor" name="7-fc_unacked"></a><a class="anchor" name="7.3.3-fc_unacked"></a><a class="anchor" name="fc_unacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_unacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_unacked"></a><a href="#7.3.3-fc_unacked">fc_unacked</a></b> : integer</div><pre class="text">Returns the unacked counter measured by the kernel for the client connection.
-If the server connection is not established, if the connection is not TCP or
-if the operating system does not support TCP_INFO, for example Linux kernels
-before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_sacked"></a><a class="anchor" name="7-fc_sacked"></a><a class="anchor" name="7.3.3-fc_sacked"></a><a class="anchor" name="fc_sacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_sacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_sacked"></a><a href="#7.3.3-fc_sacked">fc_sacked</a></b> : integer</div><pre class="text">Returns the sacked counter measured by the kernel for the client connection.
 If the server connection is not established, if the connection is not TCP or
 if the operating system does not support TCP_INFO, for example Linux kernels
 before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_retrans"></a><a class="anchor" name="7-fc_retrans"></a><a class="anchor" name="7.3.3-fc_retrans"></a><a class="anchor" name="fc_retrans (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_retrans (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_retrans"></a><a href="#7.3.3-fc_retrans">fc_retrans</a></b> : integer</div><pre class="text">Returns the retransmits counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_fackets"></a><a class="anchor" name="7-fc_fackets"></a><a class="anchor" name="7.3.3-fc_fackets"></a><a class="anchor" name="fc_fackets (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_fackets (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_fackets"></a><a href="#7.3.3-fc_fackets">fc_fackets</a></b> : integer</div><pre class="text">Returns the fack counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_lost"></a><a class="anchor" name="7-fc_lost"></a><a class="anchor" name="7.3.3-fc_lost"></a><a class="anchor" name="fc_lost (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_lost (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_lost"></a><a href="#7.3.3-fc_lost">fc_lost</a></b> : integer</div><pre class="text">Returns the lost counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_reordering"></a><a class="anchor" name="7-fc_reordering"></a><a class="anchor" name="7.3.3-fc_reordering"></a><a class="anchor" name="fc_reordering (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_reordering (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_reordering"></a><a href="#7.3.3-fc_reordering">fc_reordering</a></b> : integer</div><pre class="text">Returns the reordering counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_unacked"></a><a class="anchor" name="7-fc_unacked"></a><a class="anchor" name="7.3.3-fc_unacked"></a><a class="anchor" name="fc_unacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_unacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_unacked"></a><a href="#7.3.3-fc_unacked">fc_unacked</a></b> : integer</div><pre class="text">Returns the unacked counter measured by the kernel for the client connection.
+If the server connection is not established, if the connection is not TCP or
+if the operating system does not support TCP_INFO, for example Linux kernels
+before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fe_defbe"></a><a class="anchor" name="7-fe_defbe"></a><a class="anchor" name="7.3.3-fe_defbe"></a><a class="anchor" name="fe_defbe (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_defbe (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_defbe"></a><a href="#7.3.3-fe_defbe">fe_defbe</a></b> : string</div><pre class="text">Returns a string containing the frontend&#x27;s default backend name. It can be
 used in frontends to check which backend will handle requests by default.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend&#x27;s id. It can be used in
@@ -18402,7 +18437,7 @@ requested. Please note that the TLS NPN extension was replaced with ALPN.
 over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_fc_unique_id"></a><a class="anchor" name="7-ssl_fc_unique_id"></a><a class="anchor" name="7.3.4-ssl_fc_unique_id"></a><a class="anchor" name="ssl_fc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_unique_id"></a><a href="#7.3.4-ssl_fc_unique_id">ssl_fc_unique_id</a></b> : binary</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the TLS unique ID as defined in RFC5929 <a href="#3">section 3</a>. The unique id
-can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot;.
+can be encoded to base64 using the converter: &quot;ssl_fc_unique_id,base64&quot;.
 </pre><a class="anchor" name="ssl_fc_server_random"></a><a class="anchor" name="7-ssl_fc_server_random"></a><a class="anchor" name="7.3.4-ssl_fc_server_random"></a><a class="anchor" name="ssl_fc_server_random (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_server_random (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_server_random"></a><a href="#7.3.4-ssl_fc_server_random">ssl_fc_server_random</a></b> : binary</div><pre class="text">Returns the server random of the front connection when the incoming connection
 was made over an SSL/TLS transport layer. It is useful to to decrypt traffic
 sent using ephemeral ciphers. This requires OpenSSL &gt;= 1.1.0, or BoringSSL.
@@ -19738,7 +19773,7 @@ Please refer to the table below for currently defined variables :
   |   | %ID  | unique-id                                     | string      |
   |   | %ST  | status_code                                   | numeric     |
   |   | %T   | gmt_date_time                                 | date        |
-  |   | %Ta  | Active time of the request (from TR to end)   | numeric     |
+  | H | %Ta  | Active time of the request (from TR to end)   | numeric     |
   |   | %Tc  | Tc                                            | numeric     |
   |   | %Td  | Td = Tt - (Tq + Tw + Tc + Tr)                 | numeric     |
   |   | %Tl  | local_date_time                               | date        |
@@ -20790,8 +20825,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0.22 &ndash; Configuration Manual<br>
-							<small>2021/04/12, willy tarreau</small>
+							HAProxy 2.0.27 &ndash; Configuration Manual<br>
+							<small>2022/01/26, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20894,7 +20929,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.22', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.27', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
