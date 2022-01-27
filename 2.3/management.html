@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.3.10 - Management Guide</title>
+		<title>HAProxy version 2.3.17 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -470,6 +470,8 @@
 							
 							<a class="list-group-item" href="#show trace">show trace</a>
 							
+							<a class="list-group-item" href="#show version">show version</a>
+							
 							<a class="list-group-item" href="#shutdown">shutdown</a>
 							
 							<a class="list-group-item" href="#shutdown frontend">shutdown frontend</a>
@@ -507,7 +509,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -518,7 +520,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.3.10</strong></p>
+							<p><strong>version 2.3.17</strong></p>
 							<p>
 								<br>
 								
@@ -1140,7 +1142,7 @@ continues to process existing connections. If the binding still fails (because
 for example a port is shared with another daemon), then the new process sends a
 SIGTTIN signal to the old processes to instruct them to resume operations just
 as if nothing happened. The old processes will then restart listening to the
-ports and continue to accept connections. Not that this mechanism is system
+ports and continue to accept connections. Note that this mechanism is system
 dependent and some operating systems may not support it in multi-process mode.
 
 If the new process manages to bind correctly to all ports, then it sends either
@@ -2416,18 +2418,29 @@ the same filename, it will update this transaction. It&#x27;s also possible to
 update the files linked to a certificate (.issuer, .sctl, .oscp etc.)
 Once the modification are done, you have to &quot;<a href="#commit%20ssl%20cert">commit ssl cert</a>&quot; the
 transaction.
+
+Injection of files over the CLI must be done with caution since an empty line
+is used to notify the end of the payload. It is recommended to inject a PEM
+file which has been sanitized. A simple method would be to remove every empty
+line and only leave what are in the PEM sections. It could be achieved with a
+sed command.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code>echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(cat 127.0.0.1.pem)\n&quot; | \
-socat /var/run/haproxy.stat -
-echo -e \
-&quot;set ssl cert localhost.pem.issuer &lt;&lt;\n $(cat 127.0.0.1.pem.issuer)\n&quot; | \
-socat /var/run/haproxy.stat -
-echo -e \
-&quot;set ssl cert localhost.pem.ocsp &lt;&lt;\n$(base64 -w 1000 127.0.0.1.pem.ocsp)\n&quot; | \
-socat /var/run/haproxy.stat -
-echo &quot;commit ssl cert localhost.pem&quot; | socat /var/run/haproxy.stat -
+<code><span class="comment"># With some simple sanitizing</span>
+ echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(sed -n &<span class="comment">#x27;/^$/d;/-BEGIN/,/-END/p&#x27; 127.0.0.1.pem)\n&quot; | \</span>
+ socat /var/run/haproxy.stat -
+
+ <span class="comment"># Complete example with commit</span>
+ echo -e &quot;set ssl cert localhost.pem &lt;&lt;\n$(cat 127.0.0.1.pem)\n&quot; | \
+ socat /var/run/haproxy.stat -
+ echo -e \
+ &quot;set ssl cert localhost.pem.issuer &lt;&lt;\n $(cat 127.0.0.1.pem.issuer)\n&quot; | \
+ socat /var/run/haproxy.stat -
+ echo -e \
+ &quot;set ssl cert localhost.pem.ocsp &lt;&lt;\n$(base64 -w 1000 127.0.0.1.pem.ocsp)\n&quot; | \
+ socat /var/run/haproxy.stat -
+ echo &quot;commit ssl cert localhost.pem&quot; | socat /var/run/haproxy.stat -
 </code></pre>
 </div><a class="anchor" name="set"></a><a class="anchor" name="9-set"></a><a class="anchor" name="9.3-set"></a><a class="anchor" name="set (Statistics and monitoring)"></a><a class="anchor" name="set (Unix Socket commands)"></a><a class="anchor" name="set ssl"></a><a class="anchor" name="9-set ssl"></a><a class="anchor" name="9.3-set ssl"></a><a class="anchor" name="set ssl (Statistics and monitoring)"></a><a class="anchor" name="set ssl (Unix Socket commands)"></a><a class="anchor" name="set ssl ocsp-response"></a><a class="anchor" name="9-set ssl ocsp-response"></a><a class="anchor" name="9.3-set ssl ocsp-response"></a><a class="anchor" name="set ssl ocsp-response (Statistics and monitoring)"></a><a class="anchor" name="set ssl ocsp-response (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="set ssl ocsp-response"></a><a href="#9.3-set%20ssl%20ocsp-response">set ssl ocsp-response</a></b> <span style="color: #080">&lt;response | payload&gt;</span></div><pre class="text">This command is used to update an OCSP Response for a certificate (see &quot;crt&quot;
 on &quot;bind&quot; lines). Same controls are performed as during the initial loading of
@@ -3291,7 +3304,18 @@ list of all events supported by the source, and their status for each action
 (report, start, pause, stop), indicated by a &quot;+&quot; if they are enabled, or a
 &quot;-&quot; otherwise. All these events are independent and an event might trigger
 a start without being reported and conversely.
-</pre><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.3-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.3-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.3-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Unix Socket commands)"></a><a class="anchor" name="show version"></a><a class="anchor" name="9-show version"></a><a class="anchor" name="9.3-show version"></a><a class="anchor" name="show version (Statistics and monitoring)"></a><a class="anchor" name="show version (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="show version"></a><a href="#9.3-show%20version">show version</a></b></div><pre class="text">Show the version of the current HAProxy process. This is available from
+master and workers CLI.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>$ echo &quot;<a href="#show%20version">show version</a>&quot; | socat /var/run/haproxy.sock stdio
+2.4.9
+
+$ echo &quot;<a href="#show%20version">show version</a>&quot; | socat /var/run/haproxy-master.sock stdio
+2.5.0
+</code></pre>
+</div><a class="anchor" name="shutdown"></a><a class="anchor" name="9-shutdown"></a><a class="anchor" name="9.3-shutdown"></a><a class="anchor" name="shutdown (Statistics and monitoring)"></a><a class="anchor" name="shutdown (Unix Socket commands)"></a><a class="anchor" name="shutdown frontend"></a><a class="anchor" name="9-shutdown frontend"></a><a class="anchor" name="9.3-shutdown frontend"></a><a class="anchor" name="shutdown frontend (Statistics and monitoring)"></a><a class="anchor" name="shutdown frontend (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="shutdown frontend"></a><a href="#9.3-shutdown%20frontend">shutdown frontend</a></b> <span style="color: #080">&lt;frontend&gt;</span></div><pre class="text">Completely delete the specified frontend. All the ports it was bound to will
 be released. It will not be possible to enable the frontend anymore after
 this operation. This is intended to be used in environments where stopping a
 proxy is not even imaginable but a misconfigured proxy must be fixed. That
@@ -3882,7 +3906,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.3.10 &ndash; Management Guide<br>
+							HAProxy 2.3.17 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -3986,7 +4010,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3.10', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.3.17', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
