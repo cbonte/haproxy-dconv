@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 1.6.15-20 - Configuration Manual</title>
+		<title>HAProxy version 1.6.16 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -2469,7 +2469,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2020/04/17</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -2480,10 +2480,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 1.6.15-20</strong></p>
+							<p><strong>version 1.6.16</strong></p>
 							<p>
 								willy tarreau<br>
-								2019/10/25
+								2021/03/19
 							</p>
 						</div>
 
@@ -9874,22 +9874,27 @@ server www1_dc2 &quot;${LAN_DC2}.101:80&quot;
       &quot;,unix-tightsocklen=0&quot; to any abstract socket definition in socat to
       make it compatible with HAProxy&#x27;s.
 </pre><div class="page-header"><b>See also:</b> &quot;<a href="#default-server">default-server</a>&quot;, &quot;<a href="#http-send-name-header">http-send-name-header</a>&quot; and <a href="#5">section 5</a> about server options</div>
-<a class="anchor" name="server-state-file-name"></a><a class="anchor" name="4-server-state-file-name"></a><a class="anchor" name="4.2-server-state-file-name"></a><a class="anchor" name="server-state-file-name (Proxies)"></a><a class="anchor" name="server-state-file-name (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-state-file-name"></a><a href="#4.2-server-state-file-name">server-state-file-name</a></b> <span style="color: #008">[<span style="color: #080">&lt;file&gt;</span>]</span></div><pre class="text">Set the server state file to read, load and apply to servers available in
-this backend. It only applies when the directive &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;
-is set to &quot;local&quot;. When &lt;file&gt; is not provided or if this directive is not
-set, then backend name is used. If &lt;file&gt; starts with a slash &#x27;/&#x27;, then it is
-considered as an absolute path. Otherwise, &lt;file&gt; is concatenated to the
-global directive &quot;server-state-file-base&quot;.
+<a class="anchor" name="server-state-file-name"></a><a class="anchor" name="4-server-state-file-name"></a><a class="anchor" name="4.2-server-state-file-name"></a><a class="anchor" name="server-state-file-name (Proxies)"></a><a class="anchor" name="server-state-file-name (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server-state-file-name"></a><a href="#4.2-server-state-file-name">server-state-file-name</a></b> <span style="color: #008">[ <span style="color: #800">{ use-backend-name | <span style="color: #080">&lt;file&gt;</span> }</span> ]</span></div><pre class="text">Set the server state file to read, load and apply to servers available in
+this backend.
+</pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+<thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
+<tr><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-error pagination-centered">no<br /><img src="../../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../../css/check.png" alt="yes" title="yes" /></td></tr>
+</table></div>
+<pre class="text">It only applies when the directive &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot; is set to
+&quot;local&quot;. When &lt;file&gt; is not provided, if &quot;use-backend-name&quot; is used or if
+this directive is not set, then backend name is used. If &lt;file&gt; starts with a
+slash &#x27;/&#x27;, then it is considered as an absolute path. Otherwise, &lt;file&gt; is
+concatenated to the global directive &quot;<a href="#server-state-base">server-state-base</a>&quot;.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<div class="example-desc">The minimal configuration below would make HAProxy look for the state server file &#x27;/etc/haproxy/states/bk&#x27;:</div><code> global
-   server-state-file-base /etc/haproxy/states
+<div class="example-desc">The minimal configuration below would make HAProxy look for the state server file &#x27;/etc/haproxy/states/bk&#x27;:</div><code>global
+  server-state-file-base /etc/haproxy/states
 
 backend bk
-   load-server-state-from-file
+  load-server-state-from-file
 </code></pre>
-</div><div class="page-header"><b>See also:</b> &quot;server-state-file-base&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#server-state-base">server-state-base</a>&quot;, &quot;<a href="#load-server-state-from-file">load-server-state-from-file</a>&quot;, and &quot;show servers state&quot;</div>
 <a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | client | clientip }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[usesrc <span style="color: #800">{ <span style="color: #080">&lt;addr2&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port2&gt;</span>]</span> | hdr_ip(<span style="color: #080">&lt;hdr&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;occ&gt;</span>]</span>) }</span> ]</span></div><a class="anchor" name="source"></a><a class="anchor" name="4-source"></a><a class="anchor" name="4.2-source"></a><a class="anchor" name="source (Proxies)"></a><a class="anchor" name="source (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="source"></a><a href="#4.2-source">source</a></b> <span style="color: #080">&lt;addr&gt;</span><span style="color: #008">[:<span style="color: #080">&lt;port&gt;</span>]</span> <span style="color: #008">[interface <span style="color: #080">&lt;name&gt;</span>]</span></div><pre class="text">Set the source address for outgoing connections
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -12358,8 +12363,11 @@ certificate, with the following format for each line :
 
       &lt;crtfile&gt; [[!]&lt;snifilter&gt; ...]
 
-Wildcards are supported in the SNI filter. Negative filter are also supported,
-only useful in combination with a wildcard filter to exclude a particular SNI.
+Wildcards are supported in the SNI filter. Negative filters can be specified
+in the configuration, but they are only used as a hint, they don&#x27;t do
+anything.  (this changes in newer haproxy versions) If you want to exclude a
+SNI from a wildcard, use this positive SNI on another line. (like in the
+example).
 The certificates will be presented to clients who provide a valid TLS Server
 Name Indication field matching one of the SNI filters. If no SNI filter is
 specified, the CN and alt subjects are used. This directive may be specified
@@ -12657,7 +12665,7 @@ in any order, optionally terminated by &#x27;\r&#x27; and/or &#x27;\n&#x27;, eac
   MAINT mode, thus it will not accept any new connections at all, and health
   checks will be stopped.
 
-- The words &quot;down&quot;, &quot;failed&quot;, or &quot;stopped&quot;, optionally followed by a
+- The words &quot;down&quot;, &quot;fail&quot;, or &quot;stopped&quot;, optionally followed by a
   description string after a sharp (&#x27;#&#x27;). All of these mark the server&#x27;s
   operating state as DOWN, but since the word itself is reported on the stats
   page, the difference allows an administrator to know if the situation was
@@ -17234,8 +17242,8 @@ reading. Their sole purpose is to explain how to decipher them.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 1.6.15-20 &ndash; Configuration Manual<br>
-							<small>2019/10/25, willy tarreau</small>
+							HAProxy 1.6.16 &ndash; Configuration Manual<br>
+							<small>2021/03/19, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -17338,7 +17346,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.15-20', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 1.6.16', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
