@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.2.14 - Configuration Manual</title>
+		<title>HAProxy version 2.2.20 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -1400,7 +1400,7 @@
 							
 							<a class="list-group-item" href="#email-alert to">email-alert to</a>
 							
-							<a class="list-group-item" href="#enable">enable</a>
+							<a class="list-group-item" href="#enabled (Peers)">enabled (Peers)</a>
 							
 							<a class="list-group-item" href="#enabled (Alphabetically sorted keywords reference)">enabled (Alphabetically sorted keywords reference)</a>
 							
@@ -3501,7 +3501,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2021/05/19</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3512,10 +3512,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.2.14</strong></p>
+							<p><strong>version 2.2.20</strong></p>
 							<p>
 								willy tarreau<br>
-								2021/04/29
+								2022/01/12
 							</p>
 						</div>
 
@@ -5450,6 +5450,8 @@ could be replaced with PrivateKey+Certificate. HAProxy will complete the
 chain if a file with IntermediateCA2+IntermediateCA1 is present in
 &quot;<a href="#issuers-chain-path">issuers-chain-path</a>&quot; directory. All other certificates with the same issuer
 will share the chain in memory.
+
+This option only applies to certificates used from bind lines.
 </pre><a class="anchor" name="localpeer"></a><a class="anchor" name="3-localpeer"></a><a class="anchor" name="3.1-localpeer"></a><a class="anchor" name="localpeer (Global parameters)"></a><a class="anchor" name="localpeer (Process management and security)"></a><div class="keyword"><b><a class="anchor" name="localpeer"></a><a href="#3.1-localpeer">localpeer</a></b> <span style="color: #080">&lt;name&gt;</span></div><pre class="text">Sets the local instance&#x27;s peer name. It will be ignored if the &quot;-L&quot;
 command line argument is specified or if used after &quot;<a href="#peers">peers</a>&quot; section
 definitions. In such cases, a warning message will be emitted during
@@ -6607,7 +6609,8 @@ tables without having to comment out all &quot;<a href="#peers">peers</a>&quot; 
           details.</pre>
 </div>
 <div class="page-header"><b>See also:</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">server<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#server%20%28Peers%29">Peers</a></li><li><a href="#server%20%28Rings%29">Rings</a></li><li><a href="#server%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; and <a href="#5">section 5</a> about server options</div>
-<a class="anchor" name="enable"></a><a class="anchor" name="3-enable"></a><a class="anchor" name="3.5-enable"></a><a class="anchor" name="enable (Global parameters)"></a><a class="anchor" name="enable (Peers)"></a><div class="keyword"><b><a class="anchor" name="enable"></a><a href="#3.5-enable">enable</a></b></div><pre class="text">This re-enables a disabled peers section which was previously disabled.
+<a class="anchor" name="enabled"></a><a class="anchor" name="3-enabled"></a><a class="anchor" name="3.5-enabled"></a><a class="anchor" name="enabled (Global parameters)"></a><a class="anchor" name="enabled (Peers)"></a><div class="keyword"><b><a class="anchor" name="enabled"></a><a href="#3.5-enabled">enabled</a></b></div><pre class="text">This re-enables a peers section which was previously disabled via the
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword.
 </pre><a class="anchor" name="log"></a><a class="anchor" name="3-log"></a><a class="anchor" name="3.5-log"></a><a class="anchor" name="log (Global parameters)"></a><a class="anchor" name="log (Peers)"></a><div class="keyword"><b><a class="anchor" name="log"></a><a href="#3.5-log">log</a></b> <span style="color: #080">&lt;address&gt;</span> <span style="color: #008">[len <span style="color: #080">&lt;length&gt;</span>]</span> <span style="color: #008">[format <span style="color: #080">&lt;format&gt;</span>]</span> <span style="color: #008">[sample <span style="color: #080">&lt;ranges&gt;</span>:<span style="color: #080">&lt;sample_size&gt;</span>]</span>
     <span style="color: #080">&lt;facility&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;level&gt;</span> <span style="color: #008">[<span style="color: #080">&lt;minlevel&gt;</span>]</span>]</span></div><pre class="text">&quot;<a href="#peers">peers</a>&quot; sections support the same &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; keyword as for the proxies to
 log information about the &quot;<a href="#peers">peers</a>&quot; listener. See &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">log<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#log%20%28Process%20management%20and%20security%29">Process management and security</a></li><li><a href="#log%20%28Peers%29">Peers</a></li><li><a href="#log%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; option for proxies for
@@ -8072,7 +8075,7 @@ created in the &quot;stopped&quot; state and will appear as such in the statisti
 will not receive any traffic nor will it send any health-checks or logs. It
 is possible to disable many instances at once by adding the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;
 keyword in a &quot;defaults&quot; section.
-</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
+</pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Peers%29">Peers</a></li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
 <a class="anchor" name="dispatch"></a><a class="anchor" name="4-dispatch"></a><a class="anchor" name="4.2-dispatch"></a><a class="anchor" name="dispatch (Proxies)"></a><a class="anchor" name="dispatch (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="dispatch"></a><a href="#4.2-dispatch">dispatch</a></b> <span style="color: #080">&lt;address&gt;</span>:<span style="color: #080">&lt;port&gt;</span></div><pre class="text">Set a default server address
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -8115,7 +8118,7 @@ even if servers are dynamically added or removed.
 <div class="separator">
 <span class="label label-info">Arguments :</span> none
 </div>
-<pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword is used to explicitly enable an instance, when the
+<pre class="text">The &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Peers%29">Peers</a></li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; keyword is used to explicitly enable an instance, when the
 defaults has been set to &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;. This is very rarely used.
 </pre><div class="page-header"><b>See also :</b> &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">disabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#disabled%20%28Peers%29">Peers</a></li><li><a href="#disabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#disabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot;</div>
 <a class="anchor" name="errorfile"></a><a class="anchor" name="4-errorfile"></a><a class="anchor" name="4.2-errorfile"></a><a class="anchor" name="errorfile (Proxies)"></a><a class="anchor" name="errorfile (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="errorfile"></a><a href="#4.2-errorfile">errorfile</a></b> <span style="color: #080">&lt;code&gt;</span> <span style="color: #080">&lt;file&gt;</span></div><pre class="text">Return a file contents instead of errors generated by HAProxy
@@ -10148,7 +10151,8 @@ and the actions evaluation continues.
 designated by &lt;sc-id&gt; and the value of &lt;int&gt;/&lt;expr&gt;. The expected result is a
 boolean. If an error occurs, this action silently fails and the actions
 evaluation continues.
-</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response send-spoe-group"></a><a class="anchor" name="4-http-response send-spoe-group"></a><a class="anchor" name="4.2-http-response send-spoe-group"></a><a class="anchor" name="http-response send-spoe-group (Proxies)"></a><a class="anchor" name="http-response send-spoe-group (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response send-spoe-group"></a><a href="#4.2-http-response%20send-spoe-group">http-response send-spoe-group</a></b> <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action is used to trigger sending of a group of SPOE messages. To do so,
+</pre><a class="anchor" name="http-response"></a><a class="anchor" name="4-http-response"></a><a class="anchor" name="4.2-http-response"></a><a class="anchor" name="http-response (Proxies)"></a><a class="anchor" name="http-response (Alphabetically sorted keywords reference)"></a><a class="anchor" name="http-response send-spoe-group"></a><a class="anchor" name="4-http-response send-spoe-group"></a><a class="anchor" name="4.2-http-response send-spoe-group"></a><a class="anchor" name="http-response send-spoe-group (Proxies)"></a><a class="anchor" name="http-response send-spoe-group (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="http-response send-spoe-group"></a><a href="#4.2-http-response%20send-spoe-group">http-response send-spoe-group</a></b> <span style="color: #080">&lt;engine-name&gt;</span> <span style="color: #080">&lt;group-name&gt;</span>
+                              <span style="color: #008">[ <span style="color: #800">{ if | unless }</span> <span style="color: #080">&lt;condition&gt;</span> ]</span></div><pre class="text">This action is used to trigger sending of a group of SPOE messages. To do so,
 the SPOE engine used to send messages must be defined, as well as the SPOE
 group to send. Of course, the SPOE engine must refer to an existing SPOE
 filter. If not engine name is provided on the SPOE filter line, the SPOE
@@ -11891,12 +11895,13 @@ pre-41     Send pre v4.1 client compatible checks</pre>
 one Client Authentication packet, and one QUIT packet, to correctly close
 MySQL session. We then parse the MySQL Handshake Initialization packet and/or
 Error packet. It is a basic but useful test which does not produce error nor
-aborted connect on the server. However, it requires adding an authorization
-in the MySQL table, like this :
+aborted connect on the server. However, it requires an unlocked authorised
+user without a password. To create a basic limited user in MySQL with
+optional resource limits:
 
-    USE mysql;
-    INSERT INTO user (Host,User) values (&#x27;&lt;ip_of_haproxy&gt;&#x27;,&#x27;&lt;username&gt;&#x27;);
-    FLUSH PRIVILEGES;
+    CREATE USER &#x27;&lt;username&gt;&#x27;@&#x27;&lt;ip_of_haproxy|network_of_haproxy/netmask&gt;&#x27;
+    /*!50701 WITH MAX_QUERIES_PER_HOUR 1 MAX_UPDATES_PER_HOUR 0 */
+    /*M!100201 MAX_STATEMENT_TIME 0.0001 */;
 
 If you don&#x27;t specify a username (it is deprecated and not recommended), the
 check only consists in parsing the Mysql Handshake Initialization packet or
@@ -12842,7 +12847,7 @@ a retry occurs.
 When &quot;<a href="#option%20redispatch">option redispatch</a>&quot; is set, the last retry may be performed on another
 server even if a cookie references a different server.
 </pre><div class="page-header"><b>See also :</b> &quot;<a href="#option%20redispatch">option redispatch</a>&quot;</div>
-<a class="anchor" name="retry-on"></a><a class="anchor" name="4-retry-on"></a><a class="anchor" name="4.2-retry-on"></a><a class="anchor" name="retry-on (Proxies)"></a><a class="anchor" name="retry-on (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="retry-on"></a><a href="#4.2-retry-on">retry-on</a></b> <span style="color: #008">[list of keywords]</span></div><pre class="text">Specify when to attempt to automatically retry a failed request.
+<a class="anchor" name="retry-on"></a><a class="anchor" name="4-retry-on"></a><a class="anchor" name="4.2-retry-on"></a><a class="anchor" name="retry-on (Proxies)"></a><a class="anchor" name="retry-on (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="retry-on"></a><a href="#4.2-retry-on">retry-on</a></b> <span style="color: #008">[space-delimited list of keywords]</span></div><pre class="text">Specify when to attempt to automatically retry a failed request.
 This setting is only valid when &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">mode<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#mode%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#mode%20%28Bind%20options%29">Bind options</a></li></ul></span>&quot; is set to http and is silently ignored
 otherwise.
 </pre><div><p>  May be used in sections :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
@@ -12850,10 +12855,11 @@ otherwise.
 <tr><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-error pagination-centered">no<br /><img src="../css/cross.png" alt="no" title="no" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td><td class="alert-success pagination-centered">yes<br /><img src="../css/check.png" alt="yes" title="yes" /></td></tr>
 </table></div>
 <div class="separator">
-<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;keywords&gt;  is a list of keywords or HTTP status codes, each representing a
-            type of failure event on which an attempt to retry the request
-            is desired. Please read the notes at the bottom before changing
-            this setting. The following keywords are supported :
+<span class="label label-info">Arguments :</span><pre class="prettyprint arguments">&lt;keywords&gt;  is a space-delimited list of keywords or HTTP status codes, each
+            representing a type of failure event on which an attempt to
+            retry the request is desired. Please read the notes at the
+            bottom before changing this setting. The following keywords are
+            supported :
 
   none              never retry
 
@@ -12924,7 +12930,12 @@ Unless you know exactly how the application deals with replayed requests, you
 should not use this directive.
 
 The default is &quot;conn-failure&quot;.
-</pre><div class="page-header"><b>See also:</b> &quot;<a href="#retries">retries</a>&quot;, &quot;<a href="#option%20redispatch">option redispatch</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;</div>
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>retry-on 503 504
+</code></pre>
+</div><div class="page-header"><b>See also:</b> &quot;<a href="#retries">retries</a>&quot;, &quot;<a href="#option%20redispatch">option redispatch</a>&quot;, &quot;<a href="#tune.bufsize">tune.bufsize</a>&quot;</div>
 <a class="anchor" name="server"></a><a class="anchor" name="4-server"></a><a class="anchor" name="4.2-server"></a><a class="anchor" name="server (Proxies)"></a><a class="anchor" name="server (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="server"></a><a href="#4.2-server">server</a></b> <span style="color: #080">&lt;name&gt;</span> <span style="color: #080">&lt;address&gt;</span><span style="color: #008">[:<span style="color: #008">[port]</span>]</span> <span style="color: #008">[param*]</span></div><pre class="text">Declare a server in a backend
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13954,6 +13965,11 @@ backend smtp
     a cumulative number, it maintains the rate at which the counter is
     incremented. Most of the time it will be used to measure the frequency of
     occurrence of certain events (e.g. requests to a specific URL).
+
+  - gpt0 : first General Purpose Tag. It is a positive 32-bit integer
+    integer which may be used for anything. Most of the time it will be used
+    to put a special tag on some entries, for instance to note that a
+    specific behavior was detected and must be known for future matches
 
   - conn_cnt : Connection Count. It is a positive 32-bit integer which counts
     the absolute number of connections received from clients which matched
@@ -15066,7 +15082,7 @@ Several types of actions are supported :
       the rules evaluation. Rejected session are immediately closed.
 
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
-      Sets a variable.
+      Sets a variable from an expression.
 
   - unset-var(&lt;var-name&gt;)
       Unsets a variable.
@@ -15137,19 +15153,11 @@ declared inline.
 
   &lt;expr&gt;     Is a standard HAProxy expression formed by a sample-fetch
              followed by some converters.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request content set-var(sess.my_var) src
-</code></pre>
-</div><pre class="text">The &quot;unset-var&quot; is used to unset a variable. See above for details about
+
+The &quot;unset-var&quot; is used to unset a variable. See above for details about
 &lt;var-name&gt;.
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>tcp-request content unset-var(sess.my_var)
-</code></pre>
-</div><pre class="text">The &quot;send-spoe-group&quot; is used to trigger sending of a group of SPOE
+
+The &quot;send-spoe-group&quot; is used to trigger sending of a group of SPOE
 messages. To do so, the SPOE engine used to send messages must be defined, as
 well as the SPOE group to send. Of course, the SPOE engine must refer to an
 existing SPOE filter. If not engine name is provided on the SPOE filter line,
@@ -15205,6 +15213,10 @@ Several types of actions are supported :
   - sc-inc-gpc0(&lt;sc-id&gt;)
   - sc-inc-gpc1(&lt;sc-id&gt;)
   - sc-set-gpt0(&lt;sc-id&gt;) { &lt;int&gt; | &lt;expr&gt; }
+  - set-dst &lt;expr&gt;
+  - set-dst-port &lt;expr&gt;
+  - set-src &lt;expr&gt;
+  - set-src-port &lt;expr&gt;
   - set-var(&lt;var-name&gt;) &lt;expr&gt;
   - unset-var(&lt;var-name&gt;)
   - silent-drop
@@ -15778,17 +15790,17 @@ stripped.
 The &quot;<a href="#use-server">use-server</a>&quot; statement works both in HTTP and TCP mode. This makes it
 suitable for use with content-based inspection. For instance, a server could
 be selected in a farm according to the TLS SNI field when using protocols with
-implicit TLS (also see &quot;<a href="#req_ssl_sni">req_ssl_sni</a>&quot;). And if these servers have their weight
+implicit TLS (also see &quot;<a href="#req.ssl_sni">req.ssl_sni</a>&quot;). And if these servers have their weight
 set to zero, they will not be used for other traffic.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># intercept incoming TLS requests based on the SNI field</span>
-use-server www if { req_ssl_sni -i www.example.com }
+use-server www if { req.ssl_sni -i www.example.com }
 server     www 192.168.0.1:443 weight 0
-use-server mail if { req_ssl_sni -i mail.example.com }
+use-server mail if { req.ssl_sni -i mail.example.com }
 server     mail 192.168.0.1:465 weight 0
-use-server imap if { req_ssl_sni -i imap.example.com }
+use-server imap if { req.ssl_sni -i imap.example.com }
 server     imap 192.168.0.1:993 weight 0
 <span class="comment"># all the rest is forwarded to this server</span>
 server  default 192.168.0.2:443 check
@@ -16641,7 +16653,7 @@ that it is marked down in maintenance mode, and no connection other than the
 ones allowed by persist mode will reach it. It is very well suited to setup
 new servers, because normal traffic will never reach them, while it is still
 possible to test the service by making use of the force-persist mechanism.
-See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">enabled<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#enabled%20%28Peers%29">Peers</a></li><li><a href="#enabled%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li><li><a href="#enabled%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; setting.
 </pre><a class="anchor" name="enabled"></a><a class="anchor" name="5-enabled"></a><a class="anchor" name="5.2-enabled"></a><a class="anchor" name="enabled (Bind and server options)"></a><a class="anchor" name="enabled (Server and default-server options)"></a><div class="keyword"><b><a class="anchor" name="enabled"></a><a href="#5.2-enabled">enabled</a></b></div><pre class="text">This option may be used as &#x27;server&#x27; setting to reset any &#x27;disabled&#x27;
 setting which would have been inherited from &#x27;default-server&#x27; directive as
 default value.
@@ -17303,7 +17315,7 @@ used by HAProxy. The following processing is applied on this error:
   2. When the fallback on the query type was done (or not applicable), HAProxy
      retries the original DNS query, with the preferred query type.
 
-  3. HAProxy retries previous steps &lt;resolve_retires&gt; times. If no valid
+  3. HAProxy retries previous steps &lt;resolve_retries&gt; times. If no valid
      response is received after that, it stops the DNS resolution and reports
      the error.
 
@@ -19130,9 +19142,6 @@ starting at zero. If the range is not specified, it defaults to 2^32, which
 gives numbers between 0 and 4294967295. It can be useful to pass some values
 needed to take some routing decisions for example, or just for debugging
 purposes. This random must not be used for security purposes.
-</pre><a class="anchor" name="uuid"></a><a class="anchor" name="7-uuid"></a><a class="anchor" name="7.3.2-uuid"></a><a class="anchor" name="uuid (Using ACLs and fetching samples)"></a><a class="anchor" name="uuid (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="uuid"></a><a href="#7.3.2-uuid">uuid</a></b>(<span style="color: #008">[<span style="color: #080">&lt;version&gt;</span>]</span>) : string</div><pre class="text">Returns a UUID following the RFC4122 standard. If the version is not
-specified, a UUID version 4 (fully random) is returned.
-Currently, only version 4 is supported.
 </pre><a class="anchor" name="srv_conn"></a><a class="anchor" name="7-srv_conn"></a><a class="anchor" name="7.3.2-srv_conn"></a><a class="anchor" name="srv_conn (Using ACLs and fetching samples)"></a><a class="anchor" name="srv_conn (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="srv_conn"></a><a href="#7.3.2-srv_conn">srv_conn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;backend&gt;</span>/]</span><span style="color: #080">&lt;server&gt;</span>) : integer</div><pre class="text">Returns an integer value corresponding to the number of currently established
 connections on the designated server, possibly including the connection being
 evaluated. If &lt;backend&gt; is omitted, then the server is looked up in the
@@ -19190,6 +19199,9 @@ table_avl for other entry counting methods.
 </pre><a class="anchor" name="thread"></a><a class="anchor" name="7-thread"></a><a class="anchor" name="7.3.2-thread"></a><a class="anchor" name="thread (Using ACLs and fetching samples)"></a><a class="anchor" name="thread (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="thread"></a><a href="#7.3.2-thread">thread</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the position of the thread calling
 the function, between 0 and (global.nbthread-1). This is useful for logging
 and debugging purposes.
+</pre><a class="anchor" name="uuid"></a><a class="anchor" name="7-uuid"></a><a class="anchor" name="7.3.2-uuid"></a><a class="anchor" name="uuid (Using ACLs and fetching samples)"></a><a class="anchor" name="uuid (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="uuid"></a><a href="#7.3.2-uuid">uuid</a></b>(<span style="color: #008">[<span style="color: #080">&lt;version&gt;</span>]</span>) : string</div><pre class="text">Returns a UUID following the RFC4122 standard. If the version is not
+specified, a UUID version 4 (fully random) is returned.
+Currently, only version 4 is supported.
 </pre><a class="anchor" name="var"></a><a class="anchor" name="7-var"></a><a class="anchor" name="7.3.2-var"></a><a class="anchor" name="var (Using ACLs and fetching samples)"></a><a class="anchor" name="var (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="var"></a><a href="#7.3.2-var">var</a></b>(<span style="color: #080">&lt;var-name&gt;</span>) : undefined</div><pre class="text">Returns a variable with the stored type. If the variable is not set, the
 sample fetch fails. The name of the variable starts with an indication
 about its scope. The scopes allowed are:
@@ -19259,15 +19271,31 @@ This might be used when running in transparent mode, when assigning dynamic
 ports to some clients for a whole application session, to stick all users to
 a same server, or to pass the destination port information to a server using
 an HTTP header.
+</pre><a class="anchor" name="fc_fackets"></a><a class="anchor" name="7-fc_fackets"></a><a class="anchor" name="7.3.3-fc_fackets"></a><a class="anchor" name="fc_fackets (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_fackets (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_fackets"></a><a href="#7.3.3-fc_fackets">fc_fackets</a></b> : integer</div><pre class="text">Returns the fack counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_http_major"></a><a class="anchor" name="7-fc_http_major"></a><a class="anchor" name="7.3.3-fc_http_major"></a><a class="anchor" name="fc_http_major (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_http_major (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_http_major"></a><a href="#7.3.3-fc_http_major">fc_http_major</a></b> : integer</div><pre class="text">Reports the front connection&#x27;s HTTP major version encoding, which may be 1
 for HTTP/0.9 to HTTP/1.1 or 2 for HTTP/2. Note, this is based on the on-wire
 encoding and not on the version present in the request header.
+</pre><a class="anchor" name="fc_lost"></a><a class="anchor" name="7-fc_lost"></a><a class="anchor" name="7.3.3-fc_lost"></a><a class="anchor" name="fc_lost (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_lost (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_lost"></a><a href="#7.3.3-fc_lost">fc_lost</a></b> : integer</div><pre class="text">Returns the lost counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_pp_authority"></a><a class="anchor" name="7-fc_pp_authority"></a><a class="anchor" name="7.3.3-fc_pp_authority"></a><a class="anchor" name="fc_pp_authority (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_pp_authority (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_pp_authority"></a><a href="#7.3.3-fc_pp_authority">fc_pp_authority</a></b> : string</div><pre class="text">Returns the authority TLV sent by the client in the PROXY protocol header,
 if any.
 </pre><a class="anchor" name="fc_pp_unique_id"></a><a class="anchor" name="7-fc_pp_unique_id"></a><a class="anchor" name="7.3.3-fc_pp_unique_id"></a><a class="anchor" name="fc_pp_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_pp_unique_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_pp_unique_id"></a><a href="#7.3.3-fc_pp_unique_id">fc_pp_unique_id</a></b> : string</div><pre class="text">Returns the unique ID TLV sent by the client in the PROXY protocol header,
 if any.
 </pre><a class="anchor" name="fc_rcvd_proxy"></a><a class="anchor" name="7-fc_rcvd_proxy"></a><a class="anchor" name="7.3.3-fc_rcvd_proxy"></a><a class="anchor" name="fc_rcvd_proxy (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rcvd_proxy (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rcvd_proxy"></a><a href="#7.3.3-fc_rcvd_proxy">fc_rcvd_proxy</a></b> : boolean</div><pre class="text">Returns true if the client initiated the connection with a PROXY protocol
 header.
+</pre><a class="anchor" name="fc_reordering"></a><a class="anchor" name="7-fc_reordering"></a><a class="anchor" name="7.3.3-fc_reordering"></a><a class="anchor" name="fc_reordering (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_reordering (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_reordering"></a><a href="#7.3.3-fc_reordering">fc_reordering</a></b> : integer</div><pre class="text">Returns the reordering counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_retrans"></a><a class="anchor" name="7-fc_retrans"></a><a class="anchor" name="7.3.3-fc_retrans"></a><a class="anchor" name="fc_retrans (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_retrans (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_retrans"></a><a href="#7.3.3-fc_retrans">fc_retrans</a></b> : integer</div><pre class="text">Returns the retransmits counter measured by the kernel for the client
+connection. If the server connection is not established, if the connection is
+not TCP or if the operating system does not support TCP_INFO, for example
+Linux kernels before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_rtt"></a><a class="anchor" name="7-fc_rtt"></a><a class="anchor" name="7.3.3-fc_rtt"></a><a class="anchor" name="fc_rtt (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_rtt (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_rtt"></a><a href="#7.3.3-fc_rtt">fc_rtt</a></b>(<span style="color: #080">&lt;unit&gt;</span>) : integer</div><pre class="text">Returns the Round Trip Time (RTT) measured by the kernel for the client
 connection. &lt;unit&gt; is facultative, by default the unit is milliseconds. &lt;unit&gt;
 can be set to &quot;ms&quot; for milliseconds or &quot;us&quot; for microseconds. If the server
@@ -19280,30 +19308,14 @@ client connection. &lt;unit&gt; is facultative, by default the unit is milliseco
 server connection is not established, if the connection is not TCP or if the
 operating system does not support TCP_INFO, for example Linux kernels before
 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_unacked"></a><a class="anchor" name="7-fc_unacked"></a><a class="anchor" name="7.3.3-fc_unacked"></a><a class="anchor" name="fc_unacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_unacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_unacked"></a><a href="#7.3.3-fc_unacked">fc_unacked</a></b> : integer</div><pre class="text">Returns the unacked counter measured by the kernel for the client connection.
-If the server connection is not established, if the connection is not TCP or
-if the operating system does not support TCP_INFO, for example Linux kernels
-before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fc_sacked"></a><a class="anchor" name="7-fc_sacked"></a><a class="anchor" name="7.3.3-fc_sacked"></a><a class="anchor" name="fc_sacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_sacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_sacked"></a><a href="#7.3.3-fc_sacked">fc_sacked</a></b> : integer</div><pre class="text">Returns the sacked counter measured by the kernel for the client connection.
 If the server connection is not established, if the connection is not TCP or
 if the operating system does not support TCP_INFO, for example Linux kernels
 before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_retrans"></a><a class="anchor" name="7-fc_retrans"></a><a class="anchor" name="7.3.3-fc_retrans"></a><a class="anchor" name="fc_retrans (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_retrans (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_retrans"></a><a href="#7.3.3-fc_retrans">fc_retrans</a></b> : integer</div><pre class="text">Returns the retransmits counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_fackets"></a><a class="anchor" name="7-fc_fackets"></a><a class="anchor" name="7.3.3-fc_fackets"></a><a class="anchor" name="fc_fackets (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_fackets (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_fackets"></a><a href="#7.3.3-fc_fackets">fc_fackets</a></b> : integer</div><pre class="text">Returns the fack counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_lost"></a><a class="anchor" name="7-fc_lost"></a><a class="anchor" name="7.3.3-fc_lost"></a><a class="anchor" name="fc_lost (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_lost (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_lost"></a><a href="#7.3.3-fc_lost">fc_lost</a></b> : integer</div><pre class="text">Returns the lost counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
-</pre><a class="anchor" name="fc_reordering"></a><a class="anchor" name="7-fc_reordering"></a><a class="anchor" name="7.3.3-fc_reordering"></a><a class="anchor" name="fc_reordering (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_reordering (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_reordering"></a><a href="#7.3.3-fc_reordering">fc_reordering</a></b> : integer</div><pre class="text">Returns the reordering counter measured by the kernel for the client
-connection. If the server connection is not established, if the connection is
-not TCP or if the operating system does not support TCP_INFO, for example
-Linux kernels before 2.4, the sample fetch fails.
+</pre><a class="anchor" name="fc_unacked"></a><a class="anchor" name="7-fc_unacked"></a><a class="anchor" name="7.3.3-fc_unacked"></a><a class="anchor" name="fc_unacked (Using ACLs and fetching samples)"></a><a class="anchor" name="fc_unacked (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fc_unacked"></a><a href="#7.3.3-fc_unacked">fc_unacked</a></b> : integer</div><pre class="text">Returns the unacked counter measured by the kernel for the client connection.
+If the server connection is not established, if the connection is not TCP or
+if the operating system does not support TCP_INFO, for example Linux kernels
+before 2.4, the sample fetch fails.
 </pre><a class="anchor" name="fe_defbe"></a><a class="anchor" name="7-fe_defbe"></a><a class="anchor" name="7.3.3-fe_defbe"></a><a class="anchor" name="fe_defbe (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_defbe (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_defbe"></a><a href="#7.3.3-fe_defbe">fe_defbe</a></b> : string</div><pre class="text">Returns a string containing the frontend&#x27;s default backend name. It can be
 used in frontends to check which backend will handle requests by default.
 </pre><a class="anchor" name="fe_id"></a><a class="anchor" name="7-fe_id"></a><a class="anchor" name="7.3.3-fe_id"></a><a class="anchor" name="fe_id (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_id (Fetching samples at Layer 4)"></a><div class="keyword"><b><a class="anchor" name="fe_id"></a><a href="#7.3.3-fe_id">fe_id</a></b> : integer</div><pre class="text">Returns an integer containing the current frontend&#x27;s id. It can be used in
@@ -19937,7 +19949,7 @@ requested. Please note that the TLS NPN extension was replaced with ALPN.
 over an SSL/TLS transport layer.
 </pre><a class="anchor" name="ssl_fc_unique_id"></a><a class="anchor" name="7-ssl_fc_unique_id"></a><a class="anchor" name="7.3.4-ssl_fc_unique_id"></a><a class="anchor" name="ssl_fc_unique_id (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_unique_id (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_unique_id"></a><a href="#7.3.4-ssl_fc_unique_id">ssl_fc_unique_id</a></b> : binary</div><pre class="text">When the incoming connection was made over an SSL/TLS transport layer,
 returns the TLS unique ID as defined in RFC5929 <a href="#3">section 3</a>. The unique id
-can be encoded to base64 using the converter: &quot;ssl_bc_unique_id,base64&quot;.
+can be encoded to base64 using the converter: &quot;ssl_fc_unique_id,base64&quot;.
 </pre><a class="anchor" name="ssl_fc_server_handshake_traffic_secret"></a><a class="anchor" name="7-ssl_fc_server_handshake_traffic_secret"></a><a class="anchor" name="7.3.4-ssl_fc_server_handshake_traffic_secret"></a><a class="anchor" name="ssl_fc_server_handshake_traffic_secret (Using ACLs and fetching samples)"></a><a class="anchor" name="ssl_fc_server_handshake_traffic_secret (Fetching samples at Layer 5)"></a><div class="keyword"><b><a class="anchor" name="ssl_fc_server_handshake_traffic_secret"></a><a href="#7.3.4-ssl_fc_server_handshake_traffic_secret">ssl_fc_server_handshake_traffic_secret</a></b> : string</div><pre class="text">Return the SERVER_HANDSHAKE_TRAFFIC_SECRET as an hexadecimal string for the
 front connection when the incoming connection was made over a TLS 1.3
 transport layer.
@@ -19969,7 +19981,7 @@ deciphered by haproxy. The result (when present) typically is a string
 matching the HTTPS host name (253 chars or less). The SSL library must have
 been built with support for TLS extensions enabled (check haproxy -vv).
 
-This fetch is different from &quot;<a href="#req_ssl_sni">req_ssl_sni</a>&quot; above in that it applies to the
+This fetch is different from &quot;<a href="#req.ssl_sni">req.ssl_sni</a>&quot; above in that it applies to the
 connection being deciphered by haproxy and not to SSL contents being blindly
 forwarded. See also &quot;ssl_fc_sni_end&quot; and &quot;ssl_fc_sni_reg&quot; below. This
 requires that the SSL library is built with support for TLS extensions
@@ -20183,14 +20195,14 @@ it is recommended to first wait for a complete client hello (type 1), like in
 the example below. See also &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot;.
 
 ACL derivatives :
-  req_ssl_sni : exact string match
+  req.ssl_sni : exact string match
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
 <code><span class="comment"># Wait for a client hello for at most 5 seconds</span>
 tcp-request inspect-delay 5s
 tcp-request content accept if { req_ssl_hello_type 1 }
-use_backend bk_allow if { req_ssl_sni -f allowed_sites }
+use_backend bk_allow if { req.ssl_sni -f allowed_sites }
 default_backend bk_sorry_page
 </code></pre>
 </div><a class="anchor" name="req.ssl_st_ext"></a><a class="anchor" name="7-req.ssl_st_ext"></a><a class="anchor" name="7.3.5-req.ssl_st_ext"></a><a class="anchor" name="req.ssl_st_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_st_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_st_ext"></a><a href="#7.3.5-req.ssl_st_ext">req.ssl_st_ext</a></b> : integer</div><pre class="text">Returns 0 if the client didn&#x27;t send a SessionTicket TLS Extension (RFC5077)
@@ -21495,7 +21507,7 @@ Please refer to the table below for currently defined variables :
   |   | %ID  | unique-id                                     | string      |
   |   | %ST  | status_code                                   | numeric     |
   |   | %T   | gmt_date_time                                 | date        |
-  |   | %Ta  | Active time of the request (from TR to end)   | numeric     |
+  | H | %Ta  | Active time of the request (from TR to end)   | numeric     |
   |   | %Tc  | Tc                                            | numeric     |
   |   | %Td  | Td = Tt - (Tq + Tw + Tc + Tr)                 | numeric     |
   |   | %Tl  | local_date_time                               | date        |
@@ -22742,6 +22754,10 @@ applications. All these variables may be overwritten, with caution though.
   | SERVER_PROTOCOL   | Contains the request&#x27;s protocol.                    |
   |                   |                                                     |
   +-------------------+-----------------------------------------------------+
+  | SERVER_SOFTWARE   | Contains the string &quot;HAProxy&quot; followed by the       |
+  |                   | current HAProxy version.                            |
+  |                   |                                                     |
+  +-------------------+-----------------------------------------------------+
   | HTTPS             | Set to a non-empty value (&quot;on&quot;) if the script was   |
   |                   | queried through the HTTPS protocol.                 |
   |                   |                                                     |
@@ -22779,8 +22795,8 @@ here.
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.2.14 &ndash; Configuration Manual<br>
-							<small>2021/04/29, willy tarreau</small>
+							HAProxy 2.2.20 &ndash; Configuration Manual<br>
+							<small>2022/01/12, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -22883,7 +22899,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2.14', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.2.20', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
