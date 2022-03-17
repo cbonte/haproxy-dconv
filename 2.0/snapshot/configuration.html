@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.0.27 - Configuration Manual</title>
+		<title>HAProxy version 2.0.28 - Configuration Manual</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -3172,7 +3172,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/03/17</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -3183,10 +3183,10 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Configuration Manual</h2>
-							<p><strong>version 2.0.27</strong></p>
+							<p><strong>version 2.0.28</strong></p>
 							<p>
 								willy tarreau<br>
-								2022/01/26
+								2022/03/14
 							</p>
 						</div>
 
@@ -6485,7 +6485,7 @@ two, and never more than some limits (usually 32768).
   rdp-cookie(&lt;name&gt;)
               The RDP cookie &lt;name&gt; (or &quot;mstshash&quot; if omitted) will be
               looked up and hashed for each incoming TCP request. Just as
-              with the equivalent ACL &#x27;req_rdp_cookie()&#x27; function, the name
+              with the equivalent ACL &#x27;req.rdp_cookie()&#x27; function, the name
               is not case-sensitive. This mechanism is useful as a degraded
               persistence mode, as it makes it possible to always send the
               same user (or the same session ID) to the same server. If the
@@ -6495,13 +6495,11 @@ two, and never more than some limits (usually 32768).
               Note that for this to work, the frontend must ensure that an
               RDP cookie is already present in the request buffer. For this
               you must use &#x27;tcp-request content accept&#x27; rule combined with
-              a &#x27;req_rdp_cookie_cnt&#x27; ACL.
+              a &#x27;req.rdp_cookie_cnt&#x27; ACL.
 
               This algorithm is static by default, which means that
               changing a server&#x27;s weight on the fly will have no effect,
               but this can be changed using &quot;<a href="#hash-type">hash-type</a>&quot;.
-
-              See also the rdp_cookie pattern fetch function.
 
 &lt;arguments&gt; is an optional list of arguments which may be needed by some
             algorithms. Right now, only &quot;<a href="#url_param">url_param</a>&quot; and &quot;uri&quot; support an
@@ -11204,7 +11202,7 @@ that the &quot;IP address redirection&quot; option is disabled.
     server srv1 1.1.1.1:3389
     server srv2 1.1.1.2:3389
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;balance rdp-cookie&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot;, the &quot;req_rdp_cookie&quot; ACL and the rdp_cookie pattern fetch function.</div>
+</div><div class="page-header"><b>See also :</b> &quot;balance rdp-cookie&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot; and the &quot;<a href="#req.rdp_cookie">req.rdp_cookie</a>&quot; ACL.</div>
 <a class="anchor" name="rate-limit"></a><a class="anchor" name="4-rate-limit"></a><a class="anchor" name="4.2-rate-limit"></a><a class="anchor" name="rate-limit (Proxies)"></a><a class="anchor" name="rate-limit (Alphabetically sorted keywords reference)"></a><a class="anchor" name="rate-limit sessions"></a><a class="anchor" name="4-rate-limit sessions"></a><a class="anchor" name="4.2-rate-limit sessions"></a><a class="anchor" name="rate-limit sessions (Proxies)"></a><a class="anchor" name="rate-limit sessions (Alphabetically sorted keywords reference)"></a><div class="keyword"><b><a class="anchor" name="rate-limit sessions"></a><a href="#4.2-rate-limit%20sessions">rate-limit sessions</a></b> <span style="color: #080">&lt;rate&gt;</span></div><pre class="text">Set a limit on the number of new sessions accepted per second on a frontend
 </pre><div><p>  May be used in sections  :</p><table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 <thead><tr><th>defaults</th><th>frontend</th><th>listen</th><th>backend</th></tr></thead>
@@ -13098,8 +13096,8 @@ backend https
     <span class="comment"># maximum SSL session ID length is 32 bytes.</span>
     stick-table type binary len 32 size 30k expire 30m
 
-    acl clienthello req_ssl_hello_type 1
-    acl serverhello rep_ssl_hello_type 2
+    acl clienthello req.ssl_hello_type 1
+    acl serverhello rep.ssl_hello_type 2
 
     <span class="comment"># use tcp content accepts to detects ssl client and server hello.</span>
     tcp-request inspect-delay 5s
@@ -13113,10 +13111,10 @@ backend https
     <span class="comment"># at offset 44.</span>
 
     <span class="comment"># Match and learn on request if client hello.</span>
-    stick on payload_lv(43,1) if clienthello
+    stick on req.payload_lv(43,1) if clienthello
 
     <span class="comment"># Learn on response if server hello.</span>
-    stick store-response payload_lv(43,1) if serverhello
+    stick store-response resp.payload_lv(43,1) if serverhello
 
     server s1 192.168.1.1:443
     server s2 192.168.1.1:443
@@ -13708,12 +13706,12 @@ tcp-request content reject
 <pre class="prettyprint">
 <code><span class="comment"># reject SMTP connection if client speaks first</span>
 tcp-request inspect-delay 30s
-acl content_present req_len gt 0
+acl content_present req.len gt 0
 tcp-request content reject if content_present
 
 <span class="comment"># Forward HTTPS connection only if client speaks</span>
 tcp-request inspect-delay 30s
-acl content_present req_len gt 0
+acl content_present req.len gt 0
 tcp-request content accept if content_present
 tcp-request content reject
 </code></pre>
@@ -14556,17 +14554,18 @@ stripped.
 
 The &quot;<a href="#use-server">use-server</a>&quot; statement works both in HTTP and TCP mode. This makes it
 suitable for use with content-based inspection. For instance, a server could
-be selected in a farm according to the TLS SNI field. And if these servers
-have their weight set to zero, they will not be used for other traffic.
+be selected in a farm according to the TLS SNI field when using protocols with
+implicit TLS (also see &quot;<a href="#req.ssl_sni">req.ssl_sni</a>&quot;). And if these servers have their weight
+set to zero, they will not be used for other traffic.
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># intercept incoming TLS requests based on the SNI field</span>
-use-server www if { req_ssl_sni -i www.example.com }
+use-server www if { req.ssl_sni -i www.example.com }
 server     www 192.168.0.1:443 weight 0
-use-server mail if { req_ssl_sni -i mail.example.com }
-server     mail 192.168.0.1:587 weight 0
-use-server imap if { req_ssl_sni -i imap.example.com }
+use-server mail if { req.ssl_sni -i mail.example.com }
+server     mail 192.168.0.1:465 weight 0
+use-server imap if { req.ssl_sni -i imap.example.com }
 server     imap 192.168.0.1:993 weight 0
 <span class="comment"># all the rest is forwarded to this server</span>
 server  default 192.168.0.2:443 check
@@ -16362,17 +16361,17 @@ be placed first. The pattern matching method must be one of the following :
 For example, to quickly detect the presence of cookie &quot;JSESSIONID&quot; in an HTTP
 request, it is possible to do :
 
-    acl jsess_present cook(JSESSIONID) -m found
+    acl jsess_present req.cook(JSESSIONID) -m found
 
 In order to apply a regular expression on the 500 first bytes of data in the
 buffer, one would use the following acl :
 
-    acl script_tag payload(0,500) -m reg -i &lt;script&gt;
+    acl script_tag req.payload(0,500) -m reg -i &lt;script&gt;
 
 On systems where the regex library is much slower when using &quot;-i&quot;, it is
 possible to convert the sample to lowercase before matching, like this :
 
-    acl script_tag payload(0,500),lower -m reg &lt;script&gt;
+    acl script_tag req.payload(0,500),lower -m reg &lt;script&gt;
 
 All ACL-specific criteria imply a default matching method. Most often, these
 criteria are composed by concatenating the name of the original sample fetch
@@ -16474,11 +16473,11 @@ Available operators for integer matching are :
 
 For instance, the following ACL matches any negative Content-Length header :
 
-  acl negative-length hdr_val(content-length) lt 0
+  acl negative-length req.hdr_val(content-length) lt 0
 
 This one matches SSL versions between 3.0 and 3.1 (inclusive) :
 
-  acl sslv3 req_ssl_ver 3:3.1
+  acl sslv3 req.ssl_ver 3:3.1
 </pre></div>
 <a class="anchor" id="7.1.3" name="7.1.3"></a>
 <h3 id="chapter-7.1.3" data-target="7.1.3"><small><a class="small" href="#7.1.3">7.1.3.</a></small> Matching strings</h3>
@@ -16543,7 +16542,7 @@ digits may be used upper or lower case.
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
 <code><span class="comment"># match &quot;Hello\n&quot; in the input stream (\x48 \x65 \x6c \x6c \x6f \x0a)</span>
-acl hello payload(0,6) -m bin 48656c6c6f0a
+acl hello req.payload(0,6) -m bin 48656c6c6f0a
 </code></pre>
 </div></div>
 <a class="anchor" id="7.1.6" name="7.1.6"></a>
@@ -16611,7 +16610,7 @@ For instance, to block HTTP requests to the &quot;*&quot; URL with methods other
 requests with a content-length greater than 0, and finally every request which
 is not either GET/HEAD/POST/OPTIONS !
 
-   acl missing_cl hdr_cnt(Content-length) eq 0
+   acl missing_cl req.hdr_cnt(Content-length) eq 0
    http-request deny if HTTP_URL_STAR !METH_OPTIONS || METH_POST missing_cl
    http-request deny if METH_GET HTTP_CONTENT
    http-request deny unless METH_GET or METH_POST or METH_OPTIONS
@@ -16636,12 +16635,12 @@ the braces must be seen as independent words). Example :
 
    The following rule :
 
-       acl missing_cl hdr_cnt(Content-length) eq 0
+       acl missing_cl req.hdr_cnt(Content-length) eq 0
        http-request deny if METH_POST missing_cl
 
    Can also be written that way :
 
-       http-request deny if METH_POST { hdr_cnt(Content-length) eq 0 }
+       http-request deny if METH_POST { req.hdr_cnt(Content-length) eq 0 }
 
 It is generally not recommended to use this construct because it&#x27;s a lot easier
 to leave errors in the configuration when written that way. However, for very
@@ -17604,7 +17603,7 @@ certain way.
 http-request add-header Via 1.1\ %[env(HOSTNAME)]
 
 <span class="comment"># reject cookie-less requests when the STOP environment variable is set</span>
-http-request deny if !{ cook(SESSIONID) -m found } { env(STOP) -m found }
+http-request deny if !{ req.cook(SESSIONID) -m found } { env(STOP) -m found }
 </code></pre>
 </div><a class="anchor" name="fe_conn"></a><a class="anchor" name="7-fe_conn"></a><a class="anchor" name="7.3.2-fe_conn"></a><a class="anchor" name="fe_conn (Using ACLs and fetching samples)"></a><a class="anchor" name="fe_conn (Fetching samples from internal states)"></a><div class="keyword"><b><a class="anchor" name="fe_conn"></a><a href="#7.3.2-fe_conn">fe_conn</a></b>(<span style="color: #008">[<span style="color: #080">&lt;frontend&gt;</span>]</span>) : integer</div><pre class="text">Returns the number of currently established connections on the frontend,
 possibly including the connection being evaluated. If no frontend name is
@@ -18455,7 +18454,7 @@ deciphered by haproxy. The result (when present) typically is a string
 matching the HTTPS host name (253 chars or less). The SSL library must have
 been built with support for TLS extensions enabled (check haproxy -vv).
 
-This fetch is different from &quot;<a href="#req_ssl_sni">req_ssl_sni</a>&quot; above in that it applies to the
+This fetch is different from &quot;<a href="#req.ssl_sni">req.ssl_sni</a>&quot; above in that it applies to the
 connection being deciphered by haproxy and not to SSL contents being blindly
 forwarded. See also &quot;ssl_fc_sni_end&quot; and &quot;ssl_fc_sni_reg&quot; below. This
 requires that the SSL library is built with support for TLS extensions
@@ -18498,15 +18497,15 @@ the the whole buffer from &lt;offset&gt; to the end is extracted. This can be us
 with ACLs in order to check for the presence of some content in a buffer at
 any location.
 
-ACL alternatives :
-  payload(&lt;offset&gt;,&lt;length&gt;) : hex binary match
+ACL derivatives :
+  req.payload(&lt;offset&gt;,&lt;length&gt;) : hex binary match
 </pre><a class="anchor" name="req.payload_lv"></a><a class="anchor" name="7-req.payload_lv"></a><a class="anchor" name="7.3.5-req.payload_lv"></a><a class="anchor" name="req.payload_lv (Using ACLs and fetching samples)"></a><a class="anchor" name="req.payload_lv (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.payload_lv"></a><a href="#7.3.5-req.payload_lv">req.payload_lv</a></b>(<span style="color: #080">&lt;offset1&gt;</span>,<span style="color: #080">&lt;length&gt;</span><span style="color: #008">[,<span style="color: #080">&lt;offset2&gt;</span>]</span>) : binary</div><pre class="text">This extracts a binary block whose size is specified at &lt;offset1&gt; for &lt;length&gt;
 bytes, and which starts at &lt;offset2&gt; if specified or just after the length in
 the request buffer. The &lt;offset2&gt; parameter also supports relative offsets if
 prepended with a &#x27;+&#x27; or &#x27;-&#x27; sign.
 
-ACL alternatives :
-  payload_lv(&lt;offset1&gt;,&lt;length&gt;[,&lt;offset2&gt;]) : hex binary match
+ACL derivatives :
+  req.payload_lv(&lt;offset1&gt;,&lt;length&gt;[,&lt;offset2&gt;]) : hex binary match
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -18542,7 +18541,7 @@ distribution of clients to backend servers than the hash used by &quot;balance
 rdp-cookie&quot;.
 
 ACL derivatives :
-  req_rdp_cookie([&lt;name&gt;]) : exact string match
+  req.rdp_cookie([&lt;name&gt;]) : exact string match
 </pre><div class="separator">
 <span class="label label-success">Example :</span>
 <pre class="prettyprint">
@@ -18561,14 +18560,14 @@ ACL derivatives :
     server srv1 1.1.1.1:3389
     server srv1 1.1.1.2:3389
 </code></pre>
-</div><div class="page-header"><b>See also :</b> &quot;balance rdp-cookie&quot;, &quot;<a href="#persist%20rdp-cookie">persist rdp-cookie</a>&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot; and the &quot;req_rdp_cookie&quot; ACL.</div>
+</div><div class="page-header"><b>See also :</b> &quot;balance rdp-cookie&quot;, &quot;<a href="#persist%20rdp-cookie">persist rdp-cookie</a>&quot;, &quot;<a href="#tcp-request">tcp-request</a>&quot; and the &quot;<a href="#req.rdp_cookie">req.rdp_cookie</a>&quot; ACL.</div>
 <a class="anchor" name="req.rdp_cookie_cnt"></a><a class="anchor" name="7-req.rdp_cookie_cnt"></a><a class="anchor" name="7.3.5-req.rdp_cookie_cnt"></a><a class="anchor" name="req.rdp_cookie_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="req.rdp_cookie_cnt (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.rdp_cookie_cnt"></a><a href="#7.3.5-req.rdp_cookie_cnt">req.rdp_cookie_cnt</a></b>(<span style="color: #008">[name]</span>) : integer</div><a class="anchor" name="rdp_cookie_cnt"></a><a class="anchor" name="7-rdp_cookie_cnt"></a><a class="anchor" name="7.3.5-rdp_cookie_cnt"></a><a class="anchor" name="rdp_cookie_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="rdp_cookie_cnt (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="rdp_cookie_cnt"></a><a href="#7.3.5-rdp_cookie_cnt">rdp_cookie_cnt</a></b>(<span style="color: #008">[name]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Tries to parse the request buffer as RDP protocol, then returns an integer
 corresponding to the number of RDP cookies found. If an optional cookie name
 is passed, only cookies matching this name are considered. This is mostly
 used in ACL.
 
 ACL derivatives :
-  req_rdp_cookie_cnt([&lt;name&gt;]) : integer match
+  req.rdp_cookie_cnt([&lt;name&gt;]) : integer match
 </pre><a class="anchor" name="req.ssl_alpn"></a><a class="anchor" name="7-req.ssl_alpn"></a><a class="anchor" name="7.3.5-req.ssl_alpn"></a><a class="anchor" name="req.ssl_alpn (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_alpn (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_alpn"></a><a href="#7.3.5-req.ssl_alpn">req.ssl_alpn</a></b> : string</div><pre class="text">Returns a string containing the values of the Application-Layer Protocol
 Negotiation (ALPN) TLS extension (RFC7301), sent by the client within the SSL
 ClientHello message. Note that this only applies to raw contents found in the
@@ -18581,7 +18580,7 @@ client, like in the example below. See also &quot;<a href="#ssl_fc_alpn">ssl_fc_
 <pre class="prettyprint">
 <code><span class="comment"># Wait for a client hello for at most 5 seconds</span>
 tcp-request inspect-delay 5s
-tcp-request content accept if { req_ssl_hello_type 1 }
+tcp-request content accept if { req.ssl_hello_type 1 }
 use_backend bk_acme if { req.ssl_alpn acme-tls/1 }
 default_backend bk_default
 </code></pre>
@@ -18604,23 +18603,25 @@ by a client in a TLS stream passing through the request buffer if the buffer
 contains data that parse as a complete SSL (v3 or superior) client hello
 message. Note that this only applies to raw contents found in the request
 buffer and not to contents deciphered via an SSL data layer, so this will not
-work with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bind<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bind%20%28Peers%29">Peers</a></li><li><a href="#bind%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; lines having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option. SNI normally contains the
-name of the host the client tries to connect to (for recent browsers). SNI is
-useful for allowing or denying access to certain hosts when SSL/TLS is used
-by the client. This test was designed to be used with TCP request content
-inspection. If content switching is needed, it is recommended to first wait
-for a complete client hello (type 1), like in the example below. See also
-&quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot;.
+work with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">bind<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#bind%20%28Peers%29">Peers</a></li><li><a href="#bind%20%28Alphabetically%20sorted%20keywords%20reference%29">Alphabetically sorted keywords reference</a></li></ul></span>&quot; lines having the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ssl<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#ssl%20%28Bind%20options%29">Bind options</a></li><li><a href="#ssl%20%28Server%20and%20default-server%20options%29">Server and default-server options</a></li></ul></span>&quot; option. This will only work for actual
+implicit TLS based protocols like HTTPS (443), IMAPS (993), SMTPS (465),
+however it will not work for explicit TLS based protocols, like SMTP (25/587)
+or IMAP (143). SNI normally contains the name of the host the client tries to
+connect to (for recent browsers). SNI is useful for allowing or denying access
+to certain hosts when SSL/TLS is used by the client. This test was designed to
+be used with TCP request content inspection. If content switching is needed,
+it is recommended to first wait for a complete client hello (type 1), like in
+the example below. See also &quot;<a href="#ssl_fc_sni">ssl_fc_sni</a>&quot;.
 
 ACL derivatives :
-  req_ssl_sni : exact string match
+  req.ssl_sni : exact string match
 </pre><div class="separator">
 <span class="label label-success">Examples :</span>
 <pre class="prettyprint">
 <code><span class="comment"># Wait for a client hello for at most 5 seconds</span>
 tcp-request inspect-delay 5s
-tcp-request content accept if { req_ssl_hello_type 1 }
-use_backend bk_allow if { req_ssl_sni -f allowed_sites }
+tcp-request content accept if { req.ssl_hello_type 1 }
+use_backend bk_allow if { req.ssl_sni -f allowed_sites }
 default_backend bk_sorry_page
 </code></pre>
 </div><a class="anchor" name="req.ssl_st_ext"></a><a class="anchor" name="7-req.ssl_st_ext"></a><a class="anchor" name="7.3.5-req.ssl_st_ext"></a><a class="anchor" name="req.ssl_st_ext (Using ACLs and fetching samples)"></a><a class="anchor" name="req.ssl_st_ext (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="req.ssl_st_ext"></a><a href="#7.3.5-req.ssl_st_ext">req.ssl_st_ext</a></b> : integer</div><pre class="text">Returns 0 if the client didn&#x27;t send a SessionTicket TLS Extension (RFC5077)
@@ -18643,7 +18644,7 @@ matches against a decimal notation in the form MAJOR.MINOR (e.g. 3.1). This
 fetch is mostly used in ACL.
 
 ACL derivatives :
-  req_ssl_ver : decimal match
+  req.ssl_ver : decimal match
 </pre><a class="anchor" name="res.len"></a><a class="anchor" name="7-res.len"></a><a class="anchor" name="7.3.5-res.len"></a><a class="anchor" name="res.len (Using ACLs and fetching samples)"></a><a class="anchor" name="res.len (Fetching samples from buffer contents (Layer 6))"></a><div class="keyword"><b><a class="anchor" name="res.len"></a><a href="#7.3.5-res.len">res.len</a></b> : integer</div><pre class="text">Returns an integer value corresponding to the number of bytes present in the
 response buffer. This is mostly used in ACL. It is important to understand
 that this test does not return false as long as the buffer is changing. This
@@ -18788,14 +18789,14 @@ well return an empty value if it is present. Use the &quot;found&quot; match to 
 presence. Use the res.cook() variant for response cookies sent by the server.
 
 ACL derivatives :
-  cook([&lt;name&gt;])     : exact string match
-  cook_beg([&lt;name&gt;]) : prefix match
-  cook_dir([&lt;name&gt;]) : subdir match
-  cook_dom([&lt;name&gt;]) : domain match
-  cook_end([&lt;name&gt;]) : suffix match
-  cook_len([&lt;name&gt;]) : length match
-  cook_reg([&lt;name&gt;]) : regex match
-  cook_sub([&lt;name&gt;]) : substring match
+  req.cook([&lt;name&gt;])     : exact string match
+  req.cook_beg([&lt;name&gt;]) : prefix match
+  req.cook_dir([&lt;name&gt;]) : subdir match
+  req.cook_dom([&lt;name&gt;]) : domain match
+  req.cook_end([&lt;name&gt;]) : suffix match
+  req.cook_len([&lt;name&gt;]) : length match
+  req.cook_reg([&lt;name&gt;]) : regex match
+  req.cook_sub([&lt;name&gt;]) : substring match
 </pre><a class="anchor" name="req.cook_cnt"></a><a class="anchor" name="7-req.cook_cnt"></a><a class="anchor" name="7.3.6-req.cook_cnt"></a><a class="anchor" name="req.cook_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="req.cook_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.cook_cnt"></a><a href="#7.3.6-req.cook_cnt">req.cook_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="cook_cnt"></a><a class="anchor" name="7-cook_cnt"></a><a class="anchor" name="7.3.6-cook_cnt"></a><a class="anchor" name="cook_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="cook_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="cook_cnt"></a><a href="#7.3.6-cook_cnt">cook_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value representing the number of occurrences of the cookie
 &lt;name&gt; in the request, or all cookies if &lt;name&gt; is not specified.
 </pre><a class="anchor" name="req.cook_val"></a><a class="anchor" name="7-req.cook_val"></a><a class="anchor" name="7.3.6-req.cook_val"></a><a class="anchor" name="req.cook_val (Using ACLs and fetching samples)"></a><a class="anchor" name="req.cook_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="req.cook_val"></a><a href="#7.3.6-req.cook_val">req.cook_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="cook_val"></a><a class="anchor" name="7-cook_val"></a><a class="anchor" name="7.3.6-cook_val"></a><a class="anchor" name="cook_val (Using ACLs and fetching samples)"></a><a class="anchor" name="cook_val (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="cook_val"></a><a href="#7.3.6-cook_val">cook_val</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of the cookie name &lt;name&gt; on a &quot;Cookie&quot;
@@ -18961,7 +18962,7 @@ be useful for logs, but is mostly there for ACL. Some predefined ACL already
 check for versions 1.0 and 1.1.
 
 ACL derivatives :
-  req_ver : exact string match
+  req.ver : exact string match
 </pre><a class="anchor" name="res.comp"></a><a class="anchor" name="7-res.comp"></a><a class="anchor" name="7.3.6-res.comp"></a><a class="anchor" name="res.comp (Using ACLs and fetching samples)"></a><a class="anchor" name="res.comp (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.comp"></a><a href="#7.3.6-res.comp">res.comp</a></b> : boolean</div><pre class="text">Returns the boolean &quot;true&quot; value if the response has been compressed by
 HAProxy, otherwise returns boolean &quot;false&quot;. This may be used to add
 information in the logs.
@@ -18973,7 +18974,7 @@ header line from the response, and returns its value as string. If no name is
 specified, the first cookie value is returned.
 
 ACL derivatives :
-  scook([&lt;name&gt;] : exact string match
+  res.scook([&lt;name&gt;] : exact string match
 </pre><a class="anchor" name="res.cook_cnt"></a><a class="anchor" name="7-res.cook_cnt"></a><a class="anchor" name="7.3.6-res.cook_cnt"></a><a class="anchor" name="res.cook_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="res.cook_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.cook_cnt"></a><a href="#7.3.6-res.cook_cnt">res.cook_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="scook_cnt"></a><a class="anchor" name="7-scook_cnt"></a><a class="anchor" name="7.3.6-scook_cnt"></a><a class="anchor" name="scook_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="scook_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="scook_cnt"></a><a href="#7.3.6-scook_cnt">scook_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value representing the number of occurrences of the cookie
 &lt;name&gt; in the response, or all cookies if &lt;name&gt; is not specified. This is
 mostly useful when combined with ACLs to detect suspicious responses.
@@ -19004,14 +19005,14 @@ any comma as a delimiter for distinct values. If this is not desired, the
 res.fhdr() fetch should be used instead.
 
 ACL derivatives :
-  shdr([&lt;name&gt;[,&lt;occ&gt;]])     : exact string match
-  shdr_beg([&lt;name&gt;[,&lt;occ&gt;]]) : prefix match
-  shdr_dir([&lt;name&gt;[,&lt;occ&gt;]]) : subdir match
-  shdr_dom([&lt;name&gt;[,&lt;occ&gt;]]) : domain match
-  shdr_end([&lt;name&gt;[,&lt;occ&gt;]]) : suffix match
-  shdr_len([&lt;name&gt;[,&lt;occ&gt;]]) : length match
-  shdr_reg([&lt;name&gt;[,&lt;occ&gt;]]) : regex match
-  shdr_sub([&lt;name&gt;[,&lt;occ&gt;]]) : substring match
+  res.hdr([&lt;name&gt;[,&lt;occ&gt;]])     : exact string match
+  res.hdr_beg([&lt;name&gt;[,&lt;occ&gt;]]) : prefix match
+  res.hdr_dir([&lt;name&gt;[,&lt;occ&gt;]]) : subdir match
+  res.hdr_dom([&lt;name&gt;[,&lt;occ&gt;]]) : domain match
+  res.hdr_end([&lt;name&gt;[,&lt;occ&gt;]]) : suffix match
+  res.hdr_len([&lt;name&gt;[,&lt;occ&gt;]]) : length match
+  res.hdr_reg([&lt;name&gt;[,&lt;occ&gt;]]) : regex match
+  res.hdr_sub([&lt;name&gt;[,&lt;occ&gt;]]) : substring match
 </pre><a class="anchor" name="res.hdr_cnt"></a><a class="anchor" name="7-res.hdr_cnt"></a><a class="anchor" name="7.3.6-res.hdr_cnt"></a><a class="anchor" name="res.hdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="res.hdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="res.hdr_cnt"></a><a href="#7.3.6-res.hdr_cnt">res.hdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer</div><a class="anchor" name="shdr_cnt"></a><a class="anchor" name="7-shdr_cnt"></a><a class="anchor" name="7.3.6-shdr_cnt"></a><a class="anchor" name="shdr_cnt (Using ACLs and fetching samples)"></a><a class="anchor" name="shdr_cnt (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="shdr_cnt"></a><a href="#7.3.6-shdr_cnt">shdr_cnt</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : integer <span class="label label-warning">(deprecated)</span></div><pre class="text">Returns an integer value representing the number of occurrences of response
 header field name &lt;name&gt;, or the total number of header fields if &lt;name&gt; is
 not specified. The function considers any comma as a delimiter for distinct
@@ -19037,7 +19038,7 @@ useful to learn some data into a stick table.
 can be useful for logs, but is mostly there for ACL.
 
 ACL derivatives :
-  resp_ver : exact string match
+  resp.ver : exact string match
 </pre><a class="anchor" name="set-cookie"></a><a class="anchor" name="7-set-cookie"></a><a class="anchor" name="7.3.6-set-cookie"></a><a class="anchor" name="set-cookie (Using ACLs and fetching samples)"></a><a class="anchor" name="set-cookie (Fetching HTTP samples (Layer 7))"></a><div class="keyword"><b><a class="anchor" name="set-cookie"></a><a href="#7.3.6-set-cookie">set-cookie</a></b>(<span style="color: #008">[<span style="color: #080">&lt;name&gt;</span>]</span>) : string <span class="label label-warning">(deprecated)</span></div><pre class="text">This extracts the last occurrence of the cookie name &lt;name&gt; on a &quot;Set-Cookie&quot;
 header line from the response and uses the corresponding value to match. This
 can be comparable to what &quot;appsession&quot; did with default options, but with
@@ -20825,8 +20826,8 @@ cache foobar
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.0.27 &ndash; Configuration Manual<br>
-							<small>2022/01/26, willy tarreau</small>
+							HAProxy 2.0.28 &ndash; Configuration Manual<br>
+							<small>2022/03/14, willy tarreau</small>
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -20929,7 +20930,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.27', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.0.28', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();

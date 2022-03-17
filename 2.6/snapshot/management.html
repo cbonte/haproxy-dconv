@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>HAProxy version 2.6-dev0-332 - Management Guide</title>
+		<title>HAProxy version 2.6-dev3-18 - Management Guide</title>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
 		<link href="../../css/page.css?0.4.2-12" rel="stylesheet" />
@@ -174,6 +174,19 @@
 			
 				
 				<tr>
+					<td><small>9.4.1.</small></td>
+					<td>
+							<div class="tab">
+							<div class="tab">
+							<a href="#9.4.1">Master CLI commands</a>
+							</div>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
 					<td><br><b><small>10.</small></b></td>
 					<td>
 							<a href="#10"><br><b>Tricks for easier configuration management</b></a>
@@ -321,9 +334,13 @@
 							
 							<a class="list-group-item" href="#enable server">enable server</a>
 							
-							<a class="list-group-item" href="#experimental-mode">experimental-mode</a>
+							<a class="list-group-item" href="#experimental-mode (Unix Socket commands)">experimental-mode (Unix Socket commands)</a>
 							
-							<a class="list-group-item" href="#expert-mode">expert-mode</a>
+							<a class="list-group-item" href="#experimental-mode (Master CLI)">experimental-mode (Master CLI)</a>
+							
+							<a class="list-group-item" href="#expert-mode (Unix Socket commands)">expert-mode (Unix Socket commands)</a>
+							
+							<a class="list-group-item" href="#expert-mode (Master CLI)">expert-mode (Master CLI)</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-G"><h4>G</h4>
@@ -344,6 +361,11 @@
 							<a class="list-group-item" href="#help">help</a>
 							
 							<a class="list-group-item" href="#httpclient">httpclient</a>
+							
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-M"><h4>M</h4>
+								
+							<a class="list-group-item" href="#mcli-debug-mode">mcli-debug-mode</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-N"><h4>N</h4>
@@ -372,12 +394,19 @@
 							
 							<a class="list-group-item" href="#prepare map">prepare map</a>
 							
-							<a class="list-group-item" href="#prompt">prompt</a>
+							<a class="list-group-item" href="#prompt (Unix Socket commands)">prompt (Unix Socket commands)</a>
+							
+							<a class="list-group-item" href="#prompt (Master CLI)">prompt (Master CLI)</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-Q"><h4>Q</h4>
 								
 							<a class="list-group-item" href="#quit">quit</a>
+							
+                                                                </div> <!-- /letter -->
+								<div class="letter" id="letter-R"><h4>R</h4>
+								
+							<a class="list-group-item" href="#reload">reload</a>
 							
                                                                 </div> <!-- /letter -->
 								<div class="letter" id="letter-S"><h4>S</h4>
@@ -478,6 +507,8 @@
 							
 							<a class="list-group-item" href="#show pools">show pools</a>
 							
+							<a class="list-group-item" href="#show proc">show proc</a>
+							
 							<a class="list-group-item" href="#show profiling">show profiling</a>
 							
 							<a class="list-group-item" href="#show resolvers">show resolvers</a>
@@ -557,7 +588,7 @@
 					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
 				</p>
 				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/01/27</b></small>
+					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>0.4.2-12</b> on <b>2022/03/17</b></small>
 				</p>
 			</div>
 			<!-- /.sidebar -->
@@ -568,7 +599,7 @@
 						<div class="text-center">
                             <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="../../img/HAProxyCommunityEdition_60px.png?0.4.2-12" /></a></h1>
 							<h2>Management Guide</h2>
-							<p><strong>version 2.6-dev0-332</strong></p>
+							<p><strong>version 2.6-dev3-18</strong></p>
 							<p>
 								<br>
 								
@@ -709,6 +740,19 @@
 					<td>
 							<div class="tab">
 							<a href="#9.4">Master CLI</a>
+							</div>
+					<td>
+				</tr>
+				
+			
+				
+				<tr>
+					<td><small>9.4.1.</small></td>
+					<td>
+							<div class="tab">
+							<div class="tab">
+							<a href="#9.4.1">Master CLI commands</a>
+							</div>
 							</div>
 					<td>
 				</tr>
@@ -935,7 +979,8 @@ list of options is :
 
        ./haproxy -W -q -c -dL -f foo.cfg | tar -T - -hzcf archive.tgz
 
-  -dM[&lt;byte&gt;] : forces memory poisoning, which means that each and every
+  -dM[&lt;byte&gt;[,]][help|options,...] : forces memory poisoning, and/or changes
+    memory other debugging options. Memory poisonning means that each and every
     memory region allocated with malloc() or pool_alloc() will be filled with
     &lt;byte&gt; before being passed to the caller. When &lt;byte&gt; is not specified, it
     defaults to 0x50 (&#x27;P&#x27;). While this slightly slows down operations, it is
@@ -943,7 +988,74 @@ list of options is :
     the code that cause random crashes. Note that -dM0 has the effect of
     turning any malloc() into a calloc(). In any case if a bug appears or
     disappears when using this option it means there is a bug in haproxy, so
-    please report it.
+    please report it. A number of other options are available either alone or
+    after a comma following the byte. The special option &quot;<a href="#help">help</a>&quot; will list the
+    currently supported options and their current value. Each debugging option
+    may be forced on or off. The most optimal options are usually chosen at
+    build time based on the operating system and do not need to be adjusted,
+    unless suggested by a developer. Supported debugging options include
+    (set/clear):
+      - fail / no-fail:
+        This enables randomly failing memory allocations, in conjunction with
+        the global &quot;tune.fail-alloc&quot; setting. This is used to detect missing
+        error checks in the code.
+
+      - no-merge / merge:
+        By default, pools of very similar sizes are merged, resulting in more
+        efficiency, but this complicates the analysis of certain memory dumps.
+        This option allows to disable this mechanism, and may slightly increase
+        the memory usage.
+
+      - cold-first / hot-first:
+        In order to optimize the CPU cache hit ratio, by default the most
+        recently released objects (&quot;hot&quot;) are recycled for new allocations.
+        But doing so also complicates analysis of memory dumps and may hide
+        use-after-free bugs. This option allows to instead pick the coldest
+        objects first, which may result in a slight increase of CPU usage.
+
+      - integrity / no-integrity:
+        When this option is enabled, memory integrity checks are enabled on
+        the allocated area to verify that it hasn&#x27;t been modified since it was
+        last released. This works best with &quot;no-merge&quot;, &quot;cold-first&quot; and &quot;tag&quot;.
+        Enabling this option will slightly increase the CPU usage.
+
+      - no-global / global:
+        Depending on the operating system, a process-wide global memory cache
+        may be enabled if it is estimated that the standard allocator is too
+        slow or inefficient with threads. This option allows to forcefully
+        disable it or enable it. Disabling it may result in a CPU usage
+        increase with inefficient allocators. Enabling it may result in a
+        higher memory usage with efficient allocators.
+
+      - no-cache / cache:
+        Each thread uses a very fast local object cache for allocations, which
+        is always enabled by default. This option allows to disable it. Since
+        the global cache also passes via the local caches, this will
+        effectively result in disabling all caches and allocating directly from
+        the default allocator. This may result in a significant increase of CPU
+        usage, but may also result in small memory savings on tiny systems.
+
+      - caller / no-caller:
+        Enabling this option reserves some extra space in each allocated object
+        to store the address of the last caller that allocated or released it.
+        This helps developers go back in time when analysing memory dumps and
+        to guess how something unexpected happened.
+
+      - tag / no-tag:
+        Enabling this option reserves some extra space in each allocated object
+        to store a tag that allows to detect bugs such as double-free, freeing
+        an invalid object, and buffer overflows. It offers much stronger
+        reliability guarantees at the expense of 4 or 8 extra bytes per
+        allocation. It usually is the first step to detect memory corruption.
+
+      - poison / no-poison:
+        Enabling this option will fill allocated objects with a fixed pattern
+        that will make sure that some accidental values such as 0 will not be
+        present if a newly added field was mistakenly forgotten in an
+        initialization routine. Such bugs tend to rarely reproduce, especially
+        when pools are not merged. This is normally enabled by directly passing
+        the byte&#x27;s value to -dM but using this option allows to disable/enable
+        use of a previously set value.
 
   -dS : disable use of the splice() system call. It is equivalent to the
     &quot;global&quot; section&#x27;s &quot;nosplice&quot; keyword. This may be used when splice() is
@@ -1179,7 +1291,7 @@ from listening ports, but continue to process existing connections until they
 close. Once the last connection is closed, the process leaves.
 
 The hard stop method is used for the &quot;stop&quot; or &quot;restart&quot; actions of the service
-management script. The graceful stop is used for the &quot;reload&quot; action which
+management script. The graceful stop is used for the &quot;<a href="#reload">reload</a>&quot; action which
 tries to seamlessly reload a new configuration in a new process.
 
 Both of these signals may be sent by the new haproxy process itself during a
@@ -2060,13 +2172,13 @@ must be preceded by a backslash (&#x27;\&#x27;).
 
 The interactive mode displays a prompt (&#x27;&gt;&#x27;) and waits for commands to be
 entered on the line, then processes them, and displays the prompt again to wait
-for a new command. This mode is entered via the &quot;<a href="#prompt">prompt</a>&quot; command which must be
+for a new command. This mode is entered via the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">prompt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#prompt%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#prompt%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; command which must be
 sent on the first line in non-interactive mode. The mode is a flip switch, if
-&quot;<a href="#prompt">prompt</a>&quot; is sent in interactive mode, it is disabled and the connection closes
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">prompt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#prompt%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#prompt%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; is sent in interactive mode, it is disabled and the connection closes
 after processing the last command of the same line.
 
 For this reason, when debugging by hand, it&#x27;s quite common to start with the
-&quot;<a href="#prompt">prompt</a>&quot; command :
+&quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">prompt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#prompt%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#prompt%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; command :
 
    # socat /var/run/haproxy readline
    prompt
@@ -2153,9 +2265,7 @@ prompt
 
 &gt;
 </code></pre>
-</div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add server"></a><a class="anchor" name="9-add server"></a><a class="anchor" name="9.3-add server"></a><a class="anchor" name="add server (Statistics and monitoring)"></a><a class="anchor" name="add server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add server"></a><a href="#9.3-add%20server">add server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Instantiate a new server attached to the backend &lt;backend&gt;. Only supported on
-a CLI connection running in experimental mode (see &quot;experimental-mode on&quot;).
-This method is still in development and may change in the future.
+</div><a class="anchor" name="add"></a><a class="anchor" name="9-add"></a><a class="anchor" name="9.3-add"></a><a class="anchor" name="add (Statistics and monitoring)"></a><a class="anchor" name="add (Unix Socket commands)"></a><a class="anchor" name="add server"></a><a class="anchor" name="9-add server"></a><a class="anchor" name="9.3-add server"></a><a class="anchor" name="add server (Statistics and monitoring)"></a><a class="anchor" name="add server (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="add server"></a><a href="#9.3-add%20server">add server</a></b> <span style="color: #080">&lt;backend&gt;</span>/<span style="color: #080">&lt;server&gt;</span> <span style="color: #008">[args]</span>*</div><pre class="text">Instantiate a new server attached to the backend &lt;backend&gt;.
 
 The &lt;server&gt; name must not be already used in the backend. A special
 restriction is put on the backend which must used a dynamic load-balancing
@@ -2567,7 +2677,16 @@ it off.
 The experimental mode is used to access to extra features still in
 development. These features are currently not stable and should be used with
 care. They may be subject to breaking changes across versions.
-</pre><a class="anchor" name="expert-mode"></a><a class="anchor" name="9-expert-mode"></a><a class="anchor" name="9.3-expert-mode"></a><a class="anchor" name="expert-mode (Statistics and monitoring)"></a><a class="anchor" name="expert-mode (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="expert-mode"></a><a href="#9.3-expert-mode">expert-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">This command is similar to experimental-mode but is used to toggle the
+
+When used from the master CLI, this command shouldn&#x27;t be prefixed, as it will
+set the mode for any worker when connecting to its CLI.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>echo &quot;@1; experimental-mode on; &lt;experimental_cmd&gt;...&quot; | socat /var/run/haproxy.master -
+echo &quot;experimental-mode on; @1 &lt;experimental_cmd&gt;...&quot; | socat /var/run/haproxy.master -
+</code></pre>
+</div><a class="anchor" name="expert-mode"></a><a class="anchor" name="9-expert-mode"></a><a class="anchor" name="9.3-expert-mode"></a><a class="anchor" name="expert-mode (Statistics and monitoring)"></a><a class="anchor" name="expert-mode (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="expert-mode"></a><a href="#9.3-expert-mode">expert-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">This command is similar to experimental-mode but is used to toggle the
 expert mode.
 
 The expert mode enables displaying of expert commands that can be extremely
@@ -2577,7 +2696,16 @@ likely lead to a process crash. Do not use this option without being invited
 to do so. Note that this command is purposely not listed in the help message.
 This command is only accessible in admin level. Changing to another level
 automatically resets the expert mode.
-</pre><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get map"></a><a class="anchor" name="9-get map"></a><a class="anchor" name="9.3-get map"></a><a class="anchor" name="get map (Statistics and monitoring)"></a><a class="anchor" name="get map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get map"></a><a href="#9.3-get%20map">get map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get acl"></a><a class="anchor" name="9-get acl"></a><a class="anchor" name="9.3-get acl"></a><a class="anchor" name="get acl (Statistics and monitoring)"></a><a class="anchor" name="get acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get acl"></a><a href="#9.3-get%20acl">get acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Lookup the value &lt;value&gt; in the map &lt;map&gt; or in the ACL &lt;acl&gt;. &lt;map&gt; or &lt;acl&gt;
+
+When used from the master CLI, this command shouldn&#x27;t be prefixed, as it will
+set the mode for any worker when connecting to its CLI.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>echo &quot;@1; expert-mode on; debug dev exit 1&quot; | socat /var/run/haproxy.master -
+echo &quot;expert-mode on; @1 debug dev exit 1&quot; | socat /var/run/haproxy.master -
+</code></pre>
+</div><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get map"></a><a class="anchor" name="9-get map"></a><a class="anchor" name="9.3-get map"></a><a class="anchor" name="get map (Statistics and monitoring)"></a><a class="anchor" name="get map (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get map"></a><a href="#9.3-get%20map">get map</a></b> <span style="color: #080">&lt;map&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><a class="anchor" name="get"></a><a class="anchor" name="9-get"></a><a class="anchor" name="9.3-get"></a><a class="anchor" name="get (Statistics and monitoring)"></a><a class="anchor" name="get (Unix Socket commands)"></a><a class="anchor" name="get acl"></a><a class="anchor" name="9-get acl"></a><a class="anchor" name="9.3-get acl"></a><a class="anchor" name="get acl (Statistics and monitoring)"></a><a class="anchor" name="get acl (Unix Socket commands)"></a><div class="keyword"><b><a class="anchor" name="get acl"></a><a href="#9.3-get%20acl">get acl</a></b> <span style="color: #080">&lt;acl&gt;</span> <span style="color: #080">&lt;value&gt;</span></div><pre class="text">Lookup the value &lt;value&gt; in the map &lt;map&gt; or in the ACL &lt;acl&gt;. &lt;map&gt; or &lt;acl&gt;
 are the #&lt;id&gt; or the &lt;file&gt; returned by &quot;<a href="#show%20map">show map</a>&quot; or &quot;<a href="#show%20acl">show acl</a>&quot;. This command
 returns all the matching patterns associated with this map. This is useful for
 debugging maps and ACLs. The output format is composed by one line par
@@ -4072,40 +4200,17 @@ the -S option. This option also takes bind options separated by commas.
 <span class="comment"># haproxy -Ws -S /tmp/master-socket,uid,1000,gid,1000,mode,600 -f test1.cfg</span>
 <span class="comment"># haproxy -W -S /tmp/master-socket,level,user -f test1.cfg</span>
 </code></pre>
-</div><pre class="text">The master CLI introduces a &#x27;show proc&#x27; command to surpervise the
-processes:
-</pre><div class="separator">
-<span class="label label-success">Example:</span>
-<pre class="prettyprint">
-<code>$ echo &<span class="comment">#x27;show proc&#x27; | socat /var/run/haproxy-master.sock -</span>
-<span class="comment">#&lt;PID&gt;          &lt;type&gt;          &lt;reloads&gt;       &lt;uptime&gt;        &lt;version&gt;</span>
-1162            master          5 [failed: 0]   0d00h02m07s     2.5-dev13
-<span class="comment"># workers</span>
-1271            worker          1               0d00h00m00s     2.5-dev13
-<span class="comment"># old workers</span>
-1233            worker          3               0d00h00m43s     2.0-dev3-6019f6-289
-<span class="comment"># programs</span>
-1244            foo             0               0d00h00m00s     -
-1255            bar             0               0d00h00m00s     -
-</code></pre>
-</div><pre class="text">In this example, the master has been reloaded 5 times but one of the old
-worker is still running and survived 3 reloads. You could access the CLI of
-this worker to understand what&#x27;s going on.
+</div></div>
+<a class="anchor" id="9.4" name="9.4"></a>
+<h2 id="chapter-9.4" data-target="9.4"><small><a class="small" href="#9.4">9.4.</a></small> 1 Master CLI commands</h2>
+<div><pre class="text">@&lt;[!]pid&gt;
+  The master CLI uses a special prefix notation to access the multiple
+  processes. This notation is easily identifiable as it begins by a @.
 
-When the prompt is enabled (via the &quot;<a href="#prompt">prompt</a>&quot; command), the context the CLI is
-working on is displayed in the prompt. The master is identified by the &quot;master&quot;
-string, and other processes are identified with their PID. In case the last
-reload failed, the master prompt will be changed to &quot;master[ReloadFailed]&gt;&quot; so
-that it becomes visible that the process is still running on the previous
-configuration and that the new configuration is not operational.
-
-The master CLI uses a special prefix notation to access the multiple
-processes. This notation is easily identifiable as it begins by a @.
-
-A @ prefix can be followed by a relative process number or by an exclamation
-point and a PID. (e.g. @1 or @!1271). A @ alone could be use to specify the
-master. Leaving processes are only accessible with the PID as relative process
-number are only usable with the current processes.
+  A @ prefix can be followed by a relative process number or by an exclamation
+  point and a PID. (e.g. @1 or @!1271). A @ alone could be use to specify the
+  master. Leaving processes are only accessible with the PID as relative process
+  number are only usable with the current processes.
 </pre><div class="separator">
 <span class="label label-success">Examples:</span>
 <pre class="prettyprint">
@@ -4142,15 +4247,70 @@ master&gt;
 $ echo &<span class="comment">#x27;@1; show info; show stat; @2; show info; show stat&#x27; | socat /var/run/haproxy-master.sock -</span>
 [...]
 </code></pre>
-</div><pre class="text">You can also reload the HAProxy master process with the &quot;reload&quot; command which
+</div><a class="anchor" name="expert-mode"></a><a class="anchor" name="9-expert-mode"></a><a class="anchor" name="9.4-expert-mode"></a><a class="anchor" name="expert-mode (Statistics and monitoring)"></a><a class="anchor" name="expert-mode (Master CLI)"></a><div class="keyword"><b><a class="anchor" name="expert-mode"></a><a href="#9.4-expert-mode">expert-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">This command activates the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">expert-mode<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#expert-mode%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#expert-mode%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; for every worker accessed from the
+master CLI. Combined with &quot;<a href="#mcli-debug-mode">mcli-debug-mode</a>&quot; it also activates the command on
+the master. Display the flag &quot;e&quot; in the master CLI prompt.
+
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">expert-mode<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#expert-mode%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#expert-mode%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; in Section 9.3 and &quot;<a href="#mcli-debug-mode">mcli-debug-mode</a>&quot; in 9.4.1.
+</pre><a class="anchor" name="experimental-mode"></a><a class="anchor" name="9-experimental-mode"></a><a class="anchor" name="9.4-experimental-mode"></a><a class="anchor" name="experimental-mode (Statistics and monitoring)"></a><a class="anchor" name="experimental-mode (Master CLI)"></a><div class="keyword"><b><a class="anchor" name="experimental-mode"></a><a href="#9.4-experimental-mode">experimental-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">This command activates the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">experimental-mode<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#experimental-mode%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#experimental-mode%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; for every worker accessed from
+the master CLI. Combined with &quot;<a href="#mcli-debug-mode">mcli-debug-mode</a>&quot; it also activates the command on
+the master. Display the flag &quot;x&quot; in the master CLI prompt.
+
+See also &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">experimental-mode<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#experimental-mode%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#experimental-mode%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; in Section 9.3 and &quot;<a href="#mcli-debug-mode">mcli-debug-mode</a>&quot; in 9.4.1.
+</pre><a class="anchor" name="mcli-debug-mode"></a><a class="anchor" name="9-mcli-debug-mode"></a><a class="anchor" name="9.4-mcli-debug-mode"></a><a class="anchor" name="mcli-debug-mode (Statistics and monitoring)"></a><a class="anchor" name="mcli-debug-mode (Master CLI)"></a><div class="keyword"><b><a class="anchor" name="mcli-debug-mode"></a><a href="#9.4-mcli-debug-mode">mcli-debug-mode</a></b> <span style="color: #008">[on|off]</span></div><pre class="text">This keyword allows a special mode in the master CLI which enables every
+keywords that were meant for a worker CLI on the master CLI, allowing to debug
+the master process. Once activated, you list the new available keywords with
+&quot;<a href="#help">help</a>&quot;. Combined with &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">experimental-mode<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#experimental-mode%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#experimental-mode%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; or &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">expert-mode<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#expert-mode%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#expert-mode%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; it enables even
+more keywords. Display the flag &quot;d&quot; in the master CLI prompt.
+</pre><a class="anchor" name="prompt"></a><a class="anchor" name="9-prompt"></a><a class="anchor" name="9.4-prompt"></a><a class="anchor" name="prompt (Statistics and monitoring)"></a><a class="anchor" name="prompt (Master CLI)"></a><div class="keyword"><b><a class="anchor" name="prompt"></a><a href="#9.4-prompt">prompt</a></b></div><pre class="text">When the prompt is enabled (via the &quot;<span class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">prompt<span class="caret"></span></a><ul class="dropdown-menu"><li class="dropdown-header">This keyword is available in sections :</li><li><a href="#prompt%20%28Unix%20Socket%20commands%29">Unix Socket commands</a></li><li><a href="#prompt%20%28Master%20CLI%29">Master CLI</a></li></ul></span>&quot; command), the context the CLI is
+working on is displayed in the prompt. The master is identified by the &quot;master&quot;
+string, and other processes are identified with their PID. In case the last
+reload failed, the master prompt will be changed to &quot;master[ReloadFailed]&gt;&quot; so
+that it becomes visible that the process is still running on the previous
+configuration and that the new configuration is not operational.
+
+The prompt of the master CLI is able to display several flags which are the
+enable modes. &quot;d&quot; for mcli-debug-mode, &quot;e&quot; for expert-mode, &quot;x&quot; for
+experimental-mode.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>$ socat /var/run/haproxy-master.sock -
+prompt
+master&gt; expert-mode on
+master(e)&gt; experimental-mode on
+master(xe)&gt; mcli-debug-mode on
+master(xed)&gt; @1
+95191(xed)&gt;
+</code></pre>
+</div><a class="anchor" name="reload"></a><a class="anchor" name="9-reload"></a><a class="anchor" name="9.4-reload"></a><a class="anchor" name="reload (Statistics and monitoring)"></a><a class="anchor" name="reload (Master CLI)"></a><div class="keyword"><b><a class="anchor" name="reload"></a><a href="#9.4-reload">reload</a></b></div><pre class="text">You can also reload the HAProxy master process with the &quot;<a href="#reload">reload</a>&quot; command which
 does the same as a `kill -USR2` on the master process, provided that the user
 has at least &quot;<a href="#operator">operator</a>&quot; or &quot;admin&quot; privileges.
 </pre><div class="separator">
 <span class="label label-success">Example:</span>
 <pre class="prettyprint">
-<code>$ echo &quot;reload&quot; | socat /var/run/haproxy-master.sock stdin
+<code>$ echo &quot;<a href="#reload">reload</a>&quot; | socat /var/run/haproxy-master.sock stdin
 </code></pre>
 </div><pre class="text">Note that a reload will close the connection to the master CLI.
+</pre><a class="anchor" name="show"></a><a class="anchor" name="9-show"></a><a class="anchor" name="9.4-show"></a><a class="anchor" name="show (Statistics and monitoring)"></a><a class="anchor" name="show (Master CLI)"></a><a class="anchor" name="show proc"></a><a class="anchor" name="9-show proc"></a><a class="anchor" name="9.4-show proc"></a><a class="anchor" name="show proc (Statistics and monitoring)"></a><a class="anchor" name="show proc (Master CLI)"></a><div class="keyword"><b><a class="anchor" name="show proc"></a><a href="#9.4-show%20proc">show proc</a></b></div><pre class="text">The master CLI introduces a &#x27;show proc&#x27; command to surpervise the
+processe.
+</pre><div class="separator">
+<span class="label label-success">Example:</span>
+<pre class="prettyprint">
+<code>$ echo &<span class="comment">#x27;show proc&#x27; | socat /var/run/haproxy-master.sock -</span>
+<span class="comment">#&lt;PID&gt;          &lt;type&gt;          &lt;reloads&gt;       &lt;uptime&gt;        &lt;version&gt;</span>
+1162            master          5 [failed: 0]   0d00h02m07s     2.5-dev13
+<span class="comment"># workers</span>
+1271            worker          1               0d00h00m00s     2.5-dev13
+<span class="comment"># old workers</span>
+1233            worker          3               0d00h00m43s     2.0-dev3-6019f6-289
+<span class="comment"># programs</span>
+1244            foo             0               0d00h00m00s     -
+1255            bar             0               0d00h00m00s     -
+</code></pre>
+</div><pre class="text">In this example, the master has been reloaded 5 times but one of the old
+worker is still running and survived 3 reloads. You could access the CLI of
+this worker to understand what&#x27;s going on.
 </pre></div>
 <a class="anchor" id="10" name="10"></a>
 <div class="page-header"><h1 id="chapter-10" data-target="10"><small><a class="small" href="#10">10.</a></small> Tricks for easier configuration management</h1>
@@ -4479,7 +4639,7 @@ A safe configuration will have :
 						<br>
 						<hr>
 						<div class="text-right">
-							HAProxy 2.6-dev0-332 &ndash; Management Guide<br>
+							HAProxy 2.6-dev3-18 &ndash; Management Guide<br>
 							<small>, </small>
 						</div>
 					</div>
@@ -4583,7 +4743,7 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 4);
-piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.6-dev0-332', 'page');
+piwikTracker.setCustomVariable (1, 'HaproxyVersion', 'version 2.6-dev3-18', 'page');
 piwikTracker.setCustomVariable (2, 'HaproxyDconvVersion', '0.4.2-12', 'page');
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
