@@ -9,6 +9,7 @@ import re
 import sys
 import html
 import datetime
+import time
 
 
 
@@ -27,6 +28,10 @@ import parser.seealso
 
 
 
+def getBuildTime():
+    return datetime.datetime.utcfromtimestamp(
+        int(os.environ.get('SOURCE_DATE_EPOCH', time.time()))
+    )
 
 
 def getTitleDetails(string):
@@ -449,7 +454,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
             keywordsCount=keywordsCount,
             keyword_conflicts=keyword_conflicts,
             version=version,
-            date=datetime.datetime.now().strftime("%Y/%m/%d"),
+            date=getBuildTime().strftime("%Y/%m/%d"),
         )
     except TopLevelLookupException:
         footer = ""
@@ -465,6 +470,6 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
             'keywordsCount': keywordsCount,
             'keyword_conflicts': keyword_conflicts,
             'version': version,
-            'date': datetime.datetime.now().strftime("%Y/%m/%d"),
+            'date': getBuildTime().strftime("%Y/%m/%d"),
             'footer': footer
     }
