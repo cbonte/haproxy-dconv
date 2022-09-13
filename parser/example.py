@@ -45,7 +45,7 @@ class ExampleParser(parser.Parser):
                         for j in range(0, add_empty_line):
                             content.append("")
 
-                        content.append(re.sub(r'(#.*)$', self.comment, pctxt.get_line()))
+                        content.append(re.sub(r'[^&](#.*)$', self.comment, pctxt.get_line()))
                         add_empty_line = 0
                     else:
                         add_empty_line += 1
