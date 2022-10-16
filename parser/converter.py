@@ -240,8 +240,6 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
         i += 1
     sections.append(currentSection)
 
-    chapterIndexes = sorted(list(chapters.keys()), key=lambda chapter: list(map(int, chapter.split('.'))))
-
     document = ""
 
     # Complete the summary
@@ -256,7 +254,8 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                 if not details["chapter"] in chapters:
                     print("Adding '%s' to the summary" % details["title"], file=sys.stderr)
                     chapters[details["chapter"]] = details
-                    chapterIndexes = sorted(chapters.keys())
+
+    chapterIndexes = sorted(list(chapters.keys()), key=lambda chapter: list(map(int, chapter.split('.'))))
 
     for section in sections:
         details = section["details"]
