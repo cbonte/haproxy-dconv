@@ -29,7 +29,7 @@
 %>\
 <td ${style}>\
 % if "keyword" in col:
-<a href="#${quote("%s-%s" % (col['toplevel'], col['keyword']))}">\
+<a href="#${quote("%s-%s" % (col['toplevel'], col['keyword'].split('(')[0]))}">\
 % for extra in col['extra']:
 <span class="pull-right">${extra}</span>\
 % endfor
