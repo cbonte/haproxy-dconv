@@ -129,7 +129,7 @@ class TableParser(parser.Parser):
             return self.renderTable(table, nbColumns, pctxt.details["toplevel"])
         # elif self.table2Pattern.match(line):
         #    return self.parse_table_format2()
-        elif line.find("May be used in sections") != -1:
+        elif line.find("May be used in sections") != -1 or line.find("Usable in:") != -1:
             nextline = pctxt.get_line(1)
             rows = []
             headers = line.split(":")
