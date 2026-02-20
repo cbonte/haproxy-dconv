@@ -172,11 +172,47 @@
 				nextTarget = next ? next.attr('data-target') : 'bottom'
 			}
 
+			function updateCurrentLocation() {
+				var scrollTop = $(window).scrollTop();
+				var activeChapter = null;
+
+				/* Find the last header whose anchor has scrolled past the top of the viewport */
+				$(':header[data-target]').each(function() {
+					var target = $(this).attr('data-target');
+					var $anchor = $('#' + target.replace(/\./g, '\\.'));
+					if ($anchor.length && $anchor.offset().top <= scrollTop + 5)
+						activeChapter = target;
+				});
+
+				/* Clear the previous highlight; bail out if no chapter is active */
+				var $summary = $('#tab-summary');
+				$summary.find('a.loc-active').removeClass('loc-active');
+				if (!activeChapter) return;
+
+				/* Highlight the active chapter and scroll the sidebar to keep it visible */
+				var $sidebar = $('#sidebar');
+				var $active = $summary.find('a[href="#' + activeChapter + '"]');
+				if (!$active.length) return;
+				$active.addClass('loc-active');
+				var linkTop = $active.offset().top - $sidebar.offset().top + $sidebar.scrollTop();
+				var paneHeight = $sidebar.outerHeight();
+				if (linkTop < $sidebar.scrollTop())
+					$sidebar.scrollTop(linkTop);
+				else if (linkTop + $active.outerHeight() > $sidebar.scrollTop() + paneHeight)
+					$sidebar.scrollTop(linkTop - paneHeight + $active.outerHeight());
+			}
+
+			var locationPending = false;
 			$(window).scroll(function () {
-				refreshNavigation()
+				refreshNavigation();
+				if (!locationPending) {
+					locationPending = true;
+					requestAnimationFrame(function() { updateCurrentLocation(); locationPending = false; });
+				}
 			});
 			$(document).ready(function() {
-				refreshNavigation()
+				refreshNavigation();
+				updateCurrentLocation();
 			});
 
 			/* EXPERIMENTAL - Enable keyboard navigation */
