@@ -32,6 +32,7 @@
 				</ul>
 			</div>
 		</nav>
+		<div id="current-location" class="navbar-inverse small text-right"><em>Top</em></div>
 		<!-- /.navbar-static-side -->
 
 		<div id="wrapper">
@@ -174,15 +175,45 @@
 
 			function updateCurrentLocation() {
 				var scrollTop = $(window).scrollTop();
-				var activeChapter = null;
+				var levels = {};
+				var newKeyword = null;
 
-				/* Find the last header whose anchor has scrolled past the top of the viewport */
-				$(':header[data-target]').each(function() {
-					var target = $(this).attr('data-target');
-					var $anchor = $('#' + target.replace(/\./g, '\\.'));
-					if ($anchor.length && $anchor.offset().top <= scrollTop + 5)
-						activeChapter = target;
+				/* Find headers and keywords that have scrolled past the viewport, in DOM order */
+				$(':header[data-target], .keyword').each(function() {
+					if ($(this).offset().top > scrollTop + 85)
+						return false;
+					if ($(this).hasClass('keyword')) {
+						var link = $(this).find('b a[href]');
+						newKeyword = { text: link.text().trim(), href: link.attr('href') };
+					} else {
+						var target = $(this).attr('data-target');
+						var $anchor = $('#' + target.replace(/\./g, '\\.'));
+						if ($anchor.length && $anchor.offset().top <= scrollTop + 5) {
+							var level = parseInt(this.tagName.substring(1));
+							var title = $(this).clone().children('small').remove().end().text().trim();
+							levels[level] = { chapter: target, title: title };
+							for (var l = level + 1; l <= 6; l++) delete levels[l];
+							newKeyword = null;
+						}
+					}
 				});
+
+				/* Update the current-location bar */
+				var sep = ' <span class="loc-sep">&rsaquo;</span> ';
+				var activeChapter = null;
+				var html = '';
+				if (levels[1]) {
+					html = '<a href="#' + levels[1].chapter + '" class="loc-section">' + levels[1].chapter + '. ' + levels[1].title + '</a>';
+					activeChapter = levels[1].chapter;
+					for (var l = 2; l <= 6; l++) {
+						if (!levels[l]) break;
+						html += sep + '<a href="#' + levels[l].chapter + '" class="loc-subsection">' + levels[l].chapter + '. ' + levels[l].title + '</a>';
+						activeChapter = levels[l].chapter;
+					}
+					if (newKeyword)
+						html += sep + '<a href="' + newKeyword.href + '">' + newKeyword.text + '</a>';
+				}
+				$('#current-location').html(html);
 
 				/* Clear the previous highlight; bail out if no chapter is active */
 				var $summary = $('#tab-summary');
