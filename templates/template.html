@@ -177,7 +177,7 @@
 			})();
 		</script>
 		<script>
-			// Navigation and breadcrumbs - super optimized
+			// Navigation and breadcrumbs - IntersectionObserver for zero scroll overhead
 			(function() {
 				var content = document.getElementById('content');
 				var breadcrumbs = document.getElementById('breadcrumbs');
@@ -212,10 +212,6 @@
 				
 				var currentTarget = null;
 				var currentActiveLink = null;
-				var rafId = null;
-				
-				// Find scroll container (the content's scrollable area, not sidebar)
-				var scrollContainer = content.querySelector('.flex-grow-1.overflow-auto') || content.querySelector('.overflow-auto') || content;
 				
 				// Helper: parse "5.2.1. Title" into {num: "5.2.1", title: "Title"}
 				function parseChapterText(text) {
@@ -300,40 +296,35 @@
 					}
 				}
 				
-				function onScroll() {
-					if (rafId) cancelAnimationFrame(rafId);
+				// Use IntersectionObserver - browser notifies us when sections enter/leave viewport
+				// rootMargin: trigger when section is near top of visible area
+				var scrollContainer = content.querySelector('.flex-grow-1.overflow-auto') || content.querySelector('.overflow-auto') || content;
+				
+				var observer = new IntersectionObserver(function(entries) {
+					// Find the most visible section near top
+					var topSection = null;
+					for (var i = 0; i < entries.length; i++) {
+						if (entries[i].isIntersecting) {
+							topSection = entries[i].target._sectionData;
+							break;
+						}
+					}
 					
-					rafId = requestAnimationFrame(function() {
-						var contentRect = scrollContainer.getBoundingClientRect();
-						var found = null;
-						
-						// Reverse search for current section
-						for (var i = sections.length - 1; i >= 0; i--) {
-							var rect = sections[i].element.getBoundingClientRect();
-							if (rect.top <= contentRect.top + 100) {
-								found = sections[i];
-								break;
-							}
-						}
-						
-						if (found) {
-							updateBreadcrumbs(found.target, found.text);
-							updateSidebarHighlight(found.target);
-						} else {
-							updateBreadcrumbs(null, null);
-							if (currentActiveLink) {
-								currentActiveLink.classList.remove('active');
-								currentActiveLink = null;
-							}
-						}
-					});
+					if (topSection) {
+						updateBreadcrumbs(topSection.target, topSection.text);
+						updateSidebarHighlight(topSection.target);
+					}
+				}, {
+					root: scrollContainer,
+					rootMargin: '-10% 0px -80% 0px', // Trigger when section enters top 10-20% of viewport
+					threshold: 0
+				});
+				
+				// Observe all section headings
+				for (var i = 0; i < sections.length; i++) {
+					sections[i].element._sectionData = sections[i];
+					observer.observe(sections[i].element);
 				}
-				
-				// Passive scroll listener for performance
-				scrollContainer.addEventListener('scroll', onScroll, { passive: true });
-				
-				// Initial update
-				onScroll();
 				
 				// Keyboard navigation
 				document.addEventListener('keydown', function(e) {
