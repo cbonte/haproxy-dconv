@@ -355,9 +355,9 @@
 								newTarget = sections[currentIndex - 1].target;
 							} else if (currentIndex === 0) {
 								newTarget = 'top';
-							} else if (currentIndex < 0 && sections.length > 0) {
-								// No current section, go to first
-								newTarget = sections[0].target;
+							} else if (!currentTarget || currentIndex < 0) {
+								// No current section (null or not in sections), go to top
+								newTarget = 'top';
 							}
 							break;
 						case 39: // right
@@ -371,7 +371,7 @@
 							} else if (currentIndex === sections.length - 1) {
 								// At last section, go to bottom
 								newTarget = 'bottom';
-							} else if (currentIndex < 0 && sections.length > 0) {
+							} else if (!currentTarget || currentIndex < 0) {
 								// No current section, go to first
 								newTarget = sections[0].target;
 							}
