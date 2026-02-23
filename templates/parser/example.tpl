@@ -1,5 +1,5 @@
 <div class="separator">
-<span class="label label-success">${label}</span>
+<span class="badge bg-success">${label}</span>
 <pre class="prettyprint">
 % if desc:
 <div class="example-desc">${desc}</div>\
