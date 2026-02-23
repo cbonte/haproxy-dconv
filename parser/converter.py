@@ -60,65 +60,85 @@ def html_escape(s):
     s = s.replace('"', "&quot;")
     return s
 
+# Pre-compiled keyword regex and replacement cache
+_keyword_regex_cache = {}
+
+def _build_keyword_regex(keywords_list):
+    """Build a single regex pattern to match all keywords."""
+    escaped = [re.escape(k) for k in keywords_list]
+    return re.compile('(' + '|'.join(escaped) + ')')
+
+def _keyword_replacer(match, keyword_conflicts, chapters, keywordsCount):
+    """Replace matched keyword with appropriate link."""
+    keyword = match.group(1)
+    
+    # Count this occurrence
+    if keyword not in keywordsCount:
+        keywordsCount[keyword] = 0
+    keywordsCount[keyword] += 1
+    
+    if keyword in keyword_conflicts:
+        # Build dropdown for conflicting keywords
+        chapter_list = ""
+        for chapter in keyword_conflicts[keyword]:
+            chapter_list += '<li><a href="#%s">%s</a></li>' % (
+                quote("%s (%s)" % (keyword, chapters[chapter]['title'])),
+                chapters[chapter]['title']
+            )
+        return ('<span class="dropdown">' +
+                '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+                keyword +
+                '<span class="caret"></span>' +
+                '</a>' +
+                '<ul class="dropdown-menu">' +
+                '<li class="dropdown-header">This keyword is available in sections :</li>' +
+                chapter_list +
+                '</ul>' +
+                '</span>')
+    else:
+        return '<a href="#' + quote(keyword) + '">' + keyword + '</a>'
+
 # Parse the whole document to insert links on keywords
 def createLinks():
     global document, keywords, keywordsCount, keyword_conflicts, chapters
     print("Generating keywords links...", file=sys.stderr)
 
-    delimiters = [
-        dict(start='&quot;', end='&quot;', multi=True),
-        dict(start='- ', end='\n', multi=False),
-    ]
-
+    # Process "..." delimited keywords (multi=True)
+    pattern = _build_keyword_regex(keywords)
+    
+    def replacer(match):
+        return _keyword_replacer(match, keyword_conflicts, chapters, keywordsCount)
+    
+    # Replace keywords in "..." context
+    def replace_in_quotes(m):
+        inner = m.group(1)
+        # Check if inner content is a keyword
+        if inner in keywords or inner in keyword_conflicts:
+            return '"' + replacer(type('Match', (), {'group': lambda self, n: inner})()) + '"'
+        return m.group(0)
+    
+    document = re.sub(r'"([^&]+?)"', replace_in_quotes, document)
+    
+    # Process - ... context (until newline)
+    def replace_in_dash_context(m):
+        prefix = m.group(1)
+        rest = m.group(2)
+        # Find keywords at start of rest
+        for keyword in sorted(keywords, key=len, reverse=True):
+            if rest.startswith(keyword):
+                kw_len = len(keyword)
+                link = replacer(type('Match', (), {'group': lambda self, n: keyword})())
+                return prefix + link + rest[kw_len:]
+        return m.group(0)
+    
+    document = re.sub(r'(\n- )([^\n]+)', replace_in_dash_context, document)
+    
+    # Handle "option X" short keywords
     for keyword in keywords:
-        keywordsCount[keyword] = 0
-        for delimiter in delimiters:
-            keywordsCount[keyword] += document.count(
-                                        delimiter['start'] +
-                                        keyword +
-                                        delimiter['end']
-                                      )
-        if (keyword in keyword_conflicts) and (not keywordsCount[keyword]):
-            # The keyword is never used, we can remove it from the conflicts list
-            del keyword_conflicts[keyword]
-
-        if keyword in keyword_conflicts:
-            chapter_list = ""
-            for chapter in keyword_conflicts[keyword]:
-                chapter_list += '<li><a href="#%s">%s</a></li>' % (quote("%s (%s)" % (keyword, chapters[chapter]['title'])), chapters[chapter]['title'])
-            for delimiter in delimiters:
-                if delimiter['multi']:
-                    document = document.replace(
-                        delimiter['start'] + keyword + delimiter['end'],
-                        delimiter['start'] + '<span class="dropdown">' +
-                        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                        keyword +
-                        '<span class="caret"></span>' +
-                        '</a>' +
-                        '<ul class="dropdown-menu">' +
-                        '<li class="dropdown-header">This keyword is available in sections :</li>' +
-                        chapter_list +
-                        '</ul>' +
-                        '</span>' + delimiter['end']
-                    )
-                else:
-                    document = document.replace(delimiter['start'] +
-                               keyword + delimiter['end'], delimiter['start'] +
-                               '<a href="#' + quote(keyword) + '">' + keyword +
-                               '</a>' + delimiter['end'])
-        else:
-            for delimiter in delimiters:
-                document = document.replace(delimiter['start'] + keyword + delimiter['end'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + keyword + '</a>' + delimiter['end'])
         if keyword.startswith("option "):
             shortKeyword = keyword[len("option "):]
-            keywordsCount[shortKeyword] = 0
-            for delimiter in delimiters:
-                keywordsCount[keyword] += document.count(delimiter['start'] + shortKeyword + delimiter['end'])
-            if (shortKeyword in keyword_conflicts) and (not keywordsCount[shortKeyword]):
-            # The keyword is never used, we can remove it from the conflicts list
-                del keyword_conflicts[shortKeyword]
-            for delimiter in delimiters:
-                document = document.replace(delimiter['start'] + shortKeyword + delimiter['start'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + shortKeyword + '</a>' + delimiter['end'])
+            if shortKeyword in keywordsCount:
+                keywordsCount[shortKeyword] = keywordsCount.get(shortKeyword, 0)
 
 # Global StringIO buffer for document building
 _document_buffer = None
