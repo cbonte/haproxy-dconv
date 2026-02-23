@@ -213,6 +213,11 @@
 				var currentTarget = null;
 				var currentActiveLink = null;
 				
+				// Initialize from URL hash on page load
+				if (window.location.hash && window.location.hash.length > 1) {
+					currentTarget = window.location.hash.substring(1);
+				}
+				
 				// Helper: parse "5.2.1. Title" into {num: "5.2.1", title: "Title"}
 				function parseChapterText(text) {
 					var dotSpaceIndex = text.indexOf('. ');
@@ -338,21 +343,33 @@
 						}
 					}
 					
+					var newTarget = null;
 					switch(e.which) {
 						case 37: // left
 							if (currentIndex > 0) {
-								window.location.hash = sections[currentIndex - 1].target;
-							} else {
-								window.location.hash = 'top';
+								newTarget = sections[currentIndex - 1].target;
+							} else if (currentIndex === 0) {
+								newTarget = 'top';
+							} else if (currentIndex < 0 && sections.length > 0) {
+								// No current section, go to first
+								newTarget = sections[0].target;
 							}
-							e.preventDefault();
 							break;
 						case 39: // right
-							if (currentIndex < sections.length - 1) {
-								window.location.hash = sections[currentIndex + 1].target;
+							if (currentIndex >= 0 && currentIndex < sections.length - 1) {
+								newTarget = sections[currentIndex + 1].target;
+							} else if (currentIndex < 0 && sections.length > 0) {
+								// No current section, go to first
+								newTarget = sections[0].target;
 							}
-							e.preventDefault();
 							break;
+					}
+					
+					if (newTarget) {
+						// Update currentTarget immediately for next keypress
+						currentTarget = newTarget;
+						window.location.hash = newTarget;
+						e.preventDefault();
 					}
 				});
 				
