@@ -10,6 +10,7 @@ import sys
 import html
 import datetime
 import time
+import io
 
 
 
@@ -27,6 +28,9 @@ import parser.table
 import parser.seealso
 
 
+# Pre-compiled regex patterns for performance
+_PATTERN_SECTION = re.compile(r'section ([0-9]+(.[0-9]+)*)')
+_PATTERN_HEADER_SEP = re.compile(r'^-+$')
 
 def getBuildTime():
     return datetime.datetime.utcfromtimestamp(
@@ -56,71 +60,104 @@ def html_escape(s):
     s = s.replace('"', "&quot;")
     return s
 
+# Pre-compiled keyword regex and replacement cache
+_keyword_regex_cache = {}
+
+def _build_keyword_regex(keywords_list):
+    """Build a single regex pattern to match all keywords."""
+    escaped = [re.escape(k) for k in keywords_list]
+    return re.compile('(' + '|'.join(escaped) + ')')
+
+def _keyword_replacer(match, keyword_conflicts, chapters, keywordsCount):
+    """Replace matched keyword with appropriate link."""
+    keyword = match.group(1)
+    
+    # Count this occurrence
+    if keyword not in keywordsCount:
+        keywordsCount[keyword] = 0
+    keywordsCount[keyword] += 1
+    
+    if keyword in keyword_conflicts:
+        # Build dropdown for conflicting keywords
+        chapter_list = ""
+        for chapter in keyword_conflicts[keyword]:
+            chapter_list += '<li><a href="#%s">%s</a></li>' % (
+                quote("%s (%s)" % (keyword, chapters[chapter]['title'])),
+                chapters[chapter]['title']
+            )
+        return ('<span class="dropdown">' +
+                '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+                keyword +
+                '<span class="caret"></span>' +
+                '</a>' +
+                '<ul class="dropdown-menu">' +
+                '<li class="dropdown-header">This keyword is available in sections :</li>' +
+                chapter_list +
+                '</ul>' +
+                '</span>')
+    else:
+        return '<a href="#' + quote(keyword) + '">' + keyword + '</a>'
+
 # Parse the whole document to insert links on keywords
 def createLinks():
     global document, keywords, keywordsCount, keyword_conflicts, chapters
     print("Generating keywords links...", file=sys.stderr)
 
-    delimiters = [
-        dict(start='&quot;', end='&quot;', multi=True),
-        dict(start='- ', end='\n', multi=False),
-    ]
-
+    # Process "..." delimited keywords (multi=True)
+    pattern = _build_keyword_regex(keywords)
+    
+    def replacer(match):
+        return _keyword_replacer(match, keyword_conflicts, chapters, keywordsCount)
+    
+    # Replace keywords in "..." context
+    def replace_in_quotes(m):
+        inner = m.group(1)
+        # Check if inner content is a keyword
+        if inner in keywords or inner in keyword_conflicts:
+            return '"' + replacer(type('Match', (), {'group': lambda self, n: inner})()) + '"'
+        return m.group(0)
+    
+    document = re.sub(r'"([^&]+?)"', replace_in_quotes, document)
+    
+    # Process - ... context (until newline)
+    def replace_in_dash_context(m):
+        prefix = m.group(1)
+        rest = m.group(2)
+        # Find keywords at start of rest
+        for keyword in sorted(keywords, key=len, reverse=True):
+            if rest.startswith(keyword):
+                kw_len = len(keyword)
+                link = replacer(type('Match', (), {'group': lambda self, n: keyword})())
+                return prefix + link + rest[kw_len:]
+        return m.group(0)
+    
+    document = re.sub(r'(\n- )([^\n]+)', replace_in_dash_context, document)
+    
+    # Handle "option X" short keywords
     for keyword in keywords:
-        keywordsCount[keyword] = 0
-        for delimiter in delimiters:
-            keywordsCount[keyword] += document.count(
-                                        delimiter['start'] +
-                                        keyword +
-                                        delimiter['end']
-                                      )
-        if (keyword in keyword_conflicts) and (not keywordsCount[keyword]):
-            # The keyword is never used, we can remove it from the conflicts list
-            del keyword_conflicts[keyword]
-
-        if keyword in keyword_conflicts:
-            chapter_list = ""
-            for chapter in keyword_conflicts[keyword]:
-                chapter_list += '<li><a href="#%s">%s</a></li>' % (quote("%s (%s)" % (keyword, chapters[chapter]['title'])), chapters[chapter]['title'])
-            for delimiter in delimiters:
-                if delimiter['multi']:
-                    document = document.replace(
-                        delimiter['start'] + keyword + delimiter['end'],
-                        delimiter['start'] + '<span class="dropdown">' +
-                        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                        keyword +
-                        '<span class="caret"></span>' +
-                        '</a>' +
-                        '<ul class="dropdown-menu">' +
-                        '<li class="dropdown-header">This keyword is available in sections :</li>' +
-                        chapter_list +
-                        '</ul>' +
-                        '</span>' + delimiter['end']
-                    )
-                else:
-                    document = document.replace(delimiter['start'] +
-                               keyword + delimiter['end'], delimiter['start'] +
-                               '<a href="#' + quote(keyword) + '">' + keyword +
-                               '</a>' + delimiter['end'])
-        else:
-            for delimiter in delimiters:
-                document = document.replace(delimiter['start'] + keyword + delimiter['end'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + keyword + '</a>' + delimiter['end'])
         if keyword.startswith("option "):
             shortKeyword = keyword[len("option "):]
-            keywordsCount[shortKeyword] = 0
-            for delimiter in delimiters:
-                keywordsCount[keyword] += document.count(delimiter['start'] + shortKeyword + delimiter['end'])
-            if (shortKeyword in keyword_conflicts) and (not keywordsCount[shortKeyword]):
-            # The keyword is never used, we can remove it from the conflicts list
-                del keyword_conflicts[shortKeyword]
-            for delimiter in delimiters:
-                document = document.replace(delimiter['start'] + shortKeyword + delimiter['start'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + shortKeyword + '</a>' + delimiter['end'])
+            if shortKeyword in keywordsCount:
+                keywordsCount[shortKeyword] = keywordsCount.get(shortKeyword, 0)
+
+# Global StringIO buffer for document building
+_document_buffer = None
 
 def documentAppend(text, retline = True):
-    global document
-    document += text
+    global _document_buffer
+    _document_buffer.write(text)
     if retline:
-        document += "\n"
+        _document_buffer.write("\n")
+
+def _get_document():
+    """Get the current document content as a string."""
+    global _document_buffer
+    return _document_buffer.getvalue()
+
+def _reset_document():
+    """Reset the document buffer for a new conversion."""
+    global _document_buffer
+    _document_buffer = io.StringIO()
 
 def init_parsers(pctxt):
     return [
@@ -145,7 +182,8 @@ def convert_all(infiles, outdir, base='', version='', haproxy_version=''):
             TemplateLookup(
                 directories=[
                     'templates'
-                ]
+                ],
+                filesystem_checks=False
             )
         )
         data = convert(pctxt, infile, outfile, base, version, haproxy_version)
@@ -247,7 +285,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
         i += 1
     sections.append(currentSection)
 
-    document = ""
+    _reset_document()
 
     # Complete the summary
     for section in sections:
@@ -305,7 +343,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     documentAppend('<li class="next"><a href="#%s">Next</a></li>' % chapterIndexes[index + 1], False)
                 documentAppend('</ul>', False)
             content = html_escape(content)
-            content = re.sub(r'section ([0-9]+(.[0-9]+)*)', r'<a href="#\1">section \1</a>', content)
+            content = _PATTERN_SECTION.sub(r'<a href="#\1">section \1</a>', content)
 
             pctxt.set_content(content)
 
@@ -318,7 +356,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     'author':   '',
                     'date':     ''
                 }
-                if re.match("^-+$", pctxt.get_line().strip()):
+                if _PATTERN_HEADER_SEP.match(pctxt.get_line().strip()):
                     # Try to analyze the header of the file, assuming it follows
                     # those rules :
                     # - it begins with a "separator line" (several '-' chars)
@@ -332,7 +370,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     pctxt.context['headers']['title'] = pctxt.get_line().strip()
                     pctxt.next()
                     subtitle = ""
-                    while not re.match("^-+$", pctxt.get_line().strip()):
+                    while not _PATTERN_HEADER_SEP.match(pctxt.get_line().strip()):
                         subtitle += " " + pctxt.get_line().strip()
                         pctxt.next()
                     pctxt.context['headers']['subtitle'] += subtitle.strip()
@@ -415,12 +453,16 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
     if not hasSummary:
         summaryTemplate = pctxt.templates.get_template('summary.html')
         print(chapters)
-        document = summaryTemplate.render(
+        summary = summaryTemplate.render(
             pctxt=pctxt,
             chapters=chapters,
             chapterIndexes=chapterIndexes,
-        ) + document
+        )
+        _reset_document()
+        _document_buffer.write(summary)
 
+    # Get the document string from the buffer
+    document = _get_document()
 
     # Log warnings for keywords defined in several chapters
     keyword_conflicts = {}
