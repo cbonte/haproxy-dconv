@@ -2,90 +2,106 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>${headers['title']} ${headers['version']} - ${headers['subtitle']}</title>
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="https://raw.githubusercontent.com/thomaspark/bootswatch/v3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" />
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="${base}css/page.css?${version}" rel="stylesheet" />
 	</head>
-	<body>
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
+	<body class="d-flex flex-column vh-100">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
 				<a class="navbar-brand" href="${base}">HAProxy Documentation</a>
-			</div>
-			<!-- /.navbar-header -->
-
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="menu">
-				<ul class="nav navbar-nav">
-					%for item in menu:
-						<li class="${'active' if headers['subtitle'] == item[1] else ''}"><a href="${item[0]}">${item[1]}</a></li>
-					%endfor
-				</ul>
-				<ul class="nav navbar-nav">
-					<li><a href="http://www.haproxy.org/">HAProxy Home Page</a></li>
-				</ul>
+				<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="menu">
+					<ul class="navbar-nav me-auto">
+						%for item in menu:
+							<li class="nav-item"><a class="nav-link ${'active' if headers['subtitle'] == item[1] else ''}" href="${item[0]}">${item[1]}</a></li>
+						%endfor
+					</ul>
+					<ul class="navbar-nav">
+						<li class="nav-item"><a class="nav-link" href="http://www.haproxy.org/">HAProxy Home Page</a></li>
+					</ul>
+				</div>
 			</div>
 		</nav>
-		<!-- /.navbar-static-side -->
 
-		<div id="wrapper">
+		<div class="d-flex flex-grow-1 overflow-hidden">
 
-			<div id="sidebar">
-				<ul class="nav nav-tabs" role="tablist">
-					<li role="presentation" class="active"><a href="#tab-summary" aria-controls="tab-summary" role="tab" data-toggle="tab">Summary</a></li>
-					% if keywords:
-					<li role="presentation"><a href="#tab-keywords" aria-controls="tab-keywords" role="tab" data-toggle="tab">Keywords</a></li>
-					% endif
-				</ul>
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="tab-summary">
-						<%include file="_summary.html"/>
-					</div>
-					% if keywords:
-					<div role="tabpanel" class="tab-pane" id="tab-keywords">
-						<label for="filter">Filter</label>
-						<input class="form-control" type="text" name="filter" id="filter" onkeyup="filterKeywords(this.value)" placeholder="Enter keyword to search...">
-						<% previous_letter = None %>
-						% for keyword in keywords:
-							<% letter = keyword[0].upper() %>
-							%if letter != previous_letter:
-                                                                % if previous_letter:
-                                                                </div> <!-- /letter -->
-                                                                % endif
-								<div class="letter" id="letter-${letter}"><h4>${letter}</h4>
-								<% previous_letter = letter %>
-							%endif
-							<a class="list-group-item" href="#${keyword}">${keyword}</a>
-						% endfor
-						</div><!-- /letter -->
-					</div>
-					% endif
+			<aside id="sidebar" class="d-flex flex-column flex-shrink-0 bg-dark">
+				<!-- Nav tabs (fixed at top) -->
+				<div class="flex-shrink-0 p-3 pb-0">
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-chapters" type="button" role="tab">Chapters</button></li>
+						% if keywords:
+						<li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-keywords" type="button" role="tab">Keywords</button></li>
+						% endif
+					</ul>
 				</div>
+				
+				<!-- Content wrapper (grows to fill space, contains scrollbar) -->
+				<div class="flex-grow-1 overflow-hidden p-3 pt-0">
+					<div class="h-100 overflow-auto bg-light text-body rounded-bottom p-3">
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="tab-chapters">
+								<%include file="_summary.html"/>
+							</div>
+							% if keywords:
+							<div role="tabpanel" class="tab-pane" id="tab-keywords">
+								<label for="filter" class="form-label">Filter</label>
+								<input class="form-control mb-2" type="text" name="filter" id="filter" placeholder="Enter keyword to search...">
+								<div id="keywords-list">
+								<% previous_letter = None %>
+								% for keyword in keywords:
+									<% letter = keyword[0].upper() %>
+									%if letter != previous_letter:
+										% if previous_letter:
+								</div>
+										% endif
+								<div class="letter mb-2" id="letter-${letter}"><strong class="d-block mb-1">${letter}</strong>
+									<% previous_letter = letter %>
+									%endif
+								<a class="d-block py-1" href="#${keyword}">${keyword}</a>
+								% endfor
+								% if previous_letter:
+								</div>
+								% endif
+								</div>
+							</div>
+							% endif
+						</div>
+					</div>
+				</div>
+				
+				<!-- Footer (fixed at bottom) -->
+				<div class="flex-shrink-0 border-top border-secondary p-3 text-light small">
+					<p class="mb-1">
+						Keyboard navigation: <span id="keyboardNavStatus"></span>
+					</p>
+					<p class="mb-1">
+						Use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.
+					</p>
+					<p class="mb-0 text-end">
+						Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b>
+					</p>
+				</div>
+			</aside>
 
-				<p>
-					Keyboard navigation&nbsp;: <span id="keyboardNavStatus"></span>
-				</p>
-				<p>
-					You can use <strong>left</strong> and <strong>right</strong> arrow keys to navigate between chapters.<br>
-				</p>
-				<p class="text-right">
-					<small>Converted with <a href="https://github.com/cbonte/haproxy-dconv">haproxy-dconv</a> v<b>${version}</b> on <b>${date}</b></small>
-				</p>
-			</div>
-			<!-- /.sidebar -->
-
-			<div id="page-wrapper">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="text-center">
-                            <h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="${base}img/HAProxyCommunityEdition_60px.png?${version}" /></a></h1>
-                            %if headers['title'] != 'HAProxy':
+			<main id="content" class="flex-grow-1 d-flex flex-column overflow-hidden">
+				<!-- Breadcrumbs bar -->
+				<nav id="breadcrumbs" class="flex-shrink-0 py-2 px-3 bg-dark">
+					<small><ol class="breadcrumb mb-0 ps-0">
+						<li class="breadcrumb-item"><a href="#top" class="text-light">${headers['subtitle']}</a></li>
+					</ol></small>
+				</nav>
+				
+				<!-- Content area -->
+				<div class="flex-grow-1 overflow-auto">
+					<div class="container-fluid py-4">
+						<div class="text-center mb-4">
+							<h1><a href="http://www.haproxy.org/" title="HAProxy"><img src="${base}img/HAProxyCommunityEdition_60px.png?${version}" /></a></h1>
+							%if headers['title'] != 'HAProxy':
 							<h1>${headers['title']}</h1>
 							%endif
 							<h2>${headers['subtitle']}</h2>
@@ -97,107 +113,262 @@
 						</div>
 
 						${document}
-						<br>
-						<hr>
-						<div class="text-right">
-							${headers['title']} ${headers['version'].replace("version ", "")} &ndash; ${headers['subtitle']}<br>
-							<small>${headers['date']}, ${headers['author']}</small>
-						</div>
+
+					<hr>
+					<div class="text-end">
+						${headers['title']} ${headers['version'].replace("version ", "")} &ndash; ${headers['subtitle']}<br>
+						<small class="text-muted">${headers['date']}, ${headers['author']}</small>
 					</div>
-					<!-- /.col-lg-12 -->
+					<a id="bottom" name="bottom"></a>
 				</div>
-				<!-- /.row -->
-			</div>
-			<!-- /#page-wrapper -->
+				${footer}
+				</div>
+			</main>
 
 		</div>
-		<!-- /#wrapper -->
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 		<script>
-			function filterKeywords(text) {
-				$('.letter').each(function(idx1, letter) {
-					$letter = $(letter)
-					found = false
-					$letter.find('.list-group-item').each(function(idx2, keyword) {
-						$keyword = $(keyword)
-						if ($keyword.text().indexOf(text) != -1) {
-							$keyword.show();
-							found = true
+			// Keyword filter - maximum performance optimization
+			(function() {
+				var keywordsList = document.getElementById('keywords-list');
+				var filterInput = document.getElementById('filter');
+				
+				if (!keywordsList || !filterInput) return;
+				
+				// Pre-compute all link data once at init
+				var linkData = [];
+				var letters = keywordsList.querySelectorAll('.letter');
+				var links = keywordsList.querySelectorAll('a');
+				
+				for (var i = 0; i < links.length; i++) {
+					linkData.push({
+						element: links[i],
+						text: links[i].textContent.toLowerCase(),
+						letter: links[i].closest('.letter')
+					});
+				}
+				
+				var debounceTimer;
+				filterInput.addEventListener('input', function() {
+					clearTimeout(debounceTimer);
+					debounceTimer = setTimeout(function() {
+						var text = filterInput.value.toLowerCase();
+						var visibleLetters = new Set();
+						var updates = [];
+						
+						for (var i = 0; i < linkData.length; i++) {
+							var item = linkData[i];
+							var match = !text || item.text.includes(text);
+							updates.push({ element: item.element, match: match });
+							if (match && item.letter) visibleLetters.add(item.letter);
 						}
-						else {
-							$keyword.hide();
-						}
-					})
-					if (found) {
-						$letter.show()
-					}
-					else {
-						$letter.hide()
-					}
-				})
-			}
+						
+						requestAnimationFrame(function() {
+							for (var i = 0; i < updates.length; i++) {
+								updates[i].element.classList.toggle('d-none', !updates[i].match);
+							}
+							for (var i = 0; i < letters.length; i++) {
+								letters[i].classList.toggle('d-none', !visibleLetters.has(letters[i]));
+							}
+						});
+					}, 30);
+				});
+			})();
 		</script>
 		<script>
-			/* EXPERIMENTAL - Previous/Next navigation */
-			var headings = $(":header")
-			var previousTarget = false
-			var nextTarget = false
-			var $previous = $('#previous')
-			var $next = $('#next')
-			function refreshNavigation() {
-				var previous = false
-				var next = false
-				$.each(headings, function(item, value) {
-					var el = $(value)
-
-					// TODO : avoid target recalculation on each refresh
-					var target = el.attr('data-target')
-					if (! target) return true
-
-					var target_el = $('#' + target.replace(/\./, "\\."))
-					if (! target_el.attr('id')) return true
-
-					if (target_el.offset().top < $(window).scrollTop()) {
-						previous = el
+			// Navigation and breadcrumbs - super optimized
+			(function() {
+				var content = document.getElementById('content');
+				var breadcrumbs = document.getElementById('breadcrumbs');
+				var breadcrumbList = breadcrumbs.querySelector('.breadcrumb');
+				var sidebarContent = document.querySelector('#sidebar .bg-light');
+				
+				// Pre-compute sections data once at init
+				var sections = [];
+				var sectionMap = {}; // Map target to section data for breadcrumb hierarchy
+				var headingElements = document.querySelectorAll('[data-target]');
+				for (var i = 0; i < headingElements.length; i++) {
+					var el = headingElements[i];
+					var target = el.getAttribute('data-target');
+					var text = el.textContent.trim();
+					var section = {
+						element: el,
+						target: target,
+						text: text
+					};
+					sections.push(section);
+					sectionMap[target] = section;
+				}
+				
+				// Pre-compute sidebar chapter links for highlighting
+				var chapterLinks = {};
+				var allChapterLinks = sidebarContent.querySelectorAll('#tab-chapters a[href^="#"]');
+				for (var i = 0; i < allChapterLinks.length; i++) {
+					var link = allChapterLinks[i];
+					var href = link.getAttribute('href').substring(1);
+					chapterLinks[href] = link;
+				}
+				
+				var currentTarget = null;
+				var currentActiveLink = null;
+				var rafId = null;
+				
+				// Find scroll container (the content's scrollable area, not sidebar)
+				var scrollContainer = content.querySelector('.flex-grow-1.overflow-auto') || content.querySelector('.overflow-auto') || content;
+				
+				// Helper: parse "5.2.1. Title" into {num: "5.2.1", title: "Title"}
+				function parseChapterText(text) {
+					var dotSpaceIndex = text.indexOf('. ');
+					if (dotSpaceIndex > 0) {
+						return { num: text.substring(0, dotSpaceIndex), title: text.substring(dotSpaceIndex + 2) };
 					}
-					if (target_el.offset().top - 1 > $(window).scrollTop()) {
-						next = el
+					return null;
+				}
+				
+				function updateBreadcrumbs(target, text) {
+					if (target === currentTarget) return;
+					currentTarget = target;
+					
+					// Build breadcrumb HTML with hierarchy
+					var html = '<li class="breadcrumb-item"><a href="#top" class="text-light">' + document.title.split(' - ')[1] + '</a></li>';
+					
+					if (target && text) {
+						// Extract chapter number and title
+						var parsed = parseChapterText(text);
+						if (parsed) {
+							var chapterNum = parsed.num;
+							var chapterTitle = parsed.title;
+							
+							// Build hierarchy of parent chapters (exclude current)
+							var parts = chapterNum.split('.');
+							var parents = [];
+							for (var i = 0; i < parts.length - 1; i++) {
+								var parentTarget = parts.slice(0, i + 1).join('.');
+								if (sectionMap[parentTarget]) {
+									var parentText = sectionMap[parentTarget].text;
+									var parentParsed = parseChapterText(parentText);
+									parents.push({
+										target: parentTarget,
+										num: parentParsed ? parentParsed.num : parentTarget,
+										title: parentParsed ? parentParsed.title : parentText
+									});
+								}
+							}
+							
+							// Add parent crumbs with ellipsis for middle items
+							if (parents.length > 1) {
+								// First parent
+								html += '<li class="breadcrumb-item"><a href="#' + parents[0].target + '" class="text-light">' + parents[0].num + '. ' + parents[0].title + '</a></li>';
+								
+								// Ellipsis for middle items
+								if (parents.length > 2) {
+									html += '<li class="breadcrumb-item text-secondary">…</li>';
+								}
+								
+								// Last parent
+								var lastParent = parents[parents.length - 1];
+								html += '<li class="breadcrumb-item"><a href="#' + lastParent.target + '" class="text-light">' + lastParent.num + '. ' + lastParent.title + '</a></li>';
+							} else if (parents.length === 1) {
+								html += '<li class="breadcrumb-item"><a href="#' + parents[0].target + '" class="text-light">' + parents[0].num + '. ' + parents[0].title + '</a></li>';
+							}
+							
+							// Add current chapter
+							html += '<li class="breadcrumb-item active text-light">' + chapterNum + '. ' + chapterTitle + '</li>';
+						} else {
+							html += '<li class="breadcrumb-item active text-light">' + text + '</li>';
+						}
 					}
-					if (next) return false
-				})
-
-				previousTarget = previous ? previous.attr('data-target') : 'top'
-				nextTarget = next ? next.attr('data-target') : 'bottom'
-			}
-
-			$(window).scroll(function () {
-				refreshNavigation()
-			});
-			$(document).ready(function() {
-				refreshNavigation()
-			});
-
-			/* EXPERIMENTAL - Enable keyboard navigation */
-			$(document).keydown(function(e){
-				if (!(e.altKey || e.ctrlKey || e.shiftKey || e.metaKey)) {
+					
+					breadcrumbList.innerHTML = html;
+				}
+				
+				function updateSidebarHighlight(target) {
+					// Remove previous active
+					if (currentActiveLink) {
+						currentActiveLink.classList.remove('active');
+					}
+					
+					// Find new active link in chapters
+					var newLink = chapterLinks[target];
+					
+					if (newLink) {
+						newLink.classList.add('active');
+						currentActiveLink = newLink;
+					} else {
+						currentActiveLink = null;
+					}
+				}
+				
+				function onScroll() {
+					if (rafId) cancelAnimationFrame(rafId);
+					
+					rafId = requestAnimationFrame(function() {
+						var contentRect = scrollContainer.getBoundingClientRect();
+						var found = null;
+						
+						// Reverse search for current section
+						for (var i = sections.length - 1; i >= 0; i--) {
+							var rect = sections[i].element.getBoundingClientRect();
+							if (rect.top <= contentRect.top + 100) {
+								found = sections[i];
+								break;
+							}
+						}
+						
+						if (found) {
+							updateBreadcrumbs(found.target, found.text);
+							updateSidebarHighlight(found.target);
+						} else {
+							updateBreadcrumbs(null, null);
+							if (currentActiveLink) {
+								currentActiveLink.classList.remove('active');
+								currentActiveLink = null;
+							}
+						}
+					});
+				}
+				
+				// Passive scroll listener for performance
+				scrollContainer.addEventListener('scroll', onScroll, { passive: true });
+				
+				// Initial update
+				onScroll();
+				
+				// Keyboard navigation
+				document.addEventListener('keydown', function(e) {
+					if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) return;
+					
+					var currentIndex = -1;
+					for (var i = 0; i < sections.length; i++) {
+						if (sections[i].target === currentTarget) {
+							currentIndex = i;
+							break;
+						}
+					}
+					
 					switch(e.which) {
 						case 37: // left
-						window.location.hash = previousTarget ? previousTarget : 'top'
-						break
-
+							if (currentIndex > 0) {
+								window.location.hash = sections[currentIndex - 1].target;
+							} else {
+								window.location.hash = 'top';
+							}
+							e.preventDefault();
+							break;
 						case 39: // right
-						window.location.hash = nextTarget ? nextTarget : 'bottom'
-						break
-
-						default: return // exit this handler for other keys
+							if (currentIndex < sections.length - 1) {
+								window.location.hash = sections[currentIndex + 1].target;
+							}
+							e.preventDefault();
+							break;
 					}
-					e.preventDefault()
-				}
-			})
+				});
+				
+				// Enable keyboard nav status
+				var statusEl = document.getElementById('keyboardNavStatus');
+				if (statusEl) statusEl.textContent = 'enabled';
+			})();
 		</script>
-		${footer}
-		<a class="anchor" name="bottom"></a>
 	</body>
 </html>
