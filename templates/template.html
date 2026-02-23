@@ -331,7 +331,7 @@
 					observer.observe(sections[i].element);
 				}
 				
-				// Keyboard navigation
+				// Keyboard navigation: top ↔ sections ↔ bottom
 				document.addEventListener('keydown', function(e) {
 					if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) return;
 					
@@ -346,7 +346,12 @@
 					var newTarget = null;
 					switch(e.which) {
 						case 37: // left
-							if (currentIndex > 0) {
+							if (currentTarget === 'bottom' && sections.length > 0) {
+								// At bottom, go to last section
+								newTarget = sections[sections.length - 1].target;
+							} else if (currentTarget === 'top') {
+								// Already at top, stay there
+							} else if (currentIndex > 0) {
 								newTarget = sections[currentIndex - 1].target;
 							} else if (currentIndex === 0) {
 								newTarget = 'top';
@@ -356,8 +361,16 @@
 							}
 							break;
 						case 39: // right
-							if (currentIndex >= 0 && currentIndex < sections.length - 1) {
+							if (currentTarget === 'top' && sections.length > 0) {
+								// At top, go to first section
+								newTarget = sections[0].target;
+							} else if (currentTarget === 'bottom') {
+								// Already at bottom, stay there
+							} else if (currentIndex >= 0 && currentIndex < sections.length - 1) {
 								newTarget = sections[currentIndex + 1].target;
+							} else if (currentIndex === sections.length - 1) {
+								// At last section, go to bottom
+								newTarget = 'bottom';
 							} else if (currentIndex < 0 && sections.length > 0) {
 								// No current section, go to first
 								newTarget = sections[0].target;
