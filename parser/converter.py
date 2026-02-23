@@ -10,6 +10,7 @@ import sys
 import html
 import datetime
 import time
+import io
 
 
 
@@ -116,11 +117,24 @@ def createLinks():
             for delimiter in delimiters:
                 document = document.replace(delimiter['start'] + shortKeyword + delimiter['start'], delimiter['start'] + '<a href="#' + quote(keyword) + '">' + shortKeyword + '</a>' + delimiter['end'])
 
+# Global StringIO buffer for document building
+_document_buffer = None
+
 def documentAppend(text, retline = True):
-    global document
-    document += text
+    global _document_buffer
+    _document_buffer.write(text)
     if retline:
-        document += "\n"
+        _document_buffer.write("\n")
+
+def _get_document():
+    """Get the current document content as a string."""
+    global _document_buffer
+    return _document_buffer.getvalue()
+
+def _reset_document():
+    """Reset the document buffer for a new conversion."""
+    global _document_buffer
+    _document_buffer = io.StringIO()
 
 def init_parsers(pctxt):
     return [
@@ -247,7 +261,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
         i += 1
     sections.append(currentSection)
 
-    document = ""
+    _reset_document()
 
     # Complete the summary
     for section in sections:
@@ -415,12 +429,16 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
     if not hasSummary:
         summaryTemplate = pctxt.templates.get_template('summary.html')
         print(chapters)
-        document = summaryTemplate.render(
+        summary = summaryTemplate.render(
             pctxt=pctxt,
             chapters=chapters,
             chapterIndexes=chapterIndexes,
-        ) + document
+        )
+        _reset_document()
+        _document_buffer.write(summary)
 
+    # Get the document string from the buffer
+    document = _get_document()
 
     # Log warnings for keywords defined in several chapters
     keyword_conflicts = {}
