@@ -182,7 +182,8 @@ def convert_all(infiles, outdir, base='', version='', haproxy_version=''):
             TemplateLookup(
                 directories=[
                     'templates'
-                ]
+                ],
+                filesystem_checks=False
             )
         )
         data = convert(pctxt, infile, outfile, base, version, haproxy_version)
