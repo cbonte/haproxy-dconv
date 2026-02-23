@@ -28,6 +28,9 @@ import parser.table
 import parser.seealso
 
 
+# Pre-compiled regex patterns for performance
+_PATTERN_SECTION = re.compile(r'section ([0-9]+(.[0-9]+)*)')
+_PATTERN_HEADER_SEP = re.compile(r'^-+$')
 
 def getBuildTime():
     return datetime.datetime.utcfromtimestamp(
@@ -319,7 +322,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     documentAppend('<li class="next"><a href="#%s">Next</a></li>' % chapterIndexes[index + 1], False)
                 documentAppend('</ul>', False)
             content = html_escape(content)
-            content = re.sub(r'section ([0-9]+(.[0-9]+)*)', r'<a href="#\1">section \1</a>', content)
+            content = _PATTERN_SECTION.sub(r'<a href="#\1">section \1</a>', content)
 
             pctxt.set_content(content)
 
@@ -332,7 +335,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     'author':   '',
                     'date':     ''
                 }
-                if re.match("^-+$", pctxt.get_line().strip()):
+                if _PATTERN_HEADER_SEP.match(pctxt.get_line().strip()):
                     # Try to analyze the header of the file, assuming it follows
                     # those rules :
                     # - it begins with a "separator line" (several '-' chars)
@@ -346,7 +349,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
                     pctxt.context['headers']['title'] = pctxt.get_line().strip()
                     pctxt.next()
                     subtitle = ""
-                    while not re.match("^-+$", pctxt.get_line().strip()):
+                    while not _PATTERN_HEADER_SEP.match(pctxt.get_line().strip()):
                         subtitle += " " + pctxt.get_line().strip()
                         pctxt.next()
                     pctxt.context['headers']['subtitle'] += subtitle.strip()
