@@ -114,10 +114,10 @@ def createLinks():
         inner = m.group(1)
         # Check if inner content is a keyword
         if inner in keywords or inner in keyword_conflicts:
-            return '"' + replacer(type('Match', (), {'group': lambda self, n: inner})()) + '"'
+            return '&quot;' + replacer(type('Match', (), {'group': lambda self, n: inner})()) + '&quot;'
         return m.group(0)
-    
-    document = re.sub(r'"([^&]+?)"', replace_in_quotes, document)
+
+    document = re.sub(r'&quot;([^&]+?)&quot;', replace_in_quotes, document)
     
     # Process - ... context (until newline)
     def replace_in_dash_context(m):
