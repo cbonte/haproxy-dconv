@@ -6,9 +6,9 @@ class KeyWordParser(parser.Parser):
     def __init__(self, pctxt):
         parser.Parser.__init__(self, pctxt)
         self.keywordPattern = re.compile(r'^(%s%s)(%s)' % (
-            '([a-z0-9\-\+_\.]*[a-z0-9\-\+_)])', # keyword
-            '( [a-z0-9\-_]+)*',                  # subkeywords
-            '(\([^ ]*\))?',   # arg (ex: (<backend>), (<frontend>/<backend>), (<offset1>,<length>[,<offset2>]) ...
+            r'([a-z0-9\-\+_\.]*[a-z0-9\-\+_)])',  # keyword
+            r'( [a-z0-9\-_]+)*',                  # subkeywords
+            r'(\([^ ]*\))?',   # arg (ex: (<backend>), (<frontend>/<backend>), (<offset1>,<length>[,<offset2>]) ...
         ))
 
     def parse(self, line):
@@ -25,7 +25,7 @@ class KeyWordParser(parser.Parser):
                 keyword = parsed.group(1)
                 arg     = parsed.group(4)
                 parameters = line[len(keyword) + len(arg):]
-                if (parameters != "" and not re.match("^ +(/?(&lt;|\[|\{).*|(: [a-z0-9 +]+))?(\(deprecated\))?$", parameters)):
+                if (parameters != "" and not re.match(r"^ +(/?(&lt;|\[|\{).*|(: [a-z0-9 +]+))?(\(deprecated\))?$", parameters)):
                     # Dirty hack
                     # - parameters should only start with the character "<", "[", "{", and in rare cases with an extra "/"
                     # - or a column (":") followed by a alpha keywords to identify fetching samples (optionally separated by the character "+")
