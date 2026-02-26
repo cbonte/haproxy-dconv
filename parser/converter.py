@@ -518,6 +518,7 @@ def convert(pctxt, infile, outfile, base='', version='', haproxy_version=''):
             'keywordsCount': keywordsCount,
             'keyword_conflicts': keyword_conflicts,
             'version': version,
+            'haproxy_major_version': re.match(r'(\d+\.\d+)', haproxy_version).group(1) if haproxy_version else None,
             'date': getBuildTime().strftime("%Y/%m/%d"),
             'footer': footer
     }
